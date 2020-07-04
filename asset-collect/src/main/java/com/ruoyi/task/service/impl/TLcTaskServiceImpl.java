@@ -1071,12 +1071,22 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                     if (StringUtils.isNoneBlank(tLcCallRecord.getPlatform()) && tLcCallRecord.getPlatform().equals("ZJ")) {
                         log.info("通话开始时间：{}",tLcCallRecord.getCallStartTime());
                         if (tLcCallRecord.getCallStartTime() != null) {
-                            long callLen = new Date().getTime() - tLcCallRecord.getCallStartTime().getTime();
-                            log.info("通话id：{}的通话时长为：{}",tLcCallRecord.getId(), callLen);
-                            tLcCallRecord.setCallLen(String.valueOf(callLen));
-                            tLcCallRecord.setCallEndTime(new Date());
-                        }else {
-                            log.info("通话id：{}的通话开始时间或者通话结束时间为空",tLcCallRecord.getId());
+                            if (StringUtils.isBlank(tLcCallRecord.getCallLen())) {
+                                if (tLcCallRecord.getCallEndTime() == null) {
+                                    long callLen = System.currentTimeMillis() - tLcCallRecord.getCallStartTime().getTime();
+                                    log.info("通话id：{}的通话时长为：{}",tLcCallRecord.getId(), callLen);
+                                    tLcCallRecord.setCallLen(String.valueOf(callLen));
+                                    tLcCallRecord.setCallEndTime(new Date());
+                                } else {
+                                    long callLen = tLcCallRecord.getCallEndTime().getTime() - tLcCallRecord.getCallStartTime().getTime();
+                                    log.info("通话id：{}的通话时长为：{}",tLcCallRecord.getId(), callLen);
+                                    tLcCallRecord.setCallLen(String.valueOf(callLen));
+                                }
+                            } else {
+                                if (tLcCallRecord.getCallEndTime() == null) {
+                                    tLcCallRecord.setCallEndTime(new Date());
+                                }
+                            }
                         }
                     }
                 } catch (Exception e) {
