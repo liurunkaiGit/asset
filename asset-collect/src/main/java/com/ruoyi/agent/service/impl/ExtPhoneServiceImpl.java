@@ -1,14 +1,12 @@
 package com.ruoyi.agent.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.ruoyi.assetspackage.domain.OrgPackage;
 import com.ruoyi.assetspackage.service.IOrgPackageService;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.exonNum.domain.TLcExonNum;
 import com.ruoyi.exonNum.service.ITLcExonNumService;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysDictDataService;
@@ -151,5 +149,22 @@ public class ExtPhoneServiceImpl implements IExtPhoneService {
             }
         });
         return resultList;
+    }
+
+    @Override
+    public List<String> selectExtNumBySeat(String seatId, String agentId, String callPlatform) {
+        ExtPhone extPhone = new ExtPhone();
+        extPhone.setIsused("0");
+        extPhone.setSeatId(Integer.valueOf(seatId));
+        extPhone.setAgentid(agentId);
+        extPhone.setCallPlatform(callPlatform);
+        List<ExtPhone> list = selectExtPhoneList(extPhone);
+        List<String> exonNumGroupList = new ArrayList<>();
+        if (list != null && list.size() > 0) {
+            TLcExonNum tLcExonNum = this.exonNumService.selectTLcExonNumById(Long.valueOf(list.get(0).getExonNumGroupId()));
+            String[] exonNumGroups = tLcExonNum.getExonNum().split(";");
+            exonNumGroupList = Arrays.asList(exonNumGroups);
+        }
+        return exonNumGroupList;
     }
 }

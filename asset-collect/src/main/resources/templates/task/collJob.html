@@ -76,6 +76,7 @@
     <input type="hidden" id="endOverdueDaysSearch" name="endOverdueDaysSearch" th:value="${tLcTask.endOverdueDays}">
     <input type="hidden" id="totalCaseNum" name="totalCaseNum" th:value="${totalCaseNum}">
     <input type="hidden" id="totalArrears" name="totalArrears" th:value="${totalArrears}">
+    <input type="hidden" id="extNum" name="extNum" th:value="${extNumList}">
     <input type="hidden" id="startNum" name="startNum" value="1">
 
     <div class="box box-main">
@@ -332,7 +333,7 @@
                 </div>
                 <div style="margin-bottom: 2px;">
                     <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)">外显号码：</span>
-                    <select id="exonNum" onchange="initial1();" style="width: 120px;height: 22px;"></select>
+                    <select id="exonNum" onchange="initial1();" style="width: 120px;height: 22px;" ></select>
                     <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)" id="platformName"></span>
                 </div>
                 <div class="btn-group-sm">
@@ -1731,23 +1732,30 @@
             }
 
         });*/
-        $.post(
-            prefix + "/selectExtNumBySeat",
-            {
-                seatId:$("#ownerId").val(),
-                agentId:$("#agentId").val(),
-                callPlatform:$("#callPlatform").val(),
-            },
-            function(data){
-                var result = eval(data.msg);
-                $("#exonNum").append("<option value=''>请选择</option>");
-                $.each(result,function(index,obj){
-                    var agentId = obj;
-                    $("#exonNum").append("<option value='"+agentId+"'>"+agentId+"</option>");
-                });
-            }
-
-        );
+        // $.post(
+        //     prefix + "/selectExtNumBySeat",
+        //     {
+        //         seatId:$("#ownerId").val(),
+        //         agentId:$("#agentId").val(),
+        //         callPlatform:$("#callPlatform").val(),
+        //     },
+        //     function(data){
+        //         var result = eval(data.msg);
+        //         $("#exonNum").append("<option value=''>请选择</option>");
+        //         $.each(result,function(index,obj){
+        //             var agentId = obj;
+        //             $("#exonNum").append("<option value='"+agentId+"'>"+agentId+"</option>");
+        //         });
+        //     }
+        //
+        // );
+        var extNumList = $("#extNum").val();
+        extNumList = extNumList.split(",");
+        $("#exonNum").append("<option value=''>请选择</option>");
+        $.each(extNumList,function(index,obj){
+            var agentId = obj;
+            $("#exonNum").append("<option value='"+agentId+"'>"+agentId+"</option>");
+        });
     });
 
 

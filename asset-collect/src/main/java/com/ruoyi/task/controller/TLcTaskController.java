@@ -204,6 +204,9 @@ public class TLcTaskController extends BaseController {
         if (list != null && list.size() > 0) {
             // 分机号码
             modelMap.put("extPhone", list.get(0).getAgentid());
+            // 查询外显号码
+            List<String> extNumList = this.extPhoneService.selectExtNumBySeat(String.valueOf(ShiroUtils.getSysUser().getUserId()), list.get(0).getAgentid(), ShiroUtils.getSysUser().getPlatform());
+            modelMap.put("extNumList",StringUtils.join(extNumList,","));
         }
         modelMap.put("callPlatform", ShiroUtils.getSysUser().getPlatform());
         // 查询总的金额及总的件数
@@ -1062,18 +1065,7 @@ public class TLcTaskController extends BaseController {
     @PostMapping("/selectExtNumBySeat")
     @ResponseBody
     public AjaxResult selectExtNumBySeat(String seatId, String agentId, String callPlatform) {
-        ExtPhone extPhone = new ExtPhone();
-        extPhone.setIsused("0");
-        extPhone.setSeatId(Integer.valueOf(seatId));
-        extPhone.setAgentid(agentId);
-        extPhone.setCallPlatform(callPlatform);
-        List<ExtPhone> list = extPhoneService.selectExtPhoneList(extPhone);
-        List<String> exonNumGroupList = new ArrayList<>();
-        if (list != null && list.size() > 0) {
-            TLcExonNum tLcExonNum = this.exonNumService.selectTLcExonNumById(Long.valueOf(list.get(0).getExonNumGroupId()));
-            String[] exonNumGroups = tLcExonNum.getExonNum().split(";");
-            exonNumGroupList = Arrays.asList(exonNumGroups);
-        }
+        List<String> exonNumGroupList = this.extPhoneService.selectExtNumBySeat(seatId, agentId, callPlatform);
         String result = JSON.toJSONString(exonNumGroupList);
         return AjaxResult.success(result);
     }

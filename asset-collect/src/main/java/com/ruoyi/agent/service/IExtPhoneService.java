@@ -67,4 +67,6 @@ public interface IExtPhoneService
     int updateExtPhoneStatus(ExtPhone extPhone);
 
     List<Map<String, Object>> selectExtPhoneListByUsername(String username);
+
+    List<String> selectExtNumBySeat(String seatId, String agentId, String callPlatform);
 }
