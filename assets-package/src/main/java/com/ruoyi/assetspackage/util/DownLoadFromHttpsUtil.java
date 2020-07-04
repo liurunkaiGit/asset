@@ -160,17 +160,39 @@ public class DownLoadFromHttpsUtil implements X509TrustManager {
         return getData;
     }
 
+    /**
+     * 从https的地址下载文件
+     *
+     * @param url 下载地址https
+     */
+    public static void downLoadFromHttp(HttpServletResponse response, String url) {
+        log.info("开始下载，下载地址{}", url);
+        if (!(url == null || StringUtils.equals("", url))) {
+            if (!(url == null || StringUtils.equals("", url))) {
+                String[] arr1 = url.split("/");
+                if (arr1.length > 0) {
+                    String fileName = arr1[arr1.length - 1];
+                    fileName = (fileName != null && fileName.indexOf("?") == -1) ? fileName : (fileName.substring(0, fileName.indexOf("?")));
+                    log.info("文件名{}", fileName);
+                    try {
+                        downLoadFromUrlHttp(response, url, fileName);
+                        log.info("下载完成，下载地址{}", url);
+                    } catch (Exception e) {
+                        log.error("下载异常：{}", e);
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * 从网络http类型Url中下载文件
      *
      * @param urlStr
      * @param fileName
-     * @param savePath
      * @throws IOException
      */
-    public static void downLoadFromUrlHttp(String urlStr, String fileName,
-                                           String savePath) throws IOException {
+    public static void downLoadFromUrlHttp(HttpServletResponse response, String urlStr, String fileName) throws IOException {
         URL url = new URL(urlStr);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         // 设置超时间为3秒
@@ -180,24 +202,41 @@ public class DownLoadFromHttpsUtil implements X509TrustManager {
                 "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
         conn.connect();
 
+        response.reset();
+        response.setHeader("Content-Type", "application/octet-stream");
+        response.setHeader("Content-Transfer-Encoding", "chunked");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setContentType("application/OCTET-STREAM");
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Content-Disposition", "attachment; filename="
+                + new String(fileName.getBytes("gb2312"), "iso-8859-1"));
+
         // 得到输入流
         InputStream inputStream = conn.getInputStream();
         byte[] getData = readInputStream(inputStream);
-        // 文件保存位置
-        File saveDir = new File(savePath);
-        if (!saveDir.exists()) {
-            saveDir.mkdirs();
-        }
-        // 输出流
-        File file = new File(saveDir + File.separator + fileName);
-        FileOutputStream fos = new FileOutputStream(file);
-        fos.write(getData);
-        if (fos != null) {
-            fos.close();
+        OutputStream outputStream = response.getOutputStream();
+        outputStream.write(getData);
+        if (outputStream != null) {
+            outputStream.close();
         }
         if (inputStream != null) {
             inputStream.close();
         }
+        // 文件保存位置
+//        File saveDir = new File(savePath);
+//        if (!saveDir.exists()) {
+//            saveDir.mkdirs();
+//        }
+        // 输出流
+//        File file = new File(saveDir + File.separator + fileName);
+//        FileOutputStream fos = new FileOutputStream(file);
+//        fos.write(getData);
+//        if (fos != null) {
+//            fos.close();
+//        }
+//        if (inputStream != null) {
+//            inputStream.close();
+//        }
     }
 
 

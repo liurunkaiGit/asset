@@ -100,9 +100,12 @@
 					},
 					updateLoadBar = setInterval( function()
 					{
-						barLoaded.width( ( theAudio.buffered.end( 0 ) / theAudio.duration ) * 100 + '%' );
-						if( theAudio.buffered.end( 0 ) >= theAudio.duration )
-							clearInterval( updateLoadBar );
+						if(theAudio.buffered.length != 0){
+							barLoaded.width( ( theAudio.buffered.end( 0 ) / theAudio.duration ) * 100 + '%' );
+							if( theAudio.buffered.end( 0 ) >= theAudio.duration )
+								clearInterval( updateLoadBar );
+						}
+
 					}, 100 );
 
 				var volumeTestDefault = theAudio.volume, volumeTestValue = theAudio.volume = 0.111;

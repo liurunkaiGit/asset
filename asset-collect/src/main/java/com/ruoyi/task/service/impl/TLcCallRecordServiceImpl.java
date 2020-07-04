@@ -187,7 +187,11 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
 //            response.setHeader("Content-Disposition",
 //                    "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, fileName));
 //            FileUtils.writeBytes(urlpath, response.getOutputStream());
-            DownLoadFromHttpsUtil.downLoadFromHttps(response,urlpath);
+            if (urlpath.startsWith("https://")) {
+                DownLoadFromHttpsUtil.downLoadFromHttps(response,urlpath);
+            } else if (urlpath.startsWith("http://")) {
+                DownLoadFromHttpsUtil.downLoadFromHttp(response,urlpath);
+            }
         } catch (Exception e) {
             log.error("下载录音异常，exception is {}", e);
             throw new RuntimeException("下载录音异常");
