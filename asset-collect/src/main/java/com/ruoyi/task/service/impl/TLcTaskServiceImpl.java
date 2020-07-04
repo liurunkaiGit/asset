@@ -1034,8 +1034,13 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
 //            String[] split = tLcCallRecord.getCallRadioLocation().split("/");
 //            String fileName = split[split.length-1];
             if (StringUtils.isNoneBlank(tLcCallRecord.getCallRadioLocation())) {
-                String urlpath = remoteConfigure.getTelphoneRecordUrl() + tLcCallRecord.getCallRadioLocation();
-                tLcCallRecord.setCallRadioLocation(urlpath);
+                if (ShiroUtils.getSysUser().getPlatform().equals("PA")) {
+                    String urlpath = remoteConfigure.getTelphoneRecordUrl() + tLcCallRecord.getCallRadioLocation();
+                    tLcCallRecord.setCallRadioLocation(urlpath);
+                } else {
+                    tLcCallRecord.setCallRadioLocation(tLcCallRecord.getCallRadioLocation());
+                }
+
             }
             //删除本地文件
             //file.delete();
