@@ -1,0 +1,651 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.CurAssetsRepaymentPackageMapper">
+    
+    <resultMap type="com.ruoyi.assetspackage.domain.CurAssetsRepaymentPackage" id="CurAssetsRepaymentPackageResult">
+        <result property="id"    column="id"    />
+        <result property="orgCasno"    column="org_casNo"    />
+        <result property="jyqtfy"    column="jyqtfy"    />
+        <result property="jylx"    column="jylx"    />
+        <result property="jybj"    column="jybj"    />
+        <result property="jyznf"    column="jyznf"    />
+        <result property="jyType"    column="jy_type"    />
+        <result property="jyje"    column="jyje"    />
+        <result property="productType"    column="product_type"    />
+        <result property="jjh"    column="jjh"    />
+        <result property="csr"    column="csr"    />
+        <result property="csjd"    column="csjd"    />
+        <result property="fprq"    column="fprq"    />
+        <result property="areaCenter"    column="area_center"    />
+        <result property="acceptCity"    column="accept_city"    />
+        <result property="hth"    column="hth"    />
+        <result property="dqsybYj"    column="dqsyb_yj"    />
+        <result property="dqsybEj"    column="dqsyb_ej"    />
+        <result property="wbqs"    column="wbqs"    />
+        <result property="wbjb"    column="wbjb"    />
+        <result property="warq"    column="warq"    />
+        <result property="curName"    column="cur_name"    />
+        <result property="khjlxm"    column="khjlxm"    />
+        <result property="sjrq"    column="sjrq"    />
+        <result property="sfwbcs"    column="sfwbcs"    />
+        <result property="sfjq"    column="sfjq"    />
+        <result property="bywa"    column="bywa"    />
+        <result property="ajhsrq"    column="ajhsrq"    />
+        <result property="xfjrzh"    column="xfjrzh"    />
+        <result property="tzsx"    column="tzsx"    />
+        <result property="tzje"    column="tzje"    />
+        <result property="zhzt"    column="zhzt"    />
+        <result property="hkrq"    column="hkrq"    />
+        <result property="hksyqqs"    column="hksyqqs"    />
+        <result property="hkje"    column="hkje"    />
+        <result property="yqcplx"    column="yqcplx"    />
+        <result property="yqjd"    column="yqjd"    />
+        <result property="quotaProduct"    column="quota_product"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="jazt"    column="jazt"    />
+        <result property="isExitCollect"    column="is_exit_collect"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="orgName"    column="org_name"    />
+    </resultMap>
+
+    <resultMap type="com.ruoyi.assetspackage.domain.TempCurAssetsRepaymentPackage" id="TempCurAssetsRepaymentPackageResult">
+        <result property="id"    column="id"    />
+        <result property="orgCasno"    column="org_casNo"    />
+        <result property="jyqtfy"    column="jyqtfy"    />
+        <result property="jylx"    column="jylx"    />
+        <result property="jybj"    column="jybj"    />
+        <result property="jyznf"    column="jyznf"    />
+        <result property="jyType"    column="jy_type"    />
+        <result property="jyje"    column="jyje"    />
+        <result property="productType"    column="product_type"    />
+        <result property="jjh"    column="jjh"    />
+        <result property="csr"    column="csr"    />
+        <result property="csjd"    column="csjd"    />
+        <result property="fprq"    column="fprq"    />
+        <result property="areaCenter"    column="area_center"    />
+        <result property="acceptCity"    column="accept_city"    />
+        <result property="hth"    column="hth"    />
+        <result property="dqsybYj"    column="dqsyb_yj"    />
+        <result property="dqsybEj"    column="dqsyb_ej"    />
+        <result property="wbqs"    column="wbqs"    />
+        <result property="wbjb"    column="wbjb"    />
+        <result property="warq"    column="warq"    />
+        <result property="curName"    column="cur_name"    />
+        <result property="khjlxm"    column="khjlxm"    />
+        <result property="sjrq"    column="sjrq"    />
+        <result property="sfwbcs"    column="sfwbcs"    />
+        <result property="sfjq"    column="sfjq"    />
+        <result property="bywa"    column="bywa"    />
+        <result property="ajhsrq"    column="ajhsrq"    />
+        <result property="xfjrzh"    column="xfjrzh"    />
+        <result property="tzsx"    column="tzsx"    />
+        <result property="tzje"    column="tzje"    />
+        <result property="zhzt"    column="zhzt"    />
+        <result property="hkrq"    column="hkrq"    />
+        <result property="hksyqqs"    column="hksyqqs"    />
+        <result property="hkje"    column="hkje"    />
+        <result property="yqcplx"    column="yqcplx"    />
+        <result property="yqjd"    column="yqjd"    />
+        <result property="quotaProduct"    column="quota_product"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="jazt"    column="jazt"    />
+        <result property="isExitCollect"    column="is_exit_collect"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="closeCaseDate"    column="close_case_date"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="isException"    column="is_exception"    />
+    </resultMap>
+
+    <sql id="selectCurAssetsRepaymentPackageVo">
+        select id, org_casNo, jyqtfy, jylx, jybj, jyznf, jy_type, jyje, product_type, jjh, csr, csjd, fprq, area_center, accept_city, hth, dqsyb_yj, dqsyb_ej, wbqs, wbjb, warq, cur_name, khjlxm, sjrq, sfwbcs, sfjq, bywa, ajhsrq, xfjrzh, tzsx, tzje, zhzt, hkrq, hksyqqs, hkje, yqcplx, yqjd, quota_product, org_id, jazt, is_exit_collect, create_by, create_time, import_batch_no, org_name from cur_assets_repayment_package
+    </sql>
+
+    <sql id="selectTempCurAssetsRepaymentPackageVo">
+        select id, org_casNo, jyqtfy, jylx, jybj, jyznf, jy_type, jyje, product_type, jjh, csr, csjd, fprq, area_center, accept_city, hth, dqsyb_yj, dqsyb_ej, wbqs, wbjb, warq, cur_name, khjlxm, sjrq, sfwbcs, sfjq, bywa, ajhsrq, xfjrzh, tzsx, tzje, zhzt, hkrq, hksyqqs, hkje, yqcplx, yqjd, quota_product, org_id, jazt, is_exit_collect, create_by, create_time, import_batch_no,close_case_date, org_name, is_exception from cur_assets_repayment_package_temp
+    </sql>
+
+    <select id="selectCurAssetsRepaymentPackageList" parameterType="CurAssetsRepaymentPackage" resultMap="CurAssetsRepaymentPackageResult">
+        <include refid="selectCurAssetsRepaymentPackageVo"/>
+        <where>  
+            <if test="orgCasno != null  and orgCasno != ''"> and org_casNo = #{orgCasno}</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+            <if test="jyqtfy != null "> and jyqtfy = #{jyqtfy}</if>
+            <if test="jylx != null "> and jylx = #{jylx}</if>
+            <if test="jybj != null "> and jybj = #{jybj}</if>
+            <if test="jyznf != null "> and jyznf = #{jyznf}</if>
+            <if test="jyType != null  and jyType != ''"> and jy_type = #{jyType}</if>
+            <if test="jyje != null "> and jyje = #{jyje}</if>
+            <if test="productType != null  and productType != ''"> and product_type = #{productType}</if>
+            <if test="jjh != null  and jjh != ''"> and jjh = #{jjh}</if>
+            <if test="csr != null  and csr != ''"> and csr like concat('%', #{csr}, '%')</if>
+            <if test="csjd != null  and csjd != ''"> and csjd = #{csjd}</if>
+            <if test="fprq != null "> and fprq = #{fprq}</if>
+            <if test="areaCenter != null  and areaCenter != ''"> and area_center = #{areaCenter}</if>
+            <if test="acceptCity != null  and acceptCity != ''"> and accept_city = #{acceptCity}</if>
+            <if test="hth != null  and hth != ''"> and hth = #{hth}</if>
+            <if test="dqsybYj != null  and dqsybYj != ''"> and dqsyb_yj = #{dqsybYj}</if>
+            <if test="dqsybEj != null  and dqsybEj != ''"> and dqsyb_ej = #{dqsybEj}</if>
+            <if test="wbqs != null  and wbqs != ''"> and wbqs = #{wbqs}</if>
+            <if test="wbjb != null  and wbjb != ''"> and wbjb = #{wbjb}</if>
+            <if test="warq != null "> and warq = #{warq}</if>
+            <if test="curName != null  and curName != ''"> and cur_name like concat('%', #{curName}, '%')</if>
+            <if test="khjlxm != null  and khjlxm != ''"> and khjlxm like concat('%',  #{khjlxm}, '%')</if>
+            <if test="sjrq != null "> and sjrq = #{sjrq}</if>
+            <if test="sfwbcs != null  and sfwbcs != ''"> and sfwbcs = #{sfwbcs}</if>
+            <if test="sfjq != null  and sfjq != ''"> and sfjq = #{sfjq}</if>
+            <if test="bywa != null  and bywa != ''"> and bywa = #{bywa}</if>
+            <if test="ajhsrq != null "> and ajhsrq = #{ajhsrq}</if>
+            <if test="xfjrzh != null  and xfjrzh != ''"> and xfjrzh = #{xfjrzh}</if>
+            <if test="tzsx != null  and tzsx != ''"> and tzsx = #{tzsx}</if>
+            <if test="tzje != null "> and tzje = #{tzje}</if>
+            <if test="zhzt != null  and zhzt != ''"> and zhzt = #{zhzt}</if>
+            <if test="hkrq != null "> and hkrq = #{hkrq}</if>
+            <if test="hksyqqs != null  and hksyqqs != ''"> and hksyqqs = #{hksyqqs}</if>
+            <if test="hkje != null "> and hkje = #{hkje}</if>
+            <if test="yqcplx != null  and yqcplx != ''"> and yqcplx = #{yqcplx}</if>
+            <if test="yqjd != null  and yqjd != ''"> and yqjd = #{yqjd}</if>
+            <if test="quotaProduct != null  and quotaProduct != ''"> and quota_product = #{quotaProduct}</if>
+            <if test="orgId != null  and orgId != ''"> and org_id = #{orgId}</if>
+            <if test="jazt != null  and jazt != ''"> and jazt = #{jazt}</if>
+            <if test="isExitCollect != null  and isExitCollect != ''"> and is_exit_collect = #{isExitCollect}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="startDate != null"> and create_time <![CDATA[>=]]> #{startDate}</if>
+            <if test="endDate != null"> and create_time <![CDATA[<=]]> #{endDate}</if>
+            <choose>
+                <when test="orgId != null and orgId != ''">
+                    and org_id = #{orgId}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="deptIds != null">
+                            and org_id in
+                            <foreach collection="deptIds" item="deptId" open="(" close=")" separator=",">
+                                #{deptId}
+                            </foreach>
+                        </when>
+                    </choose>
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+    
+    <select id="selectCurAssetsRepaymentPackageById" parameterType="String" resultMap="CurAssetsRepaymentPackageResult">
+        <include refid="selectCurAssetsRepaymentPackageVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCurAssetsRepaymentPackage" parameterType="CurAssetsRepaymentPackage">
+        insert into cur_assets_repayment_package
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="orgCasno != null  and orgCasno != ''">org_casNo,</if>
+            <if test="jyqtfy != null ">jyqtfy,</if>
+            <if test="jylx != null ">jylx,</if>
+            <if test="jybj != null ">jybj,</if>
+            <if test="jyznf != null ">jyznf,</if>
+            <if test="jyType != null  and jyType != ''">jy_type,</if>
+            <if test="jyje != null ">jyje,</if>
+            <if test="productType != null  and productType != ''">product_type,</if>
+            <if test="jjh != null  and jjh != ''">jjh,</if>
+            <if test="csr != null  and csr != ''">csr,</if>
+            <if test="csjd != null  and csjd != ''">csjd,</if>
+            <if test="fprq != null ">fprq,</if>
+            <if test="areaCenter != null  and areaCenter != ''">area_center,</if>
+            <if test="acceptCity != null  and acceptCity != ''">accept_city,</if>
+            <if test="hth != null  and hth != ''">hth,</if>
+            <if test="dqsybYj != null  and dqsybYj != ''">dqsyb_yj,</if>
+            <if test="dqsybEj != null  and dqsybEj != ''">dqsyb_ej,</if>
+            <if test="wbqs != null  and wbqs != ''">wbqs,</if>
+            <if test="wbjb != null  and wbjb != ''">wbjb,</if>
+            <if test="warq != null ">warq,</if>
+            <if test="curName != null  and curName != ''">cur_name,</if>
+            <if test="khjlxm != null  and khjlxm != ''">khjlxm,</if>
+            <if test="sjrq != null ">sjrq,</if>
+            <if test="sfwbcs != null  and sfwbcs != ''">sfwbcs,</if>
+            <if test="sfjq != null  and sfjq != ''">sfjq,</if>
+            <if test="bywa != null  and bywa != ''">bywa,</if>
+            <if test="ajhsrq != null ">ajhsrq,</if>
+            <if test="xfjrzh != null  and xfjrzh != ''">xfjrzh,</if>
+            <if test="tzsx != null  and tzsx != ''">tzsx,</if>
+            <if test="tzje != null ">tzje,</if>
+            <if test="zhzt != null  and zhzt != ''">zhzt,</if>
+            <if test="hkrq != null ">hkrq,</if>
+            <if test="hksyqqs != null  and hksyqqs != ''">hksyqqs,</if>
+            <if test="hkje != null ">hkje,</if>
+            <if test="yqcplx != null  and yqcplx != ''">yqcplx,</if>
+            <if test="yqjd != null  and yqjd != ''">yqjd,</if>
+            <if test="quotaProduct != null  and quotaProduct != ''">quota_product,</if>
+            <if test="orgId != null  and orgId != ''">org_id,</if>
+            <if test="jazt != null  and jazt != ''">jazt,</if>
+            <if test="isExitCollect != null  and isExitCollect != ''">is_exit_collect,</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="orgCasno != null  and orgCasno != ''">#{orgCasno},</if>
+            <if test="jyqtfy != null ">#{jyqtfy},</if>
+            <if test="jylx != null ">#{jylx},</if>
+            <if test="jybj != null ">#{jybj},</if>
+            <if test="jyznf != null ">#{jyznf},</if>
+            <if test="jyType != null  and jyType != ''">#{jyType},</if>
+            <if test="jyje != null ">#{jyje},</if>
+            <if test="productType != null  and productType != ''">#{productType},</if>
+            <if test="jjh != null  and jjh != ''">#{jjh},</if>
+            <if test="csr != null  and csr != ''">#{csr},</if>
+            <if test="csjd != null  and csjd != ''">#{csjd},</if>
+            <if test="fprq != null ">#{fprq},</if>
+            <if test="areaCenter != null  and areaCenter != ''">#{areaCenter},</if>
+            <if test="acceptCity != null  and acceptCity != ''">#{acceptCity},</if>
+            <if test="hth != null  and hth != ''">#{hth},</if>
+            <if test="dqsybYj != null  and dqsybYj != ''">#{dqsybYj},</if>
+            <if test="dqsybEj != null  and dqsybEj != ''">#{dqsybEj},</if>
+            <if test="wbqs != null  and wbqs != ''">#{wbqs},</if>
+            <if test="wbjb != null  and wbjb != ''">#{wbjb},</if>
+            <if test="warq != null ">#{warq},</if>
+            <if test="curName != null  and curName != ''">#{curName},</if>
+            <if test="khjlxm != null  and khjlxm != ''">#{khjlxm},</if>
+            <if test="sjrq != null ">#{sjrq},</if>
+            <if test="sfwbcs != null  and sfwbcs != ''">#{sfwbcs},</if>
+            <if test="sfjq != null  and sfjq != ''">#{sfjq},</if>
+            <if test="bywa != null  and bywa != ''">#{bywa},</if>
+            <if test="ajhsrq != null ">#{ajhsrq},</if>
+            <if test="xfjrzh != null  and xfjrzh != ''">#{xfjrzh},</if>
+            <if test="tzsx != null  and tzsx != ''">#{tzsx},</if>
+            <if test="tzje != null ">#{tzje},</if>
+            <if test="zhzt != null  and zhzt != ''">#{zhzt},</if>
+            <if test="hkrq != null ">#{hkrq},</if>
+            <if test="hksyqqs != null  and hksyqqs != ''">#{hksyqqs},</if>
+            <if test="hkje != null ">#{hkje},</if>
+            <if test="yqcplx != null  and yqcplx != ''">#{yqcplx},</if>
+            <if test="yqjd != null  and yqjd != ''">#{yqjd},</if>
+            <if test="quotaProduct != null  and quotaProduct != ''">#{quotaProduct},</if>
+            <if test="orgId != null  and orgId != ''">#{orgId},</if>
+            <if test="jazt != null  and jazt != ''">#{jazt},</if>
+            <if test="isExitCollect != null  and isExitCollect != ''">#{isExitCollect},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">#{importBatchNo},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime}</if>
+         </trim>
+    </insert>
+
+    <update id="updateCurAssetsRepaymentPackage" parameterType="CurAssetsRepaymentPackage">
+        update cur_assets_repayment_package
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orgCasno != null  and orgCasno != ''">org_casNo = #{orgCasno},</if>
+            <if test="jyqtfy != null ">jyqtfy = #{jyqtfy},</if>
+            <if test="jylx != null ">jylx = #{jylx},</if>
+            <if test="jybj != null ">jybj = #{jybj},</if>
+            <if test="jyznf != null ">jyznf = #{jyznf},</if>
+            <if test="jyType != null  and jyType != ''">jy_type = #{jyType},</if>
+            <if test="jyje != null ">jyje = #{jyje},</if>
+            <if test="productType != null  and productType != ''">product_type = #{productType},</if>
+            <if test="jjh != null  and jjh != ''">jjh = #{jjh},</if>
+            <if test="csr != null  and csr != ''">csr = #{csr},</if>
+            <if test="csjd != null  and csjd != ''">csjd = #{csjd},</if>
+            <if test="fprq != null ">fprq = #{fprq},</if>
+            <if test="areaCenter != null  and areaCenter != ''">area_center = #{areaCenter},</if>
+            <if test="acceptCity != null  and acceptCity != ''">accept_city = #{acceptCity},</if>
+            <if test="hth != null  and hth != ''">hth = #{hth},</if>
+            <if test="dqsybYj != null  and dqsybYj != ''">dqsyb_yj = #{dqsybYj},</if>
+            <if test="dqsybEj != null  and dqsybEj != ''">dqsyb_ej = #{dqsybEj},</if>
+            <if test="wbqs != null  and wbqs != ''">wbqs = #{wbqs},</if>
+            <if test="wbjb != null  and wbjb != ''">wbjb = #{wbjb},</if>
+            <if test="warq != null ">warq = #{warq},</if>
+            <if test="curName != null  and curName != ''">cur_name = #{curName},</if>
+            <if test="khjlxm != null  and khjlxm != ''">khjlxm = #{khjlxm},</if>
+            <if test="sjrq != null ">sjrq = #{sjrq},</if>
+            <if test="sfwbcs != null  and sfwbcs != ''">sfwbcs = #{sfwbcs},</if>
+            <if test="sfjq != null  and sfjq != ''">sfjq = #{sfjq},</if>
+            <if test="bywa != null  and bywa != ''">bywa = #{bywa},</if>
+            <if test="ajhsrq != null ">ajhsrq = #{ajhsrq},</if>
+            <if test="xfjrzh != null  and xfjrzh != ''">xfjrzh = #{xfjrzh},</if>
+            <if test="tzsx != null  and tzsx != ''">tzsx = #{tzsx},</if>
+            <if test="tzje != null ">tzje = #{tzje},</if>
+            <if test="zhzt != null  and zhzt != ''">zhzt = #{zhzt},</if>
+            <if test="hkrq != null ">hkrq = #{hkrq},</if>
+            <if test="hksyqqs != null  and hksyqqs != ''">hksyqqs = #{hksyqqs},</if>
+            <if test="hkje != null ">hkje = #{hkje},</if>
+            <if test="yqcplx != null  and yqcplx != ''">yqcplx = #{yqcplx},</if>
+            <if test="yqjd != null  and yqjd != ''">yqjd = #{yqjd},</if>
+            <if test="quotaProduct != null  and quotaProduct != ''">quota_product = #{quotaProduct},</if>
+            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="jazt != null  and jazt != ''">jazt = #{jazt},</if>
+            <if test="isExitCollect != null  and isExitCollect != ''">is_exit_collect = #{isExitCollect},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no = #{importBatchNo},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime}</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCurAssetsRepaymentPackageById" parameterType="String">
+        delete from cur_assets_repayment_package where id = #{id}
+    </delete>
+
+    <delete id="deleteCurAssetsRepaymentPackageByIds" parameterType="String">
+        delete from cur_assets_repayment_package where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="findMoreByOrgCasNO" parameterType="java.util.Map" resultType="java.lang.String">
+        select id from cur_assets_package
+        where org_casNo = #{orgCasno}
+    </select>
+    <select id="findMoreByHt" parameterType="java.util.Map" resultType="java.lang.String">
+        select id from cur_assets_package
+        where hth = #{hth} and jjh = #{jjh}
+    </select>
+
+    <select id="selectHkjeByOrgCasNo" parameterType="String" resultType="java.math.BigDecimal">
+        select sum(hkje) as hkje from cur_assets_repayment_package
+        where org_casNo=#{orgCasNo}
+    </select>
+    
+    <update id="updateJaztByCasNo" parameterType="java.util.Map">
+        UPDATE cur_assets_repayment_package SET jazt=#{jazt}, close_case_date=#{closeCaseDate} where org_casNo=#{orgCasNo}
+    </update>
+
+    <insert id="batchAddTemp" parameterType="java.util.List">
+        insert into cur_assets_repayment_package_temp
+        (id,
+        org_casNo,
+        jyqtfy,
+        jylx,
+        jybj,
+        jyznf,
+        jy_type,
+        jyje,
+        product_type,
+        jjh,
+        csr,
+        csjd,
+        fprq,
+        area_center,
+        accept_city,
+        hth,
+        dqsyb_yj,
+        dqsyb_ej,
+        wbqs,
+        wbjb,
+        warq,
+        cur_name,
+        khjlxm,
+        sjrq,
+        sfwbcs,
+        sfjq,
+        bywa,
+        ajhsrq,
+        xfjrzh,
+        tzsx,
+        tzje,
+        zhzt,
+        hkrq,
+        hksyqqs,
+        hkje,
+        yqcplx,
+        yqjd,
+        quota_product,
+        org_id,
+        jazt,
+        create_by,
+        create_time,
+        is_exit_collect,
+        import_batch_no,
+        close_case_date,
+        org_name,
+        is_exception)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id},
+            #{item.orgCasno},
+            #{item.jyqtfy},
+            #{item.jylx},
+            #{item.jybj},
+            #{item.jyznf},
+            #{item.jyType},
+            #{item.jyje},
+            #{item.productType},
+            #{item.jjh},
+            #{item.csr},
+            #{item.csjd},
+            #{item.fprq},
+            #{item.areaCenter},
+            #{item.acceptCity},
+            #{item.hth},
+            #{item.dqsybYj},
+            #{item.dqsybEj},
+            #{item.wbqs},
+            #{item.wbjb},
+            #{item.warq},
+            #{item.curName},
+            #{item.khjlxm},
+            #{item.sjrq},
+            #{item.sfwbcs},
+            #{item.sfjq},
+            #{item.bywa},
+            #{item.ajhsrq},
+            #{item.xfjrzh},
+            #{item.tzsx},
+            #{item.tzje},
+            #{item.zhzt},
+            #{item.hkrq},
+            #{item.hksyqqs},
+            #{item.hkje},
+            #{item.yqcplx},
+            #{item.yqjd},
+            #{item.quotaProduct},
+            #{item.orgId},
+            #{item.jazt},
+            #{item.createBy},
+            #{item.createTime},
+            #{item.isExitCollect},
+            #{item.importBatchNo},
+            #{item.closeCaseDate},
+            #{item.orgName},
+            0)
+        </foreach>
+    </insert>
+    
+    <select id="selectTempTableList" parameterType="TempCurAssetsRepaymentPackage" resultMap="TempCurAssetsRepaymentPackageResult">
+        <include refid="selectTempCurAssetsRepaymentPackageVo"/>
+        <where>
+            <if test="orgCasno != null  and orgCasno != ''"> and org_casNo = #{orgCasno}</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+            <if test="isException != null  and isException != ''"> and is_exception = #{isException}</if>
+            <if test="jazt != null  and jazt != ''"> and jazt = #{jazt}</if>
+            <if test="isExitCollect != null  and isExitCollect != ''"> and is_exit_collect = #{isExitCollect}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="startDate != null"> and create_time <![CDATA[>=]]> #{startDate}</if>
+            <if test="endDate != null"> and create_time <![CDATA[<=]]> #{endDate}</if>
+        </where>
+    </select>
+
+    <update id="updateExceptionStatus" parameterType="String">
+        update cur_assets_repayment_package_temp set is_exception = 1
+        where id = #{id}
+    </update>
+
+    <select id="selectNotExistsNum" parameterType="String" resultType="java.lang.Integer">
+        select count(1)as notExistsNum
+	    FROM cur_assets_repayment_package_temp t
+	    where t.import_batch_no = #{importBatchNo}
+	    AND t.is_exception = 0
+	    AND NOT EXISTS(
+		    SELECT 1 FROM cur_assets_package a WHERE t.org_casNo=a.org_casNo AND t.org_id=a.org_id
+	    )
+    </select>
+
+    <update id="updateNotExists" parameterType="String">
+        UPDATE cur_assets_repayment_package_temp tt SET tt.is_exception=2
+        WHERE EXISTS(
+	        SELECT 1 from (
+		        select t.id
+	            FROM cur_assets_repayment_package_temp t
+	            where t.import_batch_no = #{importBatchNo}
+	            AND t.is_exception = 0
+	            AND NOT EXISTS(
+		            SELECT 1 FROM cur_assets_package a WHERE t.org_casNo=a.org_casNo AND t.org_id=a.org_id
+			    )
+	      )m WHERE m.id= tt.id
+      )
+    </update>
+    
+    <select id="selectCloseCaseNum" parameterType="String" resultType="java.lang.Integer">
+        select count(*)as closeCaseNum
+        FROM cur_assets_repayment_package_temp t
+        where t.import_batch_no = #{importBatchNo}
+        AND t.is_exception = 0
+        AND EXISTS(
+		    SELECT 1 FROM cur_assets_package a WHERE a.org_casNo=t.org_casNo AND a.org_id=t.org_id  AND a.close_case=1
+        )
+    </select>
+    
+    <update id="updateCloseCaseNum" parameterType="String">
+        UPDATE cur_assets_repayment_package_temp tt SET tt.is_exception=3
+        WHERE EXISTS(
+	        SELECT 1 from (
+		        select t.id
+	            FROM cur_assets_repayment_package_temp t
+	            where t.import_batch_no = #{importBatchNo}
+	            AND t.is_exception = 0
+	            AND EXISTS(
+		            SELECT 1 FROM cur_assets_package a WHERE t.org_casNo=a.org_casNo AND t.org_id=a.org_id AND a.close_case=1
+                  )
+			)m WHERE m.id= tt.id
+	    )
+    </update>
+
+    <select id="selectNormalTotal" parameterType="String" resultType="java.lang.Integer">
+        SELECT count(*) as total
+        from cur_assets_repayment_package_temp t WHERE t.import_batch_no = #{importBatchNo} AND t.is_exception=0
+    </select>
+
+    <select id="selectNotExistsInfo" parameterType="String" resultType="java.util.Map">
+          SELECT id,org_casNo as orgCasno,'该案件不存在' as msg
+          from cur_assets_repayment_package_temp
+          WHERE import_batch_no=#{importBatchNo} AND is_exception=2
+    </select>
+
+    <select id="selectCloseCaseInfo" parameterType="String" resultType="java.util.Map">
+          SELECT id,org_casNo as orgCasno,'该案件已结案' as msg
+          from cur_assets_repayment_package_temp
+          WHERE import_batch_no=#{importBatchNo} AND is_exception=3
+    </select>
+
+
+    <insert id="batchAddRepaymentTable" parameterType="java.util.List">
+        insert into cur_assets_repayment_package
+        (id,
+        org_casNo,
+        jyqtfy,
+        jylx,
+        jybj,
+        jyznf,
+        jy_type,
+        jyje,
+        product_type,
+        jjh,
+        csr,
+        csjd,
+        fprq,
+        area_center,
+        accept_city,
+        hth,
+        dqsyb_yj,
+        dqsyb_ej,
+        wbqs,
+        wbjb,
+        warq,
+        cur_name,
+        khjlxm,
+        sjrq,
+        sfwbcs,
+        sfjq,
+        bywa,
+        ajhsrq,
+        xfjrzh,
+        tzsx,
+        tzje,
+        zhzt,
+        hkrq,
+        hksyqqs,
+        hkje,
+        yqcplx,
+        yqjd,
+        quota_product,
+        org_id,
+        jazt,
+        create_by,
+        create_time,
+        is_exit_collect,
+        import_batch_no,
+        close_case_date,
+        org_name
+        )
+        SELECT
+        id,
+        org_casNo,
+        jyqtfy,
+        jylx,
+        jybj,
+        jyznf,
+        jy_type,
+        jyje,
+        product_type,
+        jjh,
+        csr,
+        csjd,
+        fprq,
+        area_center,
+        accept_city,
+        hth,
+        dqsyb_yj,
+        dqsyb_ej,
+        wbqs,
+        wbjb,
+        warq,
+        cur_name,
+        khjlxm,
+        sjrq,
+        sfwbcs,
+        sfjq,
+        bywa,
+        ajhsrq,
+        xfjrzh,
+        tzsx,
+        tzje,
+        zhzt,
+        hkrq,
+        hksyqqs,
+        hkje,
+        yqcplx,
+        yqjd,
+        quota_product,
+        org_id,
+        jazt,
+        create_by,
+        create_time,
+        is_exit_collect,
+        import_batch_no,
+        close_case_date,
+        org_name
+        FROM cur_assets_repayment_package_temp WHERE import_batch_no=#{importBatchNo} AND is_exception='0'
+    </insert>
+
+    <delete id="deleteTempTable" parameterType="String">
+        delete from cur_assets_repayment_package_temp where import_batch_no = #{importBatchNo}
+    </delete>
+
+</mapper>

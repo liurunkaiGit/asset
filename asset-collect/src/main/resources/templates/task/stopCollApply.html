@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('我的任务列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <input type="hidden" id="orgId" name="orgId" th:value="${orgId}">
+                            <input type="hidden" id="type" name="type" th:value="${type}">
+                            <li>
+                                <p>证件号：</p>
+                                <input type="text" name="certificateNo"/>
+                            </li>
+                            <li>
+                                <p>证件类型：</p>
+                                <!-- 1：身份证，2：护照，3：军官证，4：港澳台居民往来大陆通行证，5：户口簿-->
+                                <select name="certificateType" th:with="type=${@dict.getType('sys_car_type')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>客户姓名：</p>
+                                <input type="text" name="customName"/>
+                            </li>
+                            <li>
+                                <p>任务状态：</p>
+                                <!-- 1：未分配 2：催收中 3: 已结案-->
+                                <select name="taskStatus" th:with="type=${@dict.getType('sys_task_state')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>任务类型：</p>
+                                <select name="taskType" th:with="type=${@dict.getType('sys_task_type')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <button type="button" class="btn btn-success" onclick="approveStopColl(1)">同意</button>
+                <button type="button" class="btn btn-success" onclick="approveStopColl(2)">拒绝</button>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:task:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:task:remove')}]];
+        var carTypeDatas = [[${@dict.getType('sys_car_type')}]];
+        var taskStatusDatas = [[${@dict.getType('sys_task_state')}]];
+        var taskTypeDatas = [[${@dict.getType('sys_task_type')}]];
+        var prefix = ctx + "collect/task";
+        var custTagPrefix = ctx + "collect/cust/tag";
+
+        $(function() {
+            var options = {
+                url: prefix + "/stopCollList?type="+$("#type").val(),
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                clickToSelect:true,
+                modalName: "任务",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id',
+                    title : '主鍵ID',
+                    visible: false
+                },{
+                    field : 'caseNo',
+                    title : '案件编号'
+                },
+                {
+                    field : 'certificateNo',
+                    title : '证件号'
+                },
+                {
+                    field : 'certificateType',
+                    title : '证件类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(carTypeDatas, value);
+                    }
+                },
+                {
+                    field : 'customCode',
+                    title : '客户编号'
+                },
+                {
+                    field : 'customName',
+                    title : '客户姓名'
+                },
+                {
+                    field : 'arrearsTotal',
+                    title : '欠款总额'
+                },
+                {
+                    field : 'taskStatus',
+                    title : '任务状态',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(taskStatusDatas, value);
+                    }
+                },
+                {
+                    field : 'overdueDays',
+                    title : '逾期天数'
+                },
+                {
+                    field : 'overdueAging',
+                    title : '逾期账龄'
+                },
+                {
+                    field : 'collectTimeLimit',
+                    title : '催收限时天数'
+                },
+                {
+                    field : 'collectLastTime',
+                    title : '最后催记时间'
+                },
+                {
+                    field : 'ownerName',
+                    title : '业务归属人'
+                },
+                {
+                    field : 'orgName',
+                    title : '业务归属机构'
+                },
+                {
+                    field : 'closeDate',
+                    title : '任务结束日期'
+                },
+                {
+                    field : 'taskType',
+                    title : '任务类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(taskTypeDatas, value);
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+
+
+        /**
+         * 停止催收任务审批
+         * @param status
+         */
+        function approveStopColl(status) {
+            var taskIdrows = $.table.selectFirstColumns();
+            if (taskIdrows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.modal.confirm("确认要要执行此操作吗?", function() {
+                // 查询当前机构下所有用户
+                var approveStopCollUrl = prefix + '/approveStopColl?taskIds='+taskIdrows.join()+"&status="+status;
+                $.operate.submit(approveStopCollUrl);
+            });
+        }
+    </script>
+</body>
+</html>

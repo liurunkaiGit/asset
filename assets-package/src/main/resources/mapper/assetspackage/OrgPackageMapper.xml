@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.OrgPackageMapper">
+
+    <resultMap type="com.ruoyi.assetspackage.domain.OrgPackage" id="OrgPackageResult">
+        <result property="id"    column="id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="orgCode"    column="org_code"    />
+        <result property="startDate"    column="start_date"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="orgStatus"    column="org_status"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateDate"    column="update_date"    />
+        <result property="sendRobot"    column="send_robot"    />
+        <result property="autoStartRobotTask"    column="auto_start_robot_task"    />
+        <result property="sendRadioQc"    column="send_radio_qc"    />
+        <result property="sendRuleEngine"    column="send_rule_engine"    />
+        <result property="autoAllocatTask"    column="auto_allocat_task"    />
+        <result property="allocatTaskStartegy"    column="allocat_task_startegy"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="isAutoScore"    column="is_auto_score"    />
+    </resultMap>
+
+    <sql id="selectOrgPackageVo">
+        select id, org_name, org_code, start_date, end_date, org_status, dept_id, dept_name, create_by, create_date, update_by, update_date, send_robot, auto_start_robot_task, send_radio_qc, send_rule_engine, auto_allocat_task, allocat_task_startegy, project_name,is_auto_score from org_package
+    </sql>
+
+    <select id="selectOrgPackageList" parameterType="OrgPackage" resultMap="OrgPackageResult">
+        <include refid="selectOrgPackageVo"/>
+        <where>
+            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+            <if test="orgCode != null  and orgCode != ''"> and org_code = #{orgCode}</if>
+            <if test="projectName != null  and projectName != ''"> and project_name = #{projectName}</if>
+            <if test="startDate != null "> and start_date = #{startDate}</if>
+            <if test="endDate != null "> and end_date = #{endDate}</if>
+            <if test="orgStatus != null  and orgStatus != ''"> and org_status = #{orgStatus}</if>
+            <if test="deptId != null "> and dept_id = #{deptId}</if>
+            <if test="deptName != null  and deptName != ''"> and dept_name like concat('%', #{deptName}, '%')</if>
+            <if test="createDate != null "> and create_date = #{createDate}</if>
+            <if test="updateDate != null "> and update_date = #{updateDate}</if>
+            <if test="sendRobot != null "> and send_robot = #{sendRobot}</if>
+            <if test="autoStartRobotTask != null "> and auto_start_robot_task = #{autoStartRobotTask}</if>
+            <if test="sendRadioQc != null "> and send_radio_qc = #{sendRadioQc}</if>
+            <if test="sendRuleEngine != null "> and send_rule_engine = #{sendRuleEngine}</if>
+            <if test="autoAllocatTask != null "> and auto_allocat_task = #{autoAllocatTask}</if>
+            <if test="allocatTaskStartegy != null "> and allocat_task_startegy = #{allocatTaskStartegy}</if>
+            <if test="deptIds != null">
+                and dept_id in
+                <foreach collection="deptIds" item="deptId" open="(" close=")" separator=",">
+                    #{deptId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectOrgPackageById" parameterType="String" resultMap="OrgPackageResult">
+        <include refid="selectOrgPackageVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectOrgPackageByDeptId" parameterType="String" resultMap="OrgPackageResult">
+        <include refid="selectOrgPackageVo"/>
+        where dept_id = #{deptId}
+    </select>
+        
+    <insert id="insertOrgPackage" parameterType="OrgPackage">
+        insert into org_package
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="orgCode != null  and orgCode != ''">org_code,</if>
+            <if test="projectName != null  and projectName != ''">project_name,</if>
+            <if test="startDate != null ">start_date,</if>
+            <if test="endDate != null ">end_date,</if>
+            <if test="orgStatus != null  and orgStatus != ''">org_status,</if>
+            <if test="deptId != null ">dept_id,</if>
+            <if test="deptName != null  and deptName != ''">dept_name,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createDate != null ">create_date,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateDate != null ">update_date,</if>
+            <if test="sendRobot != null ">send_robot,</if>
+            <if test="autoStartRobotTask != null ">auto_start_robot_task,</if>
+            <if test="sendRadioQc != null ">send_radio_qc,</if>
+            <if test="sendRuleEngine != null ">send_rule_engine,</if>
+            <if test="autoAllocatTask != null ">auto_allocat_task,</if>
+            <if test="allocatTaskStartegy != null ">allocat_task_startegy,</if>
+            <if test="isAutoScore != null and isAutoScore != ''">is_auto_score,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="orgCode != null  and orgCode != ''">#{orgCode},</if>
+            <if test="projectName != null  and projectName != ''">#{projectName},</if>
+            <if test="startDate != null ">#{startDate},</if>
+            <if test="endDate != null ">#{endDate},</if>
+            <if test="orgStatus != null  and orgStatus != ''">#{orgStatus},</if>
+            <if test="deptId != null ">#{deptId},</if>
+            <if test="deptName != null  and deptName != ''">#{deptName},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createDate != null ">#{createDate},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateDate != null ">#{updateDate},</if>
+            <if test="sendRobot != null ">#{sendRobot},</if>
+            <if test="autoStartRobotTask != null ">#{autoStartRobotTask},</if>
+            <if test="sendRadioQc != null ">#{sendRadioQc},</if>
+            <if test="sendRuleEngine != null ">#{sendRuleEngine},</if>
+            <if test="autoAllocatTask != null ">#{autoAllocatTask},</if>
+            <if test="allocatTaskStartegy != null ">#{allocatTaskStartegy},</if>
+            <if test="isAutoScore != null and isAutoScore != ''">#{isAutoScore},</if>
+        </trim>
+    </insert>
+
+    <update id="updateOrgPackage" parameterType="OrgPackage">
+        update org_package
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="orgCode != null  and orgCode != ''">org_code = #{orgCode},</if>
+            <if test="projectName != null  and projectName != ''">project_name = #{projectName},</if>
+            <if test="startDate != null ">start_date = #{startDate},</if>
+            <if test="endDate != null ">end_date = #{endDate},</if>
+            <if test="orgStatus != null  and orgStatus != ''">org_status = #{orgStatus},</if>
+            <if test="deptId != null ">dept_id = #{deptId},</if>
+            <if test="deptName != null  and deptName != ''">dept_name = #{deptName},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createDate != null ">create_date = #{createDate},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateDate != null ">update_date = #{updateDate},</if>
+            <if test="sendRobot != null ">send_robot = #{sendRobot},</if>
+            <if test="autoStartRobotTask != null ">auto_start_robot_task = #{autoStartRobotTask},</if>
+            <if test="sendRadioQc != null ">send_radio_qc = #{sendRadioQc},</if>
+            <if test="sendRuleEngine != null ">send_rule_engine = #{sendRuleEngine},</if>
+            <if test="autoAllocatTask != null ">auto_allocat_task = #{autoAllocatTask},</if>
+            <if test="allocatTaskStartegy != null ">allocat_task_startegy = #{allocatTaskStartegy},</if>
+            <if test="isAutoScore != null and isAutoScore != ''">is_auto_score = #{isAutoScore},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOrgPackageById" parameterType="String">
+        delete from org_package where id = #{id}
+    </delete>
+
+    <delete id="deleteOrgPackageByIds" parameterType="String">
+        delete from org_package where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectOrgIdByUserId" parameterType="Long" resultType="String">
+        SELECT id FROM org_package t
+        WHERE  t.dept_id = (
+        SELECT b.dept_id FROM  SYS_USER a
+        JOIN sys_dept b ON a.dept_id = b.dept_id
+        where a.user_id = #{userId}
+        )
+    </select>
+
+    <select id="selectDataScopeByUserId" parameterType="Long" resultType="String">
+        SELECT c.data_scope as dataScope
+        from sys_user_role a
+        join sys_user b ON a.user_id=b.user_id
+        join sys_role c on a.role_id = c.role_id
+        WHERE b.user_id=#{userId}
+    </select>
+
+    <select id="selectDeptIdByUserId" parameterType="Long" resultType="long">
+        SELECT a.dept_id from sys_dept a
+        JOIN sys_user b on a.dept_id = b.dept_id
+        WHERE b.user_id=#{userId}
+    </select>
+
+    <select id="selectOrgInfoByUserId1" parameterType="Long" resultType="java.util.Map">
+        SELECT t.dept_id as orgId,t.org_name as orgName FROM org_package t
+    </select>
+
+    <select id="selectOrgInfoByUserId2" parameterType="Long" resultType="java.util.Map">
+        SELECT t.dept_id as orgId,t.org_name as orgName FROM org_package t
+        WHERE t.dept_id in(
+			SELECT c.dept_id
+			from sys_user_role a
+			join sys_user b ON a.user_id=b.user_id
+			join sys_role_dept c on a.role_id = c.role_id
+			WHERE b.user_id=#{userId}
+		)
+    </select>
+
+    <select id="selectOrgInfoByUserId3" parameterType="Long" resultType="java.util.Map">
+        SELECT t.dept_id as orgId,t.org_name as orgName FROM org_package t
+        WHERE t.dept_id in(
+			SELECT a.dept_id
+			from sys_user a
+			WHERE a.user_id=#{userId}
+        )
+    </select>
+
+    <select id="selectOrgInfoByUserId4" parameterType="java.util.Set" resultType="java.util.Map">
+        SELECT t.dept_id as orgId,t.org_name as orgName FROM org_package t
+        WHERE t.dept_id in
+          <foreach item="item" index="index" collection="collection" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="selectChildDeptId" parameterType="Long" resultType="java.lang.Long">
+        SELECT b.dept_id from sys_dept a
+        join sys_dept b on a.dept_id = b.parent_id
+        where a.dept_id = #{parentId}
+    </select>
+
+    <select id="selectOrgPackageByOrgId" parameterType="java.lang.String" resultMap="OrgPackageResult">
+        <include refid="selectOrgPackageVo"/>
+        where dept_id = #{orgId}
+    </select>
+
+    <select id="selectOrgInfoByDeptId" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT t.dept_id as orgId,t.org_name as orgName FROM org_package t
+        WHERE t.dept_id = #{deptId}
+    </select>
+
+    <!-- 此返回mapResult是有顺序的LinkedHashMap，禁止打乱排序，可以往最后追加 -->
+    <resultMap id="mapResult" type="java.util.LinkedHashMap">
+        <result property="id" column="id"/>
+        <result property="orgName" column="org_name"/>
+        <result property="orgCode" column="org_code"/>
+        <result property="startDate" column="start_date"/>
+        <result property="endDate" column="end_date"/>
+        <result property="orgStatus" column="org_status"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateBy" column="update_by" />
+        <result property="updateDate" column="update_date" />
+        <result property="sendRobot" column="send_robot" />
+        <result property="autoStartRobotTask" column="auto_start_robot_task" />
+        <result property="sendRadioQc" column="send_radio_qc" />
+        <result property="sendRuleEngine" column="send_rule_engine" />
+        <result property="autoAllocatTask" column="auto_allocat_task" />
+        <result property="allocatTaskStartegy" column="allocat_task_startegy" />
+    </resultMap>
+
+    <select id="selectOrgPackageByTime" parameterType="com.ruoyi.assetspackage.domain.OrgPackage" resultMap="mapResult">
+        select id, org_name, org_code, start_date,  end_date, org_status,dept_id, create_by, create_date,update_by,update_date,send_robot,
+        auto_start_robot_task,send_radio_qc,send_rule_engine,auto_allocat_task,allocat_task_startegy from org_package
+        where 1 = 1
+        <if test="updateDate != null">
+            AND create_date <![CDATA[>=]]> #{updateDate} or update_date <![CDATA[>=]]> #{updateDate}
+        </if>
+        order by update_date desc
+    </select>
+
+</mapper>

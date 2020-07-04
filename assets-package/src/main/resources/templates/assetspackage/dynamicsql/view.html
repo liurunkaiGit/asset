@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('动态sql')" />
+    <th:block th:include="include :: datetimepicker-css" />
+    <style type="text/css">
+        .select-list li p{
+            width: 100px;
+        }
+
+    </style>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <!--<div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>机构案件号：</p>
+                            <input type="text" name="orgCasno"/>
+                        </li>
+                        <li>
+                            <p>委托方：</p>
+                            <select name="orgId" id="orgId">
+                                <option value="">请选择</option>
+                            </select>
+                        </li>
+                        <li>
+                            <p>资产导入人：</p>
+                            <input type="text" name="createBy"/>
+                        </li>
+                        <li>
+                            <p>还款导入人：</p>
+                            <input type="text" name="createBy2"/>
+                        </li>
+                        <li class="select-time">
+                            <p>资产导入时间：</p>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="startDate"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="endDate"/>
+                        </li>
+                        <li class="select-time">
+                            <p>还款导入时间：</p>
+                            <input type="text" class="time-input" id="startTime2" placeholder="开始时间" name="startDate2"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime2" placeholder="结束时间" name="endDate2"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>-->
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" data-toggle="modal" data-target="#myModal">
+                <i class="glyphicon glyphicon-play"></i> 执行sql
+            </a>
+            <a class="btn btn-warning" data-toggle="modal" data-target="#myModal2">
+                <i class="glyphicon glyphicon-play"></i> 文件下载
+            </a>
+           <!-- <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="assetspackage:dynamicsql:list">
+                <i class="fa fa-download"></i> 导出
+            </a>-->
+
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content animated bounceInRight">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+                            </button>
+                            <h4 class="modal-title">执行窗口</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <span  style="font-size: 15px;color:black;">sql编写：</span>
+                                <textarea  id ="sql" name="sql" class="form-control" style="height: 300px;"></textarea>
+                            </div>
+                            <!--<div class="form-group">
+                                <input id="options"  type="hidden">
+                            </div>-->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-primary" onclick="toApply();">执行</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="modal inmodal" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content animated bounceInRight">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+                            </button>
+                            <h4 class="modal-title">下载窗口</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <span  style="font-size: 15px;color:black;">文件名称：</span>
+                                <input id ="downloadName" name="downloadName" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <span  style="font-size: 15px;color:black;">文件路径：</span>
+                                <input id ="downloadPath" name="downloadPath" class="form-control" >
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-primary" onclick="download();">执行</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: datetimepicker-js" />
+<script th:inline="javascript">
+    var prefix = ctx + "assetspackage/dynamicsql";
+
+    $(function() {
+        /*var options = {
+            url: prefix + "/list",
+            exportUrl: prefix + "/export",
+            clickToSelect:true,
+            pagination:false,
+            columns: [{checkbox: false},
+                {field : 'id', title : '主键'},
+                {field : 'package_name', title : 'package_name'}
+
+
+            ]
+        };
+        $.table.init(options);*/
+
+
+       /* $.ajax({
+            url: prefix+"/findOrgInfo",
+            dataType: "json",
+            type: "post",
+            success:function(data){
+                var result = JSON.parse(data.msg);
+                $.each(result,function(index,obj){
+                    $("#orgId").append("<option value='"+obj.orgId+"'>"+obj.orgName+"</option>");
+                });
+            }
+        });*/
+
+
+
+
+
+    });
+
+
+    function toExecute() {
+        $.modal.open("执行窗口", prefix+"/execute");
+
+    }
+    function toApply() {
+        var sql = $("#sql").val();
+        if(sql.indexOf("select")>=0 || sql.indexOf("SELECT")>=0){
+            window.location.href=prefix + "/apply2"+"?sql="+sql;
+            $('#myModal').modal('hide');
+        }else{
+            $.ajax({
+                url: prefix + "/apply",
+                type: 'post',
+                cache: false,
+                data: {
+                    sql:sql
+                },
+                dataType: "json",
+                success: function(result) {
+                    $.modal.alertSuccess(result.msg);
+                    // $.operate.successCallback(result);
+                    $('#myModal').modal('hide');
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown){
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+                }
+            });
+        }
+    }
+</script>
+
+<script type="text/javascript">
+        function download() {
+            var downloadName = $("#downloadName").val();
+            var downloadPath = $("#downloadPath").val();
+            $("#myModal2").modal('hide');
+            window.location.href = prefix+"/downLoad?downloadName="+downloadName+"&downloadPath="+downloadPath;
+        }
+</script>
+</body>
+</html>

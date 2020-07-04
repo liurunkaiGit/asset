@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta http-equiv="Cache-Control" content="no-store">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <link th:href="@{/css/agentcss/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/agentcss/agent-toolbar.css}" rel="stylesheet"/>
+
+    <!--[if lt IE 9]>
+    <script th:src="@{/ajax/libs/agentjs/html5shiv.min.js}"></script>
+    <script th:src="@{/ajax/libs/agentjs/respond.min.js}"></script>
+    <![endif]-->
+
+
+    <script th:src="@{/ajax/libs/agentjs/jquery.min.js}"></script>
+    <script th:src="@{/ajax/libs/agentjs/socket.io.min.js}"></script>
+    <script th:src="@{/ajax/libs/agentjs/agent-client.js}"></script>
+    <script th:src="@{/ajax/libs/agentjs/moment.min.js}"></script>
+    <script th:src="@{/ajax/libs/agentjs/agent-toolbar.js}"></script>
+
+    <th:block th:include="include :: header('签入')" />
+    <th:block th:include="include :: datetimepicker-css" />
+
+
+
+
+    <style>
+        body {
+            padding: 15px;
+            font-size: 12px;
+            font-family: "Microsoft YaHei", "微软雅黑";
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+
+        .form-control {
+            font-size: 12px;
+            height: 31px;
+        }
+
+        #mainContainer .form-control.w100 {
+            width: 100px;
+        }
+
+        #printContainer.panel {
+            position: absolute;
+            top: 120px;
+            bottom: 0;
+            left: 15px;
+            right: 15px;
+            overflow: auto;
+            background: white;
+        }
+
+        #printContainer pre {
+            border: 0;
+            color: blue;
+            background: transparent;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div id="loginContainer" class="panel panel-default" style="display:none;">
+        <form class="form-horizontal m" id="form-assetspackage-add" >
+            <div class="form-group">
+                <label class="col-sm-3 control-label">分机号码：</label>
+                <div class="col-sm-8">
+                    <input id="agentId" name="agentId" class="form-control" type="text" th:value="${agentId}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">坐席技能：</label>
+                <div class="col-sm-8">
+                    <input id="skillDesc" name="skillDesc" class="form-control" type="text" th:value="${skillDesc}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">外呼前缀：</label>
+                <div class="col-sm-8">
+                    <input id="dialPrefix" name="dialPrefix" class="form-control" type="text" th:value="${dialPrefix}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">外显号码：</label>
+                <div class="col-sm-8">
+                    <input id="dialCaller" name="dialCaller" class="form-control" type="text" th:value="${dialCaller}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">代理地址：</label>
+                <div class="col-sm-8">
+                    <input id="proxyUrl" name="proxyUrl" class="form-control" type="text" th:value="${proxyUrl}">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="mainContainer">
+        <div id="agentContainer" class="panel panel-default"></div>
+        <div class="panel panel-default">
+            <div class="btn-toolbar form-inline">
+                <div class="input-group">
+                    <div class="input-group-btn">
+                        <a class="btn btn-info" id="btnHold" style="border-radius: 4px 0px 0px 4px;">保持</a>
+                        <a class="btn btn-info" id="btnGetAgentState" style="border-left: 1.5px solid rgb(33,178,202)">坐席状态</a>
+                        <a class="btn btn-info" id="btnReset" style="border-left: 1.5px solid rgb(33,178,202)">重置</a>
+                        <a class="btn btn-info" id="btnEmpty" style="border-radius: 0px 4px 4px 0px;border-left: 1.5px solid rgb(33,178,202)">清空</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="printContainer" class="panel panel-default"><pre></pre></div>
+    </div>
+
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        $(function () {
+            var agentId = $("#agentId").val();
+            var proxyUrl = $("#proxyUrl").val();
+            var skillDesc = $("#skillDesc").val();
+            var dialPrefix = $("#dialPrefix").val();
+            var dialCaller = $("#dialCaller").val();
+
+            var agentBar = new AgentBar({
+                container: '#agentContainer',
+                autoAnswer: true,
+                autoReady: 2,
+                acwTime: 3000,
+                /*owReasons: ['休息', '就餐', '会议'],*/
+                agentId: agentId,
+                agentDn: agentId,
+                agentName: agentId,
+                agentType: 1,
+                skillDesc: skillDesc+';',
+                proxyUrl: proxyUrl,
+                dialPrefix:dialPrefix,
+                dialCaller:dialCaller
+            });
+
+
+            agentBar.onOnline = function(event) {
+                printEvent('onOnline', event);
+            };
+
+            agentBar.onOffline = function(event) {
+                printEvent('onOffline', event);
+            };
+
+            agentBar.onStatusChanged = function(event) {
+                printEvent('onStatusChanged', event);
+            };
+
+            agentBar.onDialing = function(event) {
+                printEvent('onDialing', event);
+            };
+
+            agentBar.onOffering = function(event) {
+                printEvent('onOffering', event);
+            };
+
+            agentBar.onConnected = function(event) {
+                printEvent('onConnected', event);
+            };
+
+            agentBar.onReleased = function(event) {
+                printEvent('onReleased', event);
+            };
+
+            agentBar.onRecordEnd = function(event) {
+                printEvent('onRecordEnd', event);
+            };
+
+            agentBar.onError = function(event) {
+                printEvent('onError', event);
+            };
+
+            agentBar.start();
+
+            function printEvent(handler, event) {
+                $('#printContainer pre').append(handler + ': ' + JSON.stringify(event, null, 4) + '\n\n');
+                $('#printContainer').scrollTop($('#printContainer')[0].scrollHeight);
+            }
+
+
+            $(".btn-group").remove();
+            $('#btnEmpty').click(function() {
+                $('#printContainer pre').empty();
+            });
+            $('#btnReset').click(function() {
+                $('#txtNumber').val('');
+            });
+            $('#btnHold').click(function() {
+                agentBar.holdCall();
+            });
+            $('#btnGetAgentState').click(function() {
+                agentBar.getAgentState(agentId, function(agentStatus, deviceStatus) {
+                    var agentDetail,deviceDetail;
+                    if(agentStatus==0){
+                        agentDetail='座席初始化状态';
+                    }
+                    if(agentStatus==1){
+                        agentDetail='签入';
+                    }
+                    if(agentStatus==2){
+                        agentDetail='忙碌';
+                    }
+                    if(agentStatus==3){
+                        agentDetail='空闲';
+                    }
+                    if(agentStatus==4){
+                        agentDetail='锁定';
+                    }
+                    if(agentStatus==5){
+                        agentDetail='工作，包含振铃、通话等话路事件';
+                    }
+                    if(agentStatus==6){
+                        agentDetail='事后整理';
+                    }
+                    if(agentStatus==7){
+                        agentDetail='其他工作';
+                    }
+                    if(agentStatus==8){
+                        agentDetail='签出';
+                    }
+                    $.modal.alertSuccess("当前坐席状态："+agentDetail);
+                });
+
+            });
+
+
+        });
+
+        $("#form-assetspackage-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.modal.close();
+            }
+        }
+
+
+
+    </script>
+</body>
+</html>

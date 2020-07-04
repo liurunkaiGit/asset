@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改【请填写功能名称】')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-pandect-edit" th:object="${tLcRobotTaskPandect}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机器人任务id：</label>
+                <div class="col-sm-8">
+                    <input name="robotTaskId" th:field="*{robotTaskId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">任务名称：</label>
+                <div class="col-sm-8">
+                    <input name="taskName" th:field="*{taskName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机器人话术id：</label>
+                <div class="col-sm-8">
+                    <input name="speechCraftNameId" th:field="*{speechCraftNameId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机器人话术名称：</label>
+                <div class="col-sm-8">
+                    <input name="speechCraftName" th:field="*{speechCraftName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机器人任务状态：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="robotTaskStatus" value="">
+                        <label th:for="robotTaskStatus" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机构编号：</label>
+                <div class="col-sm-8">
+                    <input name="orgId" th:field="*{orgId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机构名称：</label>
+                <div class="col-sm-8">
+                    <input name="orgName" th:field="*{orgName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">所属机器人：</label>
+                <div class="col-sm-8">
+                    <input name="robot" th:field="*{robot}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">任务拨打的号码总数：</label>
+                <div class="col-sm-8">
+                    <input name="callTotalCount" th:field="*{callTotalCount}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">任务已完成拨打的号码总数：</label>
+                <div class="col-sm-8">
+                    <input name="callDoneCount" th:field="*{callDoneCount}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">任务已完成呼通的号码总数：</label>
+                <div class="col-sm-8">
+                    <input name="callCalledCount" th:field="*{callCalledCount}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">任务呼叫被拒接的号码总数：</label>
+                <div class="col-sm-8">
+                    <input name="callRejectedCount" th:field="*{callRejectedCount}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">任务呼叫无法接通的号码总数：</label>
+                <div class="col-sm-8">
+                    <input name="callUnavailableCount" th:field="*{callUnavailableCount}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">任务主叫号码不可用的号码总：</label>
+                <div class="col-sm-8">
+                    <input name="callFromUnavailableCount" th:field="*{callFromUnavailableCount}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "ruoyi/pandect";
+        $("#form-pandect-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-pandect-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

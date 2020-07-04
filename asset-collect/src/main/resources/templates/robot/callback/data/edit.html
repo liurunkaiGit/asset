@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改【请填写功能名称】')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-data-edit" th:object="${tLcRobotCallRecordMeteData}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">呼入回调标识：INBOUND_CALL_INSTANCE_RESULT：</label>
+                <div class="col-sm-8">
+                    <select name="dataType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">通话记录 id：</label>
+                <div class="col-sm-8">
+                    <input name="inboundInstanceId" th:field="*{inboundInstanceId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">公司ID：</label>
+                <div class="col-sm-8">
+                    <input name="companyId" th:field="*{companyId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">任务 ID：</label>
+                <div class="col-sm-8">
+                    <input name="callJobId" th:field="*{callJobId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户 Id：</label>
+                <div class="col-sm-8">
+                    <input name="customerId" th:field="*{customerId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户手机号：</label>
+                <div class="col-sm-8">
+                    <input name="customerTelephone" th:field="*{customerTelephone}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户手机号：</label>
+                <div class="col-sm-8">
+                    <input name="customerName" th:field="*{customerName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">电话实例状态 0： 未开始 1： 进行中 2： 已完成：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="status" value="">
+                        <label th:for="status" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">已完成通话状态枚举：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="finishStatus" value="">
+                        <label th:for="finishStatus" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">通话时长：</label>
+                <div class="col-sm-8">
+                    <input name="duration" th:field="*{duration}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">通话轮次：</label>
+                <div class="col-sm-8">
+                    <input name="chatRound" th:field="*{chatRound}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">通话开始时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="startTime" th:value="${#dates.format(tLcRobotCallRecordMeteData.startTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">通话开始时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="endTime" th:value="${#dates.format(tLcRobotCallRecordMeteData.endTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">被叫号码：</label>
+                <div class="col-sm-8">
+                    <input name="calleePhone" th:field="*{calleePhone}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">通话录音：</label>
+                <div class="col-sm-8">
+                    <input name="luyinOssUrl" th:field="*{luyinOssUrl}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">通话录音：</label>
+                <div class="col-sm-8">
+                    <input name="userLuyinOssUrl" th:field="*{userLuyinOssUrl}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">通话记录携带的参数(json 字符串)，包含话术变量和自定义参数， 用户可以传入自己的变量， 回调会传回给用户：</label>
+                <div class="col-sm-8">
+                    <input name="properties" th:field="*{properties}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否已读， 产品中的通话记录已读未读状态 0： 未读 1： 已读：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="readStatus" value="">
+                        <label th:for="readStatus" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机器人 Id：</label>
+                <div class="col-sm-8">
+                    <input name="robotDefId" th:field="*{robotDefId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">场景 Id：</label>
+                <div class="col-sm-8">
+                    <input name="sceneDefId" th:field="*{sceneDefId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">场景录音 id：</label>
+                <div class="col-sm-8">
+                    <input name="sceneRecordId" th:field="*{sceneRecordId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">转人工状态:0-无转接,1-成功,2-失败：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="transferStatus" value="">
+                        <label th:for="transferStatus" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">转人工详情：</label>
+                <div class="col-sm-8">
+                    <input name="transferInfo" th:field="*{transferInfo}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">用户级别：</label>
+                <div class="col-sm-8">
+                    <input name="userLevel" th:field="*{userLevel}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">挂机人 0： AI 1： 用户：</label>
+                <div class="col-sm-8">
+                    <input name="hangUp" th:field="*{hangUp}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否回调：</label>
+                <div class="col-sm-8">
+                    <input name="callbacked" th:field="*{callbacked}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否回调：</label>
+                <div class="col-sm-8">
+                    <input name="propertiesMap" th:field="*{propertiesMap}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">回调签名：</label>
+                <div class="col-sm-8">
+                    <input name="sign" th:field="*{sign}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">GMT 格式日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="dateTime" th:value="${#dates.format(tLcRobotCallRecordMeteData.dateTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "ruoyi/data";
+        $("#form-data-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-data-edit').serialize());
+            }
+        }
+
+        $("input[name='startTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='endTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='dateTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.report.mapper.TLcReportDayProcessMapper">
+
+    <resultMap type="com.ruoyi.report.domain.TLcReportDayProcess" id="TLcReportDayProcessResult">
+        <result property="id" column="id"/>
+        <result property="reportDate" column="report_date"/>
+        <result property="seatGroup" column="seat_group"/>
+        <result property="seatNum" column="seat_num"/>
+        <result property="seatName" column="seat_name"/>
+        <result property="dealWithConsumerCount" column="deal_with_consumer_count"/>
+        <result property="actionCodeNum" column="action_code_num"/>
+        <result property="callCodeNum" column="call_code_num"/>
+        <result property="callActionCodeRecovery" column="call_action_code_recovery"/>
+        <result property="averageCallCode" column="average_call_code"/>
+        <result property="averageActionCode" column="average_action_code"/>
+        <result property="callLen" column="call_len"/>
+        <result property="selfEffectiveCallCodeNum" column="self_effective_call_code_num"/>
+        <result property="thirdEffectiveCallCodeNum" column="third_effective_call_code_num"/>
+        <result property="averageEffectiveCallCodeNum" column="average_effective_call_code_num"/>
+        <result property="callConnectedRecovery" column="call_connected_recovery"/>
+        <result property="complaintNum" column="complaint_num"/>
+        <result property="orgId" column="org_id"/>
+        <result property="orgName" column="org_name"/>
+        <result property="userCoverNum"    column="user_cover_num"    />
+        <result property="callNum"    column="call_num"    />
+        <result property="connectedCallNum"    column="connected_call_num"    />
+        <result property="collingCaseMoney" column="colling_case_money"/>
+    </resultMap>
+
+    <sql id="selectTLcReportDayProcessVo">
+        select id, report_date, seat_group, seat_num, seat_name, deal_with_consumer_count, action_code_num, call_code_num, call_action_code_recovery, average_call_code, average_action_code, call_len, self_effective_call_code_num, third_effective_call_code_num, average_effective_call_code_num, call_connected_recovery, complaint_num, org_id, org_name, user_cover_num, call_num, connected_call_num, colling_case_money from t_lc_report_day_process
+    </sql>
+
+    <select id="selectTLcReportDayProcessList" parameterType="com.ruoyi.report.domain.TLcReportDayProcess"
+            resultMap="TLcReportDayProcessResult">
+        <include refid="selectTLcReportDayProcessVo"/>
+        <where>
+            <if test="reportDate != null ">and report_date = #{reportDate}</if>
+            <if test="seatGroup != null  and seatGroup != ''">and seat_group = #{seatGroup}</if>
+            <if test="seatNum != null  and seatNum != ''">and seat_num = #{seatNum}</if>
+            <if test="seatName != null  and seatName != ''">and seat_name like concat('%', #{seatName}, '%')</if>
+            <if test="dealWithConsumerCount != null ">and deal_with_consumer_count = #{dealWithConsumerCount}</if>
+            <if test="actionCodeNum != null ">and action_code_num = #{actionCodeNum}</if>
+            <if test="callCodeNum != null ">and call_code_num = #{callCodeNum}</if>
+            <if test="callActionCodeRecovery != null  and callActionCodeRecovery != ''">and call_action_code_recovery =
+                #{callActionCodeRecovery}
+            </if>
+            <if test="averageCallCode != null  and averageCallCode != ''">and average_call_code = #{averageCallCode}
+            </if>
+            <if test="averageActionCode != null  and averageActionCode != ''">and average_action_code =
+                #{averageActionCode}
+            </if>
+            <if test="callLen != null  and callLen != ''">and call_len = #{callLen}</if>
+            <if test="selfEffectiveCallCodeNum != null ">and self_effective_call_code_num =
+                #{selfEffectiveCallCodeNum}
+            </if>
+            <if test="thirdEffectiveCallCodeNum != null ">and third_effective_call_code_num =
+                #{thirdEffectiveCallCodeNum}
+            </if>
+            <if test="averageEffectiveCallCodeNum != null ">and average_effective_call_code_num =
+                #{averageEffectiveCallCodeNum}
+            </if>
+            <if test="callConnectedRecovery != null  and callConnectedRecovery != ''">and call_connected_recovery =
+                #{callConnectedRecovery}
+            </if>
+            <if test="complaintNum != null ">and complaint_num = #{complaintNum}</if>
+            <if test="orgId != null  and orgId != ''">and org_id = #{orgId}</if>
+            <if test="userCoverNum != null "> and user_cover_num = #{userCoverNum}</if>
+            <if test="callNum != null "> and call_num = #{callNum}</if>
+            <if test="connectedCallNum != null "> and connected_call_num = #{connectedCallNum}</if>
+        </where>
+    </select>
+
+    <select id="selectTLcReportDayProcessById" parameterType="Long" resultMap="TLcReportDayProcessResult">
+        <include refid="selectTLcReportDayProcessVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTLcReportDayProcess" parameterType="com.ruoyi.report.domain.TLcReportDayProcess"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_report_day_process
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reportDate != null ">report_date,</if>
+            <if test="seatGroup != null  and seatGroup != ''">seat_group,</if>
+            <if test="seatNum != null  and seatNum != ''">seat_num,</if>
+            <if test="seatName != null  and seatName != ''">seat_name,</if>
+            <if test="dealWithConsumerCount != null ">deal_with_consumer_count,</if>
+            <if test="actionCodeNum != null ">action_code_num,</if>
+            <if test="callCodeNum != null ">call_code_num,</if>
+            <if test="callActionCodeRecovery != null  and callActionCodeRecovery != ''">call_action_code_recovery,</if>
+            <if test="averageCallCode != null  and averageCallCode != ''">average_call_code,</if>
+            <if test="averageActionCode != null  and averageActionCode != ''">average_action_code,</if>
+            <if test="callLen != null  and callLen != ''">call_len,</if>
+            <if test="selfEffectiveCallCodeNum != null ">self_effective_call_code_num,</if>
+            <if test="thirdEffectiveCallCodeNum != null ">third_effective_call_code_num,</if>
+            <if test="averageEffectiveCallCodeNum != null ">average_effective_call_code_num,</if>
+            <if test="callConnectedRecovery != null  and callConnectedRecovery != ''">call_connected_recovery,</if>
+            <if test="complaintNum != null ">complaint_num,</if>
+            <if test="orgId != null  and orgId != ''">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="userCoverNum != null ">user_cover_num,</if>
+            <if test="callNum != null ">call_num,</if>
+            <if test="connectedCallNum != null ">connected_call_num,</if>
+            <if test="collingCaseMoney != null ">colling_case_money,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reportDate != null ">#{reportDate},</if>
+            <if test="seatGroup != null  and seatGroup != ''">#{seatGroup},</if>
+            <if test="seatNum != null  and seatNum != ''">#{seatNum},</if>
+            <if test="seatName != null  and seatName != ''">#{seatName},</if>
+            <if test="dealWithConsumerCount != null ">#{dealWithConsumerCount},</if>
+            <if test="actionCodeNum != null ">#{actionCodeNum},</if>
+            <if test="callCodeNum != null ">#{callCodeNum},</if>
+            <if test="callActionCodeRecovery != null  and callActionCodeRecovery != ''">#{callActionCodeRecovery},</if>
+            <if test="averageCallCode != null  and averageCallCode != ''">#{averageCallCode},</if>
+            <if test="averageActionCode != null  and averageActionCode != ''">#{averageActionCode},</if>
+            <if test="callLen != null  and callLen != ''">#{callLen},</if>
+            <if test="selfEffectiveCallCodeNum != null ">#{selfEffectiveCallCodeNum},</if>
+            <if test="thirdEffectiveCallCodeNum != null ">#{thirdEffectiveCallCodeNum},</if>
+            <if test="averageEffectiveCallCodeNum != null ">#{averageEffectiveCallCodeNum},</if>
+            <if test="callConnectedRecovery != null  and callConnectedRecovery != ''">#{callConnectedRecovery},</if>
+            <if test="complaintNum != null ">#{complaintNum},</if>
+            <if test="orgId != null  and orgId != ''">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="userCoverNum != null ">#{userCoverNum},</if>
+            <if test="callNum != null ">#{callNum},</if>
+            <if test="connectedCallNum != null ">#{connectedCallNum},</if>
+            <if test="collingCaseMoney != null ">#{collingCaseMoney},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTLcReportDayProcess" parameterType="com.ruoyi.report.domain.TLcReportDayProcess">
+        update t_lc_report_day_process
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="reportDate != null ">report_date = #{reportDate},</if>
+            <if test="seatGroup != null  and seatGroup != ''">seat_group = #{seatGroup},</if>
+            <if test="seatNum != null  and seatNum != ''">seat_num = #{seatNum},</if>
+            <if test="seatName != null  and seatName != ''">seat_name = #{seatName},</if>
+            <if test="dealWithConsumerCount != null ">deal_with_consumer_count = #{dealWithConsumerCount},</if>
+            <if test="actionCodeNum != null ">action_code_num = #{actionCodeNum},</if>
+            <if test="callCodeNum != null ">call_code_num = #{callCodeNum},</if>
+            <if test="callActionCodeRecovery != null  and callActionCodeRecovery != ''">call_action_code_recovery =
+                #{callActionCodeRecovery},
+            </if>
+            <if test="averageCallCode != null  and averageCallCode != ''">average_call_code = #{averageCallCode},</if>
+            <if test="averageActionCode != null  and averageActionCode != ''">average_action_code =
+                #{averageActionCode},
+            </if>
+            <if test="callLen != null  and callLen != ''">call_len = #{callLen},</if>
+            <if test="selfEffectiveCallCodeNum != null ">self_effective_call_code_num = #{selfEffectiveCallCodeNum},
+            </if>
+            <if test="thirdEffectiveCallCodeNum != null ">third_effective_call_code_num =
+                #{thirdEffectiveCallCodeNum},
+            </if>
+            <if test="averageEffectiveCallCodeNum != null ">average_effective_call_code_num =
+                #{averageEffectiveCallCodeNum},
+            </if>
+            <if test="callConnectedRecovery != null  and callConnectedRecovery != ''">call_connected_recovery =
+                #{callConnectedRecovery},
+            </if>
+            <if test="complaintNum != null ">complaint_num = #{complaintNum},</if>
+            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="userCoverNum != null ">user_cover_num = #{userCoverNum},</if>
+            <if test="callNum != null ">call_num = #{callNum},</if>
+            <if test="connectedCallNum != null ">connected_call_num = #{connectedCallNum},</if>
+            <if test="collingCaseMoney != null ">colling_case_money = #{collingCaseMoney},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcReportDayProcessById" parameterType="Long">
+        delete from t_lc_report_day_process where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcReportDayProcessByIds" parameterType="String">
+        delete from t_lc_report_day_process where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectDayProcess" parameterType="java.util.Map" resultMap="TLcReportDayProcessResult">
+        SELECT
+        (
+        SELECT
+        date_sub(curdate(), INTERVAL #{day} DAY)
+        ) AS report_date,
+        t2.user_group AS seat_group,
+        t2.login_name AS seat_num,
+        t2.owner_name AS seat_name,
+        t2.org_id AS org_id,
+        t2.deal_with_consumer_count AS deal_with_consumer_count,
+        t2.collecting_total_money AS colling_case_money,
+        t3.call_code_num AS call_code_num,
+        t4.action_code_num AS action_code_num,
+        t3.call_len / 1000 / 60 AS call_len,
+        t5.self_effective_call_code_num AS self_effective_call_code_num,
+        t8.third_effective_call_code_num AS third_effective_call_code_num,
+        t10.connected_call_num / t11.call_num AS call_connected_recovery,
+        t6.complaint_num AS complaint_num,
+        t9.user_cover_num,
+        t10.connected_call_num,
+        t11.call_num
+        FROM
+        (
+        SELECT
+        count(1) AS deal_with_consumer_count,
+        sum(t.arrears_total) AS collecting_total_money,
+        t.owner_id,
+        t.owner_name,
+        su.user_group,
+        t.org_id,
+        su.login_name
+        FROM
+        t_lc_task t,sys_user su
+        WHERE
+        t.owner_id = su.user_id
+        AND t.allot_type = 1
+        AND t.task_status = 2
+        AND t.org_id = #{orgId}
+        GROUP BY
+        t.owner_id,
+        t.org_id
+        ) t2
+        LEFT JOIN (
+        SELECT
+        count(1) AS call_code_num,
+        t.create_by,
+        sum(t.call_len) AS call_len
+        FROM
+        t_lc_call_record t,t_lc_task t2
+        WHERE 1=1 and t2.case_no = t.case_no AND t2.owner_id = t.create_by and t2.org_id = #{orgId} AND t2.task_status != 3
+        <if test="startDate != null">
+            AND t.create_time <![CDATA[>=]]> #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND t.create_time <![CDATA[<=]]> #{endDate}
+        </if>
+        GROUP BY
+        t.create_by
+        ) t3 ON t2.owner_id = t3.create_by
+        LEFT JOIN (
+        SELECT
+        count(1) AS action_code_num,
+        t.create_by
+        FROM
+        t_lc_duncase_action_record t,t_lc_task ta
+        WHERE t.case_no = ta.case_no
+        AND ta.owner_id = t.create_by
+        AND ta.task_status != 3
+        <if test="startDate != null">
+            AND t.create_time <![CDATA[>=]]> #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND t.create_time <![CDATA[<=]]> #{endDate}
+        </if>
+        AND ta.org_id = #{orgId}
+        GROUP BY
+        t.create_by
+        ) t4 ON t2.owner_id = t4.create_by
+        LEFT JOIN (
+        SELECT
+        count(1) AS self_effective_call_code_num,
+        t.create_by
+        FROM
+        t_lc_call_record t,t_lc_task t2
+        WHERE
+        1=1 and t2.case_no = t.case_no and t2.org_id = #{orgId} and t2.task_status != 3
+        and EXISTS (
+        SELECT
+        cc.call_code
+        FROM t_lc_call_code cc
+        where cc.is_valid = 1
+        AND t.call_sign = cc.call_code
+        )
+        AND t.contact_relation = 1
+        <if test="startDate != null">
+            AND t.create_time <![CDATA[>=]]> #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND t.create_time <![CDATA[<=]]> #{endDate}
+        </if>
+        GROUP BY
+        t.create_by
+        ) t5 ON t2.owner_id = t5.create_by
+        LEFT JOIN (
+        SELECT
+        count(1) AS complaint_num,
+        t.create_by
+        FROM
+        t_lc_duncase_action_record t,t_lc_task ta
+        WHERE
+        t.action_code = 'TS'
+        and ta.task_status != 3
+        <if test="startDate != null">
+            AND t.create_time <![CDATA[>=]]> #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND t.create_time <![CDATA[<=]]> #{endDate}
+        </if>
+        AND ta.org_id = #{orgId}
+        GROUP BY
+        t.create_by
+        ) t6 ON t2.owner_id = t6.create_by
+        LEFT JOIN (
+        SELECT
+        count(1) AS called_num,
+        t.create_by
+        FROM
+        t_lc_call_record t,t_lc_task t2
+        WHERE
+        1=1 and t2.case_no = t.case_no and t2.org_id = #{orgId} and t2.task_status != 3
+        and EXISTS (
+        SELECT
+        cc.call_code
+        FROM t_lc_call_code cc
+        where cc.is_connected = 1
+        AND t.call_sign = cc.call_code
+        )
+        <if test="startDate != null">
+            AND t.create_time <![CDATA[>=]]> #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND t.create_time <![CDATA[<=]]> #{endDate}
+        </if>
+        GROUP BY
+        t.create_by
+        ) t7 ON t2.owner_id = t7.create_by
+        LEFT JOIN (
+            SELECT
+                count(1) AS third_effective_call_code_num,
+                t.create_by
+            FROM
+                t_lc_call_record t,t_lc_task ta
+            WHERE
+            t.case_no = ta.case_no
+            and ta.task_status != 3
+            AND EXISTS (
+            SELECT
+            cc.call_code
+            FROM t_lc_call_code cc
+            where cc.is_valid = 1
+            AND t.call_sign = cc.call_code
+            )
+            AND t.contact_relation != 1
+            <if test="startDate != null">
+                AND t.create_time <![CDATA[>=]]> #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND t.create_time <![CDATA[<=]]> #{endDate}
+            </if>
+            GROUP BY
+                t.create_by
+        ) t8 ON t2.owner_id = t8.create_by
+        LEFT JOIN (
+            select count(user_cover_num) AS user_cover_num,tb.create_by from (
+                SELECT
+                count(1) AS user_cover_num,
+                t.create_by
+                FROM
+                t_lc_call_record t,t_lc_task t2
+                WHERE 1=1 and t2.case_no = t.case_no and t2.org_id = #{orgId}
+                and t2.task_status != 3
+                <if test="startDate != null">
+                    AND t.create_time <![CDATA[>=]]> #{startDate}
+                </if>
+                <if test="endDate != null">
+                    AND t.create_time <![CDATA[<=]]> #{endDate}
+                </if>
+                GROUP BY
+                t.create_by,
+                t.case_no
+            ) tb group by tb.create_by
+        ) t9 ON t2.owner_id = t9.create_by
+        LEFT JOIN (
+        SELECT
+        count(1) AS connected_call_num,
+        t.create_by
+        FROM
+        t_lc_call_record t,t_lc_task t2
+        WHERE 1=1 and t2.case_no = t.case_no and t2.org_id = #{orgId}
+        AND t.call_radio_location IS NOT NULL
+        and t2.task_status != 3
+        <if test="startDate != null">
+            AND t.create_time <![CDATA[>=]]> #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND t.create_time <![CDATA[<=]]> #{endDate}
+        </if>
+        GROUP BY
+        t.create_by
+        ) t10 ON t2.owner_id = t10.create_by
+        LEFT JOIN (
+        SELECT
+        t.create_by,
+        count(1) AS call_num
+        FROM
+        t_lc_call_record t,t_lc_task t2
+        WHERE 1=1 and t2.case_no = t.case_no and t2.org_id = #{orgId} and t.type = 1 and t2.task_status != 3
+        <if test="startDate != null">
+            AND t.create_time <![CDATA[>=]]> #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND t.create_time <![CDATA[<=]]> #{endDate}
+        </if>
+        GROUP BY
+        t.create_by
+        ) t11 ON t2.owner_id = t11.create_by
+        WHERE
+        1 = 1
+        <if test="orgId != null and orgId != ''">
+            AND t2.org_id = #{orgId}
+        </if>
+    </select>
+
+</mapper>

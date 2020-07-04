@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.robot.mapper.TLcRobotCallRecordMeteDataMapper">
+    
+    <resultMap type="com.ruoyi.robot.domain.TLcRobotCallRecordMeteData" id="TLcRobotCallRecordMeteDataResult">
+        <result property="id"    column="id"    />
+        <result property="dataType"    column="data_type"    />
+        <result property="inboundInstanceId"    column="inbound_instance_id"    />
+        <result property="companyId"    column="company_id"    />
+        <result property="callJobId"    column="call_job_id"    />
+        <result property="customerId"    column="customer_id"    />
+        <result property="customerTelephone"    column="customer_telephone"    />
+        <result property="customerName"    column="customer_name"    />
+        <result property="status"    column="status"    />
+        <result property="finishStatus"    column="finish_status"    />
+        <result property="duration"    column="duration"    />
+        <result property="chatRound"    column="chat_round"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="callerPhone"    column="callee_phone"    />
+        <result property="luyinOssUrl"    column="luyin_oss_url"    />
+        <result property="userLuyinOssUrl"    column="user_luyin_oss_url"    />
+        <result property="properties"    column="properties"    />
+        <result property="readStatus"    column="read_status"    />
+        <result property="robotDefId"    column="robot_def_id"    />
+        <result property="sceneDefId"    column="scene_def_id"    />
+        <result property="sceneRecordId"    column="scene_record_id"    />
+        <result property="transferStatus"    column="transfer_status"    />
+        <result property="transferInfo"    column="transfer_info"    />
+        <result property="userLevel"    column="user_level"    />
+        <result property="hangUp"    column="hang_up"    />
+        <result property="callbacked"    column="callbacked"    />
+        <result property="propertiesMap"    column="properties_map"    />
+        <result property="sign"    column="sign"    />
+        <result property="dateTime"    column="date_time"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectTLcRobotCallRecordMeteDataVo">
+        select id, data_type, inbound_instance_id, company_id, call_job_id, customer_id, customer_telephone, customer_name, status, finish_status, duration, chat_round, start_time, end_time, callee_phone, luyin_oss_url, user_luyin_oss_url, properties, read_status, robot_def_id, scene_def_id, scene_record_id, transfer_status, transfer_info, user_level, hang_up, callbacked, properties_map, sign, date_time, create_time from t_lc_robot_call_record_mete_data
+    </sql>
+
+    <select id="selectTLcRobotCallRecordMeteDataList" parameterType="com.ruoyi.robot.domain.TLcRobotCallRecordMeteData" resultMap="TLcRobotCallRecordMeteDataResult">
+        <include refid="selectTLcRobotCallRecordMeteDataVo"/>
+        <where>  
+            <if test="dataType != null  and dataType != ''"> and data_type = #{dataType}</if>
+            <if test="inboundInstanceId != null "> and inbound_instance_id = #{inboundInstanceId}</if>
+            <if test="companyId != null "> and company_id = #{companyId}</if>
+            <if test="callJobId != null "> and call_job_id = #{callJobId}</if>
+            <if test="customerId != null "> and customer_id = #{customerId}</if>
+            <if test="customerTelephone != null  and customerTelephone != ''"> and customer_telephone = #{customerTelephone}</if>
+            <if test="customerName != null  and customerName != ''"> and customer_name like concat('%', #{customerName}, '%')</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="finishStatus != null "> and finish_status = #{finishStatus}</if>
+            <if test="duration != null "> and duration = #{duration}</if>
+            <if test="chatRound != null "> and chat_round = #{chatRound}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="callerPhone != null  and callerPhone != ''"> and callee_phone = #{callerPhone}</if>
+            <if test="luyinOssUrl != null  and luyinOssUrl != ''"> and luyin_oss_url = #{luyinOssUrl}</if>
+            <if test="userLuyinOssUrl != null  and userLuyinOssUrl != ''"> and user_luyin_oss_url = #{userLuyinOssUrl}</if>
+            <if test="properties != null  and properties != ''"> and properties = #{properties}</if>
+            <if test="readStatus != null "> and read_status = #{readStatus}</if>
+            <if test="robotDefId != null "> and robot_def_id = #{robotDefId}</if>
+            <if test="sceneDefId != null "> and scene_def_id = #{sceneDefId}</if>
+            <if test="sceneRecordId != null "> and scene_record_id = #{sceneRecordId}</if>
+            <if test="transferStatus != null "> and transfer_status = #{transferStatus}</if>
+            <if test="transferInfo != null  and transferInfo != ''"> and transfer_info = #{transferInfo}</if>
+            <if test="userLevel != null  and userLevel != ''"> and user_level = #{userLevel}</if>
+            <if test="hangUp != null "> and hang_up = #{hangUp}</if>
+            <if test="callbacked != null "> and callbacked = #{callbacked}</if>
+            <if test="propertiesMap != null  and propertiesMap != ''"> and properties_map = #{propertiesMap}</if>
+            <if test="sign != null  and sign != ''"> and sign = #{sign}</if>
+            <if test="dateTime != null "> and date_time = #{dateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectTLcRobotCallRecordMeteDataById" parameterType="Long" resultMap="TLcRobotCallRecordMeteDataResult">
+        <include refid="selectTLcRobotCallRecordMeteDataVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLcRobotCallRecordMeteData" parameterType="com.ruoyi.robot.domain.TLcRobotCallRecordMeteData">
+        insert into t_lc_robot_call_record_mete_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dataType != null  and dataType != ''">data_type,</if>
+            <if test="inboundInstanceId != null ">inbound_instance_id,</if>
+            <if test="companyId != null ">company_id,</if>
+            <if test="callJobId != null ">call_job_id,</if>
+            <if test="customerId != null ">customer_id,</if>
+            <if test="customerTelephone != null  and customerTelephone != ''">customer_telephone,</if>
+            <if test="customerName != null  and customerName != ''">customer_name,</if>
+            <if test="status != null ">status,</if>
+            <if test="finishStatus != null ">finish_status,</if>
+            <if test="duration != null ">duration,</if>
+            <if test="chatRound != null ">chat_round,</if>
+            <if test="startTime != null ">start_time,</if>
+            <if test="endTime != null ">end_time,</if>
+            <if test="callerPhone != null  and callerPhone != ''">callee_phone,</if>
+            <if test="luyinOssUrl != null  and luyinOssUrl != ''">luyin_oss_url,</if>
+            <if test="userLuyinOssUrl != null  and userLuyinOssUrl != ''">user_luyin_oss_url,</if>
+            <if test="properties != null  and properties != ''">properties,</if>
+            <if test="readStatus != null ">read_status,</if>
+            <if test="robotDefId != null ">robot_def_id,</if>
+            <if test="sceneDefId != null ">scene_def_id,</if>
+            <if test="sceneRecordId != null ">scene_record_id,</if>
+            <if test="transferStatus != null ">transfer_status,</if>
+            <if test="transferInfo != null  and transferInfo != ''">transfer_info,</if>
+            <if test="userLevel != null  and userLevel != ''">user_level,</if>
+            <if test="hangUp != null ">hang_up,</if>
+            <if test="callbacked != null ">callbacked,</if>
+            <if test="propertiesMap != null  and propertiesMap != ''">properties_map,</if>
+            <if test="sign != null  and sign != ''">sign,</if>
+            <if test="dateTime != null ">date_time,</if>
+            create_time,
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dataType != null  and dataType != ''">#{dataType},</if>
+            <if test="inboundInstanceId != null ">#{inboundInstanceId},</if>
+            <if test="companyId != null ">#{companyId},</if>
+            <if test="callJobId != null ">#{callJobId},</if>
+            <if test="customerId != null ">#{customerId},</if>
+            <if test="customerTelephone != null  and customerTelephone != ''">#{customerTelephone},</if>
+            <if test="customerName != null  and customerName != ''">#{customerName},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="finishStatus != null ">#{finishStatus},</if>
+            <if test="duration != null ">#{duration},</if>
+            <if test="chatRound != null ">#{chatRound},</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="endTime != null ">#{endTime},</if>
+            <if test="callerPhone != null  and callerPhone != ''">#{callerPhone},</if>
+            <if test="luyinOssUrl != null  and luyinOssUrl != ''">#{luyinOssUrl},</if>
+            <if test="userLuyinOssUrl != null  and userLuyinOssUrl != ''">#{userLuyinOssUrl},</if>
+            <if test="properties != null  and properties != ''">#{properties},</if>
+            <if test="readStatus != null ">#{readStatus},</if>
+            <if test="robotDefId != null ">#{robotDefId},</if>
+            <if test="sceneDefId != null ">#{sceneDefId},</if>
+            <if test="sceneRecordId != null ">#{sceneRecordId},</if>
+            <if test="transferStatus != null ">#{transferStatus},</if>
+            <if test="transferInfo != null  and transferInfo != ''">#{transferInfo},</if>
+            <if test="userLevel != null  and userLevel != ''">#{userLevel},</if>
+            <if test="hangUp != null ">#{hangUp},</if>
+            <if test="callbacked != null ">#{callbacked},</if>
+            <if test="propertiesMap != null  and propertiesMap != ''">#{propertiesMap},</if>
+            <if test="sign != null  and sign != ''">#{sign},</if>
+            <if test="dateTime != null ">#{dateTime},</if>
+            NOW(),
+         </trim>
+    </insert>
+
+    <update id="updateTLcRobotCallRecordMeteData" parameterType="com.ruoyi.robot.domain.TLcRobotCallRecordMeteData">
+        update t_lc_robot_call_record_mete_data
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dataType != null  and dataType != ''">data_type = #{dataType},</if>
+            <if test="inboundInstanceId != null ">inbound_instance_id = #{inboundInstanceId},</if>
+            <if test="companyId != null ">company_id = #{companyId},</if>
+            <if test="callJobId != null ">call_job_id = #{callJobId},</if>
+            <if test="customerId != null ">customer_id = #{customerId},</if>
+            <if test="customerTelephone != null  and customerTelephone != ''">customer_telephone = #{customerTelephone},</if>
+            <if test="customerName != null  and customerName != ''">customer_name = #{customerName},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="finishStatus != null ">finish_status = #{finishStatus},</if>
+            <if test="duration != null ">duration = #{duration},</if>
+            <if test="chatRound != null ">chat_round = #{chatRound},</if>
+            <if test="startTime != null ">start_time = #{startTime},</if>
+            <if test="endTime != null ">end_time = #{endTime},</if>
+            <if test="callerPhone != null  and callerPhone != ''">callee_phone = #{callerPhone},</if>
+            <if test="luyinOssUrl != null  and luyinOssUrl != ''">luyin_oss_url = #{luyinOssUrl},</if>
+            <if test="userLuyinOssUrl != null  and userLuyinOssUrl != ''">user_luyin_oss_url = #{userLuyinOssUrl},</if>
+            <if test="properties != null  and properties != ''">properties = #{properties},</if>
+            <if test="readStatus != null ">read_status = #{readStatus},</if>
+            <if test="robotDefId != null ">robot_def_id = #{robotDefId},</if>
+            <if test="sceneDefId != null ">scene_def_id = #{sceneDefId},</if>
+            <if test="sceneRecordId != null ">scene_record_id = #{sceneRecordId},</if>
+            <if test="transferStatus != null ">transfer_status = #{transferStatus},</if>
+            <if test="transferInfo != null  and transferInfo != ''">transfer_info = #{transferInfo},</if>
+            <if test="userLevel != null  and userLevel != ''">user_level = #{userLevel},</if>
+            <if test="hangUp != null ">hang_up = #{hangUp},</if>
+            <if test="callbacked != null ">callbacked = #{callbacked},</if>
+            <if test="propertiesMap != null  and propertiesMap != ''">properties_map = #{propertiesMap},</if>
+            <if test="sign != null  and sign != ''">sign = #{sign},</if>
+            <if test="dateTime != null ">date_time = #{dateTime},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcRobotCallRecordMeteDataById" parameterType="Long">
+        delete from t_lc_robot_call_record_mete_data where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcRobotCallRecordMeteDataByIds" parameterType="String">
+        delete from t_lc_robot_call_record_mete_data where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

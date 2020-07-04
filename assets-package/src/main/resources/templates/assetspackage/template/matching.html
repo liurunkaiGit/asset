@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('模板匹配')" />
+    <th:block th:include="include :: select2-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-package-matching" th:object="${templatesPackage}">
+            <div class="form-group">
+                 <label class="col-sm-3 control-label">表头行：</label>
+                 <div class="col-sm-8" style="font-size: 16px;">
+                    <input name="表头行" class="form-control" type="text" value="1" required>
+                 </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">数据起始行：</label>
+                <div class="col-sm-8" style="font-size: 16px;">
+                    <input name="数据起始行" class="form-control" type="text" value="2" required>
+                </div>
+            </div>
+            <div class="form-group" id="form-package-matching2">
+                <input name="id" th:field="*{id}" type="hidden">
+                <input name="url" th:field="*{url}" type="hidden">
+                <input name="type" th:field="*{type}" type="hidden" id="type">
+                <div class='col-sm-6'>
+                    <input name='系统表头' class='form-control' type='text' value="系统表头" disabled style='background-color: #f8ac59;color: #123b5f;font-size: 18px;text-align: center'>
+                </div>
+                <div class='col-sm-6'>
+                    <input name='模板表头' class='form-control' type='text' value="模板表头" disabled style='background-color: #f8ac59;color: #123b5f;font-size: 18px;text-align: center'>
+                </div>
+            </div>
+        </form>
+    </div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: select2-js" />
+<script th:inline="javascript">
+    // var ctx = [[${@config.getKey('ctx')}]];
+    var prefix = ctx + "assetspackage/template";
+
+    $(function() {
+        var paramUrl = $("#url").val();
+        var id = $("#id").val();
+        var type = $("#type").val();
+        $.ajax({
+            url: prefix+"/paseHead",
+            dataType: "json",
+            type: "post",
+            data: {
+                url: paramUrl,
+                templateId:id
+            },
+            success:function(data){
+                var result = JSON.parse(data.msg);
+                var templateHead = eval(result.templateHead);
+                var systemHead = eval(result.systemHead);
+                var relations = eval(result.relations);
+                $.each(systemHead,function(index,obj){
+                    if (type == 1) {
+                        if("机构案件号"==obj){
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+obj+"(*不为空，且能标识数据唯一性*)"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' id='"+obj+"macth"+"' class='form-control' id='机构案件号macth'></select></div>");
+                        }else if("结案应还金额"==obj){
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+obj+"(*不为空*)"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' id='"+obj+"macth"+"' class='form-control' id='结案应还金额macth'></select></div>");
+                        }else if("入催日"==obj){
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+obj+"(*不为空*)"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' id='"+obj+"macth"+"' class='form-control' id='入催日macth'></select></div>");
+                        }else if("姓名"==obj){
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+obj+"(*不为空*)"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' id='"+obj+"macth"+"' class='form-control' id='姓名macth'></select></div>");
+                        }else if("手别"==obj){
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+obj+"(*不为空*)"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' id='"+obj+"macth"+"' class='form-control' id='手别macth'></select></div>");
+                        }else if("证件号"==obj){
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+obj+"(*不为空*)"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' id='"+obj+"macth"+"' class='form-control' id='证件号macth'></select></div>");
+                        }else if("移动电话"==obj){
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+obj+"(*不为空*)"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' id='"+obj+"macth"+"' class='form-control' id='移动电话macth'></select></div>");
+                        }else if("委案金额"==obj){
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+obj+"(*不为空*)"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' id='"+obj+"macth"+"' class='form-control' id='委案金额macth'></select></div>");
+                        }else{
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+obj+"'required disabled style='background-color: #FFFFFF;'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' id='"+obj+"macth"+"' class='form-control'></select></div>");
+                        }
+                    } else if(type==2) {
+                        if("机构案件号"==obj){
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+obj+"(*不为空，且能标识数据唯一性*)"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' id='"+obj+"macth"+"' class='form-control' id='机构案件号macth'></select></div>");
+                        }else if("还款日期"==obj){
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+obj+"(*如果导入了还款金额，则还款日期不能为空*)"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' class='form-control' id='还款日期macth'></select></div>");
+                        }else if("是否出催"==obj){
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+obj+"(*用于标识案件是否结清出催，只能导入“是”*)"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' class='form-control' id='是否出催macth'></select></div>");
+                        }else if("出催日期"==obj){
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+obj+"(*如果“是否出催”=是，则出催日期不能为空*)"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' class='form-control' id='出催日期macth'></select></div>");
+                        }else{
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+obj+"'required disabled style='background-color: #FFFFFF;'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' id='"+obj+"macth"+"' class='form-control'></select></div>");
+                        }
+                    }else {
+                        if("机构案件号"==obj){
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+"*"+obj+"*"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' id='"+obj+"macth"+"' class='form-control' id='机构案件号macth'></select></div>");
+                        }else if("手机号"==obj){
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+"*"+obj+"*"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' class='form-control' id='手机号macth'></select></div>");
+                        }else if("拨打时间"==obj){
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+"*"+obj+"*"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' class='form-control' id='拨打时间macth'></select></div>");
+                        }else if("通话时长"==obj){
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+"*"+obj+"(秒)*"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' class='form-control' id='通话时长macth'></select></div>");
+                        }else if("通话录音ID"==obj){
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+"*"+obj+"*"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' class='form-control' id='通话录音IDmacth'></select></div>");
+                        }else if("通话状态"==obj){
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+"*"+obj+"(请填写电话码)*"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' class='form-control' id='通话状态macth'></select></div>");
+                        }else if("坐席"==obj){
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+obj+"(机器人坐席请输入-1)'required disabled style='background-color: #FFFFFF;'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' id='"+obj+"macth"+"' class='form-control'></select></div>");
+                        }else{
+                            $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+obj+"'required disabled style='background-color: #FFFFFF;'></div>")
+                                .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' id='"+obj+"macth"+"' class='form-control'></select></div>");
+                        }
+                    }
+                });
+
+                var selects = $("select");
+                selects.select2();
+                for(var j=0;j<selects.length;j++) {
+                    var obj = selects[j];
+                    obj.options.add(new Option("请选择",""));
+                    for (var i=0;i<templateHead.length;i++) {
+                        obj.options.add(new Option(templateHead[i],templateHead[i]));
+                    }
+
+                }
+
+                for(var sys in relations){
+                    var sys2 = sys+"macth";
+                    var customer = relations[sys];
+                    for(var j=0;j<selects.length;j++) {
+                        var obj = selects[j].name;
+                        if(sys2 == obj){
+                            // $("#"+obj).find("option:contains('"+customer+"')").attr("selected",true);
+                            if(sys == "地区事业部(一级)" || sys == "地区事业部(二级)"){
+                                // customer.replace('(','\(').replace(')','\)');
+                                // $("#"+obj+" option[value='"+customer+"']").attr("selected",true);
+                                continue;
+                            }else{
+                                $("#"+obj+" option[value='"+customer+"']").attr("selected",true);
+                            }
+                        }
+                    }
+
+                }
+
+            }
+        });
+
+
+
+
+
+
+
+    });
+
+</script>
+<script type="text/javascript">
+    $("#form-package-matching").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        var type = $("#type").val();
+        if (type == 1) {
+            var jgajhMacth = $("#机构案件号macth").val();
+            var wayeMacth = $("#结案应还金额macth").val();
+            var rcr = $("#入催日macth").val();
+            var curName = $("#姓名macth").val();
+            var transferType = $("#手别macth").val();
+            var cardNo = $("#证件号macth").val();
+            var phone = $("#移动电话macth").val();
+            var waje = $("#委案金额macth").val();
+            if(jgajhMacth =="" || jgajhMacth=="请选择" || jgajhMacth == null){
+                $.modal.alertWarning("请选择机构案件号对应的值");
+                return;
+            }
+            if(wayeMacth =="" || wayeMacth=="请选择" ||  wayeMacth == null){
+                $.modal.alertWarning("请选择结案应还金额对应的值");
+                return;
+            }
+            if(rcr =="" || rcr=="请选择" ||  rcr == null){
+                $.modal.alertWarning("请选择入催日对应的值");
+                return;
+            }
+            if(curName =="" || curName=="请选择" ||  curName == null){
+                $.modal.alertWarning("请选择姓名对应的值");
+                return;
+            }
+            if(transferType =="" || transferType=="请选择" ||  transferType == null){
+                $.modal.alertWarning("请选择手别对应的值");
+                return;
+            }
+            if(cardNo =="" || cardNo=="请选择" ||  cardNo == null){
+                $.modal.alertWarning("请选择证件号对应的值");
+                return;
+            }
+            if(phone =="" || phone=="请选择" ||  phone == null){
+                $.modal.alertWarning("请选择移动电话对应的值");
+                return;
+            }
+            if(waje =="" || waje =="请选择" ||  waje == null){
+                $.modal.alertWarning("请选择委案金额对应的值");
+                return;
+            }
+        } else if(type ==2) {
+            var jgajhMacth = $("#机构案件号macth").val();
+            var isExitCollect = $("#是否出催macth").val();
+            if(jgajhMacth =="" || jgajhMacth=="请选择" || jgajhMacth == null){
+                $.modal.alertWarning("请选择机构案件号对应的值");
+                return;
+            }
+            /*if(isExitCollect =="" || isExitCollect=="请选择" || isExitCollect == null){
+                $.modal.alertWarning("请选择是否出催对应的值");
+                return;
+            }*/
+        }else{
+            var jgajhMacth = $("#机构案件号macth").val();
+            var sjhMacth = $("#手机号macth").val();
+            var bdsjMacth = $("#拨打时间macth").val();
+            var thscMacth = $("#通话时长macth").val();
+            var thlyidMacth = $("#通话录音IDmacth").val();
+            var thztMacth = $("#通话状态macth").val();
+            if(jgajhMacth =="" || jgajhMacth=="请选择" || jgajhMacth == null){
+                $.modal.alertWarning("请选择机构案件号对应的值");
+                return;
+            }
+            if(sjhMacth =="" || sjhMacth=="请选择" || sjhMacth == null){
+                $.modal.alertWarning("请选择手机号对应的值");
+                return;
+            }
+            if(bdsjMacth =="" || bdsjMacth=="请选择" || bdsjMacth == null){
+                $.modal.alertWarning("请选择拨打时间对应的值");
+                return;
+            }
+            if(thscMacth =="" || thscMacth=="请选择" || thscMacth == null){
+                $.modal.alertWarning("请选择通话时长对应的值");
+                return;
+            }
+            if(thlyidMacth =="" || thlyidMacth=="请选择" || thlyidMacth == null){
+                $.modal.alertWarning("请选择通话录音ID对应的值");
+                return;
+            }
+            if(thztMacth =="" || thztMacth=="请选择" || thztMacth == null){
+                $.modal.alertWarning("请选择通话状态对应的值");
+                return;
+            }
+
+
+        }
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/addRelation", $('#form-package-matching').serialize());
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.TLiCaseInfoMapper">
+    
+    <resultMap type="com.ruoyi.assetspackage.domain.TLiCaseInfo" id="TLiCaseInfoResult">
+        <result property="tuid"    column="tuid"    />
+        <result property="status"    column="status"    />
+        <result property="isStop"    column="is_stop"    />
+        <result property="stopTime"    column="stop_time"    />
+        <result property="outTime"    column="out_time"    />
+        <result property="created"    column="created"    />
+        <result property="createdby"    column="createdby"    />
+        <result property="updated"    column="updated"    />
+        <result property="updatedby"    column="updatedby"    />
+        <result property="collector"    column="collector"    />
+        <result property="collectorCurrent"    column="collector_current"    />
+        <result property="caseNo"    column="case_no"    />
+        <result property="custNo"    column="cust_no"    />
+        <result property="custName"    column="cust_name"    />
+        <result property="mobile"    column="mobile"    />
+        <result property="debt"    column="debt"    />
+        <result property="outType"    column="out_type"    />
+        <result property="cardCount"    column="card_count"    />
+        <result property="signColor"    column="sign_color"    />
+        <result property="overdueDate"    column="overdue_date"    />
+        <result property="overdueDays"    column="overdue_days"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="importBatch"    column="import_batch"    />
+        <result property="queue"    column="queue"    />
+        <result property="minRepay"    column="min_repay"    />
+        <result property="sex"    column="sex"    />
+        <result property="certificateNo"    column="certificate_no"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="depart"    column="depart"    />
+        <result property="homePostcode"    column="home_postcode"    />
+        <result property="homeProvince"    column="home_province"    />
+        <result property="homeCity"    column="home_city"    />
+        <result property="homeDistrict"    column="home_district"    />
+        <result property="homeTown"    column="home_town"    />
+        <result property="homeStreet"    column="home_street"    />
+        <result property="homePlate"    column="home_plate"    />
+        <result property="companyPostcode"    column="company_postcode"    />
+        <result property="companyProvince"    column="company_province"    />
+        <result property="companyCity"    column="company_city"    />
+        <result property="companyDistrict"    column="company_district"    />
+        <result property="companyTown"    column="company_town"    />
+        <result property="companyStreet"    column="company_street"    />
+        <result property="companyStreetNo"    column="company_street_no"    />
+        <result property="companyPlate"    column="company_plate"    />
+        <result property="domicilePostcode"    column="domicile_postcode"    />
+        <result property="domicileProvince"    column="domicile_province"    />
+        <result property="domicileCity"    column="domicile_city"    />
+        <result property="domicileDistrict"    column="domicile_district"    />
+        <result property="domicileTown"    column="domicile_town"    />
+        <result property="domicileStreet"    column="domicile_street"    />
+        <result property="domicileStreetNo"    column="domicile_street_no"    />
+        <result property="domicilePlate"    column="domicile_plate"    />
+        <result property="homeStreetNo"    column="home_street_no"    />
+    </resultMap>
+
+    <sql id="selectTLiCaseInfoVo">
+        select tuid, status, is_stop, stop_time, out_time, created, createdby, updated, updatedby, collector, collector_current, case_no, cust_no, cust_name, mobile, debt, out_type, card_count, sign_color, overdue_date, overdue_days, company_name, import_batch, queue, min_repay, sex, certificate_no, birthday, depart, home_postcode, home_province, home_city, home_district, home_town, home_street, home_plate, company_postcode, company_province, company_city, company_district, company_town, company_street, company_street_no, company_plate, domicile_postcode, domicile_province, domicile_city, domicile_district, domicile_town, domicile_street, domicile_street_no, domicile_plate, home_street_no from t_li_case_info
+    </sql>
+
+    <select id="selectTLiCaseInfoList" parameterType="TLiCaseInfo" resultMap="TLiCaseInfoResult">
+        <include refid="selectTLiCaseInfoVo"/>
+        <where>  
+            <if test="tuid != null  and tuid != ''"> and tuid = #{tuid}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="isStop != null "> and is_stop = #{isStop}</if>
+            <if test="stopTime != null "> and stop_time = #{stopTime}</if>
+            <if test="outTime != null "> and out_time = #{outTime}</if>
+            <if test="created != null "> and created = #{created}</if>
+            <if test="createdby != null  and createdby != ''"> and createdby = #{createdby}</if>
+            <if test="updated != null "> and updated = #{updated}</if>
+            <if test="updatedby != null  and updatedby != ''"> and updatedby = #{updatedby}</if>
+            <if test="collector != null  and collector != ''"> and collector = #{collector}</if>
+            <if test="collectorCurrent != null  and collectorCurrent != ''"> and collector_current = #{collectorCurrent}</if>
+            <if test="caseNo != null  and caseNo != ''"> and case_no = #{caseNo}</if>
+            <if test="custNo != null  and custNo != ''"> and cust_no = #{custNo}</if>
+            <if test="custName != null  and custName != ''"> and cust_name like concat('%', #{custName}, '%')</if>
+            <if test="mobile != null  and mobile != ''"> and mobile = #{mobile}</if>
+            <if test="debt != null "> and debt = #{debt}</if>
+            <if test="outType != null "> and out_type = #{outType}</if>
+            <if test="cardCount != null "> and card_count = #{cardCount}</if>
+            <if test="signColor != null  and signColor != ''"> and sign_color = #{signColor}</if>
+            <if test="overdueDate != null "> and overdue_date = #{overdueDate}</if>
+            <if test="overdueDays != null "> and overdue_days = #{overdueDays}</if>
+            <if test="companyName != null  and companyName != ''"> and company_name like concat('%', #{companyName}, '%')</if>
+            <if test="importBatch != null  and importBatch != ''"> and import_batch = #{importBatch}</if>
+            <if test="queue != null  and queue != ''"> and queue = #{queue}</if>
+            <if test="minRepay != null "> and min_repay = #{minRepay}</if>
+            <if test="sex != null  and sex != ''"> and sex = #{sex}</if>
+            <if test="certificateNo != null  and certificateNo != ''"> and certificate_no = #{certificateNo}</if>
+            <if test="birthday != null  and birthday != ''"> and birthday = #{birthday}</if>
+            <if test="depart != null  and depart != ''"> and depart = #{depart}</if>
+            <if test="homePostcode != null  and homePostcode != ''"> and home_postcode = #{homePostcode}</if>
+            <if test="homeProvince != null  and homeProvince != ''"> and home_province = #{homeProvince}</if>
+            <if test="homeCity != null  and homeCity != ''"> and home_city = #{homeCity}</if>
+            <if test="homeDistrict != null  and homeDistrict != ''"> and home_district = #{homeDistrict}</if>
+            <if test="homeTown != null  and homeTown != ''"> and home_town = #{homeTown}</if>
+            <if test="homeStreet != null  and homeStreet != ''"> and home_street = #{homeStreet}</if>
+            <if test="homePlate != null  and homePlate != ''"> and home_plate = #{homePlate}</if>
+            <if test="companyPostcode != null  and companyPostcode != ''"> and company_postcode = #{companyPostcode}</if>
+            <if test="companyProvince != null  and companyProvince != ''"> and company_province = #{companyProvince}</if>
+            <if test="companyCity != null  and companyCity != ''"> and company_city = #{companyCity}</if>
+            <if test="companyDistrict != null  and companyDistrict != ''"> and company_district = #{companyDistrict}</if>
+            <if test="companyTown != null  and companyTown != ''"> and company_town = #{companyTown}</if>
+            <if test="companyStreet != null  and companyStreet != ''"> and company_street = #{companyStreet}</if>
+            <if test="companyStreetNo != null  and companyStreetNo != ''"> and company_street_no = #{companyStreetNo}</if>
+            <if test="companyPlate != null  and companyPlate != ''"> and company_plate = #{companyPlate}</if>
+            <if test="domicilePostcode != null  and domicilePostcode != ''"> and domicile_postcode = #{domicilePostcode}</if>
+            <if test="domicileProvince != null  and domicileProvince != ''"> and domicile_province = #{domicileProvince}</if>
+            <if test="domicileCity != null  and domicileCity != ''"> and domicile_city = #{domicileCity}</if>
+            <if test="domicileDistrict != null  and domicileDistrict != ''"> and domicile_district = #{domicileDistrict}</if>
+            <if test="domicileTown != null  and domicileTown != ''"> and domicile_town = #{domicileTown}</if>
+            <if test="domicileStreet != null  and domicileStreet != ''"> and domicile_street = #{domicileStreet}</if>
+            <if test="domicileStreetNo != null  and domicileStreetNo != ''"> and domicile_street_no = #{domicileStreetNo}</if>
+            <if test="domicilePlate != null  and domicilePlate != ''"> and domicile_plate = #{domicilePlate}</if>
+            <if test="homeStreetNo != null  and homeStreetNo != ''"> and home_street_no = #{homeStreetNo}</if>
+        </where>
+    </select>
+    
+    <select id="selectTLiCaseInfoById" parameterType="String" resultMap="TLiCaseInfoResult">
+        <include refid="selectTLiCaseInfoVo"/>
+        where tuid = #{tuid}
+    </select>
+        
+    <insert id="insertTLiCaseInfo" parameterType="TLiCaseInfo">
+        insert into t_li_case_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tuid != null  and tuid != ''">tuid,</if>
+            <if test="status != null ">status,</if>
+            <if test="isStop != null ">is_stop,</if>
+            <if test="stopTime != null ">stop_time,</if>
+            <if test="outTime != null ">out_time,</if>
+            <if test="created != null ">created,</if>
+            <if test="createdby != null  and createdby != ''">createdby,</if>
+            <if test="updated != null ">updated,</if>
+            <if test="updatedby != null  and updatedby != ''">updatedby,</if>
+            <if test="collector != null  and collector != ''">collector,</if>
+            <if test="collectorCurrent != null  and collectorCurrent != ''">collector_current,</if>
+            <if test="caseNo != null  and caseNo != ''">case_no,</if>
+            <if test="custNo != null  and custNo != ''">cust_no,</if>
+            <if test="custName != null  and custName != ''">cust_name,</if>
+            <if test="mobile != null  and mobile != ''">mobile,</if>
+            <if test="debt != null ">debt,</if>
+            <if test="outType != null ">out_type,</if>
+            <if test="cardCount != null ">card_count,</if>
+            <if test="signColor != null  and signColor != ''">sign_color,</if>
+            <if test="overdueDate != null ">overdue_date,</if>
+            <if test="overdueDays != null ">overdue_days,</if>
+            <if test="companyName != null  and companyName != ''">company_name,</if>
+            <if test="importBatch != null  and importBatch != ''">import_batch,</if>
+            <if test="queue != null  and queue != ''">queue,</if>
+            <if test="minRepay != null ">min_repay,</if>
+            <if test="sex != null  and sex != ''">sex,</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no,</if>
+            <if test="birthday != null  and birthday != ''">birthday,</if>
+            <if test="depart != null  and depart != ''">depart,</if>
+            <if test="homePostcode != null  and homePostcode != ''">home_postcode,</if>
+            <if test="homeProvince != null  and homeProvince != ''">home_province,</if>
+            <if test="homeCity != null  and homeCity != ''">home_city,</if>
+            <if test="homeDistrict != null  and homeDistrict != ''">home_district,</if>
+            <if test="homeTown != null  and homeTown != ''">home_town,</if>
+            <if test="homeStreet != null  and homeStreet != ''">home_street,</if>
+            <if test="homePlate != null  and homePlate != ''">home_plate,</if>
+            <if test="companyPostcode != null  and companyPostcode != ''">company_postcode,</if>
+            <if test="companyProvince != null  and companyProvince != ''">company_province,</if>
+            <if test="companyCity != null  and companyCity != ''">company_city,</if>
+            <if test="companyDistrict != null  and companyDistrict != ''">company_district,</if>
+            <if test="companyTown != null  and companyTown != ''">company_town,</if>
+            <if test="companyStreet != null  and companyStreet != ''">company_street,</if>
+            <if test="companyStreetNo != null  and companyStreetNo != ''">company_street_no,</if>
+            <if test="companyPlate != null  and companyPlate != ''">company_plate,</if>
+            <if test="domicilePostcode != null  and domicilePostcode != ''">domicile_postcode,</if>
+            <if test="domicileProvince != null  and domicileProvince != ''">domicile_province,</if>
+            <if test="domicileCity != null  and domicileCity != ''">domicile_city,</if>
+            <if test="domicileDistrict != null  and domicileDistrict != ''">domicile_district,</if>
+            <if test="domicileTown != null  and domicileTown != ''">domicile_town,</if>
+            <if test="domicileStreet != null  and domicileStreet != ''">domicile_street,</if>
+            <if test="domicileStreetNo != null  and domicileStreetNo != ''">domicile_street_no,</if>
+            <if test="domicilePlate != null  and domicilePlate != ''">domicile_plate,</if>
+            <if test="homeStreetNo != null  and homeStreetNo != ''">home_street_no,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tuid != null  and tuid != ''">#{tuid},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="isStop != null ">#{isStop},</if>
+            <if test="stopTime != null ">#{stopTime},</if>
+            <if test="outTime != null ">#{outTime},</if>
+            <if test="created != null ">#{created},</if>
+            <if test="createdby != null  and createdby != ''">#{createdby},</if>
+            <if test="updated != null ">#{updated},</if>
+            <if test="updatedby != null  and updatedby != ''">#{updatedby},</if>
+            <if test="collector != null  and collector != ''">#{collector},</if>
+            <if test="collectorCurrent != null  and collectorCurrent != ''">#{collectorCurrent},</if>
+            <if test="caseNo != null  and caseNo != ''">#{caseNo},</if>
+            <if test="custNo != null  and custNo != ''">#{custNo},</if>
+            <if test="custName != null  and custName != ''">#{custName},</if>
+            <if test="mobile != null  and mobile != ''">#{mobile},</if>
+            <if test="debt != null ">#{debt},</if>
+            <if test="outType != null ">#{outType},</if>
+            <if test="cardCount != null ">#{cardCount},</if>
+            <if test="signColor != null  and signColor != ''">#{signColor},</if>
+            <if test="overdueDate != null ">#{overdueDate},</if>
+            <if test="overdueDays != null ">#{overdueDays},</if>
+            <if test="companyName != null  and companyName != ''">#{companyName},</if>
+            <if test="importBatch != null  and importBatch != ''">#{importBatch},</if>
+            <if test="queue != null  and queue != ''">#{queue},</if>
+            <if test="minRepay != null ">#{minRepay},</if>
+            <if test="sex != null  and sex != ''">#{sex},</if>
+            <if test="certificateNo != null  and certificateNo != ''">#{certificateNo},</if>
+            <if test="birthday != null  and birthday != ''">#{birthday},</if>
+            <if test="depart != null  and depart != ''">#{depart},</if>
+            <if test="homePostcode != null  and homePostcode != ''">#{homePostcode},</if>
+            <if test="homeProvince != null  and homeProvince != ''">#{homeProvince},</if>
+            <if test="homeCity != null  and homeCity != ''">#{homeCity},</if>
+            <if test="homeDistrict != null  and homeDistrict != ''">#{homeDistrict},</if>
+            <if test="homeTown != null  and homeTown != ''">#{homeTown},</if>
+            <if test="homeStreet != null  and homeStreet != ''">#{homeStreet},</if>
+            <if test="homePlate != null  and homePlate != ''">#{homePlate},</if>
+            <if test="companyPostcode != null  and companyPostcode != ''">#{companyPostcode},</if>
+            <if test="companyProvince != null  and companyProvince != ''">#{companyProvince},</if>
+            <if test="companyCity != null  and companyCity != ''">#{companyCity},</if>
+            <if test="companyDistrict != null  and companyDistrict != ''">#{companyDistrict},</if>
+            <if test="companyTown != null  and companyTown != ''">#{companyTown},</if>
+            <if test="companyStreet != null  and companyStreet != ''">#{companyStreet},</if>
+            <if test="companyStreetNo != null  and companyStreetNo != ''">#{companyStreetNo},</if>
+            <if test="companyPlate != null  and companyPlate != ''">#{companyPlate},</if>
+            <if test="domicilePostcode != null  and domicilePostcode != ''">#{domicilePostcode},</if>
+            <if test="domicileProvince != null  and domicileProvince != ''">#{domicileProvince},</if>
+            <if test="domicileCity != null  and domicileCity != ''">#{domicileCity},</if>
+            <if test="domicileDistrict != null  and domicileDistrict != ''">#{domicileDistrict},</if>
+            <if test="domicileTown != null  and domicileTown != ''">#{domicileTown},</if>
+            <if test="domicileStreet != null  and domicileStreet != ''">#{domicileStreet},</if>
+            <if test="domicileStreetNo != null  and domicileStreetNo != ''">#{domicileStreetNo},</if>
+            <if test="domicilePlate != null  and domicilePlate != ''">#{domicilePlate},</if>
+            <if test="homeStreetNo != null  and homeStreetNo != ''">#{homeStreetNo},</if>
+         </trim>
+    </insert>
+
+  <!--  <update id="updateTLiCaseInfo" parameterType="TLiCaseInfo">
+        update t_li_case_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="status != null ">status = #{status},</if>
+            <if test="isStop != null ">is_stop = #{isStop},</if>
+            <if test="stopTime != null ">stop_time = #{stopTime},</if>
+            <if test="outTime != null ">out_time = #{outTime},</if>
+            <if test="created != null ">created = #{created},</if>
+            <if test="createdby != null  and createdby != ''">createdby = #{createdby},</if>
+            <if test="updated != null ">updated = #{updated},</if>
+            <if test="updatedby != null  and updatedby != ''">updatedby = #{updatedby},</if>
+            <if test="collector != null  and collector != ''">collector = #{collector},</if>
+            <if test="collectorCurrent != null  and collectorCurrent != ''">collector_current = #{collectorCurrent},</if>
+            <if test="caseNo != null  and caseNo != ''">case_no = #{caseNo},</if>
+            <if test="custNo != null  and custNo != ''">cust_no = #{custNo},</if>
+            <if test="custName != null  and custName != ''">cust_name = #{custName},</if>
+            <if test="mobile != null  and mobile != ''">mobile = #{mobile},</if>
+            <if test="debt != null ">debt = #{debt},</if>
+            <if test="outType != null ">out_type = #{outType},</if>
+            <if test="cardCount != null ">card_count = #{cardCount},</if>
+            <if test="signColor != null  and signColor != ''">sign_color = #{signColor},</if>
+            <if test="overdueDate != null ">overdue_date = #{overdueDate},</if>
+            <if test="overdueDays != null ">overdue_days = #{overdueDays},</if>
+            <if test="companyName != null  and companyName != ''">company_name = #{companyName},</if>
+            <if test="importBatch != null  and importBatch != ''">import_batch = #{importBatch},</if>
+            <if test="queue != null  and queue != ''">queue = #{queue},</if>
+            <if test="minRepay != null ">min_repay = #{minRepay},</if>
+            <if test="sex != null  and sex != ''">sex = #{sex},</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no = #{certificateNo},</if>
+            <if test="birthday != null  and birthday != ''">birthday = #{birthday},</if>
+            <if test="depart != null  and depart != ''">depart = #{depart},</if>
+            <if test="homePostcode != null  and homePostcode != ''">home_postcode = #{homePostcode},</if>
+            <if test="homeProvince != null  and homeProvince != ''">home_province = #{homeProvince},</if>
+            <if test="homeCity != null  and homeCity != ''">home_city = #{homeCity},</if>
+            <if test="homeDistrict != null  and homeDistrict != ''">home_district = #{homeDistrict},</if>
+            <if test="homeTown != null  and homeTown != ''">home_town = #{homeTown},</if>
+            <if test="homeStreet != null  and homeStreet != ''">home_street = #{homeStreet},</if>
+            <if test="homePlate != null  and homePlate != ''">home_plate = #{homePlate},</if>
+            <if test="companyPostcode != null  and companyPostcode != ''">company_postcode = #{companyPostcode},</if>
+            <if test="companyProvince != null  and companyProvince != ''">company_province = #{companyProvince},</if>
+            <if test="companyCity != null  and companyCity != ''">company_city = #{companyCity},</if>
+            <if test="companyDistrict != null  and companyDistrict != ''">company_district = #{companyDistrict},</if>
+            <if test="companyTown != null  and companyTown != ''">company_town = #{companyTown},</if>
+            <if test="companyStreet != null  and companyStreet != ''">company_street = #{companyStreet},</if>
+            <if test="companyStreetNo != null  and companyStreetNo != ''">company_street_no = #{companyStreetNo},</if>
+            <if test="companyPlate != null  and companyPlate != ''">company_plate = #{companyPlate},</if>
+            <if test="domicilePostcode != null  and domicilePostcode != ''">domicile_postcode = #{domicilePostcode},</if>
+            <if test="domicileProvince != null  and domicileProvince != ''">domicile_province = #{domicileProvince},</if>
+            <if test="domicileCity != null  and domicileCity != ''">domicile_city = #{domicileCity},</if>
+            <if test="domicileDistrict != null  and domicileDistrict != ''">domicile_district = #{domicileDistrict},</if>
+            <if test="domicileTown != null  and domicileTown != ''">domicile_town = #{domicileTown},</if>
+            <if test="domicileStreet != null  and domicileStreet != ''">domicile_street = #{domicileStreet},</if>
+            <if test="domicileStreetNo != null  and domicileStreetNo != ''">domicile_street_no = #{domicileStreetNo},</if>
+            <if test="domicilePlate != null  and domicilePlate != ''">domicile_plate = #{domicilePlate},</if>
+            <if test="homeStreetNo != null  and homeStreetNo != ''">home_street_no = #{homeStreetNo},</if>
+        </trim>
+        where tuid = #{tuid}
+    </update>-->
+
+
+    <update id="updateTLiCaseInfo" parameterType="TLiCaseInfo">
+        update t_li_case_info set cust_name = #{custName},certificate_no = #{certificateNo}
+        where tuid = #{tuid}
+    </update>
+
+    <delete id="deleteTLiCaseInfoById" parameterType="String">
+        delete from t_li_case_info where tuid = #{tuid}
+    </delete>
+
+    <delete id="deleteTLiCaseInfoByIds" parameterType="String">
+        delete from t_li_case_info where tuid in 
+        <foreach item="tuid" collection="array" open="(" separator="," close=")">
+            #{tuid}
+        </foreach>
+    </delete>
+    
+</mapper>

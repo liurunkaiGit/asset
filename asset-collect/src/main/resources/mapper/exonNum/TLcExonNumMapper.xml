@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.exonNum.mapper.TLcExonNumMapper">
+    
+    <resultMap type="com.ruoyi.exonNum.domain.TLcExonNum" id="TLcExonNumResult">
+        <result property="id"    column="id"    />
+        <result property="exonNumGroup"    column="exon_num_group"    />
+        <result property="exonNumCount"    column="exon_num_count"    />
+        <result property="exonNum"    column="exon_num"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="callPlatform"    column="call_platform"    />
+    </resultMap>
+
+    <sql id="selectTLcExonNumVo">
+        select id, exon_num_group, exon_num_count, exon_num, create_by, create_time, update_by, update_time, org_id, org_name ,call_platform from t_lc_exon_num
+    </sql>
+
+    <sql id="SELECT_EXON_NUM">
+        t.id, t.exon_num_group, t.exon_num_count, t.exon_num, t.create_by, t.create_time, t.update_by, t.update_time, org_id, org_name,call_platform
+    </sql>
+
+    <select id="selectTLcExonNumList" parameterType="com.ruoyi.exonNum.domain.TLcExonNum" resultMap="TLcExonNumResult">
+        SELECT su.user_name AS createUser,
+        <include refid="SELECT_EXON_NUM"/>
+        from t_lc_exon_num t LEFT JOIN sys_user su ON t.create_by = su.user_id
+        <where>  
+            <if test="exonNumGroup != null  and exonNumGroup != ''"> and exon_num_group = #{exonNumGroup}</if>
+            <if test="callPlatform != null  and callPlatform != ''"> and call_platform = #{callPlatform}</if>
+            <!--<if test="orgId != null"> and org_id = #{orgId}</if>-->
+        </where>
+    </select>
+    
+    <select id="selectTLcExonNumById" parameterType="Long" resultMap="TLcExonNumResult">
+        <include refid="selectTLcExonNumVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLcExonNum" parameterType="com.ruoyi.exonNum.domain.TLcExonNum" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_exon_num
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="exonNumGroup != null  and exonNumGroup != ''">exon_num_group,</if>
+            <if test="exonNumCount != null ">exon_num_count,</if>
+            <if test="exonNum != null  and exonNum != ''">exon_num,</if>
+            <if test="orgId != null ">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="createBy != null ">create_by,</if>
+            create_time,
+            <if test="updateBy != null ">update_by,</if>
+            update_time,
+            <if test="callPlatform != null  and callPlatform != ''">call_platform,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="exonNumGroup != null  and exonNumGroup != ''">#{exonNumGroup},</if>
+            <if test="exonNumCount != null ">#{exonNumCount},</if>
+            <if test="exonNum != null  and exonNum != ''">#{exonNum},</if>
+            <if test="orgId != null ">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="createBy != null ">#{createBy},</if>
+            NOW(),
+            <if test="updateBy != null ">#{updateBy},</if>
+            NOW(),
+            <if test="callPlatform != null  and callPlatform != ''">#{callPlatform},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLcExonNum" parameterType="com.ruoyi.exonNum.domain.TLcExonNum">
+        update t_lc_exon_num
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="exonNumGroup != null  and exonNumGroup != ''">exon_num_group = #{exonNumGroup},</if>
+            <if test="exonNumCount != null ">exon_num_count = #{exonNumCount},</if>
+            <if test="exonNum != null  and exonNum != ''">exon_num = #{exonNum},</if>
+            <if test="updateBy != null ">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="orgId != null ">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="callPlatform != null  and callPlatform != ''">call_platform = #{callPlatform},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcExonNumById" parameterType="Long">
+        delete from t_lc_exon_num where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcExonNumByIds" parameterType="String">
+        delete from t_lc_exon_num where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('【请填写功能名称】列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>委托方：</p>
+                                <!--<input type="text" name="orgName"/>-->
+                                <select name="orgId" id="orgId">
+                                    <option value="">请选择</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="orgspeech:conf:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="orgspeech:conf:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="orgspeech:conf:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="ruoyi:conf:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>-->
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('ruoyi:conf:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('ruoyi:conf:remove')}]];
+        var prefix = ctx + "orgspeech/conf";
+        var taskPrefix = ctx + "collect/task";
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                clickToSelect:true,
+                modalName: "",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '话术名称，多个之间逗号分隔',
+                    visible: false
+                },
+                /*{
+                    field : 'orgId', 
+                    title : '委托方编码'
+                },*/
+                {
+                    field : 'orgName', 
+                    title : '委托方'
+                },
+                {
+                    field : 'speechcraftName', 
+                    title : '话术'
+                },
+                {
+                    field : 'concurrentValue',
+                    title : '并发量'
+                },
+                {
+                    field : 'updateTime',
+                    title : '最近修改时间'
+                },
+                    {
+                        field : 'startCallTime',
+                        title : '呼叫起始时间',
+                    },
+                    {
+                        field : 'endCallTime',
+                        title : '呼叫停止时间'
+                    }]
+            };
+            $.table.init(options);
+            initOrg();
+        });
+
+        function initOrg() {
+            $.post(
+                taskPrefix + "/initOrg",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            var opt = "<option value='"+data.rows[i].deptId+"'>"+data.rows[i].deptName+"</option>";
+                            $("#orgId").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+    </script>
+</body>
+</html>

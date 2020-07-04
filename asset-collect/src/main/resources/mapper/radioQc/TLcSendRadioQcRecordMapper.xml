@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.radioQc.mapper.TLcSendRadioQcRecordMapper">
+    
+    <resultMap type="com.ruoyi.radioQc.domain.TLcSendRadioQcRecord" id="TLcSendRadioQcRecordResult">
+        <result property="id"    column="id"    />
+        <result property="callRecordId"    column="call_record_id"    />
+        <result property="radioUrl"    column="radio_url"    />
+        <result property="custName"    column="cust_name"    />
+        <result property="custPhone"    column="cust_phone"    />
+        <result property="callStartTime"    column="call_start_time"    />
+        <result property="callEndTime"    column="call_end_time"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectTLcSendRadioQcRecordVo">
+        select id, call_record_id, radio_url, cust_name, cust_phone, call_start_time, call_end_time, status, create_time from t_lc_send_radio_qc_record
+    </sql>
+
+    <select id="selectTLcSendRadioQcRecordList" parameterType="com.ruoyi.radioQc.domain.TLcSendRadioQcRecord" resultMap="TLcSendRadioQcRecordResult">
+        <include refid="selectTLcSendRadioQcRecordVo"/>
+        <where>  
+            <if test="callRecordId != null "> and call_record_id = #{callRecordId}</if>
+            <if test="radioUrl != null  and radioUrl != ''"> and radio_url = #{radioUrl}</if>
+            <if test="custName != null  and custName != ''"> and cust_name like concat('%', #{custName}, '%')</if>
+            <if test="custPhone != null  and custPhone != ''"> and cust_phone = #{custPhone}</if>
+            <if test="callStartTime != null "> and call_start_time = #{callStartTime}</if>
+            <if test="callEndTime != null "> and call_end_time = #{callEndTime}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectTLcSendRadioQcRecordById" parameterType="Long" resultMap="TLcSendRadioQcRecordResult">
+        <include refid="selectTLcSendRadioQcRecordVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLcSendRadioQcRecord" parameterType="com.ruoyi.radioQc.domain.TLcSendRadioQcRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_send_radio_qc_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="callRecordId != null ">call_record_id,</if>
+            <if test="radioUrl != null  and radioUrl != ''">radio_url,</if>
+            <if test="custName != null  and custName != ''">cust_name,</if>
+            <if test="custPhone != null  and custPhone != ''">cust_phone,</if>
+            <if test="callStartTime != null ">call_start_time,</if>
+            <if test="callEndTime != null ">call_end_time,</if>
+            <if test="status != null ">status,</if>
+            <if test="createTime != null ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="callRecordId != null ">#{callRecordId},</if>
+            <if test="radioUrl != null  and radioUrl != ''">#{radioUrl},</if>
+            <if test="custName != null  and custName != ''">#{custName},</if>
+            <if test="custPhone != null  and custPhone != ''">#{custPhone},</if>
+            <if test="callStartTime != null ">#{callStartTime},</if>
+            <if test="callEndTime != null ">#{callEndTime},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLcSendRadioQcRecord" parameterType="com.ruoyi.radioQc.domain.TLcSendRadioQcRecord">
+        update t_lc_send_radio_qc_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="callRecordId != null ">call_record_id = #{callRecordId},</if>
+            <if test="radioUrl != null  and radioUrl != ''">radio_url = #{radioUrl},</if>
+            <if test="custName != null  and custName != ''">cust_name = #{custName},</if>
+            <if test="custPhone != null  and custPhone != ''">cust_phone = #{custPhone},</if>
+            <if test="callStartTime != null ">call_start_time = #{callStartTime},</if>
+            <if test="callEndTime != null ">call_end_time = #{callEndTime},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcSendRadioQcRecordById" parameterType="Long">
+        delete from t_lc_send_radio_qc_record where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcSendRadioQcRecordByIds" parameterType="String">
+        delete from t_lc_send_radio_qc_record where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

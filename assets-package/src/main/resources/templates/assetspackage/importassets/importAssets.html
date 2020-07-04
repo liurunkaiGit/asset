@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('客户资产列表')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <input type="hidden" name="importType" id="importType" value="1"/>
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>导入批次号：</p>
+                                <input type="text" name="importBatchNo"/>
+                            </li>
+                           <!-- <li>
+                                <p>委托方：</p>
+                                <select name="orgId" id="orgId">
+                                    <option value="">请选择</option>
+                                </select>
+                            </li>-->
+                            <li class="select-time">
+                                <p>导入时间：</p>
+                                <input type="text" class="time-input" id="startCreateTime" placeholder="开始时间" name="startCreateTime"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endCreateTime" placeholder="结束时间" name="endCreateTime"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+               <!-- <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="import:assets:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="import:assets:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="import:assets:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>-->
+                <a class="btn btn-primary"  data-toggle="modal" data-target="#myModal" shiro:hasPermission="import:assets:upload">
+                    <i class="glyphicon glyphicon-cloud-upload"></i> 导入
+                </a>
+                <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="import:assets:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>-->
+
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+            <div class="col-sm-12">
+                <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content animated bounceInRight">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+                                </button>
+                                <i class="fa fa-database modal-icon"></i>
+                                <h4 class="modal-title">数据导入窗口</h4>
+                            </div>
+                            <div class="modal-body">
+                                <!--<div class="form-group">
+                                    <span style="font-size: 15px;color:black;">&nbsp;&nbsp;委托机构：</span>
+                                    <select name="orgId2" id="orgId2" style="padding: 3px;width:200px;" onchange="findTemplate();">
+                                        <option value="">请选择</option>
+                                    </select>
+                                </div>-->
+                                <div class="form-group">
+                                    <span style="font-size: 15px;color:black;">&nbsp;&nbsp;模板选择：</span>
+                                    <select name="templateId" id="templateId" style="padding: 3px;width:200px;">
+                                        <option value="">请选择</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <span style="font-size: 15px;color:black;">&nbsp;&nbsp;导入类型：</span>
+                                    <select name="type" id="type" style="padding: 3px;width:200px;">
+                                        <option value="">请选择</option>
+                                        <option value="1">新案导入</option>
+                                        <option value="2">更新信息</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input id="filePath" name="filePath" class="form-control" type="file" style="padding:3px;">
+                                </div>
+                                <div class="form-group" id="message" style="color: red;">
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                                <button type="button" class="btn btn-primary" onclick="uploadFile();">保存</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        // var ctx = [[${@config.getKey('ctx')}]];
+        var editFlag = [[${@permission.hasPermi('import:assets:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('import:assets:remove')}]];
+        var prefix = ctx + "import/assets";
+        var flowPrefix = ctx + "assetspackage/import/flow";
+        $(function() {
+            var options = {
+                url: flowPrefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "客户资产",
+                clickToSelect:true,
+               /* fixedColumns: true,
+                fixedNumber: 3,*/
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id',
+                    title : '主键',
+                    visible: false
+                },
+                    {
+                        field : 'importBatchNo',
+                        title : '导入批次号',
+                        formatter: function (value, row, index) {
+                            return "<a href='javascript:void(0)' onclick='viewImportDetail(\""+value + "\")'>"+value+"</a>";
+                        }
+                    },
+                    {
+                        field : 'orgName',
+                        title : '委托方'
+                    },
+                    {
+                        field : 'totalMoney',
+                        title : '总金额'
+                    },
+                    {
+                        field : 'totalNum',
+                        title : '总笔数'
+                    },{
+                        field : 'optionUser',
+                        title : '操作人'
+                    },
+                    {
+                        field : 'createTime',
+                        title : '操作时间'
+                    }]
+            };
+            $.table.init(options);
+
+
+           /* $.ajax({
+                url: prefix+"/findOrgInfo",
+                dataType: "json",
+                type: "post",
+                success:function(data){
+                    var result = JSON.parse(data.msg);
+                    $.each(result,function(index,obj){
+                        // $("#orgId").append("<option value='"+obj.orgId+"'>"+obj.orgName+"</option>");
+                        $("#orgId2").append("<option value='"+obj.orgId+"'>"+obj.orgName+"</option>");
+                    });
+                }
+            });*/
+
+            findTemplate();
+
+
+        });
+    </script>
+
+    <script type="text/javascript">
+        function upload() {
+            $.ajax({
+                url: prefix+"/upload",
+                type: "get",
+                dataType: "json",
+                success: function(data) {
+                    $.modal.closeLoading();
+
+                }
+            });
+        }
+
+        /*function findTemplate() {
+            var orgId = $("#orgId2").val();
+            $.ajax({
+                url: prefix+"/findTemplate?orgId="+orgId,
+                dataType: "json",
+                type: "post",
+                success:function(data){
+                    $("#templateId").empty().append("<option value=''>请选择</option>");
+                    var result = JSON.parse(data.msg);
+                    $.each(result,function(index,obj){
+                        $("#templateId").append("<option value='"+index+"'>"+obj+"</option>");
+                    });
+                }
+            });
+        }*/
+
+        function findTemplate() {
+            $.ajax({
+                url: prefix+"/findTemplate",
+                dataType: "json",
+                type: "post",
+                success:function(data){
+                    $("#templateId").empty().append("<option value=''>请选择</option>");
+                    var result = JSON.parse(data.msg);
+                    $.each(result,function(index,obj){
+                        $("#templateId").append("<option value='"+index+"'>"+obj+"</option>");
+                    });
+                }
+            });
+        }
+
+        function uploadFile() {
+            var templateId = $("#templateId").val();
+            var orgId = $("#orgId2").val();
+            var type = $("#type").val();
+            var formData = new FormData();
+           /* if(""==orgId || "请选择" == orgId || orgId ==null){
+                $.modal.alertWarning("请先选择委托机构");
+                return false;
+            }*/
+            if(""==type || "请选择" == type || type ==null){
+                $.modal.alertWarning("请先选择导入类型");
+                return false;
+            }
+            if ($('#filePath')[0].files[0] == null) {
+                $.modal.alertWarning("请先选择文件路径");
+                return false;
+            }
+            if(""==templateId || "请选择" == templateId || templateId ==null){
+                $.modal.alertWarning("请先选择模板");
+                return false;
+            }
+            window.parent.$.modal.loading("数据加载中，请稍后...");
+            formData.append('file', $('#filePath')[0].files[0]);
+            formData.append('templateId', templateId);
+            formData.append('orgId', orgId);
+            formData.append('type', type);
+            $.ajax({
+                url: prefix + "/upload",
+                type: 'post',
+                cache: false,
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: "json",
+                success: function(result) {
+                    debugger;
+                    if(result.msg =="数据导入失败"){
+                        $.modal.alertWarning(result.data);
+                        window.parent.$.modal.closeLoading();
+                    }else{
+                        // $.operate.successCallback(result);
+                        var importBatchNo = result.data;
+                        $('#myModal').modal('hide');
+                        window.parent.$.modal.closeLoading();
+                        var statisticsUrl = prefix + "/toStatistics/"+importBatchNo;
+                        var width = "800";
+                        var height = $(window).height() - 50;
+                        layer.open({
+                            type: 2,
+                            maxmin: true,
+                            shade: 0.3,
+                            title: "导入统计窗口",
+                            fix: false,
+                            area: [width + 'px', height + 'px'],
+                            content: statisticsUrl,
+                            shadeClose: true,
+                            btn: ['关闭'],
+                            yes: function (index, layero) {
+                                window.location.href=prefix+"/deleteTempTable/"+importBatchNo;
+                                layer.close(index);
+                                window.parent.$.modal.reload();
+                            },
+                            cancel: function (index, layero) {
+                                window.location.href=prefix+"/deleteTempTable/"+importBatchNo;
+                                layer.close(index);
+                                window.parent.$.modal.reload();
+                            },
+                            end:function (index, layero) {
+                                window.location.href=prefix+"/deleteTempTable/"+importBatchNo;
+                                layer.close(index);
+                                window.parent.$.modal.reload();
+                            }
+                        });
+
+                    }
+                }
+            });
+        }
+
+        function viewImportDetail(importBatchNo) {
+            var toViewImportDetailUrl = prefix + '/toViewImportDetail?importBatchNo='+importBatchNo;
+            // var data = {"importBatchNo": importBatchNo};
+            // $.operate.submit(viewImportDetailUrl, "post", "json", data);
+            $.modal.open("资产导入", toViewImportDetailUrl);
+        }
+
+    </script>
+</body>
+</html>

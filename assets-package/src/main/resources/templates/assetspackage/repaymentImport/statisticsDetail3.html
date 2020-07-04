@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('导入统计详情')" />
+    <style type="text/css">
+        .select-list li p{
+            width: 100px;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <input id = "importBatchNo" name="importBatchNo" th:value="${importBatchNo}" type="hidden">
+    <div class="row">
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-css"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script th:inline="javascript">
+    var prefix = ctx + "assetspackage/repaymentImport";
+    $(function() {
+        var pch = $("#importBatchNo").val();
+        var options = {
+            url: prefix + "/exceptionList/3"+"?importBatchNo="+pch,
+            clickToSelect:true,
+            modalName: "已结案统计详情",
+            columns: [{
+                checkbox: false
+            },
+
+                {
+                    field : 'orgCasno',
+                    title : '机构案件号'
+                },
+                {
+                    field : 'msg',
+                    title : '异常消息'
+                }]
+        };
+        $.table.init(options);
+    });
+
+
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.robot.mapper.TLcRobotCallDetailMapper">
+    
+    <resultMap type="com.ruoyi.robot.domain.TLcRobotCallDetail" id="TLcRobotCallDetailResult">
+        <result property="id"    column="id"    />
+        <result property="sceneInstanceLogId"    column="scene_instance_log_id"    />
+        <result property="inboundInstanceId"    column="inbound_instance_id"    />
+        <result property="companyId"    column="company_id"    />
+        <result property="robotDefId"    column="robot_def_id"    />
+        <result property="decisionId"    column="decision_id"    />
+        <result property="speaker"    column="speaker"    />
+        <result property="content"    column="content"    />
+        <result property="userMean"    column="user_mean"    />
+        <result property="userMeanDetail"    column="user_mean_detail"    />
+        <result property="aiUnknownValue"    column="ai_unknown"    />
+        <result property="answerStatus"    column="answer_status"    />
+        <result property="studyStatus"    column="study_status"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="correctionContent"    column="correction_content"    />
+        <result property="luyinOssUrl"    column="luyin_oss_url"    />
+        <result property="sign"    column="sign"    />
+        <result property="dateTime"    column="date_time"    />
+        <result property="dataType"    column="data_type"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectTLcRobotCallDetailVo">
+        select id, scene_instance_log_id, inbound_instance_id, company_id, robot_def_id, decision_id, speaker, content, user_mean, user_mean_detail, ai_unknown, answer_status, study_status, start_time, end_time, correction_content, luyin_oss_url, sign, date_time, data_type, create_time from t_lc_robot_call_detail
+    </sql>
+
+    <select id="selectTLcRobotCallDetailList" parameterType="com.ruoyi.robot.domain.TLcRobotCallDetail" resultMap="TLcRobotCallDetailResult">
+        <include refid="selectTLcRobotCallDetailVo"/>
+        <where>  
+            <if test="sceneInstanceLogId != null "> and scene_instance_log_id = #{sceneInstanceLogId}</if>
+            <if test="inboundInstanceId != null "> and inbound_instance_id = #{inboundInstanceId}</if>
+            <if test="companyId != null "> and company_id = #{companyId}</if>
+            <if test="robotDefId != null "> and robot_def_id = #{robotDefId}</if>
+            <if test="decisionId != null "> and decision_id = #{decisionId}</if>
+            <if test="speaker != null  and speaker != ''"> and speaker = #{speaker}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="userMean != null  and userMean != ''"> and user_mean = #{userMean}</if>
+            <if test="userMeanDetail != null  and userMeanDetail != ''"> and user_mean_detail = #{userMeanDetail}</if>
+            <if test="aiUnknownValue != null "> and ai_unknown = #{aiUnknownValue}</if>
+            <if test="answerStatus != null "> and answer_status = #{answerStatus}</if>
+            <if test="studyStatus != null "> and study_status = #{studyStatus}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="correctionContent != null  and correctionContent != ''"> and correction_content = #{correctionContent}</if>
+            <if test="luyinOssUrl != null  and luyinOssUrl != ''"> and luyin_oss_url = #{luyinOssUrl}</if>
+            <if test="sign != null  and sign != ''"> and sign = #{sign}</if>
+            <if test="dateTime != null "> and date_time = #{dateTime}</if>
+            <if test="dataType != null  and dataType != ''"> and data_type = #{dataType}</if>
+        </where>
+    </select>
+    
+    <select id="selectTLcRobotCallDetailById" parameterType="Long" resultMap="TLcRobotCallDetailResult">
+        <include refid="selectTLcRobotCallDetailVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLcRobotCallDetail" parameterType="com.ruoyi.robot.domain.TLcRobotCallDetail">
+        insert into t_lc_robot_call_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sceneInstanceLogId != null ">scene_instance_log_id,</if>
+            <if test="inboundInstanceId != null ">inbound_instance_id,</if>
+            <if test="companyId != null ">company_id,</if>
+            <if test="robotDefId != null ">robot_def_id,</if>
+            <if test="decisionId != null ">decision_id,</if>
+            <if test="speaker != null  and speaker != ''">speaker,</if>
+            <if test="content != null  and content != ''">content,</if>
+            <if test="userMean != null  and userMean != ''">user_mean,</if>
+            <if test="userMeanDetail != null  and userMeanDetail != ''">user_mean_detail,</if>
+            <if test="aiUnknownValue != null ">ai_unknown,</if>
+            <if test="answerStatus != null ">answer_status,</if>
+            <if test="studyStatus != null ">study_status,</if>
+            <if test="startTime != null ">start_time,</if>
+            <if test="endTime != null ">end_time,</if>
+            <if test="correctionContent != null  and correctionContent != ''">correction_content,</if>
+            <if test="luyinOssUrl != null  and luyinOssUrl != ''">luyin_oss_url,</if>
+            <if test="sign != null  and sign != ''">sign,</if>
+            <if test="dateTime != null ">date_time,</if>
+            <if test="dataType != null  and dataType != ''">data_type,</if>
+            create_time,
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sceneInstanceLogId != null ">#{sceneInstanceLogId},</if>
+            <if test="inboundInstanceId != null ">#{inboundInstanceId},</if>
+            <if test="companyId != null ">#{companyId},</if>
+            <if test="robotDefId != null ">#{robotDefId},</if>
+            <if test="decisionId != null ">#{decisionId},</if>
+            <if test="speaker != null  and speaker != ''">#{speaker},</if>
+            <if test="content != null  and content != ''">#{content},</if>
+            <if test="userMean != null  and userMean != ''">#{userMean},</if>
+            <if test="userMeanDetail != null  and userMeanDetail != ''">#{userMeanDetail},</if>
+            <if test="aiUnknownValue != null ">#{aiUnknownValue},</if>
+            <if test="answerStatus != null ">#{answerStatus},</if>
+            <if test="studyStatus != null ">#{studyStatus},</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="endTime != null ">#{endTime},</if>
+            <if test="correctionContent != null  and correctionContent != ''">#{correctionContent},</if>
+            <if test="luyinOssUrl != null  and luyinOssUrl != ''">#{luyinOssUrl},</if>
+            <if test="sign != null  and sign != ''">#{sign},</if>
+            <if test="dateTime != null ">#{dateTime},</if>
+            <if test="dataType != null  and dataType != ''">#{dataType},</if>
+            NOW(),
+         </trim>
+    </insert>
+
+    <update id="updateTLcRobotCallDetail" parameterType="com.ruoyi.robot.domain.TLcRobotCallDetail">
+        update t_lc_robot_call_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sceneInstanceLogId != null ">scene_instance_log_id = #{sceneInstanceLogId},</if>
+            <if test="inboundInstanceId != null ">inbound_instance_id = #{inboundInstanceId},</if>
+            <if test="companyId != null ">company_id = #{companyId},</if>
+            <if test="robotDefId != null ">robot_def_id = #{robotDefId},</if>
+            <if test="decisionId != null ">decision_id = #{decisionId},</if>
+            <if test="speaker != null  and speaker != ''">speaker = #{speaker},</if>
+            <if test="content != null  and content != ''">content = #{content},</if>
+            <if test="userMean != null  and userMean != ''">user_mean = #{userMean},</if>
+            <if test="userMeanDetail != null  and userMeanDetail != ''">user_mean_detail = #{userMeanDetail},</if>
+            <if test="aiUnknownValue != null ">ai_unknown = #{aiUnknownValue},</if>
+            <if test="answerStatus != null ">answer_status = #{answerStatus},</if>
+            <if test="studyStatus != null ">study_status = #{studyStatus},</if>
+            <if test="startTime != null ">start_time = #{startTime},</if>
+            <if test="endTime != null ">end_time = #{endTime},</if>
+            <if test="correctionContent != null  and correctionContent != ''">correction_content = #{correctionContent},</if>
+            <if test="luyinOssUrl != null  and luyinOssUrl != ''">luyin_oss_url = #{luyinOssUrl},</if>
+            <if test="sign != null  and sign != ''">sign = #{sign},</if>
+            <if test="dateTime != null ">date_time = #{dateTime},</if>
+            <if test="dataType != null  and dataType != ''">data_type = #{dataType},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcRobotCallDetailById" parameterType="Long">
+        delete from t_lc_robot_call_detail where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcRobotCallDetailByIds" parameterType="String">
+        delete from t_lc_robot_call_detail where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

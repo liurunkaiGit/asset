@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增案件')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-duncase-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">案件编号：</label>
+                <div class="col-sm-8">
+                    <input name="caseNo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户编号：</label>
+                <div class="col-sm-8">
+                    <input name="customNo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户姓名：</label>
+                <div class="col-sm-8">
+                    <input name="customName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">证件类型：</label>
+                <div class="col-sm-8">
+                    <select name="certificateType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">证件号码：</label>
+                <div class="col-sm-8">
+                    <input name="certificateNo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户手机号：</label>
+                <div class="col-sm-8">
+                    <input name="customPhone" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">账单日：</label>
+                <div class="col-sm-8">
+                    <input name="monthRepayDay" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">首次逾期时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="firstOverdueTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">逾期天数：</label>
+                <div class="col-sm-8">
+                    <input name="overdueDays" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">逾期账龄：</label>
+                <div class="col-sm-8">
+                    <input name="overdueAging" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">历史最大逾期天数：</label>
+                <div class="col-sm-8">
+                    <input name="maxOverdueDay" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">还款账号：</label>
+                <div class="col-sm-8">
+                    <input name="repayAccountNo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">还款银行：</label>
+                <div class="col-sm-8">
+                    <input name="repayBank" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">业务归属人：</label>
+                <div class="col-sm-8">
+                    <input name="ownerId" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">业务归属机构：</label>
+                <div class="col-sm-8">
+                    <input name="orgId" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">手别：</label>
+                <div class="col-sm-8">
+                    <input name="handSeparation" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">还款日：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="repayDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">授信额度：</label>
+                <div class="col-sm-8">
+                    <input name="creditLine" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">借款额度：</label>
+                <div class="col-sm-8">
+                    <input name="borrowLine" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">借款卡号：</label>
+                <div class="col-sm-8">
+                    <input name="borrowCardNo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">借款卡银行：</label>
+                <div class="col-sm-8">
+                    <input name="borrowBank" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户最后缴款金额：</label>
+                <div class="col-sm-8">
+                    <input name="lastRepayAmountRmb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户余额：</label>
+                <div class="col-sm-8">
+                    <input name="balanceRmb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户当前CD值：</label>
+                <div class="col-sm-8">
+                    <input name="currentCdValue" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户最后一次缴款日：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="lastRepayDateRmb" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户最后还款笔数：</label>
+                <div class="col-sm-8">
+                    <input name="lastRepayNum" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户应还利息总额：</label>
+                <div class="col-sm-8">
+                    <input name="totalInterestRmb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户应还本金1：</label>
+                <div class="col-sm-8">
+                    <input name="principalOneRmb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户应还本金2：</label>
+                <div class="col-sm-8">
+                    <input name="principalTwoRmb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户应还本金总额：</label>
+                <div class="col-sm-8">
+                    <input name="totalPrincipalRmb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户应还罚息1：</label>
+                <div class="col-sm-8">
+                    <input name="defaultInterestOneRmb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户应还罚息2：</label>
+                <div class="col-sm-8">
+                    <input name="defaultInterestTwoRmb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户应还罚息总额：</label>
+                <div class="col-sm-8">
+                    <input name="totalDefaultInterestRmb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户应还费用1：</label>
+                <div class="col-sm-8">
+                    <input name="expensesPayableOneRmb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户应还费用2：</label>
+                <div class="col-sm-8">
+                    <input name="expensesPayableTwoRmb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户应还费用总金额：</label>
+                <div class="col-sm-8">
+                    <input name="totalExpensesPayableRmb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户最低应还金额：</label>
+                <div class="col-sm-8">
+                    <input name="lowestPaymentRmb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户欠款总金额：</label>
+                <div class="col-sm-8">
+                    <input name="totalDebtAmountRmb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户额度固定额度：</label>
+                <div class="col-sm-8">
+                    <input name="fixLimitRmb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户应还罚息1：</label>
+                <div class="col-sm-8">
+                    <input name="defaultInterestOneFc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户应还罚息2：</label>
+                <div class="col-sm-8">
+                    <input name="defaultInterestTwoFc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户应还罚息总额：</label>
+                <div class="col-sm-8">
+                    <input name="totalDefaultInterestFc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户应还利息总额：</label>
+                <div class="col-sm-8">
+                    <input name="totalInterestFc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户应还本金1：</label>
+                <div class="col-sm-8">
+                    <input name="principalOneFc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户应还本金2：</label>
+                <div class="col-sm-8">
+                    <input name="principalTwoFc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户应还本金总额：</label>
+                <div class="col-sm-8">
+                    <input name="totalPrincipalFc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户应还费用1：</label>
+                <div class="col-sm-8">
+                    <input name="expensesPayableOneFc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户应还费用2：</label>
+                <div class="col-sm-8">
+                    <input name="expensesPayableTwoFc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户应还费用总金额：</label>
+                <div class="col-sm-8">
+                    <input name="totalExpensesPayableFc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户最低应还金额：</label>
+                <div class="col-sm-8">
+                    <input name="lowestPaymentFc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户欠款总金额：</label>
+                <div class="col-sm-8">
+                    <input name="totalDebtAmountFc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">案件关闭状态 1 打开 2 关闭：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="caseStatus" value="">
+                        <label th:for="caseStatus" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否有效 1：是，2：否：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="validateStatus" value="">
+                        <label th:for="validateStatus" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">修改时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="modifyTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">修改人：</label>
+                <div class="col-sm-8">
+                    <input name="modifyBy" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/duncase"
+        $("#form-duncase-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-duncase-add').serialize());
+            }
+        }
+
+        $("input[name='firstOverdueTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='repayDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='lastRepayDateRmb']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='modifyTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

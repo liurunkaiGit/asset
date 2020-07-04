@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.robot.mapper.TLcRobotCallAnalyseResultMapper">
+    
+    <resultMap type="com.ruoyi.robot.domain.TLcRobotCallAnalyseResult" id="TLcRobotCallAnalyseResultResult">
+        <result property="id"    column="id"    />
+        <result property="sceneInstanceResultId"    column="scene_instance_result_id"    />
+        <result property="companyId"    column="company_id"    />
+        <result property="callJobId"    column="call_job_id"    />
+        <result property="inboundInstanceId"    column="inbound_instance_id"    />
+        <result property="resultName"    column="result_name"    />
+        <result property="resultValue"    column="result_value"    />
+        <result property="artificialResultValue"    column="artificial_result_value"    />
+        <result property="artificialChangedValue"    column="artificial_changed_value"    />
+        <result property="resultDesc"    column="result_desc"    />
+        <result property="resultValueAlias"    column="result_value_alias"    />
+        <result property="resultLabels"    column="result_labels"    />
+        <result property="resultValueNew"    column="result_value_new"    />
+        <result property="sign"    column="sign"    />
+        <result property="dateTime"    column="date_time"    />
+        <result property="dataType"    column="data_type"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectTLcRobotCallAnalyseResultVo">
+        select id, scene_instance_result_id, company_id, call_job_id, inbound_instance_id, result_name, result_value, artificial_result_value, artificial_changed_value, result_desc, result_value_alias, result_labels, result_value_new, sign, date_time, data_type, create_time from t_lc_robot_call_analyse_result
+    </sql>
+
+    <select id="selectTLcRobotCallAnalyseResultList" parameterType="com.ruoyi.robot.domain.TLcRobotCallAnalyseResult" resultMap="TLcRobotCallAnalyseResultResult">
+        <include refid="selectTLcRobotCallAnalyseResultVo"/>
+        <where>  
+            <if test="sceneInstanceResultId != null "> and scene_instance_result_id = #{sceneInstanceResultId}</if>
+            <if test="companyId != null "> and company_id = #{companyId}</if>
+            <if test="callJobId != null "> and call_job_id = #{callJobId}</if>
+            <if test="inboundInstanceId != null "> and inbound_instance_id = #{inboundInstanceId}</if>
+            <if test="resultName != null  and resultName != ''"> and result_name like concat('%', #{resultName}, '%')</if>
+            <if test="resultValue != null  and resultValue != ''"> and result_value = #{resultValue}</if>
+            <if test="artificialResultValue != null  and artificialResultValue != ''"> and artificial_result_value = #{artificialResultValue}</if>
+            <if test="artificialChangedValue != null "> and artificial_changed_value = #{artificialChangedValue}</if>
+            <if test="resultDesc != null  and resultDesc != ''"> and result_desc = #{resultDesc}</if>
+            <if test="resultValueAlias != null  and resultValueAlias != ''"> and result_value_alias = #{resultValueAlias}</if>
+            <if test="resultLabels != null  and resultLabels != ''"> and result_labels = #{resultLabels}</if>
+            <if test="resultValueNew != null  and resultValueNew != ''"> and result_value_new = #{resultValueNew}</if>
+            <if test="sign != null  and sign != ''"> and sign = #{sign}</if>
+            <if test="dateTime != null "> and date_time = #{dateTime}</if>
+            <if test="dataType != null  and dataType != ''"> and data_type = #{dataType}</if>
+        </where>
+    </select>
+    
+    <select id="selectTLcRobotCallAnalyseResultById" parameterType="Long" resultMap="TLcRobotCallAnalyseResultResult">
+        <include refid="selectTLcRobotCallAnalyseResultVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLcRobotCallAnalyseResult" parameterType="com.ruoyi.robot.domain.TLcRobotCallAnalyseResult">
+        insert into t_lc_robot_call_analyse_result
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sceneInstanceResultId != null ">scene_instance_result_id,</if>
+            <if test="companyId != null ">company_id,</if>
+            <if test="callJobId != null ">call_job_id,</if>
+            <if test="inboundInstanceId != null ">inbound_instance_id,</if>
+            <if test="resultName != null  and resultName != ''">result_name,</if>
+            <if test="resultValue != null  and resultValue != ''">result_value,</if>
+            <if test="artificialResultValue != null  and artificialResultValue != ''">artificial_result_value,</if>
+            <if test="artificialChangedValue != null ">artificial_changed_value,</if>
+            <if test="resultDesc != null  and resultDesc != ''">result_desc,</if>
+            <if test="resultValueAlias != null  and resultValueAlias != ''">result_value_alias,</if>
+            <if test="resultLabels != null  and resultLabels != ''">result_labels,</if>
+            <if test="resultValueNew != null  and resultValueNew != ''">result_value_new,</if>
+            <if test="sign != null  and sign != ''">sign,</if>
+            <if test="dateTime != null ">date_time,</if>
+            <if test="dataType != null  and dataType != ''">data_type,</if>
+            create_time,
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sceneInstanceResultId != null ">#{sceneInstanceResultId},</if>
+            <if test="companyId != null ">#{companyId},</if>
+            <if test="callJobId != null ">#{callJobId},</if>
+            <if test="inboundInstanceId != null ">#{inboundInstanceId},</if>
+            <if test="resultName != null  and resultName != ''">#{resultName},</if>
+            <if test="resultValue != null  and resultValue != ''">#{resultValue},</if>
+            <if test="artificialResultValue != null  and artificialResultValue != ''">#{artificialResultValue},</if>
+            <if test="artificialChanged != null ">#{artificialChanged},</if>
+            <if test="resultDesc != null  and resultDesc != ''">#{resultDesc},</if>
+            <if test="resultValueAlias != null  and resultValueAlias != ''">#{resultValueAlias},</if>
+            <if test="resultLabels != null  and resultLabels != ''">#{resultLabels},</if>
+            <if test="resultValueNew != null  and resultValueNew != ''">#{resultValueNew},</if>
+            <if test="sign != null  and sign != ''">#{sign},</if>
+            <if test="dateTime != null ">#{dateTime},</if>
+            <if test="dataType != null  and dataType != ''">#{dataType},</if>
+            NOW(),
+         </trim>
+    </insert>
+
+    <update id="updateTLcRobotCallAnalyseResult" parameterType="com.ruoyi.robot.domain.TLcRobotCallAnalyseResult">
+        update t_lc_robot_call_analyse_result
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sceneInstanceResultId != null ">scene_instance_result_id = #{sceneInstanceResultId},</if>
+            <if test="companyId != null ">company_id = #{companyId},</if>
+            <if test="callJobId != null ">call_job_id = #{callJobId},</if>
+            <if test="inboundInstanceId != null ">inbound_instance_id = #{inboundInstanceId},</if>
+            <if test="resultName != null  and resultName != ''">result_name = #{resultName},</if>
+            <if test="resultValue != null  and resultValue != ''">result_value = #{resultValue},</if>
+            <if test="artificialResultValue != null  and artificialResultValue != ''">artificial_result_value = #{artificialResultValue},</if>
+            <if test="artificialChangedValue != null ">artificial_changed_value = #{artificialChangedValue},</if>
+            <if test="resultDesc != null  and resultDesc != ''">result_desc = #{resultDesc},</if>
+            <if test="resultValueAlias != null  and resultValueAlias != ''">result_value_alias = #{resultValueAlias},</if>
+            <if test="resultLabels != null  and resultLabels != ''">result_labels = #{resultLabels},</if>
+            <if test="resultValueNew != null  and resultValueNew != ''">result_value_new = #{resultValueNew},</if>
+            <if test="sign != null  and sign != ''">sign = #{sign},</if>
+            <if test="dateTime != null ">date_time = #{dateTime},</if>
+            <if test="dataType != null  and dataType != ''">data_type = #{dataType},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcRobotCallAnalyseResultById" parameterType="Long">
+        delete from t_lc_robot_call_analyse_result where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcRobotCallAnalyseResultByIds" parameterType="String">
+        delete from t_lc_robot_call_analyse_result where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

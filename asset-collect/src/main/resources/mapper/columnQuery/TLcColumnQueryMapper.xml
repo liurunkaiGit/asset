@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.columnQuery.mapper.TLcColumnQueryMapper">
+
+    <resultMap type="com.ruoyi.columnQuery.domain.TLcColumnQuery" id="TLcColumnQueryResult">
+        <result property="id" column="id"/>
+        <result property="orgId" column="org_id"/>
+        <result property="orgName" column="org_name"/>
+        <result property="tableName" column="table_name"/>
+        <result property="columnName" column="column_name"/>
+        <result property="columnNameCn" column="column_name_cn"/>
+        <result property="columnType" column="column_type"/>
+        <result property="beanName" column="bean_name"/>
+        <result property="columnValue" column="column_value"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyBy" column="modify_by"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="tablePrefix" column="table_prefix"/>
+    </resultMap>
+
+    <sql id="selectTLcColumnQueryVo">
+        select id, org_id, org_name, table_name, column_name, column_name_cn, column_type, bean_name, column_value, create_by, create_time, modify_by, modify_time,table_prefix from t_lc_column_query
+    </sql>
+
+    <select id="selectTLcColumnQueryList" parameterType="com.ruoyi.columnQuery.domain.TLcColumnQuery" resultMap="TLcColumnQueryResult">
+        <include refid="selectTLcColumnQueryVo"/>
+        <where>
+            <if test="orgId != null ">and org_id = #{orgId}</if>
+            <if test="tableName != null  and tableName != ''">and table_name = #{tableName}</if>
+            <if test="columnName != null  and columnName != ''">and column_name like concat('%', #{columnName}, '%')</if>
+            <if test="columnNameCn != null  and columnNameCn != ''">and column_name_cn = #{columnNameCn}</if>
+            <if test="columnType != null  and columnType != ''">and column_type = #{columnType}</if>
+            <if test="columnValue != null  and columnValue != ''">and column_value = #{columnValue}</if>
+            <if test="modifyBy != null ">and modify_by = #{modifyBy}</if>
+            <if test="modifyTime != null ">and modify_time = #{modifyTime}</if>
+            <if test="tablePrefix != null  and tablePrefix != ''">and table_prefix = #{tablePrefix}</if>
+        </where>
+    </select>
+
+    <select id="selectTLcColumnQueryById" parameterType="Long" resultMap="TLcColumnQueryResult">
+        <include refid="selectTLcColumnQueryVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTLcColumnQuery" parameterType="com.ruoyi.columnQuery.domain.TLcColumnQuery"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_column_query
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orgId != null ">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="tableName != null  and tableName != ''">table_name,</if>
+            <if test="columnName != null  and columnName != ''">column_name,</if>
+            <if test="columnNameCn != null  and columnNameCn != ''">column_name_cn,</if>
+            <if test="columnType != null  and columnType != ''">column_type,</if>
+            <if test="beanName != null  and beanName != ''">bean_name,</if>
+            <if test="columnValue != null  and columnValue != ''">column_value,</if>
+            <if test="tablePrefix != null  and tablePrefix != ''">table_prefix,</if>
+            <if test="createBy != null ">create_by,</if>
+            create_time,
+            <if test="modifyBy != null ">modify_by,</if>
+            modify_time,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orgId != null ">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="tableName != null  and tableName != ''">#{tableName},</if>
+            <if test="columnName != null  and columnName != ''">#{columnName},</if>
+            <if test="columnNameCn != null  and columnNameCn != ''">#{columnNameCn},</if>
+            <if test="columnType != null  and columnType != ''">#{columnType},</if>
+            <if test="beanName != null  and beanName != ''">#{beanName},</if>
+            <if test="columnValue != null  and columnValue != ''">#{columnValue},</if>
+            <if test="tablePrefix != null  and tablePrefix != ''">#{tablePrefix},</if>
+            <if test="createBy != null ">#{createBy},</if>
+            NOW(),
+            <if test="modifyBy != null ">#{modifyBy},</if>
+            NOW(),
+        </trim>
+    </insert>
+
+    <update id="updateTLcColumnQuery" parameterType="com.ruoyi.columnQuery.domain.TLcColumnQuery">
+        update t_lc_column_query
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orgId != null ">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="tableName != null  and tableName != ''">table_name = #{tableName},</if>
+            <if test="columnName != null  and columnName != ''">column_name = #{columnName},</if>
+            <if test="columnNameCn != null  and columnNameCn != ''">column_name_cn = #{columnNameCn},</if>
+            <if test="columnType != null  and columnType != ''">column_type = #{columnType},</if>
+            <if test="beanName != null  and beanName != ''">bean_name = #{beanName},</if>
+            <if test="columnValue != null  and columnValue != ''">column_value = #{columnValue},</if>
+            <if test="tablePrefix != null  and tablePrefix != ''">table_prefix = #{tablePrefix},</if>
+            <if test="createBy != null ">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="modifyBy != null ">modify_by = #{modifyBy},</if>
+            <if test="modifyTime != null ">modify_time = #{modifyTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcColumnQueryById" parameterType="Long">
+        delete from t_lc_column_query where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcColumnQueryByIds" parameterType="String">
+        delete from t_lc_column_query where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getColumnByTable" resultType="java.util.Map">
+        select COLUMN_NAME as columnName,column_comment as columnNameComment,COLUMN_TYPE as columnType from INFORMATION_SCHEMA.Columns where table_name=#{tableName} and table_schema=#{database};
+    </select>
+
+</mapper>

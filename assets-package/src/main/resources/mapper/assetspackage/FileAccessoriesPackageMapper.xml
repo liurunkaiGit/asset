@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.FileAccessoriesPackageMapper">
+    
+    <resultMap type="com.ruoyi.assetspackage.domain.FileAccessoriesPackage" id="FileAccessoriesPackageResult">
+        <result property="id"    column="id"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="fileUrl"    column="file_url"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="connId"    column="conn_id"    />
+    </resultMap>
+
+    <sql id="selectFileAccessoriesPackageVo">
+        select id, file_name, file_url, create_by, create_time, conn_id from file_accessories_package
+    </sql>
+
+    <select id="selectFileAccessoriesPackageList" parameterType="FileAccessoriesPackage" resultMap="FileAccessoriesPackageResult">
+        <include refid="selectFileAccessoriesPackageVo"/>
+        <where>  
+            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+            <if test="fileUrl != null  and fileUrl != ''"> and file_url = #{fileUrl}</if>
+            <if test="connId != null  and connId != ''"> and conn_id = #{connId}</if>
+        </where>
+    </select>
+    
+    <select id="selectFileAccessoriesPackageById" parameterType="String" resultMap="FileAccessoriesPackageResult">
+        <include refid="selectFileAccessoriesPackageVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFileAccessoriesPackage" parameterType="FileAccessoriesPackage">
+        insert into file_accessories_package
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="fileName != null  and fileName != ''">file_name,</if>
+            <if test="fileUrl != null  and fileUrl != ''">file_url,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="connId != null  and connId != ''">conn_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="fileName != null  and fileName != ''">#{fileName},</if>
+            <if test="fileUrl != null  and fileUrl != ''">#{fileUrl},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="connId != null  and connId != ''">#{connId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFileAccessoriesPackage" parameterType="FileAccessoriesPackage">
+        update file_accessories_package
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fileName != null  and fileName != ''">file_name = #{fileName},</if>
+            <if test="fileUrl != null  and fileUrl != ''">file_url = #{fileUrl},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="connId != null  and connId != ''">conn_id = #{connId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFileAccessoriesPackageById" parameterType="String">
+        delete from file_accessories_package where id = #{id}
+    </delete>
+
+    <delete id="deleteFileAccessoriesPackageByIds" parameterType="String">
+        delete from file_accessories_package where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

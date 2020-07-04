@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.TLiTelInfoMapper">
+    
+    <resultMap type="com.ruoyi.assetspackage.domain.TLiTelInfo" id="TLiTelInfoResult">
+        <result property="tuid"    column="tuid"    />
+        <result property="caseTuid"    column="case_tuid"    />
+        <result property="custNo"    column="cust_no"    />
+        <result property="telType"    column="tel_type"    />
+        <result property="telephone"    column="telephone"    />
+        <result property="custName"    column="cust_name"    />
+        <result property="custNamePinyin"    column="cust_name_pinyin"    />
+        <result property="relation"    column="relation"    />
+        <result property="dataSource"    column="data_source"    />
+        <result property="lastTelCode"    column="last_tel_code"    />
+        <result property="lastCallTime"    column="last_call_time"    />
+        <result property="lastCallUser"    column="last_call_user"    />
+        <result property="stopFlag"    column="stop_flag"    />
+        <result property="shiLian"    column="shi_lian"    />
+        <result property="created"    column="created"    />
+        <result property="createdby"    column="createdby"    />
+        <result property="updated"    column="updated"    />
+        <result property="updatedby"    column="updatedby"    />
+        <result property="importBatch"    column="import_batch"    />
+        <result property="recheckDate"    column="recheck_date"    />
+        <result property="importTuid"    column="import_tuid"    />
+        <result property="postcode"    column="postcode"    />
+        <result property="address"    column="address"    />
+        <result property="maxTelCode"    column="max_tel_code"    />
+        <result property="appointTime"    column="appoint_time"    />
+        <result property="effectiveFlag"    column="effective_flag"    />
+        <result property="signStatus"    column="sign_status"    />
+        <result property="stress"    column="stress"    />
+        <result property="displayFlag"    column="display_flag"    />
+        <result property="weight"    column="weight"    />
+        <result property="dialCount"    column="dial_count"    />
+    </resultMap>
+
+    <sql id="selectTLiTelInfoVo">
+        select tuid, case_tuid, cust_no, tel_type, telephone, cust_name, cust_name_pinyin, relation, data_source, last_tel_code, last_call_time, last_call_user, stop_flag, shi_lian, created, createdby, updated, updatedby, import_batch, recheck_date, import_tuid, postcode, address, max_tel_code, appoint_time, effective_flag, sign_status, stress, display_flag, weight, dial_count from t_li_tel_info
+    </sql>
+
+    <select id="selectTLiTelInfoList" parameterType="TLiTelInfo" resultMap="TLiTelInfoResult">
+        <include refid="selectTLiTelInfoVo"/>
+        <where>  
+            <if test="tuid != null  and tuid != ''"> and tuid = #{tuid}</if>
+            <if test="caseTuid != null  and caseTuid != ''"> and case_tuid = #{caseTuid}</if>
+            <if test="custNo != null  and custNo != ''"> and cust_no = #{custNo}</if>
+            <if test="telType != null  and telType != ''"> and tel_type = #{telType}</if>
+            <if test="telephone != null  and telephone != ''"> and telephone = #{telephone}</if>
+            <if test="custName != null  and custName != ''"> and cust_name like concat('%', #{custName}, '%')</if>
+            <if test="custNamePinyin != null  and custNamePinyin != ''"> and cust_name_pinyin = #{custNamePinyin}</if>
+            <if test="relation != null  and relation != ''"> and relation = #{relation}</if>
+            <if test="dataSource != null  and dataSource != ''"> and data_source = #{dataSource}</if>
+            <if test="lastTelCode != null  and lastTelCode != ''"> and last_tel_code = #{lastTelCode}</if>
+            <if test="lastCallTime != null "> and last_call_time = #{lastCallTime}</if>
+            <if test="lastCallUser != null  and lastCallUser != ''"> and last_call_user = #{lastCallUser}</if>
+            <if test="stopFlag != null "> and stop_flag = #{stopFlag}</if>
+            <if test="shiLian != null "> and shi_lian = #{shiLian}</if>
+            <if test="created != null "> and created = #{created}</if>
+            <if test="createdby != null  and createdby != ''"> and createdby = #{createdby}</if>
+            <if test="updated != null "> and updated = #{updated}</if>
+            <if test="updatedby != null  and updatedby != ''"> and updatedby = #{updatedby}</if>
+            <if test="importBatch != null  and importBatch != ''"> and import_batch = #{importBatch}</if>
+            <if test="recheckDate != null "> and recheck_date = #{recheckDate}</if>
+            <if test="importTuid != null  and importTuid != ''"> and import_tuid = #{importTuid}</if>
+            <if test="postcode != null  and postcode != ''"> and postcode = #{postcode}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="maxTelCode != null  and maxTelCode != ''"> and max_tel_code = #{maxTelCode}</if>
+            <if test="appointTime != null "> and appoint_time = #{appointTime}</if>
+            <if test="effectiveFlag != null "> and effective_flag = #{effectiveFlag}</if>
+            <if test="signStatus != null "> and sign_status = #{signStatus}</if>
+            <if test="stress != null "> and stress = #{stress}</if>
+            <if test="displayFlag != null "> and display_flag = #{displayFlag}</if>
+            <if test="weight != null  and weight != ''"> and weight = #{weight}</if>
+            <if test="dialCount != null "> and dial_count = #{dialCount}</if>
+        </where>
+    </select>
+    
+    <select id="selectTLiTelInfoById" parameterType="String" resultMap="TLiTelInfoResult">
+        <include refid="selectTLiTelInfoVo"/>
+        where tuid = #{tuid}
+    </select>
+        
+    <insert id="insertTLiTelInfo" parameterType="TLiTelInfo">
+        insert into t_li_tel_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tuid != null  and tuid != ''">tuid,</if>
+            <if test="caseTuid != null  and caseTuid != ''">case_tuid,</if>
+            <if test="custNo != null  and custNo != ''">cust_no,</if>
+            <if test="telType != null  and telType != ''">tel_type,</if>
+            <if test="telephone != null  and telephone != ''">telephone,</if>
+            <if test="custName != null  and custName != ''">cust_name,</if>
+            <if test="custNamePinyin != null  and custNamePinyin != ''">cust_name_pinyin,</if>
+            <if test="relation != null  and relation != ''">relation,</if>
+            <if test="dataSource != null  and dataSource != ''">data_source,</if>
+            <if test="lastTelCode != null  and lastTelCode != ''">last_tel_code,</if>
+            <if test="lastCallTime != null ">last_call_time,</if>
+            <if test="lastCallUser != null  and lastCallUser != ''">last_call_user,</if>
+            <if test="stopFlag != null ">stop_flag,</if>
+            <if test="shiLian != null ">shi_lian,</if>
+            <if test="created != null ">created,</if>
+            <if test="createdby != null  and createdby != ''">createdby,</if>
+            <if test="updated != null ">updated,</if>
+            <if test="updatedby != null  and updatedby != ''">updatedby,</if>
+            <if test="importBatch != null  and importBatch != ''">import_batch,</if>
+            <if test="recheckDate != null ">recheck_date,</if>
+            <if test="importTuid != null  and importTuid != ''">import_tuid,</if>
+            <if test="postcode != null  and postcode != ''">postcode,</if>
+            <if test="address != null  and address != ''">address,</if>
+            <if test="maxTelCode != null  and maxTelCode != ''">max_tel_code,</if>
+            <if test="appointTime != null ">appoint_time,</if>
+            <if test="effectiveFlag != null ">effective_flag,</if>
+            <if test="signStatus != null ">sign_status,</if>
+            <if test="stress != null ">stress,</if>
+            <if test="displayFlag != null ">display_flag,</if>
+            <if test="weight != null  and weight != ''">weight,</if>
+            <if test="dialCount != null ">dial_count,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tuid != null  and tuid != ''">#{tuid},</if>
+            <if test="caseTuid != null  and caseTuid != ''">#{caseTuid},</if>
+            <if test="custNo != null  and custNo != ''">#{custNo},</if>
+            <if test="telType != null  and telType != ''">#{telType},</if>
+            <if test="telephone != null  and telephone != ''">#{telephone},</if>
+            <if test="custName != null  and custName != ''">#{custName},</if>
+            <if test="custNamePinyin != null  and custNamePinyin != ''">#{custNamePinyin},</if>
+            <if test="relation != null  and relation != ''">#{relation},</if>
+            <if test="dataSource != null  and dataSource != ''">#{dataSource},</if>
+            <if test="lastTelCode != null  and lastTelCode != ''">#{lastTelCode},</if>
+            <if test="lastCallTime != null ">#{lastCallTime},</if>
+            <if test="lastCallUser != null  and lastCallUser != ''">#{lastCallUser},</if>
+            <if test="stopFlag != null ">#{stopFlag},</if>
+            <if test="shiLian != null ">#{shiLian},</if>
+            <if test="created != null ">#{created},</if>
+            <if test="createdby != null  and createdby != ''">#{createdby},</if>
+            <if test="updated != null ">#{updated},</if>
+            <if test="updatedby != null  and updatedby != ''">#{updatedby},</if>
+            <if test="importBatch != null  and importBatch != ''">#{importBatch},</if>
+            <if test="recheckDate != null ">#{recheckDate},</if>
+            <if test="importTuid != null  and importTuid != ''">#{importTuid},</if>
+            <if test="postcode != null  and postcode != ''">#{postcode},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="maxTelCode != null  and maxTelCode != ''">#{maxTelCode},</if>
+            <if test="appointTime != null ">#{appointTime},</if>
+            <if test="effectiveFlag != null ">#{effectiveFlag},</if>
+            <if test="signStatus != null ">#{signStatus},</if>
+            <if test="stress != null ">#{stress},</if>
+            <if test="displayFlag != null ">#{displayFlag},</if>
+            <if test="weight != null  and weight != ''">#{weight},</if>
+            <if test="dialCount != null ">#{dialCount},</if>
+         </trim>
+    </insert>
+
+    <!--<update id="updateTLiTelInfo" parameterType="TLiTelInfo">
+        update t_li_tel_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="caseTuid != null  and caseTuid != ''">case_tuid = #{caseTuid},</if>
+            <if test="custNo != null  and custNo != ''">cust_no = #{custNo},</if>
+            <if test="telType != null  and telType != ''">tel_type = #{telType},</if>
+            <if test="telephone != null  and telephone != ''">telephone = #{telephone},</if>
+            <if test="custName != null  and custName != ''">cust_name = #{custName},</if>
+            <if test="custNamePinyin != null  and custNamePinyin != ''">cust_name_pinyin = #{custNamePinyin},</if>
+            <if test="relation != null  and relation != ''">relation = #{relation},</if>
+            <if test="dataSource != null  and dataSource != ''">data_source = #{dataSource},</if>
+            <if test="lastTelCode != null  and lastTelCode != ''">last_tel_code = #{lastTelCode},</if>
+            <if test="lastCallTime != null ">last_call_time = #{lastCallTime},</if>
+            <if test="lastCallUser != null  and lastCallUser != ''">last_call_user = #{lastCallUser},</if>
+            <if test="stopFlag != null ">stop_flag = #{stopFlag},</if>
+            <if test="shiLian != null ">shi_lian = #{shiLian},</if>
+            <if test="created != null ">created = #{created},</if>
+            <if test="createdby != null  and createdby != ''">createdby = #{createdby},</if>
+            <if test="updated != null ">updated = #{updated},</if>
+            <if test="updatedby != null  and updatedby != ''">updatedby = #{updatedby},</if>
+            <if test="importBatch != null  and importBatch != ''">import_batch = #{importBatch},</if>
+            <if test="recheckDate != null ">recheck_date = #{recheckDate},</if>
+            <if test="importTuid != null  and importTuid != ''">import_tuid = #{importTuid},</if>
+            <if test="postcode != null  and postcode != ''">postcode = #{postcode},</if>
+            <if test="address != null  and address != ''">address = #{address},</if>
+            <if test="maxTelCode != null  and maxTelCode != ''">max_tel_code = #{maxTelCode},</if>
+            <if test="appointTime != null ">appoint_time = #{appointTime},</if>
+            <if test="effectiveFlag != null ">effective_flag = #{effectiveFlag},</if>
+            <if test="signStatus != null ">sign_status = #{signStatus},</if>
+            <if test="stress != null ">stress = #{stress},</if>
+            <if test="displayFlag != null ">display_flag = #{displayFlag},</if>
+            <if test="weight != null  and weight != ''">weight = #{weight},</if>
+            <if test="dialCount != null ">dial_count = #{dialCount},</if>
+        </trim>
+        where tuid = #{tuid}
+    </update>-->
+
+    <update id="updateTLiTelInfo" parameterType="TLiTelInfo">
+        update t_li_tel_info set telephone = #{telephone}
+         where tuid = #{tuid}
+    </update>
+
+    <delete id="deleteTLiTelInfoById" parameterType="String">
+        delete from t_li_tel_info where tuid = #{tuid}
+    </delete>
+
+    <delete id="deleteTLiTelInfoByIds" parameterType="String">
+        delete from t_li_tel_info where tuid in 
+        <foreach item="tuid" collection="array" open="(" separator="," close=")">
+            #{tuid}
+        </foreach>
+    </delete>
+    
+</mapper>

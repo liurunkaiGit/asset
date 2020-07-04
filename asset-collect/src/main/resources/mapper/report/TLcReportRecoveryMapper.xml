@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.report.mapper.TLcReportRecoveryMapper">
+
+    <resultMap type="com.ruoyi.report.domain.TLcReportRecovery" id="TLcReportRecoveryResult">
+        <result property="id" column="id"/>
+        <result property="reportDate" column="report_date"/>
+        <result property="seatGroup" column="seat_group"/>
+        <result property="seatNum" column="seat_num"/>
+        <result property="seatName" column="seat_name"/>
+        <result property="collingCaseNum" column="colling_case_num"/>
+        <result property="confirmedRecycleCaseNum" column="confirmed_recycle_case_num"/>
+        <result property="unconfirmedRecycleCaseNum" column="unconfirmed_recycle_case_num"/>
+        <result property="caseRecovery" column="case_recovery"/>
+        <result property="collingCaseMoney" column="colling_case_money"/>
+        <result property="confirmedRecycleCaseMoney" column="confirmed_recycle_case_money"/>
+        <result property="unconfirmedRecycleCaseMoney" column="unconfirmed_recycle_case_money"/>
+        <result property="moneyRecovery" column="money_recovery"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="orgId" column="org_id"/>
+        <result property="orgName" column="org_name"/>
+    </resultMap>
+
+    <sql id="selectTLcReportRecoveryVo">
+        select id, report_date, seat_group, seat_num, seat_name, colling_case_num, confirmed_recycle_case_num, unconfirmed_recycle_case_num, case_recovery, colling_case_money, confirmed_recycle_case_money, unconfirmed_recycle_case_money, money_recovery, create_by, create_time, org_id, org_name from t_lc_report_recovery
+    </sql>
+
+    <select id="selectTLcReportRecoveryList" parameterType="com.ruoyi.report.domain.TLcReportRecovery"
+            resultMap="TLcReportRecoveryResult">
+        <include refid="selectTLcReportRecoveryVo"/>
+        <where>
+            <if test="reportDate != null ">and report_date = #{reportDate}</if>
+            <if test="seatGroup != null  and seatGroup != ''">and seat_group = #{seatGroup}</if>
+            <if test="seatNum != null  and seatNum != ''">and seat_num = #{seatNum}</if>
+            <if test="seatName != null  and seatName != ''">and seat_name like concat('%', #{seatName}, '%')</if>
+            <if test="collingCaseNum != null ">and colling_case_num = #{collingCaseNum}</if>
+            <if test="confirmedRecycleCaseNum != null ">and confirmed_recycle_case_num = #{confirmedRecycleCaseNum}</if>
+            <if test="unconfirmedRecycleCaseNum != null ">and unconfirmed_recycle_case_num =
+                #{unconfirmedRecycleCaseNum}
+            </if>
+            <if test="caseRecovery != null  and caseRecovery != ''">and case_recovery = #{caseRecovery}</if>
+            <if test="collingCaseMoney != null ">and colling_case_money = #{collingCaseMoney}</if>
+            <if test="confirmedRecycleCaseMoney != null ">and confirmed_recycle_case_money =
+                #{confirmedRecycleCaseMoney}
+            </if>
+            <if test="unconfirmedRecycleCaseMoney != null ">and unconfirmed_recycle_case_money =
+                #{unconfirmedRecycleCaseMoney}
+            </if>
+            <if test="moneyRecovery != null  and moneyRecovery != ''">and money_recovery = #{moneyRecovery}</if>
+            <if test="orgId != null  and orgId != ''">and org_id = #{orgId}</if>
+        </where>
+    </select>
+
+    <select id="selectTLcReportRecoveryById" parameterType="Long" resultMap="TLcReportRecoveryResult">
+        <include refid="selectTLcReportRecoveryVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTLcReportRecovery" parameterType="com.ruoyi.report.domain.TLcReportRecovery"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_report_recovery
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reportDate != null ">report_date,</if>
+            <if test="seatGroup != null  and seatGroup != ''">seat_group,</if>
+            <if test="seatNum != null  and seatNum != ''">seat_num,</if>
+            <if test="seatName != null  and seatName != ''">seat_name,</if>
+            <if test="collingCaseNum != null ">colling_case_num,</if>
+            <if test="confirmedRecycleCaseNum != null ">confirmed_recycle_case_num,</if>
+            <if test="unconfirmedRecycleCaseNum != null ">unconfirmed_recycle_case_num,</if>
+            <if test="caseRecovery != null  and caseRecovery != ''">case_recovery,</if>
+            <if test="collingCaseMoney != null ">colling_case_money,</if>
+            <if test="confirmedRecycleCaseMoney != null ">confirmed_recycle_case_money,</if>
+            <if test="unconfirmedRecycleCaseMoney != null ">unconfirmed_recycle_case_money,</if>
+            <if test="moneyRecovery != null  and moneyRecovery != ''">money_recovery,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            create_time,
+            <if test="orgId != null  and orgId != ''">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reportDate != null ">#{reportDate},</if>
+            <if test="seatGroup != null  and seatGroup != ''">#{seatGroup},</if>
+            <if test="seatNum != null  and seatNum != ''">#{seatNum},</if>
+            <if test="seatName != null  and seatName != ''">#{seatName},</if>
+            <if test="collingCaseNum != null ">#{collingCaseNum},</if>
+            <if test="confirmedRecycleCaseNum != null ">#{confirmedRecycleCaseNum},</if>
+            <if test="unconfirmedRecycleCaseNum != null ">#{unconfirmedRecycleCaseNum},</if>
+            <if test="caseRecovery != null  and caseRecovery != ''">#{caseRecovery},</if>
+            <if test="collingCaseMoney != null ">#{collingCaseMoney},</if>
+            <if test="confirmedRecycleCaseMoney != null ">#{confirmedRecycleCaseMoney},</if>
+            <if test="unconfirmedRecycleCaseMoney != null ">#{unconfirmedRecycleCaseMoney},</if>
+            <if test="moneyRecovery != null  and moneyRecovery != ''">#{moneyRecovery},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            NOW(),
+            <if test="orgId != null  and orgId != ''">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTLcReportRecovery" parameterType="com.ruoyi.report.domain.TLcReportRecovery">
+        update t_lc_report_recovery
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="reportDate != null ">report_date = #{reportDate},</if>
+            <if test="seatGroup != null  and seatGroup != ''">seat_group = #{seatGroup},</if>
+            <if test="seatNum != null  and seatNum != ''">seat_num = #{seatNum},</if>
+            <if test="seatName != null  and seatName != ''">seat_name = #{seatName},</if>
+            <if test="collingCaseNum != null ">colling_case_num = #{collingCaseNum},</if>
+            <if test="confirmedRecycleCaseNum != null ">confirmed_recycle_case_num = #{confirmedRecycleCaseNum},</if>
+            <if test="unconfirmedRecycleCaseNum != null ">unconfirmed_recycle_case_num = #{unconfirmedRecycleCaseNum},
+            </if>
+            <if test="caseRecovery != null  and caseRecovery != ''">case_recovery = #{caseRecovery},</if>
+            <if test="collingCaseMoney != null ">colling_case_money = #{collingCaseMoney},</if>
+            <if test="confirmedRecycleCaseMoney != null ">confirmed_recycle_case_money = #{confirmedRecycleCaseMoney},
+            </if>
+            <if test="unconfirmedRecycleCaseMoney != null ">unconfirmed_recycle_case_money =
+                #{unconfirmedRecycleCaseMoney},
+            </if>
+            <if test="moneyRecovery != null  and moneyRecovery != ''">money_recovery = #{moneyRecovery},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcReportRecoveryById" parameterType="Long">
+        delete from t_lc_report_recovery where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcReportRecoveryByIds" parameterType="String">
+        delete from t_lc_report_recovery where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectRecoveryByPayment" parameterType="java.util.Map" resultMap="TLcReportRecoveryResult">
+        SELECT
+			(
+				SELECT
+					date_sub(curdate(), INTERVAL #{day} DAY)
+			) AS report_date,
+			t.user_group AS seat_group,
+			t.user_id AS seat_num,
+			t.user_name AS seat_name,
+			t.dept_id AS org_id,
+			t2.collecting_case_num AS colling_case_num,
+			t2.collecting_total_money AS colling_case_money,
+			t3.confired_case_num AS confirmed_recycle_case_num,
+			t3.confired_total_money AS confirmed_recycle_case_money,
+			t4.unconfired_case_num AS unconfirmed_recycle_case_num,
+			t4.unconfired_total_money AS unconfirmed_recycle_case_money,
+			t3.confired_case_num / t2.collecting_case_num AS case_recovery,
+			t3.confired_total_money / t2.collecting_total_money AS money_recovery
+		FROM
+			(
+				SELECT
+					su.user_group,
+					su.user_id,
+					su.user_name,
+					su.dept_id
+				FROM
+					org_package o
+				LEFT JOIN sys_user su ON su.dept_id = o.dept_id
+				WHERE
+					su.user_id != 1
+				GROUP BY
+					su.user_id,
+					o.dept_id
+			) t
+		LEFT JOIN (
+			SELECT
+				count(1) AS collecting_case_num,
+				t.owner_id,
+				t.create_time,
+				sum(t.arrears_total) AS collecting_total_money
+			FROM
+				t_lc_task t
+			WHERE
+				t.allot_type = 1
+			AND t.task_status = 2
+			GROUP BY
+				t.owner_id,
+				t.org_id
+		) t2 ON t.user_id = t2.owner_id
+		LEFT JOIN (
+			SELECT
+				count(1) AS confired_case_num,
+				t.owner_id,
+				sum(t.arrears_total) AS confired_total_money
+			FROM
+				t_lc_task t
+			LEFT JOIN cur_assets_repayment_package p ON p.org_casNo = t.case_no
+			WHERE
+				t.allot_type = 1
+			AND p.is_exit_collect = 1
+			GROUP BY
+				t.owner_id,
+				t.org_id
+		) t3 ON t.user_id = t3.owner_id
+		LEFT JOIN (
+			SELECT
+				count(1) AS unconfired_case_num,
+				t.owner_id,
+				sum(t.arrears_total) AS unconfired_total_money
+			FROM
+				t_lc_task t
+			LEFT JOIN t_lc_duncase_action_record r ON r.id IN (
+				SELECT
+					max(id)
+				FROM
+					t_lc_duncase_action_record
+				GROUP BY
+					task_id
+			)
+			AND t.id = r.task_id
+			WHERE
+				t.allot_type = 1
+			AND r.action_code = 'ALPA'
+			GROUP BY
+				t.owner_id,
+				t.org_id
+		) t4 ON t.user_id = t4.owner_id
+		WHERE
+			1 = 1
+		<if test="orgId != null and orgId != ''">
+			AND t.dept_id = #{orgId}
+		</if>
+		<if test="startDate != null">
+			and t2.create_time <![CDATA[>=]]> #{startDate}
+		</if>
+		UNION ALL
+            SELECT
+			(
+				SELECT
+					date_sub(curdate(), INTERVAL #{day} DAY)
+			) AS report_date,
+			'合计' AS seat_group,
+			NULL,
+			NULL,
+			t.dept_id AS org_id,
+			sum(t2.collecting_case_num) AS colling_case_num,
+			sum(t2.collecting_total_money) AS colling_case_money,
+			sum(t3.confired_case_num) AS confirmed_recycle_case_num,
+			sum(t3.confired_total_money) AS confirmed_recycle_case_money,
+			sum(t4.unconfired_case_num) AS unconfirmed_recycle_case_num,
+			sum(t4.unconfired_total_money) AS unconfirmed_recycle_case_money,
+			sum(t3.confired_case_num) / sum(t2.collecting_case_num) AS case_recovery,
+			sum(t3.confired_total_money) / sum(t2.collecting_total_money) AS money_recovery
+		FROM
+			(
+				SELECT
+					su.user_group,
+					su.user_id,
+					su.user_name,
+					su.dept_id
+				FROM
+					org_package o
+				LEFT JOIN sys_user su ON su.dept_id = o.dept_id
+				WHERE
+					su.user_id != 1
+				GROUP BY
+					su.user_id,
+					o.dept_id
+			) t
+		LEFT JOIN (
+			SELECT
+				count(1) AS collecting_case_num,
+				t.owner_id,
+				t.create_time,
+				sum(t.arrears_total) AS collecting_total_money
+			FROM
+				t_lc_task t
+			WHERE
+				t.allot_type = 1
+			AND t.task_status = 2
+			GROUP BY
+				t.owner_id,
+				t.org_id
+		) t2 ON t.user_id = t2.owner_id
+		LEFT JOIN (
+			SELECT
+				count(1) AS confired_case_num,
+				t.owner_id,
+				sum(t.arrears_total) AS confired_total_money
+			FROM
+				t_lc_task t
+			LEFT JOIN cur_assets_repayment_package p ON p.org_casNo = t.case_no
+			WHERE
+				t.allot_type = 1
+			AND p.is_exit_collect = 1
+			GROUP BY
+				t.owner_id,
+				t.org_id
+		) t3 ON t.user_id = t3.owner_id
+		LEFT JOIN (
+			SELECT
+				count(1) AS unconfired_case_num,
+				t.owner_id,
+				sum(t.arrears_total) AS unconfired_total_money
+			FROM
+				t_lc_task t
+			LEFT JOIN t_lc_duncase_action_record r ON r.id IN (
+				SELECT
+					max(id)
+				FROM
+					t_lc_duncase_action_record
+				GROUP BY
+					task_id
+			)
+			AND t.id = r.task_id
+			WHERE
+				t.allot_type = 1
+			AND r.action_code = 'ALPA'
+			GROUP BY
+				t.owner_id,
+				t.org_id
+		) t4 ON t.user_id = t4.owner_id
+		WHERE
+			1 = 1
+		<if test="orgId != null and orgId != ''">
+			AND t.dept_id = #{orgId}
+		</if>
+		<if test="startDate != null">
+			and t2.create_time <![CDATA[>=]]> #{startDate}
+		</if>
+		GROUP BY t.dept_id
+    </select>
+
+	<select id="selectRecovery" parameterType="java.util.Map" resultMap="TLcReportRecoveryResult">
+		SELECT
+			(
+				SELECT
+					date_sub(curdate(), INTERVAL #{day} DAY)
+			) AS report_date,
+			t2.user_group AS seat_group,
+			t2.owner_id AS seat_num,
+			t2.owner_name AS seat_name,
+			t2.org_id AS org_id,
+			t2.collecting_case_num AS colling_case_num,
+			t2.collecting_total_money AS colling_case_money,
+			t3.confired_case_num AS confirmed_recycle_case_num,
+			t3.confired_total_money AS confirmed_recycle_case_money,
+			t4.unconfired_case_num AS unconfirmed_recycle_case_num,
+			t4.unconfired_total_money AS unconfirmed_recycle_case_money,
+			t3.confired_case_num / t2.collecting_case_num AS case_recovery,
+			t3.confired_total_money / t2.collecting_total_money AS money_recovery
+		FROM
+			(
+			SELECT
+				count(1) AS collecting_case_num,
+				t.owner_id,
+				t.owner_name,
+				t.org_id,
+				t.create_time,
+				su.user_group,
+				sum(t.arrears_total) AS collecting_total_money
+			FROM
+				t_lc_task t,sys_user su
+			WHERE
+				t.owner_id = su.user_id
+			AND	t.allot_type = 1
+			AND t.task_status = 2
+			AND t.org_id = #{orgId}
+			GROUP BY
+				t.owner_id,
+				t.org_id
+		) t2
+		LEFT JOIN (
+					SELECT
+						count(1) AS confired_case_num,
+						t.owner_id,
+						sum(t.arrears_total) AS confired_total_money
+					FROM
+						t_lc_task t
+					LEFT JOIN cur_assets_package p ON p.org_casNo = t.case_no and t.import_batch_no = p.import_batch_no and t.org_id = p.org_id
+					WHERE
+						t.allot_type = 1
+					AND p.is_exit_collect = 1
+					AND t.org_id = #{orgId}
+					GROUP BY
+						t.owner_id,
+						t.org_id
+				) t3 ON t2.owner_id = t3.owner_id
+		LEFT JOIN (
+			SELECT
+				count(1) AS unconfired_case_num,
+				t.owner_id,
+				sum(t.arrears_total) AS unconfired_total_money
+			FROM
+				t_lc_task t
+			LEFT JOIN t_lc_duncase_action_record r ON r.id IN (
+				SELECT
+					max(id)
+				FROM
+					t_lc_duncase_action_record
+				GROUP BY
+					task_id
+			)
+			AND t.id = r.task_id
+			WHERE
+				t.allot_type = 1
+				AND t.org_id = #{orgId}
+			AND r.action_code = 'ALPA'
+			GROUP BY
+				t.owner_id,
+				t.org_id
+		) t4 ON t2.owner_id = t4.owner_id
+		WHERE
+			1 = 1
+		AND t2.org_id = #{orgId}
+		AND t2.create_time <![CDATA[>=]]> #{startDate}
+		UNION ALL
+		SELECT
+			(
+				SELECT
+					date_sub(curdate(), INTERVAL #{day} DAY)
+			) AS report_date,
+			'合计' AS seat_group,
+			NULL,
+			NULL,
+			t2.org_id AS org_id,
+			sum(t2.collecting_case_num) AS colling_case_num,
+			sum(t2.collecting_total_money) AS colling_case_money,
+			sum(t3.confired_case_num) AS confirmed_recycle_case_num,
+			sum(t3.confired_total_money) AS confirmed_recycle_case_money,
+			sum(t4.unconfired_case_num) AS unconfirmed_recycle_case_num,
+			sum(t4.unconfired_total_money) AS unconfirmed_recycle_case_money,
+			sum(t3.confired_case_num) / sum(t2.collecting_case_num) AS case_recovery,
+			sum(t3.confired_total_money) / sum(t2.collecting_total_money) AS money_recovery
+		FROM
+			(
+			SELECT
+				count(1) AS collecting_case_num,
+				t.owner_id,
+				t.owner_name,
+				t.org_id,
+				t.create_time,
+				sum(t.arrears_total) AS collecting_total_money
+			FROM
+				t_lc_task t
+			WHERE
+				t.allot_type = 1
+			AND t.org_id = #{orgId}
+			AND t.task_status = 2
+			GROUP BY
+				t.owner_id,
+				t.org_id
+		) t2
+		LEFT JOIN (
+			SELECT
+				count(1) AS confired_case_num,
+				t.owner_id,
+				sum(t.arrears_total) AS confired_total_money
+			FROM
+				t_lc_task t
+			LEFT JOIN cur_assets_repayment_package p ON p.org_casNo = t.case_no and t.import_batch_no = p.import_batch_no and t.org_id = p.org_id
+			WHERE
+				t.allot_type = 1
+			AND p.is_exit_collect = 1
+			AND t.org_id = #{orgId}
+			GROUP BY
+				t.owner_id,
+				t.org_id
+		) t3 ON t2.owner_id = t3.owner_id
+		LEFT JOIN (
+			SELECT
+				count(1) AS unconfired_case_num,
+				t.owner_id,
+				sum(t.arrears_total) AS unconfired_total_money
+			FROM
+				t_lc_task t
+			LEFT JOIN t_lc_duncase_action_record r ON r.id IN (
+				SELECT
+					max(id)
+				FROM
+					t_lc_duncase_action_record
+				GROUP BY
+					task_id
+			)
+			AND t.id = r.task_id
+			WHERE
+				t.allot_type = 1
+			AND r.action_code = 'ALPA'
+			AND t.org_id = #{orgId}
+			GROUP BY
+				t.owner_id,
+				t.org_id
+		) t4 ON t2.owner_id = t4.owner_id
+		WHERE
+			1 = 1
+		AND t2.org_id = #{orgId}
+		AND t2.create_time <![CDATA[>=]]> #{startDate}
+		GROUP BY
+			t2.org_id
+	</select>
+
+</mapper>

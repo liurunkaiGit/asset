@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.robot.mapper.TLcRobotTaskMapper">
+
+    <resultMap type="com.ruoyi.robot.domain.TLcRobotTask" id="TLcRobotTaskResult">
+        <result property="id" column="id"/>
+        <result property="taskId" column="task_id"/>
+        <result property="robotTastId" column="robot_tast_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="taskName" column="task_name"/>
+        <result property="ownerName" column="owner_name"/>
+        <result property="transferType" column="transfer_type"/>
+        <result property="arrearsTotal" column="arrears_total"/>
+        <result property="speechCraftName" column="speech_craft_name"/>
+        <result property="callEndDate" column="call_end_date"/>
+        <result property="robotTaskStatus" column="robot_task_status"/>
+        <result property="resultValueAlias" column="result_value_alias"/>
+        <result property="callStatus" column="call_status"/>
+        <result property="callLen" column="call_len"/>
+        <result property="taskStatus" column="task_status"/>
+        <result property="taskType" column="task_type"/>
+        <result property="callContent" column="call_content"/>
+        <result property="callRadio" column="call_radio"/>
+        <result property="callStartDate" column="call_start_date"/>
+        <result property="curName" column="cur_name"/>
+        <result property="phone" column="phone"/>
+        <result property="orgId" column="org_id"/>
+        <result property="orgName" column="org_name"/>
+        <result property="robot" column="robot"/>
+        <result property="isRecall"    column="is_recall"    />
+        <result property="continueDays"    column="continue_days"    />
+        <result property="continueFrequency"    column="continue_frequency"    />
+    </resultMap>
+
+    <sql id="selectTLcRobotTaskVo">
+        t.id,
+        t.task_id,
+        t.robot_tast_id,
+        t.create_by,
+        t.create_time,
+        t.task_name,
+        t.owner_name,
+        t.transfer_type,
+        t.arrears_total,
+        t.speech_craft_name,
+        t.call_end_date,
+        t.robot_task_status,
+        t.result_value_alias,
+        t.call_status,
+        t.call_len,
+        t.task_status,
+        t.task_type,
+        t.call_content,
+        t.call_radio,
+        t.call_start_date,
+        t.cur_name,
+        t.phone,
+        t.org_id,
+        t.org_name,
+        t.robot,
+        t.is_recall,
+        t.continue_days,
+        t.continue_frequency
+    </sql>
+
+    <sql id="WHERE_COLUMN">
+        <if test="taskId != null ">
+            and t.task_id = #{taskId}
+        </if>
+        <if test="robotTastId != null ">
+            and t.robot_tast_id = #{robotTastId}
+        </if>
+        <if test="taskName != null  and taskName != ''">
+            and t.task_name like concat('%', #{taskName}, '%')
+        </if>
+        <if test="ownerName != null  and ownerName != ''">
+            and t.owner_name like concat('%', #{ownerName}, '%')
+        </if>
+        <if test="transferType != null  and transferType != ''">
+            and t.transfer_type = #{transferType}
+        </if>
+        <if test="arrearsTotal != null ">
+            and t.arrears_total = #{arrearsTotal}
+        </if>
+        <if test="speechCraftName != null  and speechCraftName != ''">
+            and t.speech_craft_name like concat('%',#{speechCraftName}, '%')
+        </if>
+        <if test="callEndDate != null ">
+            and t.call_end_date = #{callEndDate}
+        </if>
+        <if test="robotTaskStatus != null  and robotTaskStatus != ''">
+            and t.robot_task_status = #{robotTaskStatus}
+        </if>
+        <if test="resultValueAlias != null  and resultValueAlias != ''">
+            and t.result_value_alias = #{resultValueAlias}
+        </if>
+        <if test="callStatus != null  and callStatus != ''">
+            and t.call_status = #{callStatus}
+        </if>
+        <if test="callLen != null  and callLen != ''">
+            and t.call_len = #{callLen}
+        </if>
+        <if test="taskStatus != null ">
+            and t.task_status = #{taskStatus}
+        </if>
+        <if test="taskType != null ">
+            and t.task_type = #{taskType}
+        </if>
+        <if test="callContent != null  and callContent != ''">
+            and t.call_content = #{callContent}
+        </if>
+        <if test="callRadio != null  and callRadio != ''">
+            and t.call_radio = #{callRadio}
+        </if>
+        <if test="startCreateTime != null">
+            and t.create_time <![CDATA[>=]]> #{startCreateTime}
+        </if>
+        <if test="endCreateTime != null">
+            and t.create_time <![CDATA[<=]]> #{endCreateTime}
+        </if>
+        <if test="startCallEndDate != null">
+            and t.call_end_date <![CDATA[>=]]> #{startCallEndDate}
+        </if>
+        <if test="endCallEndDate != null">
+            and t.call_end_date <![CDATA[<=]]> #{endCallEndDate}
+        </if>
+        <if test="curName != null  and curName != ''">
+            and t.cur_name like concat('%', #{curName}, '%')
+        </if>
+        <if test="phone != null  and phone != ''">
+            and t.phone = #{phone}
+        </if>
+        <if test="robot != null  and robot != ''">
+            and t.robot = #{robot}
+        </if>
+        <if test="isRecall != null ">
+            and is_recall = #{isRecall}
+        </if>
+        <if test="continueDays != null ">
+            and continue_days = #{continueDays}
+        </if>
+        <if test="continueFrequency != null ">
+            and continue_frequency = #{continueFrequency}
+        </if>
+        <choose>
+            <when test="orgId != null and orgId != ''">
+                and t.org_id = #{orgId}
+            </when>
+            <otherwise>
+                <choose>
+                    <when test="deptIds != null">
+                        and t.org_id in
+                        <foreach collection="deptIds" item="deptId" separator="," open="(" close=")">
+                            #{deptId}
+                        </foreach>
+                    </when>
+                </choose>
+            </otherwise>
+        </choose>
+    </sql>
+
+    <select id="selectTLcRobotTaskList" parameterType="com.ruoyi.robot.domain.TLcRobotTask"
+            resultMap="TLcRobotTaskResult">
+        SELECT
+        ta.case_no as caseNo,
+        <include refid="selectTLcRobotTaskVo"/>
+        FROM t_lc_robot_task t,t_lc_task ta
+        WHERE t.task_id = ta.id and t.org_id = ta.org_id
+        <if test="orgId != null">
+            and ta.org_id = #{orgId}
+        </if>
+        and (1=1
+        <if test="caseNo != null  and caseNo != ''">
+            and ta.case_no = #{caseNo}
+        </if>
+        <if test="taskId != null ">
+            and t.task_id = #{taskId}
+        </if>
+        <if test="robotTastId != null ">
+            and t.robot_tast_id = #{robotTastId}
+        </if>
+        <if test="robotTaskStatus != null  and robotTaskStatus != ''">
+            and t.robot_task_status = #{robotTaskStatus}
+        </if>
+        <if test="callStatus != null  and callStatus != ''">
+            and t.call_status = #{callStatus}
+        </if>
+        <if test="freeSQL != null  and freeSQL != ''">
+            ${freeSQL}
+        </if>
+        )
+        ORDER BY t.create_time DESC
+    </select>
+
+    <select id="selectTLcRobotTaskById" parameterType="java.lang.Long" resultMap="TLcRobotTaskResult">
+        SELECT
+        <include refid="selectTLcRobotTaskVo"/>
+        FROM t_lc_robot_task t
+        where id = #{id}
+    </select>
+
+    <insert id="insertTLcRobotTask" parameterType="com.ruoyi.robot.domain.TLcRobotTask" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_lc_robot_task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskId != null ">task_id,</if>
+            <if test="robotTastId != null ">robot_tast_id,</if>
+            <if test="createBy != null ">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="taskName != null  and taskName != ''">task_name,</if>
+            <if test="ownerName != null  and ownerName != ''">owner_name,</if>
+            <if test="transferType != null  and transferType != ''">transfer_type,</if>
+            <if test="arrearsTotal != null ">arrears_total,</if>
+            <if test="speechCraftName != null  and speechCraftName != ''">speech_craft_name,</if>
+            <if test="callEndDate != null ">call_end_date,</if>
+            <if test="robotTaskStatus != null  and robotTaskStatus != ''">robot_task_status,</if>
+            <if test="resultValueAlias != null  and resultValueAlias != ''">result_value_alias,</if>
+            <if test="callStatus != null  and callStatus != ''">call_status,</if>
+            <if test="callLen != null  and callLen != ''">call_len,</if>
+            <if test="taskStatus != null ">task_status,</if>
+            <if test="taskType != null ">task_type,</if>
+            <if test="callContent != null  and callContent != ''">call_content,</if>
+            <if test="callRadio != null  and callRadio != ''">call_radio,</if>
+            <if test="callStartDate != null ">call_start_date,</if>
+            <if test="curName != null  and curName != ''">cur_name,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="orgId != null  and orgId != ''">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="robot != null  and robot != ''">robot,</if>
+            <if test="isRecall != null ">is_recall,</if>
+            <if test="continueDays != null ">continue_days,</if>
+            <if test="continueFrequency != null ">continue_frequency,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskId != null ">#{taskId},</if>
+            <if test="robotTastId != null ">#{robotTastId},</if>
+            <if test="createBy != null ">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="taskName != null  and taskName != ''">#{taskName},</if>
+            <if test="ownerName != null  and ownerName != ''">#{ownerName},</if>
+            <if test="transferType != null  and transferType != ''">#{transferType},</if>
+            <if test="arrearsTotal != null ">#{arrearsTotal},</if>
+            <if test="speechCraftName != null  and speechCraftName != ''">#{speechCraftName},</if>
+            <if test="callEndDate != null ">#{callEndDate},</if>
+            <if test="robotTaskStatus != null  and robotTaskStatus != ''">#{robotTaskStatus},</if>
+            <if test="resultValueAlias != null  and resultValueAlias != ''">#{resultValueAlias},</if>
+            <if test="callStatus != null  and callStatus != ''">#{callStatus},</if>
+            <if test="callLen != null  and callLen != ''">#{callLen},</if>
+            <if test="taskStatus != null ">#{taskStatus},</if>
+            <if test="taskType != null ">#{taskType},</if>
+            <if test="callContent != null  and callContent != ''">#{callContent},</if>
+            <if test="callRadio != null  and callRadio != ''">#{callRadio},</if>
+            <if test="callStartDate != null ">#{callStartDate},</if>
+            <if test="curName != null  and curName != ''">#{curName},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="orgId != null  and orgId != ''">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="robot != null  and robot != ''">#{robot},</if>
+            <if test="isRecall != null ">#{isRecall},</if>
+            <if test="continueDays != null ">#{continueDays},</if>
+            <if test="continueFrequency != null ">#{continueFrequency},</if>
+        </trim>
+    </insert>
+
+    <insert id="batchAddRobotTask" parameterType="java.util.List">
+        insert into t_lc_robot_task (
+            task_id,
+            robot_tast_id,
+            create_by,
+            create_time,
+            task_name,
+            owner_name,
+            transfer_type,
+            arrears_total,
+            speech_craft_name,
+            call_end_date,
+            robot_task_status,
+            result_value_alias,
+            call_status,
+            call_len,
+            task_status,
+            task_type,
+            call_content,
+            call_radio,
+            call_start_date,
+            cur_name,
+            phone,
+            org_id,
+            org_name,
+            robot,
+            is_recall,
+            continue_days,
+            continue_frequency
+        ) VALUES
+        <foreach collection="tLcRobotTaskList" item="robotTask" separator=",">
+            (
+            #{robotTask.taskId},
+            #{robotTask.robotTastId},
+            #{robotTask.createBy},
+            NOW(),
+            #{robotTask.taskName},
+            #{robotTask.ownerName},
+            #{robotTask.transferType},
+            #{robotTask.arrearsTotal},
+            #{robotTask.speechCraftName},
+            #{robotTask.callEndDate},
+            #{robotTask.robotTaskStatus},
+            #{robotTask.resultValueAlias},
+            #{robotTask.callStatus},
+            #{robotTask.callLen},
+            #{robotTask.taskStatus},
+            #{robotTask.taskType},
+            #{robotTask.callContent},
+            #{robotTask.callRadio},
+            #{robotTask.callStartDate},
+            #{robotTask.curName},
+            #{robotTask.phone},
+            #{robotTask.orgId},
+            #{robotTask.orgName},
+            #{robotTask.robot},
+            #{robotTask.isRecall},
+            #{robotTask.continueDays},
+            #{robotTask.continueFrequency}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateTLcRobotTask" parameterType="com.ruoyi.robot.domain.TLcRobotTask">
+        update t_lc_robot_task
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskId != null ">task_id = #{taskId},</if>
+            <if test="robotTastId != null ">robot_tast_id = #{robotTastId},</if>
+            <if test="createBy != null ">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="taskName != null  and taskName != ''">task_name = #{taskName},</if>
+            <if test="ownerName != null  and ownerName != ''">owner_name = #{ownerName},</if>
+            <if test="transferType != null  and transferType != ''">transfer_type = #{transferType},</if>
+            <if test="arrearsTotal != null ">arrears_total = #{arrearsTotal},</if>
+            <if test="speechCraftName != null  and speechCraftName != ''">speech_craft_name = #{speechCraftName},</if>
+            <if test="callEndDate != null ">call_end_date = #{callEndDate},</if>
+            <if test="robotTaskStatus != null  and robotTaskStatus != ''">robot_task_status = #{robotTaskStatus},</if>
+            <if test="resultValueAlias != null  and resultValueAlias != ''">result_value_alias = #{resultValueAlias},</if>
+            <if test="callStatus != null  and callStatus != ''">call_status = #{callStatus},</if>
+            <if test="callLen != null  and callLen != ''">call_len = #{callLen},</if>
+            <if test="taskStatus != null ">task_status = #{taskStatus},</if>
+            <if test="taskType != null ">task_type = #{taskType},</if>
+            <if test="callContent != null  and callContent != ''">call_content = #{callContent},</if>
+            <if test="callRadio != null  and callRadio != ''">call_radio = #{callRadio},</if>
+            <if test="callStartDate != null ">call_start_date = #{callStartDate},</if>
+            <if test="curName != null  and curName != ''">cur_name = #{curName},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="robot != null  and robot != ''">robot = #{robot},</if>
+            <if test="isRecall != null ">is_recall = #{isRecall},</if>
+            <if test="continueDays != null ">continue_days = #{continueDays},</if>
+            <if test="continueFrequency != null ">continue_frequency = #{continueFrequency},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateTLcRobotTaskByRobotTaskIdAndPhone" parameterType="com.ruoyi.robot.domain.TLcRobotTask">
+        update t_lc_robot_task
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskId != null ">task_id = #{taskId},</if>
+            <if test="robotTastId != null ">robot_tast_id = #{robotTastId},</if>
+            <if test="createBy != null ">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="taskName != null  and taskName != ''">task_name = #{taskName},</if>
+            <if test="ownerName != null  and ownerName != ''">owner_name = #{ownerName},</if>
+            <if test="transferType != null  and transferType != ''">transfer_type = #{transferType},</if>
+            <if test="arrearsTotal != null ">arrears_total = #{arrearsTotal},</if>
+            <if test="speechCraftName != null  and speechCraftName != ''">speech_craft_name = #{speechCraftName},</if>
+            <if test="callEndDate != null ">call_end_date = #{callEndDate},</if>
+            <if test="robotTaskStatus != null  and robotTaskStatus != ''">robot_task_status = #{robotTaskStatus},</if>
+            <if test="resultValueAlias != null  and resultValueAlias != ''">result_value_alias = #{resultValueAlias},</if>
+            <if test="callStatus != null  and callStatus != ''">call_status = #{callStatus},</if>
+            <if test="callLen != null  and callLen != ''">call_len = #{callLen},</if>
+            <if test="taskStatus != null ">task_status = #{taskStatus},</if>
+            <if test="taskType != null ">task_type = #{taskType},</if>
+            <if test="callContent != null  and callContent != ''">call_content = #{callContent},</if>
+            <if test="callRadio != null  and callRadio != ''">call_radio = #{callRadio},</if>
+            <if test="callStartDate != null ">call_start_date = #{callStartDate},</if>
+            <if test="curName != null  and curName != ''">cur_name = #{curName},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="robot != null  and robot != ''">robot = #{robot},</if>
+            <if test="isRecall != null ">is_recall = #{isRecall},</if>
+            <if test="continueDays != null ">continue_days = #{continueDays},</if>
+            <if test="continueFrequency != null ">continue_frequency = #{continueFrequency},</if>
+        </trim>
+        where robot_tast_id = #{robotTastId} AND phone = #{phone}
+    </update>
+
+    <update id="updateTLcRobotTaskByRobotTaskId" parameterType="com.ruoyi.robot.domain.TLcRobotTask">
+        update t_lc_robot_task
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="robotTaskStatus != null">robot_task_status = #{robotTaskStatus},</if>
+        </trim>
+        where robot_tast_id = #{robotTastId}
+    </update>
+
+    <delete id="deleteTLcRobotTaskById" parameterType="java.lang.Long">
+        delete from t_lc_robot_task where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcRobotTaskByIds" parameterType="java.lang.String">
+        delete from t_lc_robot_task where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectTLcRobotTaskByRobotTaskId" parameterType="java.lang.Integer" resultMap="TLcRobotTaskResult">
+        SELECT
+        <include refid="selectTLcRobotTaskVo"/>
+        FROM t_lc_robot_task t
+        WHERE t.robot_tast_id = #{robotTaskId}
+    </select>
+
+    <select id="selectListByRobotTaskId" parameterType="java.lang.Integer" resultMap="TLcRobotTaskResult">
+        SELECT
+        <include refid="selectTLcRobotTaskVo"/>
+        FROM t_lc_robot_task t
+        WHERE t.robot_tast_id = #{robotTaskId}
+    </select>
+
+    <select id="selectRobotTaskByRobotTaskIdAndTaskId" resultMap="TLcRobotTaskResult">
+        SELECT
+        <include refid="selectTLcRobotTaskVo"/>
+        FROM t_lc_robot_task t
+        WHERE t.robot_tast_id = #{robotTaskId}
+        AND t.task_id = #{taskId}
+    </select>
+
+    <select id="selectRobotTaskByRobotTaskIdAndPhone" resultMap="TLcRobotTaskResult">
+        SELECT
+        <include refid="selectTLcRobotTaskVo"/>
+        FROM t_lc_robot_task t
+        WHERE t.robot_tast_id = #{robotTaskId}
+        AND t.phone = #{phone}
+    </select>
+
+    <select id="selectCallbackFaild" resultMap="TLcRobotTaskResult">
+        SELECT
+        <include refid="selectTLcRobotTaskVo"/>
+        FROM t_lc_robot_task t
+        WHERE t.robot_tast_id = #{robotTaskId}
+        AND t.call_status IS NULL
+    </select>
+
+    <update id="updateRobotTaskStatusByRobotTaskId" parameterType="com.ruoyi.robot.domain.TLcRobotTask">
+        update t_lc_robot_task set robot_task_status = #{robotTaskStatus} where robot_tast_id = #{robotTastId}
+    </update>
+
+</mapper>

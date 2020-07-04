@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.TLiContractInfoMapper">
+    
+    <resultMap type="com.ruoyi.assetspackage.domain.TLiContractInfo" id="TLiContractInfoResult">
+        <result property="tuid"    column="tuid"    />
+        <result property="importBatch"    column="import_batch"    />
+        <result property="queue"    column="queue"    />
+        <result property="status"    column="status"    />
+        <result property="isStop"    column="is_stop"    />
+        <result property="stopTime"    column="stop_time"    />
+        <result property="outTime"    column="out_time"    />
+        <result property="outType"    column="out_type"    />
+        <result property="created"    column="created"    />
+        <result property="createdby"    column="createdby"    />
+        <result property="updated"    column="updated"    />
+        <result property="updatedby"    column="updatedby"    />
+        <result property="caseTuid"    column="case_tuid"    />
+        <result property="caseNo"    column="case_no"    />
+        <result property="debtNo"    column="debt_no"    />
+        <result property="custName"    column="cust_name"    />
+        <result property="debtInit"    column="debt_init"    />
+        <result property="debt"    column="debt"    />
+        <result property="minRepay"    column="min_repay"    />
+        <result property="billDate"    column="bill_date"    />
+        <result property="insurance"    column="insurance"    />
+        <result property="contractId"    column="contract_id"    />
+        <result property="org"    column="org"    />
+        <result property="checkArea"    column="check_area"    />
+        <result property="productPrice"    column="product_price"    />
+        <result property="lastPaymentDate"    column="last_payment_date"    />
+        <result property="nextPaymentDate"    column="next_payment_date"    />
+        <result property="loans"    column="loans"    />
+        <result property="overduePhase"    column="overdue_phase"    />
+        <result property="termPayment"    column="term_payment"    />
+        <result property="termNum"    column="term_num"    />
+        <result property="loansType"    column="loans_type"    />
+        <result property="advancePayment"    column="advance_payment"    />
+        <result property="contractNum"    column="contract_num"    />
+        <result property="unpaidTermPayment"    column="unpaid_term_payment"    />
+        <result property="overdueFine"    column="overdue_fine"    />
+        <result property="jlAmount"    column="jl_amount"    />
+        <result property="jlDebt"    column="jl_debt"    />
+        <result property="jlFlag"    column="jl_flag"    />
+        <result property="repayment"    column="repayment"    />
+        <result property="merchant"    column="merchant"    />
+        <result property="saleArea"    column="sale_area"    />
+        <result property="firm"    column="firm"    />
+        <result property="brand"    column="brand"    />
+        <result property="product"    column="product"    />
+        <result property="contractType"    column="contract_type"    />
+        <result property="saleMemo"    column="sale_memo"    />
+        <result property="accountId"    column="account_id"    />
+        <result property="downPayment"    column="down_payment"    />
+        <result property="cardNo"    column="card_no"    />
+        <result property="saleOnline"    column="sale_online"    />
+        <result property="property"    column="property"    />
+        <result property="accountName"    column="account_name"    />
+        <result property="depositBank"    column="deposit_bank"    />
+        <result property="yzAccount"    column="yz_account"    />
+        <result property="paidTerm"    column="paid_term"    />
+        <result property="firstRepayMonth"    column="first_repay_month"    />
+        <result property="penaltyContract"    column="penalty_contract"    />
+        <result property="extendContract"    column="extend_contract"    />
+        <result property="outBefore"    column="out_before"    />
+        <result property="lastOutDate"    column="last_out_date"    />
+        <result property="outNum"    column="out_num"    />
+        <result property="newOutDate"    column="new_out_date"    />
+        <result property="newOutNum"    column="new_out_num"    />
+        <result property="productType"    column="product_type"    />
+        <result property="overdueNum"    column="overdue_num"    />
+        <result property="outcaseDate"    column="outcase_date"    />
+        <result property="applyDate"    column="apply_date"    />
+        <result property="assignDate"    column="assign_date"    />
+        <result property="cardNum"    column="card_num"    />
+        <result property="qqMail"    column="qq_mail"    />
+        <result property="qqMail2"    column="qq_mail2"    />
+    </resultMap>
+
+    <sql id="selectTLiContractInfoVo">
+        select tuid, import_batch, queue, status, is_stop, stop_time, out_time, out_type, created, createdby, updated, updatedby, case_tuid, case_no, debt_no, cust_name, debt_init, debt, min_repay, bill_date, insurance, contract_id, org, check_area, product_price, last_payment_date, next_payment_date, loans, overdue_phase, term_payment, term_num, loans_type, advance_payment, contract_num, unpaid_term_payment, overdue_fine, jl_amount, jl_debt, jl_flag, repayment, merchant, sale_area, firm, brand, product, contract_type, sale_memo, account_id, down_payment, card_no, sale_online, property, account_name, deposit_bank, yz_account, paid_term, first_repay_month, penalty_contract, extend_contract, out_before, last_out_date, out_num, new_out_date, new_out_num, product_type, overdue_num, outcase_date, apply_date, assign_date, card_num, qq_mail, qq_mail2 from t_li_contract_info
+    </sql>
+
+    <select id="selectTLiContractInfoList" parameterType="TLiContractInfo" resultMap="TLiContractInfoResult">
+        <include refid="selectTLiContractInfoVo"/>
+        <where>  
+            <if test="tuid != null  and tuid != ''"> and tuid = #{tuid}</if>
+            <if test="importBatch != null  and importBatch != ''"> and import_batch = #{importBatch}</if>
+            <if test="queue != null  and queue != ''"> and queue = #{queue}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="isStop != null "> and is_stop = #{isStop}</if>
+            <if test="stopTime != null "> and stop_time = #{stopTime}</if>
+            <if test="outTime != null "> and out_time = #{outTime}</if>
+            <if test="outType != null "> and out_type = #{outType}</if>
+            <if test="created != null "> and created = #{created}</if>
+            <if test="createdby != null  and createdby != ''"> and createdby = #{createdby}</if>
+            <if test="updated != null "> and updated = #{updated}</if>
+            <if test="updatedby != null  and updatedby != ''"> and updatedby = #{updatedby}</if>
+            <if test="caseTuid != null  and caseTuid != ''"> and case_tuid = #{caseTuid}</if>
+            <if test="caseNo != null  and caseNo != ''"> and case_no = #{caseNo}</if>
+            <if test="debtNo != null  and debtNo != ''"> and debt_no = #{debtNo}</if>
+            <if test="custName != null  and custName != ''"> and cust_name like concat('%', #{custName}, '%')</if>
+            <if test="debtInit != null "> and debt_init = #{debtInit}</if>
+            <if test="debt != null "> and debt = #{debt}</if>
+            <if test="minRepay != null "> and min_repay = #{minRepay}</if>
+            <if test="billDate != null  and billDate != ''"> and bill_date = #{billDate}</if>
+            <if test="insurance != null  and insurance != ''"> and insurance = #{insurance}</if>
+            <if test="contractId != null  and contractId != ''"> and contract_id = #{contractId}</if>
+            <if test="org != null  and org != ''"> and org = #{org}</if>
+            <if test="checkArea != null  and checkArea != ''"> and check_area = #{checkArea}</if>
+            <if test="productPrice != null "> and product_price = #{productPrice}</if>
+            <if test="lastPaymentDate != null  and lastPaymentDate != ''"> and last_payment_date = #{lastPaymentDate}</if>
+            <if test="nextPaymentDate != null  and nextPaymentDate != ''"> and next_payment_date = #{nextPaymentDate}</if>
+            <if test="loans != null "> and loans = #{loans}</if>
+            <if test="overduePhase != null  and overduePhase != ''"> and overdue_phase = #{overduePhase}</if>
+            <if test="termPayment != null "> and term_payment = #{termPayment}</if>
+            <if test="termNum != null "> and term_num = #{termNum}</if>
+            <if test="loansType != null  and loansType != ''"> and loans_type = #{loansType}</if>
+            <if test="advancePayment != null "> and advance_payment = #{advancePayment}</if>
+            <if test="contractNum != null "> and contract_num = #{contractNum}</if>
+            <if test="unpaidTermPayment != null "> and unpaid_term_payment = #{unpaidTermPayment}</if>
+            <if test="overdueFine != null "> and overdue_fine = #{overdueFine}</if>
+            <if test="jlAmount != null "> and jl_amount = #{jlAmount}</if>
+            <if test="jlDebt != null "> and jl_debt = #{jlDebt}</if>
+            <if test="jlFlag != null  and jlFlag != ''"> and jl_flag = #{jlFlag}</if>
+            <if test="repayment != null "> and repayment = #{repayment}</if>
+            <if test="merchant != null  and merchant != ''"> and merchant = #{merchant}</if>
+            <if test="saleArea != null  and saleArea != ''"> and sale_area = #{saleArea}</if>
+            <if test="firm != null  and firm != ''"> and firm = #{firm}</if>
+            <if test="brand != null  and brand != ''"> and brand = #{brand}</if>
+            <if test="product != null  and product != ''"> and product = #{product}</if>
+            <if test="contractType != null  and contractType != ''"> and contract_type = #{contractType}</if>
+            <if test="saleMemo != null  and saleMemo != ''"> and sale_memo = #{saleMemo}</if>
+            <if test="accountId != null  and accountId != ''"> and account_id = #{accountId}</if>
+            <if test="downPayment != null "> and down_payment = #{downPayment}</if>
+            <if test="cardNo != null  and cardNo != ''"> and card_no = #{cardNo}</if>
+            <if test="saleOnline != null  and saleOnline != ''"> and sale_online = #{saleOnline}</if>
+            <if test="property != null  and property != ''"> and property = #{property}</if>
+            <if test="accountName != null  and accountName != ''"> and account_name like concat('%', #{accountName}, '%')</if>
+            <if test="depositBank != null  and depositBank != ''"> and deposit_bank = #{depositBank}</if>
+            <if test="yzAccount != null  and yzAccount != ''"> and yz_account = #{yzAccount}</if>
+            <if test="paidTerm != null  and paidTerm != ''"> and paid_term = #{paidTerm}</if>
+            <if test="firstRepayMonth != null  and firstRepayMonth != ''"> and first_repay_month = #{firstRepayMonth}</if>
+            <if test="penaltyContract != null  and penaltyContract != ''"> and penalty_contract = #{penaltyContract}</if>
+            <if test="extendContract != null  and extendContract != ''"> and extend_contract = #{extendContract}</if>
+            <if test="outBefore != null  and outBefore != ''"> and out_before = #{outBefore}</if>
+            <if test="lastOutDate != null  and lastOutDate != ''"> and last_out_date = #{lastOutDate}</if>
+            <if test="outNum != null  and outNum != ''"> and out_num = #{outNum}</if>
+            <if test="newOutDate != null  and newOutDate != ''"> and new_out_date = #{newOutDate}</if>
+            <if test="newOutNum != null  and newOutNum != ''"> and new_out_num = #{newOutNum}</if>
+            <if test="productType != null  and productType != ''"> and product_type = #{productType}</if>
+            <if test="overdueNum != null "> and overdue_num = #{overdueNum}</if>
+            <if test="outcaseDate != null  and outcaseDate != ''"> and outcase_date = #{outcaseDate}</if>
+            <if test="applyDate != null  and applyDate != ''"> and apply_date = #{applyDate}</if>
+            <if test="assignDate != null  and assignDate != ''"> and assign_date = #{assignDate}</if>
+            <if test="cardNum != null  and cardNum != ''"> and card_num = #{cardNum}</if>
+            <if test="qqMail != null  and qqMail != ''"> and qq_mail = #{qqMail}</if>
+            <if test="qqMail2 != null  and qqMail2 != ''"> and qq_mail2 = #{qqMail2}</if>
+        </where>
+    </select>
+    
+    <select id="selectTLiContractInfoById" parameterType="String" resultMap="TLiContractInfoResult">
+        <include refid="selectTLiContractInfoVo"/>
+        where tuid = #{tuid}
+    </select>
+        
+    <insert id="insertTLiContractInfo" parameterType="TLiContractInfo">
+        insert into t_li_contract_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tuid != null  and tuid != ''">tuid,</if>
+            <if test="importBatch != null  and importBatch != ''">import_batch,</if>
+            <if test="queue != null  and queue != ''">queue,</if>
+            <if test="status != null ">status,</if>
+            <if test="isStop != null ">is_stop,</if>
+            <if test="stopTime != null ">stop_time,</if>
+            <if test="outTime != null ">out_time,</if>
+            <if test="outType != null ">out_type,</if>
+            <if test="created != null ">created,</if>
+            <if test="createdby != null  and createdby != ''">createdby,</if>
+            <if test="updated != null ">updated,</if>
+            <if test="updatedby != null  and updatedby != ''">updatedby,</if>
+            <if test="caseTuid != null  and caseTuid != ''">case_tuid,</if>
+            <if test="caseNo != null  and caseNo != ''">case_no,</if>
+            <if test="debtNo != null  and debtNo != ''">debt_no,</if>
+            <if test="custName != null  and custName != ''">cust_name,</if>
+            <if test="debtInit != null ">debt_init,</if>
+            <if test="debt != null ">debt,</if>
+            <if test="minRepay != null ">min_repay,</if>
+            <if test="billDate != null  and billDate != ''">bill_date,</if>
+            <if test="insurance != null  and insurance != ''">insurance,</if>
+            <if test="contractId != null  and contractId != ''">contract_id,</if>
+            <if test="org != null  and org != ''">org,</if>
+            <if test="checkArea != null  and checkArea != ''">check_area,</if>
+            <if test="productPrice != null ">product_price,</if>
+            <if test="lastPaymentDate != null  and lastPaymentDate != ''">last_payment_date,</if>
+            <if test="nextPaymentDate != null  and nextPaymentDate != ''">next_payment_date,</if>
+            <if test="loans != null ">loans,</if>
+            <if test="overduePhase != null  and overduePhase != ''">overdue_phase,</if>
+            <if test="termPayment != null ">term_payment,</if>
+            <if test="termNum != null ">term_num,</if>
+            <if test="loansType != null  and loansType != ''">loans_type,</if>
+            <if test="advancePayment != null ">advance_payment,</if>
+            <if test="contractNum != null ">contract_num,</if>
+            <if test="unpaidTermPayment != null ">unpaid_term_payment,</if>
+            <if test="overdueFine != null ">overdue_fine,</if>
+            <if test="jlAmount != null ">jl_amount,</if>
+            <if test="jlDebt != null ">jl_debt,</if>
+            <if test="jlFlag != null  and jlFlag != ''">jl_flag,</if>
+            <if test="repayment != null ">repayment,</if>
+            <if test="merchant != null  and merchant != ''">merchant,</if>
+            <if test="saleArea != null  and saleArea != ''">sale_area,</if>
+            <if test="firm != null  and firm != ''">firm,</if>
+            <if test="brand != null  and brand != ''">brand,</if>
+            <if test="product != null  and product != ''">product,</if>
+            <if test="contractType != null  and contractType != ''">contract_type,</if>
+            <if test="saleMemo != null  and saleMemo != ''">sale_memo,</if>
+            <if test="accountId != null  and accountId != ''">account_id,</if>
+            <if test="downPayment != null ">down_payment,</if>
+            <if test="cardNo != null  and cardNo != ''">card_no,</if>
+            <if test="saleOnline != null  and saleOnline != ''">sale_online,</if>
+            <if test="property != null  and property != ''">property,</if>
+            <if test="accountName != null  and accountName != ''">account_name,</if>
+            <if test="depositBank != null  and depositBank != ''">deposit_bank,</if>
+            <if test="yzAccount != null  and yzAccount != ''">yz_account,</if>
+            <if test="paidTerm != null  and paidTerm != ''">paid_term,</if>
+            <if test="firstRepayMonth != null  and firstRepayMonth != ''">first_repay_month,</if>
+            <if test="penaltyContract != null  and penaltyContract != ''">penalty_contract,</if>
+            <if test="extendContract != null  and extendContract != ''">extend_contract,</if>
+            <if test="outBefore != null  and outBefore != ''">out_before,</if>
+            <if test="lastOutDate != null  and lastOutDate != ''">last_out_date,</if>
+            <if test="outNum != null  and outNum != ''">out_num,</if>
+            <if test="newOutDate != null  and newOutDate != ''">new_out_date,</if>
+            <if test="newOutNum != null  and newOutNum != ''">new_out_num,</if>
+            <if test="productType != null  and productType != ''">product_type,</if>
+            <if test="overdueNum != null ">overdue_num,</if>
+            <if test="outcaseDate != null  and outcaseDate != ''">outcase_date,</if>
+            <if test="applyDate != null  and applyDate != ''">apply_date,</if>
+            <if test="assignDate != null  and assignDate != ''">assign_date,</if>
+            <if test="cardNum != null  and cardNum != ''">card_num,</if>
+            <if test="qqMail != null  and qqMail != ''">qq_mail,</if>
+            <if test="qqMail2 != null  and qqMail2 != ''">qq_mail2,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tuid != null  and tuid != ''">#{tuid},</if>
+            <if test="importBatch != null  and importBatch != ''">#{importBatch},</if>
+            <if test="queue != null  and queue != ''">#{queue},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="isStop != null ">#{isStop},</if>
+            <if test="stopTime != null ">#{stopTime},</if>
+            <if test="outTime != null ">#{outTime},</if>
+            <if test="outType != null ">#{outType},</if>
+            <if test="created != null ">#{created},</if>
+            <if test="createdby != null  and createdby != ''">#{createdby},</if>
+            <if test="updated != null ">#{updated},</if>
+            <if test="updatedby != null  and updatedby != ''">#{updatedby},</if>
+            <if test="caseTuid != null  and caseTuid != ''">#{caseTuid},</if>
+            <if test="caseNo != null  and caseNo != ''">#{caseNo},</if>
+            <if test="debtNo != null  and debtNo != ''">#{debtNo},</if>
+            <if test="custName != null  and custName != ''">#{custName},</if>
+            <if test="debtInit != null ">#{debtInit},</if>
+            <if test="debt != null ">#{debt},</if>
+            <if test="minRepay != null ">#{minRepay},</if>
+            <if test="billDate != null  and billDate != ''">#{billDate},</if>
+            <if test="insurance != null  and insurance != ''">#{insurance},</if>
+            <if test="contractId != null  and contractId != ''">#{contractId},</if>
+            <if test="org != null  and org != ''">#{org},</if>
+            <if test="checkArea != null  and checkArea != ''">#{checkArea},</if>
+            <if test="productPrice != null ">#{productPrice},</if>
+            <if test="lastPaymentDate != null  and lastPaymentDate != ''">#{lastPaymentDate},</if>
+            <if test="nextPaymentDate != null  and nextPaymentDate != ''">#{nextPaymentDate},</if>
+            <if test="loans != null ">#{loans},</if>
+            <if test="overduePhase != null  and overduePhase != ''">#{overduePhase},</if>
+            <if test="termPayment != null ">#{termPayment},</if>
+            <if test="termNum != null ">#{termNum},</if>
+            <if test="loansType != null  and loansType != ''">#{loansType},</if>
+            <if test="advancePayment != null ">#{advancePayment},</if>
+            <if test="contractNum != null ">#{contractNum},</if>
+            <if test="unpaidTermPayment != null ">#{unpaidTermPayment},</if>
+            <if test="overdueFine != null ">#{overdueFine},</if>
+            <if test="jlAmount != null ">#{jlAmount},</if>
+            <if test="jlDebt != null ">#{jlDebt},</if>
+            <if test="jlFlag != null  and jlFlag != ''">#{jlFlag},</if>
+            <if test="repayment != null ">#{repayment},</if>
+            <if test="merchant != null  and merchant != ''">#{merchant},</if>
+            <if test="saleArea != null  and saleArea != ''">#{saleArea},</if>
+            <if test="firm != null  and firm != ''">#{firm},</if>
+            <if test="brand != null  and brand != ''">#{brand},</if>
+            <if test="product != null  and product != ''">#{product},</if>
+            <if test="contractType != null  and contractType != ''">#{contractType},</if>
+            <if test="saleMemo != null  and saleMemo != ''">#{saleMemo},</if>
+            <if test="accountId != null  and accountId != ''">#{accountId},</if>
+            <if test="downPayment != null ">#{downPayment},</if>
+            <if test="cardNo != null  and cardNo != ''">#{cardNo},</if>
+            <if test="saleOnline != null  and saleOnline != ''">#{saleOnline},</if>
+            <if test="property != null  and property != ''">#{property},</if>
+            <if test="accountName != null  and accountName != ''">#{accountName},</if>
+            <if test="depositBank != null  and depositBank != ''">#{depositBank},</if>
+            <if test="yzAccount != null  and yzAccount != ''">#{yzAccount},</if>
+            <if test="paidTerm != null  and paidTerm != ''">#{paidTerm},</if>
+            <if test="firstRepayMonth != null  and firstRepayMonth != ''">#{firstRepayMonth},</if>
+            <if test="penaltyContract != null  and penaltyContract != ''">#{penaltyContract},</if>
+            <if test="extendContract != null  and extendContract != ''">#{extendContract},</if>
+            <if test="outBefore != null  and outBefore != ''">#{outBefore},</if>
+            <if test="lastOutDate != null  and lastOutDate != ''">#{lastOutDate},</if>
+            <if test="outNum != null  and outNum != ''">#{outNum},</if>
+            <if test="newOutDate != null  and newOutDate != ''">#{newOutDate},</if>
+            <if test="newOutNum != null  and newOutNum != ''">#{newOutNum},</if>
+            <if test="productType != null  and productType != ''">#{productType},</if>
+            <if test="overdueNum != null ">#{overdueNum},</if>
+            <if test="outcaseDate != null  and outcaseDate != ''">#{outcaseDate},</if>
+            <if test="applyDate != null  and applyDate != ''">#{applyDate},</if>
+            <if test="assignDate != null  and assignDate != ''">#{assignDate},</if>
+            <if test="cardNum != null  and cardNum != ''">#{cardNum},</if>
+            <if test="qqMail != null  and qqMail != ''">#{qqMail},</if>
+            <if test="qqMail2 != null  and qqMail2 != ''">#{qqMail2},</if>
+         </trim>
+    </insert>
+
+    <!--<update id="updateTLiContractInfo" parameterType="TLiContractInfo">
+        update t_li_contract_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="importBatch != null  and importBatch != ''">import_batch = #{importBatch},</if>
+            <if test="queue != null  and queue != ''">queue = #{queue},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="isStop != null ">is_stop = #{isStop},</if>
+            <if test="stopTime != null ">stop_time = #{stopTime},</if>
+            <if test="outTime != null ">out_time = #{outTime},</if>
+            <if test="outType != null ">out_type = #{outType},</if>
+            <if test="created != null ">created = #{created},</if>
+            <if test="createdby != null  and createdby != ''">createdby = #{createdby},</if>
+            <if test="updated != null ">updated = #{updated},</if>
+            <if test="updatedby != null  and updatedby != ''">updatedby = #{updatedby},</if>
+            <if test="caseTuid != null  and caseTuid != ''">case_tuid = #{caseTuid},</if>
+            <if test="caseNo != null  and caseNo != ''">case_no = #{caseNo},</if>
+            <if test="debtNo != null  and debtNo != ''">debt_no = #{debtNo},</if>
+            <if test="custName != null  and custName != ''">cust_name = #{custName},</if>
+            <if test="debtInit != null ">debt_init = #{debtInit},</if>
+            <if test="debt != null ">debt = #{debt},</if>
+            <if test="minRepay != null ">min_repay = #{minRepay},</if>
+            <if test="billDate != null  and billDate != ''">bill_date = #{billDate},</if>
+            <if test="insurance != null  and insurance != ''">insurance = #{insurance},</if>
+            <if test="contractId != null  and contractId != ''">contract_id = #{contractId},</if>
+            <if test="org != null  and org != ''">org = #{org},</if>
+            <if test="checkArea != null  and checkArea != ''">check_area = #{checkArea},</if>
+            <if test="productPrice != null ">product_price = #{productPrice},</if>
+            <if test="lastPaymentDate != null  and lastPaymentDate != ''">last_payment_date = #{lastPaymentDate},</if>
+            <if test="nextPaymentDate != null  and nextPaymentDate != ''">next_payment_date = #{nextPaymentDate},</if>
+            <if test="loans != null ">loans = #{loans},</if>
+            <if test="overduePhase != null  and overduePhase != ''">overdue_phase = #{overduePhase},</if>
+            <if test="termPayment != null ">term_payment = #{termPayment},</if>
+            <if test="termNum != null ">term_num = #{termNum},</if>
+            <if test="loansType != null  and loansType != ''">loans_type = #{loansType},</if>
+            <if test="advancePayment != null ">advance_payment = #{advancePayment},</if>
+            <if test="contractNum != null ">contract_num = #{contractNum},</if>
+            <if test="unpaidTermPayment != null ">unpaid_term_payment = #{unpaidTermPayment},</if>
+            <if test="overdueFine != null ">overdue_fine = #{overdueFine},</if>
+            <if test="jlAmount != null ">jl_amount = #{jlAmount},</if>
+            <if test="jlDebt != null ">jl_debt = #{jlDebt},</if>
+            <if test="jlFlag != null  and jlFlag != ''">jl_flag = #{jlFlag},</if>
+            <if test="repayment != null ">repayment = #{repayment},</if>
+            <if test="merchant != null  and merchant != ''">merchant = #{merchant},</if>
+            <if test="saleArea != null  and saleArea != ''">sale_area = #{saleArea},</if>
+            <if test="firm != null  and firm != ''">firm = #{firm},</if>
+            <if test="brand != null  and brand != ''">brand = #{brand},</if>
+            <if test="product != null  and product != ''">product = #{product},</if>
+            <if test="contractType != null  and contractType != ''">contract_type = #{contractType},</if>
+            <if test="saleMemo != null  and saleMemo != ''">sale_memo = #{saleMemo},</if>
+            <if test="accountId != null  and accountId != ''">account_id = #{accountId},</if>
+            <if test="downPayment != null ">down_payment = #{downPayment},</if>
+            <if test="cardNo != null  and cardNo != ''">card_no = #{cardNo},</if>
+            <if test="saleOnline != null  and saleOnline != ''">sale_online = #{saleOnline},</if>
+            <if test="property != null  and property != ''">property = #{property},</if>
+            <if test="accountName != null  and accountName != ''">account_name = #{accountName},</if>
+            <if test="depositBank != null  and depositBank != ''">deposit_bank = #{depositBank},</if>
+            <if test="yzAccount != null  and yzAccount != ''">yz_account = #{yzAccount},</if>
+            <if test="paidTerm != null  and paidTerm != ''">paid_term = #{paidTerm},</if>
+            <if test="firstRepayMonth != null  and firstRepayMonth != ''">first_repay_month = #{firstRepayMonth},</if>
+            <if test="penaltyContract != null  and penaltyContract != ''">penalty_contract = #{penaltyContract},</if>
+            <if test="extendContract != null  and extendContract != ''">extend_contract = #{extendContract},</if>
+            <if test="outBefore != null  and outBefore != ''">out_before = #{outBefore},</if>
+            <if test="lastOutDate != null  and lastOutDate != ''">last_out_date = #{lastOutDate},</if>
+            <if test="outNum != null  and outNum != ''">out_num = #{outNum},</if>
+            <if test="newOutDate != null  and newOutDate != ''">new_out_date = #{newOutDate},</if>
+            <if test="newOutNum != null  and newOutNum != ''">new_out_num = #{newOutNum},</if>
+            <if test="productType != null  and productType != ''">product_type = #{productType},</if>
+            <if test="overdueNum != null ">overdue_num = #{overdueNum},</if>
+            <if test="outcaseDate != null  and outcaseDate != ''">outcase_date = #{outcaseDate},</if>
+            <if test="applyDate != null  and applyDate != ''">apply_date = #{applyDate},</if>
+            <if test="assignDate != null  and assignDate != ''">assign_date = #{assignDate},</if>
+            <if test="cardNum != null  and cardNum != ''">card_num = #{cardNum},</if>
+            <if test="qqMail != null  and qqMail != ''">qq_mail = #{qqMail},</if>
+            <if test="qqMail2 != null  and qqMail2 != ''">qq_mail2 = #{qqMail2},</if>
+        </trim>
+        where tuid = #{tuid}
+    </update>-->
+
+    <update id="updateTLiContractInfo" parameterType="TLiContractInfo">
+        update t_li_contract_info set debt = #{debt}
+        where tuid = #{tuid}
+    </update>
+
+    <delete id="deleteTLiContractInfoById" parameterType="String">
+        delete from t_li_contract_info where tuid = #{tuid}
+    </delete>
+
+    <delete id="deleteTLiContractInfoByIds" parameterType="String">
+        delete from t_li_contract_info where tuid in 
+        <foreach item="tuid" collection="array" open="(" separator="," close=")">
+            #{tuid}
+        </foreach>
+    </delete>
+    
+</mapper>

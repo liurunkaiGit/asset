@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('回收率报列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <input name="updateTime" id="updateTime" th:value="${updateTime}" type="hidden">
+                            <input name="reportName" id="reportName" th:value="${reportName}" type="hidden">
+                            <li class="select-time">
+                                <p>报表日期：</p>
+                                <input type="text" class="time-input" th:value="${#dates.format(reportDate, 'yyyy-MM-dd')}" id="reportDate" placeholder="报表日期" name="reportDate"/>
+                            </li>
+                            <li>
+                                <p>委托方：</p>
+                                <!--<input type="text" name="orgId"/>-->
+                                <select name="orgId" id="orgId">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <!--<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>-->
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="searchRecovery()"><i class="fa fa-search"></i>搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <!--<label>报表名称：</label><label id="heapReportName"></label><br/>
+                <label>报表日期：</label><label id="headReportDate"></label><br/>
+                <label>更新时间：</label><label id="headUpdateTime"></label><br/>
+                <label>委托方：</label><label id="headOrgName"></label>-->
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="report:recovery:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('ruoyi:recovery:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('ruoyi:recovery:remove')}]];
+        var prefix = ctx + "report/recovery";
+        var taskPrefix = ctx + "collect/task";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "回收率报表",
+                columns: [
+                {
+                    field : 'id', 
+                    title : '主键id',
+                    visible: false
+                },
+                {
+                    field : 'reportDate', 
+                    title : '报表日期',
+                    visible: false/*,
+                    formatter: function(value,row,index){
+                        return getReportDate(value,row.seatNum);
+                    }*/
+                },
+                {
+                    field : 'seatGroup', 
+                    title : '组别'
+                },
+                {
+                    field : 'seatNum', 
+                    title : '坐席工号'
+                },
+                {
+                    field : 'seatName', 
+                    title : '坐席姓名'
+                },
+                {
+                    field : 'collingCaseNum', 
+                    title : '在催案件数'
+                },
+                {
+                    field : 'confirmedRecycleCaseNum', 
+                    title : '已确认回收案件数'
+                },
+                {
+                    field : 'unconfirmedRecycleCaseNum', 
+                    title : '待确认回收案件数'
+                },
+                {
+                    field : 'caseRecovery', 
+                    title : '案件回收率',
+                    formatter: function(value,index,row){
+                        return toPercent(value);
+                    }
+                },
+                {
+                    field : 'collingCaseMoney', 
+                    title : '在催案件金额(元)',
+                    align: 'right'
+                },
+                {
+                    field : 'confirmedRecycleCaseMoney', 
+                    title : '已确认回收案件金额(元)',
+                    align: 'right'
+                },
+                {
+                    field : 'unconfirmedRecycleCaseMoney', 
+                    title : '待确认回收案件金额(元)',
+                    align: 'right'
+                },
+                {
+                    field : 'moneyRecovery', 
+                    title : '金额回收率',
+                    formatter: function(value,index,row){
+                        return toPercent(value);
+                    }
+                }]
+            };
+            $.table.init(options);
+
+            initOrg();
+            $("#heapReportName").text($("#reportName").val());
+            $("#headReportDate").text($("#reportDate").val());
+            $("#headUpdateTime").text($("#updateTime").val());
+            // $("#headOrgName").text($("#orgId").val());
+        });
+
+        function initOrg() {
+            $.post(
+                taskPrefix + "/initOrg",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            var opt = "<option value='"+data.rows[i].deptId+"'>"+data.rows[i].deptName+"</option>";
+                            $("#orgId").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+        
+        function toPercent(value) {
+            if (value == null || value == '' || value==0) {
+                return value;
+            }
+            var str=Number(value * 100).toFixed(1);
+            str+="%";
+            return str;
+        }
+
+        /*function getReportDate(value,seatNum) {
+            if (seatNum == null || seatNum =='') {
+                return '合计';
+            }
+            return value;
+        }*/
+
+        function searchRecovery() {
+            var orgId = $("#orgId").val();
+            if (orgId == null || orgId == '') {
+                $.modal.alertWarning("请选择委托方");
+                return;
+            }
+            // alert($("#orgId").find("option:selected").text());
+            $("#heapReportName").text($("#reportName").val());
+            $("#headReportDate").text($("#reportDate").val());
+            $("#headUpdateTime").text($("#updateTime").val());
+            $("#headOrgName").text($("#orgId").find("option:selected").text());
+            $.table.search();
+        }
+    </script>
+</body>
+</html>

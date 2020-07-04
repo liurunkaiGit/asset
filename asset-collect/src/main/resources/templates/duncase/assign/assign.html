@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('案件轨迹列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>客户姓名：</p>
+                                <input type="text" name="customName"/>
+                            </li>
+                            <li>
+                                <p>证件号：</p>
+                                <input type="text" name="certificateNo"/>
+                            </li>
+                            <li>
+                                <p>案件编号：</p>
+                                <input type="text" name="caseNo"/>
+                            </li>
+                            <li>
+                                <p>任务编号：</p>
+                                <input type="text" name="taskId"/>
+                            </li>
+                            <li>
+                                <p>操作员ID：</p>
+                                <input type="text" name="operationId"/>
+                            </li>
+                            <li>
+                                <p>操作员姓名：</p>
+                                <input type="text" name="operationName"/>
+                            </li>
+                            <li>
+                                <p>转移类型(1：分派转移，2：委上转移，3：结案转移，4：协助催收，5：临时代理)：</p>
+                                <select name="transferType" th:with="type=${@dict.getType('')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>转移状态(1:处理中,2:已转移)：</p>
+                                <select name="transferStatus">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>任务状态：</p>
+                                <select name="taskStatus">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>业务归属人：</p>
+                                <input type="text" name="ownerId"/>
+                            </li>
+                            <li>
+                                <p>业务归属机构：</p>
+                                <input type="text" name="orgId"/>
+                            </li>
+                            <li>
+                                <p>催收组ID：</p>
+                                <input type="text" name="collectTeamId"/>
+                            </li>
+                            <li>
+                                <p>催收组名称：</p>
+                                <input type="text" name="collectTeamName"/>
+                            </li>
+                            <li class="select-time">
+                                <p>修改时间：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginModifyTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endModifyTime]"/>
+                            </li>
+                            <li>
+                                <p>修改人：</p>
+                                <input type="text" name="modifyBy"/>
+                            </li>
+                            <li>
+                                <p>是否有效 1：是，2：否：</p>
+                                <select name="validateStatus">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <!--<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:assign:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:assign:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:assign:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:assign:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>-->
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:assign:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:assign:remove')}]];
+        var prefix = ctx + "system/assign";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "案件轨迹",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : 'id',
+                    visible: false
+                },
+                {
+                    field : 'customName', 
+                    title : '客户姓名'
+                },
+                {
+                    field : 'certificateNo', 
+                    title : '证件号'
+                },
+                {
+                    field : 'caseNo', 
+                    title : '案件编号'
+                },
+                {
+                    field : 'taskId', 
+                    title : '任务编号'
+                },
+                {
+                    field : 'operationId', 
+                    title : '操作员ID'
+                },
+                {
+                    field : 'operationName', 
+                    title : '操作员姓名'
+                },
+                {
+                    field : 'transferType', 
+                    title : '转移类型(1：分派转移，2：委上转移，3：结案转移，4：协助催收，5：临时代理)'
+                },
+                {
+                    field : 'transferStatus', 
+                    title : '转移状态(1:处理中,2:已转移)'
+                },
+                {
+                    field : 'taskStatus', 
+                    title : '任务状态'
+                },
+                {
+                    field : 'ownerId', 
+                    title : '业务归属人'
+                },
+                {
+                    field : 'orgId', 
+                    title : '业务归属机构'
+                },
+                {
+                    field : 'collectTeamId', 
+                    title : '催收组ID'
+                },
+                {
+                    field : 'collectTeamName', 
+                    title : '催收组名称'
+                },
+                {
+                    field : 'modifyTime', 
+                    title : '修改时间'
+                },
+                {
+                    field : 'modifyBy', 
+                    title : '修改人'
+                },
+                {
+                    field : 'validateStatus', 
+                    title : '是否有效 1：是，2：否'
+                },
+                {
+                    field : 'remark', 
+                    title : '备注'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

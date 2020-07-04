@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.StreamPackageMapper">
+    
+    <resultMap type="com.ruoyi.assetspackage.domain.StreamPackage" id="StreamPackageResult">
+        <result property="id"    column="id"    />
+        <result property="orgCasno"    column="org_casNo"    />
+        <result property="org"    column="org"    />
+        <result property="transfertype"    column="transferType"    />
+        <result property="twentyfourcd"    column="twentyFourCD"    />
+        <result property="blk"    column="BLK"    />
+        <result property="productline"    column="productLine"    />
+        <result property="rmbLastJkje"    column="rmb_last_jkje"    />
+        <result property="rmbYe"    column="rmb_ye"    />
+        <result property="rmbYhfxzje"    column="rmb_yhfxzje"    />
+        <result property="rmbCd"    column="rmb_cd"    />
+        <result property="rmbZhycjkr"    column="rmb_zhycjkr"    />
+        <result property="rmbZhhkbs"    column="rmb_zhhkbs"    />
+        <result property="rmbYhlizje"    column="rmb_yhlizje"    />
+        <result property="rmbYhbj1"    column="rmb_yhbj1"    />
+        <result property="rmbYhbj2"    column="rmb_yhbj2"    />
+        <result property="rmbYhbjzje"    column="rmb_yhbjzje"    />
+        <result property="rmbYhfx1"    column="rmb_yhfx1"    />
+        <result property="rmbYhfx2"    column="rmb_yhfx2"    />
+        <result property="rmbYhfy1"    column="rmb_yhfy1"    />
+        <result property="rmbYhfy2"    column="rmb_yhfy2"    />
+        <result property="rmbYhfyzje"    column="rmb_yhfyzje"    />
+        <result property="rmbZdyhje"    column="rmb_zdyhje"    />
+        <result property="rmbQkzje"    column="rmb_qkzje"    />
+        <result property="rmbGded"    column="rmb_gded"    />
+        <result property="code"    column="code"    />
+        <result property="borrowNo"    column="borrow_no"    />
+        <result property="borrowBlank"    column="borrow_blank"    />
+        <result property="borrowEd"    column="borrow_ed"    />
+        <result property="zxType"    column="zx_type"    />
+        <result property="stopCard"    column="stop_card"    />
+        <result property="stopJxrq"    column="stop_jxrq"    />
+        <result property="csCompany"    column="cs_company"    />
+        <result property="rcr"    column="rcr"    />
+        <result property="gzFlag"    column="gz_flag"    />
+        <result property="fz"    column="fz"    />
+        <result property="fqFlag"    column="fq_flag"    />
+        <result property="syhxQtfy"    column="syhx_qtfy"    />
+        <result property="syhxSxf"    column="syhx_sxf"    />
+        <result property="syhxBj"    column="syhx_bj"    />
+        <result property="syhxZnf"    column="syhx_znf"    />
+        <result property="syhxYqx"    column="syhx_yqx"    />
+        <result property="syhxJehj"    column="syhx_jehj"    />
+        <result property="areaCenter"    column="area_center"    />
+        <result property="csRemarkHis"    column="cs_remark_his"    />
+        <result property="maxYqtsHis"    column="max_yqts_his"    />
+        <result property="sumYqtsHis"    column="sum_yqts_his"    />
+        <result property="sumYqcsHis"    column="sum_yqcs_his"    />
+        <result property="csjggsHis"    column="csjggs_his"    />
+        <result property="qxFlag"    column="qx_flag"    />
+        <result property="stCompany"    column="st_company"    />
+        <result property="acceptFirm"    column="accept_firm"    />
+        <result property="acceptCity"    column="accept_city"    />
+        <result property="acceptWd"    column="accept_wd"    />
+        <result property="acceptWdCode"    column="accept_wd_code"    />
+        <result property="dzhxrq"    column="dzhxrq"    />
+        <result property="remark"    column="remark"    />
+        <result property="wbYhfxze"    column="wb_yhfxze"    />
+        <result property="wbYhlxze"    column="wb_yhlxze"    />
+        <result property="wbYhbj1"    column="wb_yhbj1"    />
+        <result property="wbYhbj2"    column="wb_yhbj2"    />
+        <result property="wbYhbjzje"    column="wb_yhbjzje"    />
+        <result property="wbYhfx1"    column="wb_yhfx1"    />
+        <result property="wbYhfx2"    column="wb_yhfx2"    />
+        <result property="wbYhfy1"    column="wb_yhfy1"    />
+        <result property="wbYhfy2"    column="wb_yhfy2"    />
+        <result property="wbYhfyze"    column="wb_yhfyze"    />
+        <result property="wbZdyhe"    column="wb_zdyhe"    />
+        <result property="wbQkzje"    column="wb_qkzje"    />
+        <result property="txFlag"    column="tx_flag"    />
+        <result property="wwCompanyCode"    column="ww_company_code"    />
+        <result property="wwCityName"    column="ww_city_name"    />
+        <result property="wwJhEnddate"    column="ww_jh_enddate"    />
+        <result property="wwQsrq"    column="ww_qsrq"    />
+        <result property="wwPc"    column="ww_pc"    />
+        <result property="waYe"    column="wa_ye"    />
+        <result property="billAddress"    column="bill_address"    />
+        <result property="billAddressPostcode"    column="bill_address_postcode"    />
+        <result property="yearRates"    column="year_rates"    />
+        <result property="yhkDate"    column="yhk_date"    />
+        <result property="startYqDate"    column="start_yq_date"    />
+        <result property="khDate"    column="kh_date"    />
+        <result property="tsFlag"    column="ts_flag"    />
+        <result property="creditValue"    column="credit_value"    />
+        <result property="tjFirm"    column="tj_firm"    />
+        <result property="tjCity"    column="tj_city"    />
+        <result property="tjWd"    column="tj_wd"    />
+        <result property="shhxSxf"    column="shhx_sxf"    />
+        <result property="shhxBj"    column="shhx_bj"    />
+        <result property="shhxZnf"    column="shhx_znf"    />
+        <result property="shhxFy"    column="shhx_fy"    />
+        <result property="shhxYqx"    column="shhx_yqx"    />
+        <result property="shhxJehj"    column="shhx_jehj"    />
+        <result property="zh30Day"    column="zh_30_day"    />
+        <result property="zhXDay"    column="zh_x_day"    />
+        <result property="isZc"    column="is_zc"    />
+        <result property="isZwcz"    column="is_zwcz"    />
+        <result property="isJx"    column="is_jx"    />
+        <result property="isSx"    column="is_sx"    />
+        <result property="zjyqMonth"    column="zjyq_month"    />
+        <result property="hxSxfcs"    column="hx_sxfcs"    />
+        <result property="hxShzt"    column="hx_shzt"    />
+        <result property="hxBjcs"    column="hx_bjcs"    />
+        <result property="hxZnfcs"    column="hx_znfcs"    />
+        <result property="hxFycs"    column="hx_fycs"    />
+        <result property="hxYqlxcs"    column="hx_yqlxcs"    />
+        <result property="hxJehjcs"    column="hx_jehjcs"    />
+        <result property="ajHzDate"    column="aj_hz_date"    />
+        <result property="xfjzzh"    column="xfjzzh"    />
+        <result property="tsajType"    column="tsaj_type"    />
+        <result property="dayRates"    column="day_rates"    />
+        <result property="tjDate"    column="tj_date"    />
+        <result property="dollarYe"    column="dollar_ye"    />
+        <result property="dollarCd"    column="dollar_CD"    />
+        <result property="dollarZdyjkje"    column="dollar_zdyjkje"    />
+        <result property="dollarZhycjkr"    column="dollar_zhycjkr"    />
+        <result property="dollarZhycjkje"    column="dollar_zhycjkje"    />
+        <result property="dollarHkrhkbs"    column="dollar_hkrhkbs"    />
+        <result property="hkfs"    column="hkfs"    />
+        <result property="hkqd"    column="hkqd"    />
+        <result property="xwpf"    column="xwpf"    />
+        <result property="accountDate"    column="account_date"    />
+        <result property="accountYebj"    column="account_yebj"    />
+        <result property="accountJqrq"    column="account_jqrq"    />
+        <result property="fzzb"    column="fzzb"    />
+        <result property="revertCardNo"    column="revert_card_no"    />
+        <result property="revertCardBlank"    column="revert_card_blank"    />
+        <result property="jjqd"    column="jjqd"    />
+        <result property="overdueDays"    column="overdue_days"    />
+        <result property="overdueFlag"    column="overdue_flag"    />
+        <result property="cwcs"    column="cwcs"    />
+        <result property="quotaProduct"    column="quota_product"    />
+        <result property="quotaCode"    column="quota_code"    />
+        <result property="quotaDate"    column="quota_date"    />
+        <result property="risk"    column="risk"    />
+        <result property="firstFkDate"    column="first_fk_date"    />
+        <result property="firstYqDate"    column="first_yq_date"    />
+        <result property="firstYqjcDate"    column="first_yqjc_date"    />
+        <result property="firstYqFlag"    column="first_yq_flag"    />
+        <result property="curName"    column="cur_name"    />
+        <result property="curSex"    column="cur_sex"    />
+        <result property="certificateNo"    column="certificate_no"    />
+        <result property="certificateType"    column="certificate_type"    />
+        <result property="certificateAddress"    column="certificate_address"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="registAddress"    column="regist_address"    />
+        <result property="email"    column="email"    />
+        <result property="city"    column="city"    />
+        <result property="marriage"    column="marriage"    />
+        <result property="education"    column="education"    />
+        <result property="economy"    column="economy"    />
+        <result property="curIncome"    column="cur_income"    />
+        <result property="newAddress"    column="new_address"    />
+        <result property="customerNo"    column="customer_no"    />
+        <result property="customerMobile"    column="customer_mobile"    />
+        <result property="customerHomeTel"    column="customer_home_tel"    />
+        <result property="customerHomeAddress"    column="customer_home_address"    />
+        <result property="customerHomePostcode"    column="customer_home_postcode"    />
+        <result property="cardPostAddress"    column="card_post_address"    />
+        <result property="job"    column="job"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="indust"    column="indust"    />
+        <result property="workName"    column="work_name"    />
+        <result property="workAddress"    column="work_address"    />
+        <result property="workTel"    column="work_tel"    />
+        <result property="workPostcode"    column="work_postcode"    />
+        <result property="firstLiaisonName"    column="first_liaison_name"    />
+        <result property="firstLiaisonRelation"    column="first_liaison_relation"    />
+        <result property="firstLiaisonMobile"    column="first_liaison_mobile"    />
+        <result property="firstLiaisonTel"    column="first_liaison_tel"    />
+        <result property="secondLiaisonName"    column="second_liaison_name"    />
+        <result property="secondLiaisonRelation"    column="second_liaison_relation"    />
+        <result property="secondLiaisonMobile"    column="second_liaison_mobile"    />
+        <result property="secondLiaisonTel"    column="second_liaison_tel"    />
+        <result property="threeLiaisonName"    column="three_liaison_name"    />
+        <result property="threeLiaisonRelation"    column="three_liaison_relation"    />
+        <result property="threeLiaisonMobile"    column="three_liaison_mobile"    />
+        <result property="threeLiaisonTel"    column="three_liaison_tel"    />
+        <result property="sjrq"    column="sjrq"    />
+        <result property="hth"    column="hth"    />
+        <result property="jjh"    column="jjh"    />
+        <result property="dqsybYj"    column="dqsyb_yj"    />
+        <result property="dqsybEj"    column="dqsyb_ej"    />
+        <result property="csjd"    column="csjd"    />
+        <result property="wbjb"    column="wbjb"    />
+        <result property="ysKhjlmc"    column="ys_khjlmc"    />
+        <result property="khjlmc"    column="khjlmc"    />
+        <result property="cpmc"    column="cpmc"    />
+        <result property="xfldycpmc"    column="xfldycpmc"    />
+        <result property="qxrq"    column="qxrq"    />
+        <result property="dqrq"    column="dqrq"    />
+        <result property="hkType"    column="hk_type"    />
+        <result property="dkye"    column="dkye"    />
+        <result property="wbbs"    column="wbbs"    />
+        <result property="yqje"    column="yqje"    />
+        <result property="yqbj"    column="yqbj"    />
+        <result property="yqlx"    column="yqlx"    />
+        <result property="yqsxf"    column="yqsxf"    />
+        <result property="znj"    column="znj"    />
+        <result property="qdmc"    column="qdmc"    />
+        <result property="wbsb"    column="wbsb"    />
+        <result property="wbqs"    column="wbqs"    />
+        <result property="fpsj"    column="fpsj"    />
+        <result property="ajhssj"    column="ajhssj"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="packageFlag"    column="package_flag"    />
+
+
+        <result property="jyqtfy"    column="jyqtfy"    />
+        <result property="jylx"    column="jylx"    />
+        <result property="jybj"    column="jybj"    />
+        <result property="jyznf"    column="jyznf"    />
+        <result property="jyType"    column="jy_type"    />
+        <result property="jyje"    column="jyje"    />
+        <result property="productType"    column="product_type"    />
+        <result property="csr"    column="csr"    />
+        <result property="fprq"    column="fprq"    />
+        <result property="warq"    column="warq"    />
+        <result property="khjlxm"    column="khjlxm"    />
+        <result property="sfwbcs"    column="sfwbcs"    />
+        <result property="sfjq"    column="sfjq"    />
+        <result property="bywa"    column="bywa"    />
+        <result property="ajhsrq"    column="ajhsrq"    />
+        <result property="xfjrzh"    column="xfjrzh"    />
+        <result property="tzsx"    column="tzsx"    />
+        <result property="tzje"    column="tzje"    />
+        <result property="zhzt"    column="zhzt"    />
+        <result property="hkrq"    column="hkrq"    />
+        <result property="hksyqqs"    column="hksyqqs"    />
+        <result property="hkje"    column="hkje"    />
+        <result property="yqcplx"    column="yqcplx"    />
+        <result property="yqjd"    column="yqjd"    />
+        <result property="jazt"    column="jazt"    />
+
+        <result property="jjh2"    column="jjh2"    />
+        <result property="csjd2"    column="csjd2"    />
+        <result property="areaCenter2"    column="area_center2"    />
+        <result property="acceptCity2"    column="accept_city2"    />
+        <result property="hth2"    column="hth2"    />
+        <result property="dqsybYj2"    column="dqsyb_yj2"    />
+        <result property="dqsybEj2"    column="dqsyb_ej2"    />
+        <result property="wbqs2"    column="wbqs2"    />
+        <result property="wbjb2"    column="wbjb2"    />
+        <result property="curName2"    column="cur_name2"    />
+        <result property="sjrq2"    column="sjrq2"    />
+        <result property="quotaProduct2"    column="quota_product2"    />
+
+
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy2"    column="create_by2"    />
+        <result property="createTime2"    column="create_time2"    />
+    </resultMap>
+
+    <sql id="selectStreamPackageVo">
+        select
+            a.id,
+            a.org_casNo,
+            a.org,
+            a.transferType,
+            a.twentyFourCD,
+            a.BLK,
+            a.productLine,
+            a.rmb_last_jkje,
+            a.rmb_ye,
+            a.rmb_yhfxzje,
+            a.rmb_cd,
+            a.rmb_zhycjkr,
+            a.rmb_zhhkbs,
+            a.rmb_yhlizje,
+            a.rmb_yhbj1,
+            a.rmb_yhbj2,
+            a.rmb_yhbjzje,
+            a.rmb_yhfx1,
+            a.rmb_yhfx2,
+            a.rmb_yhfy1,
+            a.rmb_yhfy2,
+            a.rmb_yhfyzje,
+            a.rmb_zdyhje,
+            a.rmb_qkzje,
+            a.rmb_gded,
+            a.code,
+            a.borrow_no,
+            a.borrow_blank,
+            a.borrow_ed,
+            a.zx_type,
+            a.stop_card,
+            a.stop_jxrq,
+            a.cs_company,
+            a.rcr,
+            a.gz_flag,
+            a.fz,
+            a.fq_flag,
+            a.syhx_qtfy,
+            a.syhx_sxf,
+            a.syhx_bj,
+            a.syhx_znf,
+            a.syhx_yqx,
+            a.syhx_jehj,
+            a.area_center,
+            a.cs_remark_his,
+            a.max_yqts_his,
+            a.sum_yqts_his,
+            a.sum_yqcs_his,
+            a.csjggs_his,
+            a.qx_flag,
+            a.st_company,
+            a.accept_firm,
+            a.accept_city,
+            a.accept_wd,
+            a.accept_wd_code,
+            a.dzhxrq,
+            a.remark,
+            a.wb_yhfxze,
+            a.wb_yhlxze,
+            a.wb_yhbj1,
+            a.wb_yhbj2,
+            a.wb_yhbjzje,
+            a.wb_yhfx1,
+            a.wb_yhfx2,
+            a.wb_yhfy1,
+            a.wb_yhfy2,
+            a.wb_yhfyze,
+            a.wb_zdyhe,
+            a.wb_qkzje,
+            a.tx_flag,
+            a.ww_company_code,
+            a.ww_city_name,
+            a.ww_jh_enddate,
+            a.ww_qsrq,
+            a.ww_pc,
+            a.wa_ye,
+            a.bill_address,
+            a.bill_address_postcode,
+            a.year_rates,
+            a.yhk_date,
+            a.start_yq_date,
+            a.kh_date,
+            a.ts_flag,
+            a.credit_value,
+            a.tj_firm,
+            a.tj_city,
+            a.tj_wd,
+            a.shhx_sxf,
+            a.shhx_bj,
+            a.shhx_znf,
+            a.shhx_fy,
+            a.shhx_yqx,
+            a.shhx_jehj,
+            a.zh_30_day,
+            a.zh_x_day,
+            a.is_zc,
+            a.is_zwcz,
+            a.is_jx,
+            a.is_sx,
+            a.zjyq_month,
+            a.hx_sxfcs,
+            a.hx_shzt,
+            a.hx_bjcs,
+            a.hx_znfcs,
+            a.hx_fycs,
+            a.hx_yqlxcs,
+            a.hx_jehjcs,
+            a.aj_hz_date,
+            a.xfjzzh,
+            a.tsaj_type,
+            a.day_rates,
+            a.tj_date,
+            a.dollar_ye,
+            a.dollar_CD,
+            a.dollar_zdyjkje,
+            a.dollar_zhycjkr,
+            a.dollar_zhycjkje,
+            a.dollar_hkrhkbs,
+            a.hkfs,
+            a.hkqd,
+            a.xwpf,
+            a.account_date,
+            a.account_yebj,
+            a.account_jqrq,
+            a.fzzb,
+            a.revert_card_no,
+            a.revert_card_blank,
+            a.jjqd,
+            a.overdue_days,
+            a.overdue_flag,
+            a.cwcs,
+            a.quota_product,
+            a.quota_code,
+            a.quota_date,
+            a.risk,
+            a.first_fk_date,
+            a.first_yq_date,
+            a.first_yqjc_date,
+            a.first_yq_flag,
+            a.cur_name,
+            a.cur_sex,
+            a.certificate_no,
+            a.certificate_type,
+            a.certificate_address,
+            a.birthday,
+            a.regist_address,
+            a.email,
+            a.city,
+            a.marriage,
+            a.education,
+            a.economy,
+            a.cur_income,
+            a.new_address,
+            a.customer_no,
+            a.customer_mobile,
+            a.customer_home_tel,
+            a.customer_home_address,
+            a.customer_home_postcode,
+            a.card_post_address,
+            a.job,
+            a.dept_name,
+            a.indust,
+            a.work_name,
+            a.work_address,
+            a.work_tel,
+            a.work_postcode,
+            a.first_liaison_name,
+            a.first_liaison_relation,
+            a.first_liaison_mobile,
+            a.first_liaison_tel,
+            a.second_liaison_name,
+            a.second_liaison_relation,
+            a.second_liaison_mobile,
+            a.second_liaison_tel,
+            a.three_liaison_name,
+            a.three_liaison_relation,
+            a.three_liaison_mobile,
+            a.three_liaison_tel,
+            a.sjrq,
+            a.hth,
+            a.jjh,
+            a.dqsyb_yj,
+            a.dqsyb_ej,
+            a.csjd,
+            a.wbjb,
+            a.ys_khjlmc,
+            a.khjlmc,
+            a.cpmc,
+            a.xfldycpmc,
+            a.qxrq,
+            a.dqrq,
+            a.hk_type,
+            a.dkye,
+            a.wbbs,
+            a.yqje,
+            a.yqbj,
+            a.yqlx,
+            a.yqsxf,
+            a.znj,
+            a.qdmc,
+            a.wbsb,
+            a.wbqs,
+            a.fpsj,
+            a.ajhssj,
+            a.org_id,
+            a.package_flag,
+            b.jyqtfy,
+            b.jylx,
+            b.jybj,
+            b.jyznf,
+            b.jy_type,
+            b.jyje,
+            b.product_type,
+            b.csr,
+            b.fprq,
+            b.warq,
+            b.khjlxm,
+            b.sfwbcs,
+            b.sfjq,
+            b.bywa,
+            b.ajhsrq,
+            b.xfjrzh,
+            b.tzsx,
+            b.tzje,
+            b.zhzt,
+            b.hkrq,
+            b.hksyqqs,
+            b.hkje,
+            b.yqcplx,
+            b.yqjd,
+            b.jazt,
+            b.jjh as jjh2,
+            b.csjd as csjd2,
+            b.area_center as area_center2,
+            b.accept_city as accept_city2,
+            b.hth as hth2,
+            b.dqsyb_yj as dqsyb_yj2,
+            b.dqsyb_ej as dqsyb_ej2,
+            b.wbqs as wbqs2,
+            b.wbjb as wbjb2,
+            b.cur_name as cur_name2,
+            b.sjrq as sjrq2,
+            b.quota_product as quota_product2,
+            a.create_by,
+            a.create_time,
+            b.create_by as create_by2,
+            b.create_time as create_time2
+        from cur_assets_package a
+        join cur_assets_repayment_package b ON a.org_casNo=b.org_casNo
+    </sql>
+
+    <select id="selectStreamPackageList" parameterType="StreamPackage" resultMap="StreamPackageResult">
+        <include refid="selectStreamPackageVo"/>
+        <where>
+            <if test="orgCasno != null  and orgCasno != ''"> and a.org_casNo = #{orgCasno}</if>
+            <if test="orgId != null  and orgId != ''"> and a.org_id = #{orgId}</if>
+            <if test="createBy != null  and createBy != ''"> and a.create_by = #{createBy}</if>
+            <if test="createBy2 != null  and createBy2 != ''"> and b.create_by = #{createBy2}</if>
+            <if test="startDate != null "> and a.create_time <![CDATA[>=]]> #{startDate}</if>
+            <if test="endDate != null "> and a.create_time <![CDATA[<=]]> #{endDate}</if>
+            <if test="startDate2 != null "> and b.create_time <![CDATA[>=]]> #{startDate2}</if>
+            <if test="endDate2 != null "> and b.create_time <![CDATA[<=]]> #{endDate2}</if>
+        </where>
+    </select>
+
+
+    
+
+        
+
+
+
+
+</mapper>

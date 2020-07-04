@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增【请填写功能名称】')" />
+    <th:block th:include="include :: select2-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-conf-add">
+            <input type="hidden" th:value="${surPlusConcurrentValue}" id="surPlusConcurrentValue"/>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">委托方：</label>
+                <div class="col-sm-8">
+                    <!--<input name="orgId" class="form-control" type="text">-->
+                    <select class="form-control" name="orgIdAndName" id="orgId" required>
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">并发量</label>
+                <div class="col-sm-8">
+                    <input name="concurrentValue" id="concurrentValue" class="form-control" type="text" required>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>当前剩余并发量<span th:text="${surPlusConcurrentValue}" /></span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">话术：</label>
+                <div class="col-sm-8">
+                    <!--<input name="speechcraftName" class="form-control" type="text">-->
+                    <label th:each="speechcraft:${speechcraftNameList}" class="check-box">
+                        <input name="robotDefIdAndName" class="robotDefIdAndName" type="checkbox" th:value="${speechcraft.robotDefIdAndName}" th:text="${speechcraft.robotName}">
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>呼叫起始时间(08:00)：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="startCallTime" id="startCallTime" class="form-control" type="text" required>
+                        <!--<input name="startCallDate" id="startCallDate" class="form-control" placeholder="HH:mm:ss" type="text" required>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>-->
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>呼叫停止时间(20:00)：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="endCallTime" id="endCallTime" class="form-control" type="text" required>
+                        <!--<input name="stopCallDate" id="stopCallDate" class="form-control" placeholder="HH:mm:ss" type="text" required>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>-->
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: select2-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "orgspeech/conf";
+        var taskPrefix = ctx + "collect/task";
+
+        $(function () {
+            initOrg();
+        })
+
+        function initOrg() {
+            $.post(
+                taskPrefix + "/initOrg",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            var opt = "<option value='"+data.rows[i].deptId+","+data.rows[i].deptName+"'>"+data.rows[i].deptName+"</option>";
+                            $("#orgId").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        /*$("#form-conf-add").validate({
+            onkeyup: false,
+            rules:{
+                orgId:{
+                    remote: {
+                        url: prefix + "/checkOrgIdUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            orgId: function() {
+                                return $("#orgId").val();
+                            }
+                        },
+                        dataFilter: function(data, type) {
+                            return $.validate.unique(data);
+                        }
+                    }
+                }
+            },
+            messages: {
+                orgId: {
+                    remote: "机构已存在"
+                }
+            },
+            focusCleanup: true
+        });*/
+
+        function submitHandler() {
+            var reg = /^[1-9]\d*$/; //正整数的正则表达式
+            var concurrentValue = parseInt($("#concurrentValue").val());
+            if (!reg.test(concurrentValue)) {
+                $.modal.alert("并发量必须是大于0的正整数");
+                return;
+            }
+            if (concurrentValue > parseInt($("#surPlusConcurrentValue").val())) {
+                $.modal.alert("并发量不能大于剩余并发量");
+                return;
+            }
+            if($(".robotDefIdAndName:checked").length==0){
+                $.modal.alert("请选择话术");
+                return;
+            }
+            $.post(
+                prefix + "/checkOrgIdUnique",
+                {orgId: $("#orgId").val()},
+                function(data) {
+                    if (data > 0) {//请求成功
+                        $.modal.alert("该机构已存在");
+                        return;
+                    } else {
+                        if ($.validate.form()) {
+                            $.operate.save(prefix + "/add", $('#form-conf-add').serialize());
+                        }
+                    }
+                }
+            );
+
+        }
+    </script>
+</body>
+</html>

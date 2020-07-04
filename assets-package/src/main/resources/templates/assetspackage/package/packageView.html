@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('资产包列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>资产包名称：</p>
+                                <input type="text" name="packageName"/>
+                            </li>
+                            <li>
+                                <p>状态：</p>
+                                <select name="isClose" id="isClose">
+                                    <option value="">请选择</option>
+                                    <option value="0">空包</option>
+                                    <option value="1">已封包</option>
+                                    <option value="2">已分发</option>
+                                    <option value="3">已拉回</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>创建人：</p>
+                                <input type="text" name="createBy"/>
+                            </li>
+                            <li class="select-time">
+                                <p>创建时间：</p>
+                                <input type="text" class="time-input" id="startCreateTime" placeholder="开始时间" name="startCreateTime"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endCreateTime" placeholder="结束时间" name="endCreateTime"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-primary" onclick="$.operate.add()" shiro:hasPermission="assetspackage:package:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="edit()" shiro:hasPermission="assetspackage:package:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-primary multiple disabled" onclick="batchDel()" shiro:hasPermission="assetspackage:package:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <!--
+               <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="assetspackage:package:export">
+                   <i class="fa fa-download"></i> 导出
+                </a>
+                -->
+
+                <a class="btn btn-success single disabled" onclick="assemble();">
+                    <i class="fa fa-folder"></i> 打包
+                </a>
+                <a class="btn btn-success single disabled" onclick="dismantlePack();">
+                    <i class="glyphicon glyphicon-lock"></i> 拆包
+                </a>
+                <a class="btn btn-warning single disabled" onclick="packageSend();">
+                    <i class="fa fa-send"></i> 分发
+                </a>
+                <a class="btn btn-warning single disabled" onclick="unPacking();">
+                    <i class="fa fa-rotate-left"></i> 拉回
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('assetspackage:package:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('assetspackage:package:remove')}]];
+        // var ctx = [[${@config.getKey('ctx')}]];
+        var prefix = ctx + "assetspackage/package";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                clickToSelect:true,
+                modalName: "资产包",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '主键',
+                    visible: false
+                },
+                {
+                    field : 'packageName', 
+                    title : '资产包名称',
+                    formatter: function (value, row, index) {
+                        return "<a href='javascript:void(0)' onclick='viewDetail(\""+row.id+"\",\""+row.isClose+"\")'>"+value+"</a>";
+                    }
+
+                },
+                {
+                    field : 'packageAmount', 
+                    title : '资产包总金额'
+                },
+                {
+                    field : 'packageNum', 
+                    title : '资产包总笔数'
+                },
+                {
+                    field : 'isClose', 
+                    title : '状态',
+                    formatter: function (value, row, index) {
+                        if (value == 0) {
+                            return '空包';
+                        }
+                        if (value == 1) {
+                            return '已封包';
+                        }
+                        if (value == 2) {
+                            return '已分发';
+                        }
+                        if (value == 3) {
+                            return '已拉回';
+                        }
+                    }
+                },
+                {
+                    field : 'createBy', 
+                    title : '创建人'
+                },
+                {
+                    field : 'createTime', 
+                    title : '创建时间'
+                }/*,
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        /!*actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');*!/
+                        return actions.join('');
+                    }
+                }*/]
+            };
+            $.table.init(options);
+        });
+
+        function assemble() {
+            var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+            if (id.length == 0  || id.length > 1) {
+                $.modal.alertSuccess("请选择一条记录");
+                return;
+            }
+            var isClose = $.table.selectColumns("isClose");
+            if (isClose != 0) {
+                $.modal.alertSuccess("包已分发或已封包，不能再次打包");
+                return;
+            }
+            $.modal.open("选择资产", prefix + "/assemble/" + id);
+
+        }
+
+        function packaging() {
+            var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+            if (id.length == 0 || id.length > 1) {
+                $.modal.alertSuccess("请选择一条记录");
+                return;
+            }
+            var packageId = id.join();
+            $.ajax({
+                url: prefix+"/packaging",
+                dataType: "json",
+                type: "post",
+                data:{
+                    "packageId":packageId
+                },
+                success:function(data){
+                    $.modal.alertSuccess(data.msg)
+                }
+
+            });
+        }
+
+        function unPacking() {
+            var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+            if (id.length == 0 || id.length > 1) {
+                $.modal.alertSuccess("请选择一条记录");
+                return;
+            }
+            $.modal.loading("资产拉回中，请稍后...");
+            var packageId = id.join();
+            $.ajax({
+                url: prefix+"/unPacking",
+                dataType: "json",
+                type: "post",
+                data:{
+                    "packageId":packageId
+                },
+                success:function(data){
+                    window.parent.$.modal.reload();
+                    $.modal.alertSuccess(data.msg);
+                }
+
+            });
+        }
+
+        function packageSend() {
+            var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+            if (id.length == 0) {
+                $.modal.alertSuccess("请至少选择一条记录");
+                return;
+            }
+            $.modal.open(table.options.modalName+"分发窗口", prefix + "/packageSend/" + id,600,400);
+
+        }
+        
+        function batchDel() {
+            var isClose = $.table.selectColumns("isClose");
+            if (isClose != 0) {
+                $.modal.alertSuccess("只有空包可以删除");
+                return;
+            }
+            var packageIds = $.table.selectFirstColumns();
+            $.modal.confirm("确认要删除吗?", function() {
+                // var tempAgentRecycle = prefix + '/tempAgentRecycle';
+                // var data = {"taskIds": rows.join(),oldOwnerIds:oldOwnerIdRows.join()};
+                // $.operate.submit(tempAgentRecycle, "post", "json", data);
+                // 查询当前机构下所有用户
+                var batchDelUrl = prefix + '/batchDel?packageIds='+packageIds.join();
+                $.operate.submit(batchDelUrl);
+            });
+        }
+
+        function edit() {
+            var isClose = $.table.selectColumns("isClose");
+            if (isClose != 0) {
+                $.modal.alertSuccess("只有空包可以修改");
+                return;
+            }
+            $.operate.edit();
+        }
+
+        function dismantlePack() {
+            var isClose = $.table.selectColumns("isClose");
+            if (isClose != 1) {
+                $.modal.alertSuccess("只有封包才可以拆包，空包或已分发不能拆包");
+                return;
+            }
+            var packageIds = $.table.selectFirstColumns();
+            $.modal.confirm("确认要拆包吗?", function() {
+                // 查询当前机构下所有用户
+                var dismantlePackUrl = prefix + '/dismantlePack?packageIds='+packageIds.join();
+                $.operate.submit(dismantlePackUrl);
+            });
+        }
+
+        function viewDetail(id,status) {
+            if(status==0){
+                $.modal.alertWarning("该资产包为空包！");
+                return;
+            }
+            if(status==3){
+                $.modal.alertWarning("已拉回的资产包没有资产详情！");
+                return;
+            }
+            var url = prefix + "/packageDetil/"+id;
+            var width = "800";
+            var height = $(window).height() - 50;
+            var options = {
+                title: table.options.modalName + "详情窗口",
+                width: width,
+                height: height,
+                url: url,
+                btn: ['关闭'],
+                yes: function (index, layero) {
+                    layer.close(index);
+                }
+            };
+            $.modal.openOptions(options);
+        }
+
+    </script>
+</body>
+</html>

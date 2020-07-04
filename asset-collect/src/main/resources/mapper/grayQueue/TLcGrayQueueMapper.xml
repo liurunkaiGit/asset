@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.grayQueue.mapper.TLcGrayQueueMapper">
+
+    <resultMap type="com.ruoyi.grayQueue.domain.TLcGrayQueue" id="TLcGrayQueueResult">
+        <result property="id" column="id"/>
+        <result property="taskId" column="task_id"/>
+        <result property="custCode" column="cust_code"/>
+        <result property="custName" column="cust_name"/>
+        <result property="certificateNo" column="certificate_no"/>
+        <result property="orgId" column="org_id"/>
+        <result property="ownerId" column="owner_id"/>
+        <result property="grayReason" column="gray_reason"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+        <result property="orgName" column="org_name"/>
+        <result property="ownerName" column="owner_name"/>
+    </resultMap>
+
+    <sql id="selectTLcGrayQueueVo">
+        select id, task_id, cust_code, cust_name, certificate_no, org_id, org_name, owner_id, owner_name, gray_reason, remark, create_time, create_by from t_lc_gray_queue
+    </sql>
+
+    <sql id="SELECT_GRAY_QUEUE">
+        t.id,
+        t.task_id,
+        t.cust_code,
+        t.cust_name,
+        t.certificate_no,
+        t.org_id,
+        t.org_name,
+        t.owner_id,
+        t.owner_name,
+        t.gray_reason,
+        t.remark,
+        t.create_time,
+        t.create_by
+    </sql>
+
+    <select id="selectTLcGrayQueueList" parameterType="com.ruoyi.grayQueue.domain.TLcGrayQueue"
+            resultMap="TLcGrayQueueResult">
+        SELECT <include refid="SELECT_GRAY_QUEUE"/>
+        FROM t_lc_gray_queue t
+        <where>
+            <if test="taskId != null ">and t.task_id = #{taskId}</if>
+            <if test="custCode != null  and custCode != ''">and t.cust_code = #{custCode}</if>
+            <if test="custName != null  and custName != ''">and t.cust_name like concat('%', #{custName}, '%')</if>
+            <if test="certificateNo != null  and certificateNo != ''">and t.certificate_no = #{certificateNo}</if>
+            <if test="orgId != null  and orgId != ''">and t.org_id = #{orgId}</if>
+            <if test="orgName != null  and orgName != ''">and t.org_name = #{orgName}</if>
+            <if test="ownerId != null ">and t.owner_id = #{ownerId}</if>
+            <if test="ownerName != null and ownerName != ''">and t.owner_name = #{ownerName}</if>
+            <if test="grayReason != null  and grayReason != ''">and t.gray_reason = #{grayReason}</if>
+        </where>
+    </select>
+
+    <select id="selectTLcGrayQueueById" parameterType="Long" resultMap="TLcGrayQueueResult">
+        <include refid="selectTLcGrayQueueVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTLcGrayQueue" parameterType="com.ruoyi.grayQueue.domain.TLcGrayQueue" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_lc_gray_queue
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskId != null ">task_id,</if>
+            <if test="custCode != null  and custCode != ''">cust_code,</if>
+            <if test="custName != null  and custName != ''">cust_name,</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no,</if>
+            <if test="orgId != null  and orgId != ''">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="ownerName != null  and ownerName != ''">owner_name,</if>
+            <if test="ownerId != null ">owner_id,</if>
+            <if test="grayReason != null  and grayReason != ''">gray_reason,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            create_time,
+            <if test="createBy != null ">create_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskId != null ">#{taskId},</if>
+            <if test="custCode != null  and custCode != ''">#{custCode},</if>
+            <if test="custName != null  and custName != ''">#{custName},</if>
+            <if test="certificateNo != null  and certificateNo != ''">#{certificateNo},</if>
+            <if test="orgId != null  and orgId != ''">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="ownerName != null and ownerName != ''">#{ownerName},</if>
+            <if test="ownerId != null  and ownerId != ''">#{ownerId},</if>
+            <if test="grayReason != null  and grayReason != ''">#{grayReason},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            NOW(),
+            <if test="createBy != null ">#{createBy},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTLcGrayQueue" parameterType="com.ruoyi.grayQueue.domain.TLcGrayQueue">
+        update t_lc_gray_queue
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskId != null ">task_id = #{taskId},</if>
+            <if test="custCode != null  and custCode != ''">cust_code = #{custCode},</if>
+            <if test="custName != null  and custName != ''">cust_name = #{custName},</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no = #{certificateNo},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="ownerName != null  and ownerName != ''">owner_name = #{ownerName},</if>
+            <if test="ownerId != null ">owner_id = #{ownerId},</if>
+            <if test="grayReason != null  and grayReason != ''">gray_reason = #{grayReason},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="validateStatus != null ">validate_status = #{validateStatus},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="modifyTime != null ">modify_time = #{modifyTime},</if>
+            <if test="createBy != null ">create_by = #{createBy},</if>
+            <if test="modifyBy != null ">modify_by = #{modifyBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcGrayQueueById" parameterType="Long">
+        delete from t_lc_gray_queue where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcGrayQueueByIds" parameterType="String">
+        delete from t_lc_gray_queue where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.report.mapper.TLcReportCaseContactMapper">
+
+    <resultMap type="com.ruoyi.report.domain.TLcReportCaseContact" id="TLcReportCaseContactResult">
+        <result property="id" column="id"/>
+        <result property="reportDate" column="report_date"/>
+        <result property="appointCaseMoneySection" column="appoint_case_money_section"/>
+        <result property="totalCustomer" column="total_customer"/>
+        <result property="canContactCustomer" column="can_contact_customer"/>
+        <result property="customerContactRecovery" column="customer_contact_recovery"/>
+        <result property="canContactCount" column="can_contact_count"/>
+        <result property="canContactCasePermetaRecovery" column="can_contact_case_permeta_recovery"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="orgId" column="org_id"/>
+        <result property="orgName" column="org_name"/>
+    </resultMap>
+
+    <sql id="selectTLcReportCaseContactVo">
+        select id, report_date, appoint_case_money_section, total_customer, can_contact_customer, customer_contact_recovery, can_contact_count, can_contact_case_permeta_recovery, create_by, create_time, org_id, org_name from t_lc_report_case_contact
+    </sql>
+
+    <select id="selectTLcReportCaseContactList" parameterType="com.ruoyi.report.domain.TLcReportCaseContact"
+            resultMap="TLcReportCaseContactResult">
+        <include refid="selectTLcReportCaseContactVo"/>
+        <where>
+            <if test="reportDate != null ">and report_date = #{reportDate}</if>
+            <if test="appointCaseMoneySection != null  and appointCaseMoneySection != ''">and appoint_case_money_section
+                = #{appointCaseMoneySection}
+            </if>
+            <if test="totalCustomer != null ">and total_customer = #{totalCustomer}</if>
+            <if test="canContactCustomer != null ">and can_contact_customer = #{canContactCustomer}</if>
+            <if test="customerContactRecovery != null  and customerContactRecovery != ''">and customer_contact_recovery
+                = #{customerContactRecovery}
+            </if>
+            <if test="canContactCount != null ">and can_contact_count = #{canContactCount}</if>
+            <if test="canContactCasePermetaRecovery != null  and canContactCasePermetaRecovery != ''">and
+                can_contact_case_permeta_recovery = #{canContactCasePermetaRecovery}
+            </if>
+            <if test="orgId != null  and orgId != ''">and org_id = #{orgId}</if>
+        </where>
+    </select>
+
+    <select id="selectTLcReportCaseContactById" parameterType="Long" resultMap="TLcReportCaseContactResult">
+        <include refid="selectTLcReportCaseContactVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTLcReportCaseContact" parameterType="com.ruoyi.report.domain.TLcReportCaseContact"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_report_case_contact
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reportDate != null ">report_date,</if>
+            <if test="appointCaseMoneySection != null  and appointCaseMoneySection != ''">appoint_case_money_section,
+            </if>
+            <if test="totalCustomer != null ">total_customer,</if>
+            <if test="canContactCustomer != null ">can_contact_customer,</if>
+            <if test="customerContactRecovery != null  and customerContactRecovery != ''">customer_contact_recovery,
+            </if>
+            <if test="canContactCount != null ">can_contact_count,</if>
+            <if test="canContactCasePermetaRecovery != null  and canContactCasePermetaRecovery != ''">
+                can_contact_case_permeta_recovery,
+            </if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            create_time,
+            <if test="orgId != null  and orgId != ''">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reportDate != null ">#{reportDate},</if>
+            <if test="appointCaseMoneySection != null  and appointCaseMoneySection != ''">#{appointCaseMoneySection},
+            </if>
+            <if test="totalCustomer != null ">#{totalCustomer},</if>
+            <if test="canContactCustomer != null ">#{canContactCustomer},</if>
+            <if test="customerContactRecovery != null  and customerContactRecovery != ''">#{customerContactRecovery},
+            </if>
+            <if test="canContactCount != null ">#{canContactCount},</if>
+            <if test="canContactCasePermetaRecovery != null  and canContactCasePermetaRecovery != ''">
+                #{canContactCasePermetaRecovery},
+            </if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            NOW(),
+            <if test="orgId != null  and orgId != ''">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTLcReportCaseContact" parameterType="com.ruoyi.report.domain.TLcReportCaseContact">
+        update t_lc_report_case_contact
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="reportDate != null ">report_date = #{reportDate},</if>
+            <if test="appointCaseMoneySection != null  and appointCaseMoneySection != ''">appoint_case_money_section =
+                #{appointCaseMoneySection},
+            </if>
+            <if test="totalCustomer != null ">total_customer = #{totalCustomer},</if>
+            <if test="canContactCustomer != null ">can_contact_customer = #{canContactCustomer},</if>
+            <if test="customerContactRecovery != null  and customerContactRecovery != ''">customer_contact_recovery =
+                #{customerContactRecovery},
+            </if>
+            <if test="canContactCount != null ">can_contact_count = #{canContactCount},</if>
+            <if test="canContactCasePermetaRecovery != null  and canContactCasePermetaRecovery != ''">
+                can_contact_case_permeta_recovery = #{canContactCasePermetaRecovery},
+            </if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcReportCaseContactById" parameterType="Long">
+        delete from t_lc_report_case_contact where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcReportCaseContactByIds" parameterType="String">
+        delete from t_lc_report_case_contact where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectCaseContactList" parameterType="java.util.Map" resultMap="TLcReportCaseContactResult">
+        SELECT
+        (
+        SELECT
+        date_sub(curdate(), INTERVAL #{day} DAY)
+        ) AS report_date,
+        '1万以下' AS appoint_case_money_section,
+        count(1) AS total_customer,
+        t.org_id AS org_id,
+        count(t2.can_contact_customer) AS can_contact_customer,
+        count(t2.can_contact_customer) / count(1) AS customer_contact_recovery,
+        t1.can_contact_count,
+        t1.can_contact_count / count(t2.can_contact_customer) AS can_contact_case_permeta_recovery
+        FROM
+        t_lc_task t
+        LEFT JOIN (
+        SELECT
+        count(1) AS can_contact_count,
+        t.case_no
+        FROM
+        t_lc_call_record t
+        WHERE
+        EXISTS (
+        SELECT
+        cc.call_code
+        FROM
+        t_lc_call_code cc
+        WHERE
+        t.call_sign = cc.call_code
+        )
+        ) t1 ON t.case_no = t1.case_no
+        LEFT JOIN (
+        SELECT
+        count(1) AS can_contact_customer,
+        t.case_no
+        FROM
+        t_lc_call_record t
+        WHERE
+        EXISTS (
+        SELECT
+        cc.call_code
+        FROM
+        t_lc_call_code cc
+        WHERE
+        cc.is_connected = 1
+        AND t.call_sign = cc.call_code
+        )
+        GROUP BY
+        t.case_no
+        ) t2 ON t.case_no = t2.case_no
+        WHERE
+        t.arrears_total &lt;= 10000
+        <if test="orgId != null and orgId != ''">
+            AND t.org_id = #{orgId}
+        </if>
+        <if test="startDate != null">
+            and t.create_time <![CDATA[>=]]> #{startDate}
+        </if>
+        GROUP BY
+        t.org_id
+        UNION ALL
+        SELECT
+        (
+        SELECT
+        date_sub(curdate(), INTERVAL #{day} DAY)
+        ) AS report_date,
+        '1万-2万' AS appoint_case_money_section,
+        count(1) AS total_customer,
+        t.org_id AS org_id,
+        count(t2.can_contact_customer) AS can_contact_customer,
+        count(t2.can_contact_customer) / count(1) AS customer_contact_recovery,
+        t1.can_contact_count,
+        t1.can_contact_count / count(t2.can_contact_customer) AS can_contact_case_permeta_recovery
+        FROM
+        t_lc_task t
+        LEFT JOIN (
+        SELECT
+        count(1) AS can_contact_count,
+        t.case_no
+        FROM
+        t_lc_call_record t
+        WHERE
+        EXISTS (
+        SELECT
+        cc.call_code
+        FROM
+        t_lc_call_code cc
+        WHERE
+        t.call_sign = cc.call_code
+        )
+        ) t1 ON t.case_no = t1.case_no
+        LEFT JOIN (
+        SELECT
+        count(1) AS can_contact_customer,
+        t.case_no
+        FROM
+        t_lc_call_record t
+        WHERE
+        EXISTS (
+        SELECT
+        cc.call_code
+        FROM
+        t_lc_call_code cc
+        WHERE
+        t.call_sign = cc.call_code
+        )
+        GROUP BY
+        t.case_no
+        ) t2 ON t.case_no = t2.case_no
+        WHERE
+        t.arrears_total &gt; 10000
+        AND t.arrears_total &lt;= 20000
+        <if test="orgId != null and orgId != ''">
+            AND t.org_id = #{orgId}
+        </if>
+        <if test="startDate != null">
+            and t.create_time <![CDATA[>=]]> #{startDate}
+        </if>
+        GROUP BY
+        t.org_id
+        UNION ALL
+        SELECT
+        (
+        SELECT
+        date_sub(curdate(), INTERVAL #{day} DAY)
+        ) AS report_date,
+        '2万-3万' AS appoint_case_money_section,
+        count(1) AS total_customer,
+        t.org_id AS org_id,
+        count(t2.can_contact_customer) AS can_contact_customer,
+        count(t2.can_contact_customer) / count(1) AS customer_contact_recovery,
+        t1.can_contact_count,
+        t1.can_contact_count / count(t2.can_contact_customer) AS can_contact_case_permeta_recovery
+        FROM
+        t_lc_task t
+        LEFT JOIN (
+        SELECT
+        count(1) AS can_contact_count,
+        t.case_no
+        FROM
+        t_lc_call_record t
+        WHERE
+        EXISTS (
+        SELECT
+        cc.call_code
+        FROM
+        t_lc_call_code cc
+        WHERE
+        t.call_sign = cc.call_code
+        )
+        ) t1 ON t.case_no = t1.case_no
+        LEFT JOIN (
+        SELECT
+        count(1) AS can_contact_customer,
+        t.case_no
+        FROM
+        t_lc_call_record t
+        WHERE
+        EXISTS (
+        SELECT
+        cc.call_code
+        FROM
+        t_lc_call_code cc
+        WHERE
+        t.call_sign = cc.call_code
+        )
+        GROUP BY
+        t.case_no
+        ) t2 ON t.case_no = t2.case_no
+        WHERE
+        t.arrears_total &gt; 20000
+        AND t.arrears_total &lt;= 30000
+        <if test="orgId != null and orgId != ''">
+            AND t.org_id = #{orgId}
+        </if>
+        <if test="startDate != null">
+            and t.create_time <![CDATA[>=]]> #{startDate}
+        </if>
+        GROUP BY
+        t.org_id
+        UNION ALL
+        SELECT
+        (
+        SELECT
+        date_sub(curdate(), INTERVAL #{day} DAY)
+        ) AS report_date,
+        '3万-5万' AS appoint_case_money_section,
+        count(1) AS total_customer,
+        t.org_id AS org_id,
+        count(t2.can_contact_customer) AS can_contact_customer,
+        count(t2.can_contact_customer) / count(1) AS customer_contact_recovery,
+        t1.can_contact_count,
+        t1.can_contact_count / count(t2.can_contact_customer) AS can_contact_case_permeta_recovery
+        FROM
+        t_lc_task t
+        LEFT JOIN (
+        SELECT
+        count(1) AS can_contact_count,
+        t.case_no
+        FROM
+        t_lc_call_record t
+        WHERE
+        EXISTS (
+        SELECT
+        cc.call_code
+        FROM
+        t_lc_call_code cc
+        WHERE
+        t.call_sign = cc.call_code
+        )
+        ) t1 ON t.case_no = t1.case_no
+        LEFT JOIN (
+        SELECT
+        count(1) AS can_contact_customer,
+        t.case_no
+        FROM
+        t_lc_call_record t
+        WHERE
+        EXISTS (
+        SELECT
+        cc.call_code
+        FROM
+        t_lc_call_code cc
+        WHERE
+        t.call_sign = cc.call_code
+        )
+        GROUP BY
+        t.case_no
+        ) t2 ON t.case_no = t2.case_no
+        WHERE
+        t.arrears_total &gt; 30000
+        AND t.arrears_total &lt;= 50000
+        <if test="orgId != null and orgId != ''">
+            AND t.org_id = #{orgId}
+        </if>
+        <if test="startDate != null">
+            and t.create_time <![CDATA[>=]]> #{startDate}
+        </if>
+        GROUP BY
+        t.org_id
+        UNION ALL
+        SELECT
+        (
+        SELECT
+        date_sub(curdate(), INTERVAL #{day} DAY)
+        ) AS report_date,
+        '5万-10万' AS appoint_case_money_section,
+        count(1) AS total_customer,
+        t.org_id AS org_id,
+        count(t2.can_contact_customer) AS can_contact_customer,
+        count(t2.can_contact_customer) / count(1) AS customer_contact_recovery,
+        t1.can_contact_count,
+        t1.can_contact_count / count(t2.can_contact_customer) AS can_contact_case_permeta_recovery
+        FROM
+        t_lc_task t
+        LEFT JOIN (
+        SELECT
+        count(1) AS can_contact_count,
+        t.case_no
+        FROM
+        t_lc_call_record t
+        WHERE
+        EXISTS (
+        SELECT
+        cc.call_code
+        FROM
+        t_lc_call_code cc
+        WHERE
+        t.call_sign = cc.call_code
+        )
+        ) t1 ON t.case_no = t1.case_no
+        LEFT JOIN (
+        SELECT
+        count(1) AS can_contact_customer,
+        t.case_no
+        FROM
+        t_lc_call_record t
+        WHERE
+        EXISTS (
+        SELECT
+        cc.call_code
+        FROM
+        t_lc_call_code cc
+        WHERE
+        t.call_sign = cc.call_code
+        )
+        GROUP BY
+        t.case_no
+        ) t2 ON t.case_no = t2.case_no
+        WHERE
+        t.arrears_total &gt; 50000
+        AND t.arrears_total &lt;= 100000
+        <if test="orgId != null and orgId != ''">
+            AND t.org_id = #{orgId}
+        </if>
+        <if test="startDate != null">
+            and t.create_time <![CDATA[>=]]> #{startDate}
+        </if>
+        GROUP BY
+        t.org_id
+        UNION ALL
+        SELECT
+        (
+        SELECT
+        date_sub(
+        curdate(),
+        INTERVAL #{day} DAY)
+        ) AS report_date,
+        '10万以上' AS appoint_case_money_section,
+        count(1) AS total_customer,
+        t.org_id AS org_id,
+        count(t2.can_contact_customer) AS can_contact_customer,
+        count(t2.can_contact_customer) / count(1) AS customer_contact_recovery,
+        t1.can_contact_count,
+        t1.can_contact_count / count(t2.can_contact_customer) AS can_contact_case_permeta_recovery
+        FROM
+        t_lc_task t
+        LEFT JOIN (
+        SELECT
+        count(1) AS can_contact_count,
+        t.case_no
+        FROM
+        t_lc_call_record t
+        WHERE
+        EXISTS (
+        SELECT
+        cc.call_code
+        FROM
+        t_lc_call_code cc
+        WHERE
+        t.call_sign = cc.call_code
+        )
+        ) t1 ON t.case_no = t1.case_no
+        LEFT JOIN (
+        SELECT
+        count(1) AS can_contact_customer,
+        t.case_no
+        FROM
+        t_lc_call_record t
+        WHERE
+        EXISTS (
+        SELECT
+        cc.call_code
+        FROM
+        t_lc_call_code cc
+        WHERE
+        t.call_sign = cc.call_code
+        )
+        GROUP BY
+        t.case_no
+        ) t2 ON t.case_no = t2.case_no
+        WHERE
+        t.arrears_total &gt; 100000
+        <if test="orgId != null and orgId != ''">
+            AND t.org_id = #{orgId}
+        </if>
+        <if test="startDate != null">
+            and t.create_time <![CDATA[>=]]> #{startDate}
+        </if>
+        GROUP BY
+        t.org_id
+        UNION ALL
+        SELECT
+        (
+        SELECT
+        date_sub(curdate(), INTERVAL #{day} DAY)
+        ) AS report_date,
+        '合计' AS appoint_case_money_section,
+        count(1) AS total_customer,
+        t.org_id AS org_id,
+        count(t2.can_contact_customer) AS can_contact_customer,
+        count(t2.can_contact_customer) / count(1) AS customer_contact_recovery,
+        t1.can_contact_count,
+        t1.can_contact_count / count(t2.can_contact_customer) AS can_contact_case_permeta_recovery
+        FROM
+        t_lc_task t
+        LEFT JOIN (
+        SELECT
+        count(1) AS can_contact_count,
+        t.case_no
+        FROM
+        t_lc_call_record t
+        WHERE
+        EXISTS (
+        SELECT
+        cc.call_code
+        FROM
+        t_lc_call_code cc
+        WHERE
+        t.call_sign = cc.call_code
+        )
+        ) t1 ON t.case_no = t1.case_no
+        LEFT JOIN (
+        SELECT
+        count(1) AS can_contact_customer,
+        t.case_no
+        FROM
+        t_lc_call_record t
+        WHERE
+        EXISTS (
+        SELECT
+        cc.call_code
+        FROM
+        t_lc_call_code cc
+        WHERE
+        t.call_sign = cc.call_code
+        )
+        GROUP BY
+        t.case_no
+        ) t2 ON t.case_no = t2.case_no
+        WHERE 1=1
+        <if test="orgId != null and orgId != ''">
+            AND t.org_id = #{orgId}
+        </if>
+        <if test="startDate != null">
+            and t.create_time <![CDATA[>=]]> #{startDate}
+        </if>
+        GROUP BY
+        t.org_id
+    </select>
+
+</mapper>

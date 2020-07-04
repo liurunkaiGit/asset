@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('任务列表')" />
+    <style type="text/css">
+        .time-input{
+            display: inline;
+        }
+    </style>
+    <link th:href="@{/ajax/libs/bootstrap-select/bootstrap-select.css }"rel="stylesheet"/>
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row" >
+            <div class="col-sm-12 search-collapse" >
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <!--<input type="hidden" id="id" name="id" th:value="${id}">-->
+                            <input type="hidden" id="orgId" name="orgId" th:value="${orgId}">
+                            <li>
+                                <p>机构案件号：</p>
+                                <input type="text" name="caseNo" id="caseNo"/>
+                            </li>
+                            <li>
+                                <p>姓名：</p>
+                                <input type="text" name="customName" id="customName"/>
+                            </li>
+                            <li>
+                                <p>任务状态：</p>
+                                <!-- 1：未分配 2：催收中 3: 已结案-->
+                                <select name="taskStatus" id="taskStatus" th:with="type=${@dict.getType('sys_task_state')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>历史电话码：</p>
+                                <select name="callCodeHistoryListStr" id="callCodeHistoryListStr" th:with="dictList=${@dict.getType('call_record_code')}" class="selectpicker" title="全部" multiple data-live-search="true" data-actions-box="true" data-selected-text-format="count > 4">
+                                    <option th:each="dict : ${dictList}" th:text=" ${dict.dictValue} + '(' +${dict.dictLabel} +')'"
+                                            th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <!--自由查询开始-->
+                            <input type="hidden" id="freeSQL" name="freeSQL" />
+                            <li>
+                                <div class="freeSearch">
+                                    <select id="oneAndOr"  style="width:85px;margin:0 0 0 10px;">
+                                        <option value="AND" selected="selected">并且</option>
+                                        <option value="OR">或者</option>
+                                    </select>
+                                    <select id="oneColumn" onchange="viewOption('oneColumn','oneOper','oneOption')">
+                                        <option value="">字段</option>
+                                    </select>
+                                    <select id="oneOper" onchange="viewOption('oneColumn','oneOper','oneOption')" style="width: 93px;">
+                                        <option value="">运算符</option>
+                                        <option value="1">等于</option>
+                                        <option value="2">包含</option>
+                                        <option value="3">范围</option>
+                                        <option value="4">不等于</option>
+                                        <option value="5">开头字符</option>
+                                        <option value="6">结尾字符</option>
+                                        <option value="7">为空</option>
+                                        <option value="8">不为空</option>
+                                    </select>
+                                    <span id="oneOption"><input type="text"/></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="freeSearch">
+                                    <select id="twoAndOr"  style="width:85px;margin:0 0 0 10px;">
+                                        <option value="AND"  selected="selected">并且</option>
+                                        <option value="OR">或者</option>
+                                    </select>
+                                    <select id="twoColumn" onchange="viewOption('twoColumn','twoOper','twoOption')">
+                                        <option value="">字段</option>
+                                    </select>
+                                    <select id="twoOper" onchange="viewOption('twoColumn','twoOper','twoOption')" style="width: 93px;">
+                                        <option value="">运算符</option>
+                                        <option value="1">等于</option>
+                                        <option value="2">包含</option>
+                                        <option value="3">范围</option>
+                                        <option value="4">不等于</option>
+                                        <option value="5">开头字符</option>
+                                        <option value="6">结尾字符</option>
+                                        <option value="7">为空</option>
+                                        <option value="8">不为空</option>
+                                    </select>
+                                    <span id="twoOption"><input type="text"/></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="freeSearch">
+                                    <select id="threeAndOr"  style="width:85px;margin:0 0 0 10px;">
+                                        <option value="AND"  selected="selected">并且</option>
+                                        <option value="OR">或者</option>
+                                    </select>
+                                    <select id="threeColumn" onchange="viewOption('threeColumn','threeOper','threeOption')">
+                                        <option value="">字段</option>
+                                    </select>
+                                    <select id="threeOper" onchange="viewOption('threeColumn','threeOper','threeOption')" style="width: 93px;">
+                                        <option value="">运算符</option>
+                                        <option value="1">等于</option>
+                                        <option value="2">包含</option>
+                                        <option value="3">范围</option>
+                                        <option value="4">不等于</option>
+                                        <option value="5">开头字符</option>
+                                        <option value="6">结尾字符</option>
+                                        <option value="7">为空</option>
+                                        <option value="8">不为空</option>
+                                    </select>
+                                    <span id="threeOption"><input type="text"/></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="freeSearch">
+                                    <select id="fourAndOr"  style="width:85px;margin:0 0 0 10px;">
+                                        <option value="AND"  selected="selected">并且</option>
+                                        <option value="OR">或者</option>
+                                    </select>
+                                    <select id="fourColumn" onchange="viewOption('fourColumn','fourOper','fourOption')">
+                                        <option value="">字段</option>
+                                    </select>
+                                    <select id="fourOper" onchange="viewOption('fourColumn','fourOper','fourOption')" style="width: 93px;">
+                                        <option value="">运算符</option>
+                                        <option value="1">等于</option>
+                                        <option value="2">包含</option>
+                                        <option value="3">范围</option>
+                                        <option value="4">不等于</option>
+                                        <option value="5">开头字符</option>
+                                        <option value="6">结尾字符</option>
+                                        <option value="7">为空</option>
+                                        <option value="8">不为空</option>
+                                    </select>
+                                    <span id="fourOption"><input type="text"/></span>
+                                </div>
+                            </li>
+                            <!--自由查询结束-->
+                            <li>
+                                <!--<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>-->
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="selectSearch()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <button type="button" class="btn btn-success" onclick="reAllocat()">任务分派</button>
+                <button type="button" class="btn btn-success" onclick="tempAgent()">临时代理</button>
+                <button type="button" class="btn btn-success" onclick="tempAgentRecycle()">临时代理回收</button>
+                <button type="button" class="btn btn-success" onclick="closeCase()">结案</button>
+                <button type="button" class="btn btn-success" onclick="sendRobot()">推送到机器人</button>
+                <button type="button" class="btn btn-success" onclick="signRepay('ALPA')">标记还款</button>
+                <button type="button" class="btn btn-success" onclick="signRepay('QXBJ')">取消标记还款</button>
+                选择全部&nbsp;&nbsp;<input id="selectAll" type="checkbox" onclick="chackAll()">
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+
+         <div class="col-sm-12">
+             <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+                 <div class="modal-dialog">
+                     <div class="modal-content animated bounceInRight">
+                         <div class="modal-header">
+                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
+                             </button>
+                         </div>
+                         <input type="hidden" id="closeCaseUrl" />
+                         <div class="modal-body" style="height: 200px;">
+                             <div class="form-group">
+                                 <span style="font-size: 15px;color:black;">&nbsp;&nbsp;结案方式：</span>
+                                 <select name="closeCaseType" id="closeCaseType" style="padding: 3px;width:200px;">
+                                     <option value="1">出催结案</option>
+                                     <option value="2">回收结案</option>
+                                 </select>
+                             </div>
+                         </div>
+                         <div class="modal-footer">
+                             <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                             <button type="button" class="btn btn-primary" onclick="closeCaseSave();">保存</button>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+
+    </div>
+
+
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+     <script th:src="@{/ajax/libs/bootstrap-select/bootstrap-select.min.js}"></script>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:task:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:task:remove')}]];
+        var carTypeDatas = [[${@dict.getType('sys_car_type')}]];
+        var taskStatusDatas = [[${@dict.getType('sys_task_state')}]];
+        var taskTypeDatas = [[${@dict.getType('sys_task_type')}]];
+        var prefix = ctx + "collect/task";
+        var custTagPrefix = ctx + "collect/cust/tag";
+        var packagePrefix = ctx + "assetspackage/package";
+        var duncaseActionPrefix = ctx + "collect/duncase/action";
+        var columnQyeryPrefix = ctx + "column/query";
+        //var checkAll = false;
+
+        $(function() {
+            initColumnQuery();
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                clickToSelect:true,
+                rememberSelected:true,
+                modalName: "任务",
+                columns: [{
+                    field: 'state',
+                    checkbox: true
+                },
+                {
+                    field : 'id',
+                    title : '主鍵ID',
+                    visible: false
+                },{
+                    field : 'caseNo',
+                    title : '机构案件号',
+                    formatter: function(value, row, index) {
+                        return "<a href='javascript:void(0)' onclick='collHis(\""+value + "\",\""+row.orgId + "\",\""+row.importBatchNo+ "\")'>"+value+"</a>";
+                    }
+                },
+                {
+                    field : 'transferType',
+                    title : '手别'
+                },
+                    {
+                        field : 'enterCollDate',
+                        title : '入催日'
+                    },
+                {
+                    field : 'customName',
+                    title : '客户姓名'
+                },
+                {
+                    field : 'arrearsTotal',
+                    title : '委案金额',
+                    sortable: true
+
+                },
+                {
+                    field : 'closeCaseYhje',
+                    title : '结案应还金额',
+                    sortable: true
+
+                },
+                    {
+                        field : 'dqyhje',
+                        title : '当前已还金额',
+                        sortable: true
+
+                    },
+                    {
+                        field : 'ljyhje',
+                        title : '累计已还金额',
+                        sortable: true
+
+                    },
+                {
+                    field : 'taskStatus',
+                    title : '任务状态',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(taskStatusDatas, value);
+                    }
+                },
+                {
+                    field : 'taskType',
+                    title : '任务类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(taskTypeDatas, value);
+                    }
+                },
+                {
+                    field : 'recentlyAllotDate',
+                    title : '最近分配日期',
+                    sortable: true
+
+                },
+                {
+                    field : 'recentlyFollowUpDate',
+                    title : '最近跟进日期',
+                    sortable: true
+
+                },
+                {
+                    field : 'ownerName',
+                    title : '业务归属人'
+                },
+                {
+                    field : 'userGroup',
+                    title : '组别'
+                },
+                {
+                    field : 'callSign',
+                    title : '最近电话码',
+                    formatter: function(value, row, index) {
+                        return getCallCode(value,row.callSignValue);
+                    }
+                },
+                {
+                    field : 'actionCode',
+                    title : '最近行动码',
+                    formatter: function(value, row, index) {
+                        return getActionCode(value,row.actionCodeValue);
+                    }
+                },
+                {
+                    field : 'productName',
+                    title : '产品名称'
+                },
+                {
+                    field: 'score',
+                    title: '催收评分'
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function viewOption(column,oper,option) {
+            var selectColumn = $("#"+column).val();
+            var selectOper = $("#"+oper).val();
+            $("#"+option).html('<input type="text" /> ');
+            if(selectColumn != null && selectColumn != '' && selectOper != null && selectOper != ''){
+                var columnName = selectColumn.split(",")[0];
+                var columnType = selectColumn.split(",")[1];
+                var beanName = selectColumn.split(",")[2];
+                if(selectOper == "1" || selectOper == "2" || selectOper == "4" || selectOper == "5" || selectOper == "6"){//等于、包含、不等于、开头、结尾
+                    if(columnType == "date_interval"){//字段类型为日期
+                        $("#"+option).html('<input type="text"  placeholder="开始时间" style="width: 185px;" class="time-input"/>');
+                        if ($(".time-input").length > 0) {
+                            layui.use('laydate', function () {
+                                var com = layui.laydate;
+                                $(".time-input").each(function (index, item) {
+                                    var time = $(item);
+                                    var type = time.attr("data-type") || 'date';// 控制控件外观
+                                    var format = time.attr("data-format") || 'yyyy-MM-dd';// 控制回显格式
+                                    var buttons = time.attr("data-btn") || 'clear|now|confirm', newBtnArr = [];// 控制日期控件按钮
+                                    var callback = time.attr("data-callback") || {};// 日期控件选择完成后回调处理
+                                    if (buttons) {
+                                        if (buttons.indexOf("|") > 0) {
+                                            var btnArr = buttons.split("|"), btnLen = btnArr.length;
+                                            for (var j = 0; j < btnLen; j++) {
+                                                if ("clear" === btnArr[j] || "now" === btnArr[j] || "confirm" === btnArr[j]) {
+                                                    newBtnArr.push(btnArr[j]);
+                                                }
+                                            }
+                                        } else {
+                                            if ("clear" === buttons || "now" === buttons || "confirm" === buttons) {
+                                                newBtnArr.push(buttons);
+                                            }
+                                        }
+                                    } else {
+                                        newBtnArr = ['clear', 'now', 'confirm'];
+                                    }
+                                    com.render({
+                                        elem: item,
+                                        theme: 'molv',
+                                        trigger: 'click',
+                                        type: type,
+                                        format: format,
+                                        btns: newBtnArr,
+                                        done: function (value, data) {
+                                            if (typeof window[callback] != 'undefined'
+                                                && window[callback] instanceof Function) {
+                                                window[callback](value, data);
+                                            }
+                                        }
+                                    });
+                                });
+                            });
+                        }
+                    }else if(columnType == "dict"){//字段类型为数据字典
+                        $("#"+option).html("");
+                        var opt = "";
+                        var compareValue = selectColumn.split(",")[3];
+                        if (compareValue != null && compareValue != '') {
+                            for (var i = 0; i < compareValue.split("|").length; i++) {
+                                var dictValue = compareValue.split("|")[i];
+                                opt += "<option value='" + dictValue.split(":")[0] + "'>" + dictValue.split(":")[0] + "(" +dictValue.split(":")[1] +")</option>";
+                            }
+                        }
+                        $("#"+option).html('<select ><option value="">请选择</option>'+opt+'</select>');
+                    }else{
+                        $("#"+option).html('<input type="text" /> ');
+                    }
+
+                }else if(selectOper == "3" ) {//范围
+                    var startName = "start_" + columnName;
+                    var endName = "end_" + columnName;
+                    if(columnType == "date_interval"){//字段类型为日期
+                        $("#"+option).html('<input type="text"  placeholder="开始时间" style="width: 85px;" class="time-input"/> <span>-</span> <input type="text"  placeholder="结束时间" style="width: 85px;" class="time-input"/>');
+                        if ($(".time-input").length > 0) {
+                            layui.use('laydate', function () {
+                                var com = layui.laydate;
+                                $(".time-input").each(function (index, item) {
+                                    var time = $(item);
+                                    var type = time.attr("data-type") || 'date';// 控制控件外观
+                                    var format = time.attr("data-format") || 'yyyy-MM-dd';// 控制回显格式
+                                    var buttons = time.attr("data-btn") || 'clear|now|confirm', newBtnArr = [];// 控制日期控件按钮
+                                    var callback = time.attr("data-callback") || {};// 日期控件选择完成后回调处理
+                                    if (buttons) {
+                                        if (buttons.indexOf("|") > 0) {
+                                            var btnArr = buttons.split("|"), btnLen = btnArr.length;
+                                            for (var j = 0; j < btnLen; j++) {
+                                                if ("clear" === btnArr[j] || "now" === btnArr[j] || "confirm" === btnArr[j]) {
+                                                    newBtnArr.push(btnArr[j]);
+                                                }
+                                            }
+                                        } else {
+                                            if ("clear" === buttons || "now" === buttons || "confirm" === buttons) {
+                                                newBtnArr.push(buttons);
+                                            }
+                                        }
+                                    } else {
+                                        newBtnArr = ['clear', 'now', 'confirm'];
+                                    }
+                                    com.render({
+                                        elem: item,
+                                        theme: 'molv',
+                                        trigger: 'click',
+                                        type: type,
+                                        format: format,
+                                        btns: newBtnArr,
+                                        done: function (value, data) {
+                                            if (typeof window[callback] != 'undefined'
+                                                && window[callback] instanceof Function) {
+                                                window[callback](value, data);
+                                            }
+                                        }
+                                    });
+                                });
+                            });
+                        }
+                    }else if(columnType == "dict"){//字段类型为数据字典
+                        $("#"+option).html("");
+                        var opt = "";
+                        var compareValue = selectColumn.split(",")[3];
+                        if (compareValue != null && compareValue != '') {
+                            for (var i = 0; i < compareValue.split("|").length; i++) {
+                                var dictValue = compareValue.split("|")[i];
+                                opt += "<option value='" + dictValue.split(":")[0] + "'>" + dictValue.split(":")[0] + "(" +dictValue.split(":")[1] +")</option>";
+                            }
+                        }
+                        $("#"+option).html('<select   style="width: 85px;"><option value="">请选择</option>'+opt+'</select><span style="margin: 0 4px 0 4px;">-</span><select  style="width: 85px;" ><option value="">请选择</option>'+opt+'</select>');
+                    }else{
+                        $("#"+option).html('<input type="text"   style="width: 85px;"/><span style="margin: 0 4px 0 4px;">-</span><input type="text"   style="width: 85px;"/> ');
+                    }
+
+                }else if(selectOper == "7" || selectOper == "8" ) {//为空、不为空
+                    $("#"+option).html('<input type="text"/> ');
+                }
+            }
+
+        }
+
+        function initColumnQuery() {
+            $.post(
+                columnQyeryPrefix + "/initColumnQuery",
+                {
+                    tableName:'t_lc_task',
+                    orgId:$('#orgId').val()
+                }, // 请求参数
+                function (data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            var opt = "<option value='" + data.rows[i].columnName + "," + data.rows[i].columnType + "," + data.rows[i].beanName + "," + data.rows[i].columnValue + "," + data.rows[i].tablePrefix + "'>" + data.rows[i].columnNameCn + "</option>";
+                            $("#oneColumn").append(opt);
+                            $("#twoColumn").append(opt);
+                            $("#threeColumn").append(opt);
+                            $("#fourColumn").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function initFreeSearch(){
+            var freeSQL = "";
+            $(".freeSearch").each(function(i,n){
+                var obj = $(n);
+                var andOr = obj.children().eq(0).val();//并且与或者
+                var columnInfo = obj.children().eq(1).val();//字段信息
+                var selectOper = obj.children().eq(2).val();//运算符
+                if(columnInfo != null && columnInfo != '' && selectOper != null && selectOper != ''){
+                    var columnName = columnInfo.split(",")[0];
+                    var columnType = columnInfo.split(",")[1];
+                    var tablePrefix = columnInfo.split(",")[4];
+                    var columnValue = obj.children().eq(3).children().eq(0).val();
+                    if(selectOper == "1" ) {//等于
+                        if(columnValue != null && columnValue != ''){
+                            freeSQL += andOr +" " + tablePrefix +"." +  columnName + " ='" +  columnValue + "' ";
+                        }
+                    }else if(selectOper == "2" ) {//包含
+                        if(columnValue != null && columnValue != ''){
+                            freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " like'%" +  columnValue + "%' ";
+                        }
+                    }else if(selectOper == "3" ) {//范围
+                        var startValue = columnValue;
+                        var endValue = obj.children().eq(3).children().eq(2).val();
+                        if (columnType == "date_interval") {
+                            if(startValue != null && startValue != ''){
+                                freeSQL += andOr +" " + tablePrefix +"." +  columnName + " >='" +  startValue + "' ";
+                            }
+                            if(endValue != null && endValue != ''){
+                                freeSQL += andOr +" " + tablePrefix +"." +  columnName + " <='" +  endValue + " 23:59:59' ";
+                            }
+                        }else{
+                            if(startValue != null && startValue != ''){
+                                freeSQL += andOr +" " + tablePrefix +"." +  columnName + " >='" +  startValue + "' ";
+                            }
+                            if(endValue != null && endValue != ''){
+                                freeSQL += andOr +" " + tablePrefix +"." +  columnName + " <='" +  endValue + "' ";
+                            }
+                        }
+
+                    }else if(selectOper == "4" ) {//不等于
+                        if(columnValue != null && columnValue != ''){
+                            freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " !='" +  columnValue + "' ";
+                        }
+                    }else if(selectOper == "5" ) {//开头
+                        if(columnValue != null && columnValue != ''){
+                            freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " like'" +  columnValue + "%' ";
+                        }
+                    }else if(selectOper == "6" ) {//结尾
+                        if(columnValue != null && columnValue != ''){
+                            freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " like'%" +  columnValue + "' ";
+                        }
+                    }else if(selectOper == "7" ) {//为空
+                        freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " is null ";
+                    }else if(selectOper == "8" ) {//不为空
+                        freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " is not null ";
+                    }
+                }
+            });
+            $("#freeSQL").val(freeSQL);
+        }
+
+        function selectSearch(){
+            initFreeSearch();
+            $.table.search();
+        }
+
+
+        function getCallCode(callCode, dictLabel) {
+            if (dictLabel != null && dictLabel != '') {
+                return callCode + "(" + dictLabel + ")";
+            }
+            return callCode;
+        }
+
+        function getActionCode(actionCode, dictLabel) {
+            if (dictLabel != null && dictLabel != '') {
+                return actionCode + "(" + dictLabel + ")";
+            }
+            return actionCode;
+        }
+
+        function chackAll() {
+            var allCheck=document.getElementsByName("btSelectItem");
+            var allCheck2=document.getElementsByName("btSelectAll");
+            var flage = $('#selectAll').is(":checked");
+            for(var i=0;i<allCheck.length;i++){
+                //设置复选框的选中状态
+                allCheck[i].checked=flage;
+            }
+            for(var i=0;i<allCheck2.length;i++){
+                //设置复选框的选中状态
+                allCheck2[i].checked=flage;
+            }
+        }
+
+        /*重新分派*/
+        function reAllocat(){
+            // 是否选择全部
+            var flage = $('#selectAll').is(":checked");
+            if (flage) {
+                $.modal.confirm("确认要对所有数据进行操作吗?", function() {
+                    // 查询当前机构下所有用户
+                    var caseNo = $("#caseNo").val();
+                    var orgId = $("#orgId").val();
+                    var customName = $("#customName").val();
+                    var taskStatus = $("#taskStatus").val();
+                    var callCodeHistoryListStr = $('#callCodeHistoryListStr').selectpicker('val');
+                    var freeSQL = $("#freeSQL").val();
+                    // alert(freeSQL);
+                    freeSQL = encodeURIComponent(freeSQL);
+                    var toReAllocatUrl = prefix + '/allDataToReAllocat?orgId='+orgId +'&caseNo='+caseNo+'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr+'&freeSQL='+freeSQL;
+                    $.modal.open("选择用户", toReAllocatUrl);
+                });
+                return;
+            }else{
+                // 获取列表中选中数据的第一列的值
+                var rows = $.table.selectFirstColumns(); // 返回的是一个数组
+                if (rows.length == 0) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                }
+                $.modal.confirm("确认要对选中的" + rows.length + "条数据进行操作吗?", function() {
+                    var toReAllocatUrl = prefix + '/toReAllocat?taskIds='+rows.join();
+                    $.modal.open("选择用户", toReAllocatUrl);
+                });
+            }
+
+        }
+
+        /*查看还款历史*/
+        function viewRepayHis(){
+            var caseNoRows = $.table.selectColumns("caseNo"); //返回的是一个数组
+            if (caseNoRows.length != 1) {
+                $.modal.alertWarning("请选择一条记录");
+                return;
+            }
+            var toViewRepayHis = prefix + '/toViewRepayHis?caseNo='+caseNoRows.join();
+            $.modal.open("还款历史记录", toViewRepayHis);
+        }
+
+        /*协助催收*/
+        function helpColl() {
+            var taskIdRows = $.table.selectFirstColumns();
+            var orgIdRows = $.table.selectColumns("orgId");
+            checkoutData(taskIdRows,orgIdRows);
+            var taskTypeRows = $.table.selectColumns("taskType"); //返回的是一个数组
+            if(!isHelpColl(taskTypeRows)) {
+                $.modal.alertWarning("只有重新分配的或者初始生成的任务可以协助催收");
+                return;
+            }
+            // 获取当前的催收人员
+            var ownerIdRows = $.table.selectColumns("ownerId");
+            $.modal.confirm("确认要对选中的" + taskIdRows.length + "条数据协助催收吗?", function() {
+                // 查询当前机构下所有用户
+                var toHelpColl = prefix + '/toHelpColl?orgId='+orgIdRows[0]+"&taskIds="+taskIdRows.join()+"&ownerIds="+ownerIdRows.join();
+                $.modal.open("选择用户", toHelpColl);
+            });
+        }
+
+        /*数据校验：至少选择一条数据，并且是同一机构下的*/
+        function checkoutData(taskIdRows,orgIdRows) {
+            if (taskIdRows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            if(!isAllEqual(orgIdRows)) {
+                $.modal.alertWarning("只能对同一机构下面的任务重新分配");
+                return;
+            }
+        }
+
+        /*临时代理*/
+        function tempAgent(){
+            // 获取列表中选中数据的第一列的值
+            var rows = $.table.selectFirstColumns(); // 返回的是一个数组
+            //alert(rows.join());   // join()函数将数组分成以逗号分隔的字符串
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            // 获取列表中选中数据的指定列的值：任务类型，如果已经是临时代理的任务或者协助催收的任务不能进行临时代理
+            var taskTypeRows = $.table.selectColumns("taskType"); //返回的是一个数组
+            if(!isAllowTempAgent(taskTypeRows)) {
+                $.modal.alertWarning("已经是临时代理的任务或者协助催收的任务不能进行临时代理");
+                return;
+            }
+            // 获取列表中选中数据的指定列的值：任务状态，如果是未分配 不能进行临时代理
+            var taskStatusRows = $.table.selectColumns("taskStatus"); //返回的是一个数组
+            if(!isAllowTempAgentByTaskStatus(taskStatusRows)) {
+                $.modal.alertWarning("含有未分配的任务，未分配的任务不能进行临时代理");
+                return;
+            }
+            // 获取列表中选中数据的指定列的值：业务归属人
+            var ownerIdRows = $.table.selectColumns("ownerId"); //返回的是一个数组
+            $.modal.confirm("确认要对选中的" + rows.length + "条数据进行临时代理吗?", function() {
+                //$.operate.submit(prefix + "/cancelAll", "post", "json", data);
+                // 查询当前机构下所有用户
+                var toTempAgentUrl = prefix + '/toTempAgent?taskIds='+rows.join()+"&ownerIds="+ownerIdRows;
+                $.modal.open("选择用户", toTempAgentUrl);
+            });
+        }
+
+        /*临时代理回收*/
+        function tempAgentRecycle() {
+            // 获取列表中选中数据的第一列的值
+            var rows = $.table.selectFirstColumns(); // 返回的是一个数组
+            //alert(rows.join());   // join()函数将数组分成以逗号分隔的字符串
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            var taskTypeRows = $.table.selectColumns("taskType"); //返回的是一个数组
+            if(!isAllowTempAgentRecycle(taskTypeRows)) {
+                $.modal.alertWarning("只有是临时代理的任务才能进行回收");
+                return;
+            }
+            // 获取列表中选中数据的指定列的值：任务类型，如果已经是临时代理的任务或者协助催收的任务不能进行临时代理
+            // var ownerIdRows = $.table.selectColumns("ownerId"); //返回的是一个数组
+            var oldOwnerIdRows = $.table.selectColumns("oldOwnerId"); //返回的是一个数组
+            $.modal.confirm("确认要对选中的" + rows.length + "条数据进行临时代理回收吗?", function() {
+                //$.operate.submit(prefix + "/cancelAll", "post", "json", data);
+                // 查询当前机构下所有用户
+                var tempAgentRecycle = prefix + '/tempAgentRecycle';
+                // $.modal.submit(toTempAgentUrl);
+                var data = {"taskIds": rows.join(),oldOwnerIds:oldOwnerIdRows.join()};
+                $.operate.submit(tempAgentRecycle, "post", "json", data);
+            });
+        }
+
+        function closeCase() {
+            // 是否选择全部
+            var flage = $('#selectAll').is(":checked");
+            var taskIdrows = $.table.selectFirstColumns();
+            if (flage == false && taskIdrows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            if(flage){
+                $.modal.confirm("确认要对选中的所有数据结案吗?", function() {
+                    var caseNo = $("#caseNo").val();
+                    var orgId = $("#orgId").val();
+                    var customName = $("#customName").val();
+                    var taskStatus = $("#taskStatus").val();
+                    var callCodeHistoryListStr = $('#callCodeHistoryListStr').selectpicker('val');
+                    var freeSQL = $("#freeSQL").val();
+                    freeSQL = encodeURIComponent(freeSQL);
+                    var closeCaseUrl = prefix + '/closeAllCase?orgId='+orgId +'&caseNo='+caseNo+'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr+'&freeSQL='+freeSQL;
+                    $("#closeCaseUrl").val(closeCaseUrl);
+                    $("#myModal").modal('show');
+                    return;
+                });
+            }else{
+                if (taskIdrows.length > 0) {
+                    var closeCaseUrl = prefix + '/closeCase?taskIds=' + taskIdrows.join();
+                    $("#closeCaseUrl").val(closeCaseUrl);
+                    $("#myModal").modal('show');
+                    return;
+                }
+            }
+
+
+
+        }
+
+        function closeCaseSave() {
+            var url = $("#closeCaseUrl").val();
+            var closeCaseType = $("#closeCaseType").val();
+            url = url+'&closeCaseType='+closeCaseType;
+            $.operate.submit(url);
+            resetSelectAll();
+            $("#myModal").modal('hide');
+        }
+
+
+        /**
+         * 判断一个数组中的值是否全部相等，让后面的值都跟第一个值进行比较
+         * @param arr
+         */
+        function isAllEqual(array) {
+            if (array.length > 0) {
+                return !array.some(function(value, index) {
+                    return value !== array[0];
+                });
+            } else {
+                return true;
+            }
+        }
+
+        /**
+         * 判断是否允许进行临时代理，任务类型，如果已经是临时代理的任务或者协助催收的任务不能进行临时代理
+         * @param array
+         */
+        function isAllowTempAgent(array) {
+            for (var i = 0; i < array.length; i++) {
+                if(array[i] == 3 || array[i] == 4) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /**
+         * 获取列表中选中数据的指定列的值：任务状态，如果是未分配 不能进行临时代理
+         */
+        function isAllowTempAgentByTaskStatus(array) {
+            for (var i = 0; i < array.length; i++) {
+                if(array[i] == 1 ) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /**
+         * 判断是否允许进行临时代理回收，任务类型，只有是临时代理类型的任务才能回收
+         * @param array
+         */
+        function isAllowTempAgentRecycle(array) {
+            for (var i = 0; i < array.length; i++) {
+                if(array[i] != 3) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /**
+         * 判断是否允许协助催收，任务类型，只有是临时代理类型的任务才能回收
+         * @param array
+         */
+        function isHelpColl(array) {
+            for (var i = 0; i < array.length; i++) {
+                if(array[i] != 1 && array[i] != 2) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function viewCustDetail(certificateNo) {
+            alert(certificateNo);
+        }
+
+        function viewCustTag() {
+            var rows = $.table.selectFirstColumns();
+            if (rows.length != 1) {
+                $.modal.alertWarning("请选择一条记录");
+                return;
+            }
+            var certificateNo = $.table.selectColumns("certificateNo");
+            var customName = $.table.selectColumns("customName");
+            window.location.href = custTagPrefix + "/view?certificateNo="+certificateNo+"&customName="+customName;
+        }
+
+        /*催收历史*/
+        function collHis(caseNo,orgId,importBatchNo) {
+            var collHisUrl;
+            if (importBatchNo == 'null') {
+                collHisUrl = prefix + "/collJobHis?caseNo="+caseNo+"&orgId="+orgId;
+            } else {
+                collHisUrl = prefix + "/collJobHis?caseNo="+caseNo+"&orgId="+orgId+"&importBatchNo="+importBatchNo;
+            }
+            $.modal.openFull("催收记录 | " + caseNo, collHisUrl);
+        }
+
+        /*机器人协催*/
+        function sendRobot() {
+            // 是否选择全部
+            var flage = $('#selectAll').is(":checked");
+            if (flage) {
+                // 判断是否含有已结案、TS、停催的数据，已结案、TS、停催的数据不能再操作
+                // var actionCode = $("#actionCode").val();
+                // var taskType = $("#taskType").val();
+                // if (actionCode == 'TS' || taskType == 12) {
+                //     $.modal.alertWarning("投诉或者已停催的案件不能推送机器人");
+                //     return;
+                // }
+                // if (actionCode == null || actionCode == '' || taskType == null || taskType == '') {
+                //     isHasCloseCaseTask();
+                // }
+                $.modal.confirm("确认要对所有数据进行操作吗?", function() {
+                    var caseNo = $("#caseNo").val();
+                    var orgId = $("#orgId").val();
+                    var customName = $("#customName").val();
+                    var taskStatus = $("#taskStatus").val();
+                    var callCodeHistoryListStr = $('#callCodeHistoryListStr').selectpicker('val');
+                    var freeSQL = $("#freeSQL").val();
+                    freeSQL = encodeURIComponent(freeSQL);
+                    var toSendRobotUrl = prefix + '/allDataToSendRobot?orgId='+orgId +'&caseNo='+caseNo+'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr+'&freeSQL='+freeSQL;
+                    $.modal.open("选择话术", toSendRobotUrl);
+                });
+                return;
+            }else{
+                // 获取列表中选中数据的第一列的值
+                var rows = $.table.selectFirstColumns(); // 返回的是一个数组
+                if (rows.length == 0) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                }
+                // var rows = $.table.selectFirstColumns(); // 返回的是一个数组
+                // if (rows.length == 0) {
+                //     $.modal.alertWarning("请至少选择一条记录");
+                //     return;
+                // }else{
+                //     var actionCodes = $.table.selectColumns("actionCode");
+                //     for(i=0;i<actionCodes.length;i++){
+                //         if(actionCodes[i] =="TS"){
+                //             $.modal.alertWarning("行动码为TS案件不能推送机器人");
+                //             return;
+                //         }
+                //     }
+                //     var taskStatus = $.table.selectColumns("taskStatus");
+                //     for(i=0;i<taskStatus.length;i++){
+                //         if(taskStatus[i] =="已结案" || taskStatus[i] =="3"){
+                //             $.modal.alertWarning("已结案案件不能推送机器人");
+                //             return;
+                //         }
+                //     }
+                //     var taskTypes = $.table.selectColumns("taskType");
+                //     for(i=0;i<taskTypes.length;i++){
+                //         if(taskTypes[i] =="停止催收" || taskTypes[i] =="12"){
+                //             $.modal.alertWarning("已停催案件不能推送机器人");
+                //             return;
+                //         }
+                //     }
+                // }
+                var orgIdRows = $.table.selectColumns("orgId");
+                var toSendRobotUrl = prefix + '/toSendRobot?taskIds='+rows.join()+'&orgId='+orgIdRows[0];
+                $.modal.open("选择话术", toSendRobotUrl);
+            }
+
+        }
+
+        /*标记还款&取消标记还款*/
+        function signRepay(actionCode) {
+            var taskIdRows = $.table.selectFirstColumns();
+            if (taskIdRows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            var url = duncaseActionPrefix + "/batchAddActionCode?taskIds="+taskIdRows.join()+"&actionCode="+actionCode;
+            $.operate.submit(url);
+        }
+
+        function reset() {
+            $.form.reset();
+            $(".selectpicker").selectpicker('deselectAll');
+            // 取消设置复选框的选中状态
+            $("#selectAll").prop("checked",false);
+            var allCheck=document.getElementsByName("btSelectItem");
+            var allCheck2=document.getElementsByName("btSelectAll");
+            for(var i=0;i<allCheck.length;i++){
+                //设置复选框的选中状态
+                allCheck[i].checked=false;
+            }
+            for(var i=0;i<allCheck2.length;i++){
+                //设置复选框的选中状态
+                allCheck2[i].checked=false;
+            }
+        }
+
+        function resetSelectAll() {
+            // 取消设置复选框的选中状态
+            $("#selectAll").prop("checked",false);
+        }
+
+        // 0：表示任务分派 1：表示推送到机器人   因为条件不一样
+        function isHasCloseCaseTask(type) {
+            var caseNo = $("#caseNo").val();
+            var orgId = $("#orgId").val();
+            var customName = $("#customName").val();
+            var startArrearsTotal = $("#startArrearsTotal").val();
+            var endArrearsTotal = $("#endArrearsTotal").val();
+            var callCode = $("#callCode").val();
+            var transferType = $("#transferType").val();
+            var phone = $("#phone").val();
+            var startCloseCaseYhje = $("#startCloseCaseYhje").val();
+            var endCloseCaseYhje = $("#endCloseCaseYhje").val();
+            var actionCode = $("#actionCode").val();
+            var taskType = $("#taskType").val();
+            var taskStatus = $("#taskStatus").val();
+            var ownerName = $("#ownerName").val();
+            var enterCollDate = $("#enterCollDate").val();
+            var startEnterCollDate = $("#startEnterCollDate").val();
+            var endEnterCollDate = $("#endEnterCollDate").val();
+            var startRecentlyAllotDate = $("#startRecentlyAllotDate").val();
+            var endRecentlyAllotDate = $("#endRecentlyAllotDate").val();
+            var startRecentlyFollowUpDate = $("#startRecentlyFollowUpDate").val();
+            var endRecentlyFollowUpDate = $("#endRecentlyFollowUpDate").val();
+            var productName = $("#productName").val();
+            $.post(
+                prefix + '/isHasCloseCaseTask',
+                {
+                    orgId:orgId,
+                    caseNo:caseNo,
+                    customName:customName,
+                    startArrearsTotal:startArrearsTotal,
+                    endArrearsTotal:endArrearsTotal,
+                    callCode:callCode,
+                    transferType:transferType,
+                    phone:phone,
+                    startCloseCaseYhje:startCloseCaseYhje,
+                    endCloseCaseYhje:endCloseCaseYhje,
+                    actionCode:actionCode,
+                    taskType:taskType,
+                    taskStatus:taskStatus,
+                    ownerName:ownerName,
+                    enterCollDate:enterCollDate,
+                    startEnterCollDate:startEnterCollDate,
+                    endEnterCollDate:endEnterCollDate,
+                    startRecentlyAllotDate:startRecentlyAllotDate,
+                    endRecentlyAllotDate:endRecentlyAllotDate,
+                    startRecentlyFollowUpDate:startRecentlyFollowUpDate,
+                    endRecentlyFollowUpDate:endRecentlyFollowUpDate,
+                    type:type,
+                    productName:productName
+                },
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.status == 200) {//请求成功
+                        if (data.result > 0) {
+                            $.modal.alertWarning("投诉、已停催的任务不能推送到机器人");
+                            return;
+                        }
+                    }else{
+                        $.modal.alertSuccess("查询失败");
+                    }
+                }
+            );
+        }
+    </script>
+</body>
+</html>

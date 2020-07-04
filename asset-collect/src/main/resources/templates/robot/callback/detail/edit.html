@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改【请填写功能名称】')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-detail-edit" th:object="${tLcRobotCallDetail}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">通话记录日志 Id：</label>
+                <div class="col-sm-8">
+                    <input name="sceneInstanceLogId" th:field="*{sceneInstanceLogId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">通话记录 Id：</label>
+                <div class="col-sm-8">
+                    <input name="inboundInstanceId" th:field="*{inboundInstanceId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">公司id：</label>
+                <div class="col-sm-8">
+                    <input name="companyId" th:field="*{companyId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机器人id：</label>
+                <div class="col-sm-8">
+                    <input name="robotDefId" th:field="*{robotDefId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">对应决策 Id：</label>
+                <div class="col-sm-8">
+                    <input name="decisionId" th:field="*{decisionId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">说话人 ME： 用户 AI:机器人：</label>
+                <div class="col-sm-8">
+                    <input name="speaker" th:field="*{speaker}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">说话内容：</label>
+                <div class="col-sm-8">
+                    <input name="content" th:field="*{content}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">用户说话语义,客户说话内容命中的话术节点分支或知识库问题：</label>
+                <div class="col-sm-8">
+                    <input name="userMean" th:field="*{userMean}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">用户说话语义详情,客户说话内容命中详情：</label>
+                <div class="col-sm-8">
+                    <input name="userMeanDetail" th:field="*{userMeanDetail}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否是 ai 无法应答的问题， 1-是，0-否：</label>
+                <div class="col-sm-8">
+                    <input name="aiUnknown" th:field="*{aiUnknown}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">回答问题状态： 0-分支， 1-问题，2-忽略， 表示命中流程分支或者知识库问题：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="answerStatus" value="">
+                        <label th:for="answerStatus" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">学习状态： 0-未学习， 1-已学习，在问题学习板块里面的问题学习状态：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="studyStatus" value="">
+                        <label th:for="studyStatus" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">说话的开始时间,本句话在录音中的结束时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="startTime" th:value="${#dates.format(tLcRobotCallDetail.startTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">说话的结束时间,本句话在录音中的结束时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="endTime" th:value="${#dates.format(tLcRobotCallDetail.endTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">通话记录纠错内容， 通话记录中的人工纠错功能的纠错内容：</label>
+                <div class="col-sm-8">
+                    <input name="correctionContent" th:field="*{correctionContent}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">通话记录录音：</label>
+                <div class="col-sm-8">
+                    <input name="luyinOssUrl" th:field="*{luyinOssUrl}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">回调签名：</label>
+                <div class="col-sm-8">
+                    <input name="sign" th:field="*{sign}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">GMT 格式日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="dateTime" th:value="${#dates.format(tLcRobotCallDetail.dateTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">呼入回调标识：INBOUND_CALL_INSTANCE_RESULT：</label>
+                <div class="col-sm-8">
+                    <select name="dataType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "ruoyi/detail";
+        $("#form-detail-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-detail-edit').serialize());
+            }
+        }
+
+        $("input[name='startTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='endTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='dateTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

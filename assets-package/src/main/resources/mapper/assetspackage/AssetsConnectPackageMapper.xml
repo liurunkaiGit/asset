@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.AssetsConnectPackageMapper">
+    
+    <resultMap type="com.ruoyi.assetspackage.domain.AssetsConnectPackage" id="AssetsConnectPackageResult">
+        <result property="id"    column="id"    />
+        <result property="assetsId"    column="assets_id"    />
+        <result property="packageId"    column="package_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectAssetsConnectPackageVo">
+        select id, assets_id, package_id, create_by, create_time from assets_connect_package
+    </sql>
+
+    <select id="selectAssetsConnectPackageList" parameterType="AssetsConnectPackage" resultMap="AssetsConnectPackageResult">
+        <include refid="selectAssetsConnectPackageVo"/>
+        <where>  
+            <if test="assetsId != null  and assetsId != ''"> and assets_id = #{assetsId}</if>
+            <if test="packageId != null  and packageId != ''"> and package_id = #{packageId}</if>
+        </where>
+    </select>
+    
+    <select id="selectAssetsConnectPackageById" parameterType="String" resultMap="AssetsConnectPackageResult">
+        <include refid="selectAssetsConnectPackageVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAssetsConnectPackage" parameterType="AssetsConnectPackage">
+        insert into assets_connect_package
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="assetsId != null  and assetsId != ''">assets_id,</if>
+            <if test="packageId != null  and packageId != ''">package_id,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="assetsId != null  and assetsId != ''">#{assetsId},</if>
+            <if test="packageId != null  and packageId != ''">#{packageId},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAssetsConnectPackage" parameterType="AssetsConnectPackage">
+        update assets_connect_package
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="assetsId != null  and assetsId != ''">assets_id = #{assetsId},</if>
+            <if test="packageId != null  and packageId != ''">package_id = #{packageId},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAssetsConnectPackageById" parameterType="String">
+        delete from assets_connect_package where id = #{id}
+    </delete>
+
+    <delete id="deleteAssetsConnectPackageByIds" parameterType="String">
+        delete from assets_connect_package where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteAssetsConnectPackageByPackageId" parameterType="String">
+        delete from assets_connect_package where package_id =  #{packageId}
+    </delete>
+    
+</mapper>

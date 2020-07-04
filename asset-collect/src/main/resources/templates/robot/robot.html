@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('机器人任务列表')" />
+    <style type="text/css">
+        .time-input{
+            display: inline;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <input type="hidden" id="orgId" name="orgId" th:value="${orgId}">
+                            <li>
+                                <p>机器人任务id：</p>
+                                <input type="text" id="robotTastId" name="robotTastId"/>
+                            </li>
+                            <li>
+                                <p>机构案件号：</p>
+                                <input type="text" id="caseNo" name="caseNo"/>
+                            </li>
+                            <li>
+                                <p>任务状态：</p>
+                                <select id="robotTaskStatus" name="robotTaskStatus">
+                                    <option value="">所有</option>
+                                    <option th:value="1">外呼中</option>
+                                    <option th:value="2">已完成</option>
+                                    <option th:value="4">暂停</option>
+                                    <option th:value="6">停止</option>
+                                    <option th:value="50">拉回</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>通话状态：</p>
+                                <select id="callStatus" name="callStatus">
+                                    <option value="">所有</option>
+                                    <option th:value="0">已接听</option>
+                                    <option th:value="1">拒接</option>
+                                    <option th:value="2">无法接通</option>
+                                    <option th:value="3">主叫号码不可用</option>
+                                    <option th:value="4">空号</option>
+                                    <option th:value="5">关机</option>
+                                    <option th:value="6">占线</option>
+                                    <option th:value="7">停机</option>
+                                    <option th:value="8">未接</option>
+                                    <option th:value="9">主叫欠费</option>
+                                    <option th:value="10">呼损</option>
+                                    <option th:value="11">黑名单</option>
+                                    <option th:value="22">线路盲区</option>
+                                </select>
+                            </li>
+                            <!--自由查询开始-->
+                            <input type="hidden" id="freeSQL" name="freeSQL" />
+                            <li>
+                                <div class="freeSearch">
+                                    <select id="oneAndOr"  style="width:85px;margin:0 0 0 10px;">
+                                        <option value="AND" selected="selected">并且</option>
+                                        <option value="OR">或者</option>
+                                    </select>
+                                    <select id="oneColumn" onchange="viewOption('oneColumn','oneOper','oneOption')">
+                                        <option value="">字段</option>
+                                    </select>
+                                    <select id="oneOper" onchange="viewOption('oneColumn','oneOper','oneOption')" style="width: 93px;">
+                                        <option value="">运算符</option>
+                                        <option value="1">等于</option>
+                                        <option value="2">包含</option>
+                                        <option value="3">范围</option>
+                                        <option value="4">不等于</option>
+                                        <option value="5">开头字符</option>
+                                        <option value="6">结尾字符</option>
+                                        <option value="7">为空</option>
+                                        <option value="8">不为空</option>
+                                    </select>
+                                    <span id="oneOption"><input type="text"/></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="freeSearch">
+                                    <select id="twoAndOr"  style="width:85px;margin:0 0 0 10px;">
+                                        <option value="AND"  selected="selected">并且</option>
+                                        <option value="OR">或者</option>
+                                    </select>
+                                    <select id="twoColumn" onchange="viewOption('twoColumn','twoOper','twoOption')">
+                                        <option value="">字段</option>
+                                    </select>
+                                    <select id="twoOper" onchange="viewOption('twoColumn','twoOper','twoOption')" style="width: 93px;">
+                                        <option value="">运算符</option>
+                                        <option value="1">等于</option>
+                                        <option value="2">包含</option>
+                                        <option value="3">范围</option>
+                                        <option value="4">不等于</option>
+                                        <option value="5">开头字符</option>
+                                        <option value="6">结尾字符</option>
+                                        <option value="7">为空</option>
+                                        <option value="8">不为空</option>
+                                    </select>
+                                    <span id="twoOption"><input type="text"/></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="freeSearch">
+                                    <select id="threeAndOr"  style="width:85px;margin:0 0 0 10px;">
+                                        <option value="AND"  selected="selected">并且</option>
+                                        <option value="OR">或者</option>
+                                    </select>
+                                    <select id="threeColumn" onchange="viewOption('threeColumn','threeOper','threeOption')">
+                                        <option value="">字段</option>
+                                    </select>
+                                    <select id="threeOper" onchange="viewOption('threeColumn','threeOper','threeOption')" style="width: 93px;">
+                                        <option value="">运算符</option>
+                                        <option value="1">等于</option>
+                                        <option value="2">包含</option>
+                                        <option value="3">范围</option>
+                                        <option value="4">不等于</option>
+                                        <option value="5">开头字符</option>
+                                        <option value="6">结尾字符</option>
+                                        <option value="7">为空</option>
+                                        <option value="8">不为空</option>
+                                    </select>
+                                    <span id="threeOption"><input type="text"/></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="freeSearch">
+                                    <select id="fourAndOr"  style="width:85px;margin:0 0 0 10px;">
+                                        <option value="AND"  selected="selected">并且</option>
+                                        <option value="OR">或者</option>
+                                    </select>
+                                    <select id="fourColumn" onchange="viewOption('fourColumn','fourOper','fourOption')">
+                                        <option value="">字段</option>
+                                    </select>
+                                    <select id="fourOper" onchange="viewOption('fourColumn','fourOper','fourOption')" style="width: 93px;">
+                                        <option value="">运算符</option>
+                                        <option value="1">等于</option>
+                                        <option value="2">包含</option>
+                                        <option value="3">范围</option>
+                                        <option value="4">不等于</option>
+                                        <option value="5">开头字符</option>
+                                        <option value="6">结尾字符</option>
+                                        <option value="7">为空</option>
+                                        <option value="8">不为空</option>
+                                    </select>
+                                    <span id="fourOption"><input type="text"/></span>
+                                </div>
+                            </li>
+                            <!--自由查询结束-->
+                            <li>
+                                <!--<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>-->
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="selectSearch()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.table.exportExcel()" shiro:hasPermission="collect:robot:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+                <a class="btn btn-success" onclick="handCallback()" shiro:hasPermission="collect:hand:callback">
+                    <i class="fa fa-download"></i> 手动回调
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:include="include :: footer" />
+     <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:task:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:task:remove')}]];
+        var carTypeDatas = [[${@dict.getType('sys_car_type')}]];
+        var taskStatusDatas = [[${@dict.getType('sys_task_state')}]];
+        var taskTypeDatas = [[${@dict.getType('sys_task_type')}]];
+        var prefix = ctx + "collect/robot";
+        var taskPrefix = ctx + "collect/task";
+        var columnQyeryPrefix = ctx + "column/query";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/pullback",
+                updateUrl: prefix + "/collect",
+                exportUrl: prefix + "/export",
+                modalName: "任务",
+                clickToSelect:true,
+                columns: [{
+                    checkbox: true
+                },
+                    {
+                        field : 'id',
+                        title : '主键id',
+                        visible: false
+                    },
+                {
+                    field : 'robotTastId',
+                    title : '任务id'
+                },{
+                        field : 'caseNo',
+                        title : '机构案件号'
+                    },{
+                        field : 'curName',
+                        title : '客户姓名'
+                    },{
+                    field : 'taskName',
+                    title : '会话名称'
+                },
+                    {
+                        field : 'ownerName',
+                        title : '业务归属人'
+                    },
+                    {
+                        field : 'transferType',
+                        title : '手别'
+                    },
+                    {
+                        field : 'arrearsTotal',
+                        title : '委案金额'
+                    },
+                    {
+                        field : 'speechCraftName',
+                        title : '话术名称'
+                    },
+                    {
+                        field : 'createTime',
+                        title : '任务创建时间'
+                    },
+                    {
+                        field : 'callEndDate',
+                        title : '拨打结束时间'
+                    },
+                    {
+                        field : 'resultValueAlias',
+                        title : '意向标签'
+                    },
+                    {
+                        field : 'callStatus',
+                        title : '通话状态',
+                        formatter: function(value, row, index) {
+                            return getCallStatusByCode(value);
+                        }
+                    },
+                    {
+                        field : 'callLen',
+                        title : '通话时长(秒)'
+                    },
+                    {
+                        field : 'taskStatus',
+                        title : '任务状态',
+                        formatter: function (value, row, index) {
+                            return $.table.selectDictLabel(taskStatusDatas, value);
+                        }
+                    },
+                    {
+                        field : 'taskType',
+                        title : '任务类型',
+                        formatter: function (value, row, index) {
+                            return $.table.selectDictLabel(taskTypeDatas, value);
+                        }
+                    },
+                    {
+                        field : 'callContent',
+                        title : '通话文本',
+                        formatter: function (value, row, index) {
+                            if (value == null || value == '') {
+                                return '-';
+                            }
+                            return '<a href="javascript:void(0)" onclick="viewCallContent(\'' + row.id + '\')">查看</a>';
+                        }
+                    },
+                    {
+                        field : 'callRadio',
+                        title : '通话录音',
+                        formatter: function (value, row, index) {
+                            if (value == null || value == '') {
+                                return '-';
+                            }
+                            return "<a href='javascript:void(0)' onclick='listen(\""+row.id + "\")'><img src='/img/speaker.png'  class='imgso' width='20px' height='18px' alt='播放' title='播放'/></a>&nbsp;&nbsp;<a href='javascript:void(0)' onclick='downLoad(\""+value + "\")'><img src='/img/download.png'  class='imgso' width='20px' height='18px' alt='下载' title='下载'/></a>";
+
+                        }
+                    },
+                    {
+                        field : 'phone',
+                        title : '手机号码',
+                        visible: false
+                    }]
+            };
+            $.table.init(options);
+            initColumnQuery();
+        });
+
+        function viewOption(column,oper,option) {
+            var selectColumn = $("#"+column).val();
+            var selectOper = $("#"+oper).val();
+            $("#"+option).html('<input type="text" /> ');
+            if(selectColumn != null && selectColumn != '' && selectOper != null && selectOper != ''){
+                var columnName = selectColumn.split(",")[0];
+                var columnType = selectColumn.split(",")[1];
+                var beanName = selectColumn.split(",")[2];
+                if(selectOper == "1" || selectOper == "2" || selectOper == "4" || selectOper == "5" || selectOper == "6"){//等于、包含、不等于、开头、结尾
+                    if(columnType == "date_interval"){//字段类型为日期
+                        $("#"+option).html('<input type="text"  placeholder="开始时间" style="width: 185px;" class="time-input"/>');
+                        if ($(".time-input").length > 0) {
+                            layui.use('laydate', function () {
+                                var com = layui.laydate;
+                                $(".time-input").each(function (index, item) {
+                                    var time = $(item);
+                                    var type = time.attr("data-type") || 'date';// 控制控件外观
+                                    var format = time.attr("data-format") || 'yyyy-MM-dd';// 控制回显格式
+                                    var buttons = time.attr("data-btn") || 'clear|now|confirm', newBtnArr = [];// 控制日期控件按钮
+                                    var callback = time.attr("data-callback") || {};// 日期控件选择完成后回调处理
+                                    if (buttons) {
+                                        if (buttons.indexOf("|") > 0) {
+                                            var btnArr = buttons.split("|"), btnLen = btnArr.length;
+                                            for (var j = 0; j < btnLen; j++) {
+                                                if ("clear" === btnArr[j] || "now" === btnArr[j] || "confirm" === btnArr[j]) {
+                                                    newBtnArr.push(btnArr[j]);
+                                                }
+                                            }
+                                        } else {
+                                            if ("clear" === buttons || "now" === buttons || "confirm" === buttons) {
+                                                newBtnArr.push(buttons);
+                                            }
+                                        }
+                                    } else {
+                                        newBtnArr = ['clear', 'now', 'confirm'];
+                                    }
+                                    com.render({
+                                        elem: item,
+                                        theme: 'molv',
+                                        trigger: 'click',
+                                        type: type,
+                                        format: format,
+                                        btns: newBtnArr,
+                                        done: function (value, data) {
+                                            if (typeof window[callback] != 'undefined'
+                                                && window[callback] instanceof Function) {
+                                                window[callback](value, data);
+                                            }
+                                        }
+                                    });
+                                });
+                            });
+                        }
+                    }else if(columnType == "dict"){//字段类型为数据字典
+                        $("#"+option).html("");
+                        var opt = "";
+                        var compareValue = selectColumn.split(",")[3];
+                        if (compareValue != null && compareValue != '') {
+                            for (var i = 0; i < compareValue.split("|").length; i++) {
+                                var dictValue = compareValue.split("|")[i];
+                                opt += "<option value='" + dictValue.split(":")[0] + "'>" + dictValue.split(":")[0] + "(" +dictValue.split(":")[1] +")</option>";
+                            }
+                        }
+                        $("#"+option).html('<select ><option value="">请选择</option>'+opt+'</select>');
+                    }else{
+                        $("#"+option).html('<input type="text" /> ');
+                    }
+
+                }else if(selectOper == "3" ) {//范围
+                    var startName = "start_" + columnName;
+                    var endName = "end_" + columnName;
+                    if(columnType == "date_interval"){//字段类型为日期
+                        $("#"+option).html('<input type="text"  placeholder="开始时间" style="width: 85px;" class="time-input"/> <span>-</span> <input type="text"  placeholder="结束时间" style="width: 85px;" class="time-input"/>');
+                        if ($(".time-input").length > 0) {
+                            layui.use('laydate', function () {
+                                var com = layui.laydate;
+                                $(".time-input").each(function (index, item) {
+                                    var time = $(item);
+                                    var type = time.attr("data-type") || 'date';// 控制控件外观
+                                    var format = time.attr("data-format") || 'yyyy-MM-dd';// 控制回显格式
+                                    var buttons = time.attr("data-btn") || 'clear|now|confirm', newBtnArr = [];// 控制日期控件按钮
+                                    var callback = time.attr("data-callback") || {};// 日期控件选择完成后回调处理
+                                    if (buttons) {
+                                        if (buttons.indexOf("|") > 0) {
+                                            var btnArr = buttons.split("|"), btnLen = btnArr.length;
+                                            for (var j = 0; j < btnLen; j++) {
+                                                if ("clear" === btnArr[j] || "now" === btnArr[j] || "confirm" === btnArr[j]) {
+                                                    newBtnArr.push(btnArr[j]);
+                                                }
+                                            }
+                                        } else {
+                                            if ("clear" === buttons || "now" === buttons || "confirm" === buttons) {
+                                                newBtnArr.push(buttons);
+                                            }
+                                        }
+                                    } else {
+                                        newBtnArr = ['clear', 'now', 'confirm'];
+                                    }
+                                    com.render({
+                                        elem: item,
+                                        theme: 'molv',
+                                        trigger: 'click',
+                                        type: type,
+                                        format: format,
+                                        btns: newBtnArr,
+                                        done: function (value, data) {
+                                            if (typeof window[callback] != 'undefined'
+                                                && window[callback] instanceof Function) {
+                                                window[callback](value, data);
+                                            }
+                                        }
+                                    });
+                                });
+                            });
+                        }
+                    }else if(columnType == "dict"){//字段类型为数据字典
+                        $("#"+option).html("");
+                        var opt = "";
+                        var compareValue = selectColumn.split(",")[3];
+                        if (compareValue != null && compareValue != '') {
+                            for (var i = 0; i < compareValue.split("|").length; i++) {
+                                var dictValue = compareValue.split("|")[i];
+                                opt += "<option value='" + dictValue.split(":")[0] + "'>" + dictValue.split(":")[0] + "(" +dictValue.split(":")[1] +")</option>";
+                            }
+                        }
+                        $("#"+option).html('<select   style="width: 85px;"><option value="">请选择</option>'+opt+'</select><span style="margin: 0 4px 0 4px;">-</span><select  style="width: 85px;" ><option value="">请选择</option>'+opt+'</select>');
+                    }else{
+                        $("#"+option).html('<input type="text"   style="width: 85px;"/><span style="margin: 0 4px 0 4px;">-</span><input type="text"   style="width: 85px;"/> ');
+                    }
+
+                }else if(selectOper == "7" || selectOper == "8" ) {//为空、不为空
+                    $("#"+option).html('<input type="text"/> ');
+                }
+            }
+
+        }
+
+
+        function initColumnQuery() {
+            $.post(
+                columnQyeryPrefix + "/initColumnQuery",
+                {
+                    tableName:'t_lc_robot_task',
+                    orgId:$('#orgId').val()
+                }, // 请求参数
+                function (data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            var opt = "<option value='" + data.rows[i].columnName + "," + data.rows[i].columnType + "," + data.rows[i].beanName + "," + data.rows[i].columnValue + "," + data.rows[i].tablePrefix + "'>" + data.rows[i].columnNameCn + "</option>";
+                            $("#oneColumn").append(opt);
+                            $("#twoColumn").append(opt);
+                            $("#threeColumn").append(opt);
+                            $("#fourColumn").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function initFreeSearch(){
+            var freeSQL = "";
+            $(".freeSearch").each(function(i,n){
+                var obj = $(n);
+                var andOr = obj.children().eq(0).val();//并且与或者
+                var columnInfo = obj.children().eq(1).val();//字段信息
+                var selectOper = obj.children().eq(2).val();//运算符
+                if(columnInfo != null && columnInfo != '' && selectOper != null && selectOper != ''){
+                    var columnName = columnInfo.split(",")[0];
+                    var columnType = columnInfo.split(",")[1];
+                    var tablePrefix = columnInfo.split(",")[4];
+                    var columnValue = obj.children().eq(3).children().eq(0).val();
+                    if(selectOper == "1" ) {//等于
+                        if(columnValue != null && columnValue != ''){
+                            freeSQL += andOr +" " + tablePrefix +"." +  columnName + " ='" +  columnValue + "' ";
+                        }
+                    }else if(selectOper == "2" ) {//包含
+                        if(columnValue != null && columnValue != ''){
+                            freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " like'%" +  columnValue + "%' ";
+                        }
+                    }else if(selectOper == "3" ) {//范围
+                        var startValue = columnValue;
+                        var endValue = obj.children().eq(3).children().eq(2).val();
+                        if (columnType == "date_interval") {
+                            if(startValue != null && startValue != ''){
+                                freeSQL += andOr +" " + tablePrefix +"." +  columnName + " >='" +  startValue + "' ";
+                            }
+                            if(endValue != null && endValue != ''){
+                                freeSQL += andOr +" " + tablePrefix +"." +  columnName + " <='" +  endValue + " 23:59:59' ";
+                            }
+                        }else{
+                            if(startValue != null && startValue != ''){
+                                freeSQL += andOr +" " + tablePrefix +"." +  columnName + " >='" +  startValue + "' ";
+                            }
+                            if(endValue != null && endValue != ''){
+                                freeSQL += andOr +" " + tablePrefix +"." +  columnName + " <='" +  endValue + "' ";
+                            }
+                        }
+
+                    }else if(selectOper == "4" ) {//不等于
+                        if(columnValue != null && columnValue != ''){
+                            freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " !='" +  columnValue + "' ";
+                        }
+                    }else if(selectOper == "5" ) {//开头
+                        if(columnValue != null && columnValue != ''){
+                            freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " like'" +  columnValue + "%' ";
+                        }
+                    }else if(selectOper == "6" ) {//结尾
+                        if(columnValue != null && columnValue != ''){
+                            freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " like'%" +  columnValue + "' ";
+                        }
+                    }else if(selectOper == "7" ) {//为空
+                        freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " is null ";
+                    }else if(selectOper == "8" ) {//不为空
+                        freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " is not null ";
+                    }
+                }
+            });
+            $("#freeSQL").val(freeSQL);
+        }
+        function selectSearch(){
+            initFreeSearch();
+            $.table.search();
+        }
+
+        /*手动回调*/
+        function handCallback(){
+            // 获取列表中选中数据的第一列的值
+            var rows = $.table.selectFirstColumns(); // 返回的是一个数组
+            //alert(rows.join());   // join()函数将数组分成以逗号分隔的字符串
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            // var array = $.table.selectColumns("robotTaskStatus");
+            // for (var i = 0; i < array.length; i++) {
+            //     if(array[i] != 2) {
+            //         $.modal.alertWarning("只有已完成的任务可以执行回调");
+            //         return;
+            //     }
+            // }
+            $.modal.confirm("确认要对选中的" + rows.length + "条进行回调吗?", function() {
+                // var handCallbackUrl = prefix + '/handCallback?robotTaskIds='+robotTaskIds.join();
+                var handCallbackUrl = prefix + '/handCallback?ids='+rows.join();
+                $.operate.submit(handCallbackUrl);
+            });
+        }
+
+        // 录音播放
+        function playLuyin(luyinUrl) {
+            var plyaLuyinUrl = prefix + '/plyaLuyin?luyinUrl='+luyinUrl;
+            $.operate.submit(plyaLuyinUrl);
+        }
+
+        function listen(id){
+            var url = prefix + '/recordAudio?id='+id;
+            var width = "500";
+            var height = "300";
+            var options = {
+                title: "播放窗口",
+                width: width,
+                height: height,
+                maxmin:false,
+                url: url,
+                btn: ['关闭'],
+                yes: function (index, layero) {
+                    layer.close(index);
+                }
+            };
+            $.modal.openOptions(options);
+        }
+
+        // 录音下载
+        function downLoad(luyinUrl) {
+            var downLoadUrl = prefix + '/downLoadRobotRadio?luyinUrl='+luyinUrl;
+            // $.operate.submit(downLoadUrl);
+            window.location.href = downLoadUrl;
+        }
+
+        // 通话内容查看
+        function viewCallContent(id) {
+            var viewCallContentUrl = prefix + '/toViewRobotCallContent?id='+id;
+            $.modal.open("通话内容", viewCallContentUrl);
+        }
+
+        function getCallStatusByCode(value) {
+            if(value == 0) {
+                return '已接听';
+            } else if (value == 1) {
+                return '拒接';
+            } else if (value == 2) {
+                return '无法接通';
+            } else if (value == 3) {
+                return '主叫号码不可用';
+            } else if (value == 4) {
+                return '空号';
+            } else if (value == 5) {
+                return '关机';
+            } else if (value == 6) {
+                return '占线';
+            } else if (value == 7) {
+                return '停机';
+            } else if (value == 8) {
+                return '未接';
+            } else if (value == 9) {
+                return '主叫欠费';
+            } else if (value == 10) {
+                return '呼损';
+            } else if (value == 11) {
+                return '黑名单';
+            } else if (value == 22) {
+                return '线路盲区';
+            }
+        }
+    </script>
+</body>
+</html>

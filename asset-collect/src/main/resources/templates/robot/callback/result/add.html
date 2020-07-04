@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增【请填写功能名称】')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-result-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">通话记录结果 Id：</label>
+                <div class="col-sm-8">
+                    <input name="sceneInstanceResultId" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">公司id：</label>
+                <div class="col-sm-8">
+                    <input name="companyId" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">任务 ID：</label>
+                <div class="col-sm-8">
+                    <input name="callJobId" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">通 话 记 录 Id( 对 应sceneInstanceId)：</label>
+                <div class="col-sm-8">
+                    <input name="inboundInstanceId" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">通话记录结果类型名：</label>
+                <div class="col-sm-8">
+                    <input name="resultName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">通话记录结果值：</label>
+                <div class="col-sm-8">
+                    <input name="resultValue" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">通话结果人工标注值：</label>
+                <div class="col-sm-8">
+                    <input name="artificialResultValue" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否进行过人工标注修改，参数对应boolean：</label>
+                <div class="col-sm-8">
+                    <input name="artificialChanged" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">结果描述：</label>
+                <div class="col-sm-8">
+                    <input name="resultDesc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">分析结果别名(resultName 为【客户意向等级】 时标注值为意向级别 A,B,C,D,E,F)：</label>
+                <div class="col-sm-8">
+                    <input name="resultValueAlias" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">IntegerStringBO 对象中存储一个 int 类型参数， 一个 String类型参数， resultName 为【客户标签】 时存储客户标签：</label>
+                <div class="col-sm-8">
+                    <input name="resultLabels" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户意向等级的表述：</label>
+                <div class="col-sm-8">
+                    <input name="resultValueNew" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">回调签名：</label>
+                <div class="col-sm-8">
+                    <input name="sign" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">GMT 格式日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="dateTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">呼入回调标识：INBOUND_CALL_INSTANCE_RESULT：</label>
+                <div class="col-sm-8">
+                    <select name="dataType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "ruoyi/result"
+        $("#form-result-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-result-add').serialize());
+            }
+        }
+
+        $("input[name='dateTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

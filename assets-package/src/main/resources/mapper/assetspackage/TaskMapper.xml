@@ -1,0 +1,764 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.TaskMapper">
+
+    <resultMap id="TLcTaskResult" type="com.ruoyi.assetspackage.domain.Task">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="certificateNo" column="certificate_no" jdbcType="VARCHAR"/>
+        <result property="caseNo" column="case_no" jdbcType="VARCHAR"/>
+        <result property="certificateType" column="certificate_type" jdbcType="INTEGER"/>
+        <result property="customCode" column="custom_code" jdbcType="VARCHAR"/>
+        <result property="customName" column="custom_name" jdbcType="VARCHAR"/>
+        <result property="arrearsTotal" column="arrears_total" jdbcType="DECIMAL"/>
+        <result property="taskStatus" column="task_status" jdbcType="INTEGER"/>
+        <result property="overdueDays" column="overdue_days" jdbcType="BIGINT"/>
+        <result property="overdueAging" column="overdue_aging" jdbcType="VARCHAR"/>
+        <result property="ownerId" column="owner_id" jdbcType="INTEGER"/>
+        <result property="ownerName" column="owner_name" jdbcType="VARCHAR"/>
+        <result property="orgId" column="org_id" jdbcType="VARCHAR"/>
+        <result property="closeDate" column="close_date" jdbcType="TIMESTAMP"/>
+        <result property="oldOwnerId" column="old_owner_id" jdbcType="BIGINT"/>
+        <result property="oldOwnerName" column="old_owner_name" jdbcType="VARCHAR"/>
+        <result property="taskType" column="task_type" jdbcType="INTEGER"/>
+        <result property="allotType" column="allot_type" jdbcType="INTEGER"/>
+        <result property="robotTaskId" column="robot_task_id" jdbcType="BIGINT"/>
+        <result property="robotCallStrategyId" column="robot_call_strategy_id" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="modifyBy" column="modify_by" jdbcType="BIGINT"/>
+        <result property="orgName" column="org_name" jdbcType="VARCHAR"/>
+        <result property="transferType" column="transfer_type" jdbcType="VARCHAR"/>
+        <result property="enterCollDate" column="enter_coll_date" jdbcType="DATE"/>
+        <result property="closeCaseYhje" column="close_case_yhje" jdbcType="DECIMAL"/>
+        <result property="recentlyAllotDate" column="recently_allot_date" jdbcType="TIMESTAMP"/>
+        <result property="recentlyFollowUpDate" column="recently_follow_up_date" jdbcType="TIMESTAMP"/>
+        <result property="hitRule" column="hit_rule" jdbcType="VARCHAR"/>
+        <result property="hitRuleDesc" column="hit_rule_desc" jdbcType="VARCHAR"/>
+        <result property="distributionStrategy" column="distribution_strategy" jdbcType="VARCHAR"/>
+        <result property="importBatchNo" column="import_batch_no" jdbcType="VARCHAR"/>
+        <result property="actionCode" column="action_code" jdbcType="VARCHAR"/>
+        <result property="actionCodeValue" column="action_code_value" jdbcType="VARCHAR"/>
+        <result property="callSign" column="call_sign" jdbcType="VARCHAR"/>
+        <result property="callSignValue" column="call_sign_value" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="SELECT_T_LC_TASK">
+        t.id,
+        t.case_no,
+        t.certificate_no,
+        t.certificate_type,
+        t.custom_code,
+        t.custom_name,
+        t.arrears_total,
+        t.task_status,
+        t.overdue_days,
+        t.overdue_aging,
+        t.owner_id,
+        t.owner_name,
+        t.org_id,
+        t.org_name,
+        t.close_date,
+        t.old_owner_id,
+        t.old_owner_name,
+        t.task_type,
+        t.allot_type,
+        t.create_time,
+        t.modify_time,
+        t.create_by,
+        t.modify_by,
+        t.robot_task_id,
+        t.robot_call_strategy_id,
+        t.transfer_type,
+        t.enter_coll_date,
+        t.close_case_yhje,
+        t.recently_allot_date,
+        t.recently_follow_up_date,
+        t.hit_rule,
+        t.hit_rule_desc,
+        t.distribution_strategy,
+        t.import_batch_no,
+        t.action_code,
+        t.action_code_value,
+        t.call_sign,
+        t.call_sign_value,
+        t.phone
+    </sql>
+
+    <sql id="SELECT_TASK_WHERE">
+        <if test="id != null">
+            and t.id = #{id}
+        </if>
+        <if test="caseNo != null  and caseNo != ''">
+            and t.case_no = #{caseNo}
+        </if>
+        <if test="certificateNo != null  and certificateNo != ''">
+            and t.certificate_no = #{certificateNo}
+        </if>
+        <if test="certificateType != null  and certificateType != ''">
+            and t.certificate_type = #{certificateType}
+        </if>
+        <if test="customCode != null  and customCode != ''">
+            and t.custom_code = #{customCode}
+        </if>
+        <if test="customName != null  and customName != ''">
+            and t.custom_name like concat('%', #{customName}, '%')
+        </if>
+        <if test="taskStatus != null">
+            and t.task_status = #{taskStatus}
+        </if>
+        <if test="ownerId != null ">
+            and t.owner_id = #{ownerId}
+        </if>
+        <if test="ownerName != null and ownerName != ''">
+            and t.owner_name = #{ownerName}
+        </if>
+        <if test="transferType != null and transferType != ''">
+            and t.transfer_type = #{transferType}
+        </if>
+        <if test="collJob != null and collJob != ''">
+            and t.task_status = 2
+        </if>
+        <choose>
+            <when test="orgId != null and orgId != ''">
+                and t.org_id = #{orgId}
+            </when>
+            <otherwise>
+                <choose>
+                    <when test="deptIds != null">
+                        and t.org_id in
+                        <foreach collection="deptIds" item="deptId" open="(" close=")" separator=",">
+                            #{deptId}
+                        </foreach>
+                    </when>
+                </choose>
+            </otherwise>
+        </choose>
+        <if test="taskType != null">
+            and t.task_type = #{taskType}
+        </if>
+        <if test="allotType != null ">
+            and t.allot_type = #{allotType}
+        </if>
+        <if test="taskTypes != null ">
+            and t.task_type in
+            <foreach collection="taskTypes" open="(" close=")" separator="," item="taskType">
+                #{taskType}
+            </foreach>
+        </if>
+        <if test="startArrearsTotal != null">
+            and t.arrears_total <![CDATA[>=]]> #{startArrearsTotal}
+        </if>
+        <if test="endArrearsTotal != null">
+            and t.arrears_total <![CDATA[<=]]> #{endArrearsTotal}
+        </if>
+        <if test="startCloseCaseYhje != null">
+            and t.close_case_yhje <![CDATA[>=]]> #{startCloseCaseYhje}
+        </if>
+        <if test="endCloseCaseYhje != null">
+            and t.close_case_yhje <![CDATA[<=]]> #{endCloseCaseYhje}
+        </if>
+        <if test="startRecentlyAllotDate != null">
+            and t.recently_allot_date <![CDATA[>=]]> #{startRecentlyAllotDate}
+        </if>
+        <if test="endRecentlyAllotDate != null">
+            and t.recently_allot_date <![CDATA[<=]]> #{endRecentlyAllotDate}
+        </if>
+        <if test="startRecentlyFollowUpDate != null">
+            and t.recently_follow_up_date <![CDATA[>=]]> #{startRecentlyFollowUpDate}
+        </if>
+        <if test="endRecentlyFollowUpDate != null">
+            and t.recently_follow_up_date <![CDATA[<=]]> #{endRecentlyFollowUpDate}
+        </if>
+        <if test="enterCollDate != null ">
+            and t.enter_coll_date = #{enterCollDate}
+        </if>
+        <if test="actionCode != null  and actionCode != ''">
+            and action_code = #{actionCode}
+        </if>
+        <if test="actionCodeValue != null  and actionCodeValue != ''">
+            and action_code_value = #{actionCodeValue}
+        </if>
+        <if test="callSign != null  and callSign != ''">
+            and call_sign = #{callSign}
+        </if>
+        <if test="callCode != null  and callCode != ''">
+            and call_sign = #{callCode}
+        </if>
+        <if test="callSignValue != null  and callSignValue != ''">
+            and call_sign_value = #{callSignValue}
+        </if>
+        <if test="phone != null  and phone != ''">
+            and phone = #{phone}
+        </if>
+    </sql>
+
+    <select id="selectTLcTaskList" parameterType="com.ruoyi.assetspackage.domain.Task" resultMap="TLcTaskResult">
+        SELECT
+            (select user_group from sys_user where user_id = t.owner_id ) as userGroup,
+            <include refid="SELECT_T_LC_TASK"/>
+            FROM t_lc_task t
+        WHERE  t.allot_type = 1
+        <include refid="SELECT_TASK_WHERE"></include>
+        <if test="userGroup != null and userGroup != ''">
+            AND t.userGroup = #{userGroup}
+        </if>
+        ORDER BY t.task_status ASC,t.create_time DESC,t.recently_allot_date ASC,t.enter_coll_date ASC,t.case_no ASC
+    </select>
+
+    <select id="selectTLcTaskByPage" parameterType="com.ruoyi.assetspackage.domain.Task" resultMap="TLcTaskResult">
+        SELECT
+        (select user_group from sys_user where user_id = t.owner_id ) as userGroup,
+        t.id,
+        t.case_no,
+        t.transfer_type,
+        t.enter_coll_date,
+        t.custom_name,
+        t.arrears_total,
+        t.close_case_yhje,
+        t.task_status,
+        t.task_type,
+        t.recently_allot_date,
+        t.recently_follow_up_date,
+        t.owner_name,
+        t.call_sign,
+        t.call_sign_value,
+        t.action_code,
+        t.action_code_value,
+        t.org_id,
+        t.import_batch_no,
+        t.create_time
+        FROM t_lc_task t,t_lc_duncase d
+        WHERE  t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no AND t.allot_type = 1 AND t.task_status != 3
+        <include refid="SELECT_TASK_WHERE_FIX_COLUMN"></include>
+        <if test="area != null  and area != ''">
+            and d.area = #{area}
+        </if>
+        <if test="riskFlag != null  and riskFlag != ''">
+            and d.risk_flag = #{riskFlag}
+        </if>
+        <if test="startBackCaseDate != null">
+            and d.back_case_date <![CDATA[>=]]> #{startBackCaseDate}
+        </if>
+        <if test="endBackCaseDate != null">
+            and d.back_case_date <![CDATA[<=]]> #{endBackCaseDate}
+        </if>
+        <if test="contractType != null  and contractType != ''">
+            and d.contract_type = #{contractType}
+        </if>
+        <if test="reductionFlag != null  and reductionFlag != ''">
+            and d.reduction_flag = #{reductionFlag}
+        </if>
+        <if test="legalFlag != null  and legalFlag != ''">
+            and d.legal_flag = #{legalFlag}
+        </if>
+        <if test="stayCaseFlag != null  and stayCaseFlag != ''">
+            and d.stay_case_flag = #{stayCaseFlag}
+        </if>
+        ORDER BY t.task_status ASC,t.create_time DESC,t.recently_allot_date ASC,t.enter_coll_date ASC,t.case_no ASC
+    </select>
+
+    <sql id="SELECT_TASK_WHERE_FIX_COLUMN">
+        <if test="caseNo != null  and caseNo != ''">
+            and t.case_no = #{caseNo}
+        </if>
+        <choose>
+            <when test="orgId != null and orgId != ''">
+                and t.org_id = #{orgId}
+            </when>
+            <otherwise>
+                <choose>
+                    <when test="deptIds != null">
+                        and t.org_id in
+                        <foreach collection="deptIds" item="deptId" open="(" close=")" separator=",">
+                            #{deptId}
+                        </foreach>
+                    </when>
+                </choose>
+            </otherwise>
+        </choose>
+        <if test="customName != null  and customName != ''">
+            and t.custom_name like concat('%', #{customName}, '%')
+        </if>
+        <if test="startArrearsTotal != null">
+            and t.arrears_total <![CDATA[>=]]> #{startArrearsTotal}
+        </if>
+        <if test="endArrearsTotal != null">
+            and t.arrears_total <![CDATA[<=]]> #{endArrearsTotal}
+        </if>
+        <if test="callSign != null  and callSign != ''">
+            and t.call_sign = #{callSign}
+        </if>
+        <if test="callCode != null  and callCode != ''">
+            and t.call_sign = #{callCode}
+        </if>
+        <if test="transferType != null and transferType != ''">
+            and t.transfer_type like concat('%', #{transferType}, '%')
+        </if>
+        <if test="phone != null  and phone != ''">
+            and t.phone = #{phone}
+        </if>
+        <if test="startCloseCaseYhje != null">
+            and t.close_case_yhje <![CDATA[>=]]> #{startCloseCaseYhje}
+        </if>
+        <if test="endCloseCaseYhje != null">
+            and t.close_case_yhje <![CDATA[<=]]> #{endCloseCaseYhje}
+        </if>
+        <if test="actionCode != null  and actionCode != ''">
+            and t.action_code = #{actionCode}
+        </if>
+        <if test="taskType != null ">
+            and t.task_type = #{taskType}
+        </if>
+        <if test="taskStatus != null ">
+            and t.task_status = #{taskStatus}
+        </if>
+        <if test="ownerName != null and ownerName != ''">
+            and t.owner_name = #{ownerName}
+        </if>
+        <if test="enterCollDate != null ">
+            and t.enter_coll_date = #{enterCollDate}
+        </if>
+        <if test="startEnterCollDate != null">
+            and t.enter_coll_date <![CDATA[>=]]> #{startEnterCollDate}
+        </if>
+        <if test="endEnterCollDate != null">
+            and t.enter_coll_date <![CDATA[<=]]> #{endEnterCollDate}
+        </if>
+        <if test="startRecentlyAllotDate != null">
+            and t.recently_allot_date <![CDATA[>=]]> #{startRecentlyAllotDate}
+        </if>
+        <if test="endRecentlyAllotDate != null">
+            and t.recently_allot_date <![CDATA[<=]]> #{endRecentlyAllotDate}
+        </if>
+        <if test="startRecentlyFollowUpDate != null">
+            and t.recently_follow_up_date <![CDATA[>=]]> #{startRecentlyFollowUpDate}
+        </if>
+        <if test="endRecentlyFollowUpDate != null">
+            and t.recently_follow_up_date <![CDATA[<=]]> #{endRecentlyFollowUpDate}
+        </if>
+    </sql>
+
+    <select id="selectMyTaskList" parameterType="com.ruoyi.assetspackage.domain.Task" resultMap="TLcTaskResult">
+        SELECT
+        <include refid="SELECT_T_LC_TASK"/>
+        FROM t_lc_task t
+        WHERE 1=1
+        AND t.allot_type = 1
+        AND t.task_status = 2
+        AND t.task_type NOT IN (10, 11, 12)
+        <include refid="SELECT_TASK_WHERE"></include>
+        ORDER BY t.task_status ASC,t.create_time DESC,t.recently_allot_date ASC,t.enter_coll_date ASC,t.case_no ASC
+    </select>
+
+    <select id="selectTLcTaskById" parameterType="Long" resultMap="TLcTaskResult">
+        SELECT
+        <include refid="SELECT_T_LC_TASK"/>
+        FROM t_lc_task t
+        WHERE t.id = #{id}
+    </select>
+
+    <insert id="insertTLcTask" parameterType="com.ruoyi.assetspackage.domain.Task" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_lc_task (
+        case_no,
+        certificate_no,
+        certificate_type,
+        custom_code,
+        custom_name,
+        arrears_total,
+        task_status,
+        overdue_days,
+        overdue_aging,
+        owner_id,
+        owner_name,
+        org_id,
+        org_name,
+        old_owner_id,
+        old_owner_name,
+        close_date,
+        allot_type,
+        task_type,
+        create_time,
+        modify_time,
+        create_by,
+        modify_by,
+        robot_task_id,
+        robot_call_strategy_id,
+        transfer_type,
+        enter_coll_date,
+        close_case_yhje,
+        recently_allot_date,
+        recently_follow_up_date,
+        hit_rule,
+        hit_rule_desc,
+        distribution_strategy,
+        import_batch_no,
+        action_code,
+        action_code_value,
+        call_sign,
+        call_sign_value,
+        phone
+        ) VALUES (
+            #{caseNo},
+            #{certificateNo},
+            #{certificateType},
+            #{customCode},
+            #{customName},
+            #{arrearsTotal},
+            #{taskStatus},
+            #{overdueDays},
+            #{overdueAging},
+            #{ownerId},
+            #{ownerName},
+            #{orgId},
+            #{orgName},
+            #{oldOwnerId},
+            #{oldOwnerName},
+            #{closeDate},
+            #{allotType},
+            #{taskType},
+            NOW(),
+            NOW(),
+            #{createBy},
+            #{modifyBy},
+            #{robotTaskId},
+            #{robotCallStrategyId},
+            #{transferType},
+            #{enterCollDate},
+            #{closeCaseYhje},
+            #{recentlyAllotDate},
+            #{recentlyFollowUpDate},
+            #{hitRule},
+            #{hitRuleDesc},
+            #{distributionStrategy},
+            #{importBatchNo},
+            #{actionCode},
+            #{actionCodeValue},
+            #{callSign},
+            #{callSignValue},
+            #{phone}
+        )
+    </insert>
+
+    <update id="updateTLcTaskByRobotTaskIdAndPhone" parameterType="com.ruoyi.assetspackage.domain.Task">
+        UPDATE t_lc_task
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="recentlyFollowUpDate != null ">recently_follow_up_date = #{recentlyFollowUpDate},</if>
+            <if test="callSign != null and callSign != ''">call_sign = #{callSign},</if>
+            <if test="callSignValue != null and callSignValue != ''">call_sign_value = #{callSignValue},</if>
+        </trim>
+        WHERE robot_task_id = #{robotTaskId} AND phone = #{phone}
+    </update>
+
+    <update id="updateTLcTask" parameterType="com.ruoyi.assetspackage.domain.Task">
+        UPDATE t_lc_task
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="caseNo != null  and caseNo != ''">case_no = #{caseNo},</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no = #{certificateNo},</if>
+            <if test="certificateType != null ">certificate_type = #{certificateType},</if>
+            <if test="customCode != null  and customCode != ''">custom_code = #{customCode},</if>
+            <if test="customName != null  and customName != ''">custom_name = #{customName},</if>
+            <if test="arrearsTotal != null ">arrears_total = #{arrearsTotal},</if>
+            <if test="taskStatus != null ">task_status = #{taskStatus},</if>
+            <if test="overdueDays != null ">overdue_days = #{overdueDays},</if>
+            <if test="overdueAging != null  and overdueAging != ''">overdue_aging = #{overdueAging},</if>
+            <if test="ownerId != null ">owner_id = #{ownerId},</if>
+            <if test="ownerName != null  and ownerName != ''">owner_name = #{ownerName},</if>
+            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="closeDate != null ">close_date = #{closeDate},</if>
+            <if test="oldOwnerId != null ">old_owner_id = #{oldOwnerId},</if>
+            <if test="taskType != null ">task_type = #{taskType},</if>
+            <if test="allotType != null ">allot_type = #{allotType},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="modifyTime != null ">modify_time = #{modifyTime},</if>
+            <if test="createBy != null ">create_by = #{createBy},</if>
+            <if test="modifyBy != null ">modify_by = #{modifyBy},</if>
+            <if test="oldOwnerName != null  and oldOwnerName != ''">old_owner_name = #{oldOwnerName},</if>
+            <if test="robotTaskId != null ">robot_task_id = #{robotTaskId},</if>
+            <if test="robotCallStrategyId != null ">robot_call_strategy_id = #{robotCallStrategyId},</if>
+            <if test="transferType != null  and transferType != ''">transfer_type = #{transferType},</if>
+            <if test="enterCollDate != null ">enter_coll_date = #{enterCollDate},</if>
+            <if test="closeCaseYhje != null ">close_case_yhje = #{closeCaseYhje},</if>
+            <if test="recentlyAllotDate != null ">recently_allot_date = #{recentlyAllotDate},</if>
+            <if test="recentlyFollowUpDate != null ">recently_follow_up_date = #{recentlyFollowUpDate},</if>
+            <if test="hitRule != null  and hitRule != ''">hit_rule = #{hitRule},</if>
+            <if test="hitRuleDesc != null  and hitRuleDesc != ''">hit_rule_desc = #{hitRuleDesc},</if>
+            <if test="distributionStrategy != null  and distributionStrategy != ''">distribution_strategy =
+                #{distributionStrategy},
+            </if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no = #{importBatchNo},</if>
+            <if test="actionCode != null  and actionCode != ''">action_code = #{actionCode},</if>
+            <if test="actionCodeValue != null  and actionCodeValue != ''">action_code_value = #{actionCodeValue},</if>
+            call_sign = #{callSign},
+            call_sign_value = #{callSignValue},
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteTLcTaskById" parameterType="Long">
+        delete from t_lc_task where ID = #{id}
+    </delete>
+
+    <delete id="deleteTLcTaskByIds" parameterType="String">
+        delete from t_lc_task where ID in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="batchInsertTask" parameterType="java.util.List">
+        INSERT INTO t_lc_task (
+        case_no,
+        certificate_no,
+        certificate_type,
+        custom_code,
+        custom_name,
+        arrears_total,
+        task_status,
+        overdue_days,
+        overdue_aging,
+        owner_id,
+        owner_name,
+        org_id,
+        org_name,
+        old_owner_id,
+        old_owner_name,
+        close_date,
+        allot_type,
+        task_type,
+        create_time,
+        modify_time,
+        create_by,
+        modify_by,
+        robot_task_id,
+        robot_call_strategy_id,
+        transfer_type,
+        enter_coll_date,
+        close_case_yhje,
+        recently_allot_date,
+        recently_follow_up_date,
+        hit_rule,
+        hit_rule_desc,
+        distribution_strategy,
+        import_batch_no,
+        action_code,
+        action_code_value,
+        call_sign,
+        call_sign_value,
+        phone
+        ) VALUES
+        <foreach collection="taskList" item="task" separator=",">
+            (
+            #{task.caseNo},
+            #{task.certificateNo},
+            #{task.certificateType},
+            #{task.customCode},
+            #{task.customName},
+            #{task.arrearsTotal},
+            #{task.taskStatus},
+            #{task.overdueDays},
+            #{task.overdueAging},
+            #{task.ownerId},
+            #{task.ownerName},
+            #{task.orgId},
+            #{task.orgName},
+            #{task.oldOwnerId},
+            #{task.oldOwnerName},
+            #{task.closeDate},
+            #{task.allotType},
+            #{task.taskType},
+            NOW(),
+            NOW(),
+            #{task.createBy},
+            #{task.modifyBy},
+            #{task.robotTaskId},
+            #{task.robotCallStrategyId},
+            #{task.transferType},
+            #{task.enterCollDate},
+            #{task.closeCaseYhje},
+            #{task.recentlyAllotDate},
+            #{task.recentlyFollowUpDate},
+            #{task.hitRule},
+            #{task.hitRuleDesc},
+            #{task.distributionStrategy},
+            #{task.importBatchNo},
+            #{task.actionCode},
+            #{task.actionCodeValue},
+            #{task.callSign},
+            #{task.callSignValue},
+            #{task.phone}
+            )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdateTask" parameterType="java.util.List">
+        <foreach collection="taskList" item="task" separator=";">
+            UPDATE t_lc_task
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="task.caseNo != null  and task.caseNo != ''">case_no = #{task.caseNo},</if>
+                <if test="task.certificateNo != null  and task.certificateNo != ''">certificate_no =
+                    #{task.certificateNo},
+                </if>
+                <if test="task.certificateType != null ">certificate_type = #{task.certificateType},</if>
+                <if test="task.customCode != null  and task.customCode != ''">custom_code = #{task.customCode},</if>
+                <if test="task.customName != null  and task.customName != ''">custom_name = #{task.customName},</if>
+                <if test="task.arrearsTotal != null ">arrears_total = #{task.arrearsTotal},</if>
+                <if test="task.taskStatus != null ">task_status = #{task.taskStatus},</if>
+                <if test="task.overdueDays != null ">overdue_days = #{task.overdueDays},</if>
+                <if test="task.overdueAging != null  and task.overdueAging != ''">overdue_aging =
+                    #{task.overdueAging},
+                </if>
+                <if test="task.ownerId != null ">owner_id = #{task.ownerId},</if>
+                <if test="task.ownerName != null  and task.ownerName != ''">owner_name = #{task.ownerName},</if>
+                <if test="task.orgId != null  and task.orgId != ''">org_id = #{task.orgId},</if>
+                <if test="task.orgName != null  and task.orgName != ''">org_name = #{task.orgName},</if>
+                <if test="task.closeDate != null ">close_date = #{task.closeDate},</if>
+                <if test="task.oldOwnerId != null ">old_owner_id = #{task.oldOwnerId},</if>
+                <if test="task.taskType != null ">task_type = #{task.taskType},</if>
+                <if test="task.allotType != null ">allot_type = #{task.allotType},</if>
+                modify_time = now(),
+                <if test="task.modifyBy != null ">modify_by = #{task.modifyBy},</if>
+                <if test="task.oldOwnerName != null  and task.oldOwnerName != ''">old_owner_name =
+                    #{task.oldOwnerName},
+                </if>
+                <if test="task.robotTaskId != null ">robot_task_id = #{task.robotTaskId},</if>
+                <if test="task.robotCallStrategyId != null ">robot_call_strategy_id = #{task.robotCallStrategyId},</if>
+                <if test="task.transferType != null  and task.transferType != ''">transfer_type =
+                    #{task.transferType},
+                </if>
+                <if test="task.enterCollDate != null ">enter_coll_date = #{task.enterCollDate},</if>
+                <if test="task.closeCaseYhje != null ">close_case_yhje = #{task.closeCaseYhje},</if>
+                <if test="task.recentlyAllotDate != null ">recently_allot_date = #{task.recentlyAllotDate},</if>
+                <if test="task.recentlyFollowUpDate != null ">recently_follow_up_date = #{task.recentlyFollowUpDate},</if>
+                <if test="task.hitRule != null  and task.hitRule != ''">hit_rule = #{task.hitRule},</if>
+                <if test="task.hitRuleDesc != null  and task.hitRuleDesc != ''">hit_rule_desc = #{task.hitRuleDesc},</if>
+                <if test="task.distributionStrategy != null  and task.distributionStrategy != ''">distribution_strategy = #{task.distributionStrategy},</if>
+                <if test="task.importBatchNo != null  and task.importBatchNo != ''">import_batch_no = #{task.importBatchNo},</if>
+                <if test="task.actionCode != null  and task.actionCode != ''">action_code = #{task.actionCode},</if>
+                <if test="task.actionCodeValue != null  and task.actionCodeValue != ''">action_code_value = #{task.actionCodeValue},</if>
+                <if test="task.callSign != null  and task.callSign != ''">call_sign = #{task.callSign},</if>
+                <if test="task.callSignValue != null  and task.callSignValue != ''">call_sign_value = #{task.callSignValue},</if>
+                <if test="task.phone != null  and task.phone != ''">phone = #{task.phone},</if>
+                <if test="task.dqyhje != null  and task.dqyhje != ''">dqyhje = #{task.dqyhje},</if>
+            </trim>
+            WHERE case_no = #{task.caseNo} and task_status !=3
+        </foreach>
+    </update>
+
+    <select id="findTaskByCertificateNo" parameterType="java.lang.String" resultMap="TLcTaskResult">
+        SELECT
+        <include refid="SELECT_T_LC_TASK"/>
+        FROM t_lc_task t
+        WHERE t.certificate_no = #{certificateNo}
+    </select>
+
+    <select id="findTaskByOwner" parameterType="java.lang.String" resultMap="TLcTaskResult">
+        SELECT
+            t.id,
+	        t.case_no,
+	        t.custom_name,
+	        t.recently_follow_up_date,
+	        t.arrears_total,
+	        t.org_id,
+	        t.import_batch_no
+        FROM
+	        t_lc_task t
+        WHERE  t.owner_id = #{ownerId}
+            AND t.allot_type = 1
+            AND t.task_status = 2
+            AND t.task_type NOT IN (10, 11, 12)
+        ORDER BY
+	        t.task_status ASC,
+	        t.create_time DESC,
+	        t.recently_allot_date ASC,
+	        t.enter_coll_date ASC,
+	        t.case_no ASC
+    </select>
+
+    <update id="updateOwnerById">
+        UPDATE t_lc_task SET owner_id = #{userId}
+        WHERE id in
+        <foreach collection="taskIds" separator="," item="id" open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="findDeptIdByOrgId" parameterType="java.lang.String" resultType="java.lang.Long">
+        SELECT
+            sd.dept_id
+        FROM
+            sys_dept sd,
+            org_package op
+        WHERE
+            op.org_name = sd.dept_name
+        AND op.id = #{orgId}
+    </select>
+
+    <select id="selectDeptByParentId" parameterType="java.lang.Long" resultType="com.ruoyi.system.domain.SysDept">
+        select sd.dept_id as deptId from sys_dept sd where sd.parent_id = #{parentId}
+    </select>
+
+    <select id="selectDeptIdByRoleId" parameterType="java.lang.Long" resultType="com.ruoyi.system.domain.SysRoleDept">
+        select srd.dept_id as deptId from sys_role_dept srd where srd.role_id = #{roleId}
+    </select>
+
+    <select id="selectTaskByCaseNo" resultMap="TLcTaskResult">
+        SELECT
+        <include refid="SELECT_T_LC_TASK"/>
+        FROM t_lc_task t
+        WHERE t.case_no = #{caseNo} AND t.org_id = #{orgId} and t.task_status != 3
+       <!-- <if test="importBatchNo != null and importBatchNo != ''">
+            AND t.import_batch_no = #{importBatchNo}
+        </if>-->
+    </select>
+
+    <select id="selectTaskByRobotTaskId" parameterType="java.lang.String" resultMap="TLcTaskResult">
+        SELECT
+        <include refid="SELECT_T_LC_TASK"/>
+        FROM t_lc_task t
+        WHERE t.robot_task_id = #{robotTaskId}
+    </select>
+
+    <select id="selectTaskByRobotTaskIdAndPhone" resultMap="TLcTaskResult">
+        SELECT
+        <include refid="SELECT_T_LC_TASK"/>
+        FROM t_lc_task t
+        WHERE t.robot_task_id = #{robotTaskId}
+        AND phone = #{phone}
+    </select>
+
+    <select id="selectTaskListByRobotTaskIdAndPhone" resultMap="TLcTaskResult">
+        SELECT
+        <include refid="SELECT_T_LC_TASK"/>
+        FROM t_lc_task t
+        WHERE t.robot_task_id = #{robotTaskId}
+        AND phone = #{phone}
+    </select>
+
+    <select id="isHasCloseCaseTask" parameterType="com.ruoyi.assetspackage.domain.Task" resultType="java.lang.Integer">
+        SELECT count(1) FROM t_lc_task t
+        WHERE 1=1
+        <include refid="SELECT_TASK_WHERE"/>
+    </select>
+
+    <select id="isHasCTSTask" parameterType="com.ruoyi.assetspackage.domain.Task" resultType="java.lang.Integer">
+        SELECT count(1) FROM t_lc_task t
+        WHERE 1=1
+        AND org_id = #{orgId}
+        <choose>
+            <when test="taskType != null and actionCode != null and actionCode != ''">
+                AND t.task_type = #{taskType}
+                OR action_code = #{actionCode}
+                <include refid="SELECT_TASK_WHERE"/>
+            </when>
+            <otherwise>
+                <include refid="SELECT_TASK_WHERE"/>
+            </otherwise>
+        </choose>
+    </select>
+</mapper>

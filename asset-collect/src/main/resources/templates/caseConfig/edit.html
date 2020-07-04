@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改智能分案配置')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal" id="form-config-edit" th:object="${tLcAllocatCaseConfig}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>所属机构：</label>
+                <div class="col-sm-8">
+                    <input name="orgName" id="orgIdValue" th:field="*{orgId}" class="form-control" type="hidden">
+                    <!--<input name="dialcaller" class="form-control" type="text">-->
+                    <select class="form-control" name="orgId" id="orgId" required>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <!--<label class="col-sm-3 control-label">自动分案策略：</label>
+                <div class="col-sm-8">
+                    <input name="allocatCaseStartegy" class="form-control" type="text">
+                </div>-->
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>自动分案策略：</label>
+                <div class="col-sm-8">
+                    <input name="allocatCaseStartegyValue" id="allocatCaseStartegyValue" th:field="*{allocatCaseStartegy}" class="form-control" type="hidden">
+                    <select class="form-control" name="allocatCaseStartegy" id="allocatCaseStartegy" required>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">规则引擎：</label>
+                <div class="col-sm-8">
+                    <input name="ruleEngineValue" id="ruleEngineValue" th:field="*{ruleEngine}" class="form-control" type="hidden">
+                    <select class="form-control" name="ruleEngine" id="ruleEngine">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>机器人：</label>
+                <div class="col-sm-8">
+                    <input name="robotValue" id="robotValue" th:field="*{robot}" class="form-control" type="hidden">
+                    <select class="form-control" name="robot" id="robot" required>
+                    </select>
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>话务平台：</label>
+                <div class="col-sm-8">
+                    <input name="callPlatformValue" id="callPlatformValue" th:field="*{callPlatform}" class="form-control" type="hidden">
+                    <select class="form-control" name="callPlatform" id="callPlatform" required>
+                    </select>
+                </div>
+            </div>-->
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否自动分案：</label>
+                <div class="col-sm-8">
+                    <input name="autoAllocatCaseValue" id="autoAllocatCaseValue" th:field="*{autoAllocatCase}" class="form-control" type="hidden">
+                    <select class="form-control" name="autoAllocatCase" id="autoAllocatCase">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">自动分案规则：</label>
+                <div class="col-sm-8">
+                    <input name="allocatCaseRuleValue" id="allocatCaseRuleValue" th:field="*{allocatCaseRule}" class="form-control" type="hidden">
+                    <select class="form-control" name="allocatCaseRule" id="allocatCaseRule">
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "case/config";
+        var taskPrefix = ctx + "collect/task";
+
+        $(function () {
+            initOrg();
+            initRuleEngine();
+            initRobot();
+            initCallPlatform();
+            initAllocatCaseStrategy();
+            initAllocatRule();
+            initAutoAllocatCase();
+        })
+
+        $("#form-config-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            // if ($.validate.form()) {
+            //     $.operate.save(prefix + "/edit", $('#form-config-edit').serialize());
+            // }
+            /*var orgId = $("#orgId").val();
+            if (orgId == null || orgId == '') {
+                $.modal.alertWarning("请选择所属机构");
+                return;
+            }
+            var robot = $("#robot").val();
+            if (robot == null || robot == '') {
+                $.modal.alertWarning("请选择机器人");
+                return;
+            }
+            var callPlatform = $("#callPlatform").val();
+            if (callPlatform == null || callPlatform == '') {
+                $.modal.alertWarning("请选择话务平台");
+                return;
+            }
+            var allocatCaseStartegy = $("#allocatCaseStartegy").val();
+            if (allocatCaseStartegy == null || allocatCaseStartegy == '') {
+                $.modal.alertWarning("请选择自动分案策略");
+                return;
+            }*/
+            if (allocatCaseStartegy == 'robot_person') {
+                var ruleEngine = $("#ruleEngine").val();
+                if (ruleEngine == null || ruleEngine == '') {
+                    $.modal.alertWarning("请选择规则引擎");
+                    return;
+                }
+            }
+            var autoAllocatCase = $("#autoAllocatCase").val();
+            if (autoAllocatCase == 1) {
+                var allocatCaseRule = $("#allocatCaseRule").val();
+                if (allocatCaseRule == null || allocatCaseRule == '') {
+                    $.modal.alertWarning("请选择分案规则");
+                    return;
+                }
+            }
+            $.post(
+                prefix + "/edit",
+                {
+                    id:$("#id").val(),
+                    orgId:$("#orgId").val(),
+                    ruleEngine:$("#ruleEngine").val(),
+                    robot:$("#robot").val(),
+                    callPlatform:$("#callPlatform").val(),
+                    allocatCaseStartegy:$("#allocatCaseStartegy").val(),
+                    autoAllocatCase:$("#autoAllocatCase").val(),
+                    allocatCaseRule:$("#allocatCaseRule").val()
+                },
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        $.modal.alertSuccess("修改成功");
+                        window.parent.$.table.refresh();
+                        $.modal.close();
+                        //setTimeout(function() {
+                            //window.parent.location.reload();
+                        //}, 1000);
+                    }
+                }
+            );
+        }
+
+        function initOrg() {
+            var orgIdValue = $("#orgIdValue").val();
+            $.post(
+                taskPrefix+"/initOrg",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            if (orgIdValue == data.rows[i].deptId) {
+                                var opt = "<option value='"+data.rows[i].deptId+"' selected>"+data.rows[i].deptName+"</option>";
+                            } else {
+                                var opt = "<option value='"+data.rows[i].deptId+"'>"+data.rows[i].deptName+"</option>";
+                            }
+                            $("#orgId").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function initRuleEngine() {
+            var ruleEngineValue = $("#ruleEngineValue").val();
+            $.post(
+                prefix + "/initRuleEngine",
+                function (data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            if (ruleEngineValue == data.rows[i].code) {
+                                var opt = "<option value='" + data.rows[i].code + "' selected>" + data.rows[i].message + "</option>";
+                            } else {
+                                var opt = "<option value='" + data.rows[i].code + "'>" + data.rows[i].message + "</option>";
+                            }
+                            $("#ruleEngine").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function initRobot() {
+            var robotValue = $("#robotValue").val();
+            $.post(
+                prefix + "/initRobot",
+                function (data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            if (robotValue == data.rows[i].code) {
+                                var opt = "<option value='" + data.rows[i].code + "' selected>" + data.rows[i].message + "</option>";
+                            } else {
+                                var opt = "<option value='" + data.rows[i].code + "'>" + data.rows[i].message + "</option>";
+                            }
+                            $("#robot").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function initCallPlatform() {
+            var callPlatformValue = $("#callPlatformValue").val();
+            $.post(
+                prefix + "/initCallPlatform",
+                function (data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            if (callPlatformValue == data.rows[i].code) {
+                                var opt = "<option value='" + data.rows[i].code + "' selected>" + data.rows[i].message + "</option>";
+                            } else {
+                                var opt = "<option value='" + data.rows[i].code + "'>" + data.rows[i].message + "</option>";
+                            }
+                            $("#callPlatform").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function initAllocatCaseStrategy() {
+            var allocatCaseStartegyValue = $("#allocatCaseStartegyValue").val();
+            $.post(
+                prefix + "/initAllocatCaseStrategy",
+                function (data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            if (allocatCaseStartegyValue == data.rows[i].code) {
+                                var opt = "<option value='" + data.rows[i].code + "' selected>" + data.rows[i].message + "</option>";
+                            } else {
+                                var opt = "<option value='" + data.rows[i].code + "'>" + data.rows[i].message + "</option>";
+                            }
+                            $("#allocatCaseStartegy").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function initAutoAllocatCase() {
+            var autoAllocatCaseValue = $("#autoAllocatCaseValue").val();
+            if (autoAllocatCaseValue == null || autoAllocatCaseValue == '') {
+                var opt = "<option value=''>请选择</option>";
+                $("#autoAllocatCase").append(opt);
+                var opt = "<option value='1'>是</option>";
+                $("#autoAllocatCase").append(opt);
+                var opt = "<option value='2'>否</option>";
+                $("#autoAllocatCase").append(opt);
+            } else {
+                if (autoAllocatCaseValue == 1) {
+                    var opt = "<option value='1' selected>是</option>";
+                    $("#autoAllocatCase").append(opt);
+                    var opt = "<option value='2'>否</option>";
+                    $("#autoAllocatCase").append(opt);
+                } else if (autoAllocatCaseValue == 2) {
+                    var opt = "<option value='1'>是</option>";
+                    $("#autoAllocatCase").append(opt);
+                    var opt = "<option value='2' selected>否</option>";
+                    $("#autoAllocatCase").append(opt);
+                }
+            }
+        }
+
+        function initAllocatRule() {
+            var allocatCaseRuleValue = $("#allocatCaseRuleValue").val();
+            $.post(
+                taskPrefix + "/initAllocatRule",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            if (allocatCaseRuleValue == data.rows[i].code) {
+                                var opt = "<option value='" + data.rows[i].code + "' selected>" + data.rows[i].message + "</option>";
+                            } else {
+                                var opt = "<option value='" + data.rows[i].code + "'>" + data.rows[i].message + "</option>";
+                            }
+                            $("#allocatCaseRule").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+    </script>
+</body>
+</html>

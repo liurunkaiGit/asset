@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('radio表格页')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<!--<div class="col-sm-12 search-collapse">
+				<form id="user-form">
+					<input type="hidden" id="deptId" name="deptId">
+					<input type="hidden" id="parentId" name="parentId">
+					<div class="select-list">
+						<ul>
+							<input type="hidden" name="taskIds" id="taskIds" th:value="${taskIds}">
+							<li>
+								选择话术：<select name="status" th:with="type=${@dict.getType('robot_speech_craft')}">
+								<option value="">所有</option>
+								<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+								</select>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>-->
+			<div class="col-sm-12 select-table table-striped">
+				<!--<table id="bootstrap-table"></table>-->
+				<div class="select-list">
+					<ul>
+						<input type="hidden" name="taskIds" id="taskIds" th:value="${taskIds}">
+						<input type="hidden" name="orgId" id="orgId" th:value="${orgId}">
+						<li>
+							选择话术：<select name="speechcraftIdAndSceneDefId" id="speechcraftId">
+							<option value="">所有</option>
+						</select>
+						</li>
+						<li>
+							选择线路：<select name="callLineId" id="callLineId">
+							<option value="">所有</option>
+						</select>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var prefix = ctx + "collect/task";
+        var callConfigPrefix = ctx + "call/config";
+
+        $(function () {
+			initCallLine();
+			initSpeechCraft();
+		})
+
+		function initSpeechCraft() {
+        	var orgId = $("#orgId").val();
+			$.post(
+					callConfigPrefix + "/initSpeechCraftByOrgId",
+					{orgId:orgId},
+					function(data) {
+						// alert(JSON.stringify(data));
+						if (data.code == 0) {//请求成功
+							for (var i = 0; i < data.rows.length; i++) {
+								var opt = "<option value='"+data.rows[i].robotDefId+"," + data.rows[i].sceneDefId + ","+data.rows[i].robotName+"'>"+data.rows[i].robotName+"</option>";
+								$("#speechcraftId").append(opt);
+							}
+						}
+					}
+			);
+		}
+
+		function submitHandler() {
+			var speechcraftId = $("#speechcraftId").val();
+			if (speechcraftId == null || speechcraftId == '') {
+       			$.modal.alertWarning("请选择话术");
+       			return;
+       		}
+			var callLineId = $("#callLineId").val();
+			if (callLineId == null || callLineId == '') {
+				$.modal.alertWarning("请选择线路");
+				return;
+			}
+			var data = {"taskIds": $("#taskIds").val(),"speechcraftIdAndSceneDefId":speechcraftId, "callLineId":callLineId, "orgId":$("#orgId").val()};
+			//$.operate.submit(prefix + "/sendRobot", "post", "json", data);
+			window.$.modal.loading("请稍后...");
+			$.post(
+					prefix + "/sendRobot",
+					data,
+					function(data) {
+						// alert(JSON.stringify(data));
+						// if (data.code == 0) {//请求成功
+						// 	// 暂停1秒后刷新父页面
+						// 	setTimeout(function() {
+						// 		window.parent.location.reload();
+						// 	}, 1000);
+						// 	window.$.modal.closeLoading();
+						// } else {
+						// 	$.modal.alertError(data.msg);
+						// 	window.$.modal.closeLoading();
+						// }
+						// window.$.modal.closeLoading();
+						window.$.modal.closeLoading();
+						window.parent.$.table.refresh();
+						window.parent.resetSelectAll();
+						$.modal.alertSuccess(data.data.split(",")[0] + "条数据推送成功," + data.data.split(",")[1] + "条数据未推送");
+					}
+			);
+		}
+
+		function initCallLine() {
+			$.post(
+					callConfigPrefix + "/initCallLine",
+					function(data) {
+						// alert(JSON.stringify(data));
+						// console.log(data);
+						if (data.code == 0) {//请求成功
+							for (var i = 0; i < data.rows.length; i++) {
+								var opt = "<option value='"+data.rows[i].userPhoneId+"'>"+data.rows[i].phone+"</option>";
+								$("#callLineId").append(opt);
+							}
+						}
+					}
+			);
+		}
+    </script>
+</body>
+</html>

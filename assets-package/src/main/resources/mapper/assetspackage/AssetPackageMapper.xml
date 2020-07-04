@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.AssetPackageMapper">
+    
+    <resultMap type="com.ruoyi.assetspackage.domain.AssetPackage" id="AssetPackageResult">
+        <result property="id"    column="id"    />
+        <result property="packageName"    column="package_name"    />
+        <result property="caseAddress"    column="case_address"    />
+        <result property="caseAddressCode"    column="case_address_code"    />
+        <result property="caseAccountAge"    column="case_account_age"    />
+        <result property="lastCode"    column="last_code"    />
+        <result property="gradeOrgName"    column="grade_org_name"    />
+        <result property="gradeValue"    column="grade_value"    />
+        <result property="packageAmount"    column="package_amount"    />
+        <result property="packageNum"    column="package_num"    />
+        <result property="isNull"    column="is_null"    />
+        <result property="isClose"    column="is_close"    />
+        <result property="allocationBy"    column="allocation_by"    />
+        <result property="allocationTime"    column="allocation_time"    />
+        <result property="startOrgId"    column="start_org_id"    />
+        <result property="endOrgId"    column="end_org_id"    />
+        <result property="expireTime"    column="expire_time"    />
+        <result property="recoverAmount"    column="recover_amount"    />
+        <result property="recoverTime"    column="recover_time"    />
+        <result property="recoverWay"    column="recover_way"    />
+        <result property="recoverBy"    column="recover_by"    />
+        <result property="recoverCause"    column="recover_cause"    />
+        <result property="recoverStatus"    column="recover_status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <!--<resultMap type="com.ruoyi.assetspackage.domain.CurAssetsPackage" id="CurAssetsPackageResult">
+        <result property="id"    column="id"    />
+        <result property="orgCasno"    column="org_casNo"    />
+        <result property="org"    column="org"    />
+        <result property="transfertype"    column="transferType"    />
+        <result property="twentyfourcd"    column="twentyFourCD"    />
+        <result property="blk"    column="BLK"    />
+        <result property="productline"    column="productLine"    />
+        <result property="rmbLastJkje"    column="rmb_last_jkje"    />
+        <result property="rmbYe"    column="rmb_ye"    />
+        <result property="rmbYhfxzje"    column="rmb_yhfxzje"    />
+        <result property="rmbCd"    column="rmb_cd"    />
+        <result property="rmbZhycjkr"    column="rmb_zhycjkr"    />
+        <result property="rmbZhhkbs"    column="rmb_zhhkbs"    />
+        <result property="rmbYhlizje"    column="rmb_yhlizje"    />
+        <result property="rmbYhbj1"    column="rmb_yhbj1"    />
+        <result property="rmbYhbj2"    column="rmb_yhbj2"    />
+        <result property="rmbYhbjzje"    column="rmb_yhbjzje"    />
+        <result property="rmbYhfx1"    column="rmb_yhfx1"    />
+        <result property="rmbYhfx2"    column="rmb_yhfx2"    />
+        <result property="rmbYhfy1"    column="rmb_yhfy1"    />
+        <result property="rmbYhfy2"    column="rmb_yhfy2"    />
+        <result property="rmbYhfyzje"    column="rmb_yhfyzje"    />
+        <result property="rmbZdyhje"    column="rmb_zdyhje"    />
+        <result property="rmbQkzje"    column="rmb_qkzje"    />
+        <result property="rmbGded"    column="rmb_gded"    />
+        <result property="code"    column="code"    />
+        <result property="borrowNo"    column="borrow_no"    />
+        <result property="borrowBlank"    column="borrow_blank"    />
+        <result property="borrowEd"    column="borrow_ed"    />
+        <result property="zxType"    column="zx_type"    />
+        <result property="stopCard"    column="stop_card"    />
+        <result property="stopJxrq"    column="stop_jxrq"    />
+        <result property="csCompany"    column="cs_company"    />
+        <result property="rcr"    column="rcr"    />
+        <result property="gzFlag"    column="gz_flag"    />
+        <result property="fz"    column="fz"    />
+        <result property="fqFlag"    column="fq_flag"    />
+        <result property="syhxQtfy"    column="syhx_qtfy"    />
+        <result property="syhxSxf"    column="syhx_sxf"    />
+        <result property="syhxBj"    column="syhx_bj"    />
+        <result property="syhxZnf"    column="syhx_znf"    />
+        <result property="syhxYqx"    column="syhx_yqx"    />
+        <result property="syhxJehj"    column="syhx_jehj"    />
+        <result property="areaCenter"    column="area_center"    />
+        <result property="csRemarkHis"    column="cs_remark_his"    />
+        <result property="maxYqtsHis"    column="max_yqts_his"    />
+        <result property="sumYqtsHis"    column="sum_yqts_his"    />
+        <result property="sumYqcsHis"    column="sum_yqcs_his"    />
+        <result property="csjggsHis"    column="csjggs_his"    />
+        <result property="qxFlag"    column="qx_flag"    />
+        <result property="stCompany"    column="st_company"    />
+        <result property="acceptFirm"    column="accept_firm"    />
+        <result property="acceptCity"    column="accept_city"    />
+        <result property="acceptWd"    column="accept_wd"    />
+        <result property="acceptWdCode"    column="accept_wd_code"    />
+        <result property="dzhxrq"    column="dzhxrq"    />
+        <result property="remark"    column="remark"    />
+        <result property="wbYhfxze"    column="wb_yhfxze"    />
+        <result property="wbYhlxze"    column="wb_yhlxze"    />
+        <result property="wbYhbj1"    column="wb_yhbj1"    />
+        <result property="wbYhbj2"    column="wb_yhbj2"    />
+        <result property="wbYhbjzje"    column="wb_yhbjzje"    />
+        <result property="wbYhfx1"    column="wb_yhfx1"    />
+        <result property="wbYhfx2"    column="wb_yhfx2"    />
+        <result property="wbYhfy1"    column="wb_yhfy1"    />
+        <result property="wbYhfy2"    column="wb_yhfy2"    />
+        <result property="wbYhfyze"    column="wb_yhfyze"    />
+        <result property="wbZdyhe"    column="wb_zdyhe"    />
+        <result property="wbQkzje"    column="wb_qkzje"    />
+        <result property="txFlag"    column="tx_flag"    />
+        <result property="wwCompanyCode"    column="ww_company_code"    />
+        <result property="wwCityName"    column="ww_city_name"    />
+        <result property="wwJhEnddate"    column="ww_jh_enddate"    />
+        <result property="wwQsrq"    column="ww_qsrq"    />
+        <result property="wwPc"    column="ww_pc"    />
+        <result property="waYe"    column="wa_ye"    />
+        <result property="billAddress"    column="bill_address"    />
+        <result property="billAddressPostcode"    column="bill_address_postcode"    />
+        <result property="yearRates"    column="year_rates"    />
+        <result property="yhkDate"    column="yhk_date"    />
+        <result property="startYqDate"    column="start_yq_date"    />
+        <result property="khDate"    column="kh_date"    />
+        <result property="tsFlag"    column="ts_flag"    />
+        <result property="creditValue"    column="credit_value"    />
+        <result property="tjFirm"    column="tj_firm"    />
+        <result property="tjCity"    column="tj_city"    />
+        <result property="tjWd"    column="tj_wd"    />
+        <result property="shhxSxf"    column="shhx_sxf"    />
+        <result property="shhxBj"    column="shhx_bj"    />
+        <result property="shhxZnf"    column="shhx_znf"    />
+        <result property="shhxFy"    column="shhx_fy"    />
+        <result property="shhxYqx"    column="shhx_yqx"    />
+        <result property="shhxJehj"    column="shhx_jehj"    />
+        <result property="zh30Day"    column="zh_30_day"    />
+        <result property="zhXDay"    column="zh_x_day"    />
+        <result property="isZc"    column="is_zc"    />
+        <result property="isZwcz"    column="is_zwcz"    />
+        <result property="isJx"    column="is_jx"    />
+        <result property="isSx"    column="is_sx"    />
+        <result property="zjyqMonth"    column="zjyq_month"    />
+        <result property="hxSxfcs"    column="hx_sxfcs"    />
+        <result property="hxShzt"    column="hx_shzt"    />
+        <result property="hxBjcs"    column="hx_bjcs"    />
+        <result property="hxZnfcs"    column="hx_znfcs"    />
+        <result property="hxFycs"    column="hx_fycs"    />
+        <result property="hxYqlxcs"    column="hx_yqlxcs"    />
+        <result property="hxJehjcs"    column="hx_jehjcs"    />
+        <result property="ajHzDate"    column="aj_hz_date"    />
+        <result property="xfjzzh"    column="xfjzzh"    />
+        <result property="tsajType"    column="tsaj_type"    />
+        <result property="dayRates"    column="day_rates"    />
+        <result property="tjDate"    column="tj_date"    />
+        <result property="dollarYe"    column="dollar_ye"    />
+        <result property="dollarCd"    column="dollar_CD"    />
+        <result property="dollarZdyjkje"    column="dollar_zdyjkje"    />
+        <result property="dollarZhycjkr"    column="dollar_zhycjkr"    />
+        <result property="dollarZhycjkje"    column="dollar_zhycjkje"    />
+        <result property="dollarHkrhkbs"    column="dollar_hkrhkbs"    />
+        <result property="hkfs"    column="hkfs"    />
+        <result property="hkqd"    column="hkqd"    />
+        <result property="xwpf"    column="xwpf"    />
+        <result property="accountDate"    column="account_date"    />
+        <result property="accountYebj"    column="account_yebj"    />
+        <result property="accountJqrq"    column="account_jqrq"    />
+        <result property="fzzb"    column="fzzb"    />
+        <result property="revertCardNo"    column="revert_card_no"    />
+        <result property="revertCardBlank"    column="revert_card_blank"    />
+        <result property="jjqd"    column="jjqd"    />
+        <result property="overdueDays"    column="overdue_days"    />
+        <result property="overdueFlag"    column="overdue_flag"    />
+        <result property="cwcs"    column="cwcs"    />
+        <result property="quotaProduct"    column="quota_product"    />
+        <result property="quotaCode"    column="quota_code"    />
+        <result property="quotaDate"    column="quota_date"    />
+        <result property="risk"    column="risk"    />
+        <result property="firstFkDate"    column="first_fk_date"    />
+        <result property="firstYqDate"    column="first_yq_date"    />
+        <result property="firstYqjcDate"    column="first_yqjc_date"    />
+        <result property="firstYqFlag"    column="first_yq_flag"    />
+        <result property="curName"    column="cur_name"    />
+        <result property="curSex"    column="cur_sex"    />
+        <result property="certificateNo"    column="certificate_no"    />
+        <result property="certificateType"    column="certificate_type"    />
+        <result property="certificateAddress"    column="certificate_address"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="registAddress"    column="regist_address"    />
+        <result property="email"    column="email"    />
+        <result property="city"    column="city"    />
+        <result property="marriage"    column="marriage"    />
+        <result property="education"    column="education"    />
+        <result property="economy"    column="economy"    />
+        <result property="curIncome"    column="cur_income"    />
+        <result property="newAddress"    column="new_address"    />
+        <result property="customerNo"    column="customer_no"    />
+        <result property="customerMobile"    column="customer_mobile"    />
+        <result property="customerHomeTel"    column="customer_home_tel"    />
+        <result property="customerHomeAddress"    column="customer_home_address"    />
+        <result property="customerHomePostcode"    column="customer_home_postcode"    />
+        <result property="cardPostAddress"    column="card_post_address"    />
+        <result property="job"    column="job"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="indust"    column="indust"    />
+        <result property="workName"    column="work_name"    />
+        <result property="workAddress"    column="work_address"    />
+        <result property="workTel"    column="work_tel"    />
+        <result property="workPostcode"    column="work_postcode"    />
+        <result property="firstLiaisonName"    column="first_liaison_name"    />
+        <result property="firstLiaisonRelation"    column="first_liaison_relation"    />
+        <result property="firstLiaisonMobile"    column="first_liaison_mobile"    />
+        <result property="firstLiaisonTel"    column="first_liaison_tel"    />
+        <result property="secondLiaisonName"    column="second_liaison_name"    />
+        <result property="secondLiaisonRelation"    column="second_liaison_relation"    />
+        <result property="secondLiaisonMobile"    column="second_liaison_mobile"    />
+        <result property="secondLiaisonTel"    column="second_liaison_tel"    />
+        <result property="threeLiaisonName"    column="three_liaison_name"    />
+        <result property="threeLiaisonRelation"    column="three_liaison_relation"    />
+        <result property="threeLiaisonMobile"    column="three_liaison_mobile"    />
+        <result property="threeLiaisonTel"    column="three_liaison_tel"    />
+        <result property="sjrq"    column="sjrq"    />
+        <result property="hth"    column="hth"    />
+        <result property="jjh"    column="jjh"    />
+        <result property="dqsybYj"    column="dqsyb_yj"    />
+        <result property="dqsybEj"    column="dqsyb_ej"    />
+        <result property="csjd"    column="csjd"    />
+        <result property="wbjb"    column="wbjb"    />
+        <result property="ysKhjlmc"    column="ys_khjlmc"    />
+        <result property="khjlmc"    column="khjlmc"    />
+        <result property="cpmc"    column="cpmc"    />
+        <result property="xfldycpmc"    column="xfldycpmc"    />
+        <result property="qxrq"    column="qxrq"    />
+        <result property="dqrq"    column="dqrq"    />
+        <result property="hkType"    column="hk_type"    />
+        <result property="dkye"    column="dkye"    />
+        <result property="wbbs"    column="wbbs"    />
+        <result property="yqje"    column="yqje"    />
+        <result property="yqbj"    column="yqbj"    />
+        <result property="yqlx"    column="yqlx"    />
+        <result property="yqsxf"    column="yqsxf"    />
+        <result property="znj"    column="znj"    />
+        <result property="qdmc"    column="qdmc"    />
+        <result property="wbsb"    column="wbsb"    />
+        <result property="wbqs"    column="wbqs"    />
+        <result property="fpsj"    column="fpsj"    />
+        <result property="ajhssj"    column="ajhssj"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="packageFlag"    column="package_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="closeCase"    column="close_case"    />
+        <result property="closeCaseDate"    column="close_case_date"    />
+        <result property="isExitCollect"    column="is_exit_collect"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="packageId"    column="package_id"    />
+    </resultMap>
+-->
+    <resultMap type="com.ruoyi.assetspackage.domain.CurAssetsPackage" id="CurAssetsPackageResult">
+        <result property="id"    column="id"    />
+        <result property="orgCasno"    column="org_casNo"    />
+        <result property="org"    column="org"    />
+        <result property="transfertype"    column="transferType"    />
+        <result property="rmbYe"    column="rmb_ye"    />
+        <result property="rmbYhfxzje"    column="rmb_yhfxzje"    />
+        <result property="rmbYhlizje"    column="rmb_yhlizje"    />
+        <result property="rmbYhbjzje"    column="rmb_yhbjzje"    />
+        <result property="rmbYhfyzje"    column="rmb_yhfyzje"    />
+        <result property="rmbZdyhje"    column="rmb_zdyhje"    />
+        <result property="rmbQkzje"    column="rmb_qkzje"    />
+        <result property="borrowNo"    column="borrow_no"    />
+        <result property="borrowBlank"    column="borrow_blank"    />
+        <result property="borrowEd"    column="borrow_ed"    />
+        <result property="rcr"    column="rcr"    />
+        <result property="fz"    column="fz"    />
+        <result property="areaCenter"    column="area_center"    />
+        <result property="maxYqtsHis"    column="max_yqts_his"    />
+        <result property="sumYqtsHis"    column="sum_yqts_his"    />
+        <result property="sumYqcsHis"    column="sum_yqcs_his"    />
+        <result property="wwCityName"    column="ww_city_name"    />
+        <result property="waYe"    column="wa_ye"    />
+        <result property="billAddress"    column="bill_address"    />
+        <result property="yearRates"    column="year_rates"    />
+        <result property="tjFirm"    column="tj_firm"    />
+        <result property="tjWd"    column="tj_wd"    />
+        <result property="dayRates"    column="day_rates"    />
+        <result property="accountDate"    column="account_date"    />
+        <result property="overdueDays"    column="overdue_days"    />
+        <result property="firstYqDate"    column="first_yq_date"    />
+        <result property="firstYqjcDate"    column="first_yqjc_date"    />
+        <result property="firstYqFlag"    column="first_yq_flag"    />
+        <result property="curName"    column="cur_name"    />
+        <result property="curSex"    column="cur_sex"    />
+        <result property="certificateNo"    column="certificate_no"    />
+        <result property="certificateAddress"    column="certificate_address"    />
+        <result property="registAddress"    column="regist_address"    />
+        <result property="email"    column="email"    />
+        <result property="marriage"    column="marriage"    />
+        <result property="education"    column="education"    />
+        <result property="customerMobile"    column="customer_mobile"    />
+        <result property="customerHomeTel"    column="customer_home_tel"    />
+        <result property="customerHomeAddress"    column="customer_home_address"    />
+        <result property="workName"    column="work_name"    />
+        <result property="workAddress"    column="work_address"    />
+        <result property="workTel"    column="work_tel"    />
+        <result property="firstLiaisonName"    column="first_liaison_name"    />
+        <result property="firstLiaisonRelation"    column="first_liaison_relation"    />
+        <result property="firstLiaisonMobile"    column="first_liaison_mobile"    />
+        <result property="firstLiaisonTel"    column="first_liaison_tel"    />
+        <result property="secondLiaisonName"    column="second_liaison_name"    />
+        <result property="secondLiaisonRelation"    column="second_liaison_relation"    />
+        <result property="secondLiaisonMobile"    column="second_liaison_mobile"    />
+        <result property="secondLiaisonTel"    column="second_liaison_tel"    />
+        <result property="threeLiaisonName"    column="three_liaison_name"    />
+        <result property="threeLiaisonRelation"    column="three_liaison_relation"    />
+        <result property="threeLiaisonMobile"    column="three_liaison_mobile"    />
+        <result property="threeLiaisonTel"    column="three_liaison_tel"    />
+        <result property="cpmc"    column="cpmc"    />
+        <result property="hkType"    column="hk_type"    />
+        <result property="znj"    column="znj"    />
+        <result property="ajhssj"    column="ajhssj"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="packageFlag"    column="package_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="closeCase"    column="close_case"    />
+        <result property="isExitCollect"    column="is_exit_collect"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="closeCaseDate"    column="close_case_date"    />
+        <result property="packageId"    column="package_id"    />
+        <result property="accountAge"    column="account_age"    />
+        <result property="laFlag"    column="la_flag"    />
+        <result property="fxFlag"    column="fx_flag"    />
+        <result property="htlx"    column="htlx"    />
+        <result property="jmbq"    column="jmbq"    />
+        <result property="fcbq"    column="fcbq"    />
+        <result property="fxsfbh"    column="fxsfbh"    />
+        <result property="remark"    column="remark"    />
+        <result property="tar"    column="tar"    />
+        <result property="jkrq"    column="jkrq"    />
+        <result property="zhychkr"    column="zhychkr"    />
+        <result property="mqhkje"    column="mqhkje"    />
+        <result property="dqqkje"    column="dqqkje"    />
+        <result property="ljyhje"    column="ljyhje"    />
+        <result property="sfje"    column="sfje"    />
+        <result property="zdhkzh1"    column="zdhkzh1"    />
+        <result property="zdhkzh2"    column="zdhkzh2"    />
+        <result property="zdhkzhhm1"    column="zdhkzhhm1"    />
+        <result property="zdhkzhhm2"    column="zdhkzhhm2"    />
+        <result property="zdhkqd1"    column="zdhkqd1"    />
+        <result property="zdhkqd2"    column="zdhkqd2"    />
+        <result property="khmb"    column="khmb"    />
+        <result property="spjg"    column="spjg"    />
+        <result property="dklx"    column="dklx"    />
+        <result property="jkbs"    column="jkbs"    />
+        <result property="spxx"    column="spxx"    />
+        <result property="wacs"    column="wacs"    />
+        <result property="ykqs"    column="ykqs"    />
+        <result property="workDept"    column="work_dept"    />
+        <result property="customerMobile2"    column="customer_mobile2"    />
+        <result property="customerMobile3"    column="customer_mobile3"    />
+        <result property="customerMobile4"    column="customer_mobile4"    />
+        <result property="fourthLiaisonName"    column="fourth_liaison_name"    />
+        <result property="fourthLiaisonRelation"    column="fourth_liaison_relation"    />
+        <result property="fourthLiaisonMobile"    column="fourth_liaison_mobile"    />
+        <result property="fifthLiaisonName"    column="fifth_liaison_name"    />
+        <result property="fifthLiaisonRelation"    column="fifth_liaison_relation"    />
+        <result property="fifthLiaisonMobile"    column="fifth_liaison_mobile"    />
+    </resultMap>
+
+    <sql id="selectAssetPackageVo">
+        select id, package_name, case_address, case_address_code, case_account_age, last_code, grade_org_name, grade_value, package_amount, package_num, is_null, is_close, allocation_by, allocation_time, start_org_id, end_org_id, expire_time, recover_amount, recover_time, recover_way, recover_by, recover_cause, recover_status, create_by, create_time, update_by, update_time from asset_package
+    </sql>
+
+    <!--<sql id="selectCurAssetsPackageVo">
+        select id, org_casNo, org, transferType, twentyFourCD, BLK, productLine, rmb_last_jkje, rmb_ye, rmb_yhfxzje, rmb_cd, rmb_zhycjkr, rmb_zhhkbs, rmb_yhlizje, rmb_yhbj1, rmb_yhbj2, rmb_yhbjzje, rmb_yhfx1, rmb_yhfx2, rmb_yhfy1, rmb_yhfy2, rmb_yhfyzje, rmb_zdyhje, rmb_qkzje, rmb_gded, code, borrow_no, borrow_blank, borrow_ed, zx_type, stop_card, stop_jxrq, cs_company, rcr, gz_flag, fz, fq_flag, syhx_qtfy, syhx_sxf, syhx_bj, syhx_znf, syhx_yqx, syhx_jehj, area_center, cs_remark_his, max_yqts_his, sum_yqts_his, sum_yqcs_his, csjggs_his, qx_flag, st_company, accept_firm, accept_city, accept_wd, accept_wd_code, dzhxrq, remark, wb_yhfxze, wb_yhlxze, wb_yhbj1, wb_yhbj2, wb_yhbjzje, wb_yhfx1, wb_yhfx2, wb_yhfy1, wb_yhfy2, wb_yhfyze, wb_zdyhe, wb_qkzje, tx_flag, ww_company_code, ww_city_name, ww_jh_enddate, ww_qsrq, ww_pc, wa_ye, bill_address, bill_address_postcode, year_rates, yhk_date, start_yq_date, kh_date, ts_flag, credit_value, tj_firm, tj_city, tj_wd, shhx_sxf, shhx_bj, shhx_znf, shhx_fy, shhx_yqx, shhx_jehj, zh_30_day, zh_x_day, is_zc, is_zwcz, is_jx, is_sx, zjyq_month, hx_sxfcs, hx_shzt, hx_bjcs, hx_znfcs, hx_fycs, hx_yqlxcs, hx_jehjcs, aj_hz_date, xfjzzh, tsaj_type, day_rates, tj_date, dollar_ye, dollar_CD, dollar_zdyjkje, dollar_zhycjkr, dollar_zhycjkje, dollar_hkrhkbs, hkfs, hkqd, xwpf, account_date, account_yebj, account_jqrq, fzzb, revert_card_no, revert_card_blank, jjqd, overdue_days, overdue_flag, cwcs, quota_product, quota_code, quota_date, risk, first_fk_date, first_yq_date, first_yqjc_date, first_yq_flag, cur_name, cur_sex, certificate_no, certificate_type, certificate_address, birthday, regist_address, email, city, marriage, education, economy, cur_income, new_address, customer_no, customer_mobile, customer_home_tel, customer_home_address, customer_home_postcode, card_post_address, job, dept_name, indust, work_name, work_address, work_tel, work_postcode, first_liaison_name, first_liaison_relation, first_liaison_mobile, first_liaison_tel, second_liaison_name, second_liaison_relation, second_liaison_mobile, second_liaison_tel, three_liaison_name, three_liaison_relation, three_liaison_mobile, three_liaison_tel, sjrq, hth, jjh, dqsyb_yj, dqsyb_ej, csjd, wbjb, ys_khjlmc, khjlmc, cpmc, xfldycpmc, qxrq, dqrq, hk_type, dkye, wbbs, yqje, yqbj, yqlx, yqsxf, znj, qdmc, wbsb, wbqs, fpsj, ajhssj, org_id, package_flag, create_by, create_time, import_batch_no, is_exit_collect, close_case, close_case_date from cur_assets_package
+    </sql>-->
+
+    <sql id="selectCurAssetsPackageVo">
+        select id, org_casNo, org, transferType, rmb_ye, rmb_yhfxzje, rmb_yhlizje, rmb_yhbjzje, rmb_yhfyzje, rmb_zdyhje, rmb_qkzje, borrow_no, borrow_blank, borrow_ed, rcr, fz, area_center, max_yqts_his, sum_yqts_his, sum_yqcs_his, ww_city_name, wa_ye, bill_address, year_rates, tj_firm, tj_wd, day_rates, account_date, overdue_days, first_yq_date, first_yqjc_date, first_yq_flag, cur_name, cur_sex, certificate_no, certificate_address, regist_address, email, marriage, education, customer_mobile, customer_home_tel, customer_home_address, work_name, work_address, work_tel, first_liaison_name, first_liaison_relation, first_liaison_mobile, first_liaison_tel, second_liaison_name, second_liaison_relation, second_liaison_mobile, second_liaison_tel, three_liaison_name, three_liaison_relation, three_liaison_mobile, three_liaison_tel, cpmc, hk_type, znj, ajhssj, org_id, package_flag, create_by, create_time, close_case, is_exit_collect, import_batch_no, close_case_date, package_id, account_age, la_flag, fx_flag, htlx, jmbq, fcbq, fxsfbh, remark, tar, jkrq, zhychkr, mqhkje, dqqkje, ljyhje, sfje, zdhkzh1, zdhkzh2, zdhkzhhm1, zdhkzhhm2, zdhkqd1, zdhkqd2, khmb, spjg, dklx, jkbs, spxx, wacs, ykqs, work_dept, customer_mobile2, customer_mobile3, customer_mobile4, fourth_liaison_name, fourth_liaison_relation, fourth_liaison_mobile, fifth_liaison_name, fifth_liaison_relation, fifth_liaison_mobile from cur_assets_package
+    </sql>
+
+
+    <select id="selectAssetPackageList" parameterType="AssetPackage" resultMap="AssetPackageResult">
+        select id, package_name, case_address, case_address_code, case_account_age, last_code, grade_org_name, grade_value, package_amount, package_num, is_null, is_close, allocation_by, allocation_time, start_org_id, end_org_id, expire_time, recover_amount, recover_time, recover_way, recover_by, recover_cause, recover_status, create_by, create_time, update_by, update_time
+        from asset_package t
+        <where>  
+            <if test="packageName != null  and packageName != ''"> and t.package_name like concat('%', #{packageName}, '%')</if>
+            <if test="caseAddress != null  and caseAddress != ''"> and t.case_address = #{caseAddress}</if>
+            <if test="caseAddressCode != null  and caseAddressCode != ''"> and t.case_address_code = #{caseAddressCode}</if>
+            <if test="caseAccountAge != null  and caseAccountAge != ''"> and t.case_account_age = #{caseAccountAge}</if>
+            <if test="gradeOrgName != null  and gradeOrgName != ''"> and t.grade_org_name like concat('%', #{gradeOrgName}, '%')</if>
+            <if test="gradeValue != null  and gradeValue != ''"> and t.grade_value = #{gradeValue}</if>
+            <if test="packageAmount != null  and packageAmount != ''"> and t.package_amount = #{packageAmount}</if>
+            <if test="packageNum != null "> and t.package_num = #{packageNum}</if>
+            <if test="startCreateTime != null"> and t.create_time <![CDATA[>=]]> #{startCreateTime}</if>
+            <if test="endCreateTime != null"> and t.create_time <![CDATA[<=]]> #{endCreateTime}</if>
+            <if test="isClose != null and isClose != ''"> and t.is_close = #{isClose}</if>
+            <if test="createBy != null and createBy != ''"> and t.create_by like concat('%', #{createBy}, '%')</if>
+            <if test="startOrgId != null and startOrgId != ''"> and t.start_org_id = #{startOrgId}</if>
+            <if test="deptIds != null">
+                and t.start_org_id in
+                <foreach collection="deptIds" item="deptId" open="(" close=")" separator=",">
+                    #{deptId}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY t.create_time desc
+    </select>
+    
+    <select id="selectAssetPackageById" parameterType="String" resultMap="AssetPackageResult">
+        <include refid="selectAssetPackageVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAssetPackage" parameterType="AssetPackage">
+        insert into asset_package
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="packageName != null  and packageName != ''">package_name,</if>
+            <if test="caseAddress != null  and caseAddress != ''">case_address,</if>
+            <if test="caseAddressCode != null  and caseAddressCode != ''">case_address_code,</if>
+            <if test="caseAccountAge != null  and caseAccountAge != ''">case_account_age,</if>
+            <if test="lastCode != null  and lastCode != ''">last_code,</if>
+            <if test="gradeOrgName != null  and gradeOrgName != ''">grade_org_name,</if>
+            <if test="gradeValue != null  and gradeValue != ''">grade_value,</if>
+            <if test="packageAmount != null ">package_amount,</if>
+            <if test="packageNum != null ">package_num,</if>
+            <if test="isNull != null  and isNull != ''">is_null,</if>
+            <if test="isClose != null  and isClose != ''">is_close,</if>
+            <if test="allocationBy != null  and allocationBy != ''">allocation_by,</if>
+            <if test="allocationTime != null ">allocation_time,</if>
+            <if test="startOrgId != null  and startOrgId != ''">start_org_id,</if>
+            <if test="endOrgId != null  and endOrgId != ''">end_org_id,</if>
+            <if test="expireTime != null ">expire_time,</if>
+            <if test="recoverAmount != null">recover_amount,</if>
+            <if test="recoverTime != null ">recover_time,</if>
+            <if test="recoverWay != null  and recoverWay != ''">recover_way,</if>
+            <if test="recoverBy != null  and recoverBy != ''">recover_by,</if>
+            <if test="recoverCause != null  and recoverCause != ''">recover_cause,</if>
+            <if test="recoverStatus != null  and recoverStatus != ''">recover_status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="packageName != null  and packageName != ''">#{packageName},</if>
+            <if test="caseAddress != null  and caseAddress != ''">#{caseAddress},</if>
+            <if test="caseAddressCode != null  and caseAddressCode != ''">#{caseAddressCode},</if>
+            <if test="caseAccountAge != null  and caseAccountAge != ''">#{caseAccountAge},</if>
+            <if test="lastCode != null  and lastCode != ''">#{lastCode},</if>
+            <if test="gradeOrgName != null  and gradeOrgName != ''">#{gradeOrgName},</if>
+            <if test="gradeValue != null  and gradeValue != ''">#{gradeValue},</if>
+            <if test="packageAmount != null">#{packageAmount},</if>
+            <if test="packageNum != null ">#{packageNum},</if>
+            <if test="isNull != null  and isNull != ''">#{isNull},</if>
+            <if test="isClose != null  and isClose != ''">#{isClose},</if>
+            <if test="allocationBy != null  and allocationBy != ''">#{allocationBy},</if>
+            <if test="allocationTime != null ">#{allocationTime},</if>
+            <if test="startOrgId != null  and startOrgId != ''">#{startOrgId},</if>
+            <if test="endOrgId != null  and endOrgId != ''">#{endOrgId},</if>
+            <if test="expireTime != null ">#{expireTime},</if>
+            <if test="recoverAmount != null">#{recoverAmount},</if>
+            <if test="recoverTime != null ">#{recoverTime},</if>
+            <if test="recoverWay != null  and recoverWay != ''">#{recoverWay},</if>
+            <if test="recoverBy != null  and recoverBy != ''">#{recoverBy},</if>
+            <if test="recoverCause != null  and recoverCause != ''">#{recoverCause},</if>
+            <if test="recoverStatus != null  and recoverStatus != ''">#{recoverStatus},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAssetPackage" parameterType="AssetPackage">
+        update asset_package
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="packageName != null  and packageName != ''">package_name = #{packageName},</if>
+            <if test="caseAddress != null  and caseAddress != ''">case_address = #{caseAddress},</if>
+            <if test="caseAddressCode != null  and caseAddressCode != ''">case_address_code = #{caseAddressCode},</if>
+            <if test="caseAccountAge != null  and caseAccountAge != ''">case_account_age = #{caseAccountAge},</if>
+            <if test="lastCode != null  and lastCode != ''">last_code = #{lastCode},</if>
+            <if test="gradeOrgName != null  and gradeOrgName != ''">grade_org_name = #{gradeOrgName},</if>
+            <if test="gradeValue != null  and gradeValue != ''">grade_value = #{gradeValue},</if>
+            <if test="packageAmount != null">package_amount = #{packageAmount},</if>
+            <if test="packageNum != null ">package_num = #{packageNum},</if>
+            <if test="isNull != null  and isNull != ''">is_null = #{isNull},</if>
+            <if test="isClose != null  and isClose != ''">is_close = #{isClose},</if>
+            <if test="allocationBy != null  and allocationBy != ''">allocation_by = #{allocationBy},</if>
+            <if test="allocationTime != null ">allocation_time = #{allocationTime},</if>
+            <if test="startOrgId != null  and startOrgId != ''">start_org_id = #{startOrgId},</if>
+            <if test="endOrgId != null  and endOrgId != ''">end_org_id = #{endOrgId},</if>
+            <if test="expireTime != null ">expire_time = #{expireTime},</if>
+            <if test="recoverAmount != null">recover_amount = #{recoverAmount},</if>
+            <if test="recoverTime != null ">recover_time = #{recoverTime},</if>
+            <if test="recoverWay != null  and recoverWay != ''">recover_way = #{recoverWay},</if>
+            <if test="recoverBy != null  and recoverBy != ''">recover_by = #{recoverBy},</if>
+            <if test="recoverCause != null  and recoverCause != ''">recover_cause = #{recoverCause},</if>
+            <if test="recoverStatus != null  and recoverStatus != ''">recover_status = #{recoverStatus},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAssetPackageById" parameterType="String">
+        delete from asset_package where id = #{id}
+    </delete>
+
+    <delete id="deleteAssetPackageByIds" parameterType="String">
+        delete from asset_package where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectCurAssetsList" parameterType="CurAssetsPackage" resultMap="CurAssetsPackageResult">
+        <include refid="selectCurAssetsPackageVo"/>
+        <where>
+            <if test="orgCasno != null  and orgCasno != ''"> and org_casNo = #{orgCasno}</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+            <if test="org != null  and org != ''"> and org = #{org}</if>
+            <if test="curName != null  and curName != ''"> and cur_name like concat('%', #{curName}, '%')</if>
+            <if test="certificateNo != null  and certificateNo != ''"> and certificate_no = #{certificateNo}</if>
+            <if test="customerMobile != null  and customerMobile != ''"> and customer_mobile = #{customerMobile}</if>
+            <if test="packageFlag != null  and packageFlag != ''"> and package_flag = #{packageFlag}</if>
+            <if test="startDate != null"> and create_time <![CDATA[>=]]> #{startDate}</if>
+            <if test="endDate != null"> and create_time <![CDATA[<=]]> #{endDate}</if>
+            <if test="startWaYe != null"> and wa_ye <![CDATA[>=]]> #{startWaYe}</if>
+            <if test="endWaYe != null"> and wa_ye <![CDATA[<=]]> #{endWaYe}</if>
+            <if test="closeCase != null and closeCase != ''"> and close_case= #{closeCase}</if>
+            <if test="packageId != null and packageId != ''"> and package_id= #{packageId}</if>
+
+            <choose>
+                <when test="orgId != null and orgId != ''">
+                    and org_id = #{orgId}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="deptIds != null">
+                            and org_id in
+                            <foreach collection="deptIds" item="deptId" open="(" close=")" separator=",">
+                                #{deptId}
+                            </foreach>
+                        </when>
+                    </choose>
+                </otherwise>
+            </choose>
+        </where>
+        order by create_time desc
+    </select>
+
+    <update id="updateCurassets" parameterType="CurAssetsPackage">
+        UPDATE cur_assets_package set package_id = #{packageId},package_flag=#{packageFlag}
+        <where>
+            and package_flag = '0'
+            <if test="orgCasno != null  and orgCasno != ''"> and org_casNo = #{orgCasno}</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+            <if test="org != null  and org != ''"> and org = #{org}</if>
+            <if test="curName != null  and curName != ''"> and cur_name like concat('%', #{curName}, '%')</if>
+            <if test="certificateNo != null  and certificateNo != ''"> and certificate_no = #{certificateNo}</if>
+            <if test="customerMobile != null  and customerMobile != ''"> and customer_mobile = #{customerMobile}</if>
+            <if test="startDate != null"> and create_time <![CDATA[>=]]> #{startDate}</if>
+            <if test="endDate != null"> and create_time <![CDATA[<=]]> #{endDate}</if>
+            <if test="startWaYe != null"> and wa_ye <![CDATA[>=]]> #{startWaYe}</if>
+            <if test="endWaYe != null"> and wa_ye <![CDATA[<=]]> #{endWaYe}</if>
+            <if test="closeCase != null and closeCase != ''"> and close_case= #{closeCase}</if>
+
+            <choose>
+                <when test="orgId != null and orgId != ''">
+                    and org_id = #{orgId}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="deptIds != null">
+                            and org_id in
+                            <foreach collection="deptIds" item="deptId" open="(" close=")" separator=",">
+                                #{deptId}
+                            </foreach>
+                        </when>
+                    </choose>
+                </otherwise>
+            </choose>
+        </where>
+        order by create_time desc
+
+    </update>
+
+    <update id="updateCurassets2" parameterType="java.util.Map">
+        UPDATE cur_assets_package set package_id = '',package_flag=#{packageFlag} WHERE package_id = #{packageId}
+    </update>
+
+</mapper>

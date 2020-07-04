@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增客户资产')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-assetspackage-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机构案件号：</label>
+                <div class="col-sm-8">
+                    <input name="orgCasno" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">所属机构：</label>
+                <div class="col-sm-8">
+                    <select name="org" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">手别：</label>
+                <div class="col-sm-8">
+                    <select name="transfertype" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">24CD值：</label>
+                <div class="col-sm-8">
+                    <input name="twentyfourcd" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">BLK：</label>
+                <div class="col-sm-8">
+                    <input name="blk" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">产品线：</label>
+                <div class="col-sm-8">
+                    <input name="productline" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户last缴款金额：</label>
+                <div class="col-sm-8">
+                    <input name="rmbLastJkje" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户余额：</label>
+                <div class="col-sm-8">
+                    <input name="rmbYe" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户应还罚息总额：</label>
+                <div class="col-sm-8">
+                    <input name="rmbYhfxzje" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户当前CD值：</label>
+                <div class="col-sm-8">
+                    <input name="rmbCd" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户最后一次缴款日：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="rmbZhycjkr" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户最后还款笔数：</label>
+                <div class="col-sm-8">
+                    <input name="rmbZhhkbs" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户应还利息总额：</label>
+                <div class="col-sm-8">
+                    <input name="rmbYhlizje" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户应还本金1：</label>
+                <div class="col-sm-8">
+                    <input name="rmbYhbj1" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户应还本金2：</label>
+                <div class="col-sm-8">
+                    <input name="rmbYhbj2" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户应还本金总额：</label>
+                <div class="col-sm-8">
+                    <input name="rmbYhbjzje" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户应还罚息1：</label>
+                <div class="col-sm-8">
+                    <input name="rmbYhfx1" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户应还罚息2：</label>
+                <div class="col-sm-8">
+                    <input name="rmbYhfx2" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户应还费用1：</label>
+                <div class="col-sm-8">
+                    <input name="rmbYhfy1" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户应还费用2：</label>
+                <div class="col-sm-8">
+                    <input name="rmbYhfy2" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户应还费用总额：</label>
+                <div class="col-sm-8">
+                    <input name="rmbYhfyzje" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户最低应还金额：</label>
+                <div class="col-sm-8">
+                    <input name="rmbZdyhje" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户欠款总金额：</label>
+                <div class="col-sm-8">
+                    <input name="rmbQkzje" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人民币账户额度固定额度：</label>
+                <div class="col-sm-8">
+                    <input name="rmbGded" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">代码：</label>
+                <div class="col-sm-8">
+                    <input name="code" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">借款卡号：</label>
+                <div class="col-sm-8">
+                    <input name="borrowNo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">借款卡银行：</label>
+                <div class="col-sm-8">
+                    <input name="borrowBlank" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">借款额度：</label>
+                <div class="col-sm-8">
+                    <input name="borrowEd" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">债项类型：</label>
+                <div class="col-sm-8">
+                    <select name="zxType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">停卡日：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="stopCard" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">停止计息日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="stopJxrq" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">催收公司：</label>
+                <div class="col-sm-8">
+                    <input name="csCompany" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">入催日：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="rcr" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">共债标识：</label>
+                <div class="col-sm-8">
+                    <input name="gzFlag" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">分值：</label>
+                <div class="col-sm-8">
+                    <input name="fz" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">分期标识：</label>
+                <div class="col-sm-8">
+                    <input name="fqFlag" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">剩余核销其他费用：</label>
+                <div class="col-sm-8">
+                    <input name="syhxQtfy" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">剩余核销手续费：</label>
+                <div class="col-sm-8">
+                    <input name="syhxSxf" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">剩余核销本金：</label>
+                <div class="col-sm-8">
+                    <input name="syhxBj" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">剩余核销滞纳费：</label>
+                <div class="col-sm-8">
+                    <input name="syhxZnf" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">剩余核销逾期息：</label>
+                <div class="col-sm-8">
+                    <input name="syhxYqx" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">剩余核销金额合计：</label>
+                <div class="col-sm-8">
+                    <input name="syhxJehj" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">区域中心：</label>
+                <div class="col-sm-8">
+                    <input name="areaCenter" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">历史催收备注：</label>
+                <div class="col-sm-8">
+                    <input name="csRemarkHis" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">历史最大逾期天数：</label>
+                <div class="col-sm-8">
+                    <input name="maxYqtsHis" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">历史累计逾期天数：</label>
+                <div class="col-sm-8">
+                    <input name="sumYqtsHis" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">历史累计逾期次数：</label>
+                <div class="col-sm-8">
+                    <input name="sumYqcsHis" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">历史经历催收机构个数：</label>
+                <div class="col-sm-8">
+                    <input name="csjggsHis" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">取现标识：</label>
+                <div class="col-sm-8">
+                    <input name="qxFlag" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">受托公司：</label>
+                <div class="col-sm-8">
+                    <input name="stCompany" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">受理商户：</label>
+                <div class="col-sm-8">
+                    <input name="acceptFirm" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">受理城市：</label>
+                <div class="col-sm-8">
+                    <input name="acceptCity" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">受理网点：</label>
+                <div class="col-sm-8">
+                    <input name="acceptWd" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">受理网点代码：</label>
+                <div class="col-sm-8">
+                    <input name="acceptWdCode" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">呆账核销日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="dzhxrq" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户应还罚息总额：</label>
+                <div class="col-sm-8">
+                    <input name="wbYhfxze" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户应还利息总额：</label>
+                <div class="col-sm-8">
+                    <input name="wbYhlxze" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户应还本金1：</label>
+                <div class="col-sm-8">
+                    <input name="wbYhbj1" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户应还本金2：</label>
+                <div class="col-sm-8">
+                    <input name="wbYhbj2" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户应还本金总额：</label>
+                <div class="col-sm-8">
+                    <input name="wbYhbjzje" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户应还罚息1：</label>
+                <div class="col-sm-8">
+                    <input name="wbYhfx1" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户应还罚息2：</label>
+                <div class="col-sm-8">
+                    <input name="wbYhfx2" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户应还费用1：</label>
+                <div class="col-sm-8">
+                    <input name="wbYhfy1" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户应还费用2：</label>
+                <div class="col-sm-8">
+                    <input name="wbYhfy2" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户应还费用总额：</label>
+                <div class="col-sm-8">
+                    <input name="wbYhfyze" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户最低应还额：</label>
+                <div class="col-sm-8">
+                    <input name="wbZdyhe" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外币账户欠款总金额：</label>
+                <div class="col-sm-8">
+                    <input name="wbQkzje" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">套现标识：</label>
+                <div class="col-sm-8">
+                    <input name="txFlag" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">委外公司代码：</label>
+                <div class="col-sm-8">
+                    <input name="wwCompanyCode" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">委外城市名称：</label>
+                <div class="col-sm-8">
+                    <input name="wwCityName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">委外计划截止日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="wwJhEnddate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">委外起始日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="wwQsrq" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">委托批次：</label>
+                <div class="col-sm-8">
+                    <input name="wwPc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">委案余额：</label>
+                <div class="col-sm-8">
+                    <input name="waYe" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">帐单地址：</label>
+                <div class="col-sm-8">
+                    <input name="billAddress" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">帐单地址邮编：</label>
+                <div class="col-sm-8">
+                    <input name="billAddressPostcode" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">年利率：</label>
+                <div class="col-sm-8">
+                    <input name="yearRates" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">应还款日：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="yhkDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">开始逾期日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="startYqDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">开户日：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="khDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">投诉标识：</label>
+                <div class="col-sm-8">
+                    <input name="tsFlag" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">授信额度：</label>
+                <div class="col-sm-8">
+                    <input name="creditValue" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">推荐商户：</label>
+                <div class="col-sm-8">
+                    <input name="tjFirm" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">推荐城市：</label>
+                <div class="col-sm-8">
+                    <input name="tjCity" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">推荐网点：</label>
+                <div class="col-sm-8">
+                    <input name="tjWd" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">收回核销手续费：</label>
+                <div class="col-sm-8">
+                    <input name="shhxSxf" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">收回核销本金：</label>
+                <div class="col-sm-8">
+                    <input name="shhxBj" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">收回核销滞纳费：</label>
+                <div class="col-sm-8">
+                    <input name="shhxZnf" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">收回核销费用：</label>
+                <div class="col-sm-8">
+                    <input name="shhxFy" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">收回核销逾期息：</label>
+                <div class="col-sm-8">
+                    <input name="shhxYqx" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">收回核销金额合计：</label>
+                <div class="col-sm-8">
+                    <input name="shhxJehj" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">整合30 DAY：</label>
+                <div class="col-sm-8">
+                    <input name="zh30Day" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">整合X DA：</label>
+                <div class="col-sm-8">
+                    <input name="zhXDay" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否仲裁：</label>
+                <div class="col-sm-8">
+                    <input name="isZc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否债务重组：</label>
+                <div class="col-sm-8">
+                    <input name="isZwcz" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否计息：</label>
+                <div class="col-sm-8">
+                    <input name="isJx" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否诉讼：</label>
+                <div class="col-sm-8">
+                    <input name="isSx" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">最近逾期月份：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="zjyqMonth" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">核销手续费催收：</label>
+                <div class="col-sm-8">
+                    <input name="hxSxfcs" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">核销收回状态：</label>
+                <div class="col-sm-8">
+                    <input name="hxShzt" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">核销本金催收：</label>
+                <div class="col-sm-8">
+                    <input name="hxBjcs" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">核销滞纳费催收：</label>
+                <div class="col-sm-8">
+                    <input name="hxZnfcs" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">核销费用催收：</label>
+                <div class="col-sm-8">
+                    <input name="hxFycs" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">核销逾期息催收：</label>
+                <div class="col-sm-8">
+                    <input name="hxYqlxcs" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">核销金额合计催收：</label>
+                <div class="col-sm-8">
+                    <input name="hxJehjcs" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">案件核准日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="ajHzDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">消费金融账号：</label>
+                <div class="col-sm-8">
+                    <input name="xfjzzh" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">特殊案件类型：</label>
+                <div class="col-sm-8">
+                    <select name="tsajType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">日利率：</label>
+                <div class="col-sm-8">
+                    <input name="dayRates" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">统计日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="tjDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">美元余额：</label>
+                <div class="col-sm-8">
+                    <input name="dollarYe" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">美元当前CD值：</label>
+                <div class="col-sm-8">
+                    <input name="dollarCd" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">美元最低应缴款金额：</label>
+                <div class="col-sm-8">
+                    <input name="dollarZdyjkje" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">美元最后一次缴款日：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="dollarZhycjkr" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">美元最后一次缴款金额：</label>
+                <div class="col-sm-8">
+                    <input name="dollarZhycjkje" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">美元还款日还款笔数：</label>
+                <div class="col-sm-8">
+                    <input name="dollarHkrhkbs" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">获客方式：</label>
+                <div class="col-sm-8">
+                    <input name="hkfs" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">获客渠道：</label>
+                <div class="col-sm-8">
+                    <input name="hkqd" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">行方评分：</label>
+                <div class="col-sm-8">
+                    <input name="xwpf" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">账单日：</label>
+                <div class="col-sm-8">
+                    <input name="accountDate" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">账户余额本金：</label>
+                <div class="col-sm-8">
+                    <input name="accountYebj" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">账户结清日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="accountJqrq" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">辅助组别：</label>
+                <div class="col-sm-8">
+                    <input name="fzzb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">还款卡号：</label>
+                <div class="col-sm-8">
+                    <input name="revertCardNo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">还款卡银行：</label>
+                <div class="col-sm-8">
+                    <input name="revertCardBlank" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">进件渠道：</label>
+                <div class="col-sm-8">
+                    <input name="jjqd" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">逾期天数：</label>
+                <div class="col-sm-8">
+                    <input name="overdueDays" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">逾期标记：</label>
+                <div class="col-sm-8">
+                    <input name="overdueFlag" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">长委次数：</label>
+                <div class="col-sm-8">
+                    <input name="cwcs" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">额度产品：</label>
+                <div class="col-sm-8">
+                    <input name="quotaProduct" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">额度代码：</label>
+                <div class="col-sm-8">
+                    <input name="quotaCode" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">额度激活日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="quotaDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">风险：</label>
+                <div class="col-sm-8">
+                    <input name="risk" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">首次放款日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="firstFkDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">首次逾期日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="firstYqDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">首次逾期解除日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="firstYqjcDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">首逾标识：</label>
+                <div class="col-sm-8">
+                    <input name="firstYqFlag" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户名称：</label>
+                <div class="col-sm-8">
+                    <input name="curName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户性别：</label>
+                <div class="col-sm-8">
+                    <select name="curSex" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">证件号码：</label>
+                <div class="col-sm-8">
+                    <input name="certificateNo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">证件类型：</label>
+                <div class="col-sm-8">
+                    <select name="certificateType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">身份证地址：</label>
+                <div class="col-sm-8">
+                    <input name="certificateAddress" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">出生日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="birthday" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">户籍地址：</label>
+                <div class="col-sm-8">
+                    <input name="registAddress" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">电子邮箱：</label>
+                <div class="col-sm-8">
+                    <input name="email" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">城市：</label>
+                <div class="col-sm-8">
+                    <input name="city" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">婚姻状况：</label>
+                <div class="col-sm-8">
+                    <input name="marriage" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">教育程度：</label>
+                <div class="col-sm-8">
+                    <input name="education" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">经济类型：</label>
+                <div class="col-sm-8">
+                    <input name="economy" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">当前收入：</label>
+                <div class="col-sm-8">
+                    <input name="curIncome" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">新增地址：</label>
+                <div class="col-sm-8">
+                    <input name="newAddress" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户号：</label>
+                <div class="col-sm-8">
+                    <input name="customerNo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户手机号码：</label>
+                <div class="col-sm-8">
+                    <input name="customerMobile" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户家庭电话：</label>
+                <div class="col-sm-8">
+                    <input name="customerHomeTel" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户家庭地址：</label>
+                <div class="col-sm-8">
+                    <input name="customerHomeAddress" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户家庭地址邮编：</label>
+                <div class="col-sm-8">
+                    <input name="customerHomePostcode" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">卡片寄送地址：</label>
+                <div class="col-sm-8">
+                    <input name="cardPostAddress" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">职务：</label>
+                <div class="col-sm-8">
+                    <input name="job" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">部门名称：</label>
+                <div class="col-sm-8">
+                    <input name="deptName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">行业性质：</label>
+                <div class="col-sm-8">
+                    <input name="indust" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户单位名称：</label>
+                <div class="col-sm-8">
+                    <input name="workName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户单位地址：</label>
+                <div class="col-sm-8">
+                    <input name="workAddress" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">单位电话：</label>
+                <div class="col-sm-8">
+                    <input name="workTel" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">单位邮编：</label>
+                <div class="col-sm-8">
+                    <input name="workPostcode" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">第一联系人姓名：</label>
+                <div class="col-sm-8">
+                    <input name="firstLiaisonName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">第一联系人与客户关系：</label>
+                <div class="col-sm-8">
+                    <input name="firstLiaisonRelation" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">第一联系人手机：</label>
+                <div class="col-sm-8">
+                    <input name="firstLiaisonMobile" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">第一联系人电话：</label>
+                <div class="col-sm-8">
+                    <input name="firstLiaisonTel" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">第二联系人姓名：</label>
+                <div class="col-sm-8">
+                    <input name="secondLiaisonName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">第二联系人与客户关系：</label>
+                <div class="col-sm-8">
+                    <input name="secondLiaisonRelation" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">第二联系人手机：</label>
+                <div class="col-sm-8">
+                    <input name="secondLiaisonMobile" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">第二联系人电话：</label>
+                <div class="col-sm-8">
+                    <input name="secondLiaisonTel" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">第三联系人姓名：</label>
+                <div class="col-sm-8">
+                    <input name="threeLiaisonName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">第三联系人与客户关系：</label>
+                <div class="col-sm-8">
+                    <input name="threeLiaisonRelation" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">第三联系人手机：</label>
+                <div class="col-sm-8">
+                    <input name="threeLiaisonMobile" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">第三联系人电话：</label>
+                <div class="col-sm-8">
+                    <input name="threeLiaisonTel" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">数据日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="sjrq" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">合同号：</label>
+                <div class="col-sm-8">
+                    <input name="hth" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">借据号：</label>
+                <div class="col-sm-8">
+                    <input name="jjh" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">地区事业部(一级)：</label>
+                <div class="col-sm-8">
+                    <input name="dqsybYj" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">地区事业部(二级)：</label>
+                <div class="col-sm-8">
+                    <input name="dqsybEj" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">催收节点：</label>
+                <div class="col-sm-8">
+                    <input name="csjd" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">外包经办：</label>
+                <div class="col-sm-8">
+                    <input name="wbjb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">原始客户经理名称：</label>
+                <div class="col-sm-8">
+                    <input name="ysKhjlmc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">客户经理名称：</label>
+                <div class="col-sm-8">
+                    <input name="khjlmc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">产品名称：</label>
+                <div class="col-sm-8">
+                    <input name="cpmc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">新分类对应产品名称：</label>
+                <div class="col-sm-8">
+                    <input name="xfldycpmc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">起息日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="qxrq" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">到期日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="dqrq" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">还款方式：</label>
+                <div class="col-sm-8">
+                    <select name="hkType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">贷款余额：</label>
+                <div class="col-sm-8">
+                    <input name="dkye" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">外包标的：</label>
+                <div class="col-sm-8">
+                    <input name="wbbs" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">逾期金额：</label>
+                <div class="col-sm-8">
+                    <input name="yqje" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">逾期本金：</label>
+                <div class="col-sm-8">
+                    <input name="yqbj" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">逾期利息：</label>
+                <div class="col-sm-8">
+                    <input name="yqlx" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">逾期手续费：</label>
+                <div class="col-sm-8">
+                    <input name="yqsxf" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">滞纳金：</label>
+                <div class="col-sm-8">
+                    <input name="znj" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">渠道名称：</label>
+                <div class="col-sm-8">
+                    <input name="qdmc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">外包手别：</label>
+                <div class="col-sm-8">
+                    <input name="wbsb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">外包期数：</label>
+                <div class="col-sm-8">
+                    <input name="wbqs" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">分配时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="fpsj" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">案件回收时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="ajhssj" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        // var ctx = [[${@config.getKey('ctx')}]];
+        var prefix = ctx + "import/assets";
+    </script>
+    <script type="text/javascript">
+        $("#form-assetspackage-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-assetspackage-add').serialize());
+            }
+        }
+
+        $("input[name='rmbZhycjkr']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='stopCard']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='stopJxrq']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='rcr']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='dzhxrq']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='wwJhEnddate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='wwQsrq']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='yhkDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='startYqDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='khDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='zjyqMonth']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='ajHzDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='tjDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='dollarZhycjkr']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='accountJqrq']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='quotaDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='firstFkDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='firstYqDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='firstYqjcDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='birthday']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='sjrq']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='qxrq']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='dqrq']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='fpsj']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='ajhssj']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

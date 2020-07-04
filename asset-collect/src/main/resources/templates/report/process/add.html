@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增每日过程指标报')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-process-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">报表日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="reportDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">用户组别：</label>
+                <div class="col-sm-8">
+                    <input name="seatGroup" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">坐席工号：</label>
+                <div class="col-sm-8">
+                    <input name="seatNum" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">坐席名称：</label>
+                <div class="col-sm-8">
+                    <input name="seatName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">处理客户数：</label>
+                <div class="col-sm-8">
+                    <input name="dealWithConsumerCount" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">行动码数量：</label>
+                <div class="col-sm-8">
+                    <input name="actionCodeNum" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">电话码量：</label>
+                <div class="col-sm-8">
+                    <input name="callCodeNum" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">电话码于行动码比值：</label>
+                <div class="col-sm-8">
+                    <input name="callActionCodeRecovery" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">案件平均电话码量：</label>
+                <div class="col-sm-8">
+                    <input name="averageCallCode" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">案件平均行动码量：</label>
+                <div class="col-sm-8">
+                    <input name="averageActionCode" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">通话时长：</label>
+                <div class="col-sm-8">
+                    <input name="callLen" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">本人有效电话码量：</label>
+                <div class="col-sm-8">
+                    <input name="selfEffectiveCallCodeNum" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">三方有效电话码量：</label>
+                <div class="col-sm-8">
+                    <input name="thirdEffectiveCallCodeNum" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">案均有效电话码量：</label>
+                <div class="col-sm-8">
+                    <input name="averageEffectiveCallCodeNum" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">电话接通率：</label>
+                <div class="col-sm-8">
+                    <input name="callConnectedRecovery" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">投诉代码量：</label>
+                <div class="col-sm-8">
+                    <input name="complaintNum" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "ruoyi/process"
+        $("#form-process-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-process-add').serialize());
+            }
+        }
+
+        $("input[name='reportDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

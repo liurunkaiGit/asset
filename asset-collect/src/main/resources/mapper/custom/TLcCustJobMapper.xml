@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.custom.mapper.TLcCustJobMapper">
+
+    <resultMap id="TLcCustJobResult" type="com.ruoyi.custom.domain.TLcCustJob">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="customCode" column="custom_code" jdbcType="VARCHAR"/>
+        <result property="certificateNo" column="certificate_no" jdbcType="VARCHAR"/>
+        <result property="caseNo" column="case_no" jdbcType="VARCHAR"/>
+        <result property="profession" column="profession" jdbcType="VARCHAR"/>
+        <result property="companyName" column="company_name" jdbcType="VARCHAR"/>
+        <result property="companyTel" column="company_tel" jdbcType="VARCHAR"/>
+        <result property="companyAddress" column="company_address" jdbcType="VARCHAR"/>
+        <result property="companyPostcode" column="company_postcode" jdbcType="VARCHAR"/>
+        <result property="companyIndustry" column="company_industry" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="modifyBy" column="modify_by" jdbcType="BIGINT"/>
+        <result property="validateStatus" column="validate_status" jdbcType="INTEGER"/>
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+    </resultMap>
+
+    <sql id="selectTLcCustJobVo">
+        select id, custom_code, certificate_no, profession, company_name, company_tel, company_address, company_postcode, company_industry, create_time, modify_time, create_by, modify_by, validate_status, case_no, org_id, org_name, import_batch_no from t_lc_cust_job
+    </sql>
+
+    <select id="selectTLcCustJobList" parameterType="com.ruoyi.custom.domain.TLcCustJob" resultMap="TLcCustJobResult">
+        <include refid="selectTLcCustJobVo"/>
+        <where>
+            <if test="customCode != null  and customCode != ''">and custom_code = #{customCode}</if>
+            <if test="certificateNo != null  and certificateNo != ''">and certificate_no = #{certificateNo}</if>
+            <if test="profession != null  and profession != ''">and profession = #{profession}</if>
+            <if test="companyName != null  and companyName != ''">and company_name like concat('%', #{companyName},
+                '%')
+            </if>
+            <if test="companyTel != null  and companyTel != ''">and company_tel = #{companyTel}</if>
+            <if test="companyAddress != null  and companyAddress != ''">and company_address = #{companyAddress}</if>
+            <if test="companyPostcode != null  and companyPostcode != ''">and company_postcode = #{companyPostcode}</if>
+            <if test="companyIndustry != null  and companyIndustry != ''">and company_industry = #{companyIndustry}</if>
+            <if test="modifyTime != null ">and modify_time = #{modifyTime}</if>
+            <if test="modifyBy != null ">and modify_by = #{modifyBy}</if>
+            <if test="validateStatus != null  and validateStatus != ''">and validate_status = #{validateStatus}</if>
+            <if test="orgId != null  and orgId != ''"> and org_id = #{orgId}</if>
+            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+        </where>
+    </select>
+
+    <select id="selectTLcCustJobById" parameterType="Long" resultMap="TLcCustJobResult">
+        <include refid="selectTLcCustJobVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTLcCustJob" parameterType="com.ruoyi.custom.domain.TLcCustJob" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_lc_cust_job
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customCode != null  and customCode != ''">custom_code,</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no,</if>
+            <if test="profession != null  and profession != ''">profession,</if>
+            <if test="companyName != null  and companyName != ''">company_name,</if>
+            <if test="companyTel != null  and companyTel != ''">company_tel,</if>
+            <if test="companyAddress != null  and companyAddress != ''">company_address,</if>
+            <if test="companyPostcode != null  and companyPostcode != ''">company_postcode,</if>
+            <if test="companyIndustry != null  and companyIndustry != ''">company_industry,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="modifyTime != null ">modify_time,</if>
+            <if test="createBy != null ">create_by,</if>
+            <if test="modifyBy != null ">modify_by,</if>
+            <if test="validateStatus != null  and validateStatus != ''">validate_status,</if>
+            <if test="caseNo != null  and caseNo != ''">case_no,</if>
+            <if test="orgId != null  and orgId != ''">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customCode != null  and customCode != ''">#{customCode},</if>
+            <if test="certificateNo != null  and certificateNo != ''">#{certificateNo},</if>
+            <if test="profession != null  and profession != ''">#{profession},</if>
+            <if test="companyName != null  and companyName != ''">#{companyName},</if>
+            <if test="companyTel != null  and companyTel != ''">#{companyTel},</if>
+            <if test="companyAddress != null  and companyAddress != ''">#{companyAddress},</if>
+            <if test="companyPostcode != null  and companyPostcode != ''">#{companyPostcode},</if>
+            <if test="companyIndustry != null  and companyIndustry != ''">#{companyIndustry},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="modifyTime != null ">#{modifyTime},</if>
+            <if test="createBy != null ">#{createBy},</if>
+            <if test="modifyBy != null ">#{modifyBy},</if>
+            <if test="validateStatus != null  and validateStatus != ''">#{validateStatus},</if>
+            <if test="caseNo != null  and caseNo != ''">#{caseNo},</if>
+            <if test="orgId != null  and orgId != ''">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">#{importBatchNo},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTLcCustJob" parameterType="com.ruoyi.custom.domain.TLcCustJob">
+        update t_lc_cust_job
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="customCode != null  and customCode != ''">custom_code = #{customCode},</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no = #{certificateNo},</if>
+            <if test="profession != null  and profession != ''">profession = #{profession},</if>
+            <if test="companyName != null  and companyName != ''">company_name = #{companyName},</if>
+            <if test="companyTel != null  and companyTel != ''">company_tel = #{companyTel},</if>
+            <if test="companyAddress != null  and companyAddress != ''">company_address = #{companyAddress},</if>
+            <if test="companyPostcode != null  and companyPostcode != ''">company_postcode = #{companyPostcode},</if>
+            <if test="companyIndustry != null  and companyIndustry != ''">company_industry = #{companyIndustry},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="modifyTime != null ">modify_time = #{modifyTime},</if>
+            <if test="createBy != null ">create_by = #{createBy},</if>
+            <if test="modifyBy != null ">modify_by = #{modifyBy},</if>
+            <if test="validateStatus != null  and validateStatus != ''">validate_status = #{validateStatus},</if>
+            <if test="caseNo != null  and caseNo != ''">case_no = #{caseNo},</if>
+            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no = #{importBatchNo},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcCustJobById" parameterType="Long">
+        delete from t_lc_cust_job where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcCustJobByIds" parameterType="String">
+        delete from t_lc_cust_job where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="batchInsertCustJob" parameterType="java.util.List">
+        INSERT INTO t_lc_cust_job (
+        custom_code,
+        certificate_no,
+        profession,
+        company_name,
+        company_tel,
+        company_address,
+        company_postcode,
+        company_industry,
+        create_time,
+        modify_time,
+        create_by,
+        modify_by,
+        validate_status,
+        case_no,
+        org_id,
+        org_name,
+        import_batch_no
+        )
+        VALUES
+        <foreach collection="jobInsertList" item="job" separator=",">
+            (
+            #{job.customCode},
+            #{job.certificateNo},
+            #{job.profession},
+            #{job.companyName},
+            #{job.companyTel},
+            #{job.companyAddress},
+            #{job.companyPostcode},
+            #{job.companyIndustry},
+            NOW(),
+            NOW(),
+            #{job.createBy},
+            #{job.modifyBy},
+            #{job.validateStatus},
+            #{job.caseNo},
+            #{job.orgId},
+            #{job.orgName},
+            #{job.importBatchNo}
+            )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdateCustJob" parameterType="java.util.List">
+        <foreach collection="jobUpdateList" item="job" separator=";">
+            UPDATE t_lc_cust_job
+            <set>
+                <if test="job.customCode != null  and job.customCode != ''">custom_code = #{job.customCode},</if>
+                <if test="job.certificateNo != null  and job.certificateNo != ''">certificate_no = #{job.certificateNo},</if>
+                <if test="job.profession != null  and job.profession != ''">profession = #{job.profession},</if>
+                <if test="job.companyName != null  and job.companyName != ''">company_name = #{job.companyName},</if>
+                <if test="job.companyTel != null  and job.companyTel != ''">company_tel = #{job.companyTel},</if>
+                <if test="job.companyAddress != null  and job.companyAddress != ''">company_address = #{job.companyAddress},</if>
+                <if test="job.companyPostcode != null  and job.companyPostcode != ''">company_postcode = #{job.companyPostcode},</if>
+                <if test="job.companyIndustry != null  and job.companyIndustry != ''">company_industry = #{job.companyIndustry},</if>
+                modify_time = NOW(),
+                <if test="job.modifyBy != null  and job.modifyBy != ''">modify_by = #{job.modifyBy},</if>
+                <if test="job.validateStatus != null  and job.validateStatus != ''">validate_status = #{job.validateStatus},</if>
+            </set>
+            WHERE case_no = #{job.caseNo} AND import_batch_no = #{job.importBatchNo}
+        </foreach>
+    </update>
+
+    <select id="findCustJobByCertificateNo" parameterType="java.lang.String" resultMap="TLcCustJobResult">
+        <include refid="selectTLcCustJobVo"/>
+        WHERE certificate_no = #{certificateNo}
+    </select>
+
+    <select id="findCustJobByCaseNo" resultMap="TLcCustJobResult">
+        <include refid="selectTLcCustJobVo"/>
+        WHERE case_no = #{caseNo}
+        <if test="orgId != null and orgId != ''">
+            AND org_id = #{orgId}
+        </if>
+        <if test="importBatchNo != null and importBatchNo != ''">
+            AND import_batch_no = #{importBatchNo}
+        </if>
+    </select>
+
+</mapper>

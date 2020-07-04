@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.custom.mapper.TLcCustinfoMapper">
+
+    <resultMap id="tLcCustinfo" type="com.ruoyi.custom.domain.TLcCustinfo">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="customCode" column="custom_code" jdbcType="VARCHAR"/>
+        <result property="customName" column="custom_name" jdbcType="VARCHAR"/>
+        <result property="customSex" column="custom_sex" jdbcType="INTEGER"/>
+        <result property="birthday" column="birthday" jdbcType="DATE"/>
+        <result property="certificateType" column="certificate_type" jdbcType="INTEGER"/>
+        <result property="certificateNo" column="certificate_no" jdbcType="VARCHAR"/>
+        <result property="caseNo" column="case_no" jdbcType="VARCHAR"/>
+        <result property="certificateAddress" column="certificate_address" jdbcType="VARCHAR"/>
+        <result property="censusAddress" column="census_address" jdbcType="VARCHAR"/>
+        <result property="profession" column="profession" jdbcType="VARCHAR"/>
+        <result property="city" column="city" jdbcType="VARCHAR"/>
+        <result property="education" column="education" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="tel" column="tel" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="incomeYear" column="income_year" jdbcType="DECIMAL"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="marrageStatus" column="marrage_status" jdbcType="INTEGER"/>
+        <result property="hasChild" column="has_child" jdbcType="INTEGER"/>
+        <result property="hasHouse" column="has_house" jdbcType="INTEGER"/>
+        <result property="hasCar" column="has_car" jdbcType="INTEGER"/>
+        <result property="orgId" column="org_id" jdbcType="VARCHAR"/>
+        <result property="orgName" column="org_name" jdbcType="VARCHAR"/>
+        <result property="validateStatus" column="validate_status" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="modifyBy" column="modify_by" jdbcType="BIGINT"/>
+        <result property="importBatchNo"    column="import_batch_no"    />
+    </resultMap>
+
+    <sql id="SELECT_CUSTINFO">
+        t.id,
+        t.custom_code,
+        t.custom_name,
+        t.custom_sex,
+        t.birthday,
+        t.certificate_type,
+        t.certificate_no,
+        t.certificate_address,
+        t.census_address,
+        t.profession,
+        t.city,
+        t.education,
+        t.phone,
+        t.tel,
+        t.email,
+        t.income_year,
+        t.address,
+        t.marrage_status,
+        t.has_child,
+        t.has_house,
+        t.has_car,
+        t.org_id,
+        t.org_name,
+        t.validate_status,
+        t.create_time,
+        t.modify_time,
+        t.create_by,
+        t.modify_by,
+        t.case_no,
+        t.import_batch_no
+    </sql>
+
+    <select id="selectTLcCustinfoList" parameterType="com.ruoyi.custom.domain.TLcCustinfo"
+            resultMap="tLcCustinfo">
+        SELECT
+        <include refid="SELECT_CUSTINFO"/>
+        FROM t_lc_custinfo t
+        <where>
+            <if test="customCode != null  and customCode != ''">and custom_code = #{customCode}</if>
+            <if test="customName != null  and customName != ''">and custom_name like concat('%', #{customName}, '%')</if>
+            <if test="customSex != null ">and custom_sex = #{customSex}</if>
+            <if test="birthday != null ">and birthday = #{birthday}</if>
+            <if test="certificateType != null ">and certificate_type = #{certificateType}</if>
+            <if test="certificateNo != null  and certificateNo != ''">and certificate_no = #{certificateNo}</if>
+            <if test="certificateAddress != null  and certificateAddress != ''">and certificate_address = #{certificateAddress}</if>
+            <if test="censusAddress != null  and censusAddress != ''">and census_address = #{censusAddress}</if>
+            <if test="profession != null  and profession != ''">and profession = #{profession}</if>
+            <if test="city != null  and city != ''">and city = #{city}</if>
+            <if test="education != null  and education != ''">and education = #{education}</if>
+            <if test="phone != null  and phone != ''">and phone = #{phone}</if>
+            <if test="tel != null  and tel != ''">and tel = #{tel}</if>
+            <if test="email != null  and email != ''">and email = #{email}</if>
+            <if test="incomeYear != null ">and income_year = #{incomeYear}</if>
+            <if test="address != null  and address != ''">and address = #{address}</if>
+            <if test="marrageStatus != null ">and marrage_status = #{marrageStatus}</if>
+            <if test="hasChild != null ">and has_child = #{hasChild}</if>
+            <if test="hasHouse != null ">and has_house = #{hasHouse}</if>
+            <if test="hasCar != null ">and has_car = #{hasCar}</if>
+            <if test="validateStatus != null ">and validate_status = #{validateStatus}</if>
+            <if test="modifyTime != null ">and modify_time = #{modifyTime}</if>
+            <if test="modifyBy != null ">and modify_by = #{modifyBy}</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+        </where>
+    </select>
+
+    <select id="selectTLcCustinfoById" parameterType="Long" resultMap="tLcCustinfo">
+        SELECT
+        <include refid="SELECT_CUSTINFO"/>
+        FROM t_lc_custinfo t
+        where id = #{id}
+    </select>
+
+    <insert id="insertTLcCustinfo" parameterType="com.ruoyi.custom.domain.TLcCustinfo" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_lc_custinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customCode != null  and customCode != ''">custom_code,</if>
+            <if test="customName != null  and customName != ''">custom_name,</if>
+            <if test="customSex != null ">custom_sex,</if>
+            <if test="birthday != null ">birthday,</if>
+            <if test="certificateType != null ">certificate_type,</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no,</if>
+            <if test="certificateAddress != null  and certificateAddress != ''">certificate_address,</if>
+            <if test="censusAddress != null  and censusAddress != ''">census_address,</if>
+            <if test="profession != null  and profession != ''">profession,</if>
+            <if test="city != null  and city != ''">city,</if>
+            <if test="education != null  and education != ''">education,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="tel != null  and tel != ''">tel,</if>
+            <if test="email != null  and email != ''">email,</if>
+            <if test="incomeYear != null ">income_year,</if>
+            <if test="address != null  and address != ''">address,</if>
+            <if test="marrageStatus != null ">marrage_status,</if>
+            <if test="hasChild != null ">has_child,</if>
+            <if test="hasHouse != null ">has_house,</if>
+            <if test="hasCar != null ">has_car,</if>
+            <if test="validateStatus != null ">validate_status,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="modifyTime != null ">modify_time,</if>
+            <if test="createBy != null ">create_by,</if>
+            <if test="modifyBy != null ">modify_by,</if>
+            <if test="caseNo != null  and caseNo != ''">case_no,</if>
+            <if test="orgId != null  and orgId != ''">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customCode != null  and customCode != ''">#{customCode},</if>
+            <if test="customName != null  and customName != ''">#{customName},</if>
+            <if test="customSex != null ">#{customSex},</if>
+            <if test="birthday != null ">#{birthday},</if>
+            <if test="certificateType != null ">#{certificateType},</if>
+            <if test="certificateNo != null  and certificateNo != ''">#{certificateNo},</if>
+            <if test="certificateAddress != null  and certificateAddress != ''">#{certificateAddress},</if>
+            <if test="censusAddress != null  and censusAddress != ''">#{censusAddress},</if>
+            <if test="profession != null  and profession != ''">#{profession},</if>
+            <if test="city != null  and city != ''">#{city},</if>
+            <if test="education != null  and education != ''">#{education},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="tel != null  and tel != ''">#{tel},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="incomeYear != null ">#{incomeYear},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="marrageStatus != null ">#{marrageStatus},</if>
+            <if test="hasChild != null ">#{hasChild},</if>
+            <if test="hasHouse != null ">#{hasHouse},</if>
+            <if test="hasCar != null ">#{hasCar},</if>
+            <if test="validateStatus != null ">#{validateStatus},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="modifyTime != null ">#{modifyTime},</if>
+            <if test="createBy != null ">#{createBy},</if>
+            <if test="modifyBy != null ">#{modifyBy},</if>
+            <if test="caseNo != null  and caseNo != ''">#{caseNo},</if>
+            <if test="orgId != null  and orgId != ''">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">#{importBatchNo},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTLcCustinfo" parameterType="com.ruoyi.custom.domain.TLcCustinfo">
+        update t_lc_custinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="customCode != null  and customCode != ''">custom_code = #{customCode},</if>
+            <if test="customName != null  and customName != ''">custom_name = #{customName},</if>
+            <if test="customSex != null ">custom_sex = #{customSex},</if>
+            <if test="birthday != null ">birthday = #{birthday},</if>
+            <if test="certificateType != null ">certificate_type = #{certificateType},</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no = #{certificateNo},</if>
+            <if test="certificateAddress != null  and certificateAddress != ''">certificate_address = #{certificateAddress},</if>
+            <if test="censusAddress != null  and censusAddress != ''">census_address = #{censusAddress},</if>
+            <if test="profession != null  and profession != ''">profession = #{profession},</if>
+            <if test="city != null  and city != ''">city = #{city},</if>
+            <if test="education != null  and education != ''">education = #{education},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="tel != null  and tel != ''">tel = #{tel},</if>
+            <if test="email != null  and email != ''">email = #{email},</if>
+            <if test="incomeYear != null ">income_year = #{incomeYear},</if>
+            <if test="address != null  and address != ''">address = #{address},</if>
+            <if test="marrageStatus != null ">marrage_status = #{marrageStatus},</if>
+            <if test="hasChild != null ">has_child = #{hasChild},</if>
+            <if test="hasHouse != null ">has_house = #{hasHouse},</if>
+            <if test="hasCar != null ">has_car = #{hasCar},</if>
+            <if test="validateStatus != null ">validate_status = #{validateStatus},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="modifyTime != null ">modify_time = #{modifyTime},</if>
+            <if test="createBy != null ">create_by = #{createBy},</if>
+            <if test="modifyBy != null ">modify_by = #{modifyBy},</if>
+            <if test="caseNo != null  and caseNo != ''">case_no = #{caseNo},</if>
+            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no = #{importBatchNo},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcCustinfoById" parameterType="Long">
+        delete from t_lc_custinfo where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcCustinfoByIds" parameterType="String">
+        delete from t_lc_custinfo where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="batchInsertCustinfo" parameterType="java.util.List">
+        INSERT INTO t_lc_custinfo (
+        custom_code,
+        custom_name,
+        custom_sex,
+        birthday,
+        certificate_type,
+        certificate_no,
+        certificate_address,
+        census_address,
+        profession,
+        city,
+        education,
+        phone,
+        tel,
+        email,
+        income_year,
+        address,
+        marrage_status,
+        has_child,
+        has_house,
+        has_car,
+        org_id,
+        org_name,
+        validate_status,
+        create_time,
+        modify_time,
+        create_by,
+        modify_by,
+        case_no,
+        import_batch_no
+        )
+        VALUES
+        <foreach collection="custInsertList" item="custinfo" separator=",">
+            (
+            #{custinfo.customCode},
+            #{custinfo.customName},
+            #{custinfo.customSex},
+            #{custinfo.birthday},
+            #{custinfo.certificateType},
+            #{custinfo.certificateNo},
+            #{custinfo.certificateAddress},
+            #{custinfo.censusAddress},
+            #{custinfo.profession},
+            #{custinfo.city},
+            #{custinfo.education},
+            #{custinfo.phone},
+            #{custinfo.tel},
+            #{custinfo.email},
+            #{custinfo.incomeYear},
+            #{custinfo.address},
+            #{custinfo.marrageStatus},
+            #{custinfo.hasChild},
+            #{custinfo.hasHouse},
+            #{custinfo.hasCar},
+            #{custinfo.orgId},
+            #{custinfo.orgName},
+            #{custinfo.validateStatus},
+            NOW(),
+            NOW(),
+            #{custinfo.createBy},
+            #{custinfo.modifyBy},
+            #{custinfo.caseNo},
+            #{custinfo.importBatchNo}
+            )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdateCustinfo" parameterType="java.util.List">
+        <foreach collection="custUpdateList" item="custinfo" separator=";">
+            UPDATE t_lc_custinfo
+            <set>
+                <if test="custinfo.customCode != null  and custinfo.customCode != ''">custom_code = #{custinfo.customCode},</if>
+                <if test="custinfo.customName != null  and custinfo.customName != ''">custom_name = #{custinfo.customName},</if>
+                <if test="custinfo.customSex != null  and custinfo.customSex != ''">custom_sex = #{custinfo.customSex},</if>
+                <if test="custinfo.birthday != null  and custinfo.birthday != ''">birthday = #{custinfo.birthday},</if>
+                <if test="custinfo.certificateType != null  and custinfo.certificateType != ''">certificate_type = #{custinfo.certificateType},</if>
+                <if test="custinfo.certificateNo != null  and custinfo.certificateNo != ''">certificate_no = #{custinfo.certificateNo},</if>
+                <if test="custinfo.certificateAddress != null  and custinfo.certificateAddress != ''">certificate_address = #{custinfo.certificateAddress},</if>
+                <if test="custinfo.censusAddress != null  and custinfo.censusAddress != ''">census_address = #{custinfo.censusAddress},</if>
+                <if test="custinfo.profession != null  and custinfo.profession != ''">profession = #{custinfo.profession},</if>
+                <if test="custinfo.city != null  and custinfo.city != ''">city = #{custinfo.city},</if>
+                <if test="custinfo.education != null  and custinfo.education != ''">education = #{custinfo.education},</if>
+                <if test="custinfo.phone != null  and custinfo.phone != ''">phone = #{custinfo.phone},</if>
+                <if test="custinfo.tel != null  and custinfo.tel != ''">tel = #{custinfo.tel},</if>
+                <if test="custinfo.email != null  and custinfo.email != ''">email = #{custinfo.email},</if>
+                <if test="custinfo.incomeYear != null  and custinfo.incomeYear != ''">income_year = #{custinfo.incomeYear},</if>
+                <if test="custinfo.address != null  and custinfo.address != ''">address = #{custinfo.address},</if>
+                <if test="custinfo.marrageStatus != null  and custinfo.marrageStatus != ''">marrage_status = #{custinfo.marrageStatus},</if>
+                <if test="custinfo.hasChild != null  and custinfo.hasChild != ''">has_child = #{custinfo.hasChild},</if>
+                <if test="custinfo.hasHouse != null  and custinfo.hasHouse != ''">has_house = #{custinfo.hasHouse},</if>
+                <if test="custinfo.hasCar != null  and custinfo.hasCar != ''">has_car = #{custinfo.hasCar},</if>
+                modify_time = NOW(),
+                <if test="custinfo.modifyBy != null  and custinfo.modifyBy != ''">modify_by = #{custinfo.modifyBy},</if>
+            </set>
+            WHERE case_no = #{custinfo.caseNo} AND import_batch_no = #{custinfo.importBatchNo}
+        </foreach>
+    </update>
+
+    <select id="findCustByCertificateNo" parameterType="java.lang.String" resultMap="tLcCustinfo">
+        SELECT
+        <include refid="SELECT_CUSTINFO"/>
+        FROM t_lc_custinfo t
+        WHERE t.certificate_no = #{certificateNo}
+    </select>
+
+    <select id="findCustByCaseNo" resultMap="tLcCustinfo">
+        SELECT
+        <include refid="SELECT_CUSTINFO"/>
+        FROM t_lc_custinfo t
+        WHERE t.case_no = #{caseNo}
+        <if test="orgId != null and orgId != ''">
+            AND t.org_id = #{orgId}
+        </if>
+        <if test="importBatchNo != null and importBatchNo != ''">
+            AND t.import_batch_no = #{importBatchNo}
+        </if>
+    </select>
+
+    <!-- 此返回mapResult是有顺序的LinkedHashMap，禁止打乱排序，可以往最后追加 -->
+    <resultMap id="mapResult" type="java.util.LinkedHashMap">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="customCode" column="custom_code" jdbcType="VARCHAR"/>
+        <result property="customName" column="custom_name" jdbcType="VARCHAR"/>
+        <result property="customSex" column="custom_sex" jdbcType="INTEGER"/>
+        <result property="birthday" column="birthday" jdbcType="DATE"/>
+        <result property="certificateNo" column="certificate_no" jdbcType="VARCHAR"/>
+        <result property="certificateAddress" column="certificate_address" jdbcType="VARCHAR"/>
+        <result property="profession" column="profession" jdbcType="VARCHAR"/>
+        <result property="city" column="city" jdbcType="VARCHAR"/>
+        <result property="education" column="education" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="tel" column="tel" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="incomeYear" column="income_year" jdbcType="DECIMAL"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="marrageStatus" column="marrage_status" jdbcType="INTEGER"/>
+        <result property="hasChild" column="has_child" jdbcType="INTEGER"/>
+        <result property="hasHouse" column="has_house" jdbcType="INTEGER"/>
+        <result property="hasCar" column="has_car" jdbcType="INTEGER"/>
+        <result property="validateStatus" column="validate_status" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="modifyBy" column="modify_by" jdbcType="BIGINT"/>
+        <result property="orgId" column="org_id" jdbcType="VARCHAR"/>
+        <result property="censusAddress" column="census_address" jdbcType="VARCHAR"/>
+        <result property="caseNo" column="case_no" jdbcType="VARCHAR"/>
+        <result property="importBatchNo"    column="import_batch_no"    />
+    </resultMap>
+
+    <select id="selectCustinfoByTime" resultMap="mapResult">
+        select id, custom_code, custom_name, custom_sex,  birthday, certificate_no,certificate_address, profession, city,education,phone,tel,
+        email,income_year,address,marrage_status,has_child,has_house,has_car,validate_status,create_time,modify_time,create_by,modify_by,org_id,census_address,case_no,import_batch_no from t_lc_custinfo
+        where 1 = 1
+        <if test="createTime != null">
+            AND create_time <![CDATA[>=]]> #{createTime} OR modify_time <![CDATA[>=]]> #{createTime}
+        </if>
+        order by id desc
+        limit #{pnum},#{psize}
+    </select>
+
+    <select id="selectCustinfoCount" resultType="java.lang.Integer">
+        select count(1) from t_lc_custinfo
+        where 1 = 1
+        <if test="createTime != null">
+            AND create_time <![CDATA[>=]]> #{createTime} OR modify_time <![CDATA[>=]]> #{createTime}
+        </if>
+    </select>
+</mapper>

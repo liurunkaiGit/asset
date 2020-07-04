@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.duncase.mapper.TLcDuncaseAssignMapper">
+
+    <resultMap type="com.ruoyi.duncase.domain.TLcDuncaseAssign" id="TLcDuncaseAssignResult">
+        <result property="id" column="id"/>
+        <result property="customName" column="custom_name"/>
+        <result property="certificateNo" column="certificate_no"/>
+        <result property="caseNo" column="case_no"/>
+        <result property="taskId" column="task_id"/>
+        <result property="operationId" column="operation_id"/>
+        <result property="operationName" column="operation_name"/>
+        <result property="transferType" column="transfer_type"/>
+        <result property="taskStatus" column="task_status"/>
+        <result property="ownerId" column="owner_id"/>
+        <result property="ownerName" column="owner_name"/>
+        <result property="orgId" column="org_id"/>
+        <result property="orgName" column="org_name"/>
+        <result property="collectTeamId" column="collect_team_id"/>
+        <result property="collectTeamName" column="collect_team_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="validateStatus" column="validate_status"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectTLcDuncaseAssignVo">
+        select id, custom_name, certificate_no, case_no, task_id, operation_id, operation_name, transfer_type, task_status, owner_id, owner_name, org_id, org_name, collect_team_id, collect_team_name, create_time, create_by, validate_status, remark from t_lc_duncase_assign
+    </sql>
+
+    <sql id="SELECT_DUNCASE_ASSIGN">
+        t.id,
+        t.custom_name,
+        t.certificate_no,
+        t.case_no,
+        t.task_id,
+        t.operation_id,
+        t.operation_name,
+        t.transfer_type,
+        t.task_status,
+        t.owner_id,
+        t.owner_name,
+        t.org_id,
+        t.org_name,
+        t.collect_team_id,
+        t.collect_team_name,
+        t.create_time,
+        t.create_by,
+        t.validate_status,
+        t.remark
+    </sql>
+
+    <select id="selectTLcDuncaseAssignList" parameterType="com.ruoyi.duncase.domain.TLcDuncaseAssign"
+            resultMap="TLcDuncaseAssignResult">
+        <include refid="selectTLcDuncaseAssignVo"/>
+        <where>
+            <if test="customName != null  and customName != ''">and custom_name like concat('%', #{customName}, '%')
+            </if>
+            <if test="certificateNo != null  and certificateNo != ''">and certificate_no = #{certificateNo}</if>
+            <if test="caseNo != null  and caseNo != ''">and case_no = #{caseNo}</if>
+            <if test="taskId != null  and taskId != ''">and task_id = #{taskId}</if>
+            <if test="operationId != null ">and operation_id = #{operationId}</if>
+            <if test="operationName != null  and operationName != ''">and operation_name like concat('%',
+                #{operationName}, '%')
+            </if>
+            <if test="transferType != null ">and transfer_type = #{transferType}</if>
+            <if test="taskStatus != null ">and task_status = #{taskStatus}</if>
+            <if test="ownerId != null ">and owner_id = #{ownerId}</if>
+            <if test="ownerName != null ">and owner_name = #{ownerName}</if>
+            <if test="orgId != null ">and org_id = #{orgId}</if>
+            <if test="collectTeamId != null  and collectTeamId != ''">and collect_team_id = #{collectTeamId}</if>
+            <if test="collectTeamName != null  and collectTeamName != ''">and collect_team_name like concat('%',
+                #{collectTeamName}, '%')
+            </if>
+            <if test="validateStatus != null  and validateStatus != ''">and validate_status = #{validateStatus}</if>
+        </where>
+    </select>
+
+    <select id="selectTLcDuncaseAssignById" parameterType="Long" resultMap="TLcDuncaseAssignResult">
+        <include refid="selectTLcDuncaseAssignVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTLcDuncaseAssign" parameterType="com.ruoyi.duncase.domain.TLcDuncaseAssign"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_duncase_assign
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customName != null  and customName != ''">custom_name,</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no,</if>
+            <if test="caseNo != null  and caseNo != ''">case_no,</if>
+            <if test="taskId != null  and taskId != ''">task_id,</if>
+            <if test="operationId != null ">operation_id,</if>
+            <if test="operationName != null  and operationName != ''">operation_name,</if>
+            <if test="transferType != null ">transfer_type,</if>
+            <if test="taskStatus != null ">task_status,</if>
+            <if test="ownerId != null ">owner_id,</if>
+            <if test="orgId != null ">org_id,</if>
+            <if test="collectTeamId != null  and collectTeamId != ''">collect_team_id,</if>
+            <if test="collectTeamName != null  and collectTeamName != ''">collect_team_name,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createBy != null ">create_by,</if>
+            <if test="validateStatus != null  and validateStatus != ''">validate_status,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customName != null  and customName != ''">#{customName},</if>
+            <if test="certificateNo != null  and certificateNo != ''">#{certificateNo},</if>
+            <if test="caseNo != null  and caseNo != ''">#{caseNo},</if>
+            <if test="taskId != null  and taskId != ''">#{taskId},</if>
+            <if test="operationId != null ">#{operationId},</if>
+            <if test="operationName != null  and operationName != ''">#{operationName},</if>
+            <if test="transferType != null ">#{transferType},</if>
+            <if test="transferStatus != null ">#{transferStatus},</if>
+            <if test="taskStatus != null ">#{taskStatus},</if>
+            <if test="ownerId != null ">#{ownerId},</if>
+            <if test="orgId != null ">#{orgId},</if>
+            <if test="collectTeamId != null  and collectTeamId != ''">#{collectTeamId},</if>
+            <if test="collectTeamName != null  and collectTeamName != ''">#{collectTeamName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null ">#{createBy},</if>
+            <if test="validateStatus != null  and validateStatus != ''">#{validateStatus},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTLcDuncaseAssign" parameterType="com.ruoyi.duncase.domain.TLcDuncaseAssign">
+        update t_lc_duncase_assign
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="customName != null  and customName != ''">custom_name = #{customName},</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no = #{certificateNo},</if>
+            <if test="caseNo != null  and caseNo != ''">case_no = #{caseNo},</if>
+            <if test="taskId != null  and taskId != ''">task_id = #{taskId},</if>
+            <if test="operationId != null ">operation_id = #{operationId},</if>
+            <if test="operationName != null  and operationName != ''">operation_name = #{operationName},</if>
+            <if test="transferType != null ">transfer_type = #{transferType},</if>
+            <if test="taskStatus != null ">task_status = #{taskStatus},</if>
+            <if test="ownerId != null ">owner_id = #{ownerId},</if>
+            <if test="orgId != null ">org_id = #{orgId},</if>
+            <if test="collectTeamId != null  and collectTeamId != ''">collect_team_id = #{collectTeamId},</if>
+            <if test="collectTeamName != null  and collectTeamName != ''">collect_team_name = #{collectTeamName},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="createBy != null ">create_by = #{createBy},</if>
+            <if test="validateStatus != null  and validateStatus != ''">validate_status = #{validateStatus},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcDuncaseAssignById" parameterType="Long">
+        delete from t_lc_duncase_assign where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcDuncaseAssignByIds" parameterType="String">
+        delete from t_lc_duncase_assign where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="batchInsertDuncaseAssign" parameterType="java.util.List">
+        INSERT INTO t_lc_duncase_assign (
+        custom_name,
+        certificate_no,
+        case_no,
+        task_id,
+        operation_id,
+        operation_name,
+        transfer_type,
+        task_status,
+        owner_id,
+        owner_name,
+        org_id,
+        org_name,
+        collect_team_id,
+        collect_team_name,
+        create_time,
+        create_by,
+        validate_status,
+        remark
+        )
+        VALUES
+        <foreach collection="duncaseAssignList" item="assign" separator=",">
+            (
+            #{assign.customName},
+            #{assign.certificateNo},
+            #{assign.caseNo},
+            #{assign.taskId},
+            #{assign.operationId},
+            #{assign.operationName},
+            #{assign.transferType},
+            #{assign.taskStatus},
+            #{assign.ownerId},
+            #{assign.ownerName},
+            #{assign.orgId},
+            #{assign.orgName},
+            #{assign.collectTeamId},
+            #{assign.collectTeamName},
+            NOW(),
+            #{assign.createBy},
+            #{assign.validateStatus},
+            #{assign.remark}
+            )
+        </foreach>
+    </insert>
+
+    <select id="findDuncaseAssignByCertificateNo" parameterType="java.lang.String" resultMap="TLcDuncaseAssignResult">
+        SELECT su.user_name AS owner_name,
+        <include refid="SELECT_DUNCASE_ASSIGN"/>
+        FROM t_lc_duncase_assign t,sys_user su
+        WHERE t.owner_id = su.user_id AND certificate_no = #{certificateNo}
+        ORDER BY t.create_time desc
+    </select>
+
+    <select id="findDuncaseAssignByCaseNo" parameterType="java.lang.String" resultMap="TLcDuncaseAssignResult">
+        SELECT su.user_name AS owner_name,
+        <include refid="SELECT_DUNCASE_ASSIGN"/>
+        FROM t_lc_duncase_assign t LEFT JOIN sys_user su ON t.owner_id = su.user_id
+        WHERE  case_no = #{caseNo}
+        ORDER BY t.create_time desc
+    </select>
+
+</mapper>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('模板匹配')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-package-matching" th:object="${templatesPackage}">
+            <div class="form-group" id="form-package-matching2">
+                <input name="id" th:field="*{id}" type="hidden">
+                <input name="url" th:field="*{url}" type="hidden">
+                <div class='col-sm-6'>
+                    <input name='系统表头' class='form-control' type='text' value="系统表头" disabled style='background-color: #f8ac59;color: #123b5f;font-size: 18px;text-align: center'>
+                </div>
+                <div class='col-sm-6'>
+                    <input name='模板表头' class='form-control' type='text' value="模板表头" disabled style='background-color: #f8ac59;color: #123b5f;font-size: 18px;text-align: center'>
+                </div>
+            </div>
+        </form>
+    </div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    // var ctx = [[${@config.getKey('ctx')}]];
+    var prefix = ctx + "assetspackage/template";
+
+    $(function() {
+        var paramid = $("#id").val();
+        var paramurl = $("#url").val();
+        $.ajax({
+            url: prefix+"/findRelations",
+            dataType: "json",
+            type: "post",
+            data: {
+                templateId: paramid,
+                templateUrl:paramurl
+            },
+            success:function(data){
+                var result = JSON.parse(data.msg);
+                for (var templateHead in result) {
+                    var systemHead = result[templateHead];
+                    $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+systemHead+"' class='form-control' type='text' value='"+systemHead+"'required disabled style='background-color: #FFFFFF;'></div>")
+                        .append("<div class='col-sm-6'><input name='' class='form-control' type='text' value='"+templateHead+"' required disabled style='background-color: #FFFFFF;'></div>");
+                }
+
+
+            }
+        });
+
+
+
+    });
+
+</script>
+<script type="text/javascript">
+    $("#form-package-matching").validate({
+        focusCleanup: true
+    });
+</script>
+</body>
+</html>

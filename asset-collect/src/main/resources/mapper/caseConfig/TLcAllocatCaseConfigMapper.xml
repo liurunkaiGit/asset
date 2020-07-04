@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.caseConfig.mapper.TLcAllocatCaseConfigMapper">
+    
+    <resultMap type="com.ruoyi.caseConfig.domain.TLcAllocatCaseConfig" id="TLcAllocatCaseConfigResult">
+        <result property="id"    column="id"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="ruleEngine"    column="rule_engine"    />
+        <result property="robot"    column="robot"    />
+        <result property="callPlatform"    column="call_platform"    />
+        <result property="autoAllocatCase"    column="auto_allocat_case"    />
+        <result property="allocatCaseStartegy"    column="allocat_case_startegy"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="allocatCaseRule"    column="allocat_case_rule"    />
+        <result property="ruleEngineName"    column="rule_engine_name"    />
+        <result property="robotName"    column="robot_name"    />
+        <result property="callPlatformName"    column="call_platform_name"    />
+        <result property="allocatCaseStartegyName"    column="allocat_case_startegy_name"    />
+        <result property="allocatCaseRuleName"    column="allocat_case_rule_name"    />
+    </resultMap>
+
+    <sql id="selectTLcAllocatCaseConfigVo">
+        select id, org_id, org_name, rule_engine, robot, call_platform, auto_allocat_case, allocat_case_startegy, create_by, create_time, update_by, update_time, allocat_case_rule, rule_engine_name, robot_name, call_platform_name, allocat_case_startegy_name, allocat_case_rule_name from t_lc_allocat_case_config
+    </sql>
+
+    <select id="selectTLcAllocatCaseConfigList" parameterType="com.ruoyi.caseConfig.domain.TLcAllocatCaseConfig" resultMap="TLcAllocatCaseConfigResult">
+        <include refid="selectTLcAllocatCaseConfigVo"/>
+        <where>  
+            <if test="orgId != null "> and org_id = #{orgId}</if>
+            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+            <if test="ruleEngine != null  and ruleEngine != ''"> and rule_engine = #{ruleEngine}</if>
+            <if test="robot != null  and robot != ''"> and robot = #{robot}</if>
+            <if test="callPlatform != null  and callPlatform != ''"> and call_platform = #{callPlatform}</if>
+            <if test="autoAllocatCase != null "> and auto_allocat_case = #{autoAllocatCase}</if>
+            <if test="allocatCaseStartegy != null "> and allocat_case_startegy = #{allocatCaseStartegy}</if>
+            <if test="allocatCaseRule != null "> and allocat_case_rule = #{allocatCaseRule}</if>
+            <if test="ruleEngineName != null  and ruleEngineName != ''"> and rule_engine_name like concat('%', #{ruleEngineName}, '%')</if>
+            <if test="robotName != null  and robotName != ''"> and robot_name like concat('%', #{robotName}, '%')</if>
+            <if test="callPlatformName != null  and callPlatformName != ''"> and call_platform_name like concat('%', #{callPlatformName}, '%')</if>
+            <if test="allocatCaseStartegyName != null  and allocatCaseStartegyName != ''"> and allocat_case_startegy_name like concat('%', #{allocatCaseStartegyName}, '%')</if>
+            <if test="allocatCaseRuleName != null  and allocatCaseRuleName != ''"> and allocat_case_rule_name like concat('%', #{allocatCaseRuleName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectTLcAllocatCaseConfigById" parameterType="Long" resultMap="TLcAllocatCaseConfigResult">
+        <include refid="selectTLcAllocatCaseConfigVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLcAllocatCaseConfig" parameterType="com.ruoyi.caseConfig.domain.TLcAllocatCaseConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_allocat_case_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orgId != null ">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="ruleEngine != null  and ruleEngine != ''">rule_engine,</if>
+            <if test="robot != null  and robot != ''">robot,</if>
+            <if test="callPlatform != null  and callPlatform != ''">call_platform,</if>
+            <if test="autoAllocatCase != null ">auto_allocat_case,</if>
+            <if test="allocatCaseStartegy != null ">allocat_case_startegy,</if>
+            <if test="createBy != null ">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null ">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="allocatCaseRule != null ">allocat_case_rule,</if>
+            <if test="ruleEngineName != null  and ruleEngineName != ''">rule_engine_name,</if>
+            <if test="robotName != null  and robotName != ''">robot_name,</if>
+            <if test="callPlatformName != null  and callPlatformName != ''">call_platform_name,</if>
+            <if test="allocatCaseStartegyName != null  and allocatCaseStartegyName != ''">allocat_case_startegy_name,</if>
+            <if test="allocatCaseRuleName != null  and allocatCaseRuleName != ''">allocat_case_rule_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orgId != null ">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="ruleEngine != null  and ruleEngine != ''">#{ruleEngine},</if>
+            <if test="robot != null  and robot != ''">#{robot},</if>
+            <if test="callPlatform != null  and callPlatform != ''">#{callPlatform},</if>
+            <if test="autoAllocatCase != null ">#{autoAllocatCase},</if>
+            <if test="allocatCaseStartegy != null ">#{allocatCaseStartegy},</if>
+            <if test="createBy != null ">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null ">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="allocatCaseRule != null ">#{allocatCaseRule},</if>
+            <if test="ruleEngineName != null  and ruleEngineName != ''">#{ruleEngineName},</if>
+            <if test="robotName != null  and robotName != ''">#{robotName},</if>
+            <if test="callPlatformName != null  and callPlatformName != ''">#{callPlatformName},</if>
+            <if test="allocatCaseStartegyName != null  and allocatCaseStartegyName != ''">#{allocatCaseStartegyName},</if>
+            <if test="allocatCaseRuleName != null  and allocatCaseRuleName != ''">#{allocatCaseRuleName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLcAllocatCaseConfig" parameterType="com.ruoyi.caseConfig.domain.TLcAllocatCaseConfig">
+        update t_lc_allocat_case_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orgId != null ">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="ruleEngine != null  and ruleEngine != ''">rule_engine = #{ruleEngine},</if>
+            <if test="robot != null  and robot != ''">robot = #{robot},</if>
+            <if test="callPlatform != null  and callPlatform != ''">call_platform = #{callPlatform},</if>
+            <if test="autoAllocatCase != null ">auto_allocat_case = #{autoAllocatCase},</if>
+            <if test="allocatCaseStartegy != null ">allocat_case_startegy = #{allocatCaseStartegy},</if>
+            <if test="createBy != null ">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null ">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="allocatCaseRule != null ">allocat_case_rule = #{allocatCaseRule},</if>
+            <if test="ruleEngineName != null  and ruleEngineName != ''">rule_engine_name = #{ruleEngineName},</if>
+            <if test="robotName != null  and robotName != ''">robot_name = #{robotName},</if>
+            <if test="callPlatformName != null  and callPlatformName != ''">call_platform_name = #{callPlatformName},</if>
+            <if test="allocatCaseStartegyName != null  and allocatCaseStartegyName != ''">allocat_case_startegy_name = #{allocatCaseStartegyName},</if>
+            <if test="allocatCaseRuleName != null  and allocatCaseRuleName != ''">allocat_case_rule_name = #{allocatCaseRuleName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcAllocatCaseConfigById" parameterType="Long">
+        delete from t_lc_allocat_case_config where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcAllocatCaseConfigByIds" parameterType="String">
+        delete from t_lc_allocat_case_config where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectTLcAllocatCaseConfigByOrgId" parameterType="java.lang.String" resultMap="TLcAllocatCaseConfigResult">
+        <include refid="selectTLcAllocatCaseConfigVo"/>
+        where org_id = #{orgId}
+    </select>
+    
+</mapper>

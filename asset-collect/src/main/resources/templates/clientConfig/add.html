@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增【请填写功能名称】')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-config-add">
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">委托方id：</label>
+                <div class="col-sm-8">
+                    &lt;!&ndash;<input name="clientId" class="form-control" type="text">&ndash;&gt;
+                    <select class="form-control" name="clientId" id="clientId">
+                        <option value="">&#45;&#45;请选择&#45;&#45;</option>
+                    </select>
+                </div>
+            </div>-->
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">委托方名称：</label>
+                <div class="col-sm-8">
+                    <!--<input name="clientName" class="form-control" type="text">-->
+                    <select class="form-control" name="clientName" id="clientName">
+                        <option value="">--请选择--</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">推送到语音质检：</label>
+                <div class="col-sm-8">
+                    <!--<input name="sendRadioQc" class="form-control" type="text">-->
+                    <select class="form-control" name="sendRadioQc">
+                        <option value="">--请选择--</option>
+                        <option value="1">是</option>
+                        <option value="2">否</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">项目名称：</label>
+                <div class="col-sm-8">
+                    <input name="projectName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否推送到规则引擎系统</label>
+                <div class="col-sm-8">
+                    <!--<input name="sendRuleEngine" class="form-control" type="text">-->
+                    <select class="form-control" name="sendRuleEngine">
+                        <option value="">--请选择--</option>
+                        <option value="1">是</option>
+                        <option value="2">否</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否自动分配任务</label>
+                <div class="col-sm-8">
+                    <!--<input name="autoAllocatTask" class="form-control" type="text">-->
+                    <select class="form-control" name="autoAllocatTask">
+                        <option value="">--请选择--</option>
+                        <option value="1">是</option>
+                        <option value="2">否</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">自动分配任务策略</label>
+                <div class="col-sm-8">
+                    <!--<input name="autoAllocatTaskStrategy" class="form-control" type="text">-->
+                    <select class="form-control" name="autoAllocatTaskStrategy">
+                        <option value="">--请选择--</option>
+                        <option value="1">数量平均</option>
+                        <option value="2">金额平均</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">推送到机器人</label>
+                <div class="col-sm-8">
+                    <!--<input name="sendRobot" class="form-control" type="text">-->
+                    <select class="form-control" name="sendRobot">
+                        <option value="">--请选择--</option>
+                        <option value="1">是</option>
+                        <option value="2">否</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否自动开启机器人任务</label>
+                <div class="col-sm-8">
+                    <!--<input name="autoStartRobotTsk" class="form-control" type="text">-->
+                    <select class="form-control" name="autoStartRobotTsk">
+                        <option value="">--请选择--</option>
+                        <option value="1">是</option>
+                        <option value="2">否</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+
+        var taskPrefix = ctx + "assetspackage/template";
+
+        $(function () {
+            // 初始化机构下拉框
+            initOrg();
+        })
+
+        function initOrg() {
+            $.post(
+                taskPrefix + "/findOrgInfo",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    // if (data.code == 0) {//请求成功
+                    var result = JSON.parse(data.msg);
+                    $.each(result,function(index,obj){
+                        $("#clientName").append("<option value='"+obj.orgId+"'>"+obj.orgName+"</option>");
+                        /*$("#clientId").append("<option value='"+obj.orgId+"'>"+obj.orgId+"</option>");*/
+                    });
+                    // }
+                }
+            );
+        }
+
+        var prefix = ctx + "ruoyi/config"
+        $("#form-config-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-config-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

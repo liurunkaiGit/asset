@@ -1,0 +1,160 @@
+var extno = undefined;
+var domain = undefined;
+var socket_url = undefined;
+var socket_port = undefined;
+var cccId = "";
+
+function setExt(ext, domain, url, port) {
+	extno = ext;
+	domain = domain;
+	socket_url = url;
+	socket_port = port;
+}
+
+
+function doSocket() {
+	var socket = io("ws://"+socket_url+":3000");
+	socket.on('rmooi', function(data) {
+		var data;
+		var jsonData = JSON.parse(data)
+		eventCallback(jsonData);
+	})
+	var data;
+	socket.emit('requestLongConnect', data);
+	if (data == undefined) {
+	} else {
+		// console.log(data)
+	}
+}
+
+var uuid = undefined;
+var is_aleg = false;
+var bleg_uuid = undefined;
+var is_listen = false;
+
+function eventCallback(data) {
+	if (uuid == undefined && data["Event-Name"] == "CHANNEL_CREATE"
+			&& data["Caller-Destination-Number"] == extno
+			&& data["variable_a_leg_uuid"] == undefined
+			&& domain == data["variable_tcql_domain"]) {
+		uuid = data["Caller-Unique-ID"]
+		call_Event('setUUID', uuid, bleg_uuid);
+
+		if ("1" == data['variable_is_eavesdrop']) {
+			is_listen = true;
+		}
+	}
+	if (uuid == undefined && data["Event-Name"] == "CHANNEL_CREATE"
+			&& data["Caller-Destination-Number"] == extno
+			&& domain == data["variable_dialed_domain"]
+			&& data["variable_is_forecast"] == "1") {
+		uuid = data["Caller-Unique-ID"]
+		bleg_uuid = data["variable_a_leg_uuid"]
+		call_Event('setUUID', uuid, bleg_uuid);
+		/*
+		 * if ("1" == data['variable_is_eavesdrop']){ is_listen = true; }
+		 */
+		 console.log("------------->"+data['variable_tcql_arg1'])
+		call_Event('forecast_callIn', data['Caller-Orig-Caller-ID-Number'],data['variable_tcql_arg1'])
+	}
+
+	if (data["Event-Name"] == "CHANNEL_CREATE"
+			&& data["Caller-Destination-Number"] == extno
+			&& data["variable_a_leg_uuid"] != undefined
+			&& data["Answer-State"] == "ringing"
+			&& domain == data["variable_tcql_domain"]) {
+		uuid = data["Caller-Unique-ID"];
+		cdrid = data["variable_cdrid"];
+		call_Event('setUUID', uuid, bleg_uuid);
+		is_aleg = true;
+	}
+
+	if (uuid != undefined && data["Event-Name"] == "CHANNEL_BRIDGE"
+			&& data["Bridge-B-Unique-ID"] == uuid) {
+		bleg_uuid = data["Bridge-A-Unique-ID"]
+		// 设置uuid
+		cdrid = data["variable_cdrid"];
+		call_Event('setUUID', uuid, bleg_uuid);
+		// console.log("bleg:"+bleg_uuid);
+	}
+
+	if (data["Event-Name"] == "CHANNEL_CREATE"
+			&& data["variable_a_leg_uuid"] == uuid
+			&& domain == data["variable_tcql_domain"]) {
+		bleg_uuid = data["Caller-Unique-ID"]
+		cdrid = data["variable_cdrid"];
+		console.log("CDRID" + cdrid)
+		call_Event('setCDRID', "S", "S", cdrid);
+	}
+
+	if (uuid != undefined && data["Command"] == "sendevent CUSTOM"
+			&& data["aleg_uuid"] == uuid) {
+		call_Event('getDTMF', data["dtmf"]);
+	}
+
+	if (uuid == data["Caller-Unique-ID"]
+			&& data["Event-Name"] == "CHANNEL_CALLSTATE") {
+		switch (data["Answer-State"]) {
+		case 'ringing':
+			// console.log("ringing:"+data["Caller-Destination-Number"]);
+			if (data["Caller-Destination-Number"] == extno && is_aleg == true
+					&& data["variable_is_forecast"] == undefined) {
+				// alert(data['Caller-Caller-ID-Number']+'来电');
+				call_Event('callIn', data['Caller-Caller-ID-Number'], cdrid)
+			} else {
+				if (is_listen) {
+					call_Event('listen', '');
+				} else {
+					call_Event('callOutSuccess', '');
+				}
+			}
+			break;
+		// 判断对方接听需要知道对方号码
+		case 'answered':
+			if (data["Caller-Callee-ID-Number"] == extno) {
+				// alert(data["variable_cdrid"]);
+				call_Event('answered', '');
+			}
+			break;
+		}
+	}
+	if (bleg_uuid == data["Caller-Unique-ID"]
+			&& data["Event-Name"] == "CHANNEL_CALLSTATE") {
+		switch (data["Answer-State"]) {
+		case 'ringing':
+			if (data["Caller-Destination-Number"] == extno && is_aleg == true
+					&& data["variable_is_forecast"] == "") {
+				// alert(data['Caller-Caller-ID-Number']+'来电');
+				call_Event('callIn', data['Caller-Caller-ID-Number'], cdrid)
+			} else {
+				if (is_listen) {
+					call_Event('listen', '');
+				} else {
+					call_Event('callOutSuccess', '');
+				}
+			}
+			break;
+		case 'answered':
+			if (data["Caller-Destination-Number"] == extno) {
+				call_Event('answered', '');
+			}
+			break;
+		}
+	}
+
+	// 呼入时挂机的时候没有 data["Caller-Unique-ID"]
+	// 和他人的uuid都为undefined.防止出错加了不为undefined的判断
+	if (uuid == data["Caller-Unique-ID"] && uuid != undefined
+			&& data["Event-Name"] == "CHANNEL_HANGUP_COMPLETE") {
+		// console.log('uuid:'+uuid)
+		console.log('Caller-Unique-ID:' + uuid, bleg_uuid)
+		uuid = undefined;
+		is_aleg = false;
+		bleg_uuid = undefined;
+		is_listen = false;
+		call_Event('hangup', '');
+		call_Event('setUUID', uuid, bleg_uuid);
+
+	}
+
+}

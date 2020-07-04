@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.custom.mapper.TLcCustContactMapper">
+
+    <resultMap id="TLcCustContactResult" type="com.ruoyi.custom.domain.TLcCustContact">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="certificateNo" column="certificate_no" jdbcType="VARCHAR"/>
+        <result property="caseNo" column="case_no" jdbcType="VARCHAR"/>
+        <result property="contactName" column="contact_name" jdbcType="VARCHAR"/>
+        <result property="relation" column="relation" jdbcType="INTEGER"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="tel" column="tel" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="origin" column="origin" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="modifyBy" column="modify_by" jdbcType="BIGINT"/>
+        <result property="validateStatus" column="validate_status" jdbcType="INTEGER"/>
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="isClose"    column="is_close"    />
+    </resultMap>
+
+    <sql id="selectTLcCustContactVo">
+        select id, certificate_no, contact_name, relation, phone, tel, address, origin, create_time, modify_time, create_by, modify_by, validate_status, case_no, org_id, org_name, import_batch_no from t_lc_cust_contact
+    </sql>
+
+    <sql id="SELECT_CUST_CONTACT">
+        t.id,
+        t.certificate_no,
+        t.contact_name,
+        t.relation,
+        t.phone,
+        t.tel,
+        t.address,
+        t.origin,
+        t.create_time,
+        t.modify_time,
+        t.create_by,
+        t.modify_by,
+        t.validate_status,
+        t.case_no,
+        t.org_id,
+        t.org_name,
+        t.import_batch_no,
+        t.is_close
+    </sql>
+
+    <select id="selectTLcCustContactList" parameterType="com.ruoyi.custom.domain.TLcCustContact"
+            resultMap="TLcCustContactResult">
+        <include refid="selectTLcCustContactVo"/>
+        <where>
+            <if test="certificateNo != null  and certificateNo != ''">and certificate_no = #{certificateNo}</if>
+            <if test="contactName != null  and contactName != ''">and contact_name like concat('%', #{contactName},
+                '%')
+            </if>
+            <if test="relation != null  and relation != ''">and relation = #{relation}</if>
+            <if test="caseNo != null  and caseNo != ''">and case_no = #{caseNo}</if>
+            <if test="phone != null  and phone != ''">and phone = #{phone}</if>
+            <if test="tel != null  and tel != ''">and tel = #{tel}</if>
+            <if test="address != null  and address != ''">and address = #{address}</if>
+            <if test="origin != null ">and origin = #{origin}</if>
+            <if test="modifyTime != null ">and modify_time = #{modifyTime}</if>
+            <if test="modifyBy != null ">and modify_by = #{modifyBy}</if>
+            <if test="validateStatus != null  and validateStatus != ''">and validate_status = #{validateStatus}</if>
+            <if test="orgId != null  and orgId != ''"> and org_id = #{orgId}</if>
+            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+        </where>
+    </select>
+
+    <select id="selectTLcCustContactById" parameterType="Long" resultMap="TLcCustContactResult">
+        <include refid="selectTLcCustContactVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTLcCustContact" parameterType="com.ruoyi.custom.domain.TLcCustContact" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_lc_cust_contact
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no,</if>
+            <if test="contactName != null  and contactName != ''">contact_name,</if>
+            <if test="relation != null  and relation != ''">relation,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="tel != null  and tel != ''">tel,</if>
+            <if test="address != null  and address != ''">address,</if>
+            <if test="origin != null ">origin,</if>
+            create_time,
+            modify_time,
+            <if test="createBy != null ">create_by,</if>
+            <if test="modifyBy != null ">modify_by,</if>
+            <if test="validateStatus != null  and validateStatus != ''">validate_status,</if>
+            <if test="caseNo != null  and caseNo != ''">case_no,</if>
+            <if test="orgId != null  and orgId != ''">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="certificateNo != null  and certificateNo != ''">#{certificateNo},</if>
+            <if test="contactName != null  and contactName != ''">#{contactName},</if>
+            <if test="relation != null  and relation != ''">#{relation},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="tel != null  and tel != ''">#{tel},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="origin != null ">#{origin},</if>
+            NOW(),
+            NOW(),
+            <if test="createBy != null ">#{createBy},</if>
+            <if test="modifyBy != null ">#{modifyBy},</if>
+            <if test="validateStatus != null  and validateStatus != ''">#{validateStatus},</if>
+            <if test="caseNo != null  and caseNo != ''">#{caseNo},</if>
+            <if test="orgId != null  and orgId != ''">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">#{importBatchNo},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTLcCustContact" parameterType="com.ruoyi.custom.domain.TLcCustContact">
+        update t_lc_cust_contact
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no = #{certificateNo},</if>
+            <if test="contactName != null  and contactName != ''">contact_name = #{contactName},</if>
+            <if test="relation != null  and relation != ''">relation = #{relation},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="tel != null  and tel != ''">tel = #{tel},</if>
+            <if test="address != null  and address != ''">address = #{address},</if>
+            <if test="origin != null ">origin = #{origin},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="modifyTime != null ">modify_time = #{modifyTime},</if>
+            <if test="createBy != null ">create_by = #{createBy},</if>
+            <if test="modifyBy != null ">modify_by = #{modifyBy},</if>
+            <if test="validateStatus != null  and validateStatus != ''">validate_status = #{validateStatus},</if>
+            <if test="caseNo != null  and caseNo != ''">case_no = #{caseNo},</if>
+            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no = #{importBatchNo},</if>
+            <if test="isClose != null  and isClose != ''">is_close = #{isClose},</if>
+        </trim>
+        where 1=1
+        <if test="id != null and id != ''">and id = #{id}</if>
+        <if test="caseNo != null and caseNo != ''">and case_no = #{caseNo}</if>
+        <if test="phone != null and phone != ''">and phone = #{phone}</if>
+    </update>
+
+    <delete id="deleteTLcCustContactById" parameterType="Long">
+        delete from t_lc_cust_contact where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcCustContactByIds" parameterType="String">
+        delete from t_lc_cust_contact where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="batchInsertContact" parameterType="java.util.List">
+        insert into t_lc_cust_contact (
+        certificate_no,
+        contact_name,
+        relation,
+        phone,
+        tel,
+        address,
+        origin,
+        create_time,
+        modify_time,
+        create_by,
+        modify_by,
+        validate_status,
+        case_no,
+        org_id,
+        org_name,
+        import_batch_no
+        ) values
+        <foreach collection="contactInsertList" item="contact" index="index" separator=",">
+            (
+            #{contact.certificateNo},
+            #{contact.contactName},
+            #{contact.relation},
+            #{contact.phone},
+            #{contact.tel},
+            #{contact.address},
+            #{contact.origin},
+            NOW(),
+            NOW(),
+            #{contact.createBy},
+            #{contact.modifyBy},
+            #{contact.validateStatus},
+            #{contact.caseNo},
+            #{contact.orgId},
+            #{contact.orgName},
+            #{contact.importBatchNo}
+            )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdateContact" parameterType="java.util.List">
+        <foreach collection="contactUpdateList" item="contact" separator=";">
+            UPDATE t_lc_cust_contact
+            <set>
+                <if test="contact.certificateNo != null  and contact.certificateNo != ''">certificate_no = #{contact.certificateNo},</if>
+                <if test="contact.contactName != null  and contact.contactName != ''">contact_name = #{contact.contactName},</if>
+                <if test="contact.relation != null  and contact.relation != ''">relation = #{contact.relation},</if>
+                <if test="contact.phone != null  and contact.phone != ''">phone = #{contact.phone},</if>
+                <if test="contact.tel != null  and contact.tel != ''">tel = #{contact.tel},</if>
+                <if test="contact.address != null  and contact.address != ''">address = #{contact.address},</if>
+                <if test="contact.origin != null  and contact.origin != ''">origin = #{contact.origin},</if>
+                modify_time = NOW(),
+                <if test="contact.modifyBy != null  and contact.modifyBy != ''">modify_by = #{contact.modifyBy},</if>
+                <if test="contact.validateStatus != null  and contact.validateStatus != ''">validate_status = #{contact.validateStatus},</if>
+            </set>
+            WHERE case_no = #{contact.caseNo} AND import_batch_no = #{contact.importBatchNo} AND phone = #{contact.phone} AND origin = #{contact.origin}
+        </foreach>
+    </update>
+
+    <select id="findCustContactByCertificateNo" parameterType="java.lang.String" resultMap="TLcCustContactResult">
+        <include refid="selectTLcCustContactVo"/>
+        WHERE certificate_no = #{certificateNo}
+    </select>
+
+    <select id="findCustContactByCaseNo" parameterType="java.lang.String" resultMap="TLcCustContactResult">
+        <include refid="selectTLcCustContactVo"/>
+        WHERE case_no = #{caseNo}
+    </select>
+
+    <select id="findAllCustContactByCaseNo" resultMap="TLcCustContactResult">
+        select
+        DISTINCT t.phone,
+        t.id,
+        t.certificate_no,
+        t.contact_name,
+        t.relation,
+        t.tel,
+        t.address,
+        t.origin,
+        t.create_time,
+        t.modify_time,
+        t.create_by,
+        t.modify_by,
+        t.validate_status,
+        t.case_no,
+        t.org_id,
+        t.org_name,
+        t.import_batch_no,
+        t.is_close
+        FROM t_lc_cust_contact t
+        WHERE
+        t.case_no = #{caseNo}
+        <if test="orgId != null and orgId != ''">
+            AND t.org_id = #{orgId}
+        </if>
+        <if test="importBatchNo != null and importBatchNo != ''">
+            AND t.import_batch_no = #{importBatchNo}
+        </if>
+    </select>
+
+    <update id="updateIsClose" parameterType="java.util.Map">
+        update t_lc_cust_contact SET is_close=#{isClose} where certificate_no=#{certificateNo} AND phone=#{phone} and contact_name=#{contactName}
+    </update>
+
+    <!-- 此返回mapResult是有顺序的LinkedHashMap，禁止打乱排序，可以往最后追加 -->
+    <resultMap id="mapResult" type="java.util.LinkedHashMap">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="contactName" column="contact_name" jdbcType="VARCHAR"/>
+        <result property="relation" column="relation" jdbcType="INTEGER"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="tel" column="tel" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="origin" column="origin" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        <result property="validateStatus" column="validate_status" jdbcType="INTEGER"/>
+        <result property="caseNo" column="case_no" jdbcType="VARCHAR"/>
+        <result property="orgId"    column="org_id"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="isClose"    column="is_close"    />
+    </resultMap>
+
+    <select id="selectCustContactByTime" resultMap="mapResult">
+        select id, contact_name, relation, phone,  tel, address,origin, create_time, modify_time,validate_status,case_no,org_id,
+        import_batch_no,is_close from t_lc_cust_contact
+        where 1 = 1
+        <if test="createTime != null">
+            AND create_time <![CDATA[>=]]> #{createTime} OR modify_time <![CDATA[>=]]> #{createTime}
+        </if>
+        order by id desc
+        limit #{pnum},#{psize}
+    </select>
+
+    <select id="selectCustContactCount" resultType="java.lang.Integer">
+        select count(1) from t_lc_cust_contact
+        where 1 = 1
+        <if test="createTime != null">
+            AND create_time <![CDATA[>=]]> #{createTime} OR modify_time <![CDATA[>=]]> #{createTime}
+        </if>
+    </select>
+</mapper>

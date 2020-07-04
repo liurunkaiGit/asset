@@ -1,0 +1,1612 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.CurAssetsPackageMapper">
+
+    <resultMap type="com.ruoyi.assetspackage.domain.CurAssetsPackage" id="CurAssetsPackageResult">
+        <result property="id"    column="id"    />
+        <result property="orgCasno"    column="org_casNo"    />
+        <result property="org"    column="org"    />
+        <result property="transfertype"    column="transferType"    />
+        <result property="rmbYe"    column="rmb_ye"    />
+        <result property="rmbYhfxzje"    column="rmb_yhfxzje"    />
+        <result property="rmbYhlizje"    column="rmb_yhlizje"    />
+        <result property="rmbYhbjzje"    column="rmb_yhbjzje"    />
+        <result property="rmbYhfyzje"    column="rmb_yhfyzje"    />
+        <result property="rmbZdyhje"    column="rmb_zdyhje"    />
+        <result property="rmbQkzje"    column="rmb_qkzje"    />
+        <result property="borrowNo"    column="borrow_no"    />
+        <result property="borrowBlank"    column="borrow_blank"    />
+        <result property="borrowEd"    column="borrow_ed"    />
+        <result property="rcr"    column="rcr"    />
+        <result property="fz"    column="fz"    />
+        <result property="areaCenter"    column="area_center"    />
+        <result property="maxYqtsHis"    column="max_yqts_his"    />
+        <result property="sumYqtsHis"    column="sum_yqts_his"    />
+        <result property="sumYqcsHis"    column="sum_yqcs_his"    />
+        <result property="wwCityName"    column="ww_city_name"    />
+        <result property="waYe"    column="wa_ye"    />
+        <result property="billAddress"    column="bill_address"    />
+        <result property="yearRates"    column="year_rates"    />
+        <result property="tjFirm"    column="tj_firm"    />
+        <result property="tjWd"    column="tj_wd"    />
+        <result property="dayRates"    column="day_rates"    />
+        <result property="accountDate"    column="account_date"    />
+        <result property="overdueDays"    column="overdue_days"    />
+        <result property="firstYqDate"    column="first_yq_date"    />
+        <result property="firstYqjcDate"    column="first_yqjc_date"    />
+        <result property="firstYqFlag"    column="first_yq_flag"    />
+        <result property="curName"    column="cur_name"    />
+        <result property="curSex"    column="cur_sex"    />
+        <result property="certificateNo"    column="certificate_no"    />
+        <result property="certificateAddress"    column="certificate_address"    />
+        <result property="registAddress"    column="regist_address"    />
+        <result property="email"    column="email"    />
+        <result property="marriage"    column="marriage"    />
+        <result property="education"    column="education"    />
+        <result property="customerMobile"    column="customer_mobile"    />
+        <result property="customerHomeTel"    column="customer_home_tel"    />
+        <result property="customerHomeAddress"    column="customer_home_address"    />
+        <result property="workName"    column="work_name"    />
+        <result property="workAddress"    column="work_address"    />
+        <result property="workTel"    column="work_tel"    />
+        <result property="firstLiaisonName"    column="first_liaison_name"    />
+        <result property="firstLiaisonRelation"    column="first_liaison_relation"    />
+        <result property="firstLiaisonMobile"    column="first_liaison_mobile"    />
+        <result property="firstLiaisonTel"    column="first_liaison_tel"    />
+        <result property="secondLiaisonName"    column="second_liaison_name"    />
+        <result property="secondLiaisonRelation"    column="second_liaison_relation"    />
+        <result property="secondLiaisonMobile"    column="second_liaison_mobile"    />
+        <result property="secondLiaisonTel"    column="second_liaison_tel"    />
+        <result property="threeLiaisonName"    column="three_liaison_name"    />
+        <result property="threeLiaisonRelation"    column="three_liaison_relation"    />
+        <result property="threeLiaisonMobile"    column="three_liaison_mobile"    />
+        <result property="threeLiaisonTel"    column="three_liaison_tel"    />
+        <result property="cpmc"    column="cpmc"    />
+        <result property="hkType"    column="hk_type"    />
+        <result property="znj"    column="znj"    />
+        <result property="ajhssj"    column="ajhssj"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="packageFlag"    column="package_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="closeCase"    column="close_case"    />
+        <result property="isExitCollect"    column="is_exit_collect"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="closeCaseDate"    column="close_case_date"    />
+        <result property="packageId"    column="package_id"    />
+        <result property="accountAge"    column="account_age"    />
+        <result property="laFlag"    column="la_flag"    />
+        <result property="fxFlag"    column="fx_flag"    />
+        <result property="htlx"    column="htlx"    />
+        <result property="jmbq"    column="jmbq"    />
+        <result property="fcbq"    column="fcbq"    />
+        <result property="fxsfbh"    column="fxsfbh"    />
+        <result property="remark"    column="remark"    />
+        <result property="tar"    column="tar"    />
+        <result property="jkrq"    column="jkrq"    />
+        <result property="zhychkr"    column="zhychkr"    />
+        <result property="mqhkje"    column="mqhkje"    />
+        <result property="dqqkje"    column="dqqkje"    />
+        <result property="ljyhje"    column="ljyhje"    />
+        <result property="sfje"    column="sfje"    />
+        <result property="zdhkzh1"    column="zdhkzh1"    />
+        <result property="zdhkzh2"    column="zdhkzh2"    />
+        <result property="zdhkzhhm1"    column="zdhkzhhm1"    />
+        <result property="zdhkzhhm2"    column="zdhkzhhm2"    />
+        <result property="zdhkqd1"    column="zdhkqd1"    />
+        <result property="zdhkqd2"    column="zdhkqd2"    />
+        <result property="khmb"    column="khmb"    />
+        <result property="spjg"    column="spjg"    />
+        <result property="dklx"    column="dklx"    />
+        <result property="jkbs"    column="jkbs"    />
+        <result property="spxx"    column="spxx"    />
+        <result property="wacs"    column="wacs"    />
+        <result property="ykqs"    column="ykqs"    />
+        <result property="workDept"    column="work_dept"    />
+        <result property="customerMobile2"    column="customer_mobile2"    />
+        <result property="customerMobile3"    column="customer_mobile3"    />
+        <result property="customerMobile4"    column="customer_mobile4"    />
+        <result property="fourthLiaisonName"    column="fourth_liaison_name"    />
+        <result property="fourthLiaisonRelation"    column="fourth_liaison_relation"    />
+        <result property="fourthLiaisonMobile"    column="fourth_liaison_mobile"    />
+        <result property="fifthLiaisonName"    column="fifth_liaison_name"    />
+        <result property="fifthLiaisonRelation"    column="fifth_liaison_relation"    />
+        <result property="fifthLiaisonMobile"    column="fifth_liaison_mobile"    />
+        <result property="dqyhje"    column="dqyhje"    />
+        <!--<result property="freeImport"    column="free_import"    />-->
+    </resultMap>
+
+    <resultMap type="com.ruoyi.assetspackage.domain.TempCurAssetsPackage" id="TempCurAssetsPackageResult">
+        <result property="id"    column="id"    />
+        <result property="orgCasno"    column="org_casNo"    />
+        <result property="org"    column="org"    />
+        <result property="transfertype"    column="transferType"    />
+        <result property="rmbYe"    column="rmb_ye"    />
+        <result property="rmbYhfxzje"    column="rmb_yhfxzje"    />
+        <result property="rmbYhlizje"    column="rmb_yhlizje"    />
+        <result property="rmbYhbjzje"    column="rmb_yhbjzje"    />
+        <result property="rmbYhfyzje"    column="rmb_yhfyzje"    />
+        <result property="rmbZdyhje"    column="rmb_zdyhje"    />
+        <result property="rmbQkzje"    column="rmb_qkzje"    />
+        <result property="borrowNo"    column="borrow_no"    />
+        <result property="borrowBlank"    column="borrow_blank"    />
+        <result property="borrowEd"    column="borrow_ed"    />
+        <result property="rcr"    column="rcr"    />
+        <result property="fz"    column="fz"    />
+        <result property="areaCenter"    column="area_center"    />
+        <result property="maxYqtsHis"    column="max_yqts_his"    />
+        <result property="sumYqtsHis"    column="sum_yqts_his"    />
+        <result property="sumYqcsHis"    column="sum_yqcs_his"    />
+        <result property="wwCityName"    column="ww_city_name"    />
+        <result property="waYe"    column="wa_ye"    />
+        <result property="billAddress"    column="bill_address"    />
+        <result property="yearRates"    column="year_rates"    />
+        <result property="tjFirm"    column="tj_firm"    />
+        <result property="tjWd"    column="tj_wd"    />
+        <result property="dayRates"    column="day_rates"    />
+        <result property="accountDate"    column="account_date"    />
+        <result property="overdueDays"    column="overdue_days"    />
+        <result property="firstYqDate"    column="first_yq_date"    />
+        <result property="firstYqjcDate"    column="first_yqjc_date"    />
+        <result property="firstYqFlag"    column="first_yq_flag"    />
+        <result property="curName"    column="cur_name"    />
+        <result property="curSex"    column="cur_sex"    />
+        <result property="certificateNo"    column="certificate_no"    />
+        <result property="certificateAddress"    column="certificate_address"    />
+        <result property="registAddress"    column="regist_address"    />
+        <result property="email"    column="email"    />
+        <result property="marriage"    column="marriage"    />
+        <result property="education"    column="education"    />
+        <result property="customerMobile"    column="customer_mobile"    />
+        <result property="customerHomeTel"    column="customer_home_tel"    />
+        <result property="customerHomeAddress"    column="customer_home_address"    />
+        <result property="workName"    column="work_name"    />
+        <result property="workAddress"    column="work_address"    />
+        <result property="workTel"    column="work_tel"    />
+        <result property="firstLiaisonName"    column="first_liaison_name"    />
+        <result property="firstLiaisonRelation"    column="first_liaison_relation"    />
+        <result property="firstLiaisonMobile"    column="first_liaison_mobile"    />
+        <result property="firstLiaisonTel"    column="first_liaison_tel"    />
+        <result property="secondLiaisonName"    column="second_liaison_name"    />
+        <result property="secondLiaisonRelation"    column="second_liaison_relation"    />
+        <result property="secondLiaisonMobile"    column="second_liaison_mobile"    />
+        <result property="secondLiaisonTel"    column="second_liaison_tel"    />
+        <result property="threeLiaisonName"    column="three_liaison_name"    />
+        <result property="threeLiaisonRelation"    column="three_liaison_relation"    />
+        <result property="threeLiaisonMobile"    column="three_liaison_mobile"    />
+        <result property="threeLiaisonTel"    column="three_liaison_tel"    />
+        <result property="cpmc"    column="cpmc"    />
+        <result property="hkType"    column="hk_type"    />
+        <result property="znj"    column="znj"    />
+        <result property="ajhssj"    column="ajhssj"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="packageFlag"    column="package_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="closeCase"    column="close_case"    />
+        <result property="isExitCollect"    column="is_exit_collect"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="closeCaseDate"    column="close_case_date"    />
+        <result property="isException"    column="is_exception"    />
+        <result property="accountAge"    column="account_age"    />
+        <result property="laFlag"    column="la_flag"    />
+        <result property="fxFlag"    column="fx_flag"    />
+        <result property="htlx"    column="htlx"    />
+        <result property="jmbq"    column="jmbq"    />
+        <result property="fcbq"    column="fcbq"    />
+        <result property="fxsfbh"    column="fxsfbh"    />
+        <result property="remark"    column="remark"    />
+        <result property="tar"    column="tar"    />
+        <result property="jkrq"    column="jkrq"    />
+        <result property="zhychkr"    column="zhychkr"    />
+        <result property="mqhkje"    column="mqhkje"    />
+        <result property="dqqkje"    column="dqqkje"    />
+        <result property="ljyhje"    column="ljyhje"    />
+        <result property="sfje"    column="sfje"    />
+        <result property="zdhkzh1"    column="zdhkzh1"    />
+        <result property="zdhkzh2"    column="zdhkzh2"    />
+        <result property="zdhkzhhm1"    column="zdhkzhhm1"    />
+        <result property="zdhkzhhm2"    column="zdhkzhhm2"    />
+        <result property="zdhkqd1"    column="zdhkqd1"    />
+        <result property="zdhkqd2"    column="zdhkqd2"    />
+        <result property="khmb"    column="khmb"    />
+        <result property="spjg"    column="spjg"    />
+        <result property="dklx"    column="dklx"    />
+        <result property="jkbs"    column="jkbs"    />
+        <result property="spxx"    column="spxx"    />
+        <result property="wacs"    column="wacs"    />
+        <result property="ykqs"    column="ykqs"    />
+        <result property="workDept"    column="work_dept"    />
+        <result property="customerMobile2"    column="customer_mobile2"    />
+        <result property="customerMobile3"    column="customer_mobile3"    />
+        <result property="customerMobile4"    column="customer_mobile4"    />
+        <result property="fourthLiaisonName"    column="fourth_liaison_name"    />
+        <result property="fourthLiaisonRelation"    column="fourth_liaison_relation"    />
+        <result property="fourthLiaisonMobile"    column="fourth_liaison_mobile"    />
+        <result property="fifthLiaisonName"    column="fifth_liaison_name"    />
+        <result property="fifthLiaisonRelation"    column="fifth_liaison_relation"    />
+        <result property="fifthLiaisonMobile"    column="fifth_liaison_mobile"    />
+        <result property="freeImport"    column="free_import"    />
+    </resultMap>
+
+    <resultMap type="com.ruoyi.assetspackage.domain.FreeImport" id="FreeImportResult">
+        <result property="id"    column="id"    />
+        <result property="orgCasno"    column="org_casno"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="value"    column="value"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectCurAssetsPackageVo">
+        select id, org_casNo, org, transferType, rmb_ye, rmb_yhfxzje, rmb_yhlizje, rmb_yhbjzje, rmb_yhfyzje, rmb_zdyhje, rmb_qkzje, borrow_no, borrow_blank, borrow_ed, rcr, fz, area_center, max_yqts_his, sum_yqts_his, sum_yqcs_his, ww_city_name, wa_ye, bill_address, year_rates, tj_firm, tj_wd, day_rates, account_date, overdue_days, first_yq_date, first_yqjc_date, first_yq_flag, cur_name, cur_sex, certificate_no, certificate_address, regist_address, email, marriage, education, customer_mobile, customer_home_tel, customer_home_address, work_name, work_address, work_tel, first_liaison_name, first_liaison_relation, first_liaison_mobile, first_liaison_tel, second_liaison_name, second_liaison_relation, second_liaison_mobile, second_liaison_tel, three_liaison_name, three_liaison_relation, three_liaison_mobile, three_liaison_tel, cpmc, hk_type, znj, ajhssj, org_id, package_flag, create_by, create_time, close_case, is_exit_collect, import_batch_no, close_case_date, package_id, account_age, la_flag, fx_flag, htlx, jmbq, fcbq, fxsfbh, remark, tar, jkrq, zhychkr, mqhkje, dqqkje, ljyhje, sfje, zdhkzh1, zdhkzh2, zdhkzhhm1, zdhkzhhm2, zdhkqd1, zdhkqd2, khmb, spjg, dklx, jkbs, spxx, wacs, ykqs, work_dept, customer_mobile2, customer_mobile3, customer_mobile4, fourth_liaison_name, fourth_liaison_relation, fourth_liaison_mobile, fifth_liaison_name, fifth_liaison_relation, fifth_liaison_mobile, dqyhje from cur_assets_package
+    </sql>
+
+    <sql id="selectTempCurAssetsPackageVo">
+        select id, org_casNo, org, transferType, rmb_ye, rmb_yhfxzje, rmb_yhlizje, rmb_yhbjzje, rmb_yhfyzje, rmb_zdyhje, rmb_qkzje, borrow_no, borrow_blank, borrow_ed, rcr, fz, area_center, max_yqts_his, sum_yqts_his, sum_yqcs_his, ww_city_name, wa_ye, bill_address, year_rates, tj_firm, tj_wd, day_rates, account_date, overdue_days, first_yq_date, first_yqjc_date, first_yq_flag, cur_name, cur_sex, certificate_no, certificate_address, regist_address, email, marriage, education, customer_mobile, customer_home_tel, customer_home_address, work_name, work_address, work_tel, first_liaison_name, first_liaison_relation, first_liaison_mobile, first_liaison_tel, second_liaison_name, second_liaison_relation, second_liaison_mobile, second_liaison_tel, three_liaison_name, three_liaison_relation, three_liaison_mobile, three_liaison_tel, cpmc, hk_type, znj, ajhssj, org_id, package_flag, create_by, create_time, close_case, is_exit_collect, import_batch_no, close_case_date, is_exception, account_age, la_flag, fx_flag, htlx, jmbq, fcbq, fxsfbh, remark, tar, jkrq, zhychkr, mqhkje, dqqkje, ljyhje, sfje, zdhkzh1, zdhkzh2, zdhkzhhm1, zdhkzhhm2, zdhkqd1, zdhkqd2, khmb, spjg, dklx, jkbs, spxx, wacs, ykqs, work_dept, customer_mobile2, customer_mobile3, customer_mobile4, fourth_liaison_name, fourth_liaison_relation, fourth_liaison_mobile, fifth_liaison_name, fifth_liaison_relation, fifth_liaison_mobile,free_import from cur_assets_package_temp
+    </sql>
+
+    <sql id="selectTempCurAssetsPackageVo2">
+        select t.id, t.org_casNo, t.org, t.transferType, t.rmb_ye, t.rmb_yhfxzje, t.rmb_yhlizje, t.rmb_yhbjzje, t.rmb_yhfyzje, t.rmb_zdyhje, t.rmb_qkzje, t.borrow_no, t.borrow_blank, t.borrow_ed, t.rcr, t.fz, t.area_center, t.max_yqts_his, t.sum_yqts_his, t.sum_yqcs_his, t.ww_city_name, t.wa_ye, t.bill_address, t.year_rates, t.tj_firm, t.tj_wd, t.day_rates, t.account_date, t.overdue_days, t.first_yq_date, t.first_yqjc_date, t.first_yq_flag, t.cur_name, t.cur_sex, t.certificate_no, t.certificate_address, t.regist_address, t.email, t.marriage, t.education, t.customer_mobile, t.customer_home_tel, t.customer_home_address, t.work_name, t.work_address, t.work_tel, t.first_liaison_name, t.first_liaison_relation, t.first_liaison_mobile, t.first_liaison_tel, t.second_liaison_name, t.second_liaison_relation, t.second_liaison_mobile, t.second_liaison_tel, t.three_liaison_name, t.three_liaison_relation, t.three_liaison_mobile, t.three_liaison_tel, t.cpmc, t.hk_type, t.znj, t.ajhssj, t.org_id, t.package_flag, t.create_by, t.create_time, t.close_case, t.is_exit_collect, t.import_batch_no, t.close_case_date, t.is_exception, t.account_age, t.la_flag, t.fx_flag, t.htlx, t.jmbq, t.fcbq, t.fxsfbh, t.remark, t.tar, t.jkrq, t.zhychkr, t.mqhkje, t.dqqkje, t.ljyhje, t.sfje, t.zdhkzh1, t.zdhkzh2, t.zdhkzhhm1, t.zdhkzhhm2, t.zdhkqd1, t.zdhkqd2, t.khmb, t.spjg, t.dklx, t.jkbs, t.spxx, t.wacs, t.ykqs, t.work_dept, t.customer_mobile2, t.customer_mobile3, t.customer_mobile4, t.fourth_liaison_name, t.fourth_liaison_relation, t.fourth_liaison_mobile, t.fifth_liaison_name, t.fifth_liaison_relation, t.fifth_liaison_mobile,t.free_import from cur_assets_package_temp t
+    </sql>
+
+    <select id="selectCurAssetsPackageList" parameterType="CurAssetsPackage" resultMap="CurAssetsPackageResult">
+        <include refid="selectCurAssetsPackageVo"/>
+        <where>
+            <!--<if test="packageFlag != null and packageFlag != ''">and package_flag = #{packageFlag}</if>-->
+            <!--<if test="orgId != null  and orgId != ''"> and org_id = #{orgId}</if>-->
+            <if test="orgCasno != null  and orgCasno != ''"> and org_casNo = #{orgCasno}</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+            <if test="org != null  and org != ''"> and org = #{org}</if>
+            <if test="curName != null  and curName != ''"> and cur_name like concat('%', #{curName}, '%')</if>
+            <if test="certificateNo != null  and certificateNo != ''"> and certificate_no = #{certificateNo}</if>
+            <if test="customerMobile != null  and customerMobile != ''"> and customer_mobile = #{customerMobile}</if>
+            <if test="packageFlag != null  and packageFlag != ''"> and package_flag = #{packageFlag}</if>
+            <if test="startDate != null"> and create_time <![CDATA[>=]]> #{startDate}</if>
+            <if test="endDate != null"> and create_time <![CDATA[<=]]> #{endDate}</if>
+            <if test="startWaYe != null"> and rmb_ye <![CDATA[>=]]> #{startWaYe}</if>
+            <if test="endWaYe != null"> and rmb_ye <![CDATA[<=]]> #{endWaYe}</if>
+            <if test="closeCase != null and closeCase != ''"> and close_case= #{closeCase}</if>
+
+            <choose>
+                <when test="orgId != null and orgId != ''">
+                    and org_id = #{orgId}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="deptIds != null">
+                            and org_id in
+                            <foreach collection="deptIds" item="deptId" open="(" close=")" separator=",">
+                                #{deptId}
+                            </foreach>
+                        </when>
+                    </choose>
+                </otherwise>
+            </choose>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectCurAssetsPackageByPage" parameterType="CurAssetsPackage" resultMap="CurAssetsPackageResult">
+        SELECT
+        id,
+        org_casNo,
+        org,
+        import_batch_no,
+        create_time,
+        transferType,
+        rmb_ye,
+        cur_name,
+        rcr,
+        is_exit_collect,
+        ajhssj,
+        close_case,
+        close_case_date
+        FROM cur_assets_package
+        WHERE 1=1
+            <if test="orgCasno != null  and orgCasno != ''"> and org_casNo = #{orgCasno}</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+            <if test="org != null  and org != ''"> and org = #{org}</if>
+            <!--<if test="yhkDate != null "> and yhk_date = #{yhkDate}</if>-->
+            <if test="curName != null  and curName != ''"> and cur_name like concat('%', #{curName}, '%')</if>
+            <if test="certificateNo != null  and certificateNo != ''"> and certificate_no = #{certificateNo}</if>
+            <!--<if test="birthday != null "> and birthday = #{birthday}</if>-->
+            <if test="customerMobile != null  and customerMobile != ''"> and customer_mobile = #{customerMobile}</if>
+            <if test="packageFlag != null  and packageFlag != ''"> and package_flag = #{packageFlag}</if>
+            <if test="startDate != null"> and create_time <![CDATA[>=]]> #{startDate}</if>
+            <if test="endDate != null"> and create_time <![CDATA[<=]]> #{endDate}</if>
+            <if test="startWaYe != null"> and rmb_ye <![CDATA[>=]]> #{startWaYe}</if>
+            <if test="endWaYe != null"> and rmb_ye <![CDATA[<=]]> #{endWaYe}</if>
+            <if test="closeCase != null and closeCase != ''"> and close_case= #{closeCase}</if>
+            <if test="orgId != null and orgId != ''">  and org_id = #{orgId}</if>
+        order by create_time desc
+    </select>
+
+    <select id="selectCurAssetsPackageList2" resultMap="CurAssetsPackageResult">
+        <include refid="selectCurAssetsPackageVo"/>
+        <where>
+             and package_flag = '0'
+             and org_id in
+            <foreach item="item" index="index" collection="param" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            <if test="curAssetsPackage.orgCasno != null  and curAssetsPackage.orgCasno != ''"> and org_casNo = #{curAssetsPackage.orgCasno}</if>
+            <if test="curAssetsPackage.orgId != null  and curAssetsPackage.orgId != ''"> and org_id = #{curAssetsPackage.orgId}</if>
+            <if test="curAssetsPackage.curName != null  and curAssetsPackage.curName != ''"> and cur_name like concat('%', #{curAssetsPackage.curName}, '%')</if>
+            <if test="curAssetsPackage.startDate != null and curAssetsPackage.startDate != ''"> and create_time <![CDATA[>=]]> #{curAssetsPackage.startDate}</if>
+            <if test="curAssetsPackage.endDate != null and curAssetsPackage.endDate != ''"> and create_time <![CDATA[<=]]> #{curAssetsPackage.endDate}</if>
+            <if test="curAssetsPackage.startWaYe != null"> and wa_ye <![CDATA[>=]]> #{curAssetsPackage.startWaYe}</if>
+            <if test="curAssetsPackage.endWaYe != null"> and wa_ye <![CDATA[<=]]> #{curAssetsPackage.endWaYe}</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+        </where>
+    </select>
+    
+    <select id="selectCurAssetsPackageById" parameterType="String" resultMap="CurAssetsPackageResult">
+        <include refid="selectCurAssetsPackageVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCurAssetsPackage" parameterType="CurAssetsPackage">
+        insert into cur_assets_package
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="orgCasno != null  and orgCasno != ''">org_casNo,</if>
+            <if test="org != null  and org != ''">org,</if>
+            <if test="transfertype != null  and transfertype != ''">transferType,</if>
+            <if test="rmbYe != null ">rmb_ye,</if>
+            <if test="rmbYhfxzje != null ">rmb_yhfxzje,</if>
+            <if test="rmbYhlizje != null ">rmb_yhlizje,</if>
+            <if test="rmbYhbjzje != null ">rmb_yhbjzje,</if>
+            <if test="rmbYhfyzje != null ">rmb_yhfyzje,</if>
+            <if test="rmbZdyhje != null ">rmb_zdyhje,</if>
+            <if test="rmbQkzje != null ">rmb_qkzje,</if>
+            <if test="borrowNo != null  and borrowNo != ''">borrow_no,</if>
+            <if test="borrowBlank != null  and borrowBlank != ''">borrow_blank,</if>
+            <if test="borrowEd != null ">borrow_ed,</if>
+            <if test="rcr != null ">rcr,</if>
+            <if test="fz != null  and fz != ''">fz,</if>
+            <if test="areaCenter != null  and areaCenter != ''">area_center,</if>
+            <if test="maxYqtsHis != null  and maxYqtsHis != ''">max_yqts_his,</if>
+            <if test="sumYqtsHis != null  and sumYqtsHis != ''">sum_yqts_his,</if>
+            <if test="sumYqcsHis != null  and sumYqcsHis != ''">sum_yqcs_his,</if>
+            <if test="wwCityName != null  and wwCityName != ''">ww_city_name,</if>
+            <if test="waYe != null ">wa_ye,</if>
+            <if test="billAddress != null  and billAddress != ''">bill_address,</if>
+            <if test="yearRates != null  and yearRates != ''">year_rates,</if>
+            <if test="tjFirm != null  and tjFirm != ''">tj_firm,</if>
+            <if test="tjWd != null  and tjWd != ''">tj_wd,</if>
+            <if test="dayRates != null  and dayRates != ''">day_rates,</if>
+            <if test="accountDate != null  and accountDate != ''">account_date,</if>
+            <if test="overdueDays != null  and overdueDays != ''">overdue_days,</if>
+            <if test="firstYqDate != null ">first_yq_date,</if>
+            <if test="firstYqjcDate != null ">first_yqjc_date,</if>
+            <if test="firstYqFlag != null  and firstYqFlag != ''">first_yq_flag,</if>
+            <if test="curName != null  and curName != ''">cur_name,</if>
+            <if test="curSex != null  and curSex != ''">cur_sex,</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no,</if>
+            <if test="certificateAddress != null  and certificateAddress != ''">certificate_address,</if>
+            <if test="registAddress != null  and registAddress != ''">regist_address,</if>
+            <if test="email != null  and email != ''">email,</if>
+            <if test="marriage != null  and marriage != ''">marriage,</if>
+            <if test="education != null  and education != ''">education,</if>
+            <if test="customerMobile != null  and customerMobile != ''">customer_mobile,</if>
+            <if test="customerHomeTel != null  and customerHomeTel != ''">customer_home_tel,</if>
+            <if test="customerHomeAddress != null  and customerHomeAddress != ''">customer_home_address,</if>
+            <if test="workName != null  and workName != ''">work_name,</if>
+            <if test="workAddress != null  and workAddress != ''">work_address,</if>
+            <if test="workTel != null  and workTel != ''">work_tel,</if>
+            <if test="firstLiaisonName != null  and firstLiaisonName != ''">first_liaison_name,</if>
+            <if test="firstLiaisonRelation != null  and firstLiaisonRelation != ''">first_liaison_relation,</if>
+            <if test="firstLiaisonMobile != null  and firstLiaisonMobile != ''">first_liaison_mobile,</if>
+            <if test="firstLiaisonTel != null  and firstLiaisonTel != ''">first_liaison_tel,</if>
+            <if test="secondLiaisonName != null  and secondLiaisonName != ''">second_liaison_name,</if>
+            <if test="secondLiaisonRelation != null  and secondLiaisonRelation != ''">second_liaison_relation,</if>
+            <if test="secondLiaisonMobile != null  and secondLiaisonMobile != ''">second_liaison_mobile,</if>
+            <if test="secondLiaisonTel != null  and secondLiaisonTel != ''">second_liaison_tel,</if>
+            <if test="threeLiaisonName != null  and threeLiaisonName != ''">three_liaison_name,</if>
+            <if test="threeLiaisonRelation != null  and threeLiaisonRelation != ''">three_liaison_relation,</if>
+            <if test="threeLiaisonMobile != null  and threeLiaisonMobile != ''">three_liaison_mobile,</if>
+            <if test="threeLiaisonTel != null  and threeLiaisonTel != ''">three_liaison_tel,</if>
+            <if test="cpmc != null  and cpmc != ''">cpmc,</if>
+            <if test="hkType != null  and hkType != ''">hk_type,</if>
+            <if test="znj != null ">znj,</if>
+            <if test="ajhssj != null">ajhssj,</if>
+            <if test="orgId != null  and orgId != ''">org_id,</if>
+            <if test="packageFlag != null  and packageFlag != ''">package_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="closeCase != null ">close_case,</if>
+            <if test="isExitCollect != null ">is_exit_collect,</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no,</if>
+            <if test="closeCaseDate != null ">close_case_date,</if>
+            <if test="packageId != null  and packageId != ''">package_id,</if>
+            <if test="accountAge != null  and accountAge != ''">account_age,</if>
+            <if test="laFlag != null  and laFlag != ''">la_flag,</if>
+            <if test="fxFlag != null  and fxFlag != ''">fx_flag,</if>
+            <if test="htlx != null  and htlx != ''">htlx,</if>
+            <if test="jmbq != null  and jmbq != ''">jmbq,</if>
+            <if test="fcbq != null  and fcbq != ''">fcbq,</if>
+            <if test="fxsfbh != null  and fxsfbh != ''">fxsfbh,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="tar != null ">tar,</if>
+            <if test="jkrq != null ">jkrq,</if>
+            <if test="zhychkr != null ">zhychkr,</if>
+            <if test="mqhkje != null ">mqhkje,</if>
+            <if test="dqqkje != null ">dqqkje,</if>
+            <if test="ljyhje != null ">ljyhje,</if>
+            <if test="sfje != null ">sfje,</if>
+            <if test="zdhkzh1 != null  and zdhkzh1 != ''">zdhkzh1,</if>
+            <if test="zdhkzh2 != null  and zdhkzh2 != ''">zdhkzh2,</if>
+            <if test="zdhkzhhm1 != null  and zdhkzhhm1 != ''">zdhkzhhm1,</if>
+            <if test="zdhkzhhm2 != null  and zdhkzhhm2 != ''">zdhkzhhm2,</if>
+            <if test="zdhkqd1 != null  and zdhkqd1 != ''">zdhkqd1,</if>
+            <if test="zdhkqd2 != null  and zdhkqd2 != ''">zdhkqd2,</if>
+            <if test="khmb != null  and khmb != ''">khmb,</if>
+            <if test="spjg != null ">spjg,</if>
+            <if test="dklx != null  and dklx != ''">dklx,</if>
+            <if test="jkbs != null  and jkbs != ''">jkbs,</if>
+            <if test="spxx != null  and spxx != ''">spxx,</if>
+            <if test="wacs != null  and wacs != ''">wacs,</if>
+            <if test="ykqs != null  and ykqs != ''">ykqs,</if>
+            <if test="workDept != null  and workDept != ''">work_dept,</if>
+            <if test="customerMobile2 != null  and customerMobile2 != ''">customer_mobile2,</if>
+            <if test="customerMobile3 != null  and customerMobile3 != ''">customer_mobile3,</if>
+            <if test="customerMobile4 != null  and customerMobile4 != ''">customer_mobile4,</if>
+            <if test="fourthLiaisonName != null  and fourthLiaisonName != ''">fourth_liaison_name,</if>
+            <if test="fourthLiaisonRelation != null  and fourthLiaisonRelation != ''">fourth_liaison_relation,</if>
+            <if test="fourthLiaisonMobile != null  and fourthLiaisonMobile != ''">fourth_liaison_mobile,</if>
+            <if test="fifthLiaisonName != null  and fifthLiaisonName != ''">fifth_liaison_name,</if>
+            <if test="fifthLiaisonRelation != null  and fifthLiaisonRelation != ''">fifth_liaison_relation,</if>
+            <if test="fifthLiaisonMobile != null  and fifthLiaisonMobile != ''">fifth_liaison_mobile,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="orgCasno != null  and orgCasno != ''">#{orgCasno},</if>
+            <if test="org != null  and org != ''">#{org},</if>
+            <if test="transfertype != null  and transfertype != ''">#{transfertype},</if>
+            <if test="rmbYe != null ">#{rmbYe},</if>
+            <if test="rmbYhfxzje != null ">#{rmbYhfxzje},</if>
+            <if test="rmbYhlizje != null ">#{rmbYhlizje},</if>
+            <if test="rmbYhbjzje != null ">#{rmbYhbjzje},</if>
+            <if test="rmbYhfyzje != null ">#{rmbYhfyzje},</if>
+            <if test="rmbZdyhje != null ">#{rmbZdyhje},</if>
+            <if test="rmbQkzje != null ">#{rmbQkzje},</if>
+            <if test="borrowNo != null  and borrowNo != ''">#{borrowNo},</if>
+            <if test="borrowBlank != null  and borrowBlank != ''">#{borrowBlank},</if>
+            <if test="borrowEd != null ">#{borrowEd},</if>
+            <if test="rcr != null ">#{rcr},</if>
+            <if test="fz != null  and fz != ''">#{fz},</if>
+            <if test="areaCenter != null  and areaCenter != ''">#{areaCenter},</if>
+            <if test="maxYqtsHis != null  and maxYqtsHis != ''">#{maxYqtsHis},</if>
+            <if test="sumYqtsHis != null  and sumYqtsHis != ''">#{sumYqtsHis},</if>
+            <if test="sumYqcsHis != null  and sumYqcsHis != ''">#{sumYqcsHis},</if>
+            <if test="wwCityName != null  and wwCityName != ''">#{wwCityName},</if>
+            <if test="waYe != null ">#{waYe},</if>
+            <if test="billAddress != null  and billAddress != ''">#{billAddress},</if>
+            <if test="yearRates != null  and yearRates != ''">#{yearRates},</if>
+            <if test="tjFirm != null  and tjFirm != ''">#{tjFirm},</if>
+            <if test="tjWd != null  and tjWd != ''">#{tjWd},</if>
+            <if test="dayRates != null  and dayRates != ''">#{dayRates},</if>
+            <if test="accountDate != null  and accountDate != ''">#{accountDate},</if>
+            <if test="overdueDays != null  and overdueDays != ''">#{overdueDays},</if>
+            <if test="firstYqDate != null ">#{firstYqDate},</if>
+            <if test="firstYqjcDate != null ">#{firstYqjcDate},</if>
+            <if test="firstYqFlag != null  and firstYqFlag != ''">#{firstYqFlag},</if>
+            <if test="curName != null  and curName != ''">#{curName},</if>
+            <if test="curSex != null  and curSex != ''">#{curSex},</if>
+            <if test="certificateNo != null  and certificateNo != ''">#{certificateNo},</if>
+            <if test="certificateAddress != null  and certificateAddress != ''">#{certificateAddress},</if>
+            <if test="registAddress != null  and registAddress != ''">#{registAddress},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="marriage != null  and marriage != ''">#{marriage},</if>
+            <if test="education != null  and education != ''">#{education},</if>
+            <if test="customerMobile != null  and customerMobile != ''">#{customerMobile},</if>
+            <if test="customerHomeTel != null  and customerHomeTel != ''">#{customerHomeTel},</if>
+            <if test="customerHomeAddress != null  and customerHomeAddress != ''">#{customerHomeAddress},</if>
+            <if test="workName != null  and workName != ''">#{workName},</if>
+            <if test="workAddress != null  and workAddress != ''">#{workAddress},</if>
+            <if test="workTel != null  and workTel != ''">#{workTel},</if>
+            <if test="firstLiaisonName != null  and firstLiaisonName != ''">#{firstLiaisonName},</if>
+            <if test="firstLiaisonRelation != null  and firstLiaisonRelation != ''">#{firstLiaisonRelation},</if>
+            <if test="firstLiaisonMobile != null  and firstLiaisonMobile != ''">#{firstLiaisonMobile},</if>
+            <if test="firstLiaisonTel != null  and firstLiaisonTel != ''">#{firstLiaisonTel},</if>
+            <if test="secondLiaisonName != null  and secondLiaisonName != ''">#{secondLiaisonName},</if>
+            <if test="secondLiaisonRelation != null  and secondLiaisonRelation != ''">#{secondLiaisonRelation},</if>
+            <if test="secondLiaisonMobile != null  and secondLiaisonMobile != ''">#{secondLiaisonMobile},</if>
+            <if test="secondLiaisonTel != null  and secondLiaisonTel != ''">#{secondLiaisonTel},</if>
+            <if test="threeLiaisonName != null  and threeLiaisonName != ''">#{threeLiaisonName},</if>
+            <if test="threeLiaisonRelation != null  and threeLiaisonRelation != ''">#{threeLiaisonRelation},</if>
+            <if test="threeLiaisonMobile != null  and threeLiaisonMobile != ''">#{threeLiaisonMobile},</if>
+            <if test="threeLiaisonTel != null  and threeLiaisonTel != ''">#{threeLiaisonTel},</if>
+            <if test="cpmc != null  and cpmc != ''">#{cpmc},</if>
+            <if test="hkType != null  and hkType != ''">#{hkType},</if>
+            <if test="znj != null ">#{znj},</if>
+            <if test="ajhssj != null">#{ajhssj},</if>
+            <if test="orgId != null  and orgId != ''">#{orgId},</if>
+            <if test="packageFlag != null  and packageFlag != ''">#{packageFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="closeCase != null ">#{closeCase},</if>
+            <if test="isExitCollect != null ">#{isExitCollect},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">#{importBatchNo},</if>
+            <if test="closeCaseDate != null ">#{closeCaseDate},</if>
+            <if test="packageId != null  and packageId != ''">#{packageId},</if>
+            <if test="accountAge != null  and accountAge != ''">#{accountAge},</if>
+            <if test="laFlag != null  and laFlag != ''">#{laFlag},</if>
+            <if test="fxFlag != null  and fxFlag != ''">#{fxFlag},</if>
+            <if test="htlx != null  and htlx != ''">#{htlx},</if>
+            <if test="jmbq != null  and jmbq != ''">#{jmbq},</if>
+            <if test="fcbq != null  and fcbq != ''">#{fcbq},</if>
+            <if test="fxsfbh != null  and fxsfbh != ''">#{fxsfbh},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="tar != null ">#{tar},</if>
+            <if test="jkrq != null ">#{jkrq},</if>
+            <if test="zhychkr != null ">#{zhychkr},</if>
+            <if test="mqhkje != null ">#{mqhkje},</if>
+            <if test="dqqkje != null ">#{dqqkje},</if>
+            <if test="ljyhje != null ">#{ljyhje},</if>
+            <if test="sfje != null ">#{sfje},</if>
+            <if test="zdhkzh1 != null  and zdhkzh1 != ''">#{zdhkzh1},</if>
+            <if test="zdhkzh2 != null  and zdhkzh2 != ''">#{zdhkzh2},</if>
+            <if test="zdhkzhhm1 != null  and zdhkzhhm1 != ''">#{zdhkzhhm1},</if>
+            <if test="zdhkzhhm2 != null  and zdhkzhhm2 != ''">#{zdhkzhhm2},</if>
+            <if test="zdhkqd1 != null  and zdhkqd1 != ''">#{zdhkqd1},</if>
+            <if test="zdhkqd2 != null  and zdhkqd2 != ''">#{zdhkqd2},</if>
+            <if test="khmb != null  and khmb != ''">#{khmb},</if>
+            <if test="spjg != null ">#{spjg},</if>
+            <if test="dklx != null  and dklx != ''">#{dklx},</if>
+            <if test="jkbs != null  and jkbs != ''">#{jkbs},</if>
+            <if test="spxx != null  and spxx != ''">#{spxx},</if>
+            <if test="wacs != null  and wacs != ''">#{wacs},</if>
+            <if test="ykqs != null  and ykqs != ''">#{ykqs},</if>
+            <if test="workDept != null  and workDept != ''">#{workDept},</if>
+            <if test="customerMobile2 != null  and customerMobile2 != ''">#{customerMobile2},</if>
+            <if test="customerMobile3 != null  and customerMobile3 != ''">#{customerMobile3},</if>
+            <if test="customerMobile4 != null  and customerMobile4 != ''">#{customerMobile4},</if>
+            <if test="fourthLiaisonName != null  and fourthLiaisonName != ''">#{fourthLiaisonName},</if>
+            <if test="fourthLiaisonRelation != null  and fourthLiaisonRelation != ''">#{fourthLiaisonRelation},</if>
+            <if test="fourthLiaisonMobile != null  and fourthLiaisonMobile != ''">#{fourthLiaisonMobile},</if>
+            <if test="fifthLiaisonName != null  and fifthLiaisonName != ''">#{fifthLiaisonName},</if>
+            <if test="fifthLiaisonRelation != null  and fifthLiaisonRelation != ''">#{fifthLiaisonRelation},</if>
+            <if test="fifthLiaisonMobile != null  and fifthLiaisonMobile != ''">#{fifthLiaisonMobile},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCurAssetsPackage" parameterType="CurAssetsPackage">
+        update cur_assets_package
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orgCasno != null  and orgCasno != ''">org_casNo = #{orgCasno},</if>
+            <if test="org != null  and org != ''">org = #{org},</if>
+            <if test="transfertype != null  and transfertype != ''">transferType = #{transfertype},</if>
+            <if test="rmbYe != null ">rmb_ye = #{rmbYe},</if>
+            <if test="rmbYhfxzje != null ">rmb_yhfxzje = #{rmbYhfxzje},</if>
+            <if test="rmbYhlizje != null ">rmb_yhlizje = #{rmbYhlizje},</if>
+            <if test="rmbYhbjzje != null ">rmb_yhbjzje = #{rmbYhbjzje},</if>
+            <if test="rmbYhfyzje != null ">rmb_yhfyzje = #{rmbYhfyzje},</if>
+            <if test="rmbZdyhje != null ">rmb_zdyhje = #{rmbZdyhje},</if>
+            <if test="rmbQkzje != null ">rmb_qkzje = #{rmbQkzje},</if>
+            <if test="borrowNo != null  and borrowNo != ''">borrow_no = #{borrowNo},</if>
+            <if test="borrowBlank != null  and borrowBlank != ''">borrow_blank = #{borrowBlank},</if>
+            <if test="borrowEd != null ">borrow_ed = #{borrowEd},</if>
+            <if test="rcr != null ">rcr = #{rcr},</if>
+            <if test="fz != null  and fz != ''">fz = #{fz},</if>
+            <if test="areaCenter != null  and areaCenter != ''">area_center = #{areaCenter},</if>
+            <if test="maxYqtsHis != null  and maxYqtsHis != ''">max_yqts_his = #{maxYqtsHis},</if>
+            <if test="sumYqtsHis != null  and sumYqtsHis != ''">sum_yqts_his = #{sumYqtsHis},</if>
+            <if test="sumYqcsHis != null  and sumYqcsHis != ''">sum_yqcs_his = #{sumYqcsHis},</if>
+            <if test="wwCityName != null  and wwCityName != ''">ww_city_name = #{wwCityName},</if>
+            <if test="waYe != null ">wa_ye = #{waYe},</if>
+            <if test="billAddress != null  and billAddress != ''">bill_address = #{billAddress},</if>
+            <if test="yearRates != null  and yearRates != ''">year_rates = #{yearRates},</if>
+            <if test="tjFirm != null  and tjFirm != ''">tj_firm = #{tjFirm},</if>
+            <if test="tjWd != null  and tjWd != ''">tj_wd = #{tjWd},</if>
+            <if test="dayRates != null  and dayRates != ''">day_rates = #{dayRates},</if>
+            <if test="accountDate != null  and accountDate != ''">account_date = #{accountDate},</if>
+            <if test="overdueDays != null  and overdueDays != ''">overdue_days = #{overdueDays},</if>
+            <if test="firstYqDate != null ">first_yq_date = #{firstYqDate},</if>
+            <if test="firstYqjcDate != null ">first_yqjc_date = #{firstYqjcDate},</if>
+            <if test="firstYqFlag != null  and firstYqFlag != ''">first_yq_flag = #{firstYqFlag},</if>
+            <if test="curName != null  and curName != ''">cur_name = #{curName},</if>
+            <if test="curSex != null  and curSex != ''">cur_sex = #{curSex},</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no = #{certificateNo},</if>
+            <if test="certificateAddress != null  and certificateAddress != ''">certificate_address = #{certificateAddress},</if>
+            <if test="registAddress != null  and registAddress != ''">regist_address = #{registAddress},</if>
+            <if test="email != null  and email != ''">email = #{email},</if>
+            <if test="marriage != null  and marriage != ''">marriage = #{marriage},</if>
+            <if test="education != null  and education != ''">education = #{education},</if>
+            <if test="customerMobile != null  and customerMobile != ''">customer_mobile = #{customerMobile},</if>
+            <if test="customerHomeTel != null  and customerHomeTel != ''">customer_home_tel = #{customerHomeTel},</if>
+            <if test="customerHomeAddress != null  and customerHomeAddress != ''">customer_home_address = #{customerHomeAddress},</if>
+            <if test="workName != null  and workName != ''">work_name = #{workName},</if>
+            <if test="workAddress != null  and workAddress != ''">work_address = #{workAddress},</if>
+            <if test="workTel != null  and workTel != ''">work_tel = #{workTel},</if>
+            <if test="firstLiaisonName != null  and firstLiaisonName != ''">first_liaison_name = #{firstLiaisonName},</if>
+            <if test="firstLiaisonRelation != null  and firstLiaisonRelation != ''">first_liaison_relation = #{firstLiaisonRelation},</if>
+            <if test="firstLiaisonMobile != null  and firstLiaisonMobile != ''">first_liaison_mobile = #{firstLiaisonMobile},</if>
+            <if test="firstLiaisonTel != null  and firstLiaisonTel != ''">first_liaison_tel = #{firstLiaisonTel},</if>
+            <if test="secondLiaisonName != null  and secondLiaisonName != ''">second_liaison_name = #{secondLiaisonName},</if>
+            <if test="secondLiaisonRelation != null  and secondLiaisonRelation != ''">second_liaison_relation = #{secondLiaisonRelation},</if>
+            <if test="secondLiaisonMobile != null  and secondLiaisonMobile != ''">second_liaison_mobile = #{secondLiaisonMobile},</if>
+            <if test="secondLiaisonTel != null  and secondLiaisonTel != ''">second_liaison_tel = #{secondLiaisonTel},</if>
+            <if test="threeLiaisonName != null  and threeLiaisonName != ''">three_liaison_name = #{threeLiaisonName},</if>
+            <if test="threeLiaisonRelation != null  and threeLiaisonRelation != ''">three_liaison_relation = #{threeLiaisonRelation},</if>
+            <if test="threeLiaisonMobile != null  and threeLiaisonMobile != ''">three_liaison_mobile = #{threeLiaisonMobile},</if>
+            <if test="threeLiaisonTel != null  and threeLiaisonTel != ''">three_liaison_tel = #{threeLiaisonTel},</if>
+            <if test="cpmc != null  and cpmc != ''">cpmc = #{cpmc},</if>
+            <if test="hkType != null  and hkType != ''">hk_type = #{hkType},</if>
+            <if test="znj != null ">znj = #{znj},</if>
+            <if test="ajhssj != null">ajhssj = #{ajhssj},</if>
+            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="packageFlag != null  and packageFlag != ''">package_flag = #{packageFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="closeCase != null ">close_case = #{closeCase},</if>
+            <if test="isExitCollect != null ">is_exit_collect = #{isExitCollect},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no = #{importBatchNo},</if>
+            <if test="closeCaseDate != null ">close_case_date = #{closeCaseDate},</if>
+            <if test="packageId != null  and packageId != ''">package_id = #{packageId},</if>
+            <if test="accountAge != null  and accountAge != ''">account_age = #{accountAge},</if>
+            <if test="laFlag != null  and laFlag != ''">la_flag = #{laFlag},</if>
+            <if test="fxFlag != null  and fxFlag != ''">fx_flag = #{fxFlag},</if>
+            <if test="htlx != null  and htlx != ''">htlx = #{htlx},</if>
+            <if test="jmbq != null  and jmbq != ''">jmbq = #{jmbq},</if>
+            <if test="fcbq != null  and fcbq != ''">fcbq = #{fcbq},</if>
+            <if test="fxsfbh != null  and fxsfbh != ''">fxsfbh = #{fxsfbh},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="tar != null ">tar = #{tar},</if>
+            <if test="jkrq != null ">jkrq = #{jkrq},</if>
+            <if test="zhychkr != null ">zhychkr = #{zhychkr},</if>
+            <if test="mqhkje != null ">mqhkje = #{mqhkje},</if>
+            <if test="dqqkje != null ">dqqkje = #{dqqkje},</if>
+            <if test="ljyhje != null ">ljyhje = #{ljyhje},</if>
+            <if test="sfje != null ">sfje = #{sfje},</if>
+            <if test="zdhkzh1 != null  and zdhkzh1 != ''">zdhkzh1 = #{zdhkzh1},</if>
+            <if test="zdhkzh2 != null  and zdhkzh2 != ''">zdhkzh2 = #{zdhkzh2},</if>
+            <if test="zdhkzhhm1 != null  and zdhkzhhm1 != ''">zdhkzhhm1 = #{zdhkzhhm1},</if>
+            <if test="zdhkzhhm2 != null  and zdhkzhhm2 != ''">zdhkzhhm2 = #{zdhkzhhm2},</if>
+            <if test="zdhkqd1 != null  and zdhkqd1 != ''">zdhkqd1 = #{zdhkqd1},</if>
+            <if test="zdhkqd2 != null  and zdhkqd2 != ''">zdhkqd2 = #{zdhkqd2},</if>
+            <if test="khmb != null  and khmb != ''">khmb = #{khmb},</if>
+            <if test="spjg != null ">spjg = #{spjg},</if>
+            <if test="dklx != null  and dklx != ''">dklx = #{dklx},</if>
+            <if test="jkbs != null  and jkbs != ''">jkbs = #{jkbs},</if>
+            <if test="spxx != null  and spxx != ''">spxx = #{spxx},</if>
+            <if test="wacs != null  and wacs != ''">wacs = #{wacs},</if>
+            <if test="ykqs != null  and ykqs != ''">ykqs = #{ykqs},</if>
+            <if test="workDept != null  and workDept != ''">work_dept = #{workDept},</if>
+            <if test="customerMobile2 != null  and customerMobile2 != ''">customer_mobile2 = #{customerMobile2},</if>
+            <if test="customerMobile3 != null  and customerMobile3 != ''">customer_mobile3 = #{customerMobile3},</if>
+            <if test="customerMobile4 != null  and customerMobile4 != ''">customer_mobile4 = #{customerMobile4},</if>
+            <if test="fourthLiaisonName != null  and fourthLiaisonName != ''">fourth_liaison_name = #{fourthLiaisonName},</if>
+            <if test="fourthLiaisonRelation != null  and fourthLiaisonRelation != ''">fourth_liaison_relation = #{fourthLiaisonRelation},</if>
+            <if test="fourthLiaisonMobile != null  and fourthLiaisonMobile != ''">fourth_liaison_mobile = #{fourthLiaisonMobile},</if>
+            <if test="fifthLiaisonName != null  and fifthLiaisonName != ''">fifth_liaison_name = #{fifthLiaisonName},</if>
+            <if test="fifthLiaisonRelation != null  and fifthLiaisonRelation != ''">fifth_liaison_relation = #{fifthLiaisonRelation},</if>
+            <if test="fifthLiaisonMobile != null  and fifthLiaisonMobile != ''">fifth_liaison_mobile = #{fifthLiaisonMobile},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCurAssetsPackageById" parameterType="String">
+        delete from cur_assets_package where id = #{id}
+    </delete>
+
+    <delete id="deleteCurAssetsPackageByIds" parameterType="String">
+        delete from cur_assets_package where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+   <!-- <select id="selectCurAssetsByPackageId" parameterType="String" resultMap="CurAssetsPackageResult">
+        select a.id, a.org_casNo, a.org, a.transferType, a.twentyFourCD, a.BLK, a.productLine, a.rmb_last_jkje, a.rmb_ye, a.rmb_yhfxzje, a.rmb_cd, a.rmb_zhycjkr, a.rmb_zhhkbs, a.rmb_yhlizje, a.rmb_yhbj1, a.rmb_yhbj2, a.rmb_yhbjzje, a.rmb_yhfx1, a.rmb_yhfx2, a.rmb_yhfy1, a.rmb_yhfy2, a.rmb_yhfyzje, a.rmb_zdyhje, a.rmb_qkzje, a.rmb_gded, a.code, a.borrow_no, a.borrow_blank, a.borrow_ed, a.zx_type, a.stop_card, a.stop_jxrq, a.cs_company, a.rcr, a.gz_flag, a.fz, a.fq_flag, a.syhx_qtfy, a.syhx_sxf, a.syhx_bj, a.syhx_znf, a.syhx_yqx, a.syhx_jehj, a.area_center, a.cs_remark_his, a.max_yqts_his, a.sum_yqts_his, a.sum_yqcs_his, a.csjggs_his, a.qx_flag, a.st_company, a.accept_firm, a.accept_city, a.accept_wd, a.accept_wd_code, a.dzhxrq, a.remark, a.wb_yhfxze, a.wb_yhlxze, a.wb_yhbj1, a.wb_yhbj2, a.wb_yhbjzje, a.wb_yhfx1, a.wb_yhfx2, a.wb_yhfy1, a.wb_yhfy2, a.wb_yhfyze, a.wb_zdyhe, a.wb_qkzje, a.tx_flag, a.ww_company_code, a.ww_city_name, a.ww_jh_enddate, a.ww_qsrq, a.ww_pc, a.wa_ye, a.bill_address, a.bill_address_postcode, a.year_rates, a.yhk_date, a.start_yq_date, a.kh_date, a.ts_flag, a.credit_value, a.tj_firm, a.tj_city, a.tj_wd, a.shhx_sxf, a.shhx_bj, a.shhx_znf, a.shhx_fy, a.shhx_yqx, a.shhx_jehj, a.zh_30_day, a.zh_x_day, a.is_zc, a.is_zwcz, a.is_jx, a.is_sx, a.zjyq_month, a.hx_sxfcs, a.hx_shzt, a.hx_bjcs, a.hx_znfcs, a.hx_fycs, a.hx_yqlxcs, a.hx_jehjcs, a.aj_hz_date, a.xfjzzh, a.tsaj_type, a.day_rates, a.tj_date, a.dollar_ye, a.dollar_CD, a.dollar_zdyjkje, a.dollar_zhycjkr, a.dollar_zhycjkje, a.dollar_hkrhkbs, a.hkfs, a.hkqd, a.xwpf, a.account_date, a.account_yebj, a.account_jqrq, a.fzzb, a.revert_card_no, a.revert_card_blank, a.jjqd, a.overdue_days, a.overdue_flag, a.cwcs, a.quota_product, a.quota_code, a.quota_date, a.risk, a.first_fk_date, a.first_yq_date, a.first_yqjc_date, a.first_yq_flag, a.cur_name, a.cur_sex, a.certificate_no, a.certificate_type, a.certificate_address, a.birthday, a.regist_address, a.email, a.city, a.marriage, a.education, a.economy, a.cur_income, a.new_address, a.customer_no, a.customer_mobile, a.customer_home_tel, a.customer_home_address, a.customer_home_postcode, a.card_post_address, a.job, a.dept_name, a.indust, a.work_name, a.work_address, a.work_tel, a.work_postcode, a.first_liaison_name, a.first_liaison_relation, a.first_liaison_mobile, a.first_liaison_tel, a.second_liaison_name, a.second_liaison_relation, a.second_liaison_mobile, a.second_liaison_tel, a.three_liaison_name, a.three_liaison_relation, a.three_liaison_mobile, a.three_liaison_tel, a.sjrq, a.hth, a.jjh, a.dqsyb_yj, a.dqsyb_ej, a.csjd, a.wbjb, a.ys_khjlmc, a.khjlmc, a.cpmc, a.xfldycpmc, a.qxrq, a.dqrq, a.hk_type, a.dkye, a.wbbs, a.yqje, a.yqbj, a.yqlx, a.yqsxf, a.znj, a.qdmc, a.wbsb, a.wbqs, a.fpsj, a.ajhssj, a.org_id, a.package_flag, a.create_by, a.import_batch_no, a.create_time
+        from cur_assets_package a
+        RIGHT JOIN assets_connect_package b on a.id = b.assets_id
+        where b.package_id = #{packageId}
+    </select>-->
+
+    <select id="selectCurAssetsPackageByCaseNo" parameterType="java.util.Map" resultMap="CurAssetsPackageResult">
+        <include refid="selectCurAssetsPackageVo"/>
+        where org_casNo = #{caseNo} and close_case = 0
+    </select>
+
+    <insert id="batchAddTemp" parameterType="java.util.List">
+        insert into cur_assets_package_temp
+        (id,
+        org_casNo,
+        org,
+        transferType,
+        rmb_ye,
+        rmb_yhfxzje,
+        rmb_yhlizje,
+        rmb_yhbjzje,
+        rmb_yhfyzje,
+        rmb_zdyhje,
+        rmb_qkzje,
+        borrow_no,
+        borrow_blank,
+        borrow_ed,
+        rcr,
+        fz,
+        area_center,
+        max_yqts_his,
+        sum_yqts_his,
+        sum_yqcs_his,
+        ww_city_name,
+        wa_ye,
+        bill_address,
+        year_rates,
+        tj_firm,
+        tj_wd,
+        day_rates,
+        account_date,
+        overdue_days,
+        first_yq_date,
+        first_yqjc_date,
+        first_yq_flag,
+        cur_name,
+        cur_sex,
+        certificate_no,
+        certificate_address,
+        regist_address,
+        email,
+        marriage,
+        education,
+        customer_mobile,
+        customer_home_tel,
+        customer_home_address,
+        work_name,
+        work_address,
+        work_tel,
+        first_liaison_name,
+        first_liaison_relation,
+        first_liaison_mobile,
+        first_liaison_tel,
+        second_liaison_name,
+        second_liaison_relation,
+        second_liaison_mobile,
+        second_liaison_tel,
+        three_liaison_name,
+        three_liaison_relation,
+        three_liaison_mobile,
+        three_liaison_tel,
+        cpmc,
+        hk_type,
+        znj,
+        ajhssj,
+        account_age,
+        la_flag,
+        fx_flag,
+        htlx,
+        jmbq,
+        fcbq,
+        fxsfbh,
+        remark,
+        tar,
+        jkrq,
+        zhychkr,
+        mqhkje,
+        dqqkje,
+        ljyhje,
+        sfje,
+        zdhkzh1,
+        zdhkzh2,
+        zdhkzhhm1,
+        zdhkzhhm2,
+        zdhkqd1,
+        zdhkqd2,
+        khmb,
+        spjg,
+        dklx,
+        jkbs,
+        spxx,
+        wacs,
+        ykqs,
+        work_dept,
+        customer_mobile2,
+        customer_mobile3,
+        customer_mobile4,
+        fourth_liaison_name,
+        fourth_liaison_relation,
+        fourth_liaison_mobile,
+        fifth_liaison_name,
+        fifth_liaison_relation,
+        fifth_liaison_mobile,
+        free_import,
+        org_id,
+        package_flag,
+        create_by,
+        create_time,
+        close_case,
+        is_exit_collect,
+        import_batch_no,
+        close_case_date,
+        is_exception
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id},
+            #{item.orgCasno},
+            #{item.org},
+            #{item.transfertype},
+            #{item.rmbYe},
+            #{item.rmbYhfxzje},
+            #{item.rmbYhlizje},
+            #{item.rmbYhbjzje},
+            #{item.rmbYhfyzje},
+            #{item.rmbZdyhje},
+            #{item.rmbQkzje},
+            #{item.borrowNo},
+            #{item.borrowBlank},
+            #{item.borrowEd},
+            #{item.rcr},
+            #{item.fz},
+            #{item.areaCenter},
+            #{item.maxYqtsHis},
+            #{item.sumYqtsHis},
+            #{item.sumYqcsHis},
+            #{item.wwCityName},
+            #{item.waYe},
+            #{item.billAddress},
+            #{item.yearRates},
+            #{item.tjFirm},
+            #{item.tjWd},
+            #{item.dayRates},
+            #{item.accountDate},
+            #{item.overdueDays},
+            #{item.firstYqDate},
+            #{item.firstYqjcDate},
+            #{item.firstYqFlag},
+            #{item.curName},
+            #{item.curSex},
+            #{item.certificateNo},
+            #{item.certificateAddress},
+            #{item.registAddress},
+            #{item.email},
+            #{item.marriage},
+            #{item.education},
+            #{item.customerMobile},
+            #{item.customerHomeTel},
+            #{item.customerHomeAddress},
+            #{item.workName},
+            #{item.workAddress},
+            #{item.workTel},
+            #{item.firstLiaisonName},
+            #{item.firstLiaisonRelation},
+            #{item.firstLiaisonMobile},
+            #{item.firstLiaisonTel},
+            #{item.secondLiaisonName},
+            #{item.secondLiaisonRelation},
+            #{item.secondLiaisonMobile},
+            #{item.secondLiaisonTel},
+            #{item.threeLiaisonName},
+            #{item.threeLiaisonRelation},
+            #{item.threeLiaisonMobile},
+            #{item.threeLiaisonTel},
+            #{item.cpmc},
+            #{item.hkType},
+            #{item.znj},
+            #{item.ajhssj},
+            #{item.accountAge},
+            #{item.laFlag},
+            #{item.fxFlag},
+            #{item.htlx},
+            #{item.jmbq},
+            #{item.fcbq},
+            #{item.fxsfbh},
+            #{item.remark},
+            #{item.tar},
+            #{item.jkrq},
+            #{item.zhychkr},
+            #{item.mqhkje},
+            #{item.dqqkje},
+            #{item.ljyhje},
+            #{item.sfje},
+            #{item.zdhkzh1},
+            #{item.zdhkzh2},
+            #{item.zdhkzhhm1},
+            #{item.zdhkzhhm2},
+            #{item.zdhkqd1},
+            #{item.zdhkqd2},
+            #{item.khmb},
+            #{item.spjg},
+            #{item.dklx},
+            #{item.jkbs},
+            #{item.spxx},
+            #{item.wacs},
+            #{item.ykqs},
+            #{item.workDept},
+            #{item.customerMobile2},
+            #{item.customerMobile3},
+            #{item.customerMobile4},
+            #{item.fourthLiaisonName},
+            #{item.fourthLiaisonRelation},
+            #{item.fourthLiaisonMobile},
+            #{item.fifthLiaisonName},
+            #{item.fifthLiaisonRelation},
+            #{item.fifthLiaisonMobile},
+            #{item.freeImport},
+            #{item.orgId},
+            #{item.packageFlag},
+            #{item.createBy},
+            #{item.createTime},
+            #{item.closeCase},
+            #{item.isExitCollect},
+            #{item.importBatchNo},
+            #{item.closeCaseDate},
+            0)
+        </foreach>
+    </insert>
+
+    <insert id="batchAddAssets" parameterType="java.util.List">
+        insert into cur_assets_package
+        (
+        id,
+        org_casNo,
+        org,
+        transferType,
+        rmb_ye,
+        rmb_yhfxzje,
+        rmb_yhlizje,
+        rmb_yhbjzje,
+        rmb_yhfyzje,
+        rmb_zdyhje,
+        rmb_qkzje,
+        borrow_no,
+        borrow_blank,
+        borrow_ed,
+        rcr,
+        fz,
+        area_center,
+        max_yqts_his,
+        sum_yqts_his,
+        sum_yqcs_his,
+        ww_city_name,
+        wa_ye,
+        bill_address,
+        year_rates,
+        tj_firm,
+        tj_wd,
+        day_rates,
+        account_date,
+        overdue_days,
+        first_yq_date,
+        first_yqjc_date,
+        first_yq_flag,
+        cur_name,
+        cur_sex,
+        certificate_no,
+        certificate_address,
+        regist_address,
+        email,
+        marriage,
+        education,
+        customer_mobile,
+        customer_home_tel,
+        customer_home_address,
+        work_name,
+        work_address,
+        work_tel,
+        first_liaison_name,
+        first_liaison_relation,
+        first_liaison_mobile,
+        first_liaison_tel,
+        second_liaison_name,
+        second_liaison_relation,
+        second_liaison_mobile,
+        second_liaison_tel,
+        three_liaison_name,
+        three_liaison_relation,
+        three_liaison_mobile,
+        three_liaison_tel,
+        cpmc,
+        hk_type,
+        znj,
+        ajhssj,
+        account_age,
+        la_flag,
+        fx_flag,
+        htlx,
+        jmbq,
+        fcbq,
+        fxsfbh,
+        remark,
+        tar,
+        jkrq,
+        zhychkr,
+        mqhkje,
+        dqqkje,
+        ljyhje,
+        sfje,
+        zdhkzh1,
+        zdhkzh2,
+        zdhkzhhm1,
+        zdhkzhhm2,
+        zdhkqd1,
+        zdhkqd2,
+        khmb,
+        spjg,
+        dklx,
+        jkbs,
+        spxx,
+        wacs,
+        ykqs,
+        work_dept,
+        customer_mobile2,
+        customer_mobile3,
+        customer_mobile4,
+        fourth_liaison_name,
+        fourth_liaison_relation,
+        fourth_liaison_mobile,
+        fifth_liaison_name,
+        fifth_liaison_relation,
+        fifth_liaison_mobile,
+        org_id,
+        package_flag,
+        create_by,
+        create_time,
+        close_case,
+        is_exit_collect,
+        import_batch_no,
+        close_case_date,
+        package_id
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.orgCasno},
+            #{item.org},
+            #{item.transfertype},
+            #{item.rmbYe},
+            #{item.rmbYhfxzje},
+            #{item.rmbYhlizje},
+            #{item.rmbYhbjzje},
+            #{item.rmbYhfyzje},
+            #{item.rmbZdyhje},
+            #{item.rmbQkzje},
+            #{item.borrowNo},
+            #{item.borrowBlank},
+            #{item.borrowEd},
+            #{item.rcr},
+            #{item.fz},
+            #{item.areaCenter},
+            #{item.maxYqtsHis},
+            #{item.sumYqtsHis},
+            #{item.sumYqcsHis},
+            #{item.wwCityName},
+            #{item.waYe},
+            #{item.billAddress},
+            #{item.yearRates},
+            #{item.tjFirm},
+            #{item.tjWd},
+            #{item.dayRates},
+            #{item.accountDate},
+            #{item.overdueDays},
+            #{item.firstYqDate},
+            #{item.firstYqjcDate},
+            #{item.firstYqFlag},
+            #{item.curName},
+            #{item.curSex},
+            #{item.certificateNo},
+            #{item.certificateAddress},
+            #{item.registAddress},
+            #{item.email},
+            #{item.marriage},
+            #{item.education},
+            #{item.customerMobile},
+            #{item.customerHomeTel},
+            #{item.customerHomeAddress},
+            #{item.workName},
+            #{item.workAddress},
+            #{item.workTel},
+            #{item.firstLiaisonName},
+            #{item.firstLiaisonRelation},
+            #{item.firstLiaisonMobile},
+            #{item.firstLiaisonTel},
+            #{item.secondLiaisonName},
+            #{item.secondLiaisonRelation},
+            #{item.secondLiaisonMobile},
+            #{item.secondLiaisonTel},
+            #{item.threeLiaisonName},
+            #{item.threeLiaisonRelation},
+            #{item.threeLiaisonMobile},
+            #{item.threeLiaisonTel},
+            #{item.cpmc},
+            #{item.hkType},
+            #{item.znj},
+            #{item.ajhssj},
+            #{item.accountAge},
+            #{item.laFlag},
+            #{item.fxFlag},
+            #{item.htlx},
+            #{item.jmbq},
+            #{item.fcbq},
+            #{item.fxsfbh},
+            #{item.remark},
+            #{item.tar},
+            #{item.jkrq},
+            #{item.zhychkr},
+            #{item.mqhkje},
+            #{item.dqqkje},
+            #{item.ljyhje},
+            #{item.sfje},
+            #{item.zdhkzh1},
+            #{item.zdhkzh2},
+            #{item.zdhkzhhm1},
+            #{item.zdhkzhhm2},
+            #{item.zdhkqd1},
+            #{item.zdhkqd2},
+            #{item.khmb},
+            #{item.spjg},
+            #{item.dklx},
+            #{item.jkbs},
+            #{item.spxx},
+            #{item.wacs},
+            #{item.ykqs},
+            #{item.workDept},
+            #{item.customerMobile2},
+            #{item.customerMobile3},
+            #{item.customerMobile4},
+            #{item.fourthLiaisonName},
+            #{item.fourthLiaisonRelation},
+            #{item.fourthLiaisonMobile},
+            #{item.fifthLiaisonName},
+            #{item.fifthLiaisonRelation},
+            #{item.fifthLiaisonMobile},
+            #{item.orgId},
+            #{item.packageFlag},
+            #{item.createBy},
+            #{item.createTime},
+            #{item.closeCase},
+            #{item.isExitCollect},
+            #{item.importBatchNo},
+            #{item.closeCaseDate},
+            #{item.packageId}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateCurAssetsPackage2" parameterType="TempCurAssetsPackage">
+        update cur_assets_package
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orgCasno != null  and orgCasno != ''">org_casNo = #{orgCasno},</if>
+            <if test="org != null  and org != ''">org = #{org},</if>
+            <if test="transfertype != null  and transfertype != ''">transferType = #{transfertype},</if>
+            <if test="rmbYe != null ">rmb_ye = #{rmbYe},</if>
+            <if test="rmbYhfxzje != null ">rmb_yhfxzje = #{rmbYhfxzje},</if>
+            <if test="rmbYhlizje != null ">rmb_yhlizje = #{rmbYhlizje},</if>
+            <if test="rmbYhbjzje != null ">rmb_yhbjzje = #{rmbYhbjzje},</if>
+            <if test="rmbYhfyzje != null ">rmb_yhfyzje = #{rmbYhfyzje},</if>
+            <if test="rmbZdyhje != null ">rmb_zdyhje = #{rmbZdyhje},</if>
+            <if test="rmbQkzje != null ">rmb_qkzje = #{rmbQkzje},</if>
+            <if test="borrowNo != null  and borrowNo != ''">borrow_no = #{borrowNo},</if>
+            <if test="borrowBlank != null  and borrowBlank != ''">borrow_blank = #{borrowBlank},</if>
+            <if test="borrowEd != null ">borrow_ed = #{borrowEd},</if>
+            <if test="rcr != null ">rcr = #{rcr},</if>
+            <if test="fz != null  and fz != ''">fz = #{fz},</if>
+            <if test="areaCenter != null  and areaCenter != ''">area_center = #{areaCenter},</if>
+            <if test="maxYqtsHis != null  and maxYqtsHis != ''">max_yqts_his = #{maxYqtsHis},</if>
+            <if test="sumYqtsHis != null  and sumYqtsHis != ''">sum_yqts_his = #{sumYqtsHis},</if>
+            <if test="sumYqcsHis != null  and sumYqcsHis != ''">sum_yqcs_his = #{sumYqcsHis},</if>
+            <if test="wwCityName != null  and wwCityName != ''">ww_city_name = #{wwCityName},</if>
+            <if test="waYe != null ">wa_ye = #{waYe},</if>
+            <if test="billAddress != null  and billAddress != ''">bill_address = #{billAddress},</if>
+            <if test="yearRates != null  and yearRates != ''">year_rates = #{yearRates},</if>
+            <if test="tjFirm != null  and tjFirm != ''">tj_firm = #{tjFirm},</if>
+            <if test="tjWd != null  and tjWd != ''">tj_wd = #{tjWd},</if>
+            <if test="dayRates != null  and dayRates != ''">day_rates = #{dayRates},</if>
+            <if test="accountDate != null  and accountDate != ''">account_date = #{accountDate},</if>
+            <if test="overdueDays != null  and overdueDays != ''">overdue_days = #{overdueDays},</if>
+            <if test="firstYqDate != null ">first_yq_date = #{firstYqDate},</if>
+            <if test="firstYqjcDate != null ">first_yqjc_date = #{firstYqjcDate},</if>
+            <if test="firstYqFlag != null  and firstYqFlag != ''">first_yq_flag = #{firstYqFlag},</if>
+            <if test="curName != null  and curName != ''">cur_name = #{curName},</if>
+            <if test="curSex != null  and curSex != ''">cur_sex = #{curSex},</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no = #{certificateNo},</if>
+            <if test="certificateAddress != null  and certificateAddress != ''">certificate_address = #{certificateAddress},</if>
+            <if test="registAddress != null  and registAddress != ''">regist_address = #{registAddress},</if>
+            <if test="email != null  and email != ''">email = #{email},</if>
+            <if test="marriage != null  and marriage != ''">marriage = #{marriage},</if>
+            <if test="education != null  and education != ''">education = #{education},</if>
+            <if test="customerMobile != null  and customerMobile != ''">customer_mobile = #{customerMobile},</if>
+            <if test="customerHomeTel != null  and customerHomeTel != ''">customer_home_tel = #{customerHomeTel},</if>
+            <if test="customerHomeAddress != null  and customerHomeAddress != ''">customer_home_address = #{customerHomeAddress},</if>
+            <if test="workName != null  and workName != ''">work_name = #{workName},</if>
+            <if test="workAddress != null  and workAddress != ''">work_address = #{workAddress},</if>
+            <if test="workTel != null  and workTel != ''">work_tel = #{workTel},</if>
+            <if test="firstLiaisonName != null  and firstLiaisonName != ''">first_liaison_name = #{firstLiaisonName},</if>
+            <if test="firstLiaisonRelation != null  and firstLiaisonRelation != ''">first_liaison_relation = #{firstLiaisonRelation},</if>
+            <if test="firstLiaisonMobile != null  and firstLiaisonMobile != ''">first_liaison_mobile = #{firstLiaisonMobile},</if>
+            <if test="firstLiaisonTel != null  and firstLiaisonTel != ''">first_liaison_tel = #{firstLiaisonTel},</if>
+            <if test="secondLiaisonName != null  and secondLiaisonName != ''">second_liaison_name = #{secondLiaisonName},</if>
+            <if test="secondLiaisonRelation != null  and secondLiaisonRelation != ''">second_liaison_relation = #{secondLiaisonRelation},</if>
+            <if test="secondLiaisonMobile != null  and secondLiaisonMobile != ''">second_liaison_mobile = #{secondLiaisonMobile},</if>
+            <if test="secondLiaisonTel != null  and secondLiaisonTel != ''">second_liaison_tel = #{secondLiaisonTel},</if>
+            <if test="threeLiaisonName != null  and threeLiaisonName != ''">three_liaison_name = #{threeLiaisonName},</if>
+            <if test="threeLiaisonRelation != null  and threeLiaisonRelation != ''">three_liaison_relation = #{threeLiaisonRelation},</if>
+            <if test="threeLiaisonMobile != null  and threeLiaisonMobile != ''">three_liaison_mobile = #{threeLiaisonMobile},</if>
+            <if test="threeLiaisonTel != null  and threeLiaisonTel != ''">three_liaison_tel = #{threeLiaisonTel},</if>
+            <if test="cpmc != null  and cpmc != ''">cpmc = #{cpmc},</if>
+            <if test="hkType != null  and hkType != ''">hk_type = #{hkType},</if>
+            <if test="znj != null ">znj = #{znj},</if>
+            <if test="ajhssj != null">ajhssj = #{ajhssj},</if>
+            <if test="accountAge != null  and accountAge != ''">account_age = #{accountAge},</if>
+            <if test="laFlag != null  and laFlag != ''">la_flag = #{laFlag},</if>
+            <if test="fxFlag != null  and fxFlag != ''">fx_flag = #{fxFlag},</if>
+            <if test="htlx != null  and htlx != ''">htlx = #{htlx},</if>
+            <if test="jmbq != null  and jmbq != ''">jmbq = #{jmbq},</if>
+            <if test="fcbq != null  and fcbq != ''">fcbq = #{fcbq},</if>
+            <if test="fxsfbh != null  and fxsfbh != ''">fxsfbh = #{fxsfbh},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="tar != null ">tar = #{tar},</if>
+            <if test="jkrq != null ">jkrq = #{jkrq},</if>
+            <if test="zhychkr != null ">zhychkr = #{zhychkr},</if>
+            <if test="mqhkje != null ">mqhkje = #{mqhkje},</if>
+            <if test="dqqkje != null ">dqqkje = #{dqqkje},</if>
+            <if test="ljyhje != null ">ljyhje = #{ljyhje},</if>
+            <if test="sfje != null ">sfje = #{sfje},</if>
+            <if test="zdhkzh1 != null  and zdhkzh1 != ''">zdhkzh1 = #{zdhkzh1},</if>
+            <if test="zdhkzh2 != null  and zdhkzh2 != ''">zdhkzh2 = #{zdhkzh2},</if>
+            <if test="zdhkzhhm1 != null  and zdhkzhhm1 != ''">zdhkzhhm1 = #{zdhkzhhm1},</if>
+            <if test="zdhkzhhm2 != null  and zdhkzhhm2 != ''">zdhkzhhm2 = #{zdhkzhhm2},</if>
+            <if test="zdhkqd1 != null  and zdhkqd1 != ''">zdhkqd1 = #{zdhkqd1},</if>
+            <if test="zdhkqd2 != null  and zdhkqd2 != ''">zdhkqd2 = #{zdhkqd2},</if>
+            <if test="khmb != null  and khmb != ''">khmb = #{khmb},</if>
+            <if test="spjg != null ">spjg = #{spjg},</if>
+            <if test="dklx != null  and dklx != ''">dklx = #{dklx},</if>
+            <if test="jkbs != null  and jkbs != ''">jkbs = #{jkbs},</if>
+            <if test="spxx != null  and spxx != ''">spxx = #{spxx},</if>
+            <if test="wacs != null  and wacs != ''">wacs = #{wacs},</if>
+            <if test="ykqs != null  and ykqs != ''">ykqs = #{ykqs},</if>
+            <if test="workDept != null  and workDept != ''">work_dept = #{workDept},</if>
+            <if test="customerMobile2 != null  and customerMobile2 != ''">customer_mobile2 = #{customerMobile2},</if>
+            <if test="customerMobile3 != null  and customerMobile3 != ''">customer_mobile3 = #{customerMobile3},</if>
+            <if test="customerMobile4 != null  and customerMobile4 != ''">customer_mobile4 = #{customerMobile4},</if>
+            <if test="fourthLiaisonName != null  and fourthLiaisonName != ''">fourth_liaison_name = #{fourthLiaisonName},</if>
+            <if test="fourthLiaisonRelation != null  and fourthLiaisonRelation != ''">fourth_liaison_relation = #{fourthLiaisonRelation},</if>
+            <if test="fourthLiaisonMobile != null  and fourthLiaisonMobile != ''">fourth_liaison_mobile = #{fourthLiaisonMobile},</if>
+            <if test="fifthLiaisonName != null  and fifthLiaisonName != ''">fifth_liaison_name = #{fifthLiaisonName},</if>
+            <if test="fifthLiaisonRelation != null  and fifthLiaisonRelation != ''">fifth_liaison_relation = #{fifthLiaisonRelation},</if>
+            <if test="fifthLiaisonMobile != null  and fifthLiaisonMobile != ''">fifth_liaison_mobile = #{fifthLiaisonMobile},</if>
+            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <!--<if test="packageId != null  and packageId != ''">package_id = #{packageId},</if>-->
+            <!--<if test="packageFlag != null  and packageFlag != ''">package_flag = #{packageFlag},</if>-->
+           <!-- <if test="closeCase != null  and closeCase != ''">close_case = #{closeCase},</if>-->
+           <!-- <if test="isExitCollect != null  and isExitCollect != ''">is_exit_collect = #{isExitCollect},</if>-->
+            <!--<if test="importBatchNo != null  and importBatchNo != ''">import_batch_no = #{importBatchNo},</if>-->
+            <!--<if test="closeCaseDate != null ">close_case_date = #{closeCaseDate},</if>-->
+        </trim>
+        where id = #{id}
+    </update>
+
+    <select id="selectTempCurAssetsPackageList" parameterType="TempCurAssetsPackage" resultMap="TempCurAssetsPackageResult">
+        <include refid="selectTempCurAssetsPackageVo"/>
+        <where>
+            <if test="orgId != null  and orgId != ''"> and org_id = #{orgId}</if>
+            <if test="orgCasno != null  and orgCasno != ''"> and org_casNo = #{orgCasno}</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+            <if test="org != null  and org != ''"> and org = #{org}</if>
+            <if test="curName != null  and curName != ''"> and cur_name like concat('%', #{curName}, '%')</if>
+            <if test="certificateNo != null  and certificateNo != ''"> and certificate_no = #{certificateNo}</if>
+            <!--<if test="birthday != null "> and birthday = #{birthday}</if>-->
+            <if test="customerMobile != null  and customerMobile != ''"> and customer_mobile = #{customerMobile}</if>
+            <if test="packageFlag != null  and packageFlag != ''"> and package_flag = #{packageFlag}</if>
+            <if test="startDate != null"> and create_time <![CDATA[>=]]> #{startDate}</if>
+            <if test="endDate != null"> and create_time <![CDATA[<=]]> #{endDate}</if>
+            <if test="startWaYe != null"> and wa_ye <![CDATA[>=]]> #{startWaYe}</if>
+            <if test="endWaYe != null"> and wa_ye <![CDATA[<=]]> #{endWaYe}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectCurAssetsPackageList3" parameterType="CurAssetsPackage" resultType="java.util.Map">
+        SELECT  id,org_casNo as orgCasNo,close_case as closeCase from cur_assets_package
+        <where>
+            AND close_case=0
+            <if test="orgId != null  and orgId != ''"> and org_id = #{orgId}</if>
+            <if test="orgCasno != null  and orgCasno != ''"> and org_casNo = #{orgCasno}</if>
+        </where>
+        order by create_time desc
+        limit 1
+    </select>
+
+
+    <delete id="deleteTempCurAssetsPackage" parameterType="String">
+        delete from cur_assets_package_temp where import_batch_no = #{importBatchNo}
+    </delete>
+
+    <select id="selectTempCurAssetsPackageList2" resultMap="TempCurAssetsPackageResult">
+        <include refid="selectTempCurAssetsPackageVo2" />
+        WHERE NOT EXISTS (SELECT 1 from cur_assets_package_temp m where t.id = m.id and m.is_exception = 1)
+    </select>
+
+    <update id="updateExceptionStatus" parameterType="String">
+        update cur_assets_package_temp set is_exception = 1
+        where id = #{id}
+    </update>
+    
+    <select id="selectUpdateList" resultMap="TempCurAssetsPackageResult" parameterType="String">
+        <include refid="selectTempCurAssetsPackageVo2" />
+        where t.import_batch_no = #{importBatchNo}
+        and t.is_exception != '1'
+        and EXISTS (
+	        SELECT b.org_casNo,b.org_id FROM cur_assets_package b WHERE t.org_casNo=b.org_casNo AND t.org_id = b.org_id AND b.close_case=0
+        )
+    </select>
+    
+    <select id="selectUpdateCount" parameterType="String" resultType="java.lang.Integer">
+        SELECT count(*) as updateCount from cur_assets_package_temp t
+        where t.import_batch_no = #{importBatchNo}
+        and t.is_exception != '1'
+        and EXISTS (
+	        SELECT b.org_casNo,b.org_id FROM cur_assets_package b WHERE t.org_casNo=b.org_casNo AND t.org_id = b.org_id AND b.close_case=0
+        )
+    </select>
+
+    <select id="selectInsertCount" parameterType="String" resultType="java.lang.Integer">
+        SELECT count(*) as insertCount from cur_assets_package_temp t
+        WHERE t.import_batch_no = #{importBatchNo} and t.is_exception = '0'
+    </select>
+
+    <update id="modifyUpdateStatus2" parameterType="String">
+        update cur_assets_package_temp tt SET tt.is_exception=2 WHERE EXISTS(
+			SELECT 1 from (
+				SELECT t.id from cur_assets_package_temp t
+                where t.import_batch_no = #{importBatchNo}
+                and t.is_exception != '1'
+                and EXISTS (
+	              SELECT b.org_casNo,b.org_id FROM cur_assets_package b WHERE t.org_casNo=b.org_casNo AND t.org_id = b.org_id AND b.close_case=0
+                )
+			)m WHERE tt.id=m.id
+        )
+    </update>
+
+    <update id="modifyUpdateStatus" parameterType="String">
+        update cur_assets_package_temp set is_exception = 2
+        where id = #{id}
+    </update>
+
+    <select id="selectInsertList" parameterType="String" resultMap="TempCurAssetsPackageResult">
+        <include refid="selectTempCurAssetsPackageVo2" />
+        WHERE t.import_batch_no = #{importBatchNo} and t.is_exception = '0'
+    </select>
+
+    <select id="selectUpdateList2" parameterType="String" resultMap="TempCurAssetsPackageResult">
+        <include refid="selectTempCurAssetsPackageVo2" />
+        WHERE t.import_batch_no = #{importBatchNo} and t.is_exception = '2'
+    </select>
+    
+    <update id="updateNotExists" parameterType="String">
+        UPDATE cur_assets_package_temp t set t.is_exception = '3' where EXISTS(
+	      SELECT 1 from(
+		    select a.id
+		    from cur_assets_package_temp a
+		    where a.import_batch_no = #{importBatchNo}
+		    and a.is_exception=0
+		    and not EXISTS (
+		      SELECT 1 from cur_assets_package b WHERE a.org_casNo = b.org_casNO and b.is_exit_collect = 2 and b.close_case = 0
+		    )
+	      )tt where t.id = tt.id
+        )
+    </update>
+
+    <select id="findNotExistsCount" parameterType="String" resultType="java.lang.Integer">
+        SELECT count(1) as total from cur_assets_package_temp t WHERE t.is_exception = '3' and t.import_batch_no = #{importBatchNo}
+    </select>
+
+    <select id="findNotExistsList" parameterType="String" resultType="java.util.Map">
+        select t.id, t.org_casNo AS orgCasno, '案件不存在'as msg  from cur_assets_package_temp t
+         WHERE t.is_exception = '3' and t.import_batch_no = #{importBatchNo}
+    </select>
+
+    <select id="findNormalCount" parameterType="String" resultType="java.lang.Integer">
+        SELECT count(1) as total from cur_assets_package_temp t WHERE t.is_exception = '0' and t.import_batch_no = #{importBatchNo}
+    </select>
+
+    <select id="findNormalList" parameterType="String" resultMap="TempCurAssetsPackageResult">
+        <include refid="selectTempCurAssetsPackageVo2" />
+         WHERE t.is_exception = '0' and t.import_batch_no = #{importBatchNo}
+    </select>
+
+    <update id="updateCurAssetsPackage3" parameterType="java.util.List">
+        <foreach collection="TempCurAssetsList" item="TempCurAssets" separator=";">
+            update cur_assets_package
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="TempCurAssets.orgCasno != null  and TempCurAssets.orgCasno != ''">org_casNo = #{TempCurAssets.orgCasno},</if>
+                <!-- <if test="TempCurAssets.org != null  and TempCurAssets.org != ''">org = #{TempCurAssets.org},</if>-->
+                <if test="TempCurAssets.transfertype != null  and TempCurAssets.transfertype != ''">transferType = #{TempCurAssets.transfertype},</if>
+                <if test="TempCurAssets.rmbYe != null ">rmb_ye = #{TempCurAssets.rmbYe},</if>
+                <if test="TempCurAssets.rmbYhfxzje != null ">rmb_yhfxzje = #{TempCurAssets.rmbYhfxzje},</if>
+                <if test="TempCurAssets.rmbYhlizje != null ">rmb_yhlizje = #{TempCurAssets.rmbYhlizje},</if>
+                <if test="TempCurAssets.rmbYhbjzje != null ">rmb_yhbjzje = #{TempCurAssets.rmbYhbjzje},</if>
+                <if test="TempCurAssets.rmbYhfyzje != null ">rmb_yhfyzje = #{TempCurAssets.rmbYhfyzje},</if>
+                <if test="TempCurAssets.rmbZdyhje != null ">rmb_zdyhje = #{TempCurAssets.rmbZdyhje},</if>
+                <if test="TempCurAssets.rmbQkzje != null ">rmb_qkzje = #{TempCurAssets.rmbQkzje},</if>
+                <if test="TempCurAssets.borrowNo != null  and TempCurAssets.borrowNo != ''">borrow_no = #{TempCurAssets.borrowNo},</if>
+                <if test="TempCurAssets.borrowBlank != null  and TempCurAssets.borrowBlank != ''">borrow_blank = #{TempCurAssets.borrowBlank},</if>
+                <if test="TempCurAssets.borrowEd != null ">borrow_ed = #{TempCurAssets.borrowEd},</if>
+                <if test="TempCurAssets.rcr != null ">rcr = #{TempCurAssets.rcr},</if>
+                <if test="TempCurAssets.fz != null  and TempCurAssets.fz != ''">fz = #{TempCurAssets.fz},</if>
+                <if test="TempCurAssets.areaCenter != null  and TempCurAssets.areaCenter != ''">area_center = #{TempCurAssets.areaCenter},</if>
+                <if test="TempCurAssets.maxYqtsHis != null  and TempCurAssets.maxYqtsHis != ''">max_yqts_his = #{TempCurAssets.maxYqtsHis},</if>
+                <if test="TempCurAssets.sumYqtsHis != null  and TempCurAssets.sumYqtsHis != ''">sum_yqts_his = #{TempCurAssets.sumYqtsHis},</if>
+                <if test="TempCurAssets.sumYqcsHis != null  and TempCurAssets.sumYqcsHis != ''">sum_yqcs_his = #{TempCurAssets.sumYqcsHis},</if>
+                <if test="TempCurAssets.wwCityName != null  and TempCurAssets.wwCityName != ''">ww_city_name = #{TempCurAssets.wwCityName},</if>
+                <if test="TempCurAssets.waYe != null ">wa_ye = #{TempCurAssets.waYe},</if>
+                <if test="TempCurAssets.billAddress != null  and TempCurAssets.billAddress != ''">bill_address = #{TempCurAssets.billAddress},</if>
+                <if test="TempCurAssets.yearRates != null  and TempCurAssets.yearRates != ''">year_rates = #{TempCurAssets.yearRates},</if>
+                <if test="TempCurAssets.tjFirm != null  and TempCurAssets.tjFirm != ''">tj_firm = #{TempCurAssets.tjFirm},</if>
+                <if test="TempCurAssets.tjWd != null  and TempCurAssets.tjWd != ''">tj_wd = #{TempCurAssets.tjWd},</if>
+                <if test="TempCurAssets.dayRates != null  and TempCurAssets.dayRates != ''">day_rates = #{TempCurAssets.dayRates},</if>
+                <if test="TempCurAssets.accountDate != null  and TempCurAssets.accountDate != ''">account_date = #{TempCurAssets.accountDate},</if>
+                <if test="TempCurAssets.overdueDays != null  and TempCurAssets.overdueDays != ''">overdue_days = #{TempCurAssets.overdueDays},</if>
+                <if test="TempCurAssets.firstYqDate != null ">first_yq_date = #{TempCurAssets.firstYqDate},</if>
+                <if test="TempCurAssets.firstYqjcDate != null ">first_yqjc_date = #{TempCurAssets.firstYqjcDate},</if>
+                <if test="TempCurAssets.firstYqFlag != null  and TempCurAssets.firstYqFlag != ''">first_yq_flag = #{TempCurAssets.firstYqFlag},</if>
+                <if test="TempCurAssets.curName != null  and TempCurAssets.curName != ''">cur_name = #{TempCurAssets.curName},</if>
+                <if test="TempCurAssets.curSex != null  and TempCurAssets.curSex != ''">cur_sex = #{TempCurAssets.curSex},</if>
+                <if test="TempCurAssets.certificateNo != null  and TempCurAssets.certificateNo != ''">certificate_no = #{TempCurAssets.certificateNo},</if>
+                <if test="TempCurAssets.certificateAddress != null  and TempCurAssets.certificateAddress != ''">certificate_address = #{TempCurAssets.certificateAddress},</if>
+                <if test="TempCurAssets.registAddress != null  and TempCurAssets.registAddress != ''">regist_address = #{TempCurAssets.registAddress},</if>
+                <if test="TempCurAssets.email != null  and TempCurAssets.email != ''">email = #{TempCurAssets.email},</if>
+                <if test="TempCurAssets.marriage != null  and TempCurAssets.marriage != ''">marriage = #{TempCurAssets.marriage},</if>
+                <if test="TempCurAssets.education != null  and TempCurAssets.education != ''">education = #{TempCurAssets.education},</if>
+                <if test="TempCurAssets.customerMobile != null  and TempCurAssets.customerMobile != ''">customer_mobile = #{TempCurAssets.customerMobile},</if>
+                <if test="TempCurAssets.customerHomeTel != null  and TempCurAssets.customerHomeTel != ''">customer_home_tel = #{TempCurAssets.customerHomeTel},</if>
+                <if test="TempCurAssets.customerHomeAddress != null  and TempCurAssets.customerHomeAddress != ''">customer_home_address = #{TempCurAssets.customerHomeAddress},</if>
+                <if test="TempCurAssets.workName != null  and TempCurAssets.workName != ''">work_name = #{TempCurAssets.workName},</if>
+                <if test="TempCurAssets.workAddress != null  and TempCurAssets.workAddress != ''">work_address = #{TempCurAssets.workAddress},</if>
+                <if test="TempCurAssets.workTel != null  and TempCurAssets.workTel != ''">work_tel = #{TempCurAssets.workTel},</if>
+                <if test="TempCurAssets.firstLiaisonName != null  and TempCurAssets.firstLiaisonName != ''">first_liaison_name = #{TempCurAssets.firstLiaisonName},</if>
+                <if test="TempCurAssets.firstLiaisonRelation != null  and TempCurAssets.firstLiaisonRelation != ''">first_liaison_relation = #{TempCurAssets.firstLiaisonRelation},</if>
+                <if test="TempCurAssets.firstLiaisonMobile != null  and TempCurAssets.firstLiaisonMobile != ''">first_liaison_mobile = #{TempCurAssets.firstLiaisonMobile},</if>
+                <if test="TempCurAssets.firstLiaisonTel != null  and TempCurAssets.firstLiaisonTel != ''">first_liaison_tel = #{TempCurAssets.firstLiaisonTel},</if>
+                <if test="TempCurAssets.secondLiaisonName != null  and TempCurAssets.secondLiaisonName != ''">second_liaison_name = #{TempCurAssets.secondLiaisonName},</if>
+                <if test="TempCurAssets.secondLiaisonRelation != null  and TempCurAssets.secondLiaisonRelation != ''">second_liaison_relation = #{TempCurAssets.secondLiaisonRelation},</if>
+                <if test="TempCurAssets.secondLiaisonMobile != null  and TempCurAssets.secondLiaisonMobile != ''">second_liaison_mobile = #{TempCurAssets.secondLiaisonMobile},</if>
+                <if test="TempCurAssets.secondLiaisonTel != null  and TempCurAssets.secondLiaisonTel != ''">second_liaison_tel = #{TempCurAssets.secondLiaisonTel},</if>
+                <if test="TempCurAssets.threeLiaisonName != null  and TempCurAssets.threeLiaisonName != ''">three_liaison_name = #{TempCurAssets.threeLiaisonName},</if>
+                <if test="TempCurAssets.threeLiaisonRelation != null  and TempCurAssets.threeLiaisonRelation != ''">three_liaison_relation = #{TempCurAssets.threeLiaisonRelation},</if>
+                <if test="TempCurAssets.threeLiaisonMobile != null  and TempCurAssets.threeLiaisonMobile != ''">three_liaison_mobile = #{TempCurAssets.threeLiaisonMobile},</if>
+                <if test="TempCurAssets.threeLiaisonTel != null  and TempCurAssets.threeLiaisonTel != ''">three_liaison_tel = #{TempCurAssets.threeLiaisonTel},</if>
+                <if test="TempCurAssets.cpmc != null  and TempCurAssets.cpmc != ''">cpmc = #{TempCurAssets.cpmc},</if>
+                <if test="TempCurAssets.hkType != null  and TempCurAssets.hkType != ''">hk_type = #{TempCurAssets.hkType},</if>
+                <if test="TempCurAssets.znj != null ">znj = #{TempCurAssets.znj},</if>
+                <if test="TempCurAssets.ajhssj != null">ajhssj = #{TempCurAssets.ajhssj},</if>
+                <if test="TempCurAssets.accountAge != null  and TempCurAssets.accountAge != ''">account_age = #{TempCurAssets.accountAge},</if>
+                <if test="TempCurAssets.laFlag != null  and TempCurAssets.laFlag != ''">la_flag = #{TempCurAssets.laFlag},</if>
+                <if test="TempCurAssets.fxFlag != null  and TempCurAssets.fxFlag != ''">fx_flag = #{TempCurAssets.fxFlag},</if>
+                <if test="TempCurAssets.htlx != null  and TempCurAssets.htlx != ''">htlx = #{TempCurAssets.htlx},</if>
+                <if test="TempCurAssets.jmbq != null  and TempCurAssets.jmbq != ''">jmbq = #{TempCurAssets.jmbq},</if>
+                <if test="TempCurAssets.fcbq != null  and TempCurAssets.fcbq != ''">fcbq = #{TempCurAssets.fcbq},</if>
+                <if test="TempCurAssets.fxsfbh != null  and TempCurAssets.fxsfbh != ''">fxsfbh = #{TempCurAssets.fxsfbh},</if>
+                <if test="TempCurAssets.remark != null  and TempCurAssets.remark != ''">remark = #{TempCurAssets.remark},</if>
+                <if test="TempCurAssets.tar != null ">tar = #{TempCurAssets.tar},</if>
+                <if test="TempCurAssets.jkrq != null ">jkrq = #{TempCurAssets.jkrq},</if>
+                <if test="TempCurAssets.zhychkr != null ">zhychkr = #{TempCurAssets.zhychkr},</if>
+                <if test="TempCurAssets.mqhkje != null ">mqhkje = #{TempCurAssets.mqhkje},</if>
+                <if test="TempCurAssets.dqqkje != null ">dqqkje = #{TempCurAssets.dqqkje},</if>
+                <if test="TempCurAssets.ljyhje != null ">ljyhje = #{TempCurAssets.ljyhje},</if>
+                <if test="TempCurAssets.sfje != null ">sfje = #{TempCurAssets.sfje},</if>
+                <if test="TempCurAssets.zdhkzh1 != null  and TempCurAssets.zdhkzh1 != ''">zdhkzh1 = #{TempCurAssets.zdhkzh1},</if>
+                <if test="TempCurAssets.zdhkzh2 != null  and TempCurAssets.zdhkzh2 != ''">zdhkzh2 = #{TempCurAssets.zdhkzh2},</if>
+                <if test="TempCurAssets.zdhkzhhm1 != null  and TempCurAssets.zdhkzhhm1 != ''">zdhkzhhm1 = #{TempCurAssets.zdhkzhhm1},</if>
+                <if test="TempCurAssets.zdhkzhhm2 != null  and TempCurAssets.zdhkzhhm2 != ''">zdhkzhhm2 = #{TempCurAssets.zdhkzhhm2},</if>
+                <if test="TempCurAssets.zdhkqd1 != null  and TempCurAssets.zdhkqd1 != ''">zdhkqd1 = #{TempCurAssets.zdhkqd1},</if>
+                <if test="TempCurAssets.zdhkqd2 != null  and TempCurAssets.zdhkqd2 != ''">zdhkqd2 = #{TempCurAssets.zdhkqd2},</if>
+                <if test="TempCurAssets.khmb != null  and TempCurAssets.khmb != ''">khmb = #{TempCurAssets.khmb},</if>
+                <if test="TempCurAssets.spjg != null ">spjg = #{TempCurAssets.spjg},</if>
+                <if test="TempCurAssets.dklx != null  and TempCurAssets.dklx != ''">dklx = #{TempCurAssets.dklx},</if>
+                <if test="TempCurAssets.jkbs != null  and TempCurAssets.jkbs != ''">jkbs = #{TempCurAssets.jkbs},</if>
+                <if test="TempCurAssets.spxx != null  and TempCurAssets.spxx != ''">spxx = #{TempCurAssets.spxx},</if>
+                <if test="TempCurAssets.wacs != null  and TempCurAssets.wacs != ''">wacs = #{TempCurAssets.wacs},</if>
+                <if test="TempCurAssets.ykqs != null  and TempCurAssets.ykqs != ''">ykqs = #{TempCurAssets.ykqs},</if>
+                <if test="TempCurAssets.workDept != null  and TempCurAssets.workDept != ''">work_dept = #{TempCurAssets.workDept},</if>
+                <if test="TempCurAssets.customerMobile2 != null  and TempCurAssets.customerMobile2 != ''">customer_mobile2 = #{TempCurAssets.customerMobile2},</if>
+                <if test="TempCurAssets.customerMobile3 != null  and TempCurAssets.customerMobile3 != ''">customer_mobile3 = #{TempCurAssets.customerMobile3},</if>
+                <if test="TempCurAssets.customerMobile4 != null  and TempCurAssets.customerMobile4 != ''">customer_mobile4 = #{TempCurAssets.customerMobile4},</if>
+                <if test="TempCurAssets.fourthLiaisonName != null  and TempCurAssets.fourthLiaisonName != ''">fourth_liaison_name = #{TempCurAssets.fourthLiaisonName},</if>
+                <if test="TempCurAssets.fourthLiaisonRelation != null  and TempCurAssets.fourthLiaisonRelation != ''">fourth_liaison_relation = #{TempCurAssets.fourthLiaisonRelation},</if>
+                <if test="TempCurAssets.fourthLiaisonMobile != null  and TempCurAssets.fourthLiaisonMobile != ''">fourth_liaison_mobile = #{TempCurAssets.fourthLiaisonMobile},</if>
+                <if test="TempCurAssets.fifthLiaisonName != null  and TempCurAssets.fifthLiaisonName != ''">fifth_liaison_name = #{TempCurAssets.fifthLiaisonName},</if>
+                <if test="TempCurAssets.fifthLiaisonRelation != null  and TempCurAssets.fifthLiaisonRelation != ''">fifth_liaison_relation = #{TempCurAssets.fifthLiaisonRelation},</if>
+                <if test="TempCurAssets.fifthLiaisonMobile != null  and TempCurAssets.fifthLiaisonMobile != ''">fifth_liaison_mobile = #{TempCurAssets.fifthLiaisonMobile},</if>
+                <!--<if test="TempCurAssets.freeImport != null  and TempCurAssets.freeImport != ''">free_import = #{TempCurAssets.freeImport},</if>-->
+            </trim>
+            where org_casNo=#{TempCurAssets.orgCasno} AND close_case=0
+        </foreach>
+    </update>
+
+    <select id="selectBatchNo" parameterType="com.ruoyi.assetspackage.domain.TempCurAssetsPackage" resultType="java.lang.String">
+            SELECT import_batch_no from cur_assets_package
+            <where>
+                AND close_case=0
+                <if test="orgId != null  and orgId != ''"> and org_id = #{orgId}</if>
+                <if test="orgCasno != null  and orgCasno != ''"> and org_casNo = #{orgCasno}</if>
+            </where>
+            order by create_time desc
+            limit 1
+    </select>
+
+    <insert id="insertFreeImport" parameterType="java.util.List">
+        <foreach collection="FreeImportList" item="FreeImport" separator=";">
+            insert into free_import
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="FreeImport.id != null ">id,</if>
+                <if test="FreeImport.orgCasno != null  and FreeImport.orgCasno != ''">org_casno,</if>
+                <if test="FreeImport.orgId != null  and FreeImport.orgId != ''">org_id,</if>
+                <if test="FreeImport.importBatchNo != null  and FreeImport.importBatchNo != ''">import_batch_no,</if>
+                <if test="FreeImport.value != null  and FreeImport.value != ''">value,</if>
+                <if test="FreeImport.createBy != null  and FreeImport.createBy != ''">create_by,</if>
+                <if test="FreeImport.createTime != null ">create_time,</if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="FreeImport.id != null ">#{FreeImport.id},</if>
+                <if test="FreeImport.orgCasno != null  and FreeImport.orgCasno != ''">#{FreeImport.orgCasno},</if>
+                <if test="FreeImport.orgId != null  and FreeImport.orgId != ''">#{FreeImport.orgId},</if>
+                <if test="FreeImport.importBatchNo != null  and FreeImport.importBatchNo != ''">#{FreeImport.importBatchNo},</if>
+                <if test="FreeImport.value != null  and FreeImport.value != ''">#{FreeImport.value},</if>
+                <if test="FreeImport.createBy != null  and FreeImport.createBy != ''">#{FreeImport.createBy},</if>
+                <if test="FreeImport.createTime != null ">#{FreeImport.createTime},</if>
+            </trim>
+        </foreach>
+    </insert>
+
+    <select id="selectFreeImportByCaseno" parameterType="java.lang.String" resultType="java.util.Map">
+        SET SESSION group_concat_max_len = 10240;
+        SELECT group_concat(value order by create_time desc) value,import_batch_no importBatchNo
+        from free_import
+        WHERE value != '{}' and org_casno=#{orgCasno}
+        group by import_batch_no
+        order by create_time desc
+    </select>
+
+
+    <update id="updateCloseCase" parameterType="java.util.List">
+        <foreach collection="CurAssetsList" item="CurAssets" separator=";">
+            update cur_assets_package
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="CurAssets.ajhssj != null">ajhssj = #{CurAssets.ajhssj},</if>
+                <if test="CurAssets.closeCase != null ">close_case = #{CurAssets.closeCase},</if>
+                <if test="CurAssets.isExitCollect != null ">is_exit_collect = #{CurAssets.isExitCollect},</if>
+                <if test="CurAssets.closeCaseDate != null ">close_case_date = #{CurAssets.closeCaseDate},</if>
+                <if test="CurAssets.dqyhje != null ">dqyhje = #{CurAssets.dqyhje},</if>
+                <if test="CurAssets.waYe != null ">wa_ye = #{CurAssets.waYe},</if>
+            </trim>
+            where id = #{CurAssets.id}
+        </foreach>
+    </update>
+
+    <update id="updateCloseCase2" parameterType="java.util.List">
+        <foreach collection="CurAssetsList" item="CurAssets" separator=";">
+            update cur_assets_package
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="CurAssets.ajhssj != null">ajhssj = #{CurAssets.ajhssj},</if>
+                <if test="CurAssets.closeCase != null ">close_case = #{CurAssets.closeCase},</if>
+                <if test="CurAssets.isExitCollect != null ">is_exit_collect = #{CurAssets.isExitCollect},</if>
+                <if test="CurAssets.closeCaseDate != null ">close_case_date = #{CurAssets.closeCaseDate},</if>
+            </trim>
+            where org_casNo = #{CurAssets.orgCasno} and close_case = 0
+        </foreach>
+    </update>
+
+    <update id="updateNoCloseCase" parameterType="java.util.List">
+        <foreach collection="CurAssetsList" item="CurAssets" separator=";">
+            update cur_assets_package
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="CurAssets.waYe != null ">wa_ye = #{CurAssets.waYe},</if>
+                <if test="CurAssets.dqyhje != null ">dqyhje = #{CurAssets.dqyhje},</if>
+            </trim>
+            where id = #{CurAssets.id}
+        </foreach>
+    </update>
+
+
+
+</mapper>

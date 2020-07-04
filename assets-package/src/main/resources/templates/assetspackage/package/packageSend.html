@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改资产包')" />
+    <style type="text/css">
+        .form-control1{
+            width: 300px;
+            background: #FFFFFF none;
+            border: 1px solid #e5e6e7;
+            border-radius: 1px;
+            color: inherit;
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-package-packageSend" th:object="${assetPackage}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">请选择催收方式：</label>
+                <span class="col-sm-3" >
+                    <select name="org" id="org" class="form-control1" type="text" >
+                        <option value="zicui">自催</option>
+                    </select>
+                </span>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        // var ctx = [[${@config.getKey('ctx')}]];
+    </script>
+    <script type="text/javascript">
+        var prefix = ctx + "assetspackage/package";
+        /*$(function () {
+            $.ajax({
+                url: prefix+"/findOrg",
+                dataType: "json",
+                type: "post",
+                success:function(data){
+                   var reault = eval(data.msg);
+                    $.each(reault,function(index,obj){
+                        $("#org").append("<option value='"+obj.id+"'>"+obj.orgName+"</option>");
+                    });
+                }
+
+            });
+        });*/
+
+        $("#form-package-packageSend").validate({
+            focusCleanup: true
+        });
+
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/sendSave", $('#form-package-packageSend').serialize());
+            }
+        }
+
+
+    </script>
+</body>
+</html>

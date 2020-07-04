@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改回收率报')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-recovery-edit" th:object="${tLcReportRecovery}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">报表日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="reportDate" th:value="${#dates.format(tLcReportRecovery.reportDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">坐席所在组：</label>
+                <div class="col-sm-8">
+                    <input name="seatGroup" th:field="*{seatGroup}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">坐席编号：</label>
+                <div class="col-sm-8">
+                    <input name="seatNum" th:field="*{seatNum}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">坐席姓名：</label>
+                <div class="col-sm-8">
+                    <input name="seatName" th:field="*{seatName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">在催案件数：</label>
+                <div class="col-sm-8">
+                    <input name="collingCaseNum" th:field="*{collingCaseNum}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">已确认回收案件数：</label>
+                <div class="col-sm-8">
+                    <input name="confirmedRecycleCaseNum" th:field="*{confirmedRecycleCaseNum}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">待确认回收案件数：</label>
+                <div class="col-sm-8">
+                    <input name="unconfirmedRecycleCaseNum" th:field="*{unconfirmedRecycleCaseNum}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">案件回收率：</label>
+                <div class="col-sm-8">
+                    <input name="caseRecovery" th:field="*{caseRecovery}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">在催案件金额：</label>
+                <div class="col-sm-8">
+                    <input name="collingCaseMoney" th:field="*{collingCaseMoney}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">已确认回收案件金额：</label>
+                <div class="col-sm-8">
+                    <input name="confirmedRecycleCaseMoney" th:field="*{confirmedRecycleCaseMoney}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">待确认回收案件金额：</label>
+                <div class="col-sm-8">
+                    <input name="unconfirmedRecycleCaseMoney" th:field="*{unconfirmedRecycleCaseMoney}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">金额回收率：</label>
+                <div class="col-sm-8">
+                    <input name="moneyRecovery" th:field="*{moneyRecovery}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "ruoyi/recovery";
+        $("#form-recovery-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-recovery-edit').serialize());
+            }
+        }
+
+        $("input[name='reportDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

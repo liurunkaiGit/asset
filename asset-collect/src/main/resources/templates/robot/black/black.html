@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('机器人黑名单管理列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>案件编号：</p>
+                                <input type="text" name="caseNo"/>
+                            </li>
+                            <li>
+                                <p>客户名称：</p>
+                                <input type="text" name="customerName"/>
+                            </li>
+                            <li>
+                                <p>手机号：</p>
+                                <input type="text" name="phone"/>
+                            </li>
+                            <li>
+                                <p>触发原因：</p>
+                                <select name="reason">
+                                    <option value="">请选择</option>
+                                    <option value="停催">停催</option>
+                                    <option value="停拨">停拨</option>
+                                    <option value="投诉">投诉</option>
+                                    <option value="已还款">已还款</option>
+                                </select>
+                            </li>
+                            <li class="select-time">
+                                <p>创建时间：</p>
+                                <input type="text" class="time-input" id="startCreateTime" placeholder="开始时间" name="startCreateTime"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endCreateTime" placeholder="结束时间" name="endCreateTime"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="select()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="robot:black:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="robot:black:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "robot/black";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "机器人黑名单管理",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '主键自增',
+                    visible: false
+                },
+                {
+                    field : 'caseNo', 
+                    title : '案件编号'
+                },
+                {
+                    field : 'orgName', 
+                    title : '机构名称'
+                },
+                {
+                    field : 'customerName', 
+                    title : '客户名称'
+                },
+                {
+                    field : 'phone', 
+                    title : '手机号'
+                },
+                {
+                    field : 'reason', 
+                    title : '触发原因'
+                },
+                {
+                    field : 'createTime',
+                    title : '创建时间'
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function select() {
+            var endCreateTime = $("#endCreateTime").val();
+            if (endCreateTime != null && endCreateTime != '') {
+                endCreateTime = endCreateTime + " 23:59:59";
+                $("#endCreateTime").val(endCreateTime);
+            }
+            $.table.search();
+        }
+    </script>
+</body>
+</html>

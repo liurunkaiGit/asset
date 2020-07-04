@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--360浏览器优先以webkit内核解析-->
+    <title>若依介绍</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link href="../static/css/main/animate.min.css" th:href="@{/css/main/animate.min.css}" rel="stylesheet"/>
+    <link href="../static/css/main/style.min862f.css" th:href="@{/css/main/style.min862f.css}" rel="stylesheet"/>
+</head>
+
+<body class="gray-bg">
+    <div class="row  border-bottom white-bg dashboard-header" style="background-color: #f3f3f4;display: none;">
+		<div class="col-sm-6">
+			<div id="main" style="width: 600px;height:40px;"></div>
+		</div>
+		<div class="col-sm-6">
+			<div id="main2" style="width: 600px;height:40px;"></div>
+		</div>
+		<div class="col-sm-12" style="background-color: #f3f3f4;height: 5px;margin-bottom: 5px;"></div>
+
+        <div class="col-sm-12">
+			<div id="main3" style="width: 600px;height:390px;"></div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+    <script th:src="@{/js/echarts.min.js}"></script>
+    <th:block th:include="include :: footer" />
+    <!--
+    <script type="text/javascript">
+        var prefix = ctx + "home/info/";
+        $(function () {
+            $.ajax({
+                url: prefix+"curAssetsCount",
+                dataType: "json",
+                type: "post",
+                success:function(data){
+                    var result = eval(data.msg);
+                    var legendData=[];
+                    var seriesData=[];
+                    $.each(result,function(index,obj){
+                        var total = obj.total;
+                        var month = obj.month;
+                        var data = {value:total,name:month};
+                        legendData.push(month);
+                        seriesData.push(data);
+                    });
+
+                    var myChart = echarts.init(document.getElementById('main'));
+                    option = {
+                        title: {
+                            text: '每月案件导入量',
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: '{a} <br/>{b} : {c}条 【{d}%】'
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            left: 'left',
+                            data: legendData
+                        },
+                        series: [
+                            {
+                                name: '每月案件导入量',
+                                type: 'pie',
+                                radius: '55%',
+                                center: ['50%', '60%'],
+                                data: seriesData,
+                                emphasis: {
+                                    itemStyle: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
+                            }
+                        ]
+                    };
+                    myChart.setOption(option);
+                }
+            });
+        })
+
+
+        $(function () {
+            $.ajax({
+                url: prefix+"curAssetsRepaymentCount",
+                dataType: "json",
+                type: "post",
+                success:function(data){
+                    var result = eval(data.msg);
+                    var legendData=[];
+                    var seriesData=[];
+                    $.each(result,function(index,obj){
+                        var total = obj.total;
+                        var month = obj.month;
+                        var data = {value:total,name:month};
+                        legendData.push(month);
+                        seriesData.push(data);
+                    });
+                    var myChart2 = echarts.init(document.getElementById('main2'));
+                    option2 = {
+                        title: {
+                            text: '每月资产还款导入量',
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: '{a} <br/>{b} : {c}条 【{d}%】'
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            left: 'left',
+                            data:legendData
+                        },
+                        series: [
+                            {
+                                name: '每月资产还款导入量',
+                                type: 'pie',
+                                radius: '55%',
+                                center: ['50%', '60%'],
+                                data: seriesData,
+                                emphasis: {
+                                    itemStyle: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
+                            }
+                        ]
+                    };
+                    myChart2.setOption(option2);
+
+
+                }
+            });
+        })
+
+
+
+        $(function () {
+            $.ajax({
+                url: prefix+"selectQHKJe",
+                dataType: "json",
+                type: "post",
+                success:function(data){
+                    var qkjeData=[];
+                    var hkjeData=[];
+                    var result = JSON.parse(data.msg);
+                    var qkjeResultArray = result.qkjeResult;
+                    var hkjeResultArray = result.hkjeResult;
+
+                    $.each(qkjeResultArray,function(index,obj){
+                        var qkje;
+                        if(index==0){
+                            qkje=obj['01'];
+                        }
+                        if(index==1){
+                            qkje=obj['02'];
+                        }
+                        if(index==2){
+                            qkje=obj['03'];
+                        }
+                        if(index==3){
+                            qkje=obj['04'];
+                        }
+                        if(index==4){
+                            qkje=obj['05'];
+                        }
+                        if(index==5){
+                            qkje=obj['06'];
+                        }
+                        if(index==6){
+                            qkje=obj['07'];
+                        }
+                        if(index==7){
+                            qkje=obj['08'];
+                        }
+                        if(index==8){
+                            qkje=obj['09'];
+                        }
+                        if(index==9){
+                            qkje=obj['10'];
+                        }
+                        if(index==10){
+                            qkje=obj['11'];
+                        }
+                        if(index==11){
+                            qkje=obj['12'];
+                        }
+                        qkjeData.push(qkje);
+                    });
+
+                    $.each(hkjeResultArray,function(index,obj){
+                        var hkje;
+                        if(index==0){
+                            hkje=obj['01'];
+                        }
+                        if(index==1){
+                            hkje=obj['02'];
+                        }
+                        if(index==2){
+                            hkje=obj['03'];
+                        }
+                        if(index==3){
+                            hkje=obj['04'];
+                        }
+                        if(index==4){
+                            hkje=obj['05'];
+                        }
+                        if(index==5){
+                            hkje=obj['06'];
+                        }
+                        if(index==6){
+                            hkje=obj['07'];
+                        }
+                        if(index==7){
+                            hkje=obj['08'];
+                        }
+                        if(index==8){
+                            hkje=obj['09'];
+                        }
+                        if(index==9){
+                            hkje=obj['10'];
+                        }
+                        if(index==10){
+                            hkje=obj['11'];
+                        }
+                        if(index==11){
+                            hkje=obj['12'];
+                        }
+                        hkjeData.push(hkje);
+                    });
+
+
+                    var myChart3 = echarts.init(document.getElementById('main3'));
+                    option3 = {
+                        title: {
+                            text: '每月欠/还款总金额',
+                            x:'center',
+                            y:'top',
+                            textAlign:'left'
+                        },
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        legend: {
+                            data: ['欠款总金额', '还款总金额'],
+                            padding:[35,0,0,0]
+                        },
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                dataView: {show: true, readOnly: false},
+                                magicType: {show: true, type: ['line', 'bar']}
+                            }
+                        },
+                        calculable: true,
+                        xAxis: [
+                            {
+                                type: 'category',
+                                data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+                            }
+                        ],
+                        yAxis: [
+                            {
+                                type: 'value'
+                            }
+                        ],
+                        series: [
+                            {
+                                name: '欠款总金额',
+                                type: 'bar',
+                                data: qkjeData,
+                                markLine: {
+                                    data: [
+                                        {type: 'average', name: '平均值'}
+                                    ]
+                                }
+                            },
+                            {
+                                name: '还款总金额',
+                                type: 'bar',
+                                data: hkjeData,
+                                markLine: {
+                                    data: [
+                                        {type: 'average', name: '平均值'}
+                                    ]
+                                }
+                            }
+                        ]
+                    };
+                    myChart3.setOption(option3);
+
+
+                }
+            });
+        })
+
+
+
+    </script>
+    -->
+</body>
+</html>

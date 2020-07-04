@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('模板匹配')" />
+    <th:block th:include="include :: select2-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-package-matching" th:object="${templatesPackage}">
+            <div class="form-group">
+                 <label class="col-sm-3 control-label">表头行：</label>
+                 <div class="col-sm-8" style="font-size: 16px;">
+                    <input name="表头行" class="form-control" type="text" value="1" required>
+                 </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">数据起始行：</label>
+                <div class="col-sm-8" style="font-size: 16px;">
+                    <input name="数据起始行" class="form-control" type="text" value="2" required>
+                </div>
+            </div>
+            <div class="form-group" id="form-package-matching2">
+                <input name="id" th:field="*{id}" type="hidden">
+                <input name="url" th:field="*{url}" type="hidden">
+                <div class='col-sm-6'>
+                    <input name='系统表头' class='form-control' type='text' value="系统表头" disabled style='background-color: #f8ac59;color: #123b5f;font-size: 18px;text-align: center'>
+                </div>
+                <div class='col-sm-6'>
+                    <input name='模板表头' class='form-control' type='text' value="模板表头" disabled style='background-color: #f8ac59;color: #123b5f;font-size: 18px;text-align: center'>
+                </div>
+            </div>
+        </form>
+    </div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: select2-js" />
+<script th:inline="javascript">
+    // var ctx = [[${@config.getKey('ctx')}]];
+    var prefix = ctx + "assetspackage/repaymentTemplate";
+
+    $(function() {
+        alert(1)
+        var paramUrl = $("#url").val();
+        $.ajax({
+            url: prefix+"/paseHead",
+            dataType: "json",
+            type: "post",
+            data: {
+                url: paramUrl
+            },
+            success:function(data){
+                var result = JSON.parse(data.msg);
+                var templateHead = eval(result.templateHead);
+                var systemHead = eval(result.systemHead);
+                $.each(systemHead,function(index,obj){
+                    alert(obj)
+                    if("机构案件号"==obj){
+                        $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+obj+"(*不为空，且能标识数据唯一性*)"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                            .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' class='form-control' id='机构案件号macth'></select></div>");
+                    }else if("还款日期"==obj){
+                        $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+obj+"(*如果导入了还款金额，则还款日期不能为空*)"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                            .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' class='form-control' id='还款日期macth'></select></div>");
+                    }else if("是否出催"==obj){
+                        $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+obj+"(*用于标识案件是否结清出催，只能导入“是”*)"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                            .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' class='form-control' id='是否出催macth'></select></div>");
+                    }else if("出催日期"==obj){
+                        $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+obj+"(*如果“是否出催”=是，则出催日期不能为空*)"+"'required disabled style='background-color: #FFFFFF;color: red'></div>")
+                            .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' class='form-control' id='出催日期macth'></select></div>");
+                    }else{
+                        $("#form-package-matching2").append("<div class='col-sm-6'><input name='"+obj+"' class='form-control' type='text' value='"+obj+"'required disabled style='background-color: #FFFFFF;'></div>")
+                            .append("<div class='col-sm-6'><select name='"+obj+"macth"+"' class='form-control'></select></div>");
+                    }
+                });
+
+                var selects = $("select");
+                selects.select2();
+                for(var j=0;j<selects.length;j++) {
+                    var obj = selects[j];
+                    obj.options.add(new Option("请选择",""));
+                    for (var i=0;i<templateHead.length;i++) {
+                        obj.options.add(new Option(templateHead[i],templateHead[i]));
+                    }
+
+                }
+
+            }
+        });
+
+
+
+    });
+
+</script>
+<script type="text/javascript">
+    $("#form-package-matching").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        var jgajhMacth = $("#机构案件号macth").val();
+        if(jgajhMacth =="" || jgajhMacth=="请选择"){
+            $.modal.alertWarning("请选择机构案件号对应的值");
+            return;
+        }
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/addRelation", $('#form-package-matching').serialize());
+        }
+    }
+</script>
+</body>
+</html>

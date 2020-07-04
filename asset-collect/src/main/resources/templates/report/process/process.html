@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('每日过程指标报列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <input name="updateTime" id="updateTime" th:value="${updateTime}" type="hidden">
+                            <input name="reportName" id="reportName" th:value="${reportName}" type="hidden">
+                            <li class="select-time">
+                                <p>报表日期：</p>
+                                <input type="text" class="time-input" th:value="${#dates.format(reportDate, 'yyyy-MM-dd')}" id="reportDate" placeholder="报表日期" name="reportDate"/>
+                            </li>
+                            <li>
+                                <p>委托方：</p>
+                                <!--<input type="text" name="orgId"/>-->
+                                <select name="orgId" id="orgId">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <!--<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>-->
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="searchProcess()"><i class="fa fa-search"></i>搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <!--<label>报表名称：</label><label id="heapReportName"></label><br/>
+                <label>报表日期：</label><label id="headReportDate"></label><br/>
+                <label>更新时间：</label><label id="headUpdateTime"></label><br/>
+                <label>委托方：</label><label id="headOrgName"></label>-->
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="ruoyi:process:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('ruoyi:process:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('ruoyi:process:remove')}]];
+        var prefix = ctx + "report/process";
+        var taskPrefix = ctx + "collect/task";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "每日过程指标报",
+                columns: [
+                {
+                    field : 'id', 
+                    title : '主键id',
+                    visible: false
+                },
+                {
+                    field : 'reportDate', 
+                    title : '报表日期',
+                    visible: false
+                },
+                {
+                    field : 'seatGroup', 
+                    title : '用户组别'
+                },
+                {
+                    field : 'seatNum', 
+                    title : '登录名称'
+                },
+                {
+                    field : 'seatName', 
+                    title : '坐席名称'
+                },
+                {
+                    field : 'dealWithConsumerCount', 
+                    title : '处理账户数'
+                },
+                    {
+                        field : 'collingCaseMoney',
+                        title : '在催案件金额(元)',
+                        align: 'right'
+                    },
+                    {
+                        field : 'userCoverNum',
+                        title : '覆盖账户数'
+                    },
+                    {
+                        field : 'callNum',
+                        title : '拨打次数'
+                    },
+                    {
+                        field : 'connectedCallNum',
+                        title : '接通次数'
+                    },{
+                        field : 'callLen',
+                        title : '通话时长(分)',
+                        formatter: function(value,index,row){
+                            return revert(value);
+                        }
+                    },{
+                        field : 'callConnectedRecovery',
+                        title : '电话接通率',
+                        formatter: function(value,index,row){
+                            return toPercent(value);
+                        }
+                    },
+                {
+                    field : 'actionCodeNum', 
+                    title : '行动码量'
+                },
+                {
+                    field : 'callCodeNum', 
+                    title : '电话码量'
+                },
+                /*{
+                    field : 'callActionCodeRecovery', 
+                    title : '电话码量/行动码量',
+                    formatter: function(value,index,row){
+                        return revert(value);
+                    }
+                },
+                {
+                    field : 'averageCallCode', 
+                    title : '案均电话码量',
+                    formatter: function(value,index,row){
+                        return revert(value);
+                    }
+                },
+                {
+                    field : 'averageActionCode', 
+                    title : '案均行动码量',
+                    formatter: function(value,index,row){
+                        return revert(value);
+                    }
+                },*/
+
+                {
+                    field : 'selfEffectiveCallCodeNum', 
+                    title : '本人有效电话码量'
+                },
+                {
+                    field : 'thirdEffectiveCallCodeNum', 
+                    title : '三方有效电话码量'
+                },
+                /*{
+                    field : 'averageEffectiveCallCodeNum', 
+                    title : '案均有效电话码量',
+                    formatter: function(value,index,row){
+                        return revert(value);
+                    }
+                },*/
+
+                {
+                    field : 'complaintNum', 
+                    title : '投诉代码量'
+                }]
+            };
+            $.table.init(options);
+            initOrg();
+            $("#heapReportName").text($("#reportName").val());
+            $("#headReportDate").text($("#reportDate").val());
+            $("#headUpdateTime").text($("#updateTime").val());
+        });
+
+        function initOrg() {
+            $.post(
+                taskPrefix + "/initOrg",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            var opt = "<option value='"+data.rows[i].deptId+"'>"+data.rows[i].deptName+"</option>";
+                            $("#orgId").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function revert(value) {
+            if (value == null || value == '' || value==0) {
+                return value;
+            }
+            value = Math.round(value * 100) / 100;
+            return value;
+        }
+
+        function toPercent(value) {
+            if (value == null || value == '' || value==0) {
+                return value;
+            }
+            var str=Number(value * 100).toFixed(1);
+            str+="%";
+            return str;
+        }
+
+        function searchProcess() {
+            var orgId = $("#orgId").val();
+            if (orgId == null || orgId == '') {
+                $.modal.alertWarning("请选择委托方");
+                return;
+            }
+            $("#heapReportName").text($("#reportName").val());
+            $("#headReportDate").text($("#reportDate").val());
+            if (getNowDate() == $("#reportDate").val()) {
+                $("#headUpdateTime").text(dateFormat("YYYY-mm-dd HH:MM:SS", new Date()));
+            } else {
+                $("#headUpdateTime").text($("#reportDate").val() + " 23:59:59");
+            }
+            // $("#headUpdateTime").text($("#updateTime").val());
+            $("#headOrgName").text($("#orgId").find("option:selected").text());
+            $.table.search();
+        }
+
+        function getNowDate() {
+            var date = new Date();
+            var seperator1 = "-";
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentdate = year + seperator1 + month + seperator1 + strDate;
+            return currentdate;
+        }
+
+        function dateFormat(fmt, date) {
+            let ret;
+            const opt = {
+                "Y+": date.getFullYear().toString(),        // 年
+                "m+": (date.getMonth() + 1).toString(),     // 月
+                "d+": date.getDate().toString(),            // 日
+                "H+": date.getHours().toString(),           // 时
+                "M+": date.getMinutes().toString(),         // 分
+                "S+": date.getSeconds().toString()          // 秒
+                // 有其他格式化字符需求可以继续添加，必须转化成字符串
+            };
+            for (let k in opt) {
+                ret = new RegExp("(" + k + ")").exec(fmt);
+                if (ret) {
+                    fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+                };
+            };
+            return fmt;
+        }
+    </script>
+</body>
+</html>

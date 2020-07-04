@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.TemplatesPackageMapper">
+    
+    <resultMap type="com.ruoyi.assetspackage.domain.TemplatesPackage" id="TemplatesPackageResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="url"    column="url"    />
+        <result property="headRowNum"    column="head_row_num"    />
+        <result property="dataRowNum"    column="data_row_num"    />
+        <result property="type"    column="type"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="delflag"    column="delflag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTemplatesPackageVo">
+        select id, name, url, head_row_num, data_row_num, type, org_id, org_name, delflag, create_by, create_time, update_by, update_time from templates_package
+    </sql>
+
+    <select id="selectTemplatesPackageList" parameterType="TemplatesPackage" resultMap="TemplatesPackageResult">
+        <include refid="selectTemplatesPackageVo"/>
+        <where>
+            AND delflag = '0'
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="orgId != null  and orgId != ''"> and org_id = #{orgId}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by = #{updateBy}</if>
+        </where>
+    </select>
+    
+    <select id="selectTemplatesPackageById" parameterType="String" resultMap="TemplatesPackageResult">
+        <include refid="selectTemplatesPackageVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTemplatesPackage" parameterType="TemplatesPackage">
+        insert into templates_package
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="name != null  and name != ''">name,</if>
+            <if test="url != null  and url != ''">url,</if>
+            <if test="headRowNum != null  and headRowNum != ''">head_row_num,</if>
+            <if test="dataRowNum != null  and dataRowNum != ''">data_row_num,</if>
+            <if test="type != null  and type != ''">type,</if>
+            <if test="orgId != null  and orgId != ''">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="delflag != null  and delflag != ''">delflag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="url != null  and url != ''">#{url},</if>
+            <if test="headRowNum != null  and headRowNum != ''">#{headRowNum},</if>
+            <if test="dataRowNum != null  and dataRowNum != ''">#{dataRowNum},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="orgId != null  and orgId != ''">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="delflag != null  and delflag != ''">#{delflag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTemplatesPackage" parameterType="TemplatesPackage">
+        update templates_package
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="url != null  and url != ''">url = #{url},</if>
+            <if test="headRowNum != null  and headRowNum != ''">head_row_num = #{headRowNum},</if>
+            <if test="dataRowNum != null  and dataRowNum != ''">data_row_num = #{dataRowNum},</if>
+            <if test="type != null  and type != ''">type = #{type},</if>
+            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="delflag != null  and delflag != ''">delflag = #{delflag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTemplatesPackageById" parameterType="String">
+        delete from templates_package where id = #{id}
+    </delete>
+
+    <delete id="deleteTemplatesPackageByIds" parameterType="String">
+        update templates_package SET delflag='1'
+        where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectOrgIdByUserId" parameterType="Long" resultType="String">
+        SELECT id FROM org_package t
+        WHERE  t.dept_id = (
+            SELECT b.dept_id FROM  SYS_USER a
+            JOIN sys_dept b ON a.dept_id = b.dept_id
+            where a.user_id = #{userId}
+        )
+    </select>
+
+    <select id="selectTemplateByTemplateName" parameterType="java.util.Map" resultMap="TemplatesPackageResult">
+        <include refid="selectTemplatesPackageVo"/>
+        <where>
+            and name = #{templateName} and type=#{templateType}
+        </where>
+    </select>
+
+</mapper>

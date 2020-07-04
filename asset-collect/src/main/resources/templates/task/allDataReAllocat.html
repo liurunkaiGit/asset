@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('radio表格页')" />
+    <style type="text/css">
+        .fixed-table-pagination .pagination-detail, .fixed-table-pagination div.pagination{
+            display: none;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="user-form" th:object="${tLcTask}">
+					<div class="select-list">
+						<ul>
+							<input name="caseNo" id="caseNo" th:field="*{caseNo}" class="form-control" type="hidden">
+							<input name="orgId" id="orgId"  th:field="*{orgId}" class="form-control" type="hidden">
+							<input name="customName" id="customName" th:field="*{customName}" class="form-control" type="hidden">
+							<input name="taskStatus" id="taskStatus" th:field="*{taskStatus}" class="form-control" type="hidden">
+							<input name="callCodeHistoryListStr" id="callCodeHistoryListStr" th:value="${callCodeHistoryListStr}" class="form-control" type="hidden">
+							<input name="freeSQL" id="freeSQL" th:field="*{freeSQL}" class="form-control" type="hidden">
+
+							<li>
+								登录名称：<input type="text" name="loginName"/>
+							</li>
+							<li>
+								手机号码：<input type="text" name="phonenumber"/>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			<div class="col-sm-12 search-collapse">
+				<form id="rule-form">
+					<div class="select-list">
+						<ul>
+							<li>
+								请选择分配规则：
+								<select name="allocatRule" id="allocatRule"></select>
+							</li>
+							<li>
+								分配案件数量：<input type="text" name="allocatNum" id="allocatNum"/>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table"></table>
+			</div>
+		</div>
+
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var prefix = ctx + "collect/task";
+        var datas = [[${@dict.getType('sys_normal_disable')}]];
+
+        initAllocatRule();
+
+        $(function() {
+            var options = {
+                url: prefix + "/findReAllocatUser",
+		        showSearch: false,
+		        showRefresh: false,
+		        showToggle: false,
+		        showColumns: false,
+				clickToSelect:true,
+                columns: [{
+		            //radio: true
+					checkbox:true
+		        },
+				{
+					field : 'userId', 
+					title : '用户ID'
+				},
+					{
+						title: "序号",
+						formatter: function (value, row, index) {
+							return $.table.serialNumber(index);
+						}
+					},
+				{
+					field : 'loginName',
+					title : '登录名称'
+				},
+				{
+					field : 'userName', 
+					title : '用户姓名'
+				},
+				{
+					field : 'phonenumber',
+					title : '用户手机'
+				},
+				{
+					field : 'email',
+					title : '用户邮箱'
+				},
+				{
+                    field: 'status',
+                    title: '用户状态',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                    	return $.table.selectDictLabel(datas, value);
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function initAllocatRule() {
+			$.post(
+					prefix + "/initAllocatRule",
+					{
+
+					},
+					function(data) {
+						// alert(JSON.stringify(data));
+						if (data.code == 0) {//请求成功
+							for (var i = 0; i < data.rows.length; i++) {
+								if(i == 0){
+									var opt = "<option value='"+data.rows[i].code+"' selected>"+data.rows[i].message+"</option>";
+								} else {
+									var opt = "<option value='"+data.rows[i].code+"'>"+data.rows[i].message+"</option>";
+								}
+								$("#allocatRule").append(opt);
+							}
+						}
+					}
+			);
+		}
+
+        /* 添加用户-选择用户-提交 */
+		function submitHandler() {
+			var rows = $.table.selectFirstColumns();
+			if (rows.length == 0) {
+       			$.modal.alertWarning("请至少选择一个用户");
+       			return;
+       		}
+			var allocatNum = $("#allocatNum").val();
+			// if(allocatNum == null || allocatNum == "") {
+			// 	allocatNum = $("#taskIds").val().split(",").length;
+			// }
+			window.$.modal.loading("数据加载中，请稍后...");
+			$.post(
+				prefix + "/allDataReAllocat",
+				{
+					userId:rows.join(),
+					caseNo: $("#caseNo").val(),
+					customName: $("#customName").val(),
+					taskStatus: $("#taskStatus").val(),
+					orgId: $("#orgId").val(),
+					callCodeHistoryListStr: $("#callCodeHistoryListStr").val(),
+					freeSQL:$("#freeSQL").val(),
+					allocatRule:$("#allocatRule").val(),
+					allocatNum: allocatNum
+				},
+				function(data) {
+					window.$.modal.closeLoading();
+					window.parent.$.table.refresh();
+					window.parent.resetSelectAll();
+					$.modal.close();
+				}
+			)
+		}
+    </script>
+</body>
+</html>

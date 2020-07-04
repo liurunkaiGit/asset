@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('客户资产列表')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+                <form id="formId">
+                    <input type="hidden" name="importBatchNo" id="importBatchNo" th:value="${importBatchNo}"/>
+                </form>
+            <div class="btn-group-sm" id="toolbar" role="group">
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "import/assets";
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "客户资产",
+                clickToSelect:true,
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id',
+                    title : '主键',
+                    visible: false
+                },
+                    {
+                        field : 'orgCasno',
+                        title : '机构案件号'
+                    },
+                    {
+                        field : 'transfertype',
+                        title : '手别'
+                    },
+                    {
+                        field : 'curName',
+                        title : '姓名'
+                    },
+                    {
+                        field : 'rmbYe',
+                        title : '委案金额'
+                    },{
+                        field : 'rcr',
+                        title : '入催日',
+                        formatter: function (value, row, index) {
+                            return formatRcr(value);
+                        }
+                    }]
+            };
+            $.table.init(options);
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        function formatRcr(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+            if (month.length < 2) month = '0' + month;
+            if (day.length < 2) day = '0' + day;
+            return [year, month, day].join('-');
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.TLcScoreMapper">
+    
+    <resultMap type="com.ruoyi.assetspackage.domain.score.TLcScore" id="TLcScoreResult">
+        <result property="id"    column="id"    />
+        <result property="orgCasno"    column="org_casno"    />
+        <result property="score"    column="score"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="isAutoScore"    column="is_auto_score"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTLcScoreVo">
+        select id, org_casno, score, org_id, org_name, import_batch_no, is_auto_score, create_by, create_time, update_by, update_time from t_lc_score
+    </sql>
+
+    <select id="selectTLcScoreList" parameterType="TLcScore" resultMap="TLcScoreResult">
+        <include refid="selectTLcScoreVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="orgCasno != null  and orgCasno != ''"> and org_casno = #{orgCasno}</if>
+            <if test="score != null "> and score = #{score}</if>
+            <if test="orgId != null  and orgId != ''"> and org_id = #{orgId}</if>
+            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+            <if test="isAutoScore != null  and isAutoScore != ''"> and is_auto_score = #{isAutoScore}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by = #{updateBy}</if>
+            <if test="updateTime != null "> and update_time = #{updateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectTLcScoreById" parameterType="Long" resultMap="TLcScoreResult">
+        <include refid="selectTLcScoreVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLcScore" parameterType="TLcScore">
+    insert into t_lc_score
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="id != null ">id,</if>
+        <if test="orgCasno != null  and orgCasno != ''">org_casno,</if>
+        <if test="score != null ">score,</if>
+        <if test="orgId != null  and orgId != ''">org_id,</if>
+        <if test="orgName != null  and orgName != ''">org_name,</if>
+        <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no,</if>
+        <if test="isAutoScore != null  and isAutoScore != ''">is_auto_score,</if>
+        <if test="createBy != null  and createBy != ''">create_by,</if>
+        <if test="createTime != null ">create_time,</if>
+        <if test="updateBy != null  and updateBy != ''">update_by,</if>
+        <if test="updateTime != null ">update_time,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="id != null ">#{id},</if>
+        <if test="orgCasno != null  and orgCasno != ''">#{orgCasno},</if>
+        <if test="score != null ">#{score},</if>
+        <if test="orgId != null  and orgId != ''">#{orgId},</if>
+        <if test="orgName != null  and orgName != ''">#{orgName},</if>
+        <if test="importBatchNo != null  and importBatchNo != ''">#{importBatchNo},</if>
+        <if test="isAutoScore != null  and isAutoScore != ''">#{isAutoScore},</if>
+        <if test="createBy != null  and createBy != ''">#{createBy},</if>
+        <if test="createTime != null ">#{createTime},</if>
+        <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+        <if test="updateTime != null ">#{updateTime},</if>
+    </trim>
+</insert>
+
+    <update id="updateTLcScore" parameterType="TLcScore">
+        update t_lc_score
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orgCasno != null  and orgCasno != ''">org_casno = #{orgCasno},</if>
+            <if test="score != null ">score = #{score},</if>
+            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no = #{importBatchNo},</if>
+            <if test="isAutoScore != null  and isAutoScore != ''">is_auto_score = #{isAutoScore},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcScoreById" parameterType="Long">
+        delete from t_lc_score where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcScoreByIds" parameterType="String">
+        delete from t_lc_score where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into t_lc_score
+        (
+        org_casno,
+        org_id,
+        org_name,
+        import_batch_no,
+        is_auto_score,
+        create_by,
+        create_time
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.orgCasno},
+            #{item.orgId},
+            #{item.orgName},
+            #{item.importBatchNo},
+            #{item.isAutoScore},
+            #{item.createBy},
+            #{item.createTime}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectNotScoreList" parameterType="TLcScore" resultMap="TLcScoreResult">
+        <include refid="selectTLcScoreVo"/>
+        <where>
+            and score is null
+            <if test="orgCasno != null  and orgCasno != ''"> and org_casno = #{orgCasno}</if>
+            <if test="orgId != null  and orgId != ''"> and org_id = #{orgId}</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+            <if test="isAutoScore != null  and isAutoScore != ''"> and is_auto_score = #{isAutoScore}</if>
+        </where>
+        limit 100
+    </select>
+    
+    <update id="batchUpdateScore" parameterType="java.util.List">
+        <foreach collection="TLcScoreList" item="TLcScore" separator=";">
+            update t_lc_score
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="TLcScore.score != null">score = #{TLcScore.score},</if>
+                <if test="TLcScore.updateBy != null">upadte_by = #{TLcScore.updateBy},</if>
+                <if test="TLcScore.updateTime != null">update_time = #{TLcScore.updateTime},</if>
+            </trim>
+            where id = #{TLcScore.id}
+        </foreach>
+    </update>
+
+    <update id="batchUpdateScore2" parameterType="java.util.List">
+        <foreach collection="TLcScoreList" item="TLcScore" separator=";">
+            update t_lc_score
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="TLcScore.score != null">score = #{TLcScore.score},</if>
+                <if test="TLcScore.updateBy != null">update_by = #{TLcScore.updateBy},</if>
+                <if test="TLcScore.updateTime != null">update_time = #{TLcScore.updateTime},</if>
+            </trim>
+            where org_casno = #{TLcScore.orgCasno} and org_id = #{TLcScore.orgId} and import_batch_no = #{TLcScore.importBatchNo}
+        </foreach>
+    </update>
+
+</mapper>

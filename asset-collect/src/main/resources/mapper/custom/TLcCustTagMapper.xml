@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.custom.mapper.TLcCustTagMapper">
+    
+    <resultMap type="com.ruoyi.custom.domain.TLcCustTag" id="TLcCustTagResult">
+        <result property="id"    column="id"    />
+        <result property="customName"    column="custom_name"    />
+        <result property="certificateNo"    column="certificate_no"    />
+        <result property="contactName"    column="contact_name"    />
+        <result property="relation"    column="relation"    />
+        <result property="contactResult"    column="contact_result"    />
+        <result property="collType"    column="coll_type"    />
+        <result property="minCount"    column="min_count"    />
+        <result property="maxCount"    column="max_count"    />
+        <result property="customTag"    column="custom_tag"    />
+        <result property="isUse"    column="is_use"    />
+    </resultMap>
+
+    <sql id="selectTLcCustTagVo">
+        select id, custom_name, certificate_no, contact_name, relation, contact_result, coll_type, min_count, max_count, custom_tag, is_use from t_lc_cust_tag
+    </sql>
+
+    <select id="selectTLcCustTagList" parameterType="com.ruoyi.custom.domain.TLcCustTag" resultMap="TLcCustTagResult">
+        <include refid="selectTLcCustTagVo"/>
+        <where>  
+            <if test="customName != null  and customName != ''"> and custom_name like concat('%', #{customName}, '%')</if>
+            <if test="certificateNo != null  and certificateNo != ''"> and certificate_no = #{certificateNo}</if>
+            <if test="contactName != null  and contactName != ''"> and contact_name like concat('%', #{contactName}, '%')</if>
+            <if test="relation != null "> and relation = #{relation}</if>
+            <if test="contactResult != null  and contactResult != ''"> and contact_result = #{contactResult}</if>
+            <if test="collType != null "> and coll_type = #{collType}</if>
+            <if test="minCount != null "> and min_count = #{minCount}</if>
+            <if test="maxCount != null "> and max_count = #{maxCount}</if>
+            <if test="customTag != null  and customTag != ''"> and custom_tag = #{customTag}</if>
+            <if test="isUse != null "> and is_use = #{isUse}</if>
+        </where>
+    </select>
+    
+    <select id="selectTLcCustTagById" parameterType="Long" resultMap="TLcCustTagResult">
+        <include refid="selectTLcCustTagVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLcCustTag" parameterType="com.ruoyi.custom.domain.TLcCustTag" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_cust_tag
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customName != null  and customName != ''">custom_name,</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no,</if>
+            <if test="contactName != null  and contactName != ''">contact_name,</if>
+            <if test="relation != null ">relation,</if>
+            <if test="contactResult != null  and contactResult != ''">contact_result,</if>
+            <if test="collType != null ">coll_type,</if>
+            <if test="minCount != null ">min_count,</if>
+            <if test="maxCount != null ">max_count,</if>
+            <if test="customTag != null  and customTag != ''">custom_tag,</if>
+            <if test="isUse != null ">is_use,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customName != null  and customName != ''">#{customName},</if>
+            <if test="certificateNo != null  and certificateNo != ''">#{certificateNo},</if>
+            <if test="contactName != null  and contactName != ''">#{contactName},</if>
+            <if test="relation != null ">#{relation},</if>
+            <if test="contactResult != null  and contactResult != ''">#{contactResult},</if>
+            <if test="collType != null ">#{collType},</if>
+            <if test="minCount != null ">#{minCount},</if>
+            <if test="maxCount != null ">#{maxCount},</if>
+            <if test="customTag != null  and customTag != ''">#{customTag},</if>
+            <if test="isUse != null ">#{isUse},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLcCustTag" parameterType="com.ruoyi.custom.domain.TLcCustTag">
+        update t_lc_cust_tag
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="customName != null  and customName != ''">custom_name = #{customName},</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no = #{certificateNo},</if>
+            <if test="contactName != null  and contactName != ''">contact_name = #{contactName},</if>
+            <if test="relation != null ">relation = #{relation},</if>
+            <if test="contactResult != null  and contactResult != ''">contact_result = #{contactResult},</if>
+            <if test="collType != null ">coll_type = #{collType},</if>
+            <if test="minCount != null ">min_count = #{minCount},</if>
+            <if test="maxCount != null ">max_count = #{maxCount},</if>
+            <if test="customTag != null  and customTag != ''">custom_tag = #{customTag},</if>
+            <if test="isUse != null ">is_use = #{isUse},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcCustTagById" parameterType="Long">
+        delete from t_lc_cust_tag where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcCustTagByIds" parameterType="String">
+        delete from t_lc_cust_tag where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

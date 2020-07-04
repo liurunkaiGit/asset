@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('综合信息查询')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <input type="hidden" id="orgId" name="orgId" th:value="${orgId}">
+                        <li>
+                            <p>机构案件号：</p>
+                            <input type="text" name="orgCasno"/>
+                        </li>
+                        <li>
+                            <p>导入批次号：</p>
+                            <input type="text" name="importBatchNo"/>
+                        </li>
+                        <li>
+                            <p>客户名称：</p>
+                            <input type="text" name="curName"/>
+                        </li>
+                        <li>
+                            <p>委案金额：</p>
+                            <input type="text" name="startWaYe" style="width: 64px;"/>
+                            <span>-</span>
+                            <input type="text" name="endWaYe" style="width: 64px;"/>
+                        </li>
+                        <li>
+                            <p>手机号：</p>
+                            <input type="text" name="customerMobile"/>
+                        </li>
+                        <li class="select-time">
+                            <p>导入时间：</p>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="startDate"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="endDate"/>
+                        </li>
+                        <li>
+                            <p>结案状态：</p>
+                            <select type="text" name="closeCase">
+                                <option value="">请选择</option>
+                                <option value="0">未结案</option>
+                                <option value="1">已结案</option>
+                            </select>
+                        </li>
+
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: datetimepicker-js" />
+<script th:inline="javascript">
+    var prefix = ctx + "assetspackage/info";
+    var assetPrefix = ctx + "import/assets";
+    $(function() {
+        var options = {
+            url: assetPrefix + "/list",
+            // onClickCell: onClickCell,
+            modalName: "客户资产",
+            clickToSelect:true,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field : 'id',
+                    title : '主键',
+                    visible: false
+                },
+                {
+                    field : 'orgCasno',
+                    title : '机构案件号'
+                },
+                {
+                    field : 'org',
+                    title : '委托方'
+                },
+                {
+                    field : 'importBatchNo',
+                    title : '导入批次号'
+                },
+                {
+                    field : 'createTime',
+                    title : '导入时间'
+                },
+                {
+                    field : 'transfertype',
+                    title : '手别'
+                },
+                {
+                    field : 'rmbYe',
+                    title : '委案金额'
+                },
+                {
+                    field : 'curName',
+                    title : '姓名'
+                },
+                {
+                    field : 'rcr',
+                    title : '入催日',
+                    formatter: function (value, row, index) {
+                        return formatRcr(value);
+                    }
+                },
+                {
+                    field : 'isExitCollect',
+                    title : '出催状态',
+                    formatter: function (value, row, index) {
+                        if (value == 1) {
+                            return "已出催";
+                        } else if (value == 2) {
+                            return "未出催";
+                        }
+                    }
+                },
+                {
+                    field : 'ajhssj',
+                    title : '出催日'
+                },
+                {
+                    field : 'closeCase',
+                    title : '结案状态',
+                    formatter: function (value, row, index) {
+                        if (value == 0) {
+                            return "未结案";
+                        } else if (value == 1) {
+                            return "已结案";
+                        }
+                    }
+                },
+                {
+                    field : 'closeCaseDate',
+                    title : '结案日期'
+                }
+            ]
+        };
+        $.table.init(options);
+    });
+
+    function formatRcr(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+        return [year, month, day].join('-');
+    }
+</script>
+
+</body>
+</html>

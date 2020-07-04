@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.agent.mapper.ExtPhoneMapper">
+
+    <resultMap type="com.ruoyi.agent.domain.ExtPhone" id="ExtPhoneResult">
+        <result property="id"    column="id"    />
+        <result property="agentid"    column="agentId"    />
+        <result property="skilldesc"    column="skillDesc"    />
+        <result property="dialprefix"    column="dialPrefix"    />
+        <result property="dialcaller"    column="dialCaller"    />
+        <result property="isused"    column="isUsed"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="exonNumGroup"    column="exon_num_group"    />
+        <result property="exonNumGroupId"    column="exon_num_group_id"    />
+        <result property="seatName"    column="seat_name"    />
+        <result property="seatId"    column="seat_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="callPlatform"    column="call_platform"    />
+        <result property="password"    column="password"    />
+        <result property="domain"    column="domain"    />
+    </resultMap>
+
+    <sql id="selectExtPhoneVo">
+        select id, agentId, skillDesc, dialPrefix, dialCaller, proxyUrl, isUsed, create_by, create_time, update_by, update_time, exon_num_group, exon_num_group_id, seat_name, seat_id, org_id, org_name, call_platform, password, domain from ext_phone
+    </sql>
+
+    <select id="selectExtPhoneList" parameterType="com.ruoyi.agent.domain.ExtPhone" resultMap="ExtPhoneResult">
+        <include refid="selectExtPhoneVo"/>
+        <where>
+            <if test="agentid != null  and agentid != ''"> and agentId = #{agentid}</if>
+            <if test="skilldesc != null  and skilldesc != ''"> and skillDesc = #{skilldesc}</if>
+            <if test="dialprefix != null  and dialprefix != ''"> and dialPrefix = #{dialprefix}</if>
+            <if test="dialcaller != null  and dialcaller != ''"> and dialCaller = #{dialcaller}</if>
+            <if test="isused != null  and isused != ''"> and isUsed = #{isused}</if>
+            <if test="exonNumGroup != null  and exonNumGroup != ''"> and exon_num_group = #{exonNumGroup}</if>
+            <if test="exonNumGroupId != null "> and exon_num_group_id = #{exonNumGroupId}</if>
+            <if test="seatName != null  and seatName != ''"> and seat_name like concat('%', #{seatName}, '%')</if>
+            <if test="seatId != null "> and seat_id = #{seatId}</if>
+            <if test="orgName != null  and orgName != ''"> and org_name = #{orgName}</if>
+            <if test="orgId != null "> and org_id = #{orgId}</if>
+            <if test="callPlatform != null  and callPlatform != ''"> and call_platform = #{callPlatform}</if>
+        </where>
+    </select>
+
+    <select id="selectExtPhoneById" parameterType="String" resultMap="ExtPhoneResult">
+        <include refid="selectExtPhoneVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertExtPhone" parameterType="com.ruoyi.agent.domain.ExtPhone">
+        insert into ext_phone
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="agentid != null  and agentid != ''">agentId,</if>
+            <if test="skilldesc != null  and skilldesc != ''">skillDesc,</if>
+            <if test="dialprefix != null  and dialprefix != ''">dialPrefix,</if>
+            <if test="dialcaller != null  and dialcaller != ''">dialCaller,</if>
+            <if test="proxyUrl != null  and proxyUrl != ''">proxyUrl,</if>
+            <if test="isused != null  and isused != ''">isUsed,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="exonNumGroup != null  and exonNumGroup != ''">exon_num_group,</if>
+            <if test="exonNumGroupId != null ">exon_num_group_id,</if>
+            <if test="seatName != null  and seatName != ''">seat_name,</if>
+            <if test="seatId != null ">seat_id,</if>
+            <if test="orgId != null ">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="callPlatform != null  and callPlatform != ''">call_platform,</if>
+            <if test="password != null  and password != ''">password,</if>
+            <if test="domain != null  and domain != ''">domain,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="agentid != null  and agentid != ''">#{agentid},</if>
+            <if test="skilldesc != null  and skilldesc != ''">#{skilldesc},</if>
+            <if test="dialprefix != null  and dialprefix != ''">#{dialprefix},</if>
+            <if test="dialcaller != null  and dialcaller != ''">#{dialcaller},</if>
+            <if test="proxyUrl != null  and proxyUrl != ''">#{proxyUrl},</if>
+            <if test="isused != null  and isused != ''">#{isused},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="exonNumGroup != null  and exonNumGroup != ''">#{exonNumGroup},</if>
+            <if test="exonNumGroupId != null ">#{exonNumGroupId},</if>
+            <if test="seatName != null  and seatName != ''">#{seatName},</if>
+            <if test="seatId != null ">#{seatId},</if>
+            <if test="orgId != null ">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="callPlatform != null  and callPlatform != ''">#{callPlatform},</if>
+            <if test="password != null  and password != ''">#{password},</if>
+            <if test="domain != null  and domain != ''">#{domain},</if>
+         </trim>
+    </insert>
+
+    <update id="updateExtPhone" parameterType="com.ruoyi.agent.domain.ExtPhone">
+        update ext_phone
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="agentid != null  and agentid != ''">agentId = #{agentid},</if>
+            <if test="skilldesc != null  and skilldesc != ''">skillDesc = #{skilldesc},</if>
+            <if test="dialprefix != null  and dialprefix != ''">dialPrefix = #{dialprefix},</if>
+            <if test="dialcaller != null  and dialcaller != ''">dialCaller = #{dialcaller},</if>
+            <if test="proxyUrl != null  and proxyUrl != ''">proxyUrl = #{proxyUrl},</if>
+            <if test="isused != null  and isused != ''">isUsed = #{isused},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="exonNumGroup != null  and exonNumGroup != ''">exon_num_group = #{exonNumGroup},</if>
+            <if test="exonNumGroupId != null ">exon_num_group_id = #{exonNumGroupId},</if>
+            <if test="seatName != null  and seatName != ''">seat_name = #{seatName},</if>
+            <if test="seatName == null or seatName == ''">seat_name = NULL,</if>
+            <if test="seatId != null ">seat_id = #{seatId},</if>
+            <if test="seatId == null ">seat_id = NULL,</if>
+            <if test="orgId != null ">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="callPlatform != null  and callPlatform != ''">call_platform = #{callPlatform},</if>
+            <if test="password != null  and password != ''">password = #{password},</if>
+            <if test="domain != null  and domain != ''">domain = #{domain},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateExtPhoneStatus" parameterType="com.ruoyi.agent.domain.ExtPhone">
+        update ext_phone
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="isused != null  and isused != ''">isUsed = #{isused},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteExtPhoneById" parameterType="String">
+        delete from ext_phone where id = #{id}
+    </delete>
+
+    <delete id="deleteExtPhoneByIds" parameterType="String">
+        delete from ext_phone where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectNoBindUser" parameterType="com.ruoyi.system.domain.SysUser" resultType="com.ruoyi.system.domain.SysUser">
+        SELECT
+        su.user_id AS userId,
+        su.login_name AS loginName,
+        su.user_group AS userGroup,
+        su. STATUS,
+        su.user_name AS userName,
+        (SELECT dept_name  FROM sys_dept t WHERE t.dept_id = su.dept_id) AS deptName,
+        (SELECT GROUP_CONCAT(t2.role_name) FROM sys_user_rolE t,sys_role t2 where t.user_id =su.user_id and t.role_id = t2.role_id) as roleName
+        FROM
+        sys_user su
+        WHERE
+        su.user_id != 1
+        AND su.del_flag != 2
+        AND su. STATUS = 0
+        AND NOT EXISTS (SELECT p.seat_id FROM ext_phone p WHERE su.user_id = p.seat_id AND p.call_platform = #{avatar})
+        <if test="deptIds != null">
+            and dept_id in
+            <foreach collection="deptIds" item="deptId" open="(" close=")" separator=",">
+                #{deptId}
+            </foreach>
+        </if>
+        <if test="loginName != null and loginName != ''">
+            AND su.login_name = #{loginName}
+        </if>
+        <if test="userName != null and userName != ''">
+            AND su.user_name = #{userName}
+        </if>
+        <if test="deptId != null">
+            AND su.dept_id = #{deptId}
+        </if>
+    </select>
+    <select id="selectExtPhoneListBySeatId" parameterType="java.lang.Long" resultMap="ExtPhoneResult">
+        select call_platform from ext_phone where seat_id = #{userId}
+    </select>
+
+</mapper>

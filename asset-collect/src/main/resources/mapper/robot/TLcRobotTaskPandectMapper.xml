@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.robot.mapper.TLcRobotTaskPandectMapper">
+    
+    <resultMap type="com.ruoyi.robot.domain.TLcRobotTaskPandect" id="TLcRobotTaskPandectResult">
+        <result property="id"    column="id"    />
+        <result property="robotTaskId"    column="robot_task_id"    />
+        <result property="taskName"    column="task_name"    />
+        <result property="speechCraftNameId"    column="speech_craft_name_id"    />
+        <result property="speechCraftName"    column="speech_craft_name"    />
+        <result property="robotTaskStatus"    column="robot_task_status"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="robot"    column="robot"    />
+        <result property="callTotalCount"    column="call_total_count"    />
+        <result property="callDoneCount"    column="call_done_count"    />
+        <result property="callCalledCount"    column="call_called_count"    />
+        <result property="callRejectedCount"    column="call_rejected_count"    />
+        <result property="callUnavailableCount"    column="call_unavailable_count"    />
+        <result property="callFromUnavailableCount"    column="call_from_unavailable_count"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="taskStartTime"    column="task_start_time"    />
+        <result property="taskEndTime"    column="task_end_time"    />
+        <result property="callBusyCount"    column="call_busy_count"    />
+        <result property="callMissCount"    column="call_miss_count"    />
+        <result property="callBlankCount"    column="call_blank_count"    />
+        <result property="callClosedCount"    column="call_closed_count"    />
+        <result property="callDownCount"    column="call_down_count"    />
+        <result property="callBlackCount"    column="call_black_count"    />
+        <result property="callFailCount"    column="call_fail_count"    />
+        <result property="callLossCount"    column="call_loss_count"    />
+        <result property="callOverdueCount"    column="call_overdue_count"    />
+    </resultMap>
+
+    <sql id="selectTLcRobotTaskPandectVo">
+        select id, robot_task_id, task_name, speech_craft_name_id, speech_craft_name, robot_task_status, org_id, org_name, robot, call_total_count, call_done_count, call_called_count, call_rejected_count, call_unavailable_count, call_from_unavailable_count, create_by, create_time, task_start_time, task_end_time, call_busy_count, call_miss_count, call_blank_count, call_closed_count, call_down_count, call_black_count, call_fail_count, call_loss_count, call_overdue_count from t_lc_robot_task_pandect
+    </sql>
+
+    <select id="selectTLcRobotTaskPandectList" parameterType="TLcRobotTaskPandect" resultMap="TLcRobotTaskPandectResult">
+        <include refid="selectTLcRobotTaskPandectVo"/>
+        <where>  
+            <if test="robotTaskId != null "> and robot_task_id = #{robotTaskId}</if>
+            <if test="taskName != null  and taskName != ''"> and task_name like concat('%', #{taskName}, '%')</if>
+            <if test="speechCraftNameId != null "> and speech_craft_name_id = #{speechCraftNameId}</if>
+            <if test="speechCraftName != null  and speechCraftName != ''"> and speech_craft_name like concat('%', #{speechCraftName}, '%')</if>
+            <if test="robotTaskStatus != null  and robotTaskStatus != ''"> and robot_task_status = #{robotTaskStatus}</if>
+            <if test="orgId != null "> and org_id = #{orgId}</if>
+            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+            <if test="robot != null  and robot != ''"> and robot = #{robot}</if>
+            <if test="callTotalCount != null "> and call_total_count = #{callTotalCount}</if>
+            <if test="callDoneCount != null "> and call_done_count = #{callDoneCount}</if>
+            <if test="callCalledCount != null "> and call_called_count = #{callCalledCount}</if>
+            <if test="callRejectedCount != null "> and call_rejected_count = #{callRejectedCount}</if>
+            <if test="callUnavailableCount != null "> and call_unavailable_count = #{callUnavailableCount}</if>
+            <if test="callFromUnavailableCount != null "> and call_from_unavailable_count = #{callFromUnavailableCount}</if>
+            <if test="callBusyCount != null "> and call_busy_count = #{callBusyCount}</if>
+            <if test="callMissCount != null "> and call_miss_count = #{callMissCount}</if>
+            <if test="startCreateTime != null">
+                and create_time <![CDATA[>=]]> #{startCreateTime}
+            </if>
+            <if test="endCreateTime != null">
+                and create_time <![CDATA[<=]]> #{endCreateTime}
+            </if>
+            <if test="startTaskStartTime != null">
+                and task_start_time <![CDATA[>=]]> #{startTaskStartTime}
+            </if>
+            <if test="endTaskStartTime != null">
+                and task_start_time <![CDATA[<=]]> #{endTaskStartTime}
+            </if>
+            <if test="startTaskEndTime != null">
+                and task_end_time <![CDATA[>=]]> #{startTaskEndTime}
+            </if>
+            <if test="endTaskEndTime != null">
+                and task_end_time <![CDATA[<=]]> #{endTaskEndTime}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+    
+    <select id="selectTLcRobotTaskPandectById" parameterType="Long" resultMap="TLcRobotTaskPandectResult">
+        <include refid="selectTLcRobotTaskPandectVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLcRobotTaskPandect" parameterType="TLcRobotTaskPandect" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_robot_task_pandect
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="robotTaskId != null ">robot_task_id,</if>
+            <if test="taskName != null  and taskName != ''">task_name,</if>
+            <if test="speechCraftNameId != null ">speech_craft_name_id,</if>
+            <if test="speechCraftName != null  and speechCraftName != ''">speech_craft_name,</if>
+            <if test="robotTaskStatus != null  and robotTaskStatus != ''">robot_task_status,</if>
+            <if test="orgId != null ">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="robot != null  and robot != ''">robot,</if>
+            <if test="callTotalCount != null ">call_total_count,</if>
+            <if test="callDoneCount != null ">call_done_count,</if>
+            <if test="callCalledCount != null ">call_called_count,</if>
+            <if test="callRejectedCount != null ">call_rejected_count,</if>
+            <if test="callUnavailableCount != null ">call_unavailable_count,</if>
+            <if test="callFromUnavailableCount != null ">call_from_unavailable_count,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="taskStartTime != null ">task_start_time,</if>
+            <if test="taskEndTime != null ">task_end_time,</if>
+            <if test="callBusyCount != null ">call_busy_count,</if>
+            <if test="callMissCount != null ">call_miss_count,</if>
+            <if test="callBlankCount != null ">call_blank_count,</if>
+            <if test="callClosedCount != null ">call_closed_count,</if>
+            <if test="callDownCount != null ">call_down_count,</if>
+            <if test="callBlackCount != null ">call_black_count,</if>
+            <if test="callFailCount != null ">call_fail_count,</if>
+            <if test="callLossCount != null ">call_loss_count,</if>
+            <if test="callOverdueCount != null ">call_overdue_count,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="robotTaskId != null ">#{robotTaskId},</if>
+            <if test="taskName != null  and taskName != ''">#{taskName},</if>
+            <if test="speechCraftNameId != null ">#{speechCraftNameId},</if>
+            <if test="speechCraftName != null  and speechCraftName != ''">#{speechCraftName},</if>
+            <if test="robotTaskStatus != null  and robotTaskStatus != ''">#{robotTaskStatus},</if>
+            <if test="orgId != null ">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="robot != null  and robot != ''">#{robot},</if>
+            <if test="callTotalCount != null ">#{callTotalCount},</if>
+            <if test="callDoneCount != null ">#{callDoneCount},</if>
+            <if test="callCalledCount != null ">#{callCalledCount},</if>
+            <if test="callRejectedCount != null ">#{callRejectedCount},</if>
+            <if test="callUnavailableCount != null ">#{callUnavailableCount},</if>
+            <if test="callFromUnavailableCount != null ">#{callFromUnavailableCount},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="taskStartTime != null ">#{taskStartTime},</if>
+            <if test="taskEndTime != null ">#{taskEndTime},</if>
+            <if test="callBusyCount != null ">#{callBusyCount},</if>
+            <if test="callMissCount != null ">#{callMissCount},</if>
+            <if test="callBlankCount != null ">#{callBlankCount},</if>
+            <if test="callClosedCount != null ">#{callClosedCount},</if>
+            <if test="callDownCount != null ">#{callDownCount},</if>
+            <if test="callBlackCount != null ">#{callBlackCount},</if>
+            <if test="callFailCount != null ">#{callFailCount},</if>
+            <if test="callLossCount != null ">#{callLossCount},</if>
+            <if test="callOverdueCount != null ">#{callOverdueCount},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLcRobotTaskPandect" parameterType="TLcRobotTaskPandect">
+        update t_lc_robot_task_pandect
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="robotTaskId != null ">robot_task_id = #{robotTaskId},</if>
+            <if test="taskName != null  and taskName != ''">task_name = #{taskName},</if>
+            <if test="speechCraftNameId != null ">speech_craft_name_id = #{speechCraftNameId},</if>
+            <if test="speechCraftName != null  and speechCraftName != ''">speech_craft_name = #{speechCraftName},</if>
+            <if test="robotTaskStatus != null  and robotTaskStatus != ''">robot_task_status = #{robotTaskStatus},</if>
+            <if test="orgId != null ">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="robot != null  and robot != ''">robot = #{robot},</if>
+            <if test="callTotalCount != null ">call_total_count = #{callTotalCount},</if>
+            <if test="callDoneCount != null ">call_done_count = #{callDoneCount},</if>
+            <if test="callCalledCount != null ">call_called_count = #{callCalledCount},</if>
+            <if test="callRejectedCount != null ">call_rejected_count = #{callRejectedCount},</if>
+            <if test="callUnavailableCount != null ">call_unavailable_count = #{callUnavailableCount},</if>
+            <if test="callFromUnavailableCount != null ">call_from_unavailable_count = #{callFromUnavailableCount},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="taskStartTime != null ">task_start_time = #{taskStartTime},</if>
+            <if test="taskEndTime != null ">task_end_time = #{taskEndTime},</if>
+            <if test="callBusyCount != null ">call_busy_count = #{callBusyCount},</if>
+            <if test="callMissCount != null ">call_miss_count = #{callMissCount},</if>
+            <if test="callBlankCount != null ">call_blank_count = #{callBlankCount},</if>
+            <if test="callClosedCount != null ">call_closed_count = #{callClosedCount},</if>
+            <if test="callDownCount != null ">call_down_count = #{callDownCount},</if>
+            <if test="callBlackCount != null ">call_black_count = #{callBlackCount},</if>
+            <if test="callFailCount != null ">call_fail_count = #{callFailCount},</if>
+            <if test="callLossCount != null ">call_loss_count = #{callLossCount},</if>
+            <if test="callOverdueCount != null ">call_overdue_count = #{callOverdueCount},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateRobotTaskPandectStatusByRobotTaskId" parameterType="com.ruoyi.robot.domain.TLcRobotTaskPandect">
+        update t_lc_robot_task_pandect set robot_task_status = #{robotTaskStatus} where robot_task_id = #{robotTaskId}
+    </update>
+
+    <delete id="deleteTLcRobotTaskPandectById" parameterType="Long">
+        delete from t_lc_robot_task_pandect where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcRobotTaskPandectByIds" parameterType="String">
+        delete from t_lc_robot_task_pandect where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectTLcRobotTaskPandectByRobotTaskId" parameterType="java.lang.Integer" resultMap="TLcRobotTaskPandectResult">
+        <include refid="selectTLcRobotTaskPandectVo"/>
+        where robot_task_id = #{robotTaskId}
+    </select>
+    
+</mapper>

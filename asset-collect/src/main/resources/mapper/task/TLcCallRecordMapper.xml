@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.task.mapper.TLcCallRecordMapper">
+
+    <resultMap id="TLcCallRecordResult" type="com.ruoyi.task.domain.TLcCallRecord">
+        <result property="id" column="id"/>
+        <result property="certificateNo" column="certificate_no"/>
+        <result property="caseNo" column="case_no"/>
+        <result property="contactName" column="contact_name"/>
+        <result property="phone" column="phone"/>
+        <result property="contactRelation" column="contact_relation"/>
+        <result property="callStartTime" column="call_start_time"/>
+        <result property="callEndTime" column="call_end_time"/>
+        <result property="callLen" column="call_len"/>
+        <result property="callSign" column="call_sign"/>
+        <result property="callResult" column="call_result"/>
+        <result property="callRadioLocation" column="call_radio_location"/>
+        <result property="callRadio" column="call_radio"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="findDate" column="find_date"/>
+        <result property="remark" column="remark"/>
+        <result property="platform" column="platform"/>
+        <result property="agentName" column="agent_name"/>
+        <result property="type" column="type"/>
+        <result property="star" column="star"/>
+        <result property="makeCallTime" column="make_call_time"/>
+        <result property="orgId" column="org_id"/>
+        <result property="orgName" column="org_name"/>
+        <result property="createName" column="user_name"/>
+        <result property="loginName" column="login_name"/>
+    </resultMap>
+
+    <sql id="selectTLcCallRecordVo">
+        select id, case_no,  contact_name, phone, contact_relation, call_start_time, call_end_time, call_len, call_sign, call_result, call_radio_location, call_radio, create_time, create_by, remark, platform, star, type from t_lc_call_record
+    </sql>
+
+    <sql id="SELECT_CALL_RECORD">
+        t.id,
+        t.case_no,
+        t.contact_name,
+        t.phone,
+        t.contact_relation,
+        t.call_start_time,
+        t.call_end_time,
+        t.call_len/1000 as call_len,
+        t.call_sign,
+        t.call_result,
+        t.call_radio_location,
+        t.call_radio,
+        t.remark,
+        t.create_time,
+        t.create_by,
+        t.find_date,
+        t.platform,
+        t.type,
+        t.platform,
+        t.star,
+        t.make_call_time
+    </sql>
+
+    <select id="selectTLcCallRecordList" parameterType="com.ruoyi.task.domain.TLcCallRecord" resultMap="TLcCallRecordResult">
+        SELECT
+        re.case_no,
+        ta.custom_name as customName,
+        ta.certificate_no,
+        ta.enter_coll_date AS enterCollDate,
+        ta.arrears_total AS arrearsTotal,
+        ta.close_case_yhje AS closeCaseYhje,
+        ta.overdue_days AS overdueDays,
+        re.contact_name,
+        re.contact_relation,
+        re.phone,
+        (SELECT su.user_name FROM sys_user su WHERE re.create_by = su.user_id) AS agent_name,
+        CONCAT(re.call_sign,'(',re.call_result,')') AS call_sign,
+        re.find_date,
+        re.remark,
+        re.create_time,
+        re.call_start_time,
+        re.call_end_time,
+        re.call_len / 1000 AS call_len,
+        re.call_radio_location
+        FROM
+        t_lc_call_record re,
+        t_lc_task ta
+        WHERE
+        re.case_no = ta.case_no
+        AND ta.org_id = #{orgId}
+        <if test="startCreateTime != null">
+            AND re.create_time <![CDATA[>=]]> #{startCreateTime}
+        </if>
+        <if test="endCreateTime != null">
+            AND re.create_time <![CDATA[<=]]> #{endCreateTime}
+        </if>
+        <if test="startCallStartTime != null">
+            AND re.call_start_time <![CDATA[>=]]> #{startCallStartTime}
+        </if>
+        <if test="endCallStartTime != null">
+            AND re.call_start_time <![CDATA[<=]]> #{endCallStartTime}
+        </if>
+        <if test="startCallLen != null">
+            AND re.call_len <![CDATA[>=]]> #{startCallLen}
+        </if>
+        <if test="endCallLen != null">
+            AND re.call_len <![CDATA[<=]]> #{endCallLen}
+        </if>
+    </select>
+
+    <select id="selectTLcCallRecordById" parameterType="Long" resultMap="TLcCallRecordResult">
+        <include refid="selectTLcCallRecordVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTLcCallRecord" parameterType="com.ruoyi.task.domain.TLcCallRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_call_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <!--<if test="certificateNo != null  and certificateNo != ''">certificate_no,</if>-->
+            <if test="caseNo != null  and caseNo != ''">case_no,</if>
+            <if test="contactName != null  and contactName != ''">contact_name,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="contactRelation != null ">contact_relation,</if>
+            <if test="callStartTime != null ">call_start_time,</if>
+            <if test="callEndTime != null ">call_end_time,</if>
+            <if test="callLen != null ">call_len,</if>
+            <if test="callSign != null ">call_sign,</if>
+            <if test="callResult != null  and callResult != ''">call_result,</if>
+            <if test="callRadioLocation != null  and callRadioLocation != ''">call_radio_location,</if>
+            <if test="callRadio != null  and callRadio != ''">call_radio,</if>
+            create_time,
+            <if test="createBy != null ">create_by,</if>
+            <if test="findDate != null  and findDate != ''">find_date,</if>
+            <if test="remark != null ">remark,</if>
+            <if test="platform != null ">platform,</if>
+            <if test="type != null ">type,</if>
+            <if test="agentName != null and agentName != ''">agent_name,</if>
+            <if test="makeCallTime != null">make_call_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <!--<if test="certificateNo != null  and certificateNo != ''">#{certificateNo},</if>-->
+            <if test="caseNo != null  and caseNo != ''">#{caseNo},</if>
+            <if test="contactName != null  and contactName != ''">#{contactName},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="contactRelation != null ">#{contactRelation},</if>
+            <if test="callStartTime != null ">#{callStartTime},</if>
+            <if test="callEndTime != null ">#{callEndTime},</if>
+            <if test="callLen != null ">#{callLen},</if>
+            <if test="callSign != null ">#{callSign},</if>
+            <if test="callResult != null  and callResult != ''">#{callResult},</if>
+            <if test="callRadioLocation != null  and callRadioLocation != ''">#{callRadioLocation},</if>
+            <if test="callRadio != null  and callRadio != ''">#{callRadio},</if>
+            NOW(),
+            <if test="createBy != null ">#{createBy},</if>
+            <if test="findDate != null  and findDate != ''">#{findDate},</if>
+            <if test="remark != null ">#{remark},</if>
+            <if test="platform != null ">#{platform},</if>
+            <if test="type != null ">#{type},</if>
+            <if test="agentName != null and agentName != ''">#{agentName},</if>
+            <if test="makeCallTime != null">#{makeCallTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTLcCallRecord" parameterType="com.ruoyi.task.domain.TLcCallRecord">
+        update t_lc_call_record
+        <trim prefix="SET" suffixOverrides=",">
+            <!--<if test="certificateNo != null  and certificateNo != ''">certificate_no = #{certificateNo},</if>-->
+            <if test="caseNo != null  and caseNo != ''">case_no = #{caseNo},</if>
+            <if test="contactName != null  and contactName != ''">contact_name = #{contactName},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="contactRelation != null ">contact_relation = #{contactRelation},</if>
+            <if test="callStartTime != null ">call_start_time = #{callStartTime},</if>
+            <if test="callEndTime != null ">call_end_time = #{callEndTime},</if>
+            <if test="callLen != null and callLen != ''">call_len = #{callLen},</if>
+            <if test="callSign != null ">call_sign = #{callSign},</if>
+            <if test="callResult != null  and callResult != ''">call_result = #{callResult},</if>
+            <if test="callRadioLocation != null  and callRadioLocation != ''">call_radio_location = #{callRadioLocation},</if>
+            <if test="callRadio != null  and callRadio != ''">call_radio = #{callRadio},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="createBy != null ">create_by = #{createBy},</if>
+            <if test="findDate != null  and findDate != ''">find_date = #{findDate},</if>
+            <if test="remark != null ">remark = #{remark},</if>
+            <if test="platform != null ">platform = #{platform},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcCallRecordById" parameterType="Long">
+        delete from t_lc_call_record where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcCallRecordByIds" parameterType="String">
+        delete from t_lc_call_record where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="findCallRecordByCertificateNo" parameterType="java.lang.String" resultMap="TLcCallRecordResult">
+        <include refid="selectTLcCallRecordVo"/>
+        where certificate_no = #{certificateNo}
+        ORDER BY create_time desc
+    </select>
+
+    <select id="findCallRecordByCaseNo" parameterType="java.lang.String" resultMap="TLcCallRecordResult">
+        SELECT
+        CASE t.agent_name
+        WHEN '-1' THEN '机器人'
+        ELSE t.agent_name
+        END AS agent_name,
+        t4.dict_label AS dictLabel,
+        <include refid="SELECT_CALL_RECORD"/>
+        FROM t_lc_call_record t
+        LEFT JOIN sys_dict_data t4 ON t4.dict_value = t.call_sign
+        WHERE case_no = #{caseNo}
+        ORDER BY t.create_time desc
+    </select>
+
+    <select id="findListenCallRecord" parameterType="com.ruoyi.task.domain.TLcCallRecord" resultMap="TLcCallRecordResult">
+        SELECT DISTINCT t.case_no,tt.org_name,tt.org_id,u.user_name,u.login_name,
+        t.id,
+        t.contact_name,
+        t.phone,
+        t.contact_relation,
+        t.call_start_time,
+        t.call_end_time,
+        t.call_len/1000 as call_len,
+        t.call_sign,
+        t.call_result,
+        t.call_radio_location,
+        t.call_radio,
+        t.remark,
+        t.create_time,
+        t.create_by,
+        t.find_date,
+        t.type,
+        t.platform,
+        t.star
+        from t_lc_call_record t,t_lc_duncase tt,sys_user u
+        <where>
+            t.case_no=tt.case_no and t.create_by = u.user_id
+            and t.call_radio_location is not null
+            <if test="caseNo != null  and caseNo != ''">and t.case_no = #{caseNo}</if>
+            <if test="orgId != null  and orgId != ''">and tt.org_id = #{orgId}</if>
+            <if test="contactName != null  and contactName != ''">and t.contact_name like concat('%', #{contactName},'%')</if>
+            <if test="phone != null  and phone != ''">and t.phone = #{phone}</if>
+            <if test="contactRelation != null ">and t.contact_relation = #{contactRelation}</if>
+            <if test="callSign != null ">and t.call_sign = #{callSign}</if>
+            <if test="callResult != null  and callResult != ''">and t.call_result = #{callResult}</if>
+            <if test="platform != null  and platform != ''">and t.platform = #{platform}</if>
+            <if test="callStartTime != null">and t.call_start_time <![CDATA[>=]]> #{callStartTime}</if>
+            <if test="callEndTime != null">and t.call_start_time <![CDATA[<=]]> #{callEndTime}</if>
+            <if test="startCallLen != null  and startCallLen != ''">and t.call_len <![CDATA[>=]]> #{startCallLen}</if>
+            <if test="endCallLen != null  and endCallLen != ''">and t.call_len <![CDATA[<=]]> #{endCallLen}</if>
+            <if test="createName != null  and createName != ''">and u.user_name like concat('%', #{createName},'%')</if>
+        </where>
+    </select>
+
+    <update id="updateStar" parameterType="com.ruoyi.task.domain.TLcCallRecord">
+        update t_lc_call_record set star=#{star} where id=#{id}
+    </update>
+
+    <select id="findTLcCallRecordListByDate" parameterType="com.ruoyi.task.domain.TLcCallRecord" resultMap="TLcCallRecordResult">
+        SELECT r.id,r.case_no,r.platform,r.call_radio_location,t.org_id,t.org_name FROM t_lc_call_record r,t_lc_task t WHERE r.case_no = t.case_no
+        AND r.call_radio_location is NOT NULL AND r.call_radio_location != '' AND r.platform IS NOT NULL
+        AND t.task_status = 2
+        <!--<if test="platform != null">
+            AND r.platform IN
+            <foreach collection="platFormList"  item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>-->
+        <if test="startCreateTime != null">
+            AND r.create_time <![CDATA[>=]]> #{startCreateTime}
+        </if>
+        <if test="endCreateTime != null">
+            AND r.create_time <![CDATA[<=]]> #{endCreateTime}
+        </if>
+        ORDER BY r.create_time ASC
+    </select>
+
+    <resultMap id="mapResult" type="java.util.LinkedHashMap">
+        <result property="id" column="id"/>
+        <result property="contactName" column="contact_name"/>
+        <result property="phone" column="phone"/>
+        <result property="contactRelation" column="contact_relation"/>
+        <result property="callStartTime" column="call_start_time"/>
+        <result property="callEndTime" column="call_end_time"/>
+        <result property="callLen" column="call_len"/>
+        <result property="callSign" column="call_sign"/>
+        <result property="callResult" column="call_result"/>
+        <result property="callRadioLocation" column="call_radio_location"/>
+        <result property="callRadio" column="call_radio"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="caseNo" column="case_no"/>
+        <result property="platform" column="platform"/>
+        <result property="findDate" column="find_date"/>
+        <result property="agentName" column="agent_name"/>
+        <result property="star" column="star"/>
+        <result property="type" column="type"/>
+    </resultMap>
+
+    <select id="selectCallRecordByTime" resultMap="mapResult">
+        select id, contact_name, phone, contact_relation,  call_start_time, call_end_time,call_len, call_sign, call_result,call_radio_location,call_radio,create_time,
+        create_by,case_no,platform,find_date,agent_name,star,type from t_lc_call_record
+        where 1 = 1
+        <if test="createTime != null">
+            AND create_time <![CDATA[>=]]> #{createTime}
+        </if>
+        order by id desc
+        limit #{pnum},#{psize}
+    </select>
+
+    <select id="selectCallRecordCount" resultType="java.lang.Integer">
+        select count(1) from t_lc_call_record
+        where 1 = 1
+        <if test="createTime != null">
+            AND create_time <![CDATA[>=]]> #{createTime}
+        </if>
+    </select>
+
+</mapper>

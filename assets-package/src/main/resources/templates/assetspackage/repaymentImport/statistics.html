@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('导入统计')" />
+    <th:block th:include="include :: datetimepicker-css" />
+    <style>
+        #formId{
+            position: absolute;
+            top: 100px;
+            left: 30%;
+            font-size: 15px;
+        }
+        .form-control{
+            font-size: 24px;
+            border: 0px;
+        }
+        .btn{
+            font-size: 12px;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal" id="formId" >
+        <input id = "importBatchNo" name="importBatchNo" th:value="${importBatchNo}" type="hidden">
+        <div class="form-group">
+            <div class="col-sm-8">
+                <input id="normalTotalSize" value="" class="form-control" type="text" disabled>
+            </div>
+            <a id="normalTotalSizeBtn" class="btn btn-success" onclick="add()" >
+                <i class="fa fa-plus"></i> 新增
+            </a>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-8">
+                <input id="exectionSize" value="" class="form-control" type="text" disabled>
+            </div>
+            <a class="btn btn-danger multiple" onclick="toStatisticsDetail(1)" >
+                <i class="fa fa-plus"></i> 查看
+            </a>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-8">
+                <input id="notExistsSize" value="" class="form-control" type="text" disabled>
+            </div>
+            <a  class="btn btn-warning" onclick="toStatisticsDetail(2)" >
+                <i class="fa fa-plus"></i> 查看
+            </a>
+        </div>
+       <!-- <div class="form-group">
+            <div class="col-sm-8">
+                <input id="closeCaseSize" value="" class="form-control" type="text" disabled>
+            </div>
+            <a class="btn btn-primary" onclick="toStatisticsDetail(3);" >
+                <i class="fa fa-plus"></i> 查看
+            </a>
+        </div>-->
+    </form>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: datetimepicker-js" />
+<script type="text/javascript">
+    var prefix = ctx + "assetspackage/repaymentImport";
+    $(function () {
+        var pch = $("#importBatchNo").val();
+        $.modal.loading("数据加载中，请稍后...");
+        $.ajax({
+            url: prefix+"/checkData",
+            dataType: "json",
+            type: "post",
+            data:{importBatchNo:pch},
+            success:function(data){
+                $.modal.closeLoading();
+                var result = JSON.parse(data.msg);
+                var exectionSize = result.exectionSize;
+                var notExistsSize = result.notExistsSize;
+                var closeCaseSize = result.closeCaseSize;
+                var normalTotalSize = result.normalTotalSize;
+                $("#normalTotalSize").val("需要导入"+normalTotalSize+"条");
+                $("#exectionSize").val("数据异常"+exectionSize+"条");
+                $("#notExistsSize").val("数据不存在"+notExistsSize+"条");
+                $("#closeCaseSize").val("已经结案"+closeCaseSize+"条");
+                if(normalTotalSize=="0"){
+                    $("#normalTotalSizeBtn").attr('disabled','true');
+                    $("#normalTotalSizeBtn").css('pointer-events','none');
+                }
+            }
+        });
+
+
+    });
+
+
+
+
+    $("#form-assetspackage-add").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-assetspackage-add').serialize());
+        }
+    }
+    
+    function add() {
+        $("#normalTotalSizeBtn").attr('disabled','true');
+        $("#normalTotalSizeBtn").css('pointer-events','none');
+        $.modal.loading("操作中，请稍后...");
+        var pch = $("#importBatchNo").val();
+        $.ajax({
+            url: prefix+"/insert",
+            dataType: "json",
+            type: "post",
+            data:{importBatchNo:pch},
+            success:function(data){
+                $.modal.closeLoading();
+                var result = data.msg;
+                $.modal.alertSuccess(result);
+                $("#normalTotalSizeBtn").attr('disabled','true');
+                $("#normalTotalSizeBtn").css('pointer-events','none');
+
+            }
+        });
+    }
+
+
+    function toStatisticsDetail(toType) {
+        var pch = $("#importBatchNo").val();
+        var url = prefix+"/toStatisticsDetail/"+toType+"?importBatchNo="+pch;
+        var width = "600";
+        var height = $(window).height() - 80;
+        var options = {
+            title:  "查看详情窗口",
+            width: width,
+            height: height,
+            url: url,
+            btn: ['关闭'],
+            yes: function (index, layero) {
+                layer.close(index);
+            }
+        };
+        $.modal.openOptions(options);
+
+    }
+
+</script>
+</body>
+</html>

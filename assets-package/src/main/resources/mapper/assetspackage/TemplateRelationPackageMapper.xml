@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.TemplateRelationPackageMapper">
+    
+    <resultMap type="com.ruoyi.assetspackage.domain.TemplateRelationPackage" id="TemplateRelationPackageResult">
+        <result property="id"    column="id"    />
+        <result property="systemTemplateName"    column="system_template_name"    />
+        <result property="customerTemplateName"    column="customer_template_name"    />
+        <result property="templateId"    column="template_id"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectTemplateRelationPackageVo">
+        select id, system_template_name, customer_template_name, template_id, org_id, create_by, create_time from template_relation_package
+    </sql>
+
+    <select id="selectTemplateRelationPackageList" parameterType="TemplateRelationPackage" resultMap="TemplateRelationPackageResult">
+        <include refid="selectTemplateRelationPackageVo"/>
+        <where>  
+            <if test="systemTemplateName != null  and systemTemplateName != ''"> and system_template_name like concat('%', #{systemTemplateName}, '%')</if>
+            <if test="customerTemplateName != null  and customerTemplateName != ''"> and customer_template_name like concat('%', #{customerTemplateName}, '%')</if>
+            <if test="templateId != null  and templateId != ''"> and template_id = #{templateId}</if>
+            <if test="orgId != null  and orgId != ''"> and org_id = #{orgId}</if>
+        </where>
+    </select>
+    
+    <select id="selectTemplateRelationPackageById" parameterType="String" resultMap="TemplateRelationPackageResult">
+        <include refid="selectTemplateRelationPackageVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTemplateRelationPackage" parameterType="TemplateRelationPackage">
+        insert into template_relation_package
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="systemTemplateName != null  and systemTemplateName != ''">system_template_name,</if>
+            <if test="customerTemplateName != null  and customerTemplateName != ''">customer_template_name,</if>
+            <if test="templateId != null  and templateId != ''">template_id,</if>
+            <if test="orgId != null  and orgId != ''">org_id,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="systemTemplateName != null  and systemTemplateName != ''">#{systemTemplateName},</if>
+            <if test="customerTemplateName != null  and customerTemplateName != ''">#{customerTemplateName},</if>
+            <if test="templateId != null  and templateId != ''">#{templateId},</if>
+            <if test="orgId != null  and orgId != ''">#{orgId},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTemplateRelationPackage" parameterType="TemplateRelationPackage">
+        update template_relation_package
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="systemTemplateName != null  and systemTemplateName != ''">system_template_name = #{systemTemplateName},</if>
+            <if test="customerTemplateName != null  and customerTemplateName != ''">customer_template_name = #{customerTemplateName},</if>
+            <if test="templateId != null  and templateId != ''">template_id = #{templateId},</if>
+            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTemplateRelationPackageById" parameterType="String">
+        delete from template_relation_package where id = #{id}
+    </delete>
+
+    <delete id="deleteTemplateRelationPackageByIds" parameterType="String">
+        delete from template_relation_package where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteTemplateRelationPackageByTemplateId" parameterType="String">
+        delete from template_relation_package where template_id = #{templateId}
+    </delete>
+
+    <select id="selectTemplateRelationPackageListBytemplateId" parameterType="String" resultMap="TemplateRelationPackageResult">
+        <include refid="selectTemplateRelationPackageVo"/>
+        where template_id = #{templateId}
+    </select>
+
+    <select id="selectFreeTemplateRelationBytemplateId" parameterType="String" resultType="java.lang.String">
+        select customer_template_name from template_relation_package
+        where template_id = #{templateId}
+        and system_template_name='自由导入'
+    </select>
+    
+</mapper>

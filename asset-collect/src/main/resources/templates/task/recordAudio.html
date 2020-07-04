@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+
+    <link th:href="@{/css/audio/audioplayer.css}" rel="stylesheet"/>
+    <link th:href="@{/css/audio/demo.css}" rel="stylesheet"/>
+    <link th:href="@{/css/audio/reset.css}" rel="stylesheet"/>
+
+
+    <script th:src="@{/ajax/libs/agentjs/jquery.min.js}"></script>
+    <script th:src="@{/js/audioplayer.js}"></script>
+
+    <th:block th:include="include :: header('播放')" />
+
+    <style>
+        body{
+            background-color: #23c6c8;
+            overflow-y: hidden;
+        }
+        #wrapper{
+            background-color: #23c6c8;
+            padding: 7.125em 1.25em;
+            height: 200px;
+            overflow-y: hidden;
+        }
+    </style>
+</head>
+<body>
+    <!--<div class="wrapper wrapper-content animated fadeInRight ibox-content" style="display: none;">
+
+    </div>-->
+    <div id="wrapper" style="top:100px;left:50px;">
+        <form class="form-horizontal m" id="form" >
+            <input id="callRadioLocation" name="callRadioLocation" type="hidden" th:value="${callRadioLocation}" />
+        </form>
+        <audio preload="auto" controls>
+            <source id="sc" src="">
+        </audio>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            var callRadioLocation = $("#callRadioLocation").val();
+            var source = document.getElementsByTagName('source')[0];
+            // source.src ="http://139.224.189.191:8888"+callRadioLocation;
+            source.src =callRadioLocation;
+            $( 'audio' ).audioPlayer();
+        });
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.modal.close();
+            }
+        }
+
+
+
+    </script>
+</body>
+</html>

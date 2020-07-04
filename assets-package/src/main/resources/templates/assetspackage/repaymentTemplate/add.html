@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增还款模板管理')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-assetspackage-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">模板名称：</label>
+                <div class="col-sm-8">
+                    <input name="name" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">模板URL：</label>
+                <div class="col-sm-8">
+                    <input name="url" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">表头行：</label>
+                <div class="col-sm-8">
+                    <input name="headRowNum" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">数据起始行：</label>
+                <div class="col-sm-8">
+                    <input name="dataRowNum" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机构id：</label>
+                <div class="col-sm-8">
+                    <input name="orgId" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "assetspackage/assetspackage"
+        $("#form-assetspackage-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-assetspackage-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

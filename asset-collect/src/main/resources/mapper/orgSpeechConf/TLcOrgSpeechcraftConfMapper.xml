@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.orgSpeechConf.mapper.TLcOrgSpeechcraftConfMapper">
+    
+    <resultMap type="com.ruoyi.orgSpeechConf.domain.TLcOrgSpeechcraftConf" id="TLcOrgSpeechcraftConfResult">
+        <result property="id"    column="id"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="concurrentValue"    column="concurrent_value"    />
+        <result property="speechcraftId"    column="speechcraft_id"    />
+        <result property="speechcraftName"    column="speechcraft_name"    />
+        <result property="sceneDefId"    column="scene_def_id"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="startCallTime"    column="start_call_time"    />
+        <result property="endCallTime"    column="end_call_time"    />
+        <result property="companyId"    column="company_id"    />
+        <result property="speechcraftVariable"    column="speechcraft_variable"    />
+    </resultMap>
+
+    <sql id="selectTLcOrgSpeechcraftConfVo">
+        select id, org_id, org_name, concurrent_value, speechcraft_id, speechcraft_name, scene_def_id, del_flag, create_by, create_time, update_by, update_time, start_call_time, end_call_time, company_id, speechcraft_variable from t_lc_org_speechcraft_conf
+    </sql>
+
+    <select id="selectTLcOrgSpeechcraftConfList" parameterType="com.ruoyi.orgSpeechConf.domain.TLcOrgSpeechcraftConf" resultMap="TLcOrgSpeechcraftConfResult">
+        <include refid="selectTLcOrgSpeechcraftConfVo"/>
+        where del_flag = 2
+        <if test="orgId != null "> and org_id = #{orgId}</if>
+        <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+        <if test="concurrentValue != null "> and concurrent_value = #{concurrentValue}</if>
+        <if test="speechcraftId != null  and speechcraftId != ''"> and speechcraft_id = #{speechcraftId}</if>
+        <if test="speechcraftName != null  and speechcraftName != ''"> and speechcraft_name like concat('%', #{speechcraftName}, '%')</if>
+        order by update_time desc
+    </select>
+    
+    <select id="selectTLcOrgSpeechcraftConfById" parameterType="Long" resultMap="TLcOrgSpeechcraftConfResult">
+        <include refid="selectTLcOrgSpeechcraftConfVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLcOrgSpeechcraftConf" parameterType="com.ruoyi.orgSpeechConf.domain.TLcOrgSpeechcraftConf" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_org_speechcraft_conf
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orgId != null ">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="concurrentValue != null ">concurrent_value,</if>
+            <if test="speechcraftId != null  and speechcraftId != ''">speechcraft_id,</if>
+            <if test="speechcraftName != null  and speechcraftName != ''">speechcraft_name,</if>
+            <if test="sceneDefId != null  and sceneDefId != ''">scene_def_id,</if>
+            <if test="delFlag != null ">del_flag,</if>
+            <if test="createBy != null ">create_by,</if>
+            create_time,
+            <if test="updateBy != null ">update_by,</if>
+            update_time,
+            <if test="startCallTime != null  and startCallTime != ''">start_call_time,</if>
+            <if test="endCallTime != null  and endCallTime != ''">end_call_time,</if>
+            <if test="companyId != null ">company_id,</if>
+            <if test="speechcraftVariable != null  and speechcraftVariable != ''">speechcraft_variable,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orgId != null ">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="concurrentValue != null ">#{concurrentValue},</if>
+            <if test="speechcraftId != null  and speechcraftId != ''">#{speechcraftId},</if>
+            <if test="speechcraftName != null  and speechcraftName != ''">#{speechcraftName},</if>
+            <if test="sceneDefId != null  and sceneDefId != ''">#{sceneDefId},</if>
+            <if test="delFlag != null ">#{delFlag},</if>
+            <if test="createBy != null ">#{createBy},</if>
+            NOW(),
+            <if test="updateBy != null ">#{updateBy},</if>
+            NOW(),
+            <if test="startCallTime != null  and startCallTime != ''">#{startCallTime},</if>
+            <if test="endCallTime != null  and endCallTime != ''">#{endCallTime},</if>
+            <if test="companyId != null ">#{companyId},</if>
+            <if test="speechcraftVariable != null  and speechcraftVariable != ''">#{speechcraftVariable},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLcOrgSpeechcraftConf" parameterType="com.ruoyi.orgSpeechConf.domain.TLcOrgSpeechcraftConf">
+        update t_lc_org_speechcraft_conf
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orgId != null ">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="concurrentValue != null ">concurrent_value = #{concurrentValue},</if>
+            <if test="speechcraftId != null  and speechcraftId != ''">speechcraft_id = #{speechcraftId},</if>
+            <if test="speechcraftName != null  and speechcraftName != ''">speechcraft_name = #{speechcraftName},</if>
+            <if test="sceneDefId != null  and sceneDefId != ''">scene_def_id = #{sceneDefId},</if>
+            <if test="delFlag != null ">del_flag = #{delFlag},</if>
+            <if test="updateBy != null ">update_by = #{updateBy},</if>
+            update_time = NOW(),
+            <if test="startCallTime != null  and startCallTime != ''">start_call_time = #{startCallTime},</if>
+            <if test="endCallTime != null  and endCallTime != ''">end_call_time = #{endCallTime},</if>
+            <if test="companyId != null ">company_id = #{companyId},</if>
+            <if test="speechcraftVariable != null  and speechcraftVariable != ''">speechcraft_variable = #{speechcraftVariable},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcOrgSpeechcraftConfById" parameterType="Long">
+        delete from t_lc_org_speechcraft_conf where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcOrgSpeechcraftConfByIds" parameterType="String">
+        delete from t_lc_org_speechcraft_conf where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectTLcOrgSpeechcraftConfByOrgId" parameterType="java.lang.Long" resultMap="TLcOrgSpeechcraftConfResult">
+        <include refid="selectTLcOrgSpeechcraftConfVo"/>
+        where org_id = #{orgId} and del_flag = 2
+    </select>
+
+    <select id="selectUsedTotalConcurrentValue" resultType="java.lang.Integer">
+        select sum(concurrent_value) from t_lc_org_speechcraft_conf
+        where del_flag = 2
+    </select>
+
+    <select id="checkOrgIdUnique" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(1) from t_lc_org_speechcraft_conf
+        where org_id = #{orgId} and del_flag = 2
+    </select>
+    
+</mapper>

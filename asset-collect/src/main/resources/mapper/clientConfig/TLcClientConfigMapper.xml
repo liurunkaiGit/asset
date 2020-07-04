@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.clientConfig.mapper.TLcClientConfigMapper">
+    
+    <resultMap type="com.ruoyi.clientConfig.domain.TLcClientConfig" id="TLcClientConfigResult">
+        <result property="id"    column="id"    />
+        <result property="clientId"    column="client_id"    />
+        <result property="clientName"    column="client_name"    />
+        <result property="sendRadioQc"    column="send_radio_qc"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="sendRuleEngine"    column="send_rule_engine"    />
+        <result property="autoAllocatTask"    column="auto_allocat_task"    />
+        <result property="autoAllocatTaskStrategy"    column="auto_allocat_task_strategy"    />
+        <result property="sendRobot"    column="send_robot"    />
+        <result property="autoStartRobotTsk"    column="auto_start_robot_tsk"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTLcClientConfigVo">
+        select id, client_id, client_name, send_radio_qc, project_name, send_rule_engine, auto_allocat_task, auto_allocat_task_strategy, send_robot, auto_start_robot_tsk, create_by, create_time, update_by, update_time from t_lc_client_config
+    </sql>
+
+    <select id="selectTLcClientConfigList" parameterType="com.ruoyi.clientConfig.domain.TLcClientConfig" resultMap="TLcClientConfigResult">
+        <include refid="selectTLcClientConfigVo"/>
+        <where>  
+            <if test="clientId != null  and clientId != ''"> and client_id = #{clientId}</if>
+            <if test="clientName != null  and clientName != ''"> and client_name like concat('%', #{clientName}, '%')</if>
+            <if test="sendRadioQc != null "> and send_radio_qc = #{sendRadioQc}</if>
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="sendRuleEngine != null "> and send_rule_engine = #{sendRuleEngine}</if>
+            <if test="autoAllocatTask != null "> and auto_allocat_task = #{autoAllocatTask}</if>
+            <if test="autoAllocatTaskStrategy != null "> and auto_allocat_task_strategy = #{autoAllocatTaskStrategy}</if>
+            <if test="sendRobot != null "> and send_robot = #{sendRobot}</if>
+            <if test="autoStartRobotTsk != null "> and auto_start_robot_tsk = #{autoStartRobotTsk}</if>
+        </where>
+    </select>
+    
+    <select id="selectTLcClientConfigById" parameterType="Long" resultMap="TLcClientConfigResult">
+        <include refid="selectTLcClientConfigVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLcClientConfig" parameterType="com.ruoyi.clientConfig.domain.TLcClientConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_client_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="clientId != null  and clientId != ''">client_id,</if>
+            <if test="clientName != null  and clientName != ''">client_name,</if>
+            <if test="sendRadioQc != null ">send_radio_qc,</if>
+            <if test="projectName != null  and projectName != ''">project_name,</if>
+            <if test="sendRuleEngine != null ">send_rule_engine,</if>
+            <if test="autoAllocatTask != null ">auto_allocat_task,</if>
+            <if test="autoAllocatTaskStrategy != null ">auto_allocat_task_strategy,</if>
+            <if test="sendRobot != null ">send_robot,</if>
+            <if test="autoStartRobotTsk != null ">auto_start_robot_tsk,</if>
+            <if test="createBy != null ">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null ">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="clientId != null  and clientId != ''">#{clientId},</if>
+            <if test="clientName != null  and clientName != ''">#{clientName},</if>
+            <if test="sendRadioQc != null ">#{sendRadioQc},</if>
+            <if test="projectName != null  and projectName != ''">#{projectName},</if>
+            <if test="sendRuleEngine != null ">#{sendRuleEngine},</if>
+            <if test="autoAllocatTask != null ">#{autoAllocatTask},</if>
+            <if test="autoAllocatTaskStrategy != null ">#{autoAllocatTaskStrategy},</if>
+            <if test="sendRobot != null ">#{sendRobot},</if>
+            <if test="autoStartRobotTsk != null ">#{autoStartRobotTsk},</if>
+            <if test="createBy != null ">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null ">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLcClientConfig" parameterType="com.ruoyi.clientConfig.domain.TLcClientConfig">
+        update t_lc_client_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="clientId != null  and clientId != ''">client_id = #{clientId},</if>
+            <if test="clientName != null  and clientName != ''">client_name = #{clientName},</if>
+            <if test="sendRadioQc != null ">send_radio_qc = #{sendRadioQc},</if>
+            <if test="projectName != null  and projectName != ''">project_name = #{projectName},</if>
+            <if test="sendRuleEngine != null ">send_rule_engine = #{sendRuleEngine},</if>
+            <if test="autoAllocatTask != null ">auto_allocat_task = #{autoAllocatTask},</if>
+            <if test="autoAllocatTaskStrategy != null ">auto_allocat_task_strategy = #{autoAllocatTaskStrategy},</if>
+            <if test="sendRobot != null ">send_robot = #{sendRobot},</if>
+            <if test="autoStartRobotTsk != null ">auto_start_robot_tsk = #{autoStartRobotTsk},</if>
+            <if test="createBy != null ">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null ">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcClientConfigById" parameterType="Long">
+        delete from t_lc_client_config where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcClientConfigByIds" parameterType="String">
+        delete from t_lc_client_config where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

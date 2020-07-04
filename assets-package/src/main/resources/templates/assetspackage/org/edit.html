@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改机构')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal" id="form-assetspackage-edit" th:object="${orgPackage}">
+            <input name="id" id="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>机构名称：</label>
+                <div class="col-sm-8">
+                    <input name="orgName" th:field="*{orgName}" id="orgName" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>机构编码：</label>
+                <div class="col-sm-8">
+                    <input name="orgCode" id="orgCode" th:field="*{orgCode}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>服务部门：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" name="deptName" id="deptName" type="hidden">
+                    <select class="form-control" name="deptId" id="deptId" onfocus="deptChange();" required>
+                        <option th:value="${orgPackage.deptId}"th:text="${orgPackage.deptName}" selected></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>合作开始时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+
+                        <input name="startDate" id="startDate" th:value="${#dates.format(orgPackage.startDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" required>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>合作结束时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+
+                        <input name="endDate" id="endDate" th:value="${#dates.format(orgPackage.endDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" >
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>机构状态：</label>
+                <div class="col-sm-8">
+                    <select name="orgStatus" class="form-control" onfocus="statusChange();" id="orgStatus" required>
+                        <option th:value="${orgPackage.OrgStatus}"th:text="${orgPackage.OrgStatus=='1'?'正常':'停用'}" selected></option>
+                    </select>
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">是否使用 机器人</label>
+                <div class="col-sm-8">
+                    <input id="sendRobotValue" th:field="*{sendRobot}" class="form-control" type="hidden">
+                    <select class="form-control" name="sendRobot" id="sendRobot">
+                    </select>
+                </div>
+            </div>-->
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">是否自动开启机器人</label>
+                <div class="col-sm-8">
+                    <input id="autoStartRobotTaskValue" th:field="*{autoStartRobotTask}" class="form-control" type="hidden">
+                    <select class="form-control" name="autoStartRobotTask" id="autoStartRobotTask">
+                    </select>
+                </div>
+            </div>-->
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>是否推送到语音质检</label>
+                <div class="col-sm-8">
+                    <input id="sendRadioQcValue" th:field="*{sendRadioQc}" class="form-control" type="hidden">
+                    <select class="form-control" name="sendRadioQc" id="sendRadioQc" required>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>是否度小满自动评分</label>
+                <div class="col-sm-8">
+                    <select name="isAutoScore" class="form-control" onfocus="statusChange2();" id="isAutoScore" required>
+                        <option th:value="${orgPackage.isAutoScore}" th:text="${orgPackage.isAutoScore=='1'?'是':'否'}" selected></option>
+                    </select>
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">项目名称：</label>
+                <div class="col-sm-8">
+                    <input id="projectName" th:field="*{projectName}" class="form-control" type="text">
+                </div>
+            </div>-->
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">是否使用规则引擎来智能分案</label>
+                <div class="col-sm-8">
+                    <input name="sendRuleEngineValue" id="sendRuleEngineValue" th:field="*{sendRuleEngine}" class="form-control" type="hidden">
+                    <select class="form-control" name="sendRuleEngine" id="sendRuleEngine">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">是否自动分配任务</label>
+                <div class="col-sm-8">
+                    <input id="autoAllocatTaskValue" th:field="*{autoAllocatTask}" class="form-control" type="hidden">
+                    <select class="form-control" name="autoAllocatTask" id="autoAllocatTask">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">分案策略</label>
+                <div class="col-sm-8">
+                    <input id="allocatTaskStartegyValue" name="allocatTaskStartegy" th:field="*{allocatTaskStartegy}" class="form-control" type="hidden">
+                    <select class="form-control" name="allocatTaskStartegy" id="allocatTaskStartegy">
+                    </select>
+                </div>
+            </div>-->
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        // var ctx = [[${@config.getKey('ctx')}]];
+    </script>
+    <script type="text/javascript">
+        var prefix = ctx + "assetspackage/org";
+        $("#form-assetspackage-edit").validate({
+            focusCleanup: true
+        });
+
+        $(function () {
+            initIsNo();
+            initAllocatTaskStartegy();
+        })
+
+        function submitHandler() {
+            var deptId= $("#deptId").val();
+            var deptName = $("#deptId").find("option:selected").text();
+            if(deptId == "" || deptId=="请选择"){
+                $.modal.alertSuccess("请选择服务部门");
+                return;
+            }
+            $("#deptName").val(deptName);
+            /*var sendRuleEngine = $("#sendRuleEngine").val();
+            if(sendRuleEngine == "" || sendRuleEngine==null){
+                $.modal.alertSuccess("请选择是否推送到规则引擎系统");
+                return;
+            }
+            var autoAllocatTask = $("#autoAllocatTask").val();
+            if(autoAllocatTask == "" || autoAllocatTask==null){
+                $.modal.alertSuccess("请选择是否自动分配任务");
+                return;
+            }
+            var allocatTaskStartegy = $("#allocatTaskStartegy").val();
+            if (autoAllocatTask == 1) {
+                if(allocatTaskStartegy == "" || allocatTaskStartegy==null){
+                    $.modal.alertSuccess("请选择自动分配任务策略");
+                    return;
+                }
+            }*/
+            /*var sendRobot = $("#sendRobot").val();
+            if(sendRobot == "" || sendRobot==null){
+                $.modal.alertSuccess("请选择推送到机器人");
+                return;
+            }*/
+            /*var autoStartRobotTask = $("#autoStartRobotTask").val();
+            if (sendRobot == 1) {
+                if(autoStartRobotTask == "" || autoStartRobotTask== null){
+                    $.modal.alertSuccess("请选择是否自动开启机器人任务");
+                    return;
+                }
+            }*/
+            var sendRadioQc = $("#sendRadioQc").val();
+            if(sendRadioQc == "" || sendRadioQc==null){
+                $.modal.alertSuccess("请选择推送到语音质检");
+                return;
+            }
+            var orgCode = $("#orgCode").val();
+            // if (sendRadioQc == 1) {
+                if(orgCode == "" || orgCode== null){
+                    $.modal.alertSuccess("请填写机构编码");
+                    return;
+                }
+            // }
+            // if ($.validate.form()) {
+            //     $.operate.save(prefix + "/edit", $('#form-assetspackage-edit').serialize());
+            // }
+            $.post(
+                prefix + "/edit",
+                {
+                    id:$("#id").val(),
+                    orgName:$("#orgName").val(),
+                    orgCode:$("#orgCode").val(),
+                    orgId:$("#orgId").val(),
+                    deptId:deptId,
+                    deptName:deptName,
+                    startDate:$("#startDate").val(),
+                    endDate:$("#endDate").val(),
+                    orgStatus:$("#orgStatus").val(),
+                    // sendRuleEngine:sendRuleEngine,
+                    // autoAllocatTask:autoAllocatTask,
+                    sendRadioQc:sendRadioQc,
+                    isAutoScore:$("#isAutoScore").val()
+                    // allocatTaskStartegy:allocatTaskStartegy
+                },
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        $.modal.alertSuccess("修改成功");
+                        window.parent.$.table.refresh();
+                        $.modal.close();
+                        //setTimeout(function() {
+                            //window.parent.location.reload();
+                        //}, 1000);
+                    }
+                }
+            );
+        }
+
+        $("input[name='startDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='endDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        function deptChange() {
+            $("#deptId").find("option").remove();
+            $.ajax({
+                url: prefix+"/findDeptInfo",
+                dataType: "json",
+                type: "post",
+                success:function(data){
+                    var result = eval(data.msg);
+                    $("#deptId").append("<option value=''>请选择</option>");
+                    $.each(result,function(index,obj){
+                        $("#deptId").append("<option value='"+obj.deptId+"'>"+obj.deptName+"</option>");
+                    });
+                }
+            });
+        }
+        
+        function statusChange() {
+            $("#orgStatus").find("option").remove();
+            $("#orgStatus").append("<option value=''>请选择</option>");
+            $("#orgStatus").append("<option value='1'>正常</option>");
+            $("#orgStatus").append("<option value='0'>停用</option>");
+
+        }
+
+        function statusChange2() {
+            $("#isAutoScore").find("option").remove();
+            $("#isAutoScore").append("<option value=''>请选择</option>");
+            $("#isAutoScore").append("<option value='1'>是</option>");
+            $("#isAutoScore").append("<option value='2'>否</option>");
+
+        }
+
+        function initIsNo() {
+            $.post(
+                prefix + "/initIsNo",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        var sendRobotValue = $("#sendRobotValue").val();
+                        var sendRuleEngineValue = $("#sendRuleEngineValue").val();
+                        var autoStartRobotTaskValue = $("#autoStartRobotTaskValue").val();
+                        var sendRadioQcValue = $("#sendRadioQcValue").val();
+                        var autoAllocatTaskValue = $("#autoAllocatTaskValue").val();
+                        for (var i = 0; i < data.rows.length; i++) {
+                            /*if(sendRobotValue == data.rows[i].code) {
+                                var opt = "<option value='"+data.rows[i].code+"' selected>"+data.rows[i].message+"</option>";
+                            } else {
+                                var opt = "<option value='"+data.rows[i].code+"'>"+data.rows[i].message+"</option>";
+                            }
+                            $("#sendRobot").append(opt);*/
+                            if(sendRuleEngineValue == data.rows[i].code) {
+                                var opt = "<option value='"+data.rows[i].code+"' selected>"+data.rows[i].message+"</option>";
+                            } else {
+                                var opt = "<option value='"+data.rows[i].code+"'>"+data.rows[i].message+"</option>";
+                            }
+                            $("#sendRuleEngine").append(opt);
+                            /*if(autoStartRobotTaskValue == data.rows[i].code) {
+                                var opt = "<option value='"+data.rows[i].code+"' selected>"+data.rows[i].message+"</option>";
+                            } else {
+                                var opt = "<option value='"+data.rows[i].code+"'>"+data.rows[i].message+"</option>";
+                            }
+                            $("#autoStartRobotTask").append(opt);*/
+                            if(sendRadioQcValue == data.rows[i].code) {
+                                var opt = "<option value='"+data.rows[i].code+"' selected>"+data.rows[i].message+"</option>";
+                            } else {
+                                var opt = "<option value='"+data.rows[i].code+"'>"+data.rows[i].message+"</option>";
+                            }
+                            $("#sendRadioQc").append(opt);
+                            if(autoAllocatTaskValue == data.rows[i].code) {
+                                var opt = "<option value='"+data.rows[i].code+"' selected>"+data.rows[i].message+"</option>";
+                            } else {
+                                var opt = "<option value='"+data.rows[i].code+"'>"+data.rows[i].message+"</option>";
+                            }
+                            $("#autoAllocatTask").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function initAllocatTaskStartegy() {
+            $.post(
+                prefix + "/initAllocatTaskStartegy",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        var allocatTaskStartegyValue = $("#allocatTaskStartegyValue").val();
+                        for (var i = 0; i < data.rows.length; i++) {
+                            // alert(data.rows[i].code);
+                            if(allocatTaskStartegyValue == data.rows[i].code) {
+                                var opt = "<option value='"+data.rows[i].code+"' selected>"+data.rows[i].message+"</option>";
+                            } else {
+                                var opt = "<option value='"+data.rows[i].code+"'>"+data.rows[i].message+"</option>";
+                            }
+                            $("#allocatTaskStartegy").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改【请填写功能名称】')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-num-edit" th:object="${tLcExonNum}">
+            <input name="id" id="id" th:field="*{id}" type="hidden">
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>所属机构：</label>
+                <div class="col-sm-8">
+                    <input name="orgIdValue" id="orgIdValue" th:field="*{orgId}" class="form-control" type="hidden">
+                    <select class="form-control" name="orgId" id="orgId" required>
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>-->
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>所属话务平台：</label>
+                <div class="col-sm-8">
+                    <select  class="form-control" name="callPlatform" id="callPlatform" required th:with="type=${@dict.getType('call_platform')}">
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{callPlatform}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>号码组名称：</label>
+                <div class="col-sm-8">
+                    <input name="exonNumGroup" id="exonNumGroup" th:field="*{exonNumGroup}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">外显号码个数：</label>
+                <div class="col-sm-8">
+                    <input name="exonNumCount" th:field="*{exonNumCount}" class="form-control" type="text">
+                </div>
+            </div>-->
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>外显号码：</label>
+                <div class="col-sm-9">
+                   <!-- <input name="exonNum" th:field="*{exonNum}" class="form-control" type="text">-->
+                    <textarea id="exonNum" th:field="*{exonNum}" name="exonNum" rows="5" style="width: 300px;" class="form-control" required></textarea>
+                    <span><i class="fa fa-info-circle"></i>多个号码之间用英文分号分隔，如：123;456</span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "collect/exonNum";
+        var taskPrefix = ctx + "collect/task";
+        // $(function () {
+        //     initOrg();
+        // })
+        $("#form-num-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            /*var exonNumGroup = $("#exonNumGroup").val();
+            if (exonNumGroup == null || exonNumGroup == '') {
+                $.modal.alertWarning("请填写号码组名称");
+                return;
+            }
+            var exonNum = $("#exonNum").val();
+            if (exonNum == null || exonNum == '') {
+                $.modal.alertWarning("请填写外显号码");
+                return;
+            }*/
+            // if ($.validate.form()) {
+            //     $.operate.save(prefix + "/edit", $('#form-num-edit').serialize());
+            // }
+            $.post(
+                prefix + "/edit",
+                {
+                    id:$("#id").val(),
+                    //orgId:$("#orgId").val(),
+                    callPlatform:$("#callPlatform").val(),
+                    exonNumGroup:$("#exonNumGroup").val(),
+                    exonNum:$("#exonNum").val()
+                },
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        $.modal.alertSuccess("修改成功");
+                        window.parent.$.table.refresh();
+                        $.modal.close();
+                        //setTimeout(function() {
+                            //window.parent.location.reload();
+                        //}, 1000);
+                    }
+                }
+            );
+        }
+
+        // function initOrg() {
+        //     var orgIdValue = $("#orgIdValue").val();
+        //     $.post(
+        //         taskPrefix+"/initOrg",
+        //         function(data) {
+        //             // alert(JSON.stringify(data));
+        //             if (data.code == 0) {//请求成功
+        //                 for (var i = 0; i < data.rows.length; i++) {
+        //                     if (orgIdValue == data.rows[i].deptId) {
+        //                         var opt = "<option value='"+data.rows[i].deptId+"' selected>"+data.rows[i].deptName+"</option>";
+        //                     } else {
+        //                         var opt = "<option value='"+data.rows[i].deptId+"'>"+data.rows[i].deptName+"</option>";
+        //                     }
+        //                     $("#orgId").append(opt);
+        //                 }
+        //             }
+        //         }
+        //     );
+        // }
+    </script>
+</body>
+</html>

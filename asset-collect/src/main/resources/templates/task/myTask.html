@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('我的任务列表')" />
+    <link th:href="@{/ajax/libs/bootstrap-select/bootstrap-select.css}" rel="stylesheet"/>
+    <style type="text/css">
+        .time-input{
+            display: inline;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row" >
+            <div class="col-sm-12 search-collapse" >
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <input type="hidden" id="orgId" name="orgId" th:value="${orgId}">
+                            <input type="hidden" id="ownerId" name="ownerId" th:value="${ownerId}">
+                            <li>
+                                <p>机构案件号：</p>
+                                <input type="text" name="caseNo" id="caseNo"/>
+                            </li>
+                            <li>
+                                <p>姓名：</p>
+                                <input type="text" name="customName" id="customName"/>
+                            </li>
+                            <li>
+                                <p>委案金额：</p>
+                                <input type="text" name="startArrearsTotal" id="startArrearsTotal"  style="width: 85px;" />
+                                <span>-</span>
+                                <input type="text" name="endArrearsTotal" id="endArrearsTotal"   style="width: 85px;" />
+                            </li>
+                            <li>
+                                <p>最近电话码：</p>
+                                <!-- 1：未分配 2：催收中 3: 已结案-->
+                                <select name="callSign" id="callCode">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>手别：</p>
+                                <input type="text" name="transferType" id="transferType"/>
+                            </li>
+                            <li>
+                                <p>手机号：</p>
+                                <input type="text" name="phone" id="phone"/>
+                            </li>
+                            <li>
+                                <p>结案应还金额：</p>
+                                <input type="text" name="startCloseCaseYhje" id="startCloseCaseYhje" style="width: 85px;" />
+                                <span>-</span>
+                                <input type="text" name="endCloseCaseYhje" id="endCloseCaseYhje"  style="width: 85px;"  />
+                            </li>
+                            <li>
+                                <p>最近行动码：</p>
+                                <!-- 1：未分配 2：催收中 3: 已结案-->
+                                <select name="actionCode" id="actionCode" >
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+
+                            <li>
+                                <p>任务类型：</p>
+                                <select id="taskType" name="taskType" th:with="type=${@dict.getType('sys_task_type')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                           <!-- <li>
+                                <p>任务状态：</p>
+                                &lt;!&ndash; 1：未分配 2：催收中 3: 已结案&ndash;&gt;
+                                <select id="taskStatus" name="taskStatus" th:with="type=${@dict.getType('sys_task_state')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>-->
+
+                            <li class="select-time">
+                                <p>最近跟进日期：</p>
+                                <input type="text" class="time-input" id="startRecentlyFollowUpDate" placeholder="开始时间" name="startRecentlyFollowUpDate"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endRecentlyFollowUpDate" placeholder="结束时间" name="endRecentlyFollowUpDate"/>
+                            </li>
+
+                            <li class="select-time">
+                                <p>最近分配日期：</p>
+                                <input type="text" class="time-input" id="startRecentlyAllotDate" placeholder="开始时间" name="startRecentlyAllotDate"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endRecentlyAllotDate" placeholder="结束时间" name="endRecentlyAllotDate"/>
+                            </li>
+                            <li >
+                                <p>历史电话码：</p>
+                                <select name="callCodeHistoryListStr" id="callCodeHistoryListStr"   th:with="dictList=${@dict.getType('call_record_code')}" class="selectpicker" title="全部" multiple data-live-search="true" data-actions-box="true" data-selected-text-format="count > 4">
+                                    <option th:each="dict : ${dictList}" th:text=" ${dict.dictValue} + '(' +${dict.dictLabel} +')'"
+                                            th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p > </p>
+                                <select id="columnQuery1" onchange="addQuery('columnQuery1','custom1')">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li style="width: 283px;height: 30px;">
+                                <p ></p>
+                                <span id="custom1"  >
+
+                                    </span>
+                            </li>
+
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <button type="button" class="btn btn-success" onclick="toCollJob('','')">催收作业</button>
+                <button type="button" class="btn btn-success" onclick="signRepay('ALPA')">标记还款</button>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:include="include :: footer" />
+     <script th:src="@{/ajax/libs/bootstrap-select/bootstrap-select.min.js}"></script>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:task:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:task:remove')}]];
+        var carTypeDatas = [[${@dict.getType('sys_car_type')}]];
+        var taskStatusDatas = [[${@dict.getType('sys_task_state')}]];
+        var taskTypeDatas = [[${@dict.getType('sys_task_type')}]];
+        var prefix = ctx + "collect/task";
+        var duncaseActionPrefix = ctx + "collect/duncase/action";
+        var custTagPrefix = ctx + "collect/cust/tag";
+        var firstCaseNo; //直接点击催收作业时使用
+        var firstOrgId; //直接点击催收作业时使用
+        var firstImportBatchNo; //直接点击催收作业时使用
+        var columnQyeryPrefix = ctx + "column/query";
+
+        $(function() {
+            var options = {
+                url: prefix + "/myTaskList?ownerId="+$("#ownerId").val(),
+                createUrl: prefix + "/toCollJob?caseNo={id}",
+                // createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                clickToSelect:true,
+                modalName: "任务",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id',
+                    title : '主鍵ID',
+                    visible: false
+                },{
+                    field : 'caseNo',
+                    title : '机构案件号',
+                    formatter: function (value, row, index) {
+                        if (index == 0) {
+                            firstCaseNo = value;
+                            firstOrgId = row.orgId;
+                            firstImportBatchNo = row.importBatchNo;
+                        }
+                        return "<a href='javascript:void(0)' onclick='toCollJob(\""+value + "\",\""+row.importBatchNo + "\")'>"+value+"</a>";
+                    }
+                },
+                {
+                    field : 'customName',
+                    title : '姓名'
+                },
+                {
+                    field : 'arrearsTotal',
+                    title : '委案金额',
+                    sortable: true
+                },
+                    {
+                        field : 'closeCaseYhje',
+                        title : '结案应还金额',
+                        sortable: true
+                    },
+                    {
+                        field : 'dqyhje',
+                        title : '当前已还金额',
+                        sortable: true
+
+                    },
+                    {
+                        field : 'ljyhje',
+                        title : '累计已还金额',
+                        sortable: true
+
+                    },
+                    {
+                        field : 'transferType',
+                        title : '手别'
+                    },
+                    {
+                        field : 'callSign',
+                        title : '最近电话码',
+                        formatter: function(value, row, index) {
+                            return getCallCode(value,row.callSignValue);
+                        }
+                    },
+                    {
+                        field : 'actionCode',
+                        title : '最近行动码',
+                        formatter: function(value, row, index) {
+                            return getActionCode(value,row.actionCodeValue);
+                        }
+                    },
+                    {
+                        field : 'recentlyAllotDate',
+                        title : '最近分配日期',
+                        sortable: true
+                    },
+                    {
+                        field : 'recentlyFollowUpDate',
+                        title : '最近跟进日期',
+                        sortable: true
+                    },
+                    {
+                        field : 'taskType',
+                        title : '任务类型',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(taskTypeDatas, value);
+                        }
+                    },
+                {
+                    field : 'taskStatus',
+                    title : '任务状态',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(taskStatusDatas, value);
+                    }
+                },
+                {
+                    field : 'ownerName',
+                    title : '业务归属人'
+                }]
+            };
+            $.table.init(options);
+
+            // 初始化机构下拉框、电话码、行动码
+            initCallCode();
+            initActionCode();
+            initColumnQuery();
+        });
+
+        function initCallCode() {
+            $.post(
+                prefix + "/initCallCode",
+                function (data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            var opt = "<option value='" + data.rows[i].code + "'>" + data.rows[i].message + "</option>";
+                            $("#callCode").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function initActionCode() {
+            $.post(
+                prefix + "/initActionCode",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            var opt = "<option value='"+data.rows[i].code+"'>"+data.rows[i].message+"</option>";
+                            $("#actionCode").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function getCallCode(callCode, dictLabel) {
+            if (dictLabel != null && dictLabel != '') {
+                return callCode + "(" + dictLabel + ")";
+            }
+            return callCode;
+        }
+
+        function getActionCode(actionCode, dictLabel) {
+            if (dictLabel != null && dictLabel != '') {
+                return actionCode + "(" + dictLabel + ")";
+            }
+            return actionCode;
+        }
+
+        /**
+         * 跳转到我的催收作业页面-根据案件号
+         * @param taskId
+         */
+        // function toMyTask(caseNo, orgId, importBatchNo) {
+        //     var toCollJobUrl;
+        //     if (importBatchNo == 'null') {
+        //         toCollJobUrl = prefix + "/toCollJob?caseNo="+caseNo+"&orgId="+orgId;
+        //     } else {
+        //         toCollJobUrl = prefix + "/toCollJob?caseNo="+caseNo+"&orgId="+orgId+"&importBatchNo="+importBatchNo;
+        //     }
+        //     $.modal.openTab("作业催收", toCollJobUrl);
+        // }
+
+        /**
+         * 跳转到我的催收作业页面-根据案件号
+         * @param taskId
+         */
+        function toCollJob(currentCaseNo,currentImportBatchNo) {
+
+            var caseNo = $("#caseNo").val();
+            var orgId = $("#orgId").val();
+            var ownerId = $("#ownerId").val();
+            var customName = $("#customName").val();
+            var startArrearsTotal = $("#startArrearsTotal").val();
+            var endArrearsTotal = $("#endArrearsTotal").val();
+            var callCode = $("#callCode").val();
+            var transferType = encodeURIComponent($("#transferType").val());
+            var phone = $("#phone").val();
+            var startCloseCaseYhje = $("#startCloseCaseYhje").val();
+            var endCloseCaseYhje = $("#endCloseCaseYhje").val();
+            var actionCode = $("#actionCode").val();
+            var taskType = $("#taskType").val();
+            var taskStatus = $("#taskStatus").val();
+            var startEnterCollDate = $("#startEnterCollDate").val();
+            var endEnterCollDate = $("#endEnterCollDate").val();
+            var productName = $("#productName").val();
+            var startDqyhje = $("#startDqyhje").val();
+            var endDqyhje = $("#endDqyhje").val();
+            var startLjyhje = $("#startLjyhje").val();
+            var endLjyhje = $("#endLjyhje").val();
+            var startOverdueDays = $("#startOverdueDays").val();
+            var endOverdueDays = $("#endOverdueDays").val();
+            //var ownerName = $("#ownerName").val();
+            // var userGroup = $("#userGroup").val();
+           // var enterCollDate = $("#enterCollDate").val();
+            var startRecentlyAllotDate = $("#startRecentlyAllotDate").val();
+            var endRecentlyAllotDate = $("#endRecentlyAllotDate").val();
+            var startRecentlyFollowUpDate = $("#startRecentlyFollowUpDate").val();
+            var endRecentlyFollowUpDate = $("#endRecentlyFollowUpDate").val();
+            var callCodeHistoryListStr = $('#callCodeHistoryListStr').selectpicker('val');
+            var toCollJobUrl = prefix + '/toCollJob?orgId='+orgId +'&caseNo='+caseNo +'&customName='+customName
+                +'&ownerId='+ownerId
+                +'&startArrearsTotal='+startArrearsTotal
+                +'&endArrearsTotal='+endArrearsTotal
+                +'&callCode='+callCode
+                +'&transferType='+transferType
+                +'&phone='+phone
+                +'&startCloseCaseYhje='+startCloseCaseYhje
+                +'&endCloseCaseYhje='+endCloseCaseYhje
+                +'&actionCode='+actionCode
+                +'&taskType='+taskType
+                +'&startRecentlyAllotDate='+startRecentlyAllotDate
+                +'&endRecentlyAllotDate='+endRecentlyAllotDate
+                +'&startRecentlyFollowUpDate='+startRecentlyFollowUpDate
+                +'&endRecentlyFollowUpDate='+endRecentlyFollowUpDate
+                +'&currentCaseNo='+currentCaseNo
+                +'&callCodeHistoryListStr='+callCodeHistoryListStr
+                +'&currentImportBatchNo='+currentImportBatchNo;
+            if(taskStatus!=undefined){
+                toCollJobUrl=toCollJobUrl +'&taskStatus='+taskStatus
+            }
+            if(startEnterCollDate!=undefined){
+                toCollJobUrl=toCollJobUrl +'&startEnterCollDate='+startEnterCollDate
+            }
+            if(endEnterCollDate!=undefined){
+                toCollJobUrl=toCollJobUrl +'&endEnterCollDate='+endEnterCollDate
+            }
+            if(productName!=undefined){
+                toCollJobUrl=toCollJobUrl +'&productName='+productName
+            }
+            if(startDqyhje!=undefined){
+                toCollJobUrl=toCollJobUrl +'&startDqyhje='+startDqyhje
+            }
+            if(endDqyhje!=undefined){
+                toCollJobUrl=toCollJobUrl +'&endDqyhje='+endDqyhje
+            }
+            if(startLjyhje!=undefined){
+                toCollJobUrl=toCollJobUrl +'&startLjyhje='+startLjyhje
+            }
+            if(endLjyhje!=undefined){
+                toCollJobUrl=toCollJobUrl +'&endLjyhje='+endLjyhje
+            }
+            if(startOverdueDays!=undefined){
+                toCollJobUrl=toCollJobUrl +'&startOverdueDays='+startOverdueDays
+            }
+            if(endOverdueDays!=undefined){
+                toCollJobUrl=toCollJobUrl +'&endOverdueDays='+endOverdueDays
+            }
+            $.modal.openTab("作业催收", toCollJobUrl);
+            //toMyTask(firstCaseNo,firstOrgId,firstImportBatchNo)
+        }
+
+        // 标记还款
+        function signRepay(actionCode) {
+            var taskIdRows = $.table.selectFirstColumns();
+            if (taskIdRows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            var url = duncaseActionPrefix + "/batchAddActionCode?taskIds="+taskIdRows.join()+"&actionCode="+actionCode;
+            $.operate.submit(url);
+        }
+
+
+
+        function addQuery(selectId,pId) {
+            // isUsed(selectId);
+            var columnNameAndType = $("#"+selectId).val();
+            var columnName = columnNameAndType.split(",")[0];
+            var columnType = columnNameAndType.split(",")[1];
+            var beanName = columnNameAndType.split(",")[2];
+            if (columnType == "number_interval") {
+                var startName = beanName.split("|")[0];
+                var endName = beanName.split("|")[1];
+                $("#"+pId).html('<input type="text" name="'+startName+'" id="'+startName+'" style="width: 85px;"/> <span>-</span> <input type="text" name="'+endName+'" id="'+endName+'" style="width: 85px;"/>');
+            }
+            if (columnType == "date_interval") {
+                var startName = beanName.split("|")[0];
+                var endName = beanName.split("|")[1];
+                $("#"+pId).html('<input type="text" name="'+startName+'" id="'+startName+'" placeholder="开始时间" style="width: 85px;" class="time-input"/> <span>-</span> <input type="text" name="'+endName+'" id="'+endName+'" placeholder="结束时间" style="width: 85px;"  class="time-input"/>');
+                if ($(".time-input").length > 0) {
+                    layui.use('laydate', function () {
+                        var com = layui.laydate;
+                        $(".time-input").each(function (index, item) {
+                            var time = $(item);
+                            // 控制控件外观
+                            var type = time.attr("data-type") || 'date';
+                            // 控制回显格式
+                            var format = time.attr("data-format") || 'yyyy-MM-dd';
+                            // 控制日期控件按钮
+                            var buttons = time.attr("data-btn") || 'clear|now|confirm', newBtnArr = [];
+                            // 日期控件选择完成后回调处理
+                            var callback = time.attr("data-callback") || {};
+                            if (buttons) {
+                                if (buttons.indexOf("|") > 0) {
+                                    var btnArr = buttons.split("|"), btnLen = btnArr.length;
+                                    for (var j = 0; j < btnLen; j++) {
+                                        if ("clear" === btnArr[j] || "now" === btnArr[j] || "confirm" === btnArr[j]) {
+                                            newBtnArr.push(btnArr[j]);
+                                        }
+                                    }
+                                } else {
+                                    if ("clear" === buttons || "now" === buttons || "confirm" === buttons) {
+                                        newBtnArr.push(buttons);
+                                    }
+                                }
+                            } else {
+                                newBtnArr = ['clear', 'now', 'confirm'];
+                            }
+                            com.render({
+                                elem: item,
+                                theme: 'molv',
+                                trigger: 'click',
+                                type: type,
+                                format: format,
+                                btns: newBtnArr,
+                                done: function (value, data) {
+                                    if (typeof window[callback] != 'undefined'
+                                        && window[callback] instanceof Function) {
+                                        window[callback](value, data);
+                                    }
+                                }
+                            });
+                        });
+                    });
+                }
+
+            }
+            if (columnType == "string") {
+                columnName = beanName;
+                // $("#"+pId).html('<select name="compareMethod" id="compareMethod" style="width: 70px"><option value="">请选择</option>'+opt+'</select><input type="text" name="'+columnName+'" id="'+columnName+'" style="width: 100px;"/>');
+                $("#"+pId).html('<input type="text" name="'+columnName+'" id="'+columnName+'" style="width: 185px;"/>');
+            }
+            if (columnType == "dict") {
+                columnName = beanName;
+                var compareValue = columnNameAndType.split(",")[3];
+                var opt = '';
+                if (compareValue != null && compareValue != '') {
+                    for (var i = 0; i < compareValue.split("|").length; i++) {
+                        var dictValue = compareValue.split("|")[i]
+                        opt += "<option value='" + dictValue.split(":")[0] + "'>" + dictValue.split(":")[1] + "</option>";
+                    }
+                }
+                $("#"+pId).html('<select name="'+columnName+'" id="'+columnName+'" ><option value="">请选择</option>'+opt+'</select>');
+            }
+        }
+
+
+        function initColumnQuery() {
+            $.post(
+                columnQyeryPrefix + "/initColumnQuery",
+                {
+                    tableName:'t_lc_task',
+                    orgId:$('#orgId').val()
+                },
+                function (data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            var opt = "<option value='" + data.rows[i].columnName + "," + data.rows[i].columnType + "," + data.rows[i].beanName + "," + data.rows[i].columnValue + "'>" + data.rows[i].columnNameCn + "</option>";
+                            $("#columnQuery1").append(opt);
+                            // $("#columnQuery2").append(opt);
+                            // $("#columnQuery3").append(opt);
+                            // $("#columnQuery4").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        /**
+         * 重置
+         * 2020-06-18 封志涛添加 为了重置下拉多选
+         */
+        function reset() {
+            $.form.reset();
+            $(".selectpicker").selectpicker('deselectAll');
+        }
+
+    </script>
+</body>
+</html>

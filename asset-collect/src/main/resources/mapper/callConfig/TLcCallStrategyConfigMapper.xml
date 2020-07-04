@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.callConfig.mapper.TLcCallStrategyConfigMapper">
+    
+    <resultMap type="com.ruoyi.callConfig.domain.TLcCallStrategyConfig" id="TLcCallStrategyConfigResult">
+        <result property="id"    column="id"    />
+        <result property="businessScene"    column="business_scene"    />
+        <result property="callFrequencyDay"    column="call_frequency_day"    />
+        <result property="continueCallDays"    column="continue_call_days"    />
+        <result property="stopCallCurDayCondition"    column="stop_call_cur_day_condition"    />
+        <result property="stopCallCondition"    column="stop_call_condition"    />
+        <result property="startCallDate"    column="start_call_date"    />
+        <result property="stopCallDate"    column="stop_call_date"    />
+        <result property="status"    column="status"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="speechcraftId"    column="speechcraft_id"    />
+        <result property="speechcraftName"    column="speechcraft_name"    />
+        <result property="callIntervalTimeId"    column="call_interval_time_id"    />
+        <result property="callIntervalTime"    column="call_interval_time"    />
+        <result property="callLineId"    column="call_line_id"    />
+        <result property="callLineName"    column="call_line_name"    />
+        <result property="sceneDefId"    column="scene_def_id"    />
+    </resultMap>
+
+    <sql id="selectTLcCallStrategyConfigVo">
+        select id, business_scene, call_frequency_day, continue_call_days, stop_call_cur_day_condition, stop_call_condition, start_call_date, stop_call_date, status, org_id, org_name, speechcraft_id, speechcraft_name, call_interval_time_id, call_interval_time, call_line_id, call_line_name, scene_def_id from t_lc_call_strategy_config
+    </sql>
+
+    <select id="selectTLcCallStrategyConfigList" parameterType="com.ruoyi.callConfig.domain.TLcCallStrategyConfig" resultMap="TLcCallStrategyConfigResult">
+        <include refid="selectTLcCallStrategyConfigVo"/>
+        <where>  
+            <if test="businessScene != null "> and business_scene = #{businessScene}</if>
+            <if test="callFrequencyDay != null "> and call_frequency_day = #{callFrequencyDay}</if>
+            <if test="continueCallDays != null "> and continue_call_days = #{continueCallDays}</if>
+            <if test="stopCallCurDayCondition != null  and stopCallCurDayCondition != ''"> and stop_call_cur_day_condition = #{stopCallCurDayCondition}</if>
+            <if test="stopCallCondition != null  and stopCallCondition != ''"> and stop_call_condition = #{stopCallCondition}</if>
+            <if test="startCallDate != null and startCallDate != ''"> and start_call_date = #{startCallDate}</if>
+            <if test="stopCallDate != null and stopCallDate != '' "> and stop_call_date = #{stopCallDate}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="orgId != null "> and org_id = #{orgId}</if>
+            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+            <if test="speechcraftId != null "> and speechcraft_id = #{speechcraftId}</if>
+            <if test="speechcraftName != null  and speechcraftName != ''"> and speechcraft_name like concat('%', #{speechcraftName}, '%')</if>
+            <if test="callIntervalTimeId != null and callIntervalTimeId != ''"> and call_interval_time_id = #{callIntervalTimeId}</if>
+            <if test="callIntervalTime != null and callIntervalTime != ''"> and call_interval_time = #{callIntervalTime}</if>
+            <if test="callLineId != null and callLineId != ''"> and call_line_id = #{callLineId}</if>
+            <if test="callLineName != null and callLineName != ''"> and call_line_name = #{callLineName}</if>
+        </where>
+    </select>
+    
+    <select id="selectTLcCallStrategyConfigById" parameterType="Long" resultMap="TLcCallStrategyConfigResult">
+        <include refid="selectTLcCallStrategyConfigVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLcCallStrategyConfig" parameterType="com.ruoyi.callConfig.domain.TLcCallStrategyConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_call_strategy_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="businessScene != null ">business_scene,</if>
+            <if test="callFrequencyDay != null ">call_frequency_day,</if>
+            <if test="continueCallDays != null ">continue_call_days,</if>
+            <if test="stopCallCurDayCondition != null  and stopCallCurDayCondition != ''">stop_call_cur_day_condition,</if>
+            <if test="stopCallCondition != null  and stopCallCondition != ''">stop_call_condition,</if>
+            <if test="startCallDate != null and startCallDate != ''">start_call_date,</if>
+            <if test="stopCallDate != null and stopCallDate != '' ">stop_call_date,</if>
+            <if test="status != null ">status,</if>
+            <if test="orgId != null ">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="speechcraftId != null ">speechcraft_id,</if>
+            <if test="speechcraftName != null  and speechcraftName != ''">speechcraft_name,</if>
+            <if test="callIntervalTimeId != null and callIntervalTimeId != ''">call_interval_time_id,</if>
+            <if test="callIntervalTime != null and callIntervalTime != ''">call_interval_time,</if>
+            <if test="callLineId != null and callLineId != ''">call_line_id,</if>
+            <if test="callLineName != null and callLineName != ''">call_line_name,</if>
+            <if test="sceneDefId != null and sceneDefId != ''">scene_def_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="businessScene != null ">#{businessScene},</if>
+            <if test="callFrequencyDay != null ">#{callFrequencyDay},</if>
+            <if test="continueCallDays != null ">#{continueCallDays},</if>
+            <if test="stopCallCurDayCondition != null  and stopCallCurDayCondition != ''">#{stopCallCurDayCondition},</if>
+            <if test="stopCallCondition != null  and stopCallCondition != ''">#{stopCallCondition},</if>
+            <if test="startCallDate != null and startCallDate != '' ">#{startCallDate},</if>
+            <if test="stopCallDate != null and stopCallDate != '' ">#{stopCallDate},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="orgId != null ">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="speechcraftId != null ">#{speechcraftId},</if>
+            <if test="speechcraftName != null  and speechcraftName != ''">#{speechcraftName},</if>
+            <if test="callIntervalTimeId != null and callIntervalTimeId != ''">#{callIntervalTimeId},</if>
+            <if test="callIntervalTime != null and callIntervalTime != ''">#{callIntervalTime},</if>
+            <if test="callLineId != null and callLineId != ''">#{callLineId},</if>
+            <if test="callLineName != null and callLineName != ''">#{callLineName},</if>
+            <if test="sceneDefId != null and sceneDefId != ''">#{sceneDefId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLcCallStrategyConfig" parameterType="com.ruoyi.callConfig.domain.TLcCallStrategyConfig">
+        update t_lc_call_strategy_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="businessScene != null ">business_scene = #{businessScene},</if>
+            <if test="callFrequencyDay != null ">call_frequency_day = #{callFrequencyDay},</if>
+            <if test="continueCallDays != null ">continue_call_days = #{continueCallDays},</if>
+            <if test="stopCallCurDayCondition != null  and stopCallCurDayCondition != ''">stop_call_cur_day_condition = #{stopCallCurDayCondition},</if>
+            <if test="stopCallCondition != null  and stopCallCondition != ''">stop_call_condition = #{stopCallCondition},</if>
+            <if test="startCallDate != null and startCallDate != '' ">start_call_date = #{startCallDate},</if>
+            <if test="stopCallDate != null and stopCallDate != '' ">stop_call_date = #{stopCallDate},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="orgId != null ">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="speechcraftId != null ">speechcraft_id = #{speechcraftId},</if>
+            <if test="speechcraftName != null  and speechcraftName != ''">speechcraft_name = #{speechcraftName},</if>
+            <if test="callIntervalTimeId != null and callIntervalTimeId != ''">call_interval_time_id = #{callIntervalTimeId},</if>
+            <if test="callIntervalTime != null and callIntervalTime != ''">call_interval_time = #{callIntervalTime},</if>
+            <if test="callLineId != null and callLineId != ''">call_line_id = #{callLineId},</if>
+            <if test="callLineName != null and callLineName != ''">call_line_name = #{callLineName},</if>
+            <if test="sceneDefId != null and sceneDefId != ''">scene_def_id = #{sceneDefId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcCallStrategyConfigById" parameterType="Long">
+        delete from t_lc_call_strategy_config where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcCallStrategyConfigByIds" parameterType="String">
+        delete from t_lc_call_strategy_config where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectCallStrategyConfigByOrgIdAndBusinessScene" resultMap="TLcCallStrategyConfigResult">
+        <include refid="selectTLcCallStrategyConfigVo"/>
+        WHERE org_id = #{orgId} AND business_scene = #{businessScene}
+    </select>
+    
+</mapper>

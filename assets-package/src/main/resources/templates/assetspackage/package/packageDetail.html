@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('资产包详情')" />
+</head>
+<body class="gray-bg">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12">
+                <form class="form-horizontal m" id="form-package-assemble">
+                    <!--<input name="orgId" th:value="${orgId}" type="hidden" id="defaultOrgId">-->
+                    <input name="packageId" th:value="${id}" type="hidden">
+                </form>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "assetspackage/package";
+
+        $(function () {
+            var options = {
+                url: prefix+"/findDetailAsset",
+                modalName: "资产包详情",
+                columns: [
+                    {
+                        field : 'id',
+                        title : '主键',
+                        visible: false
+                    },
+                    {
+                        field : 'orgCasno',
+                        title : '机构案件号'
+                    },
+                    {
+                        field : 'org',
+                        title : '所属机构',
+                        visible: false
+                    },
+                    {
+                        field : 'transfertype',
+                        title : '手别'
+                    },
+
+                    {
+                        field : 'rmbYe',
+                        title : '委案金额',
+                    },
+                    {
+                        field : 'waYe',
+                        title : '结案应还金额',
+                        visible: false
+                    },
+                    {
+                        field : 'curName',
+                        title : '客户名称'
+                    }]
+            };
+            $.table.init(options);
+        });
+
+
+
+        $("#form-package-assemble").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+
+        }
+        
+
+
+    </script>
+</body>
+</html>

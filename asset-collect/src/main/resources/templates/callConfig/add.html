@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal" id="form-config-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>业务场景：</label>
+                <div class="col-sm-8">
+                    <!--<input name="businessScene" class="form-control" type="text">-->
+                    <select class="form-control" name="businessScene" id="businessScene" required>
+                        <option value="" selected>请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>每天呼叫次数：</label>
+                <div class="col-sm-8">
+                    <input name="callFrequencyDay" id="callFrequencyDay" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>连续呼叫天数：</label>
+                <div class="col-sm-8">
+                    <input name="continueCallDays" id="continueCallDays" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>当天停止呼叫条件：</label>
+                <div class="col-sm-9">
+                    <!--<input name="stopCallCurDayCondition" id="stopCallCurDayCondition" class="form-control" type="text">-->
+                    <label th:each="stopCallCondition:${curDayStopCallContionList}" class="check-box">
+                        <input name="stopCallCurDayCondition" class="stopCallCurDayCondition" type="checkbox" th:value="${stopCallCondition.code}" th:text="${stopCallCondition.message}">
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>停止呼叫任务条件：</label>
+                <div class="col-sm-9">
+<!--                    <input name="stopCallCondition" id="stopCallCondition" class="form-control" type="text">-->
+                    <label th:each="stopCallCondition:${stopCallConditionList}" class="check-box">
+                        <input name="stopCallCondition" class="stopCallCondition" type="checkbox" th:value="${stopCallCondition.code}" th:text="${stopCallCondition.message}">
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>呼叫起始时间(08:00)：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="startCallDate" id="startCallDate" class="form-control" type="text" required>
+                        <!--<input name="startCallDate" id="startCallDate" class="form-control" placeholder="HH:mm:ss" type="text" required>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>-->
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>呼叫停止时间(20:00)：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="stopCallDate" id="stopCallDate" class="form-control" type="text" required>
+                        <!--<input name="stopCallDate" id="stopCallDate" class="form-control" placeholder="HH:mm:ss" type="text" required>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>-->
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>所属机构：</label>
+                <div class="col-sm-8">
+                    <!--<input name="orgId" class="form-control" type="text">-->
+                    <select class="form-control" name="orgId" id="orgId" required onchange="initSpeechCraft()">
+                        <option value="" selected>请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>机器人话术：</label>
+                <div class="col-sm-8">
+                    <!--<input name="speechcraftId" class="form-control" type="text">-->
+                    <select class="form-control" name="speechcraftIdAndSceneDefId" id="speechcraftId" required>
+                        <option value="" selected>请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>通话间隔时间：</label>
+                <div class="col-sm-8">
+                    <!--<input name="callIntervalTime" class="form-control" type="text">-->
+                    <select class="form-control" name="callIntervalTimeId" id="callIntervalTimeId" required>
+                        <option value="" selected>请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>线路：</label>
+                <div class="col-sm-8">
+                    <!--<input name="callIntervalTime" class="form-control" type="text">-->
+                    <select class="form-control" name="callLineIdAndName" id="callLineId" required>
+                        <option value="" selected>请选择</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "call/config"
+        var packagePrefix = ctx + "assetspackage/package";
+        $(function() {
+            initBusinessScene();
+            // 初始化机构下拉框
+            initOrg();
+            // 初始化话术列表
+            // initSpeechCraft();
+            // 初始化通话间隔时间
+            initCallIntervalTime();
+            initCallLine();
+        });
+
+        $("#form-config-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            var reg = /^[1-9]\d*$/; //正整数的正则表达式
+            var businessScene = $("#businessScene").val();
+            var orgId = $("#orgId").val();
+            var callFrequencyDay = $("#callFrequencyDay").val();
+            if(callFrequencyDay != null && callFrequencyDay != '') {
+                if (!reg.test(callFrequencyDay)) {
+                    $.modal.alert("每天呼叫次数必须是大于0的正整数");
+                    return;
+                }
+            }
+            var continueCallDays = $("#continueCallDays").val();
+            if(continueCallDays != null && continueCallDays != '') {
+                if(!reg.test(continueCallDays)) {
+                    $.modal.alert("连续呼叫天数必须是大于0的正整数");
+                    return;
+                }
+            }
+            if($(".stopCallCurDayCondition:checked").length==0){
+                $.modal.alert("请选择当天停止呼叫任务条件");
+                return;
+            }
+            if($(".stopCallCondition:checked").length==0){
+                $.modal.alert("请选择停止呼叫任务条件");
+                return;
+            }
+            $.post(
+                prefix + "/findEnableByBusinessScene",
+                {
+                    businessScene:businessScene,
+                    orgId:orgId,
+                    status:1
+                },
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        if(data.total > 0) {
+                            $.modal.alertError("一个委托方对应的业务场景有且只有1个策略是生效的");
+                            return;
+                        } else {
+                            if ($.validate.form()) {
+                                $.operate.save(prefix + "/add", $('#form-config-add').serialize());
+                            }
+                        }
+                    }
+                }
+            );
+        }
+
+        /*$("input[name='startCallDate']").datetimepicker({
+            format: "yyyy-mm-dd hh:ii:ss",
+            autoclose: true
+        });
+
+        $("input[name='stopCallDate']").datetimepicker({
+            format: "yyyy-mm-dd hh:ii:ss",
+            autoclose: true
+        });*/
+
+        /*$("input[name='startCallDate']").datetimepicker({
+            format: "hh:ii:ss",
+            autoclose: true
+        });
+
+        $("input[name='stopCallDate']").datetimepicker({
+            format: "hh:ii:ss",
+            autoclose: true
+        });*/
+
+        function initBusinessScene() {
+            $.post(
+                prefix + "/initBusinessScene",
+                {
+
+                },
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            var opt = "<option value='"+data.rows[i].code+"'>"+data.rows[i].message+"</option>";
+                            $("#businessScene").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function initOrg() {
+            $.post(
+                packagePrefix + "/findOrgInfo",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        var result = JSON.parse(data.msg);
+                        $.each(result,function(index,obj){
+                            $("#orgId").append("<option value='"+obj.orgId+"'>"+obj.orgName+"</option>");
+                        });
+                    }
+                }
+            );
+        }
+
+        function initSpeechCraft() {
+            var obj=document.getElementById('speechcraftId');
+            obj.options.length=0;
+            var orgId = $("#orgId").val();
+            $.post(
+                prefix + "/initSpeechCraftByOrgId",
+                {orgId:orgId},
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        var opt = "<option value=''>请选择</option>";
+                        $("#speechcraftId").append(opt);
+                        for (var i = 0; i < data.rows.length; i++) {
+                            var opt = "<option value='"+data.rows[i].robotDefId+"," + data.rows[i].sceneDefId + ","+data.rows[i].robotName+"'>"+data.rows[i].robotName+"</option>";
+                            $("#speechcraftId").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function initCallIntervalTime() {
+            $.post(
+                prefix + "/initCallIntervalTime",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            var opt = "<option value='"+data.rows[i].dictValue+"'>"+data.rows[i].dictLabel+"</option>";
+                            $("#callIntervalTimeId").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function initCallLine() {
+            $.post(
+                prefix + "/initCallLine",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    // console.log(data);
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            var opt = "<option value='"+data.rows[i].userPhoneId+","+data.rows[i].phone+"'>"+data.rows[i].phone+"</option>";
+                            $("#callLineId").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+    </script>
+</body>
+</html>

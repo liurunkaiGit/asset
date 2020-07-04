@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增机构')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal" id="form-assetspackage-add">
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>机构名称：</label>
+                <div class="col-sm-8">
+                    <input name="orgName" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>机构编码：</label>
+                <div class="col-sm-8">
+                    <input name="orgCode" class="form-control" id="orgCode" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>服务部门：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" name="deptName" id="deptName" type="hidden">
+                    <select class="form-control" name="deptId" id="deptId" required>
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>合作开始时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="startDate" id="startDate" class="form-control" placeholder="yyyy-MM-dd" type="text" required>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>合作结束时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="endDate" id="endDate" class="form-control" placeholder="yyyy-MM-dd" type="text" required>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>机构状态：</label>
+                <div class="col-sm-8">
+                    <select name="orgStatus" class="form-control" required>
+                        <option value="">请选择</option>
+                        <option value="1">正常</option>
+                        <option value="0">停用</option>
+                    </select>
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">是否推送到规则引擎系统</label>
+                <div class="col-sm-8">
+                    &lt;!&ndash;<input name="sendRuleEngine" class="form-control" type="text">&ndash;&gt;
+                    <select class="form-control" name="sendRuleEngine" id="sendRuleEngine">
+                        <option value="">&#45;&#45;请选择&#45;&#45;</option>
+                        <option value="1">是</option>
+                        <option value="2">否</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">是否自动分配任务</label>
+                <div class="col-sm-8">
+                    &lt;!&ndash;<input name="autoAllocatTask" class="form-control" type="text">&ndash;&gt;
+                    <select class="form-control" name="autoAllocatTask" id="autoAllocatTask">
+                        <option value="">&#45;&#45;请选择&#45;&#45;</option>
+                        <option value="1">是</option>
+                        <option value="2">否</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">自动分配任务策略</label>
+                <div class="col-sm-8">
+                    &lt;!&ndash;<input name="autoAllocatTaskStrategy" class="form-control" type="text">&ndash;&gt;
+                    <select class="form-control" name="allocatTaskStartegy" id="allocatTaskStartegy">
+                        <option value="">&#45;&#45;请选择&#45;&#45;</option>
+                        <option value="1">案件数量平均分配</option>
+                        <option value="2">案件金额平均分配</option>
+                    </select>
+                </div>
+            </div>-->
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">推送到机器人</label>
+                <div class="col-sm-8">
+                    &lt;!&ndash;<input name="sendRobot" class="form-control" type="text">&ndash;&gt;
+                    <select class="form-control" name="sendRobot" id="sendRobot">
+                        <option value="">&#45;&#45;请选择&#45;&#45;</option>
+                        <option value="1">是</option>
+                        <option value="2">否</option>
+                    </select>
+                </div>
+            </div>-->
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">是否自动开启机器人任务</label>
+                <div class="col-sm-8">
+                    &lt;!&ndash;<input name="autoStartRobotTsk" class="form-control" type="text">&ndash;&gt;
+                    <select class="form-control" name="autoStartRobotTask" id="autoStartRobotTask">
+                        <option value="">&#45;&#45;请选择&#45;&#45;</option>
+                        <option value="1">是</option>
+                        <option value="2">否</option>
+                    </select>
+                </div>
+            </div>-->
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>推送到语音质检</label>
+                <div class="col-sm-8">
+                    <!--<input name="sendRadioQc" class="form-control" type="text">-->
+                    <select class="form-control" name="sendRadioQc" id="sendRadioQc" required>
+                        <option value="">--请选择--</option>
+                        <option value="1">是</option>
+                        <option value="2">否</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>是否度小满自动评分</label>
+                <div class="col-sm-8">
+                    <select class="form-control" name="isAutoScore" id="isAutoScore" required>
+                        <option value="">--请选择--</option>
+                        <option value="1">是</option>
+                        <option value="2">否</option>
+                    </select>
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">项目名称：</label>
+                <div class="col-sm-8">
+                    <input name="projectName" id="projectName" class="form-control" type="text">
+                </div>
+            </div>-->
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        // var ctx = [[${@config.getKey('ctx')}]];
+    </script>
+    <script type="text/javascript">
+        var prefix = ctx + "assetspackage/org";
+        $(function () {
+            $.ajax({
+                url: prefix+"/findDeptInfo",
+                dataType: "json",
+                type: "post",
+                success:function(data){
+                    var result = eval(data.msg);
+                    $.each(result,function(index,obj){
+                        $("#deptId").append("<option value='"+obj.deptId+"'>"+obj.deptName+"</option>");
+                    });
+                }
+            });
+
+
+        });
+        
+        $("#form-assetspackage-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            var deptId= $("#deptId").val();
+            var deptName = $("#deptId").find("option:selected").text();
+
+            $("#deptName").val(deptName);
+            var startDate = $("#startDate").val();
+
+
+
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-assetspackage-add').serialize());
+            }
+        }
+
+        $("input[name='startDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='endDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+
+    </script>
+</body>
+</html>

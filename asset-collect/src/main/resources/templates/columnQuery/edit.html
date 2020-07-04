@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改【请填写功能名称】')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-query-edit" th:object="${tLcColumnQuery}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">委托方：</label>
+                <div class="col-sm-8">
+                    <input name="orgIdValue" id="orgIdValue" th:field="*{orgId}" class="form-control" type="hidden">
+                    <select class="form-control" name="orgIdAndName" id="orgId" required disabled>
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">表名：</label>
+                <div class="col-sm-8">
+                    <input name="tableNameValue" id="tableNameValue" th:field="*{tableName}" class="form-control" type="hidden">
+                    <select class="form-control" name="tableName" id="tableName" onchange="getColumn()" required>
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">表简称：</label>
+                <div class="col-sm-8">
+                    <input name="tablePrefix" id="tablePrefix" th:field="*{tablePrefix}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">字段名：</label>
+                <div class="col-sm-8">
+                    <input name="columnNameValue" id="columnNameValue" th:field="*{columnName}" class="form-control" type="hidden">
+                    <select class="form-control" name="columnNameAndComment" id="columnName" required>
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">字段类型：</label>
+                <div class="col-sm-8">
+                    <input name="columnTypeValue" id="columnTypeValue" th:field="*{columnType}" class="form-control" type="hidden">
+                    <select class="form-control" name="columnType" id="columnType" required>
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">实体字段：</label>
+                <div class="col-sm-8">
+                    <input name="beanName" id="beanName" th:field="*{beanName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input name="columnValue" id="columnValue" th:field="*{columnValue}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "column/query";
+        var taskPrefix = ctx + "collect/task";
+        $("#form-query-edit").validate({
+            focusCleanup: true
+        });
+
+        $(function () {
+            initOrg();
+            initTableName();
+            getColumn();
+            initColumnType();
+        })
+
+        function initOrg() {
+            var orgIdValue = $("#orgIdValue").val();
+            $.post(
+                taskPrefix + "/initOrg",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            if (orgIdValue == data.rows[i].deptId) {
+                                var opt = "<option value='"+data.rows[i].deptId+","+data.rows[i].deptName+"' selected>"+data.rows[i].deptName+"</option>";
+                            } /*else {
+                                var opt = "<option value='"+data.rows[i].deptId+","+data.rows[i].deptName+"'>"+data.rows[i].deptName+"</option>";
+                            }*/
+                            $("#orgId").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function initTableName() {
+            var tableNameValue = $("#tableNameValue").val();
+            $.post(
+                prefix + "/initTableName",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.status == 200) {//请求成功
+                        for (var i = 0; i < data.result.length; i++) {
+                            if (tableNameValue == data.result[i].dictValue) {
+                                var opt = "<option value='" + data.result[i].dictValue + "' selected>" + data.result[i].dictLabel + "</option>";
+                            } else {
+                                var opt = "<option value='" + data.result[i].dictValue + "'>" + data.result[i].dictLabel + "</option>";
+                            }
+                            $("#tableName").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function initColumnType() {
+            var columnTypeValue = $("#columnTypeValue").val();
+            $.post(
+                prefix + "/initColumnType",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.status == 200) {//请求成功
+                        for (var i = 0; i < data.result.length; i++) {
+                            if (columnTypeValue == data.result[i].dictValue) {
+                                var opt = "<option value='" + data.result[i].dictValue + "' selected>" + data.result[i].dictLabel + "</option>";
+                            } else {
+                                var opt = "<option value='" + data.result[i].dictValue + "'>" + data.result[i].dictLabel + "</option>";
+                            }
+                            $("#columnType").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function getColumn() {
+            var tableName = $("#tableNameValue").val();
+            var columnNameValue = $("#columnNameValue").val();
+            $.post(
+                prefix + "/getColumnByTable",
+                {tableName: tableName},
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.status == 200) {//请求成功
+                        for (var i = 0; i < data.result.length; i++) {
+                            // var opt = "<option value='" + data.result[i].dictValue + "," + data.result[i].dictLabel + "'>" + data.result[i].dictLabel + "</option>";
+                            if (columnNameValue == data.result[i].dictValue) {
+                                var opt = "<option value='" + data.result[i].dictValue + "," + data.result[i].dictLabel + "' selected>" + data.result[i].dictLabel + "</option>";
+                            } else {
+                                var opt = "<option value='" + data.result[i].dictValue + "," + data.result[i].dictLabel + "'>" + data.result[i].dictLabel + "</option>";
+                            }
+                            $("#columnName").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function submitHandler() {
+            var orgIdAndName = $("#orgId").val();
+            var tableName = $("#tableName").val();
+            var columnName = $("#columnName").val();
+            var columnType = $("#columnType").val();
+            var columnValue = $("#columnValue").val();
+            var tablePrefix  = $("#tablePrefix").val();
+            // if ($.validate.form()) {
+            //     $.operate.save(prefix + "/edit", $('#form-query-edit').serialize());
+            // }
+            $.post(
+                prefix + "/edit",
+                {
+                    id: $("#id").val(),
+                    orgIdAndName: orgIdAndName,
+                    tableName: tableName,
+                    columnNameAndComment: columnName,
+                    columnType: columnType,
+                    columnValue: columnValue,
+                    tablePrefix:tablePrefix
+                },
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    $.modal.alertSuccess("保存成功");
+                    window.parent.$.table.refresh();
+                    $.modal.close();
+                }
+            );
+        }
+    </script>
+</body>
+</html>

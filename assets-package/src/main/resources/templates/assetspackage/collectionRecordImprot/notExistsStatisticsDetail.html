@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('导入统计详情')" />
+    <style type="text/css">
+        .select-list li p{
+            width: 100px;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-css"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script th:inline="javascript">
+    var prefix = ctx + "assetspackage/CollectionRecordImprot";
+    $(function() {
+        var options = {
+            url: prefix + "/notExitsList",
+            clickToSelect:true,
+            modalName: "导入统计详情",
+            columns: [{
+                checkbox: false
+            },
+                {
+                    field : 'orgCaseNo',
+                    title : '机构案件号'
+                },
+                {
+                    field : 'msg',
+                    title : '异常消息'
+                }/*,
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }*/]
+        };
+        $.table.init(options);
+    });
+
+
+    function uploadFile() {
+        var formData = new FormData();
+        if ($('#filePath')[0].files[0] == null) {
+            $.modal.alertWarning("请先选择文件路径");
+            return false;
+        }
+        formData.append('file', $('#filePath')[0].files[0]);
+        $.ajax({
+            url: prefix + "/fileUpload",
+            type: 'post',
+            cache: false,
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: "json",
+            success: function(result) {
+                $.operate.successCallback(result);
+            }
+        });
+    }
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.TLiTelListMapper">
+    
+    <resultMap type="com.ruoyi.assetspackage.domain.TLiTelList" id="TLiTelListResult">
+        <result property="tuid"    column="tuid"    />
+        <result property="telTuid"    column="tel_tuid"    />
+        <result property="taskTuid"    column="task_tuid"    />
+        <result property="caseTuid"    column="case_tuid"    />
+        <result property="obTuid"    column="ob_tuid"    />
+        <result property="caseNo"    column="case_no"    />
+        <result property="custNo"    column="cust_no"    />
+        <result property="queue"    column="queue"    />
+        <result property="telephone"    column="telephone"    />
+        <result property="telCode"    column="tel_code"    />
+        <result property="actCode"    column="act_code"    />
+        <result property="actDate"    column="act_date"    />
+        <result property="actMoney"    column="act_money"    />
+        <result property="recheckDate"    column="recheck_date"    />
+        <result property="dataOwner"    column="data_owner"    />
+        <result property="remark"    column="remark"    />
+        <result property="created"    column="created"    />
+        <result property="createdby"    column="createdby"    />
+        <result property="incidentId"    column="incident_id"    />
+        <result property="recordType"    column="record_type"    />
+        <result property="obId"    column="ob_id"    />
+        <result property="obValue"    column="ob_value"    />
+        <result property="isLaw"    column="is_law"    />
+    </resultMap>
+
+    <sql id="selectTLiTelListVo">
+        select tuid, tel_tuid, task_tuid, case_tuid, ob_tuid, case_no, cust_no, queue, telephone, tel_code, act_code, act_date, act_money, recheck_date, data_owner, remark, created, createdby, incident_id, record_type, ob_id, ob_value, is_law from t_li_tel_list
+    </sql>
+
+    <select id="selectTLiTelListList" parameterType="TLiTelList" resultMap="TLiTelListResult">
+        <include refid="selectTLiTelListVo"/>
+        <where>  
+            <if test="tuid != null  and tuid != ''"> and tuid = #{tuid}</if>
+            <if test="telTuid != null  and telTuid != ''"> and tel_tuid = #{telTuid}</if>
+            <if test="taskTuid != null  and taskTuid != ''"> and task_tuid = #{taskTuid}</if>
+            <if test="caseTuid != null  and caseTuid != ''"> and case_tuid = #{caseTuid}</if>
+            <if test="obTuid != null  and obTuid != ''"> and ob_tuid = #{obTuid}</if>
+            <if test="caseNo != null  and caseNo != ''"> and case_no = #{caseNo}</if>
+            <if test="custNo != null  and custNo != ''"> and cust_no = #{custNo}</if>
+            <if test="queue != null  and queue != ''"> and queue = #{queue}</if>
+            <if test="telephone != null  and telephone != ''"> and telephone = #{telephone}</if>
+            <if test="telCode != null  and telCode != ''"> and tel_code = #{telCode}</if>
+            <if test="actCode != null  and actCode != ''"> and act_code = #{actCode}</if>
+            <if test="actDate != null  and actDate != ''"> and act_date = #{actDate}</if>
+            <if test="actMoney != null  and actMoney != ''"> and act_money = #{actMoney}</if>
+            <if test="recheckDate != null  and recheckDate != ''"> and recheck_date = #{recheckDate}</if>
+            <if test="dataOwner != null  and dataOwner != ''"> and data_owner = #{dataOwner}</if>
+            <if test="remark != null  and remark != ''"> and remark = #{remark}</if>
+            <if test="created != null  and created != ''"> and created = #{created}</if>
+            <if test="createdby != null  and createdby != ''"> and createdby = #{createdby}</if>
+            <if test="incidentId != null  and incidentId != ''"> and incident_id = #{incidentId}</if>
+            <if test="recordType != null  and recordType != ''"> and record_type = #{recordType}</if>
+            <if test="obId != null  and obId != ''"> and ob_id = #{obId}</if>
+            <if test="obValue != null  and obValue != ''"> and ob_value = #{obValue}</if>
+            <if test="isLaw != null  and isLaw != ''"> and is_law = #{isLaw}</if>
+        </where>
+    </select>
+    
+    <select id="selectTLiTelListById" parameterType="String" resultMap="TLiTelListResult">
+        <include refid="selectTLiTelListVo"/>
+        where tuid = #{tuid}
+    </select>
+        
+    <insert id="insertTLiTelList" parameterType="TLiTelList">
+        insert into t_li_tel_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tuid != null  and tuid != ''">tuid,</if>
+            <if test="telTuid != null  and telTuid != ''">tel_tuid,</if>
+            <if test="taskTuid != null  and taskTuid != ''">task_tuid,</if>
+            <if test="caseTuid != null  and caseTuid != ''">case_tuid,</if>
+            <if test="obTuid != null  and obTuid != ''">ob_tuid,</if>
+            <if test="caseNo != null  and caseNo != ''">case_no,</if>
+            <if test="custNo != null  and custNo != ''">cust_no,</if>
+            <if test="queue != null  and queue != ''">queue,</if>
+            <if test="telephone != null  and telephone != ''">telephone,</if>
+            <if test="telCode != null  and telCode != ''">tel_code,</if>
+            <if test="actCode != null  and actCode != ''">act_code,</if>
+            <if test="actDate != null  and actDate != ''">act_date,</if>
+            <if test="actMoney != null  and actMoney != ''">act_money,</if>
+            <if test="recheckDate != null  and recheckDate != ''">recheck_date,</if>
+            <if test="dataOwner != null  and dataOwner != ''">data_owner,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="created != null  and created != ''">created,</if>
+            <if test="createdby != null  and createdby != ''">createdby,</if>
+            <if test="incidentId != null  and incidentId != ''">incident_id,</if>
+            <if test="recordType != null  and recordType != ''">record_type,</if>
+            <if test="obId != null  and obId != ''">ob_id,</if>
+            <if test="obValue != null  and obValue != ''">ob_value,</if>
+            <if test="isLaw != null  and isLaw != ''">is_law,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tuid != null  and tuid != ''">#{tuid},</if>
+            <if test="telTuid != null  and telTuid != ''">#{telTuid},</if>
+            <if test="taskTuid != null  and taskTuid != ''">#{taskTuid},</if>
+            <if test="caseTuid != null  and caseTuid != ''">#{caseTuid},</if>
+            <if test="obTuid != null  and obTuid != ''">#{obTuid},</if>
+            <if test="caseNo != null  and caseNo != ''">#{caseNo},</if>
+            <if test="custNo != null  and custNo != ''">#{custNo},</if>
+            <if test="queue != null  and queue != ''">#{queue},</if>
+            <if test="telephone != null  and telephone != ''">#{telephone},</if>
+            <if test="telCode != null  and telCode != ''">#{telCode},</if>
+            <if test="actCode != null  and actCode != ''">#{actCode},</if>
+            <if test="actDate != null  and actDate != ''">#{actDate},</if>
+            <if test="actMoney != null  and actMoney != ''">#{actMoney},</if>
+            <if test="recheckDate != null  and recheckDate != ''">#{recheckDate},</if>
+            <if test="dataOwner != null  and dataOwner != ''">#{dataOwner},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="created != null  and created != ''">#{created},</if>
+            <if test="createdby != null  and createdby != ''">#{createdby},</if>
+            <if test="incidentId != null  and incidentId != ''">#{incidentId},</if>
+            <if test="recordType != null  and recordType != ''">#{recordType},</if>
+            <if test="obId != null  and obId != ''">#{obId},</if>
+            <if test="obValue != null  and obValue != ''">#{obValue},</if>
+            <if test="isLaw != null  and isLaw != ''">#{isLaw},</if>
+         </trim>
+    </insert>
+
+   <!-- <update id="updateTLiTelList" parameterType="TLiTelList">
+        update t_li_tel_list
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="telTuid != null  and telTuid != ''">tel_tuid = #{telTuid},</if>
+            <if test="taskTuid != null  and taskTuid != ''">task_tuid = #{taskTuid},</if>
+            <if test="caseTuid != null  and caseTuid != ''">case_tuid = #{caseTuid},</if>
+            <if test="obTuid != null  and obTuid != ''">ob_tuid = #{obTuid},</if>
+            <if test="caseNo != null  and caseNo != ''">case_no = #{caseNo},</if>
+            <if test="custNo != null  and custNo != ''">cust_no = #{custNo},</if>
+            <if test="queue != null  and queue != ''">queue = #{queue},</if>
+            <if test="telephone != null  and telephone != ''">telephone = #{telephone},</if>
+            <if test="telCode != null  and telCode != ''">tel_code = #{telCode},</if>
+            <if test="actCode != null  and actCode != ''">act_code = #{actCode},</if>
+            <if test="actDate != null  and actDate != ''">act_date = #{actDate},</if>
+            <if test="actMoney != null  and actMoney != ''">act_money = #{actMoney},</if>
+            <if test="recheckDate != null  and recheckDate != ''">recheck_date = #{recheckDate},</if>
+            <if test="dataOwner != null  and dataOwner != ''">data_owner = #{dataOwner},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="created != null  and created != ''">created = #{created},</if>
+            <if test="createdby != null  and createdby != ''">createdby = #{createdby},</if>
+            <if test="incidentId != null  and incidentId != ''">incident_id = #{incidentId},</if>
+            <if test="recordType != null  and recordType != ''">record_type = #{recordType},</if>
+            <if test="obId != null  and obId != ''">ob_id = #{obId},</if>
+            <if test="obValue != null  and obValue != ''">ob_value = #{obValue},</if>
+            <if test="isLaw != null  and isLaw != ''">is_law = #{isLaw},</if>
+        </trim>
+        where tuid = #{tuid}
+    </update>-->
+
+    <update id="updateTLiTelList" parameterType="TLiTelList">
+        update t_li_tel_list set telephone = #{telephone}
+        where tuid = #{tuid}
+    </update>
+
+    <delete id="deleteTLiTelListById" parameterType="String">
+        delete from t_li_tel_list where tuid = #{tuid}
+    </delete>
+
+    <delete id="deleteTLiTelListByIds" parameterType="String">
+        delete from t_li_tel_list where tuid in 
+        <foreach item="tuid" collection="array" open="(" separator="," close=")">
+            #{tuid}
+        </foreach>
+    </delete>
+    
+</mapper>

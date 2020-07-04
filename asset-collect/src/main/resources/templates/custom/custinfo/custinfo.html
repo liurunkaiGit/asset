@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('客户信息列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>客户编号：</p>
+                                <input type="text" name="customCode"/>
+                            </li>
+                            <li>
+                                <p>客户姓名：</p>
+                                <input type="text" name="customName"/>
+                            </li>
+                            <li>
+                                <p>客户性别 0：男1：女：</p>
+                                <select name="customSex" th:with="type=${@dict.getType('')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li class="select-time">
+                                <p>出生日期：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginBirthday]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endBirthday]"/>
+                            </li>
+                            <li>
+                                <p>证件类型：</p>
+                                <select name="certificateType" th:with="type=${@dict.getType('')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>证件编号：</p>
+                                <input type="text" name="certificateNo"/>
+                            </li>
+                            <li>
+                                <p>户籍详细地址：</p>
+                                <input type="text" name="certificateAddress"/>
+                            </li>
+                            <li>
+                                <p>职业：</p>
+                                <input type="text" name="profession"/>
+                            </li>
+                            <li>
+                                <p>所在城市：</p>
+                                <input type="text" name="city"/>
+                            </li>
+                            <li>
+                                <p>学历：</p>
+                                <input type="text" name="education"/>
+                            </li>
+                            <li>
+                                <p>手机号：</p>
+                                <input type="text" name="phone"/>
+                            </li>
+                            <li>
+                                <p>家庭电话：</p>
+                                <input type="text" name="tel"/>
+                            </li>
+                            <li>
+                                <p>电子邮件：</p>
+                                <input type="text" name="email"/>
+                            </li>
+                            <li>
+                                <p>年收入：</p>
+                                <input type="text" name="incomeYear"/>
+                            </li>
+                            <li>
+                                <p>现住址：</p>
+                                <input type="text" name="address"/>
+                            </li>
+                            <li>
+                                <p>是否已婚 1：是，2：否：</p>
+                                <select name="marrageStatus">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>是否有孩 1：是，2：否：</p>
+                                <input type="text" name="hasChild"/>
+                            </li>
+                            <li>
+                                <p>是否有房 1：是，2：否：</p>
+                                <input type="text" name="hasHouse"/>
+                            </li>
+                            <li>
+                                <p>是否有车 1：是，2：否：</p>
+                                <input type="text" name="hasCar"/>
+                            </li>
+                            <li>
+                                <p>是否有效 1：是，2：否：</p>
+                                <select name="validateStatus">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li class="select-time">
+                                <p>修改时间：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginModifyTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endModifyTime]"/>
+                            </li>
+                            <li>
+                                <p>修改人：</p>
+                                <input type="text" name="modifyBy"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <!--<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:custinfo:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:custinfo:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:custinfo:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:custinfo:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>-->
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:custinfo:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:custinfo:remove')}]];
+        var prefix = ctx + "system/custinfo";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "客户信息",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '主键id',
+                    visible: false
+                },
+                {
+                    field : 'customCode', 
+                    title : '客户编号'
+                },
+                {
+                    field : 'customName', 
+                    title : '客户姓名'
+                },
+                {
+                    field : 'customSex', 
+                    title : '客户性别 0：男1：女'
+                },
+                {
+                    field : 'birthday', 
+                    title : '出生日期'
+                },
+                {
+                    field : 'certificateType', 
+                    title : '证件类型'
+                },
+                {
+                    field : 'certificateNo', 
+                    title : '证件编号'
+                },
+                {
+                    field : 'certificateAddress', 
+                    title : '户籍详细地址'
+                },
+                {
+                    field : 'profession', 
+                    title : '职业'
+                },
+                {
+                    field : 'city', 
+                    title : '所在城市'
+                },
+                {
+                    field : 'education', 
+                    title : '学历'
+                },
+                {
+                    field : 'phone', 
+                    title : '手机号'
+                },
+                {
+                    field : 'tel', 
+                    title : '家庭电话'
+                },
+                {
+                    field : 'email', 
+                    title : '电子邮件'
+                },
+                {
+                    field : 'incomeYear', 
+                    title : '年收入'
+                },
+                {
+                    field : 'address', 
+                    title : '现住址'
+                },
+                {
+                    field : 'marrageStatus', 
+                    title : '是否已婚 1：是，2：否'
+                },
+                {
+                    field : 'hasChild', 
+                    title : '是否有孩 1：是，2：否'
+                },
+                {
+                    field : 'hasHouse', 
+                    title : '是否有房 1：是，2：否'
+                },
+                {
+                    field : 'hasCar', 
+                    title : '是否有车 1：是，2：否'
+                },
+                {
+                    field : 'validateStatus', 
+                    title : '是否有效 1：是，2：否'
+                },
+                {
+                    field : 'modifyTime', 
+                    title : '修改时间'
+                },
+                {
+                    field : 'modifyBy', 
+                    title : '修改人'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

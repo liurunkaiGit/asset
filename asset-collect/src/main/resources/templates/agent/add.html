@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增分机号码')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal" id="form-phone-add">
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>所属机构：</label>
+                <div class="col-sm-8">
+                    <select class="form-control" name="orgId" id="orgId" onchange="initExon()" required>
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>-->
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>所属话务平台：</label>
+                <div class="col-sm-8">
+                    <select  class="form-control" name="callPlatform" id="callPlatform" onchange="initExon()" required th:with="type=${@dict.getType('call_platform')}">
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>分机号码：</label>
+                <div class="col-sm-8">
+                    <input name="agentid" id="agentid" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">坐席技能：</label>
+                <div class="col-sm-8">
+                    <input name="skilldesc" class="form-control" type="text" value="1001=1;">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外呼前缀：</label>
+                <div class="col-sm-8">
+                    <input name="dialprefix" class="form-control" type="text" value="991">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>外显号码组：</label>
+                <div class="col-sm-8">
+                    <!--<input name="dialcaller" class="form-control" type="text">-->
+                    <select class="form-control" name="exonNumGroupId" id="exonNumGroupId" required>
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否启用：</label>
+                <div class="col-sm-8">
+                    <select name="isused" class="form-control">
+                        <option value="">请选择</option>
+                        <option value="0">启用</option>
+                        <option value="1">停用</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">绑定坐席：</label>
+                <div class="col-sm-8">
+                    <!--<input name="dialcaller" class="form-control" type="text">-->
+                    <!--<select class="form-control" name="seatId" id="seatId">
+                        <option value="">请选择</option>
+                    </select>-->
+                    <input name="seatName" onclick="bindAgent()" id="seatName" type="seatId" placeholder="请选择坐席" class="form-control">
+                    <input name="seatId" id="seatId" type="hidden" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">分机密码：</label>
+                <div class="col-sm-8">
+                    <input name="password" id="password" value="1234" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">域名：</label>
+                <div class="col-sm-8">
+                    <input name="domain" id="domain" value="huadao" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "agent/phone"
+        var exonPrefix = ctx + "collect/exonNum";
+        var taskPrefix = ctx + "collect/task";
+        $(function () {
+            // 初始化外显号码组
+            //initExon();
+            //initOrg();
+        })
+
+        $("#form-phone-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            /*var exonNumGroupId = $("#exonNumGroupId").val();
+            if (exonNumGroupId == null || exonNumGroupId == '') {
+                $.modal.alertWarning("请选择外显号码组");
+                return;
+            }
+            var agentid = $("#agentid").val();
+            if (agentid == null || agentid == '') {
+                $.modal.alertWarning("分机号码不能为空");
+                return;
+            }*/
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-phone-add').serialize());
+            }
+        }
+
+        function initExon() {
+            var obj=document.getElementById('exonNumGroupId');
+            obj.options.length=0;
+            var callPlatform = $('#callPlatform').val();
+            if(callPlatform != null && callPlatform != ""){
+                $.post(
+                    exonPrefix + "/initExon?callPlatform="+$('#callPlatform').val(),
+                    function(data) {
+                        // alert(JSON.stringify(data));
+                        if (data.code == 0) {//请求成功
+                            var opt = "<option value=''>请选择</option>";
+                            $("#exonNumGroupId").append(opt);
+                            for (var i = 0; i < data.rows.length; i++) {
+                                var opt = "<option value='"+data.rows[i].id+"'>"+data.rows[i].exonNumGroup+"</option>";
+                                $("#exonNumGroupId").append(opt);
+                            }
+                        }
+                    }
+                );
+            }
+
+        }
+
+        // function initOrg() {
+        //     $.post(
+        //         taskPrefix+"/initOrg",
+        //         function(data) {
+        //             // alert(JSON.stringify(data));
+        //             if (data.code == 0) {//请求成功
+        //                 for (var i = 0; i < data.rows.length; i++) {
+        //                     var opt = "<option value='"+data.rows[i].deptId+"'>"+data.rows[i].deptName+"</option>";
+        //                     $("#orgId").append(opt);
+        //                 }
+        //             }
+        //         }
+        //     );
+        // }
+
+        function bindAgent() {
+
+            var callPlatform = $('#callPlatform').val();
+            if(callPlatform != null && callPlatform !=""){
+                var toBindAgentUrl = prefix + '/toBindAgent?callPlatform=' + callPlatform;
+                $.modal.open("选择坐席", toBindAgentUrl);
+            }
+
+        }
+
+        /*function initAgent() {
+            $.post(
+                prefix + "/initAgent",
+                {type:0},
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            var opt = "<option value='"+data.rows[i].userId+"'>"+data.rows[i].userName+"</option>";
+                            $("#seatId").append(opt);
+                        }
+                    }
+                }
+            );
+        }*/
+    </script>
+</body>
+</html>

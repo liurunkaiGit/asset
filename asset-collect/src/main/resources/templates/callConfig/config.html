@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('【请填写功能名称】列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>业务场景：</p>
+                                <!-- 1：新案；2：协催；3：旧案-->
+                                <!--<input type="text" name="businessScene"/>-->
+                                <select class="form-control" name="businessScene" id="businessScene">
+                                    <option value="" selected>请选择</option>
+                                </select>
+                            </li>
+                            <!--<li>
+                                <p>机构名称：</p>
+                                &lt;!&ndash;<input type="text" name="orgName"/>&ndash;&gt;
+                                <select class="form-control" name="orgName" id="orgName">
+                                    <option value="" selected>请选择</option>
+                                </select>
+                            </li>-->
+                            <!--<li>
+                                <p>呼叫次数：</p>
+                                <input type="text" name="callFrequencyDay"/>
+                            </li>
+                            <li>
+                                <p>呼叫天数：</p>
+                                <input type="text" name="continueCallDays"/>
+                            </li>
+                            <li>
+                                <p>当天停止呼叫条件：</p>
+                                <input type="text" name="stopCallCurDayCondition"/>
+                            </li>
+                            <li>
+                                <p>停止呼叫任务条件：</p>
+                                <input type="text" name="stopCallCondition"/>
+                            </li>-->
+                            <!--<li class="select-time">
+                                <p>呼叫起始时间：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginStartCallDate]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endStartCallDate]"/>
+                            </li>-->
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="call:config:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="ruoyi:config:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="ruoyi:config:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="ruoyi:config:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('call:config:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('ruoyi:config:remove')}]];
+        var prefix = ctx + "call/config";
+
+        $(function() {
+
+            initBusinessScene();
+
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                clickToSelect:true,
+                modalName: "呼叫策略配置",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '主键自增',
+                    visible: false
+                },
+                {
+                    field : 'orgName',
+                    title : '机构名称'
+                },
+                {
+                    field : 'businessScene', 
+                    title : '业务场景',
+                    formatter: function(value, row, index) {
+                        if(value == 1) {
+                            return '新案';
+                        } else if(value == 2) {
+                            return '协催';
+                        } else if(value == 3) {
+                            return '旧案';
+                        }
+                    }
+                },
+                {
+                    field : 'callFrequencyDay', 
+                    title : '每天呼叫次数'
+                },
+                {
+                    field : 'continueCallDays', 
+                    title : '连续呼叫天数'
+                },
+                {
+                    field : 'stopCallCurDayCondition', 
+                    title : '当天停止呼叫条件',
+                    formatter: function (value, row, index) {
+                        if (value != null && value != '') {
+                            return getCurStopCallConditon(value);
+                        } else {
+                            return value;
+                        }
+                    }
+                },
+                {
+                    field : 'stopCallCondition', 
+                    title : '停止呼叫任务条件',
+                    formatter: function (value, row, index) {
+                        if (value != null && value != '') {
+                            return getStopCallConditon(value);
+                        } else {
+                            return value;
+                        }
+                    }
+                },
+                {
+                    field : 'startCallDate', 
+                    title : '呼叫起始时间',
+                },
+                {
+                    field : 'stopCallDate',
+                    title : '呼叫停止时间'
+                },
+                {
+                    visible: editFlag == 'hidden' ? false : true,
+                    title: '是否生效',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    }
+                },{
+                        field : 'speechcraftName',
+                        title : '机器人话术名称'
+                    }
+                    /*{
+                        field : 'orgId',
+                        title : '所属机构id'
+                    },*/
+
+                    /*{
+                        field : 'speechcraftId',
+                        title : '机器人话术 id'
+                    },*/
+                    /*
+                    {
+                        field : 'callIntervalTime',
+                        title : '通话间隔时长（小时）'
+                    }*//*,
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }*/]
+            };
+            $.table.init(options);
+        });
+
+        function initBusinessScene() {
+            $.post(
+                prefix + "/initBusinessScene",
+                {
+
+                },
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            var opt = "<option value='"+data.rows[i].code+"'>"+data.rows[i].message+"</option>";
+                            $("#businessScene").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        /* 是否生效显示 */
+        function statusTools(row) {
+            if (row.status == 0) {
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.id + '\',\'' + row.orgId + '\',\'' + row.businessScene + '\')"></i> ';
+            } else {
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.id + '\',\'' + row.orgId + '\',\'' + row.businessScene + '\')"></i> ';
+            }
+        }
+
+        /* 不生效 */
+        function disable(id,orgId) {
+            $.modal.confirm("确认要停用此配置吗？", function() {
+                $.operate.post(prefix + "/changeStatus", { "id": id, "status": 0, "orgId":orgId });
+            })
+        }
+
+        /* 生效 */
+        function enable(id,orgId,businessScene) {
+            $.post(
+                prefix + "/findEnableByBusinessScene",
+                {
+                    businessScene:businessScene,
+                    status:1,
+                    orgId:orgId
+                },
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        if(data.total > 0) {
+                            $.modal.alertError("一个委托方对应的业务场景有且只有1个策略是生效的");
+                            return;
+                        } else {
+                            $.modal.confirm("确认要启用此配置吗？", function() {
+                                $.operate.post(prefix + "/changeStatus", { "id": id, "status": 1,"orgId":orgId });
+                            })
+                        }
+                    }
+                }
+            );
+        }
+
+        // 根据结束呼叫条件id获取值
+        function getStopCallConditon(value) {
+            var stopCallCurDayCondition = value.split(",");
+            var stopCallCurDayConditions = new Array()
+            for(var i = 0; i < stopCallCurDayCondition.length; i++){
+                var stopCallCurDayConditionValue;
+                if (stopCallCurDayCondition[i] == 1) {
+                    stopCallCurDayConditionValue = 'A';
+                } else if (stopCallCurDayCondition[i] == 2) {
+                    stopCallCurDayConditionValue = 'B';
+                } else if (stopCallCurDayCondition[i] == 3) {
+                    stopCallCurDayConditionValue = 'C';
+                } else if (stopCallCurDayCondition[i] == 4) {
+                    stopCallCurDayConditionValue = 'D';
+                } else if (stopCallCurDayCondition[i] == 5) {
+                    stopCallCurDayConditionValue = 'E';
+                }
+                stopCallCurDayConditions.push(stopCallCurDayConditionValue);
+            }
+            return stopCallCurDayConditions.join(",");
+        }
+
+        function getCurStopCallConditon(value) {
+            var stopCallCurDayCondition = value.split(",");
+            var stopCallCurDayConditions = new Array()
+            for(var i = 0; i < stopCallCurDayCondition.length; i++){
+                var stopCallCurDayConditionValue;
+                if (stopCallCurDayCondition[i] == 0) {
+                    stopCallCurDayConditionValue = '已接听';
+                } else if (stopCallCurDayCondition[i] == 1) {
+                    stopCallCurDayConditionValue = '拒接';
+                } else if (stopCallCurDayCondition[i] == 2) {
+                    stopCallCurDayConditionValue = '无法接通';
+                } else if (stopCallCurDayCondition[i] == 3) {
+                    stopCallCurDayConditionValue = '主叫号码不可用';
+                } else if (stopCallCurDayCondition[i] == 4) {
+                    stopCallCurDayConditionValue = '空号';
+                } else if (stopCallCurDayCondition[i] == 5) {
+                    stopCallCurDayConditionValue = '关机';
+                } else if (stopCallCurDayCondition[i] == 6) {
+                    stopCallCurDayConditionValue = '占线';
+                } else if (stopCallCurDayCondition[i] == 7) {
+                    stopCallCurDayConditionValue = '停机';
+                } else if (stopCallCurDayCondition[i] == 8) {
+                    stopCallCurDayConditionValue = '未接';
+                } else if (stopCallCurDayCondition[i] == 9) {
+                    stopCallCurDayConditionValue = '主叫欠费';
+                } else if (stopCallCurDayCondition[i] == 10) {
+                    stopCallCurDayConditionValue = '呼损';
+                } else if (stopCallCurDayCondition[i] == 11) {
+                    stopCallCurDayConditionValue = '黑名单';
+                } else if (stopCallCurDayCondition[i] == 22) {
+                    stopCallCurDayConditionValue = '线路盲区';
+                }
+                stopCallCurDayConditions.push(stopCallCurDayConditionValue);
+            }
+            return stopCallCurDayConditions.join(",");
+        }
+    </script>
+</body>
+</html>

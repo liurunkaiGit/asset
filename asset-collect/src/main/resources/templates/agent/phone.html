@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('分机号码列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>分机号码：</p>
+                                <input type="text" name="agentid"/>
+                            </li>
+                            <!--
+                            <li>
+                                <p>坐席技能：</p>
+                                <input type="text" name="skilldesc"/>
+                            </li>-->
+                            <li>
+                                <p>话务平台：</p><select name="callPlatform" th:with="type=${@dict.getType('call_platform')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                            </li>
+                            <li>
+                                <p>绑定坐席：</p>
+                                <input type="text" name="seatName"/>
+                            </li>
+                            <li>
+                                <p>外显号码组：</p>
+                                <!--<input type="text" name="dialcaller"/>-->
+                                <select name="exonNumGroupId" id="exonNumGroupId">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>是否启用：</p>
+                                <select name="isused">
+                                    <option value="">请选择</option>
+                                    <option value="0">启用</option>
+                                    <option value="1">停用</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="ruoyi:phone:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="ruoyi:phone:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="ruoyi:phone:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+              <!--  <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="ruoyi:phone:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>-->
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('ruoyi:phone:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('ruoyi:phone:remove')}]];
+        var prefix = ctx + "agent/phone";
+        var exonPrefix = ctx + "collect/exonNum";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                clickToSelect:true,
+                modalName: "分机号码",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '主键',
+                    visible: false
+                },
+                {
+                    field : 'agentid', 
+                    title : '分机号码'
+                },
+                    {
+                        field : 'callPlatform',
+                        title : '话务平台'
+                    },
+                {
+                    field : 'skilldesc', 
+                    title : '坐席技能'
+                },
+                {
+                    field : 'dialprefix', 
+                    title : '外呼前缀'
+                },
+                {
+                    field : 'exonNumGroup',
+                    title : '外显号码组'
+                },
+                    // {
+                    //     field : 'orgName',
+                    //     title : '所属机构'
+                    // },
+                {
+                    // field : 'isused',
+                    visible: editFlag == 'hidden' ? false : true,
+                    title: '是否启用',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    }
+
+                },
+                    {
+                        field : 'seatName',
+                        title : '绑定坐席',
+                        formatter: function (value, row, index) {
+                            if (value == null || value == '') {
+                                return '未绑定';
+                            }
+                            return value;
+                        }
+                    },
+                    {
+                        field : 'password',
+                        title : '分机密码'
+                    },
+                    {
+                        field : 'domain',
+                        title : '域名'
+                    }
+                /*{
+                    field : 'createBy', 
+                    title : '创建人'
+                },
+                {
+                    field : 'createTime', 
+                    title : '创建时间'
+                },
+                {
+                    field : 'updateBy', 
+                    title : '修改人'
+                },
+                {
+                    field : 'updateTime', 
+                    title : '修改时间'
+                }*/]
+            };
+            $.table.init(options);
+            // 初始化外显号码组
+            initExon();
+        });
+
+        function initExon() {
+            $.post(
+                exonPrefix + "/initExon",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            var opt = "<option value='"+data.rows[i].id+"'>"+data.rows[i].exonNumGroup+"</option>";
+                            $("#exonNumGroupId").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function statusTools(row) {
+            if (row.isused == 1) {
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.id + '\')"></i> ';
+            } else {
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.id + '\')"></i> ';
+            }
+        }
+
+        /* 停用 */
+        function disable(id) {
+            $.modal.confirm("确认要停用该分机吗？", function() {
+                $.operate.post(prefix + "/changeStatus", { "id": id, "isused": 1 });
+            })
+        }
+
+        /* 启用 */
+        function enable(id) {
+            $.modal.confirm("确认要启用该分机吗？", function() {
+                $.operate.post(prefix + "/changeStatus", { "id": id, "isused": 0 });
+            })
+        }
+    </script>
+</body>
+</html>

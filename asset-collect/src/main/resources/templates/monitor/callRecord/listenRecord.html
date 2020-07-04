@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('录音查听')" />
+    <style type="text/css">
+        .time-input{
+            display: inline;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>员工姓名：</p>
+                                <input type="text" name="createName"/>
+                            </li>
+                            <li>
+                                <p>联络电话：</p>
+                                <input type="text" name="phone"/>
+                            </li>
+                            <li>
+                                <p>通话开始时间：</p>
+                                <input type="text" class="time-input" id="callStartTime" placeholder="开始时间" name="callStartTime"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="callEndTime" placeholder="结束时间" name="callEndTime"/>
+
+                            </li>
+                            <li>
+                                <p>通话时长：</p>
+                                <input type="text" name="startCallLen" onblur="checkSZ(this);"/>
+                                <span>-</span>
+                                <input type="text" name="endCallLen" onblur="checkSZ(this);"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success multiple disabled" onclick="downRecord()">
+                    <i class="glyphicon glyphicon-cloud-download"></i> 录音下载
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "call/record";
+        $(function() {
+            var options = {
+                url: prefix + "/findListenCallRecord",
+                clickToSelect:true,
+                modalName: "模板管理",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id',
+                    title : 'id',
+                    visible: false
+                },
+                {
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                {
+                    field : 'loginName',
+                    title : '登录名称'
+                },
+                {
+                    field : 'createName',
+                    title : '员工姓名'
+                },
+                {
+                    field : 'orgName',
+                    title : '归属部门'
+                },
+                {
+                    field : 'contactName',
+                    title : '联系人姓名'
+                },
+                {
+                    field : 'contactRelation',
+                    title : '关系',
+                    formatter: function(value, row, index) {
+                        var type =[[${@dict.getType('sys_custom_contact_rela')}]];
+                        var real="";
+                        $.each(type,function (i,n) {
+                            if(n.dictValue == JSON.stringify(value)){
+                                real = n.dictLabel;
+                            }
+                        });
+                        return real;
+                    }
+                },
+                {
+                    field : 'phone',
+                    title : '联络电话'
+                },
+                {
+                    field : 'callStartTime',
+                    title : '通话开始时间'
+                },
+                {
+                    field : 'callLen',
+                    title : '通话时长',
+                    formatter: function(value, row, index) {
+                        return revert(value);
+                    }
+                },
+                {
+                    field : 'callSign',
+                    title : '电话码',
+                    formatter: function(value, row, index) {
+                        var type =[[${@dict.getType('call_record_code')}]];
+                        var callSignValue="";
+                        $.each(type,function (i,n) {
+                            if(n.dictValue == value){
+                                callSignValue = n.dictLabel;
+                            }
+                        });
+                        return callSignValue;
+                    }
+                },
+                {
+                    field : 'star',
+                    title : '关注度'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="listen(\'' + row.id + '\')"><i class=""></i>听录音</a> ');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function listen(id){
+            var url = prefix + '/recordAudio?id='+id;
+            var width = "500";
+            var height = "300";
+            layer.open({
+                type: 2,
+                maxmin: true,
+                shade: 0.3,
+                title: "导入统计窗口",
+                fix: false,
+                area: [width + 'px', height + 'px'],
+                content: url,
+                shadeClose: true,
+                btn: ['关闭'],
+                yes: function (index, layero) {
+                    layer.close(index);
+                    var id = $(".bootstrap-table").find(".table").attr("id");
+                    $.table.refresh(id);
+                },
+                cancel: function (index, layero) {
+                    layer.close(index);
+                    var id = $(".bootstrap-table").find(".table").attr("id");
+                    $.table.refresh(id);
+                },
+                end:function (index, layero) {
+                    layer.close(index);
+                    var id = $(".bootstrap-table").find(".table").attr("id");
+                    $.table.refresh(id);
+                }
+            });
+        }
+
+        function downRecord() {
+            var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+            if (id.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            var ids = id.join();
+            window.location.href=prefix + "/downRecord"+"?ids="+ids;
+
+        }
+
+        function revert(value) {
+            if (value == null || value == '' || value==0) {
+                return value;
+            }
+            value = Math.round(value);
+            return value;
+        }
+        
+        function checkSZ(obj) {
+            var r = /^\+?[0-9][0-9]*$/;　　//正整数
+            var value = $(obj).val();
+            if(value != null && value != ''){
+                if(!r.test(value)){
+                    $.modal.alertWarning("请输入整数！")
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.IcollectionRecordImprotMapper">
+
+    <resultMap type="com.ruoyi.assetspackage.domain.CollectionRecordImport" id="CollectionRecordImportResult">
+        <result property="id"    column="id"    />
+        <result property="orgCaseNo"    column="org_caseNo"    />
+        <result property="certificateNo"    column="certificate_no"    />
+        <result property="phone"    column="phone"    />
+        <result property="relation"    column="relation"    />
+       <!-- <result property="phoneCode"    column="phone_code"    />-->
+        <result property="remark"    column="remark"    />
+        <result property="seat"    column="seat"    />
+        <result property="makeCallTime"    column="make_call_time"    />
+        <result property="callStartTime"    column="call_start_time"    />
+        <result property="callEndTime"    column="call_end_time"    />
+        <result property="callLength"    column="call_length"    />
+        <result property="callRecordId"    column="call_record_id"    />
+        <result property="grade"    column="grade"    />
+        <result property="name"    column="name"    />
+        <result property="callStatus"    column="call_status"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createId"    column="create_id"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <resultMap type="com.ruoyi.assetspackage.domain.CollectionRecordImportTemp" id="CollectionRecordImportTempResult">
+        <result property="id"    column="id"    />
+        <result property="orgCaseNo"    column="org_caseNo"    />
+        <result property="certificateNo"    column="certificate_no"    />
+        <result property="phone"    column="phone"    />
+        <result property="relation"    column="relation"    />
+        <!--<result property="phoneCode"    column="phone_code"    />-->
+        <result property="remark"    column="remark"    />
+        <result property="seat"    column="seat"    />
+        <result property="makeCallTime"    column="make_call_time"    />
+        <result property="callStartTime"    column="call_start_time"    />
+        <result property="callEndTime"    column="call_end_time"    />
+        <result property="callLength"    column="call_length"    />
+        <result property="callRecordId"    column="call_record_id"    />
+        <result property="grade"    column="grade"    />
+        <result property="name"    column="name"    />
+        <result property="callStatus"    column="call_status"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createId"    column="create_id"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <resultMap type="com.ruoyi.assetspackage.domain.CollectionrecordimprotFlow" id="CollectionrecordimprotFlowResult">
+        <result property="id"    column="id"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="total"    column="total"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectTLcCollectionrecordimprotVo">
+        select id, org_caseNo, certificate_no, phone, relation, phone_code, remark, seat, make_call_time, call_start_time, call_end_time, call_length, call_record_id, grade, name, call_status, org_id, import_batch_no, create_by, create_id, create_time from t_lc_collectionrecordimprot
+    </sql>
+
+    <sql id="selectTLcCollectionrecordimprotTempVo">
+        select id, org_caseNo, certificate_no, phone, relation, phone_code, remark, seat, make_call_time, call_start_time, call_end_time, call_length, call_record_id, grade, name, call_status, org_id, import_batch_no, create_by, create_id, create_time from t_lc_collectionrecordimprot_temp
+    </sql>
+
+    <select id="selectTLcCollectionrecordimprotList" parameterType="CollectionRecordImport" resultMap="CollectionRecordImportResult">
+        <include refid="selectTLcCollectionrecordimprotVo"/>
+        <where>
+            <if test="orgCaseno != null  and orgCaseno != ''"> and org_caseNo = #{orgCaseno}</if>
+            <if test="certificateNo != null  and certificateNo != ''"> and certificate_no = #{certificateNo}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="relation != null  and relation != ''"> and relation = #{relation}</if>
+            <if test="phoneCode != null  and phoneCode != ''"> and phone_code = #{phoneCode}</if>
+            <if test="remark != null  and remark != ''"> and remark like concat('%', #{remark}, '%')</if>
+            <if test="seat != null  and seat != ''"> and seat = #{seat}</if>
+            <if test="callStartTime != null "> and call_start_time = #{callStartTime}</if>
+            <if test="callEndTime != null "> and call_end_time = #{callEndTime}</if>
+            <if test="callLength != null  and callLength != ''"> and call_length = #{callLength}</if>
+            <if test="callRecordId != null  and callRecordId != ''"> and call_record_id = #{callRecordId}</if>
+            <if test="orgId != null  and orgId != ''"> and org_id = #{orgId}</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <!--<if test="createTime != null "> and create_time = #{createTime}</if>-->
+            <if test="startDate != null"> and create_time <![CDATA[>=]]> #{startDate}</if>
+            <if test="endDate != null"> and create_time <![CDATA[<=]]> #{endDate}</if>
+        </where>
+    </select>
+
+    <select id="selectTLcCollectionrecordimprotById" parameterType="String" resultMap="CollectionRecordImportResult">
+        <include refid="selectTLcCollectionrecordimprotVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTLcCollectionrecordimprot" parameterType="CollectionRecordImport">
+        insert into t_lc_collectionrecordimprot
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="orgCaseno != null  and orgCaseno != ''">org_caseNo,</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="relation != null  and relation != ''">relation,</if>
+            <if test="phoneCode != null  and phoneCode != ''">phone_code,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="seat != null  and seat != ''">seat,</if>
+            <if test="callStartTime != null ">call_start_time,</if>
+            <if test="callEndTime != null ">call_end_time,</if>
+            <if test="callLength != null  and callLength != ''">call_length,</if>
+            <if test="callRecordId != null  and callRecordId != ''">call_record_id,</if>
+            <if test="grade != null  and grade != ''">grade,</if>
+            <if test="name != null  and name != ''">name,</if>
+            <if test="callStatus != null  and callStatus != ''">call_status,</if>
+            <if test="orgId != null  and orgId != ''">org_id,</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createId != null  and createId != ''">create_id,</if>
+            <if test="createTime != null ">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="orgCaseno != null  and orgCaseno != ''">#{orgCaseno},</if>
+            <if test="certificateNo != null  and certificateNo != ''">#{certificateNo},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="relation != null  and relation != ''">#{relation},</if>
+            <if test="phoneCode != null  and phoneCode != ''">#{phoneCode},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="seat != null  and seat != ''">#{seat},</if>
+            <if test="callStartTime != null ">#{callStartTime},</if>
+            <if test="callEndTime != null ">#{callEndTime},</if>
+            <if test="callLength != null  and callLength != ''">#{callLength},</if>
+            <if test="callRecordId != null  and callRecordId != ''">#{callRecordId},</if>
+            <if test="grade != null  and grade != ''">#{grade},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="callStatus != null  and callStatus != ''">#{callStatus},</if>
+            <if test="orgId != null  and orgId != ''">#{orgId},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">#{importBatchNo},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createId != null  and createId != ''">#{createId},</if>
+            <if test="createTime != null ">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTLcCollectionrecordimprot" parameterType="CollectionRecordImport">
+        update t_lc_collectionrecordimprot
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orgCaseno != null  and orgCaseno != ''">org_caseNo = #{orgCaseno},</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no = #{certificateNo},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="relation != null  and relation != ''">relation = #{relation},</if>
+            <if test="phoneCode != null  and phoneCode != ''">phone_code = #{phoneCode},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="seat != null  and seat != ''">seat = #{seat},</if>
+            <if test="callStartTime != null ">call_start_time = #{callStartTime},</if>
+            <if test="callEndTime != null ">call_end_time = #{callEndTime},</if>
+            <if test="callLength != null  and callLength != ''">call_length = #{callLength},</if>
+            <if test="callRecordId != null  and callRecordId != ''">call_record_id = #{callRecordId},</if>
+            <if test="grade != null  and grade != ''">grade = #{grade},</if>
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="callStatus != null  and callStatus != ''">call_status = #{callStatus},</if>
+            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no = #{importBatchNo},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createId != null  and createId != ''">create_id = #{createId},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcCollectionrecordimprotById" parameterType="String">
+        delete from t_lc_collectionrecordimprot where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcCollectionrecordimprotByIds" parameterType="String">
+        delete from t_lc_collectionrecordimprot where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <insert id="batchAddTemp" parameterType="java.util.List">
+        insert into t_lc_collectionrecordimprot_temp
+        (id,
+        org_caseNo,
+        certificate_no,
+        phone,
+        relation,
+        remark,
+        seat,
+        make_call_time,
+        call_start_time,
+        call_end_time,
+        call_length,
+        call_record_id,
+        grade,
+        name,
+        call_status,
+        org_id,
+        import_batch_no,
+        create_by,
+        create_id,
+        create_time
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id},
+            #{item.orgCaseNo},
+            #{item.certificateNo},
+            #{item.phone},
+            #{item.relation},
+            #{item.remark},
+            #{item.seat},
+            #{item.makeCallTime},
+            #{item.callStartTime},
+            #{item.callEndTime},
+            #{item.callLength},
+            #{item.callRecordId},
+            #{item.grade},
+            #{item.name},
+            #{item.callStatus},
+            #{item.orgId},
+            #{item.importBatchNo},
+            #{item.createBy},
+            #{item.createId},
+            #{item.createTime}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteTempTable" parameterType="String">
+        delete from t_lc_collectionrecordimprot_temp where import_batch_no = #{importBatchNo}
+    </delete>
+
+    <select id="selectTempCollectionRecordList" parameterType="CollectionRecordImportTemp" resultMap="CollectionRecordImportTempResult">
+        <include refid="selectTLcCollectionrecordimprotTempVo"/>
+        <where>
+            <if test="orgCaseNo != null  and orgCaseNo != ''"> and org_caseNo = #{orgCaseNo}</if>
+            <if test="certificateNo != null  and certificateNo != ''"> and certificate_no = #{certificateNo}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="relation != null  and relation != ''"> and relation = #{relation}</if>
+           <!-- <if test="phoneCode != null  and phoneCode != ''"> and phone_code = #{phoneCode}</if>-->
+            <if test="remark != null  and remark != ''"> and remark like concat('%', #{remark}, '%')</if>
+            <if test="seat != null  and seat != ''"> and seat = #{seat}</if>
+            <if test="callStartTime != null "> and call_start_time = #{callStartTime}</if>
+            <if test="callEndTime != null "> and call_end_time = #{callEndTime}</if>
+            <if test="callLength != null  and callLength != ''"> and call_length = #{callLength}</if>
+            <if test="callRecordId != null  and callRecordId != ''"> and call_record_id = #{callRecordId}</if>
+            <if test="orgId != null  and orgId != ''"> and org_id = #{orgId}</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="startDate != null"> and create_time <![CDATA[>=]]> #{startDate}</if>
+            <if test="endDate != null"> and create_time <![CDATA[<=]]> #{endDate}</if>
+            <if test="isException != null  and isException != ''"> and is_exception = #{isException}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectTempCollectionRecordCount" parameterType="CollectionRecordImportTemp" resultType="java.lang.Integer">
+        select count(*) as total FROM t_lc_collectionrecordimprot_temp
+        <where>
+            <if test="orgId != null  and orgId != ''"> and org_id = #{orgId}</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+            <if test="isException != null  and isException != ''"> and is_exception = #{isException}</if>
+        </where>
+    </select>
+
+    <update id="updateExceptionStatus" parameterType="String">
+        update t_lc_collectionrecordimprot_temp set is_exception = 1
+        where id = #{id}
+    </update>
+
+    <update id="updateExceptionStatus2" parameterType="String">
+        update t_lc_collectionrecordimprot_temp set is_exception = 2
+        where id = #{id}
+    </update>
+
+    <select id="findNotExistsCase" resultType="java.util.Map">
+        select t.org_caseNo as orgCaseNo,t.id
+        from t_lc_collectionrecordimprot_temp t WHERE t.import_batch_no = #{importBatchNo} and NOT EXISTS(
+	      SELECT case_no from t_lc_duncase tt WHERE tt.case_no = t.org_caseNo and tt.org_id = t.org_id)
+    </select>
+
+    <insert id="batchAddCallRecord" parameterType="CollectionRecordImportTemp">
+        insert into t_lc_call_record
+        (
+        contact_name,
+        phone,
+        contact_relation,
+        call_start_time,
+        call_end_time,
+        call_len,
+        call_sign,
+        call_result,
+        call_radio,
+        create_time,
+        create_by,
+        case_no,
+        remark,
+        type,
+        agent_name,
+        make_call_time
+        )
+       SELECT
+           name as contact_name,
+           phone,
+           (CASE relation
+             WHEN '本人' THEN '1'
+             WHEN '直系' THEN '2'
+             WHEN '亲戚' THEN '3'
+             WHEN '朋友' THEN '4'
+             WHEN '父母' THEN '5'
+             WHEN '配偶' THEN '6'
+             WHEN '兄弟' THEN '7'
+             WHEN '姐妹' THEN '8'
+             WHEN '哥哥' THEN '9'
+             WHEN '兄长' THEN '10'
+             WHEN '弟弟' THEN '11'
+             WHEN '姐姐' THEN '12'
+             WHEN '妹妹' THEN '13'
+             WHEN '家人' THEN '14'
+             WHEN '老公' THEN '15'
+             WHEN '老婆' THEN '16'
+             WHEN '同事' THEN '17'
+             ELSE '-1' END) as contact_relation,
+           call_start_time,
+           call_end_time,
+           (call_length*1000) as call_len,
+           (CASE call_status
+             WHEN '已接听' THEN 'R01'
+             WHEN '拒接' THEN 'JJ'
+             WHEN '无法接通' THEN 'R02'
+             WHEN '主叫号码不可用' THEN 'R03'
+             WHEN '空号' THEN 'KH'
+             WHEN '关机' THEN 'GJ'
+             WHEN '占线' THEN 'ZX'
+             WHEN '停机' THEN 'R04'
+             WHEN '未接' THEN 'WRJT'
+             WHEN '无人接听' THEN 'WRJT'
+             WHEN '主叫欠费' THEN 'R05'
+             WHEN '呼损' THEN 'R06'
+             WHEN '黑名单' THEN 'R07'
+             WHEN '线路盲区' THEN 'R08'
+             ELSE call_status END) as call_sign,
+           (CASE call_status
+             WHEN 'R01' THEN '已接听'
+             WHEN 'JJ' THEN '拒接'
+             WHEN 'R02' THEN '无法接通'
+             WHEN 'R03' THEN '主叫号码不可用'
+             WHEN 'KH' THEN '空号'
+             WHEN 'GJ' THEN '关机'
+             WHEN 'ZX' THEN '占线'
+             WHEN 'R04' THEN '停机'
+             WHEN 'WRJT' THEN '未接'
+             WHEN 'R05' THEN '主叫欠费'
+             WHEN 'R06' THEN '呼损'
+             WHEN 'R07' THEN '黑名单'
+             WHEN 'R08' THEN '线路盲区'
+             ELSE call_status END) as call_result,
+           call_record_id as call_radio,
+           create_time,
+           create_id,
+           org_caseNo as case_no,
+           remark,
+           3,
+           (CASE seat
+             WHEN '-1' THEN '机器人'
+             ELSE seat END) as seat,
+           make_call_time
+       FROM t_lc_collectionrecordimprot_temp
+       where import_batch_no = #{importBatchNo} and is_exception = '0'
+    </insert>
+
+    <update id="updateDuncaseTable" parameterType="String">
+        UPDATE t_lc_duncase m,
+            (SELECT tt.call_status, tt.call_sign, tt.call_start_time,tt.org_caseNo,tt.org_id from
+                  (SELECT t.call_status,
+                        (CASE t.call_status
+                        WHEN '已接听' THEN 'R01'
+                        WHEN '拒接' THEN 'JJ'
+                        WHEN '无法接通' THEN 'R02'
+                        WHEN '主叫号码不可用' THEN 'R03'
+                        WHEN '空号' THEN 'KH'
+                        WHEN '关机' THEN 'GJ'
+                        WHEN '占线' THEN 'ZX'
+                        WHEN '停机' THEN 'R04'
+                        WHEN '未接' THEN 'WRJT'
+                        WHEN '主叫欠费' THEN 'R05'
+                        WHEN '呼损' THEN 'R06'
+                        WHEN '黑名单' THEN 'R07'
+                        WHEN '线路盲区' THEN 'R08'
+                        ELSE t.call_status END) as call_sign,
+                      t.call_start_time,
+                      t.org_caseNo,
+                      t.org_id
+                  from t_lc_collectionrecordimprot_temp t
+                  WHERE t.import_batch_no = #{importBatchNo} and t.is_exception ='0' AND EXISTS(
+                      SELECT a.case_no from t_lc_duncase a
+                      WHERE a.case_no=t.org_caseNo and a.org_id=t.org_id
+                      and IFNULL(a.recently_follow_up_date,'0000-00-00 00:00:00') <![CDATA[ <= ]]> t.call_start_time)
+                )tt) n
+        SET m.call_sign = n.call_sign, m.call_sign_value = n.call_status, m.recently_follow_up_date = n.call_start_time
+        WHERE m.org_id = n.org_id and m.case_no = n.org_caseNo
+    </update>
+
+    <update id="updateTaskTable" parameterType="String">
+        UPDATE t_lc_task m,
+        (SELECT tt.call_status, tt.call_sign, tt.call_start_time,tt.org_caseNo,tt.org_id from
+        (SELECT t.call_status,
+        (CASE t.call_status
+        WHEN '已接听' THEN 'R01'
+        WHEN '拒接' THEN 'JJ'
+        WHEN '无法接通' THEN 'R02'
+        WHEN '主叫号码不可用' THEN 'R03'
+        WHEN '空号' THEN 'KH'
+        WHEN '关机' THEN 'GJ'
+        WHEN '占线' THEN 'ZX'
+        WHEN '停机' THEN 'R04'
+        WHEN '未接' THEN 'WRJT'
+        WHEN '主叫欠费' THEN 'R05'
+        WHEN '呼损' THEN 'R06'
+        WHEN '黑名单' THEN 'R07'
+        WHEN '线路盲区' THEN 'R08'
+        ELSE t.call_status END) as call_sign,
+        t.call_start_time,
+        t.org_caseNo,
+        t.org_id
+        from t_lc_collectionrecordimprot_temp t
+        WHERE t.import_batch_no = #{importBatchNo} and t.is_exception ='0' AND EXISTS(
+        SELECT a.case_no from t_lc_task a
+        WHERE a.case_no=t.org_caseNo and a.org_id=t.org_id
+        and IFNULL(a.recently_follow_up_date,'0000-00-00 00:00:00') <![CDATA[ <= ]]> t.call_start_time)
+        )tt) n
+        SET m.call_sign = n.call_sign, m.call_sign_value = n.call_status, m.recently_follow_up_date = n.call_start_time
+        WHERE m.org_id = n.org_id and m.case_no = n.org_caseNo
+    </update>
+
+    <select id="selectBatchInfo" parameterType="CollectionRecordImportTemp" resultType="java.util.Map">
+        SELECT m.importBatchNo,m.orgId,m.total,m.createBy,m.createTime,n.org_name as orgName
+        from (SELECT import_batch_no as importBatchNo,
+                    max(org_id)as orgId ,
+                    count(id) as total,
+                    max(create_by)as createBy,
+                    max(create_time)as createTime
+              from t_lc_collectionrecordimprot_temp
+              where is_exception = '0'
+              GROUP BY import_batch_no) m
+        LEFT JOIN org_package n on m.orgId = n.dept_id
+        <where>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and m.importBatchNo = #{importBatchNo}</if>
+            <if test="orgId != null  and orgId != ''"> and m.orgId = #{orgId}</if>
+            <if test="startDate != null  and startDate != ''"> and m.createTime <![CDATA[>=]]>  #{startDate}</if>
+            <if test="endDate != null  and endDate != ''"> and m.createTime <![CDATA[<=]]>  #{endDate}</if>
+        </where>
+    </select>
+
+    <insert id="insertTLcCollectionrecordimprotFlow" parameterType="CollectionrecordimprotFlow">
+        insert into t_lc_collectionrecordimprot_flow
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no,</if>
+            <if test="orgId != null  and orgId != ''">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="total != null  and total != ''">total,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">#{importBatchNo},</if>
+            <if test="orgId != null  and orgId != ''">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="total != null  and total != ''">#{total},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <select id="selectTLcCollectionrecordimprotFlowList" parameterType="CollectionRecordImportTemp" resultMap="CollectionrecordimprotFlowResult">
+        select id, import_batch_no, org_id, org_name, total, create_by, create_time from t_lc_collectionrecordimprot_flow
+        <where>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+            <if test="orgId != null  and orgId != ''"> and org_id = #{orgId}</if>
+            <if test="startDate != null  and startDate != ''"> and create_time <![CDATA[>=]]>  #{startDate}</if>
+            <if test="endDate != null  and endDate != ''"> and create_time <![CDATA[<=]]>  #{endDate}</if>
+        </where>
+    </select>
+
+</mapper>

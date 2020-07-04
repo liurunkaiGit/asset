@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('【请填写功能名称】列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <!--<li>
+                                <p>委托方id：</p>
+                                <input type="text" name="clientId"/>
+                            </li>-->
+                            <li>
+                                <p>委托方名称：</p>
+                                <!--<input type="text" name="clientName"/>-->
+                                <select class="form-control" name="clientName" id="clientName">
+                                    <option value="">--请选择--</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>推送语音</p>
+                                <!--<input type="text" name="sendRadioQc"/>-->
+                                <select class="form-control" name="sendRadioQc">
+                                    <option value="">--请选择--</option>
+                                    <option value="1">是</option>
+                                    <option value="2">否</option>
+                                </select>
+                            </li>
+                            <!--<li>
+                                <p>项目名称：</p>
+                                <input type="text" name="projectName"/>
+                            </li>-->
+                            <li>
+                                <p>推送规则引擎</p>
+                                <!--<input type="text" name="sendRuleEngine"/>-->
+                                <select class="form-control" name="sendRuleEngine">
+                                    <option value="">--请选择--</option>
+                                    <option value="1">是</option>
+                                    <option value="2">否</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>自动分配任务</p>
+                                <!--<input type="text" name="autoAllocatTask"/>-->
+                                <select class="form-control" name="autoAllocatTask">
+                                    <option value="">--请选择--</option>
+                                    <option value="1">是</option>
+                                    <option value="2">否</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>分配任务策略</p>
+                                <!--<input type="text" name="autoAllocatTaskStrategy"/>-->
+                                <select class="form-control" name="autoAllocatTaskStrategy">
+                                    <option value="">--请选择--</option>
+                                    <option value="1">数量平均</option>
+                                    <option value="2">金额平均</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>推送机器人</p>
+                                <!--<input type="text" name="sendRobot"/>-->
+                                <select class="form-control" name="sendRobot">
+                                    <option value="">--请选择--</option>
+                                    <option value="1">是</option>
+                                    <option value="2">否</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>开启机器人任务</p>
+                                <!--<input type="text" name="autoStartRobotTsk"/>-->
+                                <select class="form-control" name="autoStartRobotTsk">
+                                    <option value="">--请选择--</option>
+                                    <option value="1">是</option>
+                                    <option value="2">否</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="collect:client:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="collect:client:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="collect:client:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="collect:client:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('ruoyi:config:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('ruoyi:config:remove')}]];
+        var prefix = ctx + "collect/client/config";
+        var taskPrefix = ctx + "assetspackage/template";
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "【请填写功能名称】",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '主键',
+                    visible: false
+                },
+                /*{
+                    field : 'clientId', 
+                    title : '委托方id'
+                },*/
+                {
+                    field : 'clientName', 
+                    title : '委托方名称'
+                },
+                {
+                    field : 'sendRadioQc', 
+                    title : '推送到语音质检',
+                    formatter: function (value, row, index) {
+                        if (value == 1) {
+                            return '是';
+                        }
+                        if (value == 2) {
+                            return '否';
+                        }
+                    }
+                },
+                {
+                    field : 'projectName', 
+                    title : '项目名称'
+                },
+                {
+                    field : 'sendRuleEngine', 
+                    title : '是否推送到规则引擎系统',
+                    formatter: function (value, row, index) {
+                        if (value == 1) {
+                            return '是';
+                        }
+                        if (value == 2) {
+                            return '否';
+                        }
+                    }
+                },
+                {
+                    field : 'autoAllocatTask', 
+                    title : '是否自动分配任务',
+                    formatter: function (value, row, index) {
+                        if (value == 1) {
+                            return '是';
+                        }
+                        if (value == 2) {
+                            return '否';
+                        }
+                    }
+                },
+                {
+                    field : 'autoAllocatTaskStrategy', 
+                    title : '自动分配任务策略',
+                    formatter: function (value, row, index) {
+                        if (value == 1) {
+                            return '案件数量平均分配';
+                        }
+                        if (value == 2) {
+                            return '案件金额平均分配';
+                        }
+                    }
+                },
+                {
+                    field : 'sendRobot', 
+                    title : '推送到机器人',
+                    formatter: function (value, row, index) {
+                        if (value == 1) {
+                            return '是';
+                        }
+                        if (value == 2) {
+                            return '否';
+                        }
+                    }
+                },
+                {
+                    field : 'autoStartRobotTsk', 
+                    title : '是否自动开启机器人任务',
+                    formatter: function (value, row, index) {
+                        if (value == 1) {
+                            return '是';
+                        }
+                        if (value == 2) {
+                            return '否';
+                        }
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+
+            // 初始化机构下拉框
+            initOrg();
+        });
+
+        function initOrg() {
+            $.post(
+                taskPrefix + "/findOrgInfo",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    // if (data.code == 0) {//请求成功
+                    var result = JSON.parse(data.msg);
+                    $.each(result,function(index,obj){
+                        $("#clientName").append("<option value='"+obj.orgId+"'>"+obj.orgName+"</option>");
+                    });
+                    // }
+                }
+            );
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增【请填写功能名称】')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-query-add">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">委托方：</label>
+                <div class="col-sm-8">
+                    <!--<input name="orgId" class="form-control" type="text">-->
+                    <select class="form-control" name="orgIdAndName" id="orgId" required>
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">表名：</label>
+                <div class="col-sm-8">
+                    <!--<input name="columnNameCn" class="form-control" type="text">-->
+                    <select class="form-control" name="tableName" id="tableName" onchange="getColumn()" required>
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">表简称：</label>
+                <div class="col-sm-8">
+                    <input name="tablePrefix" id="tablePrefix" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">字段名：</label>
+                <div class="col-sm-8">
+                    <!--<input name="modifyBy" th:field="*{modifyBy}" class="form-control" type="text">-->
+                    <select class="form-control" name="columnNameAndComment" id="columnName" required>
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">字段类型：</label>
+                <div class="col-sm-8">
+                    <!--<input name="modifyBy" th:field="*{modifyBy}" class="form-control" type="text">-->
+                    <select class="form-control" name="columnType" id="columnType" required>
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">实体字段：</label>
+                <div class="col-sm-8">
+                    <input name="beanName" id="beanName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input name="columnValue" id="columnValue" class="form-control" type="text">
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">数值区间：</label>
+                <div class="col-sm-8">
+                    <label th:each="ni:${numberInterval}" class="check-box">
+                        <input name="ni" class="ni" type="checkbox" th:value="${ni.column}" th:text="${ni.columnComment}">
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">日期区间：</label>
+                <div class="col-sm-8">
+                    <label th:each="di:${dateInterval}" class="check-box">
+                        <input name="di" class="di" type="checkbox" th:value="${di.column}" th:text="${di.columnComment}">
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">字符串：</label>
+                <div class="col-sm-8">
+                    <label th:each="s:${string}" class="check-box">
+                        <input name="s" class="s" type="checkbox" th:value="${s.column}" th:text="${s.columnComment}">
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">下拉框：</label>
+                <div class="col-sm-8">
+                    <label th:each="se:${select}" class="check-box">
+                        <input name="se" class="se" type="checkbox" th:value="${se.column}" th:text="${se.columnComment}">
+                    </label>
+                </div>
+            </div>-->
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">字符串精确查询：</label>
+                <div class="col-sm-8">
+                    <label th:each="se:${stringEquals}" class="check-box">
+                        <input name="se" class="se" type="checkbox" th:value="${se.column}" th:text="${se.columnComment}">
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">字符串模糊匹配：</label>
+                <div class="col-sm-8">
+                    <label th:each="sl:${stringLike}" class="check-box">
+                        <input name="sl" class="sl" type="checkbox" th:value="${sl.column}" th:text="${sl.columnComment}">
+                    </label>
+                </div>
+            </div>-->
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "column/query";
+        var taskPrefix = ctx + "collect/task";
+        $("#form-query-add").validate({
+            focusCleanup: true
+        });
+
+        $(function () {
+            initOrg();
+            initTableName();
+            // initColumn();
+            initColumnType();
+        })
+
+        function initOrg() {
+            $.post(
+                taskPrefix + "/initOrg",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            var opt = "<option value='"+data.rows[i].deptId+","+data.rows[i].deptName+"'>"+data.rows[i].deptName+"</option>";
+                            $("#orgId").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function initTableName() {
+            $.post(
+                prefix + "/initTableName",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.status == 200) {//请求成功
+                        for (var i = 0; i < data.result.length; i++) {
+                            // var opt = "<option value='"+data.result[i].tableName+","+data.result[i].tableNameComment+"'>"+data.result[i].tableNameComment+"</option>";
+                            var opt = "<option value='"+data.result[i].dictValue+"'>"+data.result[i].dictLabel+"</option>";
+                            $("#tableName").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function initColumnType() {
+            $.post(
+                prefix + "/initColumnType",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.status == 200) {//请求成功
+                        for (var i = 0; i < data.result.length; i++) {
+                            // var opt = "<option value='"+data.result[i].tableName+","+data.result[i].tableNameComment+"'>"+data.result[i].tableNameComment+"</option>";
+                            var opt = "<option value='"+data.result[i].dictValue+"'>"+data.result[i].dictLabel+"</option>";
+                            $("#columnType").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function getColumn() {
+            var tableName = $("#tableName").val();
+            $.post(
+                prefix + "/getColumnByTable",
+                {tableName: tableName},
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.status == 200) {//请求成功
+                        for (var i = 0; i < data.result.length; i++) {
+                            var opt = "<option value='"+data.result[i].dictValue+","+data.result[i].dictLabel+"'>"+data.result[i].dictLabel+"</option>";
+                            $("#columnName").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        // function initColumn() {
+        //     var tableName = $("#tableName").val();
+        //     $.post(
+        //         prefix + "/getColumnByTable",
+        //         {tableName: tableName},
+        //         function(data) {
+        //             // alert(JSON.stringify(data));
+        //             if (data.status == 200) {//请求成功
+        //                 for (var i = 0; i < data.result.length; i++) {
+        //                     var opt = "<option value='"+data.result[i].dictValue+","+data.result[i].dictLabel+"'>"+data.result[i].dictLabel+"</option>";
+        //                     $("#columnName").append(opt);
+        //                 }
+        //             }
+        //         }
+        //     );
+        // }
+
+        function submitHandler() {
+            var orgIdAndName = $("#orgId").val();
+            var tableName = $("#tableName").val();
+            var columnName = $("#columnName").val();
+            var columnType = $("#columnType").val();
+            var columnValue = $("#columnValue").val();
+            var beanName = $("#beanName").val();
+            var tablePrefix = $("#tablePrefix").val();
+            /*var niArr = [];
+            $("input[name='ni']:checked").each(function(i){
+                niArr[i] =$(this).val();
+            });
+            var niObj = new Object();
+            niObj.type="numberInterval";
+            niObj.value=niArr;
+            var diArr = [];
+            $("input[name='di']:checked").each(function(i){
+                diArr[i] =$(this).val();
+            });
+            var diObj = new Object();
+            diObj.type="dateInterval";
+            diObj.value=diArr;
+            var sArr = [];
+            $("input[name='s']:checked").each(function(i){
+                sArr[i] =$(this).val();
+            });
+            var sObj = new Object();
+            sObj.type="string";
+            sObj.value=sArr;
+            var seArr = [];
+            $("input[name='se']:checked").each(function(i){
+                seArr[i] =$(this).val();
+            });
+            var seObj = new Object();
+            seObj.type="select";
+            seObj.value=seArr;*/
+            // var seArr = [];
+            // $("input[name='se']:checked").each(function(i){
+            //     seArr[i] =$(this).val();
+            // });
+            // console.log(seArr);
+            // var seObj = new Object();
+            // seObj.type="stringEquals";
+            // seObj.value=seArr;
+            // var slArr = [];
+            // $("input[name='sl']:checked").each(function(i){
+            //     slArr[i] =$(this).val();
+            // });
+            // console.log(slArr);
+            // var slObj = new Object();
+            // slObj.type="stringLike";
+            // slObj.value=slArr;
+            $.post(
+                prefix + "/add",
+                {
+                    orgIdAndName: orgIdAndName,
+                    tableName: tableName,
+                    columnNameAndComment: columnName,
+                    columnType: columnType,
+                    columnValue: columnValue,
+                    beanName: beanName,
+                    tablePrefix:tablePrefix
+                    // niObj: JSON.stringify(niObj),
+                    // diObj: JSON.stringify(diObj),
+                    // seObj: JSON.stringify(seObj),
+                    // slObj: JSON.stringify(slObj)
+                    // sObj: JSON.stringify(sObj)
+                },
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.status == 200) {
+                        $.modal.alertSuccess(data.message);
+                        window.parent.$.table.refresh();
+                        $.modal.close();
+                    }
+                }
+            );
+        }
+    </script>
+</body>
+</html>

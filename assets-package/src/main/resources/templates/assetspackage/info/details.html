@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('综合信息查询')" />
+    <th:block th:include="include :: datetimepicker-css" />
+    <style type="text/css">
+        .select-list li p{
+            width: 180px;
+        }
+
+        .select-list .select-time input{
+            width: 200px;
+        }
+
+    </style>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+            <div id="picture">
+                <div class="col-sm-12 search-collapse" id="moren">
+                    <div style="margin-left: 10%;">
+                        <label style="background:url('/picture/status1.png') no-repeat;width:80px;height:80px;padding-left: 12px;padding-top: 50px;">已导入</label>
+                        <label><img src="/picture/horizontal.png" style="height: 5px;margin-left: -20px"></label>
+                        <label style="background:url('/picture/status1.png') no-repeat;width:80px;height:80px;padding-left: 12px;padding-top: 50px;">催收中</label>
+                        <label><img src="/picture/horizontal.png" style="height: 5px;margin-left: -20px"></label>
+                        <label style="background:url('/picture/status1.png') no-repeat;width:80px;height:80px;padding-left: 12px;padding-top: 50px;">已结案</label>
+                    </div>
+                </div>
+                <div class="col-sm-12 search-collapse" id="daoru" style="display:none;">
+                    <div style="margin-left: 10%;">
+                        <label style="background:url('/picture/status2.png') no-repeat;width:80px;height:80px;padding-left: 12px;padding-top: 50px;">已导入</label>
+                        <label><img src="/picture/horizontal.png" style="height: 5px;margin-left: -20px"></label>
+                        <label style="background:url('/picture/status1.png') no-repeat;width:80px;height:80px;padding-left: 12px;padding-top: 50px;">催收中</label>
+                        <label><img src="/picture/horizontal.png" style="height: 5px;margin-left: -20px"></label>
+                        <label style="background:url('/picture/status1.png') no-repeat;width:80px;height:80px;padding-left: 12px;padding-top: 50px;">已结案</label>
+                    </div>
+                </div>
+                <div class="col-sm-12 search-collapse" id="cuishou" style="display:none;">
+                    <div style="margin-left: 10%;">
+                        <label style="background:url('/picture/status2.png') no-repeat;width:80px;height:80px;padding-left: 12px;padding-top: 50px;">已导入</label>
+                        <label><img src="/picture/horizontal.png" style="height: 5px;margin-left: -20px"></label>
+                        <label style="background:url('/picture/status2.png') no-repeat;width:80px;height:80px;padding-left: 12px;padding-top: 50px;">催收中</label>
+                        <label><img src="/picture/horizontal.png" style="height: 5px;margin-left: -20px"></label>
+                        <label style="background:url('/picture/status1.png') no-repeat;width:80px;height:80px;padding-left: 12px;padding-top: 50px;">已结案</label>
+                    </div>
+                </div>
+                <div class="col-sm-12 search-collapse" id="jiean" style="display: none;">
+                    <div style="margin-left: 10%;">
+                        <label style="background:url('/picture/status2.png') no-repeat;width:80px;height:80px;padding-left: 12px;padding-top: 50px;">已导入</label>
+                        <label><img src="/picture/horizontal.png" style="height: 5px;margin-left: -20px"></label>
+                        <label style="background:url('/picture/status2.png') no-repeat;width:80px;height:80px;padding-left: 12px;padding-top: 50px;">催收中</label>
+                        <label><img src="/picture/horizontal.png" style="height: 5px;margin-left: -20px"></label>
+                        <label style="background:url('/picture/status2.png') no-repeat;width:80px;height:80px;padding-left: 12px;padding-top: 50px;">已结案</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 search-collapse">
+                <from th:object="${orgPackage}">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>委托方名称：</p>
+                                <input type="text" name="orgName" th:field="*{orgName}" id="orgName" disabled/>
+                            </li>
+                            <li>
+                                <p>委托方编码：</p>
+                                <input type="text" name="orgCode" th:field="*{orgCode}" id="orgCode" disabled/>
+                            </li>
+                            <li>
+                                <p>机构状态：</p>
+                                <input type="text" name="orgStatus" th:field="*{orgStatus}" id="orgStatus" disabled/>
+                            </li>
+                            <li>
+                                <p>合作开始时间：</p>
+                                <input type="text" name="startDate" th:field="*{startDate2}" id="startDate" disabled/>
+                            </li>
+                            <li>
+                                <p>合作结束时间：</p>
+                                <input type="text" name="endDate" th:field="*{endDate2}" id="endDate" disabled/>
+                            </li>
+                        </ul>
+                    </div>
+                </from>
+            </div>
+            <div class="col-sm-12 search-collapse">
+                <from th:object="${assetsInfoPackage}">
+                    <input type="text" name="orgCasno" th:field="*{orgCasno}" id="orgCasno" hidden/>
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>客户名称：</p>
+                                <input type="text" name="curName" th:field="*{curName}" id="curName" disabled/>
+                            </li>
+                            <li>
+                                <p>客户性别：</p>
+                                <input type="text" name="curSex" th:field="*{curSex}" id="curSex" disabled/>
+                            </li>
+                            <li>
+                                <p>证件号码：</p>
+                                <input type="text" name="certificateNo" th:field="*{certificateNo}" id="certificateNo" disabled/>
+                            </li>
+                            <li>
+                                <p>出生日期：</p>
+                                <input type="text" name="birthday" th:field="*{birthday2}" id="birthday" disabled/>
+                            </li>
+                            <li>
+                                <p>户籍地址：</p>
+                                <input type="text" name="registAddress" th:field="*{registAddress}" id="registAddress" disabled/>
+                            </li>
+                            <li>
+                                <p>教育程度：</p>
+                                <input type="text" name="education" th:field="*{education}" id="education" disabled/>
+                            </li>
+                            <li>
+                                <p>当前收入：</p>
+                                <input type="text" name="curIncome" th:field="*{curIncome}" id="curIncome" disabled/>
+                            </li>
+                            <li>
+                                <p>手机号码：</p>
+                                <input type="text" name="customerMobile" th:field="*{customerMobile}" id="customerMobile" disabled/>
+                            </li>
+                            <li>
+                                <p>家庭电话：</p>
+                                <input type="text" name="customerHomeTel" th:field="*{customerHomeTel}" id="customerHomeTel" disabled/>
+                            </li>
+                            <li>
+                                <p>单位电话：</p>
+                                <input type="text" name="workTel" th:field="*{workTel}" id="workTel" disabled/>
+                            </li>
+                            <li>
+                                <p>第一联系人姓名：</p>
+                                <input type="text" name="firstLiaisonName" th:field="*{firstLiaisonName}" id="firstLiaisonName" disabled/>
+                            </li>
+                            <li>
+                                <p>第一联系人与客户关系：</p>
+                                <input type="text" name="firstLiaisonRelation" th:field="*{firstLiaisonRelation}" id="firstLiaisonRelation" disabled/>
+                            </li>
+                            <li>
+                                <p>第一联系人手机：</p>
+                                <input type="text" name="firstLiaisonMobile" th:field="*{firstLiaisonMobile}" id="firstLiaisonMobile" disabled/>
+                            </li>
+                            <li>
+                                <p>第二联系人姓名：</p>
+                                <input type="text" name="secondLiaisonName" th:field="*{secondLiaisonName}" id="secondLiaisonName" disabled/>
+                            </li>
+                            <li>
+                                <p>第二联系人与客户关系：</p>
+                                <input type="text" name="secondLiaisonRelation" th:field="*{secondLiaisonRelation}" id="secondLiaisonRelation" disabled/>
+                            </li>
+                            <li>
+                                <p>第二联系人手机：</p>
+                                <input type="text" name="secondLiaisonMobile" th:field="*{secondLiaisonMobile}" id="secondLiaisonMobile" disabled/>
+                            </li>
+                            <li>
+                                <p>第三联系人姓名：</p>
+                                <input type="text" name="threeLiaisonName" th:field="*{threeLiaisonName}" id="threeLiaisonName" disabled/>
+                            </li>
+                            <li>
+                                <p>第三联系人与客户关系：</p>
+                                <input type="text" name="threeLiaisonRelation" th:field="*{threeLiaisonRelation}" id="threeLiaisonRelation" disabled/>
+                            </li>
+                            <li>
+                                <p>第三联系人手机：</p>
+                                <input type="text" name="threeLiaisonMobile" th:field="*{threeLiaisonMobile}" id="threeLiaisonMobile" disabled/>
+                            </li>
+                        </ul>
+                    </div>
+                </from>
+            </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" style="width: 6000px;"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: datetimepicker-js" />
+<script th:inline="javascript">
+    var prefix = ctx + "assetspackage/info";
+    $(function() {
+        var orgCasno = $("#orgCasno").val();
+        var options = {
+            url: prefix + "/repaymentList?orgCasno="+orgCasno,
+            modalName: "资产还款",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field : 'id',
+                    title : 'null',
+                    visible: false
+                },
+                {
+                    field : 'orgCasno',
+                    title : '机构案件号'
+                },
+                {
+                    field : 'jyqtfy',
+                    title : '交易其他费用'
+                },
+                {
+                    field : 'jylx',
+                    title : '交易利息'
+                },
+                {
+                    field : 'jybj',
+                    title : '交易本金'
+                },
+                {
+                    field : 'jyznf',
+                    title : '交易滞纳费'
+                },
+                {
+                    field : 'jyType',
+                    title : '交易类型'
+                },
+                {
+                    field : 'jyje',
+                    title : '交易金额'
+                },
+                {
+                    field : 'productType',
+                    title : '产品类型'
+                },
+                {
+                    field : 'jjh',
+                    title : '借据号'
+                },
+                {
+                    field : 'csr',
+                    title : '催收人'
+                },
+                {
+                    field : 'csjd',
+                    title : '催收节点'
+                },
+                {
+                    field : 'fprq',
+                    title : '分配日期'
+                },
+                {
+                    field : 'areaCenter',
+                    title : '区域中心'
+                },
+                {
+                    field : 'acceptCity',
+                    title : '受理城市'
+                },
+                {
+                    field : 'hth',
+                    title : '合同号'
+                },
+                {
+                    field : 'dqsybYj',
+                    title : '地区事业部(一级)'
+                },
+                {
+                    field : 'dqsybEj',
+                    title : '地区事业部(二级)'
+                },
+                {
+                    field : 'wbqs',
+                    title : '外包期数'
+                },
+                {
+                    field : 'wbjb',
+                    title : '外包经办'
+                },
+                {
+                    field : 'warq',
+                    title : '委案日期'
+                },
+                {
+                    field : 'curName',
+                    title : '客户名称'
+                },
+                {
+                    field : 'khjlxm',
+                    title : '客户经理姓名'
+                },
+                {
+                    field : 'sjrq',
+                    title : '数据日期'
+                },
+                {
+                    field : 'sfwbcs',
+                    title : '是否外包催收'
+                },
+                {
+                    field : 'sfjq',
+                    title : '是否结清'
+                },
+                {
+                    field : 'bywa',
+                    title : '本月委案'
+                },
+                {
+                    field : 'ajhsrq',
+                    title : '案件回收日期'
+                },
+                {
+                    field : 'xfjrzh',
+                    title : '消费金融账号'
+                },
+                {
+                    field : 'tzsx',
+                    title : '调整事项'
+                },
+                {
+                    field : 'tzje',
+                    title : '调整金额'
+                },
+                {
+                    field : 'zhzt',
+                    title : '账户状态'
+                },
+                {
+                    field : 'hkrq',
+                    title : '还款日期'
+                },
+                {
+                    field : 'hksyqqs',
+                    title : '还款时逾期期数'
+                },
+                {
+                    field : 'hkje',
+                    title : '还款金额'
+                },
+                {
+                    field : 'yqcplx',
+                    title : '逾期产品类型'
+                },
+                {
+                    field : 'yqjd',
+                    title : '逾期阶段'
+                },
+                {
+                    field : 'quotaProduct',
+                    title : '额度产品'
+                },
+                {
+                    field : 'jazt',
+                    title : '结案状态'
+                },
+                {
+                    field : 'createBy',
+                    title : '导入人'
+                },
+                {
+                    field : 'createTime',
+                    title : '导入时间'
+                }
+            ]
+        };
+        $.table.init(options);
+
+        $.ajax({
+            url: prefix + "/repaymentList",
+            dataType: "json",
+            type: "post",
+            data: {
+                orgCasno: orgCasno
+            },
+            success:function(data){
+                var list = data.rows;
+                $.each(list,function(index,obj){
+                    var jazt = obj.jazt;
+                    if(jazt=="已结案"){
+                        $("#moren").css("display","none");
+                        $("#jiean").css("display","block");
+                    }else{
+                        $("#moren").css("display","none");
+                        $("#cuishou").css("display","block");
+                    }
+                });
+
+            }
+
+        });
+
+
+    });
+</script>
+</body>
+</html>

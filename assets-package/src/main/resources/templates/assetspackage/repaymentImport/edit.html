@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改资产还款')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-assetspackage-edit" th:object="${curAssetsRepaymentPackage}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机构案件号：</label>
+                <div class="col-sm-8">
+                    <input name="orgCasno" th:field="*{orgCasno}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">交易其他费用：</label>
+                <div class="col-sm-8">
+                    <input name="jyqtfy" th:field="*{jyqtfy}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">交易利息：</label>
+                <div class="col-sm-8">
+                    <input name="jylx" th:field="*{jylx}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">交易本金：</label>
+                <div class="col-sm-8">
+                    <input name="jybj" th:field="*{jybj}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">交易滞纳费：</label>
+                <div class="col-sm-8">
+                    <input name="jyznf" th:field="*{jyznf}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">交易类型：</label>
+                <div class="col-sm-8">
+                    <select name="jyType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">交易金额：</label>
+                <div class="col-sm-8">
+                    <input name="jyje" th:field="*{jyje}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">产品类型：</label>
+                <div class="col-sm-8">
+                    <select name="productType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">借据号：</label>
+                <div class="col-sm-8">
+                    <input name="jjh" th:field="*{jjh}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">催收人：</label>
+                <div class="col-sm-8">
+                    <input name="csr" th:field="*{csr}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">催收节点：</label>
+                <div class="col-sm-8">
+                    <input name="csjd" th:field="*{csjd}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">分配日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="fprq" th:value="${#dates.format(curAssetsRepaymentPackage.fprq, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">区域中心：</label>
+                <div class="col-sm-8">
+                    <input name="areaCenter" th:field="*{areaCenter}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">受理城市：</label>
+                <div class="col-sm-8">
+                    <input name="acceptCity" th:field="*{acceptCity}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">合同号：</label>
+                <div class="col-sm-8">
+                    <input name="hth" th:field="*{hth}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">地区事业部(一级)：</label>
+                <div class="col-sm-8">
+                    <input name="dqsybYj" th:field="*{dqsybYj}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">地区事业部(二级)：</label>
+                <div class="col-sm-8">
+                    <input name="dqsybEj" th:field="*{dqsybEj}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外包期数：</label>
+                <div class="col-sm-8">
+                    <input name="wbqs" th:field="*{wbqs}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外包经办：</label>
+                <div class="col-sm-8">
+                    <input name="wbjb" th:field="*{wbjb}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">委案日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="warq" th:value="${#dates.format(curAssetsRepaymentPackage.warq, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户名称：</label>
+                <div class="col-sm-8">
+                    <input name="curName" th:field="*{curName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户经理姓名：</label>
+                <div class="col-sm-8">
+                    <input name="khjlxm" th:field="*{khjlxm}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">数据日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="sjrq" th:value="${#dates.format(curAssetsRepaymentPackage.sjrq, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否外包催收：</label>
+                <div class="col-sm-8">
+                    <input name="sfwbcs" th:field="*{sfwbcs}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否结清：</label>
+                <div class="col-sm-8">
+                    <input name="sfjq" th:field="*{sfjq}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">本月委案：</label>
+                <div class="col-sm-8">
+                    <input name="bywa" th:field="*{bywa}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">案件回收日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="ajhsrq" th:value="${#dates.format(curAssetsRepaymentPackage.ajhsrq, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">消费金融账号：</label>
+                <div class="col-sm-8">
+                    <input name="xfjrzh" th:field="*{xfjrzh}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">调整事项：</label>
+                <div class="col-sm-8">
+                    <input name="tzsx" th:field="*{tzsx}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">调整金额：</label>
+                <div class="col-sm-8">
+                    <input name="tzje" th:field="*{tzje}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">账户状态：</label>
+                <div class="col-sm-8">
+                    <input name="zhzt" th:field="*{zhzt}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">还款日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="hkrq" th:value="${#dates.format(curAssetsRepaymentPackage.hkrq, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">还款时逾期期数：</label>
+                <div class="col-sm-8">
+                    <input name="hksyqqs" th:field="*{hksyqqs}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">还款金额：</label>
+                <div class="col-sm-8">
+                    <input name="hkje" th:field="*{hkje}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">逾期产品类型：</label>
+                <div class="col-sm-8">
+                    <input name="yqcplx" th:field="*{yqcplx}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">逾期阶段：</label>
+                <div class="col-sm-8">
+                    <input name="yqjd" th:field="*{yqjd}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">额度产品：</label>
+                <div class="col-sm-8">
+                    <input name="quotaProduct" th:field="*{quotaProduct}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机构id：</label>
+                <div class="col-sm-8">
+                    <input name="orgId" th:field="*{orgId}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "assetspackage/assetspackage";
+        $("#form-assetspackage-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-assetspackage-edit').serialize());
+            }
+        }
+
+        $("input[name='fprq']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='warq']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='sjrq']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='ajhsrq']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='hkrq']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.robot.mapper.TLcRobotBlackMapper">
+    
+    <resultMap type="com.ruoyi.robot.domain.TLcRobotBlack" id="TLcRobotBlackResult">
+        <result property="id"    column="id"    />
+        <result property="caseNo"    column="case_no"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="customerName"    column="customer_name"    />
+        <result property="phone"    column="phone"    />
+        <result property="reason"    column="reason"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="modifyBy"    column="modify_by"    />
+        <result property="modifyTime"    column="modify_time"    />
+    </resultMap>
+
+    <sql id="selectTLcRobotBlackVo">
+        select id, case_no, org_id, org_name, import_batch_no, customer_name, phone, reason, create_by, create_time, modify_by, modify_time from t_lc_robot_black
+    </sql>
+
+    <select id="selectTLcRobotBlackList" parameterType="com.ruoyi.robot.domain.TLcRobotBlack" resultMap="TLcRobotBlackResult">
+        <include refid="selectTLcRobotBlackVo"/>
+        <where>  
+            <if test="caseNo != null  and caseNo != ''"> and case_no = #{caseNo}</if>
+            <if test="orgId != null "> and org_id = #{orgId}</if>
+            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+            <if test="customerName != null  and customerName != ''"> and customer_name like concat('%', #{customerName}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="reason != null  and reason != ''"> and reason = #{reason}</if>
+            <if test="startCreateTime != null">
+                and create_time <![CDATA[>=]]> #{startCreateTime}
+            </if>
+            <if test="endCreateTime != null">
+                and create_time <![CDATA[<=]]> #{endCreateTime}
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectTLcRobotBlackById" parameterType="Long" resultMap="TLcRobotBlackResult">
+        <include refid="selectTLcRobotBlackVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLcRobotBlack" parameterType="com.ruoyi.robot.domain.TLcRobotBlack" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_robot_black
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="caseNo != null  and caseNo != ''">case_no,</if>
+            <if test="orgId != null ">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no,</if>
+            <if test="customerName != null  and customerName != ''">customer_name,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="reason != null  and reason != ''">reason,</if>
+            <if test="createBy != null ">create_by,</if>
+            create_time
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="caseNo != null  and caseNo != ''">#{caseNo},</if>
+            <if test="orgId != null ">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">#{importBatchNo},</if>
+            <if test="customerName != null  and customerName != ''">#{customerName},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="reason != null  and reason != ''">#{reason},</if>
+            <if test="createBy != null ">#{createBy},</if>
+            NOW()
+         </trim>
+    </insert>
+
+    <update id="updateTLcRobotBlack" parameterType="com.ruoyi.robot.domain.TLcRobotBlack">
+        update t_lc_robot_black
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="caseNo != null  and caseNo != ''">case_no = #{caseNo},</if>
+            <if test="orgId != null ">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no = #{importBatchNo},</if>
+            <if test="customerName != null  and customerName != ''">customer_name = #{customerName},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="reason != null  and reason != ''">reason = #{reason},</if>
+            <if test="createBy != null ">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="modifyBy != null ">modify_by = #{modifyBy},</if>
+            <if test="modifyTime != null ">modify_time = #{modifyTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcRobotBlackById" parameterType="Long">
+        delete from t_lc_robot_black where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcRobotBlackByIds" parameterType="String">
+        delete from t_lc_robot_black where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteobotBlackByCaseReason" parameterType="com.ruoyi.robot.domain.TLcRobotBlack">
+        delete from t_lc_robot_black where case_no = #{caseNo} AND import_batch_no = #{importBatchNo} AND phone = #{phone} AND reason = #{reason}
+    </delete>
+
+    <delete id="batchDeleteRobotBlackByCaseNo">
+        delete from t_lc_robot_black where case_no in
+        <foreach item="caseNo" collection="caseNoList" open="(" separator="," close=")">
+            #{caseNo}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改资产包')" />
+</head>
+<body class="gray-bg">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12">
+                <form class="form-horizontal m" id="form-package-assemble" th:object="${assetPackage}">
+                    <!--<input name="orgId" th:value="${orgId}" type="hidden" id="defaultOrgId">-->
+                    <input name="id" th:field="*{id}" type="hidden">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>案件号：</p>
+                                <input type="text" name="orgCasno" id="orgCasno"/>
+                            </li>
+                           <!-- <li>
+                                <p>委托方：</p>
+                                <select name="orgId" id="orgId">
+                                    &lt;!&ndash;<option value="">请选择</option>&ndash;&gt;
+                                    <option th:value="${assetPackage.startOrgId}"th:text="${assetPackage.startOrgName}" selected></option>
+                                </select>
+                            </li>-->
+                            <li>
+                                <p>客户名称：</p>
+                                <input type="text" name="curName" id="curName"/>
+                            </li>
+                            <li class="select-time">
+                                <p>导入时间：</p>
+                                <input type="text" class="time-input" id="startDate" placeholder="开始时间" name="startDate"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endDate" placeholder="结束时间" name="endDate"/>
+                            </li>
+                            <li>
+                                <p>委案余额：</p>
+                                <input type="text" name="startWaYe" id="startWaYe" style="width: 145px;"/>
+                                <span>-</span>
+                                <input type="text" name="endWaYe" id="endWaYe" style="width: 145px;"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--<div class="select-list">
+                        <ul>
+                            <li>
+                                <p>所选案件委案金额：</p>
+                                <input type="text" name="checkedWaNum" id="checkedWaNum"/>
+                            </li>
+                            <li>
+                                <p>所选案件委案金额：</p>
+                                <input type="text" name="checkedWaJe" id="checkedWaJe"/>
+                            </li>
+                        </ul>
+                    </div>-->
+                </form>
+            </div>
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <button type="button" class="btn btn-success" onclick="assembleAll()">全部打包</button>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+            <!--<div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table" style="width: 30000px;"></table>
+            </div>-->
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        // var ctx = [[${@config.getKey('ctx')}]];
+    </script>
+    <script type="text/javascript">
+        var prefix = ctx + "assetspackage/package";
+
+        $(function () {
+            var options = {
+                url: prefix+"/findAssets",
+                modalName: "客户资产",
+                showSearch: false,
+                showRefresh: false,
+                showToggle: false,
+                showColumns: false,
+               /* fixedColumns: true,
+                fixedNumber: 3,*/
+                columns: [{
+                    checkbox: true
+                },
+                    {
+                        field : 'id',
+                        title : '主键',
+                        visible: false
+                    },
+                    {
+                        field : 'orgCasno',
+                        title : '机构案件号'
+                    },
+                    {
+                        field : 'org',
+                        title : '所属机构',
+                        visible: false
+                    },
+                    {
+                        field : 'transfertype',
+                        title : '手别'
+                    },
+                    {
+                        field : 'twentyfourcd',
+                        title : '24CD值',
+                        visible: false
+                    },
+                    {
+                        field : 'blk',
+                        title : 'BLK',
+                        visible: false
+                    },
+                    {
+                        field : 'productline',
+                        title : '产品线',
+                        visible: false
+                    },
+                    {
+                        field : 'rmbLastJkje',
+                        title : '缴款金额',
+                        visible: false
+                    },
+                    {
+                        field : 'rmbYe',
+                        title : '余额',
+                        visible: false
+                    },
+                    {
+                        field : 'rmbYhfxzje',
+                        title : '罚息总额',
+                        visible: false
+                    },
+                    {
+                        field : 'rmbCd',
+                        title : 'CD值',
+                        visible: false
+                    },
+                    {
+                        field : 'rmbZhycjkr',
+                        title : '最后缴款日',
+                        visible: false
+                    },
+                    {
+                        field : 'rmbZhhkbs',
+                        title : '还款笔数',
+                        visible: false
+                    },
+                    {
+                        field : 'rmbYhlizje',
+                        title : '利息总额',
+                        visible: false
+                    },
+                    {
+                        field : 'rmbYhbj1',
+                        title : '本金1',
+                        visible: false
+                    },
+                    {
+                        field : 'rmbYhbj2',
+                        title : '本金2',
+                        visible: false
+                    },
+                    {
+                        field : 'rmbYhbjzje',
+                        title : '本金总额',
+                        visible: false
+                    },
+                    {
+                        field : 'rmbYhfx1',
+                        title : '罚息1',
+                        visible: false
+                    },
+                    {
+                        field : 'rmbYhfx2',
+                        title : '罚息2',
+                        visible: false
+                    },
+                    {
+                        field : 'rmbYhfy1',
+                        title : '费用1',
+                        visible: false
+                    },
+                    {
+                        field : 'rmbYhfy2',
+                        title : '费用2',
+                        visible: false
+                    },
+                    {
+                        field : 'rmbYhfyzje',
+                        title : '费用总额',
+                        visible: false
+                    },
+                    {
+                        field : 'rmbZdyhje',
+                        title : '应还金额',
+                        visible: false
+                    },
+                    {
+                        field : 'rmbQkzje',
+                        title : '欠款总额',
+                        visible: false
+                    },
+                    {
+                        field : 'rmbGded',
+                        title : '固定额度',
+                        visible: false
+                    },
+                    {
+                        field : 'code',
+                        title : '代码',
+                        visible: false
+                    },
+                    {
+                        field : 'borrowNo',
+                        title : '借款卡号',
+                        visible: false
+                    },
+                    {
+                        field : 'borrowBlank',
+                        title : '借款卡银行',
+                        visible: false
+                    },
+                    {
+                        field : 'borrowEd',
+                        title : '借款额度',
+                        visible: false
+                    },
+                    {
+                        field : 'zxType',
+                        title : '债项类型',
+                        visible: false
+                    },
+                    {
+                        field : 'stopCard',
+                        title : '停卡日',
+                        visible: false
+                    },
+                    {
+                        field : 'stopJxrq',
+                        title : '停止计息日期',
+                        visible: false
+                    },
+                    {
+                        field : 'csCompany',
+                        title : '催收公司',
+                        visible: false
+                    },
+                    {
+                        field : 'rcr',
+                        title : '入催日',
+                        visible: false
+                    },
+                    {
+                        field : 'gzFlag',
+                        title : '共债标识',
+                        visible: false
+                    },
+                    {
+                        field : 'fz',
+                        title : '分值',
+                        visible: false
+                    },
+                    {
+                        field : 'fqFlag',
+                        title : '分期标识',
+                        visible: false
+                    },
+                    {
+                        field : 'syhxQtfy',
+                        title : '核销其他费用',
+                        visible: false
+                    },
+                    {
+                        field : 'syhxSxf',
+                        title : '核销手续费',
+                        visible: false
+                    },
+                    {
+                        field : 'syhxBj',
+                        title : '核销本金',
+                        visible: false
+                    },
+                    {
+                        field : 'syhxZnf',
+                        title : '核销滞纳费',
+                        visible: false
+                    },
+                    {
+                        field : 'syhxYqx',
+                        title : '核销逾期息',
+                        visible: false
+                    },
+                    {
+                        field : 'syhxJehj',
+                        title : '核销金额',
+                        visible: false
+                    },
+                    {
+                        field : 'areaCenter',
+                        title : '区域中心',
+                        visible: false
+                    },
+                    {
+                        field : 'csRemarkHis',
+                        title : '催收备注',
+                        visible: false
+                    },
+                    {
+                        field : 'maxYqtsHis',
+                        title : '最大逾期天数',
+                        visible: false
+                    },
+                    {
+                        field : 'sumYqtsHis',
+                        title : '累计逾期天数',
+                        visible: false
+                    },
+                    {
+                        field : 'sumYqcsHis',
+                        title : '累计逾期次数',
+                        visible: false
+                    },
+                    {
+                        field : 'csjggsHis',
+                        title : '催收机构数',
+                        visible: false
+                    },
+                    {
+                        field : 'qxFlag',
+                        title : '取现标识',
+                        visible: false
+                    },
+                    {
+                        field : 'stCompany',
+                        title : '受托公司',
+                        visible: false
+                    },
+                    {
+                        field : 'acceptFirm',
+                        title : '受理商户',
+                        visible: false
+                    },
+                    {
+                        field : 'acceptCity',
+                        title : '受理城市',
+                        visible: false
+                    },
+                    {
+                        field : 'acceptWd',
+                        title : '受理网点',
+                        visible: false
+                    },
+                    {
+                        field : 'acceptWdCode',
+                        title : '受理网点代码',
+                        visible: false
+                    },
+                    {
+                        field : 'dzhxrq',
+                        title : '呆账核销日期',
+                        visible: false
+                    },
+                    {
+                        field : 'remark',
+                        title : '备注',
+                        visible: false
+                    },
+                    {
+                        field : 'wbYhfxze',
+                        title : '外币账户应还罚息总额',
+                        visible: false
+                    },
+                    {
+                        field : 'wbYhlxze',
+                        title : '外币账户应还利息总额',
+                        visible: false
+                    },
+                    {
+                        field : 'wbYhbj1',
+                        title : '外币账户应还本金1',
+                        visible: false
+                    },
+                    {
+                        field : 'wbYhbj2',
+                        title : '外币账户应还本金2',
+                        visible: false
+                    },
+                    {
+                        field : 'wbYhbjzje',
+                        title : '外币账户应还本金总额',
+                        visible: false
+                    },
+                    {
+                        field : 'wbYhfx1',
+                        title : '外币账户应还罚息1',
+                        visible: false
+                    },
+                    {
+                        field : 'wbYhfx2',
+                        title : '外币账户应还罚息2',
+                        visible: false
+                    },
+                    {
+                        field : 'wbYhfy1',
+                        title : '外币账户应还费用1',
+                        visible: false
+                    },
+                    {
+                        field : 'wbYhfy2',
+                        title : '外币账户应还费用2',
+                        visible: false
+                    },
+                    {
+                        field : 'wbYhfyze',
+                        title : '外币账户应还费用总额',
+                        visible: false
+                    },
+                    {
+                        field : 'wbZdyhe',
+                        title : '外币账户最低应还额',
+                        visible: false
+                    },
+                    {
+                        field : 'wbQkzje',
+                        title : '外币账户欠款总金额',
+                        visible: false
+                    },
+                    {
+                        field : 'txFlag',
+                        title : '套现标识',
+                        visible: false
+                    },
+                    {
+                        field : 'wwCompanyCode',
+                        title : '委外公司代码',
+                        visible: false
+                    },
+                    {
+                        field : 'wwCityName',
+                        title : '委外城市名称',
+                        visible: false
+                    },
+                    {
+                        field : 'wwJhEnddate',
+                        title : '委外计划截止日期',
+                        visible: false
+                    },
+                    {
+                        field : 'wwQsrq',
+                        title : '委外起始日期',
+                        visible: false
+                    },
+                    {
+                        field : 'wwPc',
+                        title : '委托批次',
+                        visible: false
+                    },
+                    {
+                        field : 'waYe',
+                        title : '委案余额'
+                    },
+                    {
+                        field : 'billAddress',
+                        title : '帐单地址',
+                        visible: false
+                    },
+                    {
+                        field : 'billAddressPostcode',
+                        title : '帐单地址邮编',
+                        visible: false
+                    },
+                    {
+                        field : 'yearRates',
+                        title : '年利率',
+                        visible: false
+                    },
+                    {
+                        field : 'yhkDate',
+                        title : '应还款日',
+                        visible: false
+                    },
+                    {
+                        field : 'startYqDate',
+                        title : '开始逾期日期',
+                        visible: false
+                    },
+                    {
+                        field : 'khDate',
+                        title : '开户日',
+                        visible: false
+                    },
+                    {
+                        field : 'tsFlag',
+                        title : '投诉标识',
+                        visible: false
+                    },
+                    {
+                        field : 'creditValue',
+                        title : '授信额度',
+                        visible: false
+                    },
+                    {
+                        field : 'tjFirm',
+                        title : '推荐商户',
+                        visible: false
+                    },
+                    {
+                        field : 'tjCity',
+                        title : '推荐城市',
+                        visible: false
+                    },
+                    {
+                        field : 'tjWd',
+                        title : '推荐网点',
+                        visible: false
+                    },
+                    {
+                        field : 'shhxSxf',
+                        title : '收回核销手续费',
+                        visible: false
+                    },
+                    {
+                        field : 'shhxBj',
+                        title : '收回核销本金',
+                        visible: false
+                    },
+                    {
+                        field : 'shhxZnf',
+                        title : '收回核销滞纳费',
+                        visible: false
+                    },
+                    {
+                        field : 'shhxFy',
+                        title : '收回核销费用',
+                        visible: false
+                    },
+                    {
+                        field : 'shhxYqx',
+                        title : '收回核销逾期息',
+                        visible: false
+                    },
+                    {
+                        field : 'shhxJehj',
+                        title : '收回核销金额合计',
+                        visible: false
+                    },
+                    {
+                        field : 'zh30Day',
+                        title : '整合30 DAY',
+                        visible: false
+                    },
+                    {
+                        field : 'zhXDay',
+                        title : '整合X DA',
+                        visible: false
+                    },
+                    {
+                        field : 'isZc',
+                        title : '是否仲裁',
+                        visible: false
+                    },
+                    {
+                        field : 'isZwcz',
+                        title : '是否债务重组',
+                        visible: false
+                    },
+                    {
+                        field : 'isJx',
+                        title : '是否计息',
+                        visible: false
+                    },
+                    {
+                        field : 'isSx',
+                        title : '是否诉讼',
+                        visible: false
+                    },
+                    {
+                        field : 'zjyqMonth',
+                        title : '最近逾期月份',
+                        visible: false
+                    },
+                    {
+                        field : 'hxSxfcs',
+                        title : '核销手续费催收',
+                        visible: false
+                    },
+                    {
+                        field : 'hxShzt',
+                        title : '核销收回状态',
+                        visible: false
+                    },
+                    {
+                        field : 'hxBjcs',
+                        title : '核销本金催收',
+                        visible: false
+                    },
+                    {
+                        field : 'hxZnfcs',
+                        title : '核销滞纳费催收',
+                        visible: false
+                    },
+                    {
+                        field : 'hxFycs',
+                        title : '核销费用催收',
+                        visible: false
+                    },
+                    {
+                        field : 'hxYqlxcs',
+                        title : '核销逾期息催收',
+                        visible: false
+                    },
+                    {
+                        field : 'hxJehjcs',
+                        title : '核销金额合计催收',
+                        visible: false
+                    },
+                    {
+                        field : 'ajHzDate',
+                        title : '案件核准日期',
+                        visible: false
+                    },
+                    {
+                        field : 'xfjzzh',
+                        title : '消费金融账号',
+                        visible: false
+                    },
+                    {
+                        field : 'tsajType',
+                        title : '特殊案件类型',
+                        visible: false
+                    },
+                    {
+                        field : 'dayRates',
+                        title : '日利率',
+                        visible: false
+                    },
+                    {
+                        field : 'tjDate',
+                        title : '统计日期',
+                        visible: false
+                    },
+                    {
+                        field : 'dollarYe',
+                        title : '美元余额',
+                        visible: false
+                    },
+                    {
+                        field : 'dollarCd',
+                        title : '美元当前CD值',
+                        visible: false
+                    },
+                    {
+                        field : 'dollarZdyjkje',
+                        title : '美元最低应缴款金额',
+                        visible: false
+                    },
+                    {
+                        field : 'dollarZhycjkr',
+                        title : '美元最后一次缴款日',
+                        visible: false
+                    },
+                    {
+                        field : 'dollarZhycjkje',
+                        title : '美元最后一次缴款金额',
+                        visible: false
+                    },
+                    {
+                        field : 'dollarHkrhkbs',
+                        title : '美元还款日还款笔数',
+                        visible: false
+                    },
+                    {
+                        field : 'hkfs',
+                        title : '获客方式',
+                        visible: false
+                    },
+                    {
+                        field : 'hkqd',
+                        title : '获客渠道',
+                        visible: false
+                    },
+                    {
+                        field : 'xwpf',
+                        title : '行方评分',
+                        visible: false
+                    },
+                    {
+                        field : 'accountDate',
+                        title : '账单日',
+                        visible: false
+                    },
+                    {
+                        field : 'accountYebj',
+                        title : '账户余额本金',
+                        visible: false
+                    },
+                    {
+                        field : 'accountJqrq',
+                        title : '账户结清日期',
+                        visible: false
+                    },
+                    {
+                        field : 'fzzb',
+                        title : '辅助组别',
+                        visible: false
+                    },
+                    {
+                        field : 'revertCardNo',
+                        title : '还款卡号',
+                        visible: false
+                    },
+                    {
+                        field : 'revertCardBlank',
+                        title : '还款卡银行',
+                        visible: false
+                    },
+                    {
+                        field : 'jjqd',
+                        title : '进件渠道',
+                        visible: false
+                    },
+                    {
+                        field : 'overdueDays',
+                        title : '逾期天数',
+                        visible: false
+                    },
+                    {
+                        field : 'overdueFlag',
+                        title : '逾期标记',
+                        visible: false
+                    },
+                    {
+                        field : 'cwcs',
+                        title : '长委次数',
+                        visible: false
+                    },
+                    {
+                        field : 'quotaProduct',
+                        title : '额度产品',
+                        visible: false
+                    },
+                    {
+                        field : 'quotaCode',
+                        title : '额度代码',
+                        visible: false
+                    },
+                    {
+                        field : 'quotaDate',
+                        title : '额度激活日期',
+                        visible: false
+                    },
+                    {
+                        field : 'risk',
+                        title : '风险',
+                        visible: false
+                    },
+                    {
+                        field : 'firstFkDate',
+                        title : '首次放款日期',
+                        visible: false
+                    },
+                    {
+                        field : 'firstYqDate',
+                        title : '首次逾期日期',
+                        visible: false
+                    },
+                    {
+                        field : 'firstYqjcDate',
+                        title : '首次逾期解除日期',
+                        visible: false
+                    },
+                    {
+                        field : 'firstYqFlag',
+                        title : '首逾标识',
+                        visible: false
+                    },
+                    {
+                        field : 'curName',
+                        title : '客户名称'
+                    },
+                    {
+                        field : 'curSex',
+                        title : '客户性别',
+                        visible: false
+                    },
+                   /* {
+                        field : 'certificateNo',
+                        title : '证件号码'
+                    },*/
+                    {
+                        field : 'certificateType',
+                        title : '证件类型',
+                        visible: false
+                    },
+                    /*{
+                        field : 'certificateAddress',
+                        title : '身份证地址'
+                    },*/
+                    {
+                        field : 'birthday',
+                        title : '出生日期',
+                        visible: false
+                    },
+                    /*{
+                        field : 'registAddress',
+                        title : '户籍地址'
+                    },*/
+                    {
+                        field : 'email',
+                        title : '电子邮箱',
+                        visible: false
+                    },
+                    {
+                        field : 'city',
+                        title : '城市',
+                        visible: false
+                    },
+                    {
+                        field : 'marriage',
+                        title : '婚姻状况',
+                        visible: false
+                    },
+                    {
+                        field : 'education',
+                        title : '教育程度',
+                        visible: false
+                    },
+                    {
+                        field : 'economy',
+                        title : '经济类型',
+                        visible: false
+                    },
+                    {
+                        field : 'curIncome',
+                        title : '当前收入',
+                        visible: false
+                    },
+                    {
+                        field : 'newAddress',
+                        title : '新增地址',
+                        visible: false
+                    },
+                    {
+                        field : 'customerNo',
+                        title : '客户编号',
+                        visible: false
+                    },
+                    {
+                        field : 'customerMobile',
+                        title : '手机号码',
+                        visible: false
+                    },
+                    {
+                        field : 'customerHomeTel',
+                        title : '家庭电话',
+                        visible: false
+                    },
+                    {
+                        field : 'customerHomeAddress',
+                        title : '家庭地址',
+                        visible: false
+                    },
+                    {
+                        field : 'customerHomePostcode',
+                        title : '客户家庭地址邮编',
+                        visible: false
+                    },
+                    {
+                        field : 'cardPostAddress',
+                        title : '卡片寄送地址',
+                        visible: false
+                    },
+                    {
+                        field : 'job',
+                        title : '职务',
+                        visible: false
+                    },
+                    {
+                        field : 'deptName',
+                        title : '部门名称',
+                        visible: false
+                    },
+                    {
+                        field : 'indust',
+                        title : '行业性质',
+                        visible: false
+                    },
+                    {
+                        field : 'workName',
+                        title : '单位名称',
+                        visible: false
+                    },
+                    {
+                        field : 'workAddress',
+                        title : '单位地址',
+                        visible: false
+                    },
+                    {
+                        field : 'workTel',
+                        title : '单位电话',
+                        visible: false
+                    },
+                    {
+                        field : 'workPostcode',
+                        title : '单位邮编',
+                        visible: false
+                    },
+                    {
+                        field : 'firstLiaisonName',
+                        title : '第一联系人姓名',
+                        visible: false
+                    },
+                    {
+                        field : 'firstLiaisonRelation',
+                        title : '第一联系人关系',
+                        visible: false
+                    },
+                    {
+                        field : 'firstLiaisonMobile',
+                        title : '第一联系人手机',
+                        visible: false
+                    },
+                    {
+                        field : 'firstLiaisonTel',
+                        title : '第一联系人电话',
+                        visible: false
+                    },
+                    {
+                        field : 'secondLiaisonName',
+                        title : '第二联系人姓名',
+                        visible: false
+                    },
+                    {
+                        field : 'secondLiaisonRelation',
+                        title : '第二联系人关系',
+                        visible: false
+                    },
+                    {
+                        field : 'secondLiaisonMobile',
+                        title : '第二联系人手机',
+                        visible: false
+                    },
+                    {
+                        field : 'secondLiaisonTel',
+                        title : '第二联系人电话',
+                        visible: false
+                    },
+                    {
+                        field : 'threeLiaisonName',
+                        title : '第三联系人姓名',
+                        visible: false
+                    },
+                    {
+                        field : 'threeLiaisonRelation',
+                        title : '第三联系人关系',
+                        visible: false
+                    },
+                    {
+                        field : 'threeLiaisonMobile',
+                        title : '第三联系人手机',
+                        visible: false
+                    },
+                    {
+                        field : 'threeLiaisonTel',
+                        title : '第三联系人电话',
+                        visible: false
+                    },
+                    {
+                        field : 'sjrq',
+                        title : '数据日期',
+                        visible: false
+                    },
+                    {
+                        field : 'hth',
+                        title : '合同号',
+                        visible: false
+                    },
+                    {
+                        field : 'jjh',
+                        title : '借据号',
+                        visible: false
+                    },
+                    {
+                        field : 'dqsybYj',
+                        title : '地区事业部(一级)',
+                        visible: false
+                    },
+                    {
+                        field : 'dqsybEj',
+                        title : '地区事业部(二级)',
+                        visible: false
+                    },
+                    {
+                        field : 'csjd',
+                        title : '催收节点',
+                        visible: false
+                    },
+                    {
+                        field : 'wbjb',
+                        title : '外包经办',
+                        visible: false
+                    },
+                    {
+                        field : 'ysKhjlmc',
+                        title : '经理名称',
+                        visible: false
+                    },
+                    {
+                        field : 'khjlmc',
+                        title : '客户经理名称',
+                        visible: false
+                    },
+                    {
+                        field : 'cpmc',
+                        title : '产品名称',
+                        visible: false
+                    },
+                    {
+                        field : 'xfldycpmc',
+                        title : '产品名称',
+                        visible: false
+                    },
+                    {
+                        field : 'qxrq',
+                        title : '起息日期',
+                        visible: false
+                    },
+                    {
+                        field : 'dqrq',
+                        title : '到期日期',
+                        visible: false
+                    },
+                    {
+                        field : 'hkType',
+                        title : '还款方式',
+                        visible: false
+                    },
+                    {
+                        field : 'dkye',
+                        title : '贷款余额',
+                        visible: false
+                    },
+                    {
+                        field : 'wbbs',
+                        title : '外包标的',
+                        visible: false
+                    },
+                    {
+                        field : 'yqje',
+                        title : '逾期金额',
+                        visible: false
+                    },
+                    {
+                        field : 'yqbj',
+                        title : '逾期本金',
+                        visible: false
+                    },
+                    {
+                        field : 'yqlx',
+                        title : '逾期利息',
+                        visible: false
+                    },
+                    {
+                        field : 'yqsxf',
+                        title : '逾期手续费',
+                        visible: false
+                    },
+                    {
+                        field : 'znj',
+                        title : '滞纳金',
+                        visible: false
+                    },
+                    {
+                        field : 'qdmc',
+                        title : '渠道名称',
+                        visible: false
+                    },
+                    {
+                        field : 'wbsb',
+                        title : '外包手别',
+                        visible: false
+                    },
+                    {
+                        field : 'wbqs',
+                        title : '外包期数',
+                        visible: false
+                    },
+                    {
+                        field : 'fpsj',
+                        title : '分配时间',
+                        visible: false
+                    },
+                    {
+                        field : 'ajhssj',
+                        title : '案件回收时间',
+                        visible: false
+                    }]
+            };
+            $.table.init(options);
+        });
+
+        /*$.ajax({
+            url: prefix+"/findOrgInfo",
+            dataType: "json",
+            type: "post",
+            success:function(data){
+                var result = JSON.parse(data.msg);
+                $.each(result,function(index,obj){
+                    $("#orgId").append("<option value='"+obj.orgId+"'>"+obj.orgName+"</option>");
+                });
+
+            }
+        });*/
+
+
+        $("#form-package-assemble").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            var rows = $.table.selectFirstColumns();
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.modal.loading("资产打包中，请稍后...");
+            var packageId = $("#id").val();
+            var assetsId = rows.join();
+            // var distributionUrl = prefix + '/distribution';
+            // var data = {"packageId": packageId,"assetsId":assetsId};
+            // $.operate.submit(distributionUrl, "post", "json", data);
+            // window.parent.location.reload(); // 刷新父页面
+            $.ajax({
+                url: prefix+"/distribution",
+                dataType: "json",
+                type: "post",
+                data:{
+                    packageId:packageId,
+                    assetsId:assetsId
+                },
+                success:function(data){
+                    if (data.code == 0) {
+                        // alert("打包成功");
+                        $.modal.alertSuccess('打包成功！！！');
+                        // window.parent.location.reload(); // 刷新父页面
+                    } else {
+                        $.modal.alertSuccess('打包失败！！！');
+                    }
+                    window.parent.$.table.refresh();
+                    $.modal.close();
+                    //setTimeout(function() {
+                        //window.parent.location.reload();
+                    //}, 1000);
+                }
+            });
+        }
+        
+        function assembleAll() {
+            var orgCasno = $("#orgCasno").val();
+            var curName = $("#curName").val();
+            var orgId = $("#orgId").val();
+            var startDate = $("#startDate").val();
+            var endDate = $("#endDate").val();
+            var startWaYe = $("#startWaYe").val();
+            var endWaYe = $("#endWaYe").val();
+            var packageId = $("#id").val();
+            $.modal.confirm("确认要将查询出来的数据全部打包吗?", function() {
+                // var assembleAllUrl = prefix + '/assembleAll';
+                // var data = {"packageId": packageId,"orgCasno":orgCasno,"curName":curName,"orgId":orgId,"startDate":startDate,"endDate":endDate,"startWaYe":startWaYe,"endWaYe":endWaYe};
+                // var submit = $.operate.submit(assembleAllUrl, "post", "json", data);
+                // window.parent.location.reload(); // 刷新父页面
+                $.modal.loading("资产打包中，请稍后...");
+                $.ajax({
+                    url: prefix+"/assembleAll",
+                    dataType: "json",
+                    type: "post",
+                    data:{
+                        packageId: packageId,
+                        orgCasno: orgCasno,
+                        curName: curName,
+                        orgId: orgId,
+                        startDate: startDate,
+                        endDate: endDate,
+                        startWaYe: startWaYe,
+                        endWaYe: endWaYe
+                    },
+                    success:function(data){
+                        if (data.code == 0) {
+                            // alert("打包成功");
+                            $.modal.alertSuccess('打包成功！！！');
+                            // window.parent.location.reload(); // 刷新父页面
+                        } else {
+                            $.modal.alertSuccess('打包失败！！！');
+                        }
+                        window.parent.$.table.refresh();
+                        $.modal.close();
+                        //setTimeout(function() {
+                            //window.parent.location.reload();
+                        //}, 1000);
+                    }
+                });
+            });
+        }
+
+    </script>
+</body>
+</html>
