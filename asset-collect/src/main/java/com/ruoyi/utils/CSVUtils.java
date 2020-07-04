@@ -31,7 +31,7 @@ public class CSVUtils {
     /**
      * 每个文件的数据条数
      */
-    private static int pageSize = 1000000;
+    public static int pageSize = 1000000;
 
 
     /**

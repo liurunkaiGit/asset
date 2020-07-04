@@ -1,33 +1,23 @@
 package com.ruoyi.quartz.task;
 
-import com.github.pagehelper.PageHelper;
 import com.ruoyi.assetspackage.domain.OrgPackage;
 import com.ruoyi.assetspackage.service.IOrgPackageService;
-import com.ruoyi.common.core.page.PageDomain;
-import com.ruoyi.common.core.page.TableSupport;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.common.utils.sql.SqlUtil;
-import com.ruoyi.custom.domain.TLcCustContact;
-import com.ruoyi.custom.domain.TLcCustinfo;
 import com.ruoyi.custom.service.ITLcCustContactService;
 import com.ruoyi.custom.service.ITLcCustinfoService;
-import com.ruoyi.duncase.domain.TLcDuncase;
 import com.ruoyi.duncase.service.ITLcDuncaseService;
 import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysUserService;
-import com.ruoyi.task.domain.TLcCallRecord;
-import com.ruoyi.task.domain.TLcTask;
 import com.ruoyi.task.service.ITLcCallRecordService;
 import com.ruoyi.task.service.ITLcTaskService;
 import com.ruoyi.utils.CSVUtils;
 import com.ruoyi.utils.SFTPUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -304,12 +294,22 @@ public class SynDataToCenterPlatFormTask
         String projectName = sysConfigService.selectConfigByKey("file.synCenterPlatFormProjectName");
         String ftpFileName = sysConfigService.selectConfigByKey("file.ftpFileName");
 
-        //文件名
-        String fileName = projectName + "-@-" + tableName + "-@-" + DateUtils.dateNowForYYYYMMDD() + "-@-";
+
         int countNum = CSVUtils.getCountNum(list.size());//产生文件的总数
         for(int i = 0; i < countNum; i ++){
-            fileName = fileName + CSVUtils.getNo(i+1+"");
-            File file = CSVUtils.createCSVFile(list, null, synCenterPlatFormPath, fileName + ".log");
+            //文件名
+            String fileName = projectName + "-@-" + tableName + "-@-" + DateUtils.dateNowForYYYYMMDD() + "-@-" + CSVUtils.getNo(i+1+"");
+            List<Map<String, Object>> tmpList = null;
+            if(countNum == 1){//当只有一个文件时
+                tmpList = list;
+            }else  if(countNum > 1){//多个文件
+                if(i != (countNum - 1) ){//不是最后一个文件时,pageSize默认是100 0000
+                    tmpList = list.subList(i*CSVUtils.pageSize,(i+1)*CSVUtils.pageSize);
+                }else{//最后一个文件时
+                    tmpList = list.subList(i*CSVUtils.pageSize,list.size());
+                }
+            }
+            File file = CSVUtils.createCSVFile(tmpList, null, synCenterPlatFormPath, fileName + ".log");
             String fileName2 = file.getName();
             log.info("文件名称：" + fileName2);
             try{
