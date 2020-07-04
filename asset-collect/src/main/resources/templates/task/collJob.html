@@ -327,7 +327,7 @@
                 <div style="margin-bottom: 2px;">
                     <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)">分机号码：</span>
                     <!--<select id="agentId" onchange="initial1();" style="width: 120px;height: 22px;"></select>-->
-                    <input id="agentId" th:value="${extPhone}" style="width: 120px;height: 22px;"></input>
+                    <input id="agentId" th:value="${extPhone.agentid}" style="width: 120px;height: 22px;"></input>
                     <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)" id="timing">00:00:00</span>
                 </div>
@@ -1833,9 +1833,10 @@
             $.modal.msgWarning("请选择分机");
             return;
         }
+        var extPhone = [[${extPhone}]];
         var platform = $("#callPlatform").val();
         if (platform == 'PA') {
-            $.ajax({
+            /*$.ajax({
                 url: prefix + "/selectExtPhone",
                 dataType: "json",
                 async:false,
@@ -1851,46 +1852,70 @@
                     $("#dialCaller").val(obj.dialcaller);
                     $("#proxyUrl").val(obj.proxyUrl);
                 }
-            });
+            });*/
 
-            var skillDesc = $("#skillDesc").val();
-            var dialPrefix = $("#dialPrefix").val();
-            // var dialCaller = $("#dialCaller").val();
+            // var skillDesc = $("#skillDesc").val();
+            // var dialPrefix = $("#dialPrefix").val();
+            // // var dialCaller = $("#dialCaller").val();
+            // var dialCaller = $("#exonNum").val();
+            // var proxyUrl = $("#proxyUrl").val();
+            var skillDesc = extPhone.skilldesc;
+            var dialPrefix = extPhone.dialprefix;
             var dialCaller = $("#exonNum").val();
-            var proxyUrl = $("#proxyUrl").val();
+            var proxyUrl = extPhone.proxyUrl;
             initial2(agentId,skillDesc,dialPrefix,dialCaller,proxyUrl);
         } else if (platform == 'ZJ') {
-            $.ajax({
-                url: prefix + "/selectExtPhone",
-                dataType: "json",
-                async:false,
-                type: "post",
-                data:{
-                    agentId: agentId
-                },
-                success:function(data){
-                    var result = eval(data.msg);
-                    var obj = result[0];
-                    // 登录及初始化
-                    var agent = $("#agentId").val(); //坐席工号
-                    // var pwd = "1234"; //登录密码
-                    var pwd = obj.password;
-                    var extno = $("#agentId").val(); //登录分机号
-                    // var domain = 'huadao'; //企业编号或域名
-                    var domain = obj.domain; //企业编号或域名
-                    var host = obj.proxyUrl.split(":")[0];
-                    var port = obj.proxyUrl.split(":")[1];
-                    // uKeFuSoftPhone.Initial("172.18.100.1","8088","0","0","0",Event);
-                    console.log("pwd="+pwd+",domain="+domain+",host="+host+",port="+port);
-                    uKeFuSoftPhone.Initial(host,port,"0","0","0",Event,domain);
-                    console.log("初始化成功");
-                    // 每次登陆之前先退出，然后再进行登录
-                    uKeFuSoftPhone.AgentLogout(agent,domain, extno, pwd);
-                    // console.log("---html退出成功---");
-                    // uKeFuSoftPhone.AgentLogin(agent, extno, pwd, domain);
-                    // console.log("---html登录成功---");
-                }
-            });
+            // $.ajax({
+            //     url: prefix + "/selectExtPhone",
+            //     dataType: "json",
+            //     async:false,
+            //     type: "post",
+            //     data:{
+            //         agentId: agentId
+            //     },
+            //     success:function(data){
+            //         var result = eval(data.msg);
+            //         var obj = result[0];
+            //         // 登录及初始化
+            //         var agent = $("#agentId").val(); //坐席工号
+            //         // var pwd = "1234"; //登录密码
+            //         var pwd = obj.password;
+            //         var extno = $("#agentId").val(); //登录分机号
+            //         // var domain = 'huadao'; //企业编号或域名
+            //         var domain = obj.domain; //企业编号或域名
+            //         var host = obj.proxyUrl.split(":")[0];
+            //         var port = obj.proxyUrl.split(":")[1];
+            //         // uKeFuSoftPhone.Initial("172.18.100.1","8088","0","0","0",Event);
+            //         console.log("pwd="+pwd+",domain="+domain+",host="+host+",port="+port);
+            //         uKeFuSoftPhone.Initial(host,port,"0","0","0",Event,domain);
+            //         console.log("初始化成功");
+            //         // 每次登陆之前先退出，然后再进行登录
+            //         uKeFuSoftPhone.AgentLogout(agent,domain, extno, pwd);
+            //         // console.log("---html退出成功---");
+            //         // uKeFuSoftPhone.AgentLogin(agent, extno, pwd, domain);
+            //         // console.log("---html登录成功---");
+            //     }
+            // });
+
+
+                var agent = $("#agentId").val(); //坐席工号
+                // var pwd = "1234"; //登录密码
+                var pwd = extPhone.password;
+                var extno = $("#agentId").val(); //登录分机号
+                // var domain = 'huadao'; //企业编号或域名
+                var domain = extPhone.domain; //企业编号或域名
+                var host = extPhone.proxyUrl.split(":")[0];
+                var port = extPhone.proxyUrl.split(":")[1];
+                // uKeFuSoftPhone.Initial("172.18.100.1","8088","0","0","0",Event);
+                console.log("pwd="+pwd+",domain="+domain+",host="+host+",port="+port);
+                uKeFuSoftPhone.Initial(host,port,"0","0","0",Event,domain);
+                console.log("初始化成功");
+                // 每次登陆之前先退出，然后再进行登录
+                uKeFuSoftPhone.AgentLogout(agent,domain, extno, pwd);
+                // console.log("---html退出成功---");
+                // uKeFuSoftPhone.AgentLogin(agent, extno, pwd, domain);
+                // console.log("---html登录成功---");
+
         }
     }
 

@@ -203,7 +203,7 @@ public class TLcTaskController extends BaseController {
         List<ExtPhone> list = extPhoneService.selectExtPhoneList(extPhone);
         if (list != null && list.size() > 0) {
             // 分机号码
-            modelMap.put("extPhone", list.get(0).getAgentid());
+            modelMap.put("extPhone", list.get(0));
             // 查询外显号码
             List<String> extNumList = this.extPhoneService.selectExtNumBySeat(String.valueOf(ShiroUtils.getSysUser().getUserId()), list.get(0).getAgentid(), ShiroUtils.getSysUser().getPlatform());
             modelMap.put("extNumList",StringUtils.join(extNumList,","));
