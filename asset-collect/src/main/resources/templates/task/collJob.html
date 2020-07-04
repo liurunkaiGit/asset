@@ -1777,6 +1777,7 @@
             // if(type == "EVENT_HUNGUP_SUCCESS" || type == "EVENT_HUNGUP" || type == "EVENT_OUTBOUND_AGNET_HANGUP" || type == "EVENT_OUTBOUND_CUSTOMER_HANGUP" || type == "EVENT_OUTBOUND_FORECAST_AGNET_HANGUP" || type == "EVENT_OUTBOUND_FORECAST_CUSTOMER_HANGUP"){
             if(type == "EVENT_HUNGUP"){
                 console.log('hangup' + type,JSON.stringify(data));
+                console.log("自建录音返回信息RecordingFile="+data[0].RecordingFile+",recordTime="+",currentCaseNo="+currentCaseNo);
                 resetTiming();
                 // 直接保存点催记录
                 var val = $('input[name="radioChoose"]:checked').parents("tr");
@@ -1973,6 +1974,7 @@
             startTime = event.recordTime;
             endTime = event.startTime;
             recordDuration = String(event.recordDuration);
+            console.log("平安录音返回信息recordFile="+event.recordFile+",recordTime="+event.recordTime+",startTime="+event.startTime+",recordDuration="+event.recordDuration+",currentCaseNo="+currentCaseNo);
             // 直接保存点催记录
             var val = $('input[name="radioChoose"]:checked').parents("tr");
             // if(freeCallFlag==null || freeCallFlag==""){
