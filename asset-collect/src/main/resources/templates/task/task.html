@@ -26,19 +26,65 @@
                                 <p>姓名：</p>
                                 <input type="text" name="customName" id="customName"/>
                             </li>
-                            <li>
+                           <!-- <li>
                                 <p>任务状态：</p>
-                                <!-- 1：未分配 2：催收中 3: 已结案-->
+                                &lt;!&ndash; 1：未分配 2：催收中 3: 已结案&ndash;&gt;
                                 <select name="taskStatus" id="taskStatus" th:with="type=${@dict.getType('sys_task_state')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
+                            </li>-->
+                             <li>
+                                <p>任务状态：</p>
+                                <!-- 1：未分配 2：催收中 3: 已结案-->
+                                 <select name="taskStatus" id="taskStatus">
+                                     <option value="">所有</option>
+                                     <option value="1">未分配</option>
+                                     <option value="2">已分配</option>
+                                     <option value="3">已结案</option>
+                                 </select>
                             </li>
-                            <li>
+                           <!-- <li>
                                 <p>历史电话码：</p>
                                 <select name="callCodeHistoryListStr" id="callCodeHistoryListStr" th:with="dictList=${@dict.getType('call_record_code')}" class="selectpicker" title="全部" multiple data-live-search="true" data-actions-box="true" data-selected-text-format="count > 4">
                                     <option th:each="dict : ${dictList}" th:text=" ${dict.dictValue} + '(' +${dict.dictLabel} +')'"
                                             th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>-->
+                            <!-- <li>
+                                <p>历史电话码：</p>
+                                <select name="callCodeHistoryListStr" id="callCodeHistoryListStr" th:with="dictList=${@dict.getType('call_record_code')}" class="selectpicker" title="全部" multiple data-live-search="true" data-actions-box="true" data-selected-text-format="count > 4">
+                                    <option th:each="dict : ${dictList}" th:text=" ${dict.dictValue} + '(' +${dict.dictLabel} +')'"
+                                            th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>-->
+                            <li>
+                                <p>历史电话码：</p>
+                                <select name="callCodeHistoryListStr" id="callCodeHistoryListStr" class="selectpicker" title="全部" multiple="" data-live-search="true" data-actions-box="true" data-selected-text-format="count > 4" tabindex="-98">
+                                    <option value="PTP">PTP(承诺还款)</option>
+                                    <option value="CYH">CYH(称已还)</option>
+                                    <option value="TP">TP(谈判沟通)</option>
+                                    <option value="WCY">WCY(无诚意)</option>
+                                    <option value="HKKN">HKKN(还款困难)</option>
+                                    <option value="ZG">ZG(转告)</option>
+                                    <option value="WRJT">WRJT(无人接听)</option>
+                                    <option value="JJ">JJ(拒接)</option>
+                                    <option value="ZX">ZX(占线忙音)</option>
+                                    <option value="GJ">GJ(关机)</option>
+                                    <option value="GD">GD(挂断)</option>
+                                    <option value="KH">KH(空号)</option>
+                                    <option value="BZ">BZ(不在)</option>
+                                    <option value="WCR">WCR(无此人)</option>
+                                    <option value="WHY">WHY(无回应)</option>
+                                    <option value="SL">SL(失联)</option>
+                                    <option value="R01">R01(已接听)</option>
+                                    <option value="R02">R02(无法接通)</option>
+                                    <option value="R03">R03(主叫号码不可用)</option>
+                                    <option value="R04">R04(停机)</option>
+                                    <option value="R05">R05(主叫欠费)</option>
+                                    <option value="R06">R06(呼损)</option>
+                                    <option value="R07">R07(黑名单)</option>
+                                    <option value="R08">R08(线路盲区)</option>
                                 </select>
                             </li>
                             <!--自由查询开始-->
