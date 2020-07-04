@@ -19,9 +19,17 @@
                             <li>
                                 <p>证件类型：</p>
                                 <!-- 1：身份证，2：护照，3：军官证，4：港澳台居民往来大陆通行证，5：户口簿-->
-                                <select name="certificateType" th:with="type=${@dict.getType('sys_car_type')}">
+                                <!--<select name="certificateType" th:with="type=${@dict.getType('sys_car_type')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>-->
+                                <select name="certificateType">
+                                    <option value="">所有</option>
+                                    <option th:value="1">身份证</option>
+                                    <option th:value="2">护照</option>
+                                    <option th:value="3">军官证</option>
+                                    <option th:value="4">港澳台居民往来大陆通行证</option>
+                                    <option th:value="5">户口簿</option>
                                 </select>
                             </li>
                             <li>
@@ -30,17 +38,39 @@
                             </li>
                             <li>
                                 <p>任务状态：</p>
-                                <!-- 1：未分配 2：催收中 3: 已结案-->
-                                <select name="taskStatus" th:with="type=${@dict.getType('sys_task_state')}">
+                                <!--<select name="taskStatus" th:with="type=${@dict.getType('sys_task_state')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>-->
+                                <select name="taskStatus">
+                                    <option value="">所有</option>
+                                    <option th:value="1">未分配</option>
+                                    <option th:value="2">已分配</option>
+                                    <option th:value="3">已结案</option>
                                 </select>
                             </li>
                             <li>
                                 <p>任务类型：</p>
-                                <select name="taskType" th:with="type=${@dict.getType('sys_task_type')}">
+                                <!--<select name="taskType" th:with="type=${@dict.getType('sys_task_type')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>-->
+                                <select name="taskType">
+                                    <option value="">所有</option>
+                                    <option th:value="1">初次生成</option>
+                                    <option th:value="2">重新分派</option>
+                                    <option th:value="3">临时代理</option>
+                                    <option th:value="4">协助催收</option>
+                                    <option th:value="5">临时代理回收</option>
+                                    <option th:value="7">结案转移</option>
+                                    <option th:value="10">协助催收申请</option>
+                                    <option th:value="11">停催申请</option>
+                                    <option th:value="12">停止催收</option>
+                                    <option th:value="13">停止催收激活</option>
+                                    <option th:value="14">停止催收拒绝</option>
+                                    <option th:value="15">拒绝协催</option>
+                                    <option th:value="16">机器人协催</option>
+                                    <option th:value="17">机器人拉回</option>
                                 </select>
                             </li>
                             <li>
