@@ -1066,7 +1066,8 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 tLcCallRecordService.insertTLcCallRecord(tLcCallRecord);
                 return Response.success(tLcCallRecord.getId());
             } else {
-                log.info("通话记录id不为空：{},话务平台：{}",tLcCallRecord.getId(),tLcCallRecord.getPlatform());
+                log.info("通话记录id不为空：{},话务平台：{},案件编号：{},录音地址：{},联系人手机号：{}",
+                        tLcCallRecord.getId(),tLcCallRecord.getPlatform(),tLcCallRecord.getCaseNo(),tLcCallRecord.getCallRadioLocation(),tLcCallRecord.getPhone());
                 try {
                     if (StringUtils.isNoneBlank(tLcCallRecord.getPlatform()) && tLcCallRecord.getPlatform().equals("ZJ")) {
                         log.info("通话开始时间：{}",tLcCallRecord.getCallStartTime());
