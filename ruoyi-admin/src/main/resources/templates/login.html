@@ -29,7 +29,7 @@
                <!-- <h1 align="center"><img alt="[ 混合作业平台 ]" src="../static/ruoyi.png" th:src="@{/ruoyi.png}">混合作业平台</h1>-->
                 <form id="signupForm" style="position: absolute;left:70%">
                     <!--<input type="text"   id="username"  name="username" class="form-control uname"   style="width:360px;"  placeholder="用户名" value=""   onchange="findOrg();findPlatform();" />-->
-                    <input type="text"   id="username"  name="username" class="form-control uname"   style="width:360px;"  placeholder="用户名" value=""   onchange="findOrg();findPlatform();" />
+                    <input type="text"   id="username"  name="username" class="form-control uname"   style="width:360px;"  placeholder="用户名" value=""   onchange="findOrg();" />
                     <input type="password" name="password" class="form-control pword"   style="width:360px;"   placeholder="密码"   value="" />
 					<select  id="orgId" name="orgId" class="form-control org" style="width:360px;color: #999898;font-size: 13px;font-weight: 400;padding-left: 8px;">
                         <option >部门</option>
@@ -50,6 +50,7 @@
 								<img th:src="@{captcha/captchaImage(type=${captchaType})}" class="imgcode" style="height: 36px;width: 150px;padding: 0 8px 0 0" />
 							</a>
 						</div>
+
 					</div>
                     <!--<div class="checkbox-custom" th:classappend="${captchaEnabled==false} ? 'm-t'">
 				        <input type="checkbox" id="rememberme" name="rememberme"> <label for="rememberme">记住我</label>
