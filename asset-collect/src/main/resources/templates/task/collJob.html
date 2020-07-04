@@ -395,11 +395,41 @@
                             <div class="row">
                                 <div class="select-list">
                                     <ul>
-                                        <li class="select-time">
+                                       <!-- <li class="select-time">
                                             <label class="labelInfo">电话码：</label>
                                             <select class="form-control" name="callCode" id="callCode" style="width: 180px; height: 30px" >
                                                 <option value="" selected>请选择</option>
                                             </select>
+                                        </li>-->
+                                         <li class="select-time">
+                                            <label class="labelInfo">电话码：</label>
+                                             <select class="form-control" name="callCode" id="callCode" style="width: 180px; height: 30px">
+                                                 <option value="" selected>请选择</option>
+                                                 <option value="PTP">PTP(承诺还款)</option>
+                                                 <option value="CYH">CYH(称已还)</option>
+                                                 <option value="TP">TP(谈判沟通)</option>
+                                                 <option value="WCY">WCY(无诚意)</option>
+                                                 <option value="HKKN">HKKN(还款困难)</option>
+                                                 <option value="ZG">ZG(转告)</option>
+                                                 <option value="WRJT">WRJT(无人接听)</option>
+                                                 <option value="JJ">JJ(拒接)</option>
+                                                 <option value="ZX">ZX(占线忙音)</option>
+                                                 <option value="GJ">GJ(关机)</option>
+                                                 <option value="GD">GD(挂断)</option>
+                                                 <option value="KH">KH(空号)</option>
+                                                 <option value="BZ">BZ(不在)</option>
+                                                 <option value="WCR">WCR(无此人)</option>
+                                                 <option value="WHY">WHY(无回应)</option>
+                                                 <option value="SL">SL(失联)</option>
+                                                 <option value="R01">R01(已接听)</option>
+                                                 <option value="R02">R02(无法接通)</option>
+                                                 <option value="R03">R03(主叫号码不可用)</option>
+                                                 <option value="R04">R04(停机)</option>
+                                                 <option value="R05">R05(主叫欠费)</option>
+                                                 <option value="R06">R06(呼损)</option>
+                                                 <option value="R07">R07(黑名单)</option>
+                                                 <option value="R08">R08(线路盲区)</option>
+                                             </select>
                                         </li>
                                     </ul>
                                 </div>
@@ -430,10 +460,23 @@
                             <div class="row">
                                 <div class="select-list">
                                     <ul>
+                                        <!--<li class="select-time">
+                                            <label class="labelInfo">行动码：</label>
+                                            <select class="form-control" name="actionCode" id="actionCode" style="width: 180px; height: 30px" onchange="actionCodeTabChange()">
+                                                <option value="" selected>请选择</option>
+                                            </select>
+                                        </li>-->
                                         <li class="select-time">
                                             <label class="labelInfo">行动码：</label>
                                             <select class="form-control" name="actionCode" id="actionCode" style="width: 180px; height: 30px" onchange="actionCodeTabChange()">
                                                 <option value="" selected>请选择</option>
+                                                <option value="ALPA">ALPA(已还款)</option>
+                                                <option value="CNHK">CNHK(承诺还款)</option>
+                                                <option value="ZTGJ">ZTGJ(暂停跟进)</option>
+                                                <option value="TS">TS(投诉)</option>
+                                                <option value="NXT">NXT(未达成还款)</option>
+                                                <option value="DYZG">DYZG(答应转告)</option>
+                                                <option value="ZCLX">ZCLX(再次联系)</option>
                                             </select>
                                         </li>
                                     </ul>
@@ -463,11 +506,21 @@
                             <div class="row">
                                 <div class="select-list">
                                     <ul>
-                                        <li class="select-time">
+                                       <!-- <li class="select-time">
                                             <label class="labelInfo">查找方式：</label>
                                             <select name="searchType" id="searchType" class="form-control" th:with="type=${@dict.getType('search_type')}" onchange="isHasOtherRemark(this)" style="width:120px;height: 30px;">
                                                 <option value="" selected>请选择</option>
                                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                            </select>
+                                        </li>-->
+                                        <li class="select-time">
+                                            <label class="labelInfo">查找方式：</label>
+                                            <select name="searchType" id="searchType" class="form-control" onchange="isHasOtherRemark(this)" style="width:120px;height: 30px;">
+                                                <option value="" selected="">请选择</option>
+                                                <option value="1">114</option>
+                                                <option value="2">12580</option>
+                                                <option value="3">天眼查</option>
+                                                <option value="4">其他</option>
                                             </select>
                                         </li>
                                         <li class="select-time"><input type="text" class="form-control" id="otherRemark"  name="otherRemark" style="width:100px;height: 30px;display: none" /></li>
@@ -488,10 +541,20 @@
                                 <div class="select-list">
                                     <ul>
                                         <li class="select-time">
-                                            <label class="labelInfo">关系：</label>
+                                            <!--<label class="labelInfo">关系：</label>
                                             <select name="selRelation" id="selRelation" class="form-control" th:with="type=${@dict.getType('sys_custom_contact_rela')}" onchange="isHasOtherContactRelation(this)" style="width:120px;height: 30px;">
                                                 <option value="" selected>请选择</option>
                                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                            </select>-->
+                                            <label class="labelInfo">关系：</label>
+                                            <select name="selRelation" id="selRelation" class="form-control" onchange="isHasOtherContactRelation(this)" style="width:120px;height: 30px;">
+                                                <option value="" selected="">请选择</option>
+                                                <option value="1">本人</option>
+                                                <option value="2">直系</option>
+                                                <option value="3">亲戚</option>
+                                                <option value="4">朋友</option>
+                                                <option value="18">单位</option>
+                                                <option value="-1">其他</option>
                                             </select>
                                         <li class="select-time"><input type="text" class="form-control" id="otherContactRelation"  name="c" style="width:100px;height: 30px;display: none" /></li>
                                         </li>
@@ -721,8 +784,8 @@
         // 查询左边客户列表并显示第一个客户的数据
         findTaskByOwner(startNum,pageSize);
         // 初始化行动码下拉框
-        initActionCode();
-        initCallRecordCode();
+        // initActionCode();
+        // initCallRecordCode();
         // $(".ui-layout-pane").css({"overflow":"hidden"});
         // 设置左边div的宽度
         $(".ui-layout-west").css({"width":"10%"});

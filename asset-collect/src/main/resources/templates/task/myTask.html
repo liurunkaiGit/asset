@@ -32,11 +32,41 @@
                                 <span>-</span>
                                 <input type="text" name="endArrearsTotal" id="endArrearsTotal"   style="width: 85px;" />
                             </li>
-                            <li>
+                           <!-- <li>
                                 <p>最近电话码：</p>
-                                <!-- 1：未分配 2：催收中 3: 已结案-->
+                                &lt;!&ndash; 1：未分配 2：催收中 3: 已结案&ndash;&gt;
                                 <select name="callSign" id="callCode">
                                     <option value="">所有</option>
+                                </select>
+                            </li>-->
+                            <li>
+                                <p>最近电话码：</p>
+                                <select name="callSign" id="callCode">
+                                    <option value="">所有</option>
+                                    <option value="PTP">承诺还款</option>
+                                    <option value="CYH">称已还</option>
+                                    <option value="TP">谈判沟通</option>
+                                    <option value="WCY">无诚意</option>
+                                    <option value="HKKN">还款困难</option>
+                                    <option value="ZG">转告</option>
+                                    <option value="WRJT">无人接听</option>
+                                    <option value="JJ">拒接</option>
+                                    <option value="ZX">占线忙音</option>
+                                    <option value="GJ">关机</option>
+                                    <option value="GD">挂断</option>
+                                    <option value="KH">空号</option>
+                                    <option value="BZ">不在</option>
+                                    <option value="WCR">无此人</option>
+                                    <option value="WHY">无回应</option>
+                                    <option value="SL">失联</option>
+                                    <option value="R01">已接听</option>
+                                    <option value="R02">无法接通</option>
+                                    <option value="R03">主叫号码不可用</option>
+                                    <option value="R04">停机</option>
+                                    <option value="R05">主叫欠费</option>
+                                    <option value="R06">呼损</option>
+                                    <option value="R07">黑名单</option>
+                                    <option value="R08">线路盲区</option>
                                 </select>
                             </li>
                             <li>
@@ -53,19 +83,53 @@
                                 <span>-</span>
                                 <input type="text" name="endCloseCaseYhje" id="endCloseCaseYhje"  style="width: 85px;"  />
                             </li>
-                            <li>
+                          <!--  <li>
                                 <p>最近行动码：</p>
-                                <!-- 1：未分配 2：催收中 3: 已结案-->
+                                &lt;!&ndash; 1：未分配 2：催收中 3: 已结案&ndash;&gt;
                                 <select name="actionCode" id="actionCode" >
                                     <option value="">所有</option>
                                 </select>
+                            </li>-->
+                            <li>
+                                <p>最近行动码：</p>
+                                <!-- 1：未分配 2：催收中 3: 已结案-->
+                                <select name="actionCode" id="actionCode">
+                                    <option value="">所有</option>
+                                    <option value="ALPA">已还款</option>
+                                    <option value="CNHK">承诺还款</option>
+                                    <option value="ZTGJ">暂停跟进</option>
+                                    <option value="TS">投诉</option>
+                                    <option value="NXT">未达成还款</option>
+                                    <option value="DYZG">答应转告</option>
+                                    <option value="ZCLX">再次联系</option>
+                                </select>
                             </li>
 
-                            <li>
+                           <!-- <li>
                                 <p>任务类型：</p>
                                 <select id="taskType" name="taskType" th:with="type=${@dict.getType('sys_task_type')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>-->
+                            <li>
+                                <p>任务类型：</p>
+                                <select id="taskType" name="taskType">
+                                    <option value="">所有</option>
+                                    <option value="1">初次生成</option>
+                                    <option value="2">重新分派</option>
+                                    <option value="3">临时代理</option>
+                                    <option value="4">协助催收</option>
+                                    <option value="5">临时代理回收</option>
+                                    <option value="7">结案转移</option>
+                                    <option value="10">协助催收申请</option>
+                                    <option value="11">停催申请</option>
+                                    <option value="12">停止催收</option>
+                                    <option value="13">停止催收激活</option>
+                                    <option value="14">停止催收拒绝</option>
+                                    <option value="15">拒绝协催</option>
+                                    <option value="16">机器人协催</option>
+                                    <option value="17">机器人拉回</option>
                                 </select>
                             </li>
                            <!-- <li>
@@ -90,14 +154,43 @@
                                 <span>-</span>
                                 <input type="text" class="time-input" id="endRecentlyAllotDate" placeholder="结束时间" name="endRecentlyAllotDate"/>
                             </li>
-                            <li >
+                            <!--<li >
                                 <p>历史电话码：</p>
                                 <select name="callCodeHistoryListStr" id="callCodeHistoryListStr"   th:with="dictList=${@dict.getType('call_record_code')}" class="selectpicker" title="全部" multiple data-live-search="true" data-actions-box="true" data-selected-text-format="count > 4">
                                     <option th:each="dict : ${dictList}" th:text=" ${dict.dictValue} + '(' +${dict.dictLabel} +')'"
                                             th:value="${dict.dictValue}"></option>
                                 </select>
+                            </li>-->
+                            <li >
+                                <p>历史电话码：</p>
+                                <select name="callCodeHistoryListStr" id="callCodeHistoryListStr"   class="selectpicker" title="全部" multiple data-live-search="true" data-actions-box="true" data-selected-text-format="count > 4">
+                                    <option value="PTP">PTP(承诺还款)</option>
+                                    <option value="CYH">CYH(称已还)</option>
+                                    <option value="TP">TP(谈判沟通)</option>
+                                    <option value="WCY">WCY(无诚意)</option>
+                                    <option value="HKKN">HKKN(还款困难)</option>
+                                    <option value="ZG">ZG(转告)</option>
+                                    <option value="WRJT">WRJT(无人接听)</option>
+                                    <option value="JJ">JJ(拒接)</option>
+                                    <option value="ZX">ZX(占线忙音)</option>
+                                    <option value="GJ">GJ(关机)</option>
+                                    <option value="GD">GD(挂断)</option>
+                                    <option value="KH">KH(空号)</option>
+                                    <option value="BZ">BZ(不在)</option>
+                                    <option value="WCR">WCR(无此人)</option>
+                                    <option value="WHY">WHY(无回应)</option>
+                                    <option value="SL">SL(失联)</option>
+                                    <option value="R01">R01(已接听)</option>
+                                    <option value="R02">R02(无法接通)</option>
+                                    <option value="R03">R03(主叫号码不可用)</option>
+                                    <option value="R04">R04(停机)</option>
+                                    <option value="R05">R05(主叫欠费)</option>
+                                    <option value="R06">R06(呼损)</option>
+                                    <option value="R07">R07(黑名单)</option>
+                                    <option value="R08">R08(线路盲区)</option>
+                                </select>
                             </li>
-                            <li>
+                           <!-- <li>
                                 <p > </p>
                                 <select id="columnQuery1" onchange="addQuery('columnQuery1','custom1')">
                                     <option value="">所有</option>
@@ -108,7 +201,7 @@
                                 <span id="custom1"  >
 
                                     </span>
-                            </li>
+                            </li>-->
 
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -250,8 +343,8 @@
             $.table.init(options);
 
             // 初始化机构下拉框、电话码、行动码
-            initCallCode();
-            initActionCode();
+            // initCallCode();
+            // initActionCode();
             initColumnQuery();
         });
 
