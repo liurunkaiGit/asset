@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('批量外呼任务管理列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <input type="hidden" id="isCanAutoCall" name="isCanAutoCall" th:value="${isCanAutoCall}">
+                            <input type="hidden" id="isCallOther" name="isCallOther" th:value="${tLcBatchCallConfig.isCallOther}">
+                            <input type="hidden" id="isCallOther" name="isCallOther" th:value="${tLcBatchCallConfig.isCallOther}">
+                            <li>
+                                <p>机构案件号：</p>
+                                <input type="text" name="caseNo"/>
+                            </li>
+                            <li>
+                                <p>电话号码：</p>
+                                <input type="text" name="phone"/>
+                            </li>
+                            <li>
+                                <p>联系人姓名：</p>
+                                <input type="text" name="contactName"/>
+                            </li>
+                            <li>
+                                <p>与本人关系：</p>
+                                <input type="text" name="contactRelation"/>
+                            </li>
+                            <li>
+                                <p>任务状态：</p>
+                                <select name="taskStatus">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <button type="button" class="btn btn-success" onclick="pauseCall()">暂停</button>
+                <button type="button" class="btn btn-success" onclick="startCall()">启动</button>
+                <button type="button" class="btn btn-success" onclick="cancelCall()">取消任务</button>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('ruoyi:batchcall:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('ruoyi:batchcall:remove')}]];
+        var prefix = ctx + "ruoyi/batchcall";
+        var batchCallArray = new Array();　//创建一个数组
+        var testStr="找到了！";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "批量外呼任务管理",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '主键ID',
+                    visible: false
+                },
+                {
+                    field : 'caseNo',
+                    title : '案件号',
+                    visible: false
+                },
+                {
+                    field : 'importBatchNo',
+                    title : '批次号',
+                    visible: false
+                },
+                {
+                    field : 'orgId',
+                    title : '委托机构ID',
+                    visible: false
+                },
+                {
+                    field : 'batchNo', 
+                    title : '批次号'
+                },
+                {
+                    field : 'caseNo', 
+                    title : '案件号'
+                },
+                {
+                    field : 'phone', 
+                    title : '电话号码'
+                },
+                {
+                    field : 'contactName', 
+                    title : '联系人姓名'
+                },
+                {
+                    field : 'contactRelation', 
+                    title : '与本人关系'
+                },
+                {
+                    field : 'exonNum',
+                    title : '外显号码'
+                },
+                {
+                    field : 'phoneType', 
+                    title : '电话类型：1 手机；2 固话'
+                },
+                {
+                    field : 'taskStatus', 
+                    title : '任务状态'
+                }]
+            };
+            $.table.init(options);
+            //表格加载完成之后，会触及此方法
+            $('#bootstrap-table').on('load-success.bs.table', function (e,data) {
+                // alert(JSON.stringify(data.rows));
+                batchCallArray = data.rows;
+                var isCanAutoCall = $("#isCanAutoCall").val();
+                if("1" == isCanAutoCall && batchCallArray.length > 0){//可自动外呼
+                    var obj = batchCallArray[1];
+                    openAutoCollJob(obj.caseNo,obj.importBatchNo,obj.orgId);
+                }
+                /*$.each(batchCallArray,function(i,e){
+                    alert(JSON.stringify(e));
+                });*/
+            });
+        });
+        
+        function openAutoCollJob(caseNo,importBatchNo,orgId) {
+            var toAutoCollJobUrl = prefix + '/toAutoCollJob?orgId='+orgId +'&caseNo='+caseNo +'&importBatchNo='+importBatchNo
+            // $('#autoCallModal').modal({show:true});
+            // $.modal.openTab("自动作业催收", toAutoCollJobUrl);
+            $.modal.openFull("催收记录 | " + caseNo, toAutoCollJobUrl,600,500);
+        }
+
+        function pauseCall(){
+            $.post(
+                prefix + "/editBatchCallStatus",
+                {
+                    flag:"pause"
+                },
+                function (data) {
+                    if (data.code == 0) {//请求成功
+                        $.modal.alert("暂停成功");
+                    }else{
+                        $.modal.alert(data.msg);
+                    }
+                }
+            );
+        }
+        
+        function startCall() {
+            $.post(
+                prefix + "/editBatchCallStatus",
+                {
+                    flag:"start"
+                },
+                function (data) {
+                    if (data.code == 0) {//请求成功
+                        $.modal.alert("启动成功");
+                    }else{
+                        $.modal.alert(data.msg);
+                    }
+                }
+            );
+        }
+        
+        function cancleCall() {
+            
+        }
+    </script>
+</body>
+</html>

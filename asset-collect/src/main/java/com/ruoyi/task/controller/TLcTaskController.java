@@ -122,8 +122,21 @@ public class TLcTaskController extends BaseController {
             log.error("获取用户信息失败");
             throw new RuntimeException("获取用户信息失败");
         }
+        ExtPhone extPhone = new ExtPhone();
+        extPhone.setIsused("0");
+        extPhone.setSeatId(Integer.valueOf(String.valueOf(userId)));
+        //暂时写平安，后续从session里面取
+//        extPhone.setCallPlatform("PA");
+        extPhone.setCallPlatform(ShiroUtils.getSysUser().getPlatform());
+        List<ExtPhone> list = extPhoneService.selectExtPhoneList(extPhone);
+        if (list != null && list.size() > 0) {
+            // 分机号码
+            modelMap.put("extPhone", list.get(0).getAgentid());
+        }
         modelMap.put("ownerId", userId);
         modelMap.put("orgId", ShiroUtils.getSysUser().getOrgId());
+        modelMap.put("callPlatform", ShiroUtils.getSysUser().getPlatform());
+
         return prefix + "/myTask";
     }
 
