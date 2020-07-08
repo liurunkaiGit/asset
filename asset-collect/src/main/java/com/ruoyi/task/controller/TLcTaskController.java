@@ -130,6 +130,7 @@ public class TLcTaskController extends BaseController {
     @RequiresPermissions("collect:task:view")
     @GetMapping(value = "/view")
     public String task(ModelMap modelMap) {
+        logger.info("====================进入我的任务页面====================="+new Date());
 //        TLcColumnQuery tLcColumnQuery = TLcColumnQuery.builder().orgId(ShiroUtils.getSysUser().getOrgId()).tableName(TableEnum.TASK.getTableName()).build();
 //        List<TLcColumnQuery> columnQueryList = this.columnQueryService.selectTLcColumnQueryList(tLcColumnQuery);
 //        modelMap.put("columnQueryList", JSON.toJSONString(columnQueryList));
@@ -189,6 +190,7 @@ public class TLcTaskController extends BaseController {
      */
     @GetMapping(value = "/toCollJob")
     public String toCollJob(TLcTask tLcTask, String currentImportBatchNo, String currentCaseNo, ModelMap modelMap,String callCodeHistoryListStr) {
+        logger.info("====================催收作业页面查询数据开始====================="+new Date());
         modelMap.put("tLcTask", tLcTask);
         modelMap.put("currentCaseNo", currentCaseNo);
         modelMap.put("currentImportBatchNo", currentImportBatchNo);
@@ -213,6 +215,7 @@ public class TLcTaskController extends BaseController {
         Map<String, BigDecimal> resultMap = this.tLcTaskService.selectTotalCountMoney(tLcTask);
         modelMap.put("totalCaseNum", resultMap.get("totalCaseNum"));
         modelMap.put("totalArrears", resultMap.get("totalArrears"));
+        logger.info("===================催收作业页面查询数据结束、进入页面====================="+new Date());
         return prefix + "/collJob";
     }
 
@@ -334,12 +337,14 @@ public class TLcTaskController extends BaseController {
     @PostMapping("/myTaskList")
     @ResponseBody
     public TableDataInfo myTaskList(TLcTask tLcTask,HttpServletRequest request) {
+        logger.info("====================我的任务页面查询list开始====================="+new Date());
         startPage();
         String callCodeHistoryListStr = request.getParameter("callCodeHistoryListStr");//历史电话码
         if(StringUtils.isNotEmpty(callCodeHistoryListStr)&& !"null".equals(callCodeHistoryListStr)){
             tLcTask.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
         }
         List<TLcTask> list = tLcTaskService.selectMyTaskList(tLcTask);
+        logger.info("====================我的任务页面查询list结束====================="+new Date());
         return getDataTable(list);
     }
 

@@ -27,10 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 登录验证
@@ -71,6 +68,7 @@ public class SysLoginController extends BaseController
         Subject subject = SecurityUtils.getSubject();
         try
         {
+            logger.info("================开始登录============================="+new Date());
             if(orgId == null || "".equals(orgId)){
                 SysUser user = new SysUser();
                 user.setLoginName(username);
@@ -78,6 +76,7 @@ public class SysLoginController extends BaseController
                 orgId = sysUser.getDeptId();
             }
             subject.login(token);
+            logger.info("================登录成功============================="+new Date());
             return success();
         }
         catch (AuthenticationException e)
