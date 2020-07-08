@@ -202,12 +202,16 @@ public class TLcTaskController extends BaseController {
         //暂时写平安，后续从session里面取
 //        extPhone.setCallPlatform("PA");
         extPhone.setCallPlatform(ShiroUtils.getSysUser().getPlatform());
+        logger.info("====================查询分机号码开始====================="+new Date());
         List<ExtPhone> list = extPhoneService.selectExtPhoneList(extPhone);
+        logger.info("====================查询分机号码结束====================="+new Date());
         if (list != null && list.size() > 0) {
             // 分机号码
             modelMap.put("extPhone", list.get(0));
             // 查询外显号码
+            logger.info("====================查询外显号码开始====================="+new Date());
             List<String> extNumList = this.extPhoneService.selectExtNumBySeat(String.valueOf(ShiroUtils.getSysUser().getUserId()), list.get(0).getAgentid(), ShiroUtils.getSysUser().getPlatform());
+            logger.info("====================查询外显号码结束====================="+new Date());
             modelMap.put("extNumList",StringUtils.join(extNumList,","));
         }
         modelMap.put("callPlatform", ShiroUtils.getSysUser().getPlatform());
@@ -351,12 +355,14 @@ public class TLcTaskController extends BaseController {
     @PostMapping("/findTaskByOwner")
     @ResponseBody
     public List<TLcTask> findTaskByOwner(TLcTask tLcTask,HttpServletRequest request) {
+        logger.info("====================查询客户列表开始====================="+new Date());
         String callCodeHistoryListStr = request.getParameter("callCodeHistoryListStr");//历史电话码
         if(StringUtils.isNotEmpty(callCodeHistoryListStr) && !"null".equals(callCodeHistoryListStr)){
             tLcTask.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
         }
         startPageCustom(Integer.valueOf(request.getParameter("startNum")), Integer.valueOf(request.getParameter("endNum")));
         List<TLcTask> list = tLcTaskService.selectMyTaskList(tLcTask);
+        logger.info("====================查询客户列表结束====================="+new Date());
         return list;
     }
 
@@ -366,7 +372,9 @@ public class TLcTaskController extends BaseController {
     @PostMapping("/callRecordList")
     @ResponseBody
     public List<TLcCallRecord> callRecordList(String caseNo) {
+        logger.info("=================查询电催记录开始=====================caseNo="+caseNo);
         List<TLcCallRecord> callRecordList = this.tLcCallRecordService.findCallRecordByCaseNo(caseNo);
+        logger.info("=================查询电催记录结束=====================caseNo="+caseNo);
         return callRecordList;
     }
 
@@ -376,7 +384,9 @@ public class TLcTaskController extends BaseController {
     @PostMapping("/selectRecordList")
     @ResponseBody
     public List<TLcSelectRecord> selectRecordList(String caseNo) {
+        logger.info("=================查询查找记录开始=====================caseNo="+caseNo);
         List<TLcSelectRecord> selectRecordList = this.tLcSelectRecordService.findSelectRecordByCaseNo(caseNo);
+        logger.info("=================查询查找记录结束=====================caseNo="+caseNo);
         return selectRecordList;
     }
 
@@ -399,8 +409,10 @@ public class TLcTaskController extends BaseController {
     @PostMapping("/actionRecordList")
     @ResponseBody
     public List<TLcDuncaseActionRecord> actionRecordList(String caseNo) {
+        logger.info("=================查询行动历史开始=====================caseNo="+caseNo);
         TLcDuncaseActionRecord actionRecord = TLcDuncaseActionRecord.builder().caseNo(caseNo).build();
         List<TLcDuncaseActionRecord> tLcDuncaseActionRecordList = this.tLcDuncaseActionRecordService.selectTLcDuncaseActionRecordList(actionRecord);
+        logger.info("=================查询行动历史结束=====================caseNo="+caseNo);
         return tLcDuncaseActionRecordList;
     }
 
@@ -410,7 +422,9 @@ public class TLcTaskController extends BaseController {
     @PostMapping("/custContactList")
     @ResponseBody
     public List<TLcCustContact> custContactList(String caseNo, String orgId, String importBatchNo) {
+        logger.info("=================查询联系人开始=====================caseNo="+caseNo);
         List<TLcCustContact> custContactList = this.tLcCustContactService.findAllCustContactByCaseNo(caseNo, orgId, importBatchNo);
+        logger.info("=================查询联系人结束=====================caseNo="+caseNo);
         return custContactList;
     }
 
@@ -420,7 +434,9 @@ public class TLcTaskController extends BaseController {
     @PostMapping("/duncaseAssignList")
     @ResponseBody
     public List<TLcDuncaseAssign> duncaseAssignList(String caseNo) {
+        logger.info("=================查询案件历史轨迹开始=====================caseNo="+caseNo);
         List<TLcDuncaseAssign> duncaseAssignList = this.tLcDuncaseAssignService.findDuncaseAssignByCaseNo(caseNo);
+        logger.info("=================查询案件历史轨迹结束=====================caseNo="+caseNo);
         return duncaseAssignList;
     }
 
@@ -430,7 +446,9 @@ public class TLcTaskController extends BaseController {
     @PostMapping("/repaymentList")
     @ResponseBody
     public List<AssetsRepayment> repaymentList(String caseNo) {
+        logger.info("=================查询还款历史记录开始=====================caseNo="+caseNo);
         List<AssetsRepayment> repayHisList = this.tLcTaskService.viewRepayHis(caseNo);
+        logger.info("=================查询还款历史记录结束=====================caseNo="+caseNo);
         return repayHisList;
     }
 
@@ -438,7 +456,9 @@ public class TLcTaskController extends BaseController {
     @PostMapping("/collJobDetail")
     @ResponseBody
     public CollJob collJobDetail(String caseNo, String orgId, String importBatchNo) {
+        logger.info("=================查询详细信息开始=====================caseNo="+caseNo);
         CollJob collJob = this.tLcTaskService.collJobDetail(caseNo, orgId, importBatchNo);
+        logger.info("=================查询详细信息结束=====================caseNo="+caseNo);
         return collJob;
     }
 

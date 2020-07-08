@@ -2,11 +2,9 @@ package com.ruoyi.duncase.service.impl;
 
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.text.Convert;
-import com.ruoyi.duncase.domain.TLcDuncase;
 import com.ruoyi.duncase.domain.TLcDuncaseActionRecord;
 import com.ruoyi.duncase.mapper.TLcDuncaseActionRecordMapper;
 import com.ruoyi.duncase.service.ITLcDuncaseActionRecordService;
-import com.ruoyi.duncase.service.ITLcDuncaseService;
 import com.ruoyi.enums.CollActionCodeEnum;
 import com.ruoyi.enums.IsNoEnum;
 import com.ruoyi.framework.util.ShiroUtils;
@@ -17,7 +15,7 @@ import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.task.domain.TLcTask;
 import com.ruoyi.task.mapper.TLcTaskMapper;
 import com.ruoyi.task.service.ITLcTaskService;
-import com.ruoyi.utils.Response;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +30,7 @@ import java.util.stream.Collectors;
  * @author liurunkai
  * @date 2020-01-04
  */
+@Slf4j
 @Service
 public class TLcDuncaseActionRecordServiceImpl implements ITLcDuncaseActionRecordService {
     @Autowired
@@ -75,6 +74,7 @@ public class TLcDuncaseActionRecordServiceImpl implements ITLcDuncaseActionRecor
      */
     @Override
     public int insertTLcDuncaseActionRecord(TLcDuncaseActionRecord tLcDuncaseActionRecord, String orgId, String importBatchNo) {
+        log.info("=================添加行动码开始=====================");
         tLcDuncaseActionRecord.setCreateBy(ShiroUtils.getUserId().toString());
         tLcDuncaseActionRecord.setModifyBy(ShiroUtils.getUserId());
         tLcDuncaseActionRecord.setValidateStatus(IsNoEnum.IS.getCode());
@@ -95,7 +95,9 @@ public class TLcDuncaseActionRecordServiceImpl implements ITLcDuncaseActionRecor
         if (CollActionCodeEnum.ALPA.getCode().equals(tLcDuncaseActionRecord.getActionCode())) {
             this.robotBlackService.insertTLcRobotBlack(tLcTask, RobotBlackReasonEnum.PAYED.getReason(), tLcTask.getPhone());
         }
-        return tLcDuncaseActionRecordMapper.insertTLcDuncaseActionRecord(tLcDuncaseActionRecord);
+        int res = tLcDuncaseActionRecordMapper.insertTLcDuncaseActionRecord(tLcDuncaseActionRecord);
+        log.info("=================添加行动码结束=====================");
+        return res;
     }
 
     /**
