@@ -1,5 +1,6 @@
 package com.ruoyi.radioQc.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.ruoyi.assetspackage.domain.OrgPackage;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
@@ -125,6 +126,7 @@ public class TLcSendRadioQcRecordServiceImpl implements ITLcSendRadioQcRecordSer
     public void sendRadioToQualityCheck(TLcCallRecord tLcCallRecord, OrgPackage orgPackage) {
         RadioQualityCheck radioQualityCheck = createRadioQualityCheck(tLcCallRecord,orgPackage);
         ResponseEntity<QualityCheckResponse> qualityCheckResponse = restTemplateUtil.getRestTemplate().postForEntity(sendRadioQualityCheck, radioQualityCheck, QualityCheckResponse.class);
+        log.info("推送语音质检返回的结果数据：{}", JSON.toJSONString(qualityCheckResponse));
         if (qualityCheckResponse.getStatusCodeValue() == HttpStatus.OK.value() && qualityCheckResponse.getBody().getCode() == 0) {
 //            QualityCheckResponse checkResponseBody = qualityCheckResponse.getBody();
 //            TLcSendRadioQcRecord tLcSendRadioQcRecord = TLcSendRadioQcRecord.builder()
