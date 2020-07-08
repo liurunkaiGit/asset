@@ -22,6 +22,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -51,12 +53,14 @@ public class SysLoginController extends BaseController
     @GetMapping("/login")
     public String login(HttpServletRequest request, HttpServletResponse response)
     {
+        logger.info("================进入登录页面开始============================="+new Date());
         // 如果是Ajax请求，返回Json字符串。
         if (ServletUtils.isAjaxRequest(request))
         {
             return ServletUtils.renderString(response, "{\"code\":\"1\",\"msg\":\"未登录或登录超时。请重新登录\"}");
         }
 
+        logger.info("================进入登录页面结束============================="+new Date());
         return "login";
     }
 
@@ -68,7 +72,9 @@ public class SysLoginController extends BaseController
         Subject subject = SecurityUtils.getSubject();
         try
         {
-            logger.info("================开始登录============================="+new Date());
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            String sessionId = request.getRequestedSessionId();
+            logger.info("================开始登录============================="+new Date()+"=====sessionId="+sessionId);
             if(orgId == null || "".equals(orgId)){
                 SysUser user = new SysUser();
                 user.setLoginName(username);
