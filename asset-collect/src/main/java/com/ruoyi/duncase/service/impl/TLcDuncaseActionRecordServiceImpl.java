@@ -74,7 +74,7 @@ public class TLcDuncaseActionRecordServiceImpl implements ITLcDuncaseActionRecor
      */
     @Override
     public int insertTLcDuncaseActionRecord(TLcDuncaseActionRecord tLcDuncaseActionRecord, String orgId, String importBatchNo) {
-        log.info("=================添加行动码开始=====================");
+        log.info("添加行动码开始");
         tLcDuncaseActionRecord.setCreateBy(ShiroUtils.getUserId().toString());
         tLcDuncaseActionRecord.setModifyBy(ShiroUtils.getUserId());
         tLcDuncaseActionRecord.setValidateStatus(IsNoEnum.IS.getCode());
@@ -96,7 +96,7 @@ public class TLcDuncaseActionRecordServiceImpl implements ITLcDuncaseActionRecor
             this.robotBlackService.insertTLcRobotBlack(tLcTask, RobotBlackReasonEnum.PAYED.getReason(), tLcTask.getPhone());
         }
         int res = tLcDuncaseActionRecordMapper.insertTLcDuncaseActionRecord(tLcDuncaseActionRecord);
-        log.info("=================添加行动码结束=====================");
+        log.info("添加行动码结束");
         return res;
     }
 

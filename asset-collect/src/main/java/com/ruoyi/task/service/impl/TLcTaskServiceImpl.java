@@ -1028,7 +1028,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
 
     @Override
     public Response addCallRecord(TLcCallRecord tLcCallRecord, String importBatchNo, String callStartTime, String callEndTime) {
-        log.info("=================添加通话记录开始===================="+new Date());
+        log.info("添加通话记录开始");
 //        String filePath = Global.getUploadPath();
         SimpleDateFormat sdf = new SimpleDateFormat(DateUtils.YYYY_MM_DD_HH_MM_SS);
         try {
@@ -1102,7 +1102,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                     return Response.success(tLcCallRecord.getId());
                 }
                 tLcCallRecordService.updateTLcCallRecord(tLcCallRecord);
-                log.info("=================添加通话记录结束===================="+new Date());
+                log.info("添加通话记录结束");
                 return Response.success(tLcCallRecord.getId());
             }
         } catch (Exception e) {

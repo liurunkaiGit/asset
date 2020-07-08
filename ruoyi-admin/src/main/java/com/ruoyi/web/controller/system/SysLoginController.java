@@ -53,14 +53,14 @@ public class SysLoginController extends BaseController
     @GetMapping("/login")
     public String login(HttpServletRequest request, HttpServletResponse response)
     {
-        logger.info("================进入登录页面开始============================="+new Date());
+        logger.info("进入登录页面开始");
         // 如果是Ajax请求，返回Json字符串。
         if (ServletUtils.isAjaxRequest(request))
         {
             return ServletUtils.renderString(response, "{\"code\":\"1\",\"msg\":\"未登录或登录超时。请重新登录\"}");
         }
 
-        logger.info("================进入登录页面结束============================="+new Date());
+        logger.info("进入登录页面结束");
         return "login";
     }
 
@@ -74,7 +74,7 @@ public class SysLoginController extends BaseController
         {
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
             String sessionId = request.getRequestedSessionId();
-            logger.info("================开始登录============================="+new Date()+"=====sessionId="+sessionId);
+            logger.info("开始登录sessionId="+sessionId);
             if(orgId == null || "".equals(orgId)){
                 SysUser user = new SysUser();
                 user.setLoginName(username);
@@ -82,7 +82,7 @@ public class SysLoginController extends BaseController
                 orgId = sysUser.getDeptId();
             }
             subject.login(token);
-            logger.info("================登录成功============================="+new Date());
+            logger.info("登录成功loginName="+ShiroUtils.getLoginName());
             return success();
         }
         catch (AuthenticationException e)
