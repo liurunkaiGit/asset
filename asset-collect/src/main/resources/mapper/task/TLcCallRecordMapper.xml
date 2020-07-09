@@ -271,6 +271,7 @@
             <if test="endCallLen != null  and endCallLen != ''">and t.call_len <![CDATA[<=]]> #{endCallLen}</if>
             <if test="createName != null  and createName != ''">and u.user_name like concat('%', #{createName},'%')</if>
         </where>
+        order by t.call_start_time desc
     </select>
 
     <update id="updateStar" parameterType="com.ruoyi.task.domain.TLcCallRecord">

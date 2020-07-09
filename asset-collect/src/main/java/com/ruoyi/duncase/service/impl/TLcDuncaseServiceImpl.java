@@ -2,6 +2,7 @@ package com.ruoyi.duncase.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.assetspackage.domain.OrgPackage;
+import com.ruoyi.assetspackage.domain.score.TLcScore;
 import com.ruoyi.assetspackage.service.IOrgPackageService;
 import com.ruoyi.callConfig.domain.TLcCallStrategyConfig;
 import com.ruoyi.callConfig.service.ITLcCallStrategyConfigService;
@@ -1107,6 +1108,11 @@ public class TLcDuncaseServiceImpl implements ITLcDuncaseService {
     public Integer selectDuncaseCount(Date createTime) {
 
         return tLcDuncaseMapper.selectDuncaseCount(createTime);
+    }
+
+    @Override
+    public void updateScore(List<TLcScore> TLcScoreList) {
+         tLcDuncaseMapper.updateScore(TLcScoreList);
     }
 
 }
