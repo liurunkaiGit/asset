@@ -207,4 +207,5 @@ cron:
   # 每天晚上22点执行：正式使用使用
   createReport: 0 0 22 * * ?
 
+isEnableTimer: true
 

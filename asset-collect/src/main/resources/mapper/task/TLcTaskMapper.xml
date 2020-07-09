@@ -264,10 +264,9 @@
                 t.overdue_days,
                 d.ljyhje,
                 d.product_name AS productName,
-                tt.score
-                FROM t_lc_task t,t_lc_duncase d,t_lc_score tt
+                d.score
+                FROM t_lc_task t,t_lc_duncase d
                 WHERE  t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no
-                       and t.case_no = tt.org_casno AND t.import_batch_no = tt.import_batch_no
                        AND t.allot_type = 1 AND t.task_status != 3
                 <if test="orgId != null  and orgId != ''">
                     and t.org_id = #{orgId}
@@ -931,10 +930,10 @@
                 t.call_sign_value,
                 t.phone,
                 t.dqyhje,
-                tt.score
-                FROM t_lc_task t,t_lc_duncase d,t_lc_custinfo cust,t_lc_score tt
+                d.score
+                FROM t_lc_task t,t_lc_duncase d,t_lc_custinfo cust
                 WHERE t.case_no = d.case_no and t.import_batch_no = d.import_batch_no and t.case_no = cust.case_no and
-                t.import_batch_no = cust.import_batch_no and t.case_no = tt.org_casno AND t.import_batch_no = tt.import_batch_no
+                t.import_batch_no = cust.import_batch_no
                 AND t.allot_type = 1 AND t.task_status != 3
                 <if test="orgId != null  and orgId != ''">
                     and t.org_id = #{orgId}
@@ -1017,10 +1016,9 @@
                 t.call_sign_value,
                 t.phone,
                 t.dqyhje,
-                tt.score
-                FROM t_lc_task t,t_lc_duncase d,t_lc_custinfo cust,t_lc_score tt
+                d.score
+                FROM t_lc_task t,t_lc_duncase d,t_lc_custinfo cust
                 WHERE t.case_no = d.case_no and t.import_batch_no = d.import_batch_no and t.case_no = cust.case_no and t.import_batch_no = cust.import_batch_no
-                and t.case_no = tt.org_casno AND t.import_batch_no = tt.import_batch_no
                 AND NOT EXISTS (select 1 from t_lc_robot_black rb where rb.case_no = t.case_no)
                 AND t.allot_type = 1 AND t.task_status != 3
                 <if test="orgId != null  and orgId != ''">
@@ -1055,10 +1053,9 @@
     <select id="selectCountExistRobotBlack"  parameterType="com.ruoyi.task.domain.TLcTask" resultType="java.lang.Long">
                 SELECT
                 count(1)
-                FROM t_lc_task t,t_lc_duncase d,t_lc_custinfo cust,t_lc_score tt
+                FROM t_lc_task t,t_lc_duncase d,t_lc_custinfo cust
                 WHERE t.case_no = d.case_no and t.import_batch_no = d.import_batch_no and t.case_no = cust.case_no and
                 t.import_batch_no = cust.import_batch_no
-                and t.case_no = tt.org_casno AND t.import_batch_no = tt.import_batch_no
                 AND EXISTS (select 1 from t_lc_robot_black rb where rb.case_no = t.case_no)
                 AND t.allot_type = 1 AND t.task_status != 3
                     <if test="orgId != null  and orgId != ''">and t.org_id = #{orgId}

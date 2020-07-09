@@ -106,6 +106,9 @@
         <if test="endCallLen != null">
             AND re.call_len <![CDATA[<=]]> #{endCallLen}
         </if>
+        <if test="caseNo != null and case_no != '' ">
+            AND re.case_no = #{caseNo}
+        </if>
     </select>
 
     <select id="selectTLcCallRecordById" parameterType="Long" resultMap="TLcCallRecordResult">
