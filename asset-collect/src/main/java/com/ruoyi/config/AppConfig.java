@@ -27,7 +27,7 @@ public class AppConfig {
     // 是否开启定时生成报表任务
     private Boolean createReport;
     // 是否开启历史数据迁移
-    private Boolean hisDataMigrate;
+//    private Boolean hisDataMigrate;
 
     //限制只能开启一个自动分配任务
     public AllocatRuleEnum validOnlyTrue() {

@@ -187,7 +187,7 @@ enable:
   #是否开启定时生成报表任务
   createReport: true
   #是否开启历史数据迁移
-  hisDataMigrate: true
+#  hisDataMigrate: true
 
 google:
   local:

@@ -4,6 +4,7 @@ import com.ruoyi.config.AppConfig;
 import com.ruoyi.quartz.service.HisDataMigrateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,8 @@ import java.time.ZoneId;
 @Component("hisDataMigrate")
 public class HisDataMigrate {
 
+    @Value("${isEnableTimer}")
+    private Boolean isEnableTimer;
     @Autowired
     private HisDataMigrateService hisDataMigrateService;
     @Autowired
@@ -27,11 +30,11 @@ public class HisDataMigrate {
      * 已结案的历史数据迁移
      */
     public void hisDataMigrate() {
-        if (!appConfig.getHisDataMigrate()) {
+        if (isEnableTimer) {
+            log.info("开始执行数据迁移，时间：{}", LocalDateTime.now(ZoneId.systemDefault()));
+            this.hisDataMigrateService.hisDataMigrate();
+        } else {
             log.info("定时历史数据迁移任务未开启");
-            return;
         }
-        log.info("开始执行数据迁移，时间：{}", LocalDateTime.now(ZoneId.systemDefault()));
-        this.hisDataMigrateService.hisDataMigrate();
     }
 }
