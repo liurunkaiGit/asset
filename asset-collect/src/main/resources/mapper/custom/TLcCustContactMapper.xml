@@ -314,11 +314,11 @@
     <select id="selectCustContactByTime" resultMap="mapResult">
         select id, contact_name, relation, phone,  tel, address,origin, create_time, modify_time,validate_status,case_no,org_id,
         import_batch_no,is_close from t_lc_cust_contact
-        where 1 = 1
+        where  1 = 1
         <if test="createTime != null">
-            AND create_time <![CDATA[>=]]> #{createTime} OR modify_time <![CDATA[>=]]> #{createTime}
+            AND (create_time <![CDATA[>=]]> #{createTime} AND create_time <![CDATA[<]]> #{modifyTime}) OR (modify_time <![CDATA[>=]]> #{createTime} AND modify_time <![CDATA[<]]> #{modifyTime})
         </if>
-        order by id desc
+        order by id asc
         limit #{pnum},#{psize}
     </select>
 
@@ -326,7 +326,7 @@
         select count(1) from t_lc_cust_contact
         where 1 = 1
         <if test="createTime != null">
-            AND create_time <![CDATA[>=]]> #{createTime} OR modify_time <![CDATA[>=]]> #{createTime}
+            AND (create_time <![CDATA[>=]]> #{createTime} AND create_time <![CDATA[<]]> #{modifyTime}) OR (modify_time <![CDATA[>=]]> #{createTime} AND modify_time <![CDATA[<]]> #{modifyTime})
         </if>
     </select>
 </mapper>

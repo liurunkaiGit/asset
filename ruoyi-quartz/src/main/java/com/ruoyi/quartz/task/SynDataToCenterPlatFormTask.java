@@ -18,6 +18,7 @@ import com.ruoyi.utils.CSVUtils;
 import com.ruoyi.utils.SFTPUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -53,19 +54,31 @@ public class SynDataToCenterPlatFormTask
     private ITLcTaskService tLcTaskService;
     @Autowired
     private ISysConfigService sysConfigService;
+    @Value("${isEnableTimer}")
+    private Boolean isEnableTimer;
 
     /**
      * 下载语音通话文件
      * 默认不传开始时间、结束时间
      */
     public void SynDataToCenterPlatForm(){
-        this.SynDataToCenterPlatForm(null,null);
+        this.SynDataToCenterPlatForm(null,null,null);
     }
+
+    /**
+     * 下载语音通话文件,只传时间
+     * @param startDate
+     */
+    public void SynDataToCenterPlatForm(String startDate){this.SynDataToCenterPlatForm(startDate,null,null);}
     /**
      * 下载语音通话文件
      * @param startDate
      */
-    public void SynDataToCenterPlatForm(String startDate,String tableName){
+    public void SynDataToCenterPlatForm(String startDate,String endDate,String tableName){
+        if(!isEnableTimer){
+            log.info("同步数据定时任务已经再执行了");
+            return;
+        }
         if(StringUtils.isEmpty(startDate)){
             // 获取当天的0点
             SimpleDateFormat dateFmt = new SimpleDateFormat(DateUtils.YYYY_MM_DD_HH_MM_SS);
@@ -76,8 +89,10 @@ public class SynDataToCenterPlatFormTask
             Date dBefore = calendar.getTime();
             startDate = dateFmt.format(dBefore);
             startDate = startDate.substring(0, 10) + " 00:00:00";
+            endDate = startDate.substring(0, 10) + " 23:59:59";
         }else{//开始时间和结束时间都不为空
             startDate = startDate.substring(0, 10) + " 00:00:00";
+            endDate = endDate.substring(0, 10) + " 23:59:59";
         }
         /*startDate = "2020-06-08 00:00:00";
         String endDate = "2020-06-08 23:59:59";*/
@@ -94,7 +109,7 @@ public class SynDataToCenterPlatFormTask
             //4、生成 t_lc_call_record 表数据，并上传FTP服务器
             createCallRecordFile(startDate,sftp);
             //5、生成 t_lc_cust_contact 表数据，并上传FTP服务器
-            createCustContactFile(startDate,sftp);
+            createCustContactFile(startDate,endDate,sftp);
             //6、生成 t_lc_custinfo 表数据，并上传FTP服务器
             createCustinfoFile(startDate,sftp);
             //7、生成 t_lc_duncase 表数据，并上传FTP服务器
@@ -115,7 +130,7 @@ public class SynDataToCenterPlatFormTask
             createCallRecordFile(startDate,sftp);
         }else if("t_lc_cust_contact".equals(tableName)){
             //1、生成 t_lc_cust_contact 表数据，并上传FTP服务器
-            createCustContactFile(startDate,sftp);
+            createCustContactFile(startDate,endDate,sftp);
         }else if("t_lc_custinfo".equals(tableName)){
             //1、生成 t_lc_custinfo 表数据，并上传FTP服务器
             createCustinfoFile(startDate,sftp);
@@ -219,17 +234,17 @@ public class SynDataToCenterPlatFormTask
      * @param startDate
      * @param sftp
      */
-    private void createCustContactFile(String startDate,SFTPUtil sftp) {
+    private void createCustContactFile(String startDate,String endDate,SFTPUtil sftp) {
 
         int pageSize = 10000;//每页的数据条数
         int pageCount = 0;//总页数
-        int count = tLcCustContactService.selectCustContactCount(DateUtils.parseDate(startDate));//总条数
+        int count = tLcCustContactService.selectCustContactCount(DateUtils.parseDate(startDate),DateUtils.parseDate(endDate));//总条数
         pageCount = count/pageSize + 1;
 
         List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
         List<Map<String,Object>> temp = null;
         for(int i = 0 ; i < pageCount; i ++){
-            temp = tLcCustContactService.selectCustContactByTime(DateUtils.parseDate(startDate),pageSize*i,pageSize);
+            temp = tLcCustContactService.selectCustContactByTime(DateUtils.parseDate(startDate),DateUtils.parseDate(endDate),pageSize*i,pageSize);
             log.info("第{}次查询t_lc_cust_contact表数据结束",i+1);
             temp = formatCustContactList(temp);
             list.addAll(temp);
@@ -340,10 +355,13 @@ public class SynDataToCenterPlatFormTask
             try{
                 InputStream is = new FileInputStream(file);
                 sftp.upload(ftpFileName, fileName2, is);
+                log.info("文件上传成功：" + fileName2);
                 //上传.ok文件
                 File okFile = CSVUtils.createCSVFile(null, null, synCenterPlatFormPath, fileName + ".ok");
+                log.info("文件名称：" + okFile.getName());
                 InputStream okIs = new FileInputStream(okFile);
                 sftp.upload(ftpFileName, okFile.getName(), okIs);
+                log.info("文件上传成功：" + okFile.getName());
             }catch (Exception e){
                 log.error("SFTP上传"+tableName+"文件失败，文件名称={},异常={}：",fileName2,e);
             }

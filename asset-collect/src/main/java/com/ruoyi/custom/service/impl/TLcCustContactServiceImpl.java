@@ -160,13 +160,13 @@ public class TLcCustContactServiceImpl implements ITLcCustContactService {
     }
 
     @Override
-    public List<Map<String, Object>> selectCustContactByTime(Date createTime, int pageNum, int pageSize) {
-        return this.tLcCustContactMapper.selectCustContactByTime(createTime,pageNum,pageSize);
+    public List<Map<String, Object>> selectCustContactByTime(Date createTime,Date modifyTime, int pageNum, int pageSize) {
+        return this.tLcCustContactMapper.selectCustContactByTime(createTime,modifyTime,pageNum,pageSize);
     }
 
     @Override
-    public Integer selectCustContactCount(Date createTime) {
-        return this.tLcCustContactMapper.selectCustContactCount(createTime);
+    public Integer selectCustContactCount(Date createTime, Date modifyTime) {
+        return this.tLcCustContactMapper.selectCustContactCount(createTime,modifyTime);
     }
 
     private AllCustContact buildAllCustContact(TLcCustContact custContact, String phone) {
