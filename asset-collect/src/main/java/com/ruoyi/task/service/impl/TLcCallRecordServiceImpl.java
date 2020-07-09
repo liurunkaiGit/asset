@@ -204,6 +204,11 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
     }
 
     @Override
+    public List<TLcCallRecord> findHisDuncaseCallRecordByCaseNo(String caseNo) {
+        return this.tLcCallRecordMapper.findHisDuncaseCallRecordByCaseNo(caseNo);
+    }
+
+    @Override
     public List<CallContent> viewCallContent(String id) {
         TLcCallRecord tLcCallRecord = this.tLcCallRecordMapper.selectTLcCallRecordById(Long.valueOf(id));
         List<CallContent> callContentList = JSONObject.parseArray(tLcCallRecord.getRemark(), CallContent.class);

@@ -104,6 +104,11 @@ public class TLcDuncaseAssignServiceImpl implements ITLcDuncaseAssignService {
     }
 
     @Override
+    public List<TLcDuncaseAssign> findHisDuncaseAssignByCaseNo(String caseNo) {
+        return this.tLcDuncaseAssignMapper.findHisDuncaseAssignByCaseNo(caseNo);
+    }
+
+    @Override
     @Async
     public void batchInsertDuncaseAssign(List<TLcTask> taskList, SysUser sysUser, Integer taskType) {
         List<TLcDuncaseAssign> duncaseAssignList = taskList.stream()

@@ -64,6 +64,28 @@
         ORDER BY create_time desc
     </select>
 
+    <select id="selectTLcHisDuncaseActionRecordList" parameterType="com.ruoyi.duncase.domain.TLcDuncaseActionRecord" resultMap="TLcDuncaseActionRecordResult">
+        SELECT
+        su.user_name AS agentName,
+        t4.dict_label AS dictLabel,
+        <include refid="SELECT_DUNCASE_ACTION_CODE"/>
+        FROM t_lc_duncase_action_record_his t
+        LEFT JOIN sys_user su ON t.create_by = su.user_id
+        LEFT JOIN sys_dict_data t4 ON t4.dict_value = t.action_code
+        WHERE 1=1
+        <if test="caseNo != null  and caseNo != ''">and t.case_no = #{caseNo}</if>
+        <if test="taskId != null  and taskId != ''">and t.task_id = #{taskId}</if>
+        <if test="repayDate != null ">and t.repay_date = #{repayDate}</if>
+        <if test="repayAmount != null ">and t.repay_amount = #{repayAmount}</if>
+        <if test="recheckDate != null ">and t.recheck_date = #{recheckDate}</if>
+        <if test="recontactDate != null ">and t.recontact_date = #{recontactDate}</if>
+        <if test="actionCode != null  and actionCode != ''">and t.action_code = #{actionCode}</if>
+        <if test="validateStatus != null ">and t.validate_status = #{validateStatus}</if>
+        <if test="modifyTime != null ">and t.modify_time = #{modifyTime}</if>
+        <if test="modifyBy != null ">and t.modify_by = #{modifyBy}</if>
+        ORDER BY create_time desc
+    </select>
+
     <select id="selectTLcDuncaseActionRecordById" parameterType="Long" resultMap="TLcDuncaseActionRecordResult">
         <include refid="selectTLcDuncaseActionRecordVo"/>
         where id = #{id}

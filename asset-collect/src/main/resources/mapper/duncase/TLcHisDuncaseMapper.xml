@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.duncase.mapper.TLcHisDuncaseMapper">
+
+    <resultMap id="TLcDuncaseResult" type="com.ruoyi.duncase.domain.TLcDuncase">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="caseNo" column="case_no" jdbcType="VARCHAR"/>
+        <result property="customName" column="custom_name" jdbcType="VARCHAR"/>
+        <result property="certificateNo" column="certificate_no" jdbcType="VARCHAR"/>
+        <result property="customPhone" column="custom_phone" jdbcType="VARCHAR"/>
+        <result property="monthRepayDay" column="month_repay_day" jdbcType="INTEGER"/>
+        <result property="firstOverdueTime" column="first_overdue_time" jdbcType="DATE"/>
+        <result property="overdueDays" column="overdue_days" jdbcType="VARCHAR"/>
+        <result property="overdueAging" column="overdue_aging" jdbcType="VARCHAR"/>
+        <result property="maxOverdueDay" column="max_overdue_day" jdbcType="INTEGER"/>
+        <result property="orgId" column="org_id" jdbcType="VARCHAR"/>
+        <result property="orgName" column="org_name" jdbcType="VARCHAR"/>
+        <result property="repayDate" column="repay_date" jdbcType="DATE"/>
+        <result property="validateStatus" column="validate_status" jdbcType="INTEGER"/>
+        <result property="caseStatus" column="case_status" jdbcType="INTEGER"/>
+        <result property="borrowLine" column="borrow_line" jdbcType="DECIMAL"/>
+        <result property="borrowCardNo" column="borrow_card_no" jdbcType="VARCHAR"/>
+        <result property="borrowBank" column="borrow_bank" jdbcType="VARCHAR"/>
+        <result property="totalInterestRmb" column="total_interest_rmb" jdbcType="DECIMAL"/>
+        <result property="totalPrincipalRmb" column="total_principal_rmb" jdbcType="DECIMAL"/>
+        <result property="totalDefaultInterestRmb" column="total_default_interest_rmb" jdbcType="DECIMAL"/>
+        <result property="totalExpensesPayableRmb" column="total_expenses_payable_rmb" jdbcType="DECIMAL"/>
+        <result property="lowestPaymentRmb" column="lowest_payment_rmb" jdbcType="DECIMAL"/>
+        <result property="totalDebtAmountRmb" column="total_debt_amount_rmb" jdbcType="DECIMAL"/>
+        <result property="appointCaseBalance" column="appoint_case_balance" jdbcType="DECIMAL"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyBy" column="modify_by" jdbcType="BIGINT"/>
+        <result property="transferType" column="transfer_type" jdbcType="VARCHAR"/>
+        <result property="enterCollDate" column="enter_coll_date" jdbcType="DATE"/>
+        <result property="closeCaseYhje" column="close_case_yhje" jdbcType="DECIMAL"/>
+        <result property="overdueFine" column="overdue_fine" jdbcType="DECIMAL"/>
+        <result property="city" column="city" jdbcType="VARCHAR"/>
+        <result property="area" column="area" jdbcType="VARCHAR"/>
+        <result property="recommendVendor" column="recommend_vendor" jdbcType="VARCHAR"/>
+        <result property="recommendWebsite" column="recommend_website" jdbcType="VARCHAR"/>
+        <result property="productName" column="product_name" jdbcType="VARCHAR"/>
+        <result property="repayMethod" column="repay_method" jdbcType="VARCHAR"/>
+        <result property="agingPeriods" column="aging_periods" jdbcType="VARCHAR"/>
+        <result property="billAddress" column="bill_address" jdbcType="VARCHAR"/>
+        <result property="yearInterestRate" column="year_interest_rate" jdbcType="VARCHAR"/>
+        <result property="dayInterestRate" column="day_interest_rate" jdbcType="VARCHAR"/>
+        <result property="firstOverdueSign" column="first_overdue_sign" jdbcType="VARCHAR"/>
+        <result property="totalOverdueDay" column="total_overdue_day" jdbcType="INTEGER"/>
+        <result property="overdueFrequency" column="overdue_frequency" jdbcType="INTEGER"/>
+        <result property="importBatchNo" column="import_batch_no" jdbcType="VARCHAR"/>
+        <result property="packNo" column="pack_no" jdbcType="VARCHAR"/>
+        <result property="actionCode" column="action_code" jdbcType="VARCHAR"/>
+        <result property="actionCodeValue" column="action_code_value" jdbcType="VARCHAR"/>
+        <result property="callSign" column="call_sign" jdbcType="VARCHAR"/>
+        <result property="callSignValue" column="call_sign_value" jdbcType="VARCHAR"/>
+        <result property="recentlyAllotDate" column="recently_allot_date" jdbcType="TIMESTAMP"/>
+        <result property="recentlyFollowUpDate" column="recently_follow_up_date" jdbcType="TIMESTAMP"/>
+        <result property="ownerName" column="owner_name" jdbcType="VARCHAR"/>
+        <result property="taskType" column="task_type" jdbcType="INTEGER"/>
+        <result property="backCaseDate" column="back_case_date" jdbcType="DATE"/>
+        <result property="loanType" column="loan_type" jdbcType="VARCHAR"/>
+        <result property="stayCaseFlag" column="stay_case_flag" jdbcType="VARCHAR"/>
+        <result property="riskFlag" column="risk_flag" jdbcType="VARCHAR"/>
+        <result property="contractType" column="contract_type" jdbcType="VARCHAR"/>
+        <result property="reductionFlag" column="reduction_flag" jdbcType="VARCHAR"/>
+        <result property="legalFlag" column="legal_flag" jdbcType="VARCHAR"/>
+        <result property="score" column="score" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="selectTLcDuncaseList" parameterType="com.ruoyi.duncase.domain.TLcDuncase" resultMap="TLcDuncaseResult">
+        SELECT
+        (select user_group from sys_user where user_id = t.owner_id) as userGroup,
+        <include refid="SELECT_DUNCASE"/>
+        FROM t_lc_duncase_his t
+        WHERE 1=1
+        <include refid="SELECT_DUNCASE_WHERE"/>
+        <if test="userGroup != null and userGroup != ''">
+            and t.userGroup = #{userGroup}
+        </if>
+        ORDER BY t.case_status ASC,t.create_time DESC,t.enter_coll_date ASC,t.case_no ASC
+    </select>
+
+    <select id="selectTLcDuncaseByPage" parameterType="com.ruoyi.duncase.domain.TLcDuncase" resultMap="TLcDuncaseResult">
+            SELECT
+            (select user_group from sys_user where user_id = ta.owner_id) as userGroup,
+            t.id,
+            t.case_no,
+            t.custom_name,
+            t.transfer_type,
+            t.enter_coll_date,
+            ta.arrears_total as appoint_case_balance,
+            t.overdue_days,
+            ta.close_case_yhje,
+            t.product_name,
+            ta.call_sign,
+            ta.call_sign_value,
+            ta.action_code,
+            ta.action_code_value,
+            ta.recently_allot_date,
+            ta.recently_follow_up_date,
+            ta.owner_name,
+            ta.task_type,
+            ta.import_batch_no,
+            ta.org_id,
+            ta.task_status AS taskStatus,
+            tt.score
+            FROM t_lc_duncase_his t, t_lc_task_his ta,t_lc_score tt
+            WHERE t.case_no = ta.case_no AND t.import_batch_no = ta.import_batch_no
+            and t.case_no = tt.org_casno AND t.import_batch_no = tt.import_batch_no
+            <if test="orgId != null  and orgId != ''">
+                and t.org_id = #{orgId}
+            </if>
+            and (1=1
+            <if test="caseNo != null  and caseNo != ''">
+                and t.case_no = #{caseNo}
+            </if>
+            <if test="customName != null  and customName != ''">
+                and t.custom_name like concat('%', #{customName}, '%')
+            </if>
+            <if test="taskStatus != null ">
+                and ta.task_status = #{taskStatus}
+            </if>
+            <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
+                and EXISTS(SELECT r.call_sign FROM t_lc_call_record r WHERE r.case_no = t.case_no and r.call_sign IN
+                <foreach collection="callCodeHistoryList" item="cl" open="(" close=")" separator=",">
+                    #{cl}
+                </foreach>
+                )
+            </if>
+            <if test="freeSQL != null  and freeSQL != ''">
+                ${freeSQL}
+            </if>
+            )
+            ORDER BY ta.task_status ASC,t.create_time DESC,ta.recently_allot_date ASC,t.enter_coll_date ASC,t.case_no ASC
+    </select>
+
+    <sql id="SELECT_DUNCASE_WHERE_FIX_COLUMN">
+        <if test="caseNo != null  and caseNo != ''">
+            and t.case_no = #{caseNo}
+        </if>
+        <choose>
+            <when test="orgId != null and orgId != ''">
+                and t.org_id = #{orgId}
+            </when>
+            <otherwise>
+                <choose>
+                    <when test="deptIds != null">
+                        and t.org_id in
+                        <foreach collection="deptIds" item="deptId" open="(" close=")" separator=",">
+                            #{deptId}
+                        </foreach>
+                    </when>
+                </choose>
+            </otherwise>
+        </choose>
+        <if test="customName != null  and customName != ''">
+            and t.custom_name like concat('%', #{customName}, '%')
+        </if>
+        <if test="startAppointCaseBalance != null">
+            and t.appoint_case_balance <![CDATA[>=]]> #{startAppointCaseBalance}
+        </if>
+        <if test="endAppointCaseBalance != null">
+            and t.appoint_case_balance <![CDATA[<=]]> #{endAppointCaseBalance}
+        </if>
+        <if test="callSign != null  and callSign != ''">
+            and ta.call_sign = #{callSign}
+        </if>
+        <if test="callCode != null  and callCode != ''">
+            and ta.call_sign = #{callCode}
+        </if>
+        <if test="callCodeList != null">
+            and ta.call_sign IN
+            <foreach collection="callCodeList" item="cc" open="(" close=")" separator=",">
+                #{cc}
+            </foreach>
+        </if>
+        <if test="transferType != null and transferType != ''">
+            and t.transfer_type like concat('%', #{transferType}, '%')
+        </if>
+        <if test="customPhone != null  and customPhone != ''">
+            and t.custom_phone = #{customPhone}
+        </if>
+        <if test="startCloseCaseYhje != null">
+            and t.close_case_yhje <![CDATA[>=]]> #{startCloseCaseYhje}
+        </if>
+        <if test="endCloseCaseYhje != null">
+            and t.close_case_yhje <![CDATA[<=]]> #{endCloseCaseYhje}
+        </if>
+        <if test="startOverdueDays != null">
+            and t.overdue_days <![CDATA[>=]]> #{startOverdueDays}
+        </if>
+        <if test="endOverdueDays != null">
+            and t.overdue_days <![CDATA[<=]]> #{endOverdueDays}
+        </if>
+        <if test="actionCode != null  and actionCode != ''">
+            and ta.action_code = #{actionCode}
+        </if>
+        <if test="actionCodeList != null ">
+            and ta.action_code IN
+            <foreach collection="actionCodeList" item="ac" open="(" close=")" separator=",">
+                #{ac}
+            </foreach>
+        </if>
+        <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
+            and EXISTS(SELECT r.call_sign FROM t_lc_call_record r WHERE r.case_no = t.case_no and r.call_sign IN
+            <foreach collection="callCodeHistoryList" item="cl" open="(" close=")" separator=",">
+                #{cl}
+            </foreach>
+            )
+        </if>
+        <if test="taskType != null ">
+            and ta.task_type = #{taskType}
+        </if>
+        <if test="taskStatus != null ">
+            and ta.task_status = #{taskStatus}
+        </if>
+        <if test="ownerName != null and ownerName != ''">
+            and ta.owner_name = #{ownerName}
+        </if>
+        <if test="enterCollDate != null ">
+            and t.enter_coll_date = #{enterCollDate}
+        </if>
+        <if test="startRecentlyAllotDate != null">
+            and ta.recently_allot_date <![CDATA[>=]]> #{startRecentlyAllotDate}
+        </if>
+        <if test="endRecentlyAllotDate != null">
+            and ta.recently_allot_date <![CDATA[<=]]> #{endRecentlyAllotDate}
+        </if>
+        <if test="startRecentlyFollowUpDate != null">
+            and ta.recently_follow_up_date <![CDATA[>=]]> #{startRecentlyFollowUpDate}
+        </if>
+        <if test="endRecentlyFollowUpDate != null">
+            and ta.recently_follow_up_date <![CDATA[<=]]> #{endRecentlyFollowUpDate}
+        </if>
+        <if test="startEnterCollDate != null">
+            and t.enter_coll_date <![CDATA[>=]]> #{startEnterCollDate}
+        </if>
+        <if test="endEnterCollDate != null">
+            and t.enter_coll_date <![CDATA[<=]]> #{endEnterCollDate}
+        </if>
+        <if test="area != null  and area != ''">
+            and t.area = #{area}
+        </if>
+        <if test="riskFlag != null  and riskFlag != ''">
+            and t.risk_flag = #{riskFlag}
+        </if>
+        <if test="startBackCaseDate != null">
+            and t.back_case_date <![CDATA[>=]]> #{startBackCaseDate}
+        </if>
+        <if test="endBackCaseDate != null">
+            and t.back_case_date <![CDATA[<=]]> #{endBackCaseDate}
+        </if>
+        <if test="contractType != null  and contractType != ''">
+            and t.contract_type = #{contractType}
+        </if>
+        <if test="reductionFlag != null  and reductionFlag != ''">
+            and t.reduction_flag = #{reductionFlag}
+        </if>
+        <if test="legalFlag != null  and legalFlag != ''">
+            and t.legal_flag = #{legalFlag}
+        </if>
+        <if test="stayCaseFlag != null  and stayCaseFlag != ''">
+            and t.stay_case_flag = #{stayCaseFlag}
+        </if>
+        <if test="productName != null  and productName != ''">
+            and t.product_name like concat('%', #{productName}, '%')
+        </if>
+    </sql>
+
+    <sql id="SELECT_DUNCASE">
+        t.id,
+        t.case_no,
+        t.custom_name,
+        t.certificate_no,
+        t.custom_phone,
+        t.month_repay_day,
+        t.first_overdue_time,
+        t.overdue_days,
+        t.overdue_aging,
+        t.max_overdue_day,
+        t.org_id,
+        t.org_name,
+        t.repay_date,
+        t.borrow_line,
+        t.borrow_card_no,
+        t.borrow_bank,
+        t.total_interest_rmb,
+        t.total_principal_rmb,
+        t.total_default_interest_rmb,
+        t.total_expenses_payable_rmb,
+        t.lowest_payment_rmb,
+        t.total_debt_amount_rmb,
+        t.appoint_case_balance,
+        t.create_time,
+        t.create_by,
+        t.modify_time,
+        t.modify_by,
+        t.transfer_type,
+        t.enter_coll_date,
+        t.close_case_yhje,
+        t.overdue_fine,
+        t.city,
+        t.area,
+        t.recommend_vendor,
+        t.recommend_website,
+        t.product_name,
+        t.repay_method,
+        t.aging_periods,
+        t.bill_address,
+        t.year_interest_rate,
+        t.day_interest_rate,
+        t.first_overdue_sign,
+        t.total_overdue_day,
+        t.overdue_frequency,
+        t.import_batch_no,
+        t.pack_no,
+        t.back_case_date,
+        t.loan_type,
+        t.stay_case_flag,
+        t.risk_flag,
+        t.contract_type,
+        t.reduction_flag,
+        legal_flag
+    </sql>
+
+    <sql id="SELECT_DUNCASE_WHERE">
+        <if test="caseNo != null  and caseNo != ''">
+            and t.case_no = #{caseNo}
+        </if>
+        <if test="customName != null  and customName != ''">
+            and t.custom_name like concat('%', #{customName}, '%')
+        </if>
+        <if test="certificateNo != null  and certificateNo != ''">
+            and t.certificate_no = #{certificateNo}
+        </if>
+        <if test="customPhone != null  and customPhone != ''">
+            and t.custom_phone = #{customPhone}
+        </if>
+        <choose>
+            <when test="orgId != null and orgId != ''">
+                and t.org_id = #{orgId}
+            </when>
+            <otherwise>
+                <choose>
+                    <when test="deptIds != null">
+                        and t.org_id in
+                        <foreach collection="deptIds" item="deptId" open="(" close=")" separator=",">
+                            #{deptId}
+                        </foreach>
+                    </when>
+                </choose>
+            </otherwise>
+        </choose>
+        <if test="transferType != null and transferType != ''">
+            and t.transfer_type = #{transferType}
+        </if>
+        <if test="startAppointCaseBalance != null">
+            and t.appoint_case_balance <![CDATA[>=]]> #{startAppointCaseBalance}
+        </if>
+        <if test="endAppointCaseBalance != null">
+            and t.appoint_case_balance <![CDATA[<=]]> #{endAppointCaseBalance}
+        </if>
+        <if test="startCloseCaseYhje != null">
+            and t.close_case_yhje <![CDATA[>=]]> #{startCloseCaseYhje}
+        </if>
+        <if test="endCloseCaseYhje != null">
+            and t.close_case_yhje <![CDATA[<=]]> #{endCloseCaseYhje}
+        </if>
+        <if test="enterCollDate != null ">
+            and t.enter_coll_date = #{enterCollDate}
+        </if>
+        <if test="importBatchNo != null  and importBatchNo != ''">
+            and t.import_batch_no = #{importBatchNo}
+        </if>
+        <if test="packNo != null  and packNo != ''">
+            and t.pack_no = #{packNo}
+        </if>
+    </sql>
+
+    <select id="selectTLcDuncaseById" parameterType="Long" resultMap="TLcDuncaseResult">
+        select
+        <include refid="SELECT_DUNCASE"/>
+        from t_lc_duncase_his t
+        where ID = #{id}
+    </select>
+
+    <select id="findDuncaseByCaseNoAndImportBatchNo" resultMap="TLcDuncaseResult">
+        SELECT
+        <include refid="SELECT_DUNCASE"/>
+        FROM t_lc_duncase_his t
+        WHERE t.case_no = #{caseNo}
+        AND t.org_id = #{orgId}
+        <if test="importBatchNo != null and importBatchNo != ''">
+            AND t.import_batch_no = #{importBatchNo}
+        </if>
+    </select>
+
+</mapper>

@@ -76,4 +76,6 @@ public interface TLcDuncaseAssignMapper {
      * @return
      */
     List<TLcDuncaseAssign> findDuncaseAssignByCaseNo(@Param("caseNo") String caseNo);
+
+    List<TLcDuncaseAssign> findHisDuncaseAssignByCaseNo(@Param("caseNo") String caseNo);
 }

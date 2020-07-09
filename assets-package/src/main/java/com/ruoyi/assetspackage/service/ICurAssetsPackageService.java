@@ -208,6 +208,8 @@ public interface ICurAssetsPackageService {
 
     public CurAssetsPackage selectAsset(String orgCasNo, String importBatchNo) throws Exception;
 
+    public CurAssetsPackage selectHisAsset(String orgCasNo, String importBatchNo) throws Exception;
+
     public List<Map<String,String>> findNotExistsList(String improtBatchNo)throws Exception;
 
     public List<TempCurAssetsPackage> findNormalList(String improtBatchNo)throws Exception;

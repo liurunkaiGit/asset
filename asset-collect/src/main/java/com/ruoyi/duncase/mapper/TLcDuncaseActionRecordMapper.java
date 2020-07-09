@@ -27,6 +27,8 @@ public interface TLcDuncaseActionRecordMapper {
      */
     public List<TLcDuncaseActionRecord> selectTLcDuncaseActionRecordList(TLcDuncaseActionRecord tLcDuncaseActionRecord);
 
+    public List<TLcDuncaseActionRecord> selectTLcHisDuncaseActionRecordList(TLcDuncaseActionRecord tLcDuncaseActionRecord);
+
     /**
      * 新增案件行动码记录
      *

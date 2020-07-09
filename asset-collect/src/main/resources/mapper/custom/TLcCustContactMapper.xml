@@ -258,6 +258,37 @@
         </if>
     </select>
 
+    <select id="findAllHisDuncaseCustContactByCaseNo" resultMap="TLcCustContactResult">
+        select
+        DISTINCT t.phone,
+        t.id,
+        t.certificate_no,
+        t.contact_name,
+        t.relation,
+        t.tel,
+        t.address,
+        t.origin,
+        t.create_time,
+        t.modify_time,
+        t.create_by,
+        t.modify_by,
+        t.validate_status,
+        t.case_no,
+        t.org_id,
+        t.org_name,
+        t.import_batch_no,
+        t.is_close
+        FROM t_lc_cust_contact_his t
+        WHERE
+        t.case_no = #{caseNo}
+        <if test="orgId != null and orgId != ''">
+            AND t.org_id = #{orgId}
+        </if>
+        <if test="importBatchNo != null and importBatchNo != ''">
+            AND t.import_batch_no = #{importBatchNo}
+        </if>
+    </select>
+
     <update id="updateIsClose" parameterType="java.util.Map">
         update t_lc_cust_contact SET is_close=#{isClose} where certificate_no=#{certificateNo} AND phone=#{phone} and contact_name=#{contactName}
     </update>
