@@ -4,3 +4,7 @@ insert into sys_job( job_name, job_group, invoke_target, cron_expression, misfir
 
 update t_lc_column_query SET table_prefix = 'd' where table_name = 't_lc_task' and table_prefix = 'tt' and column_name_cn = '催收评分';
 update t_lc_column_query SET table_prefix = 't' where table_name = 't_lc_duncase' and table_prefix = 'tt' and column_name_cn = '催收评分';
+
+delete from t_lc_score t WHERE t.score is null and EXISTS(
+	select 1 from org_package a WHERE t.org_id= a.dept_id and a.is_auto_score != '1'
+)
