@@ -811,4 +811,15 @@
         </if>
     </select>
 
+
+    <update id="updateScore" parameterType="java.util.List">
+        <foreach collection="TLcScoreList" item="TLcScore" separator=";">
+            update t_lc_duncase
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="TLcScore.score != null">score = #{TLcScore.score},</if>
+            </trim>
+            where case_no = #{TLcScore.orgCasno} and org_id = #{TLcScore.orgId} and import_batch_no = #{TLcScore.importBatchNo};
+        </foreach>
+    </update>
+
 </mapper>

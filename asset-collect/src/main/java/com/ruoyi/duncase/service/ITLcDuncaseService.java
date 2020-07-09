@@ -1,5 +1,6 @@
 package com.ruoyi.duncase.service;
 
+import com.ruoyi.assetspackage.domain.score.TLcScore;
 import com.ruoyi.duncase.domain.Assets;
 import com.ruoyi.duncase.domain.TLcDuncase;
 import com.ruoyi.utils.Response;
@@ -96,4 +97,7 @@ public interface ITLcDuncaseService {
      * @return
      */
     Integer selectDuncaseCount(Date createTime);
+
+    public void updateScore(List<TLcScore> TLcScoreList);
+
 }

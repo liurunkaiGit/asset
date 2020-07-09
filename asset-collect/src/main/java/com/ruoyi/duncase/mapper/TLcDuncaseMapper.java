@@ -1,5 +1,6 @@
 package com.ruoyi.duncase.mapper;
 
+import com.ruoyi.assetspackage.domain.score.TLcScore;
 import com.ruoyi.duncase.domain.TLcDuncase;
 import org.apache.ibatis.annotations.Param;
 
@@ -106,4 +107,6 @@ public interface TLcDuncaseMapper {
      * @return
      */
     Integer selectDuncaseCount(@Param("createTime") Date createTime);
+
+    public void updateScore(@Param(value="TLcScoreList")List<TLcScore> TLcScoreList);
 }
