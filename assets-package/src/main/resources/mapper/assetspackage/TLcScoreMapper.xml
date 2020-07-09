@@ -16,10 +16,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="sendflag"    column="sendflag"    />
     </resultMap>
 
     <sql id="selectTLcScoreVo">
-        select id, org_casno, score, org_id, org_name, import_batch_no, is_auto_score, create_by, create_time, update_by, update_time from t_lc_score
+        select id, org_casno, score, org_id, org_name, import_batch_no, is_auto_score, create_by, create_time, update_by, update_time, sendflag from t_lc_score
     </sql>
 
     <select id="selectTLcScoreList" parameterType="TLcScore" resultMap="TLcScoreResult">
@@ -112,7 +113,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         import_batch_no,
         is_auto_score,
         create_by,
-        create_time
+        create_time,
+        sendflag
         )
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
@@ -123,7 +125,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{item.importBatchNo},
             #{item.isAutoScore},
             #{item.createBy},
-            #{item.createTime}
+            #{item.createTime},
+            #{item.sendflag}
             )
         </foreach>
     </insert>
@@ -137,6 +140,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
             <if test="isAutoScore != null  and isAutoScore != ''"> and is_auto_score = #{isAutoScore}</if>
         </where>
+        limit 100
+    </select>
+
+    <select id="selectScoreListForDuncase" parameterType="TLcScore" resultMap="TLcScoreResult">
+        select t.id, t.org_casno, t.score, t.org_id, t.org_name, t.import_batch_no, t.is_auto_score, t.create_by, t.create_time, t.update_by, t.update_time, t.sendflag from t_lc_score t
+        where t.score is not null
+              and t.sendflag = '0'
+              and exists(
+                  select 1 from t_lc_duncase d where t.org_casno=d.case_no and t.org_id=d.org_id and t.import_batch_no=d.import_batch_no
+              )
         limit 100
     </select>
     
@@ -161,6 +174,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 <if test="TLcScore.updateTime != null">update_time = #{TLcScore.updateTime},</if>
             </trim>
             where org_casno = #{TLcScore.orgCasno} and org_id = #{TLcScore.orgId} and import_batch_no = #{TLcScore.importBatchNo}
+        </foreach>
+    </update>
+
+    <update id="batchUpdateDuncaseScore" parameterType="java.util.List">
+        <foreach collection="TLcScoreList" item="TLcScore" separator=";">
+            update t_lc_duncase
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="TLcScore.score != null">score = #{TLcScore.score},</if>
+            </trim>
+            where case_no = #{TLcScore.orgCasno} and org_id = #{TLcScore.orgId} and import_batch_no = #{TLcScore.importBatchNo};
+            update t_lc_score set sendflag = '1'where org_casno = #{TLcScore.orgCasno} and org_id = #{TLcScore.orgId} and import_batch_no = #{TLcScore.importBatchNo}
         </foreach>
     </update>
 

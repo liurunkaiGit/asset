@@ -74,6 +74,8 @@ public interface ITLcCustContactService {
 
     List<TLcCustContact> findAllCustContactByCaseNo(String caseNo, String orgId, String importBatchNo);
 
+    List<TLcCustContact> findAllHisDuncaseCustContactByCaseNo(String caseNo, String orgId, String importBatchNo);
+
     public int updateIsClose(Map<String,String> param);
 
     /**

@@ -468,6 +468,15 @@ public class TLcTaskController extends BaseController {
         return collJob;
     }
 
+    @PostMapping("/hisDuncaseCollJobDetail")
+    @ResponseBody
+    public CollJob hisDuncaseCollJobDetail(String caseNo, String orgId, String importBatchNo) {
+        logger.info("查询详细信息开始caseNo="+caseNo);
+        CollJob collJob = this.tLcTaskService.hisDuncaseCollJobDetail(caseNo, orgId, importBatchNo);
+        logger.info("查询详细信息结束caseNo="+caseNo);
+        return collJob;
+    }
+
     /**
      * 催收作业历史页面
      */

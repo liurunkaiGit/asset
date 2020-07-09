@@ -82,6 +82,8 @@ public interface TLcCustContactMapper {
 
     List<TLcCustContact> findAllCustContactByCaseNo(@Param("caseNo") String caseNo, @Param("orgId") String orgId, @Param("importBatchNo") String importBatchNo);
 
+    List<TLcCustContact> findAllHisDuncaseCustContactByCaseNo(@Param("caseNo") String caseNo, @Param("orgId") String orgId, @Param("importBatchNo") String importBatchNo);
+
     public int updateIsClose(Map<String,String> param);
 
     /**

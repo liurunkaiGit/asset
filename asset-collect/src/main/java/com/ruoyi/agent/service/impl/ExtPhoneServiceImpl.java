@@ -8,7 +8,9 @@ import com.ruoyi.assetspackage.service.IOrgPackageService;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.exonNum.domain.TLcExonNum;
 import com.ruoyi.exonNum.service.ITLcExonNumService;
+import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,10 @@ public class ExtPhoneServiceImpl implements IExtPhoneService {
     private ITLcExonNumService exonNumService;
     @Autowired
     private ISysDictDataService sysDictDataService;
+    @Autowired
+    private ISysDeptService sysDeptService;
+    @Autowired
+    private IOrgPackageService orgPackageService;
 
     /**
      * 查询分机号码
@@ -71,6 +77,13 @@ public class ExtPhoneServiceImpl implements IExtPhoneService {
         extPhone.setCreateTime(DateUtils.getNowDate());
         if (extPhone.getSeatId() != null) {
             extPhone.setSeatName(this.sysUserService.selectUserById(Long.valueOf(extPhone.getSeatId())).getUserName());
+            SysUser sysUser = this.sysUserService.selectUserById(Long.valueOf(extPhone.getSeatId()));
+            SysDept sysDept = this.sysDeptService.selectDeptById(sysUser.getDeptId());
+            extPhone.setOrgId(sysDept.getDeptId());
+            extPhone.setOrgName(sysDept.getDeptName());
+//            OrgPackage orgPackage = this.orgPackageService.selectOrgPackageByOrgId(String.valueOf(sysDept.getDeptId()));
+//            extPhone.setOrgId(sysDept.getDeptId());
+//            extPhone.setOrgName(orgPackage.getOrgName());
         }
         extPhone.setExonNumGroup(this.exonNumService.selectTLcExonNumById(Long.valueOf(extPhone.getExonNumGroupId())).getExonNumGroup());
         return extPhoneMapper.insertExtPhone(extPhone);
@@ -89,6 +102,13 @@ public class ExtPhoneServiceImpl implements IExtPhoneService {
         extPhone.setUpdateTime(DateUtils.getNowDate());
         if (extPhone.getSeatId() != null) {
             extPhone.setSeatName(this.sysUserService.selectUserById(Long.valueOf(extPhone.getSeatId())).getUserName());
+            SysUser sysUser = this.sysUserService.selectUserById(Long.valueOf(extPhone.getSeatId()));
+            SysDept sysDept = this.sysDeptService.selectDeptById(sysUser.getDeptId());
+            extPhone.setOrgId(sysDept.getDeptId());
+            extPhone.setOrgName(sysDept.getDeptName());
+//            OrgPackage orgPackage = this.orgPackageService.selectOrgPackageByOrgId(String.valueOf(sysDept.getDeptId()));
+//            extPhone.setOrgId(sysDept.getDeptId());
+//            extPhone.setOrgName(orgPackage.getOrgName());
         } else {
             extPhone.setSeatName(null);
         }

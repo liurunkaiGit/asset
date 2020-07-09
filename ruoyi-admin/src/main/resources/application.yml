@@ -186,6 +186,8 @@ enable:
   startRobotTask: false
   #是否开启定时生成报表任务
   createReport: true
+  #是否开启历史数据迁移
+  hisDataMigrate: true
 
 google:
   local:
@@ -205,4 +207,5 @@ cron:
   # 每天晚上22点执行：正式使用使用
   createReport: 0 0 22 * * ?
 
+isEnableTimer: true
 

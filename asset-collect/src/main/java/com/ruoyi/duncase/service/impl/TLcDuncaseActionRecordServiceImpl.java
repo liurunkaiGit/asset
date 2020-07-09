@@ -66,6 +66,11 @@ public class TLcDuncaseActionRecordServiceImpl implements ITLcDuncaseActionRecor
         return tLcDuncaseActionRecordMapper.selectTLcDuncaseActionRecordList(tLcDuncaseActionRecord);
     }
 
+    @Override
+    public List<TLcDuncaseActionRecord> selectTLcHisDuncaseActionRecordList(TLcDuncaseActionRecord tLcDuncaseActionRecord) {
+        return tLcDuncaseActionRecordMapper.selectTLcHisDuncaseActionRecordList(tLcDuncaseActionRecord);
+    }
+
     /**
      * 新增案件行动码记录
      *

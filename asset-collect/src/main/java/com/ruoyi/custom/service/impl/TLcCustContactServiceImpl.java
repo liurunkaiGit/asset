@@ -149,6 +149,12 @@ public class TLcCustContactServiceImpl implements ITLcCustContactService {
     }
 
     @Override
+    public List<TLcCustContact> findAllHisDuncaseCustContactByCaseNo(String caseNo, String orgId, String importBatchNo) {
+        List<TLcCustContact> contactList = this.tLcCustContactMapper.findAllHisDuncaseCustContactByCaseNo(caseNo, orgId, importBatchNo);
+        return contactList;
+    }
+
+    @Override
     public int updateIsClose(Map<String, String> param) {
         return this.tLcCustContactMapper.updateIsClose(param);
     }

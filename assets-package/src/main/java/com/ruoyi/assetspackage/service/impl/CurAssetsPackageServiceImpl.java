@@ -598,6 +598,16 @@ public class CurAssetsPackageServiceImpl extends BaseController implements ICurA
     }
 
     @Override
+    public CurAssetsPackage selectHisAsset(String orgCaseNo, String importBatchNo) throws Exception {
+        CurAssetsPackage param = new CurAssetsPackage();
+        param.setOrgCasno(orgCaseNo);
+        param.setImportBatchNo(importBatchNo);
+        CurAssetsPackage curAssets = this.curAssetsPackageMapper.selectHisCurAssetsPackageList(param).get(0);
+        curAssets.setPackNo(curAssets.getPackageId());
+        return curAssets;
+    }
+
+    @Override
     public List<Map<String,String>> findNotExistsList(String improtBatchNo) throws Exception {
         return this.curAssetsPackageMapper.findNotExistsList(improtBatchNo);
     }
