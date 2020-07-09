@@ -2,6 +2,8 @@ package com.ruoyi.quartz.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.Map;
+
 /**
  * @Description:
  * @author: liurunkai
@@ -10,5 +12,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface HisDataMigrateMapper {
 
-    void hisDataMigrate();
+    void hisDataMigrate(Map<String, Object> param);
 }

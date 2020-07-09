@@ -2,10 +2,14 @@ package com.ruoyi.quartz.service.impl;
 
 import com.ruoyi.quartz.mapper.HisDataMigrateMapper;
 import com.ruoyi.quartz.service.HisDataMigrateService;
+import com.ruoyi.system.service.ISysConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Description:
@@ -19,9 +23,14 @@ public class HisDataMigrateServiceImpl implements HisDataMigrateService {
 
     @Autowired
     private HisDataMigrateMapper hisDataMigrateMapper;
+    @Autowired
+    private ISysConfigService sysConfigService;
 
     @Override
     public void hisDataMigrate() {
-        this.hisDataMigrateMapper.hisDataMigrate();
+        Map<String, Object> param = new HashMap<>();
+        String hisDataMigrateDays = this.sysConfigService.selectConfigByKey("hisDataMigrateDays");
+        param.put("days", Integer.valueOf(hisDataMigrateDays));
+        this.hisDataMigrateMapper.hisDataMigrate(param);
     }
 }

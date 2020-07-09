@@ -27,7 +27,7 @@ public class HisDataMigrate {
      * 已结案的历史数据迁移
      */
     public void hisDataMigrate() {
-        if (!appConfig.getStartRobotTask()) {
+        if (!appConfig.getHisDataMigrate()) {
             log.info("定时历史数据迁移任务未开启");
             return;
         }
