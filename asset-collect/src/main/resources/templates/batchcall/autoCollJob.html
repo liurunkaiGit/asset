@@ -706,8 +706,13 @@
     var taskPrefix = ctx + "collect/task";
     var robotPrefix = ctx + "collect/robot";
     var curAssetsPrefix = ctx + "import/assets";
-    var startNum = 1;
-    var pageSize = 50;
+
+    var agentClient = parent.agentClient;
+    var recordFile = null;
+    var startTime = null;
+    var endTime = null;
+    var recordDuration = null;
+
     $(function () {
         var panehHidden = false;
         if ($(this).width() < 769) {
@@ -744,7 +749,7 @@
             $("#platformName").text("平安话务平台");
         }
 
-        initial1();
+        initial2();
     });
 
 
@@ -1616,13 +1621,8 @@
         }
     }
 
-    var agentClient = null;
-    var recordFile = null;
-    var startTime = null;
-    var endTime = null;
-    var recordDuration = null;
     function initial2(agentId,skillDesc,dialPrefix,dialCaller,proxyUrl) {
-        agentClient = new AgentClient({
+        /*agentClient = new AgentClient({
             autoAnswer: true,
             acwTime: 3000,
             agentId: agentId,
@@ -1633,7 +1633,7 @@
             proxyUrl: proxyUrl,
             dialPrefix:dialPrefix,
             dialCaller:dialCaller
-        });
+        });*/
         agentClient.onOnline = function(event) {
             printEvent('onOnline', event);
         };
@@ -1712,43 +1712,6 @@
                     }
                 }
             );
-            // }
-
-            /* $.ajax({
-                 url: prefix + "/downRemoteRecord",
-                 dataType: "json",
-                 async:false,
-                 type: "post",
-                 data:{
-                     recordFile: recordFile,
-                     startTime: startTime,
-                     endTime: endTime,
-                     recordDuration: recordDuration
-                 },
-                 success:function(data){
-                     if(data.msg=='失败'){
-                         $.modal.alertWarning("录音文件保存失败！！！");
-                     }else{
-                         var result = JSON.parse(data.msg);
-                         var callStartTime = result.callStartTime;
-                         var callEndTime = result.callEndTime;
-                         var callLen = result.callLen;
-                         var callRadioLocation = result.callRadioLocation;
-                         $("#callStartTime").val(callStartTime);
-                         $("#callEndTime").val(callEndTime);
-                         $("#callLen").val(callLen);
-                         $("#callRadioLocation").val(callRadioLocation);
-                     }
-
-
-                 }
-             });*/
-
-            // $("#callStartTime").val(startTime);
-            // $("#callEndTime").val(endTime);
-            // $("#callLen").val(recordDuration);
-            // $("#callRadioLocation").val(recordFile);
-
         };
 
         agentClient.onError = function(event) {

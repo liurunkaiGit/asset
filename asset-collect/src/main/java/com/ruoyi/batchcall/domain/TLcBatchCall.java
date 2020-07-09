@@ -75,5 +75,9 @@ public class TLcBatchCall extends BaseEntity
      * 案件导入批次编号
      */
     private String importBatchNo;
+    /**
+     * 状态 汉字
+     */
+    private String taskStatusStr;
 
 }

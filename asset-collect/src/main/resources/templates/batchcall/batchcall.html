@@ -80,7 +80,9 @@
                 <button type="button" class="btn btn-success" onclick="cancelCall()">取消任务</button>
                 <button type="button" class="btn btn-success" onclick="call()">拨打</button>
             </div>
+
             <div class="col-sm-12 select-table table-striped">
+                <span id="callingContent">显示</span>
                 <table id="bootstrap-table"></table>
             </div>
 
@@ -167,7 +169,13 @@
         var removeFlag = [[${@permission.hasPermi('ruoyi:batchcall:remove')}]];
         var prefix = ctx + "ruoyi/batchcall";
         var collectPrefix = ctx + "collect/task";
-        var batchCallArray = new Array();　//创建一个数组
+        var batchCallList = [[${batchCallList}]];
+        var exonNum = batchCallList[0].exonNum;
+        $("#exonNum").val(exonNum);//同一批次只会有一个外显号码
+        var indexCall = 0;//从第1条开始拨打
+        var callRecordId = "";//电催记录ID，当前页面拨打之后，会赋值，然后作业页面挂电话，下电话码等操作的时候 会用到
+        var isCall = "1";//默认是1，可以外呼，0 不能外呼
+        var currentCall ;//当前拨打 处理中的记录
 
         $(function() {
             var options = {
@@ -234,46 +242,49 @@
                 }]
             };
             $.table.init(options);
-            // initial1();//初始化打电话的JS
             //表格加载完成之后，会触及此方法
-            $('#bootstrap-table').on('load-success.bs.table', function (e,data) {
+            /*$('#bootstrap-table').on('load-success.bs.table', function (e,data) {
                 // alert(JSON.stringify(data.rows));
-                batchCallArray = data.rows;
                 var isCanAutoCall = $("#isCanAutoCall").val();
                 if("1" == isCanAutoCall && batchCallArray.length > 0){//可自动外呼
-                    var obj = batchCallArray[0];
-                    // alert(JSON.stringify(obj));
-                    //赋值，挂断电话监听事件用
-                    /*$("#currentPhone").val(obj.phone);
-                    $("#currentContactName").val(obj.contactName);
-                    $("#currentContactRelation").val(obj.contactRelation);
-
-                    $("#currentCaseNo").val(obj.caseNo);
-                    $("#currentImportBatchNo").val(obj.importBatchNo);
-                    $("#currentOrgId").val(obj.orgId);
-                    $("#exonNum").val(obj.exonNum);*/
-                    // var exonNum = $("#exonNum").val();
-                    // call(obj.contactName,obj.contactRelation,obj.phone,obj.exonNum);//拨打电话
+                    var obj = batchCallArray[0]
                 }
-                /*$.each(batchCallArray,function(i,e){
-                    alert(JSON.stringify(e));
-                });*/
-            });
+            });*/
 
             initial1();//初始化打电话的JS
         });
 
-        // var phone = $("#currentPhone").val();
-        var batchCallList = [[${batchCallList}]];
-        /*var contactRelation = $("#currentContactRelation").val();
-        var contactName = $("#currentContactName").val();
-        var exonNum = $("#exonNum").val();*/
-
         function openAutoCollJob(caseNo,importBatchNo,orgId,exonNum) {
             var toAutoCollJobUrl = prefix + '/toAutoCollJob?orgId='+orgId +'&caseNo='+caseNo +'&importBatchNo='+importBatchNo+'&exonNum='+exonNum;
-            // $('#autoCallModal').modal({show:true});
-            // $.modal.openTab("自动作业催收", toAutoCollJobUrl);
-            $.modal.openFull("催收记录 | " + caseNo, toAutoCollJobUrl,500,500);
+            // $.modal.openFull("催收记录 | " + caseNo, toAutoCollJobUrl,500,500);
+            var width = "800";
+            var height = $(window).height() - 50;
+            layer.open({
+                type: 2,
+                maxmin: true,
+                shade: 0.3,
+                title: "催收记录 | " + caseNo,
+                fix: false,
+                area: [width + 'px', height + 'px'],
+                content: toAutoCollJobUrl,
+                shadeClose: true,
+                btn: ['关闭'],
+                yes: function (index, layero) {//关闭按钮监听事件
+                    layer.close(index);
+                    //把结束的通话设置为 已完成
+                    updateStatus(currentCall.id,2);
+                    var batchCall = batchCallList[indexCall];
+                    call(batchCall);
+                },
+                cancel: function (index, layero) {//点击空白处
+
+                },
+                end:function (index, layero) {//点击窗口的x
+                    layer.close(index);
+                    var batchCall = batchCallList[indexCall];
+                    call(batchCall);
+                }
+            });
         }
 
         function initial1() {
@@ -306,7 +317,6 @@
                 // 每次登陆之前先退出，然后再进行登录
                 uKeFuSoftPhone.AgentLogout(agent,domain, extno, pwd);
             }
-            // call(contactName,contactRelation,phone,exonNum);//拨打电话
         }
 
         var agentClient = null;
@@ -420,14 +430,19 @@
             function printEvent(handler, event) {
                 console.log(handler + ': ' + JSON.stringify(event, null, 4) + '\n\n');
             }
+            //电话初始完毕之后，停2秒之后，自动开始拨打第一条
+            window.setTimeout(function() {
+                var batchCall = batchCallList[indexCall];
+                call(batchCall);
+            },2000);
         }
 
         /**
          * @description CallOut(外呼):座席主动出局语音呼叫
          * @param pnumber:被叫号码
          */
-        function call() {
-            var batchCall = batchCallList[0];
+        function call(batchCall) {
+            // var batchCall = batchCallList[0];
             fuzhi(batchCall);
             var contactName = batchCall.contactName;
             var contactRelation = batchCall.contactRelation;
@@ -440,11 +455,7 @@
             var callEndTime = $("#callEndTime").val();
             var callLen = $("#callLen").val();
             var callRadioLocation = $("#callRadioLocation").val();
-            /*var isRadio = $('input[name="radioChoose"]:checked').val();
-            if (isRadio == null || isRadio == 'undefined' || isRadio == '') {
-                $.modal.alert("请选择通话的联系人");
-                return;
-            }*/
+
             if(callRadioLocation!=""&&callRadioLocation!=null){
                 $.modal.alert("请保存通话记录再拨打电话");
                 return;
@@ -465,23 +476,11 @@
                 return;
             }
 
-            /*$("#"+id).attr("checked","checked");
-            $(".disclass").attr('disabled',true);
-            $(".disclass").css('pointer-events','none');
-            $(".disclass").css('background','rgb(169,169,169)');*/
-           /* window.setTimeout(function() {
-                $(".disclass").attr('disabled',false);
-                $(".disclass").css('pointer-events','');
-                $(".disclass").css('background','');
-            },10000);*/
-
-            /*var val = $('input[name="radioChoose"]:checked').parents("tr");
-            val.css('background','#dddada');*/
-            // var phone = val.find("[name='phone']").html();
             var destDesc = "0"+phone;
             if(callPlatform == 'PA') {
                 if (destDesc) {
                     agentClient.makeCall(getDestType(destDesc), destDesc);
+                    indexCall = indexCall + 1;//变量+1，以备拨打下一条
                 }
             } else if(callPlatform == 'ZJ') {
                 // 第一个参数是呼叫号码，第二个参数是外显号码
@@ -495,6 +494,8 @@
             var callRadioLocation = $("#callRadioLocation").val();
             var callRemark = $("#callRemarkAdd").val();
             // var callRecordId = $("#callRecordId").val();
+            //更改状态,外呼中
+            updateStatus(batchCall.id,0);
             $.post(
                 collectPrefix + "/addCallRecord",
                 {
@@ -515,18 +516,25 @@
                 function(data) {
                     // alert(JSON.stringify(data));
                     if (data.status == 200) {//请求成功
-                        // $.modal.alertSuccess("保存成功");
-                        //collJobDetail(data.result);
-                        $("#callRecordId").val(data.result);
-                        if($('#call').val() == '1') {
-                            callRecordList(currentCaseNo);
-                        }
+                        callRecordId = data.result;
                     }
                 }
             );
         }
         
         function fuzhi(obj) {
+            var isCanAutoCall = $("#isCanAutoCall").val();
+            // alert(isCall == '0' || isCanAutoCall == '0');
+            if(isCall == '0' || isCanAutoCall == '0'){
+                return;
+            }
+            currentCall = obj;
+            //给正在外呼区域赋值
+            var str = "<span>批次号：" + currentCall.batchNo +"</span>";
+            str = str + "<span>姓名：" + currentCall.contactName +"</span>";
+            str = str + "<span>电话号码：" + currentCall.phone +"</span>";
+            str = str + "<span>状态：" + currentCall.taskStatus +"</span>";
+            $("#callingContent").html(str);
             $("#currentPhone").val(obj.phone);
             $("#currentContactName").val(obj.contactName);
             $("#currentContactRelation").val(obj.contactRelation);
@@ -553,6 +561,7 @@
                 function (data) {
                     if (data.code == 0) {//请求成功
                         $.modal.alert("暂停成功");
+                        isCall = 0;//停止自动外呼
                     }else{
                         $.modal.alert(data.msg);
                     }
@@ -569,6 +578,9 @@
                 function (data) {
                     if (data.code == 0) {//请求成功
                         $.modal.alert("启动成功");
+                        isCall = 1;//启动自动外呼
+                        var batchCall = batchCallList[indexCall];
+                        call(batchCall);
                     }else{
                         $.modal.alert(data.msg);
                     }
@@ -577,7 +589,35 @@
         }
         
         function cancleCall() {
-            
+            $.post(
+                prefix + "/editBatchCallStatus",
+                {
+                    flag:"cancle"
+                },
+                function (data) {
+                    if (data.code == 0) {//请求成功
+                        $.modal.alert("取消成功");
+                        isCall = 0;//停止自动外呼
+                    }else{
+                        $.modal.alert(data.msg);
+                    }
+                }
+            );
+        }
+
+        function updateStatus(id,status) {
+            $.post(
+                prefix + "/editBatchCall",
+                {
+                    id:id,
+                    taskStatus:status
+                },
+                function (data) {
+                    if (data.code == 0) {//请求成功
+
+                    }
+                }
+            );
         }
     </script>
 </body>

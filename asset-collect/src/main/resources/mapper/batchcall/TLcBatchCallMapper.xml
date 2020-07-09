@@ -125,7 +125,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateBatchCallByBatchNo" >
         update t_lc_batch_call
         set task_status = #{targetTaskStatus}
-        where create_by = #{batchNo} and task_status = #{sourceTaskStatus}
+        where create_by = #{createBy}
+        <if test="sourceTaskStatus != null ">
+            and task_status = #{sourceTaskStatus}
+        </if>
     </update>
 
     <select id="selectMaxBatchNo" resultType="java.util.Map">

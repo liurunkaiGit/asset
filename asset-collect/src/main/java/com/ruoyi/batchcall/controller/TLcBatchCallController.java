@@ -210,6 +210,24 @@ public class TLcBatchCallController extends BaseController
     @ResponseBody
     public AjaxResult editSave(TLcBatchCall tLcBatchCall)
     {
+
+        /*TLcBatchCall tmp = this.tLcBatchCallService.selectTLcBatchCallById(tLcBatchCall.getId());
+        tmp.setTaskStatus(tLcBatchCall.getTaskStatus());*/
+        return toAjax(tLcBatchCallService.updateTLcBatchCall(tLcBatchCall));
+    }
+
+    /**
+     *
+     * @param tLcBatchCall
+     * @return
+     */
+    @PostMapping("/editBatchCall")
+    @ResponseBody
+    public AjaxResult editBatchCall(TLcBatchCall tLcBatchCall)
+    {
+
+        /*TLcBatchCall tmp = this.tLcBatchCallService.selectTLcBatchCallById(tLcBatchCall.getId());
+        tmp.setTaskStatus(tLcBatchCall.getTaskStatus());*/
         return toAjax(tLcBatchCallService.updateTLcBatchCall(tLcBatchCall));
     }
 
@@ -239,6 +257,8 @@ public class TLcBatchCallController extends BaseController
             return toAjax(tLcBatchCallService.updateBatchCallByBatchNo(userId,1,4));//待外呼状态 修改为 暂停状态
         }else if("start".equals(flag)){
             return toAjax(tLcBatchCallService.updateBatchCallByBatchNo(userId,4,1));//暂停状态 修改为 待外呼状态
+        }else if("cancle".equals(flag)){
+            return toAjax(tLcBatchCallService.updateBatchCallByBatchNo(userId,null,3));//取消
         }
         return error();
     }
