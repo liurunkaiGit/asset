@@ -390,7 +390,7 @@
                 {
                     seatId:$("#ownerId").val(),
                     agentId:$("#agentId").val(),
-                    callPlatform:$("#callPlatform").val(),
+                    callPlatform:$("#callPlatform").val()
                 },
                 function(data){
                     var result = eval(data.msg);
@@ -693,7 +693,7 @@
             $.post(
                 custContactPrefix + "/getCustCount",
                 {
-                    caseNoStr:caseNoStr,
+                    caseNoStr:caseNoStr
                 },
                 function (data) {
                     if (data.code == 0) {//请求成功

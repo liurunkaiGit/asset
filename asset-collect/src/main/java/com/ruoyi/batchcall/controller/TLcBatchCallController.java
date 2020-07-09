@@ -85,6 +85,25 @@ public class TLcBatchCallController extends BaseController
         modelMap.put("isCanAutoCall",isCanAutoCall);
         modelMap.put("tLcBatchCallConfig",tbcc);
 
+        ExtPhone extPhone = new ExtPhone();
+        extPhone.setIsused("0");
+        extPhone.setSeatId(Integer.valueOf(String.valueOf(ShiroUtils.getSysUser().getUserId())));
+        extPhone.setCallPlatform(ShiroUtils.getSysUser().getPlatform());
+        List<ExtPhone> list = extPhoneService.selectExtPhoneList(extPhone);
+        if (list != null && list.size() > 0) {
+            if (list != null && list.size() > 0) {
+                // 分机号码
+                modelMap.put("extPhone", list.get(0));
+                // 查询外显号码
+            }
+        }
+        TLcBatchCall tLcBatchCall = new TLcBatchCall();
+        List<TLcBatchCall> batchCallList = tLcBatchCallService.selectTLcBatchCallList(tLcBatchCall);
+        if(batchCallList != null && batchCallList.size() > 0){
+            modelMap.put("batchCallList", batchCallList);
+        }
+        modelMap.put("callPlatform", ShiroUtils.getSysUser().getPlatform());
+
         return prefix + "/batchcall";
     }
 
@@ -242,11 +261,12 @@ public class TLcBatchCallController extends BaseController
      * @return
      */
     @GetMapping(value = "/toAutoCollJob")
-    public String toCollJob(String importBatchNo, String caseNo, String orgId, ModelMap modelMap) {
+    public String toCollJob(String importBatchNo, String caseNo, String orgId, String exonNum,ModelMap modelMap) {
 //        modelMap.put("tLcTask", tLcTask);
         modelMap.put("currentCaseNo", caseNo);
         modelMap.put("currentImportBatchNo", importBatchNo);
         modelMap.put("orgId", orgId);
+        modelMap.put("exonNum", exonNum);//外显号码
         modelMap.put("ownerId", ShiroUtils.getSysUser().getUserId());
 
         ExtPhone extPhone = new ExtPhone();
@@ -255,8 +275,11 @@ public class TLcBatchCallController extends BaseController
         extPhone.setCallPlatform(ShiroUtils.getSysUser().getPlatform());
         List<ExtPhone> list = extPhoneService.selectExtPhoneList(extPhone);
         if (list != null && list.size() > 0) {
-            // 分机号码
-            modelMap.put("extPhone", list.get(0).getAgentid());
+            if (list != null && list.size() > 0) {
+                // 分机号码
+                modelMap.put("extPhone", list.get(0));
+                // 查询外显号码
+            }
         }
         modelMap.put("callPlatform", ShiroUtils.getSysUser().getPlatform());
         return prefix + "/autoCollJob";

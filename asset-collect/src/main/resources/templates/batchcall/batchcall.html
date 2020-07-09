@@ -1,6 +1,26 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta http-equiv="Cache-Control" content="no-store">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link th:href="@{/css/agentcss/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/agentcss/agent-toolbar.css}" rel="stylesheet"/>
+
+    <!--[if lt IE 9]>
+    <script th:src="@{/ajax/libs/agentjs/html5shiv.min.js}"></script>
+    <script th:src="@{/ajax/libs/agentjs/respond.min.js}"></script>
+    <![endif]-->
+
+
+    <script th:src="@{/ajax/libs/agentjs/jquery.min.js}"></script>
+    <script th:src="@{/ajax/libs/agentjs/socket.io.min.js}"></script>
+    <script th:src="@{/ajax/libs/agentjs/agent-client.js}"></script>
+    <script th:src="@{/ajax/libs/agentjs/moment.min.js}"></script>
+    <script th:src="@{/ajax/libs/agentjs/agent-toolbar.js}"></script>
+
     <th:block th:include="include :: header('批量外呼任务管理列表')" />
 </head>
 <body class="gray-bg">
@@ -11,8 +31,18 @@
                     <div class="select-list">
                         <ul>
                             <input type="hidden" id="isCanAutoCall" name="isCanAutoCall" th:value="${isCanAutoCall}">
-                            <input type="hidden" id="isCallOther" name="isCallOther" th:value="${tLcBatchCallConfig.isCallOther}">
-                            <input type="hidden" id="isCallOther" name="isCallOther" th:value="${tLcBatchCallConfig.isCallOther}">
+
+                            <input type="hidden" id="agentId" name="agentId" th:value="${extPhone.agentid}">
+                            <input type="hidden" id="callPlatform" name="callPlatform" th:value="${callPlatform}">
+                            <input type="hidden" id="exonNum" name="exonNum" value="">
+
+                            <input type="hidden" id="currentPhone" name="curentPhone" value="">
+                            <input type="hidden" id="currentContactName" name="currentContactName" value="">
+                            <input type="hidden" id="currentContactRelation" name="currentContactRelation" value="">
+
+                            <input type="hidden" id="currentCaseNo" name="currentCaseNo" value="">
+                            <input type="hidden" id="currentImportBatchNo" name="currentImportBatchNo" value="">
+                            <input type="hidden" id="currentOrgId" name="currentOrgId" value="">
                             <li>
                                 <p>机构案件号：</p>
                                 <input type="text" name="caseNo"/>
@@ -48,20 +78,96 @@
                 <button type="button" class="btn btn-success" onclick="pauseCall()">暂停</button>
                 <button type="button" class="btn btn-success" onclick="startCall()">启动</button>
                 <button type="button" class="btn btn-success" onclick="cancelCall()">取消任务</button>
+                <button type="button" class="btn btn-success" onclick="call()">拨打</button>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
             </div>
 
         </div>
+
+         <div class="modal inmodal" id="myModal2" tabindex="-2" role="dialog" aria-hidden="true">
+             <div class="modal-dialog">
+                 <div class="modal-content animated flipInY">
+                     <div class="modal-header">
+                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+                         </button>
+                         <i class="fa fa-mobile-phone modal-icon"></i>
+                         <h4 class="modal-title">初始化窗口</h4>
+                     </div>
+                     <div class="modal-body" style="height: 250px;">
+                         <input id="callRecordId" name="callRecordId" class="form-control" type="text">
+                         <div class="form-group">
+                             <label class="col-sm-3 control-label">分机号码：</label>
+                             <div class="col-sm-8">
+                                 <input id="agentId" name="agentId" class="form-control" type="text">
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label class="col-sm-3 control-label">坐席技能：</label>
+                             <div class="col-sm-8">
+                                 <input id="skillDesc" name="skillDesc" class="form-control" type="text">
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label class="col-sm-3 control-label">外呼前缀：</label>
+                             <div class="col-sm-8">
+                                 <input id="dialPrefix" name="dialPrefix" class="form-control" type="text">
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label class="col-sm-3 control-label">外显号码：</label>
+                             <div class="col-sm-8">
+                                 <input id="dialCaller" name="dialCaller" class="form-control" type="text">
+                             </div>
+                         </div>
+                         <div class="form-group" style="display: none">
+                             <label class="col-sm-3 control-label">代理地址：</label>
+                             <div class="col-sm-8">
+                                 <input id="proxyUrl" name="proxyUrl" class="form-control" type="text">
+                             </div>
+                         </div>
+                         <div class="form-group" style="display: none">
+                             <label class="col-sm-3 control-label">通话开始时间：</label>
+                             <div class="col-sm-8">
+                                 <input id="callStartTime" name="callStartTime" class="form-control" type="text">
+                             </div>
+                         </div>
+                         <div class="form-group" style="display: none">
+                             <label class="col-sm-3 control-label">通话结束时间：</label>
+                             <div class="col-sm-8">
+                                 <input id="callEndTime" name="callEndTime" class="form-control" type="text">
+                             </div>
+                         </div>
+                         <div class="form-group" style="display: none">
+                             <label class="col-sm-3 control-label">通话时长：</label>
+                             <div class="col-sm-8">
+                                 <input id="callLen" name="callLen" class="form-control" type="text">
+                             </div>
+                         </div>
+                         <div class="form-group" style="display: none">
+                             <label class="col-sm-3 control-label">录音文件地址：</label>
+                             <div class="col-sm-8">
+                                 <input id="callRadioLocation" name="callRadioLocation" class="form-control" type="text">
+                             </div>
+                         </div>
+
+                     </div>
+                     <div class="modal-footer">
+                         <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                         <!--<button type="button" class="btn btn-primary" onclick="initial();">保存</button>-->
+                     </div>
+                 </div>
+             </div>
+         </div>
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('ruoyi:batchcall:edit')}]];
         var removeFlag = [[${@permission.hasPermi('ruoyi:batchcall:remove')}]];
         var prefix = ctx + "ruoyi/batchcall";
+        var collectPrefix = ctx + "collect/task";
         var batchCallArray = new Array();　//创建一个数组
-        var testStr="找到了！";
 
         $(function() {
             var options = {
@@ -128,26 +234,314 @@
                 }]
             };
             $.table.init(options);
+            // initial1();//初始化打电话的JS
             //表格加载完成之后，会触及此方法
             $('#bootstrap-table').on('load-success.bs.table', function (e,data) {
                 // alert(JSON.stringify(data.rows));
                 batchCallArray = data.rows;
                 var isCanAutoCall = $("#isCanAutoCall").val();
                 if("1" == isCanAutoCall && batchCallArray.length > 0){//可自动外呼
-                    var obj = batchCallArray[1];
-                    openAutoCollJob(obj.caseNo,obj.importBatchNo,obj.orgId);
+                    var obj = batchCallArray[0];
+                    // alert(JSON.stringify(obj));
+                    //赋值，挂断电话监听事件用
+                    /*$("#currentPhone").val(obj.phone);
+                    $("#currentContactName").val(obj.contactName);
+                    $("#currentContactRelation").val(obj.contactRelation);
+
+                    $("#currentCaseNo").val(obj.caseNo);
+                    $("#currentImportBatchNo").val(obj.importBatchNo);
+                    $("#currentOrgId").val(obj.orgId);
+                    $("#exonNum").val(obj.exonNum);*/
+                    // var exonNum = $("#exonNum").val();
+                    // call(obj.contactName,obj.contactRelation,obj.phone,obj.exonNum);//拨打电话
                 }
                 /*$.each(batchCallArray,function(i,e){
                     alert(JSON.stringify(e));
                 });*/
             });
+
+            initial1();//初始化打电话的JS
         });
-        
-        function openAutoCollJob(caseNo,importBatchNo,orgId) {
-            var toAutoCollJobUrl = prefix + '/toAutoCollJob?orgId='+orgId +'&caseNo='+caseNo +'&importBatchNo='+importBatchNo
+
+        // var phone = $("#currentPhone").val();
+        var batchCallList = [[${batchCallList}]];
+        /*var contactRelation = $("#currentContactRelation").val();
+        var contactName = $("#currentContactName").val();
+        var exonNum = $("#exonNum").val();*/
+
+        function openAutoCollJob(caseNo,importBatchNo,orgId,exonNum) {
+            var toAutoCollJobUrl = prefix + '/toAutoCollJob?orgId='+orgId +'&caseNo='+caseNo +'&importBatchNo='+importBatchNo+'&exonNum='+exonNum;
             // $('#autoCallModal').modal({show:true});
             // $.modal.openTab("自动作业催收", toAutoCollJobUrl);
-            $.modal.openFull("催收记录 | " + caseNo, toAutoCollJobUrl,600,500);
+            $.modal.openFull("催收记录 | " + caseNo, toAutoCollJobUrl,500,500);
+        }
+
+        function initial1() {
+            var agentId = $("#agentId").val();
+            if(agentId==null || agentId==''){
+                $.modal.msgWarning("请选择分机");
+                return;
+            }
+            var extPhone = [[${extPhone}]];
+            var platform = $("#callPlatform").val();
+            if (platform == 'PA') {
+                var skillDesc = extPhone.skilldesc;
+                var dialPrefix = extPhone.dialprefix;
+                var dialCaller = exonNum;
+                var proxyUrl = extPhone.proxyUrl;
+                initial2(agentId,skillDesc,dialPrefix,dialCaller,proxyUrl);
+            } else if (platform == 'ZJ') {
+                var agent = $("#agentId").val(); //坐席工号
+                // var pwd = "1234"; //登录密码
+                var pwd = extPhone.password;
+                var extno = $("#agentId").val(); //登录分机号
+                // var domain = 'huadao'; //企业编号或域名
+                var domain = extPhone.domain; //企业编号或域名
+                var host = extPhone.proxyUrl.split(":")[0];
+                var port = extPhone.proxyUrl.split(":")[1];
+                // uKeFuSoftPhone.Initial("172.18.100.1","8088","0","0","0",Event);
+                console.log("pwd="+pwd+",domain="+domain+",host="+host+",port="+port);
+                uKeFuSoftPhone.Initial(host,port,"0","0","0",Event,domain);
+                console.log("初始化成功");
+                // 每次登陆之前先退出，然后再进行登录
+                uKeFuSoftPhone.AgentLogout(agent,domain, extno, pwd);
+            }
+            // call(contactName,contactRelation,phone,exonNum);//拨打电话
+        }
+
+        var agentClient = null;
+        var recordFile = null;
+        var startTime = null;
+        var endTime = null;
+        var recordDuration = null;
+        function initial2(agentId,skillDesc,dialPrefix,dialCaller,proxyUrl) {
+            agentClient = new AgentClient({
+                autoAnswer: true,
+                acwTime: 3000,
+                agentId: agentId,
+                agentDn: agentId,
+                agentName: agentId,
+                agentType: 1,
+                skillDesc: skillDesc,
+                proxyUrl: proxyUrl,
+                dialPrefix:dialPrefix,
+                dialCaller:dialCaller
+            });
+            console.log("初始化成功")
+            agentClient.onOnline = function(event) {
+                printEvent('onOnline', event);
+            };
+
+            agentClient.onOffline = function(event) {
+                printEvent('onOffline', event);
+            };
+
+            agentClient.onStatusChanged = function(event) {
+                printEvent('onStatusChanged', event);
+            };
+
+            agentClient.onDialing = function(event) {
+                printEvent('onDialing', event);
+            };
+
+            agentClient.onOffering = function(event) {
+                printEvent('onOffering', event);
+            };
+
+            agentClient.onConnected = function(event) {//电话接通
+                printEvent('onConnected', event);
+                var caseNo = $("#currentCaseNo").val();
+                var importBatchNo = $("#currentImportBatchNo").val();
+                var orgId = $("#currentOrgId").val();
+                var exonNum = $("#exonNum").val();
+                openAutoCollJob(caseNo,importBatchNo,orgId,exonNum);
+            };
+
+            agentClient.onReleased = function(event) {
+                printEvent('onReleased', event);
+            };
+
+            agentClient.onRecordEnd = function(event) {
+                resetTiming();
+                printEvent('onRecordEnd', event);
+                recordFile = event.recordFile;
+                startTime = event.recordTime;
+                endTime = event.startTime;
+                recordDuration = String(event.recordDuration);
+                console.log("平安录音返回信息recordFile="+event.recordFile+",recordTime="+event.recordTime+",startTime="+event.startTime+",recordDuration="+event.recordDuration+",currentCaseNo="+currentCaseNo);
+                // 直接保存点催记录
+                // var val = $('input[name="radioChoose"]:checked').parents("tr");
+                /*$.post(
+                    collectPrefix + "/addCallRecord",
+                    {
+                        id:$("#callRecordId").val(),
+                        // certificateNo:val.find("[name='hideCerNo']").html(),
+                        contactName:val.find("[name='contactName']").html(),
+                        phone:val.find("[name='phone']").html(),
+                        contactRelation:val.find("[name='hidRelation']").html(),
+                        callSign:'R01',
+                        callStartTime:startTime,
+                        callEndTime:endTime,
+                        callLen:recordDuration,
+                        callRadioLocation:recordFile,
+                        caseNo:currentCaseNo,
+                        // remark:callRemark,
+                        importBatchNo:currentImportBatchNo,
+                        orgId:currentOrgId,
+                        // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
+                        sendRadioCheck:1
+                    },
+                    function(data) {
+                        // alert(JSON.stringify(data));
+                        if (data.status == 200) {//请求成功
+                            // $.modal.alertSuccess("保存成功");
+                            //collJobDetail(data.result);
+                            $("#callStartTime").val("");
+                            $("#callEndTime").val("");
+                            $("#callLen").val("");
+                            $("#callRadioLocation").val("");
+                            $("#callCode").val("");
+                            $("#callRemarkAdd").val("");
+                            $("#callRecordId").val(data.result);
+                            if($('#call').val() == '1') {
+                                callRecordList(currentCaseNo);
+                            }
+                        }
+                    }
+                );*/
+            };
+
+            agentClient.onError = function(event) {
+                printEvent('onError', event);
+            };
+
+            agentClient.start();
+
+            function printEvent(handler, event) {
+                console.log(handler + ': ' + JSON.stringify(event, null, 4) + '\n\n');
+            }
+        }
+
+        /**
+         * @description CallOut(外呼):座席主动出局语音呼叫
+         * @param pnumber:被叫号码
+         */
+        function call() {
+            var batchCall = batchCallList[0];
+            fuzhi(batchCall);
+            var contactName = batchCall.contactName;
+            var contactRelation = batchCall.contactRelation;
+            var phone = batchCall.phone;
+            var exonNum = batchCall.exonNum;
+            var currentCaseNo = batchCall.caseNo;
+            var currentImportBatchNo = batchCall.importBatchNo;
+            var currentOrgId = batchCall.orgId;
+            var callStartTime = $("#callStartTime").val();
+            var callEndTime = $("#callEndTime").val();
+            var callLen = $("#callLen").val();
+            var callRadioLocation = $("#callRadioLocation").val();
+            /*var isRadio = $('input[name="radioChoose"]:checked').val();
+            if (isRadio == null || isRadio == 'undefined' || isRadio == '') {
+                $.modal.alert("请选择通话的联系人");
+                return;
+            }*/
+            if(callRadioLocation!=""&&callRadioLocation!=null){
+                $.modal.alert("请保存通话记录再拨打电话");
+                return;
+            }
+            var agentId = $("#agentId").val();
+            if (agentId == null || agentId == '') {
+                $.modal.alert("分机号码为空，请先绑定坐席");
+                return;
+            }
+            // var exonNum = $("#exonNum").val();
+            if (exonNum == null || exonNum == '') {
+                $.modal.alert("请选择外显号码");
+                return;
+            }
+            var callPlatform = $("#callPlatform").val();
+            if (callPlatform == null || callPlatform == '') {
+                $.modal.alert("请配置当前机构的话务平台");
+                return;
+            }
+
+            /*$("#"+id).attr("checked","checked");
+            $(".disclass").attr('disabled',true);
+            $(".disclass").css('pointer-events','none');
+            $(".disclass").css('background','rgb(169,169,169)');*/
+           /* window.setTimeout(function() {
+                $(".disclass").attr('disabled',false);
+                $(".disclass").css('pointer-events','');
+                $(".disclass").css('background','');
+            },10000);*/
+
+            /*var val = $('input[name="radioChoose"]:checked').parents("tr");
+            val.css('background','#dddada');*/
+            // var phone = val.find("[name='phone']").html();
+            var destDesc = "0"+phone;
+            if(callPlatform == 'PA') {
+                if (destDesc) {
+                    agentClient.makeCall(getDestType(destDesc), destDesc);
+                }
+            } else if(callPlatform == 'ZJ') {
+                // 第一个参数是呼叫号码，第二个参数是外显号码
+                uKeFuSoftPhone.CallOut(phone,$('#exonNum').val());
+            }
+            // start();
+            // var val = $('input[name="radioChoose"]:checked').parents("tr");
+            var callStartTime = $("#callStartTime").val();
+            var callEndTime = $("#callEndTime").val();
+            var callLen = $("#callLen").val();
+            var callRadioLocation = $("#callRadioLocation").val();
+            var callRemark = $("#callRemarkAdd").val();
+            // var callRecordId = $("#callRecordId").val();
+            $.post(
+                collectPrefix + "/addCallRecord",
+                {
+                    contactName:contactName,
+                    phone:phone,
+                    contactRelation:contactRelation,
+                    callSign:'R02',
+                    callStartTime:callStartTime,
+                    callEndTime:callEndTime,
+                    callLen:callLen,
+                    callRadioLocation:callRadioLocation,
+                    caseNo:currentCaseNo,
+                    remark:callRemark,
+                    importBatchNo:currentImportBatchNo,
+                    orgId:currentOrgId,
+                    type:1
+                },
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.status == 200) {//请求成功
+                        // $.modal.alertSuccess("保存成功");
+                        //collJobDetail(data.result);
+                        $("#callRecordId").val(data.result);
+                        if($('#call').val() == '1') {
+                            callRecordList(currentCaseNo);
+                        }
+                    }
+                }
+            );
+        }
+        
+        function fuzhi(obj) {
+            $("#currentPhone").val(obj.phone);
+            $("#currentContactName").val(obj.contactName);
+            $("#currentContactRelation").val(obj.contactRelation);
+
+            $("#currentCaseNo").val(obj.caseNo);
+            $("#currentImportBatchNo").val(obj.importBatchNo);
+        }
+
+        function getDestType(destDesc) {
+            var destType = 3;
+            if (destDesc && destDesc.length <= 6 && destDesc.substring(0, 1) != '0' &&
+                destDesc.substring(0, 1) != '1' && destDesc.substring(0, 1) != '9') {
+                destType = 1;
+            }
+            return destType;
         }
 
         function pauseCall(){
