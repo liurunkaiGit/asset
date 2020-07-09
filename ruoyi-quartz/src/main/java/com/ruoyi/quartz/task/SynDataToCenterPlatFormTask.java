@@ -59,13 +59,13 @@ public class SynDataToCenterPlatFormTask
      * 默认不传开始时间、结束时间
      */
     public void SynDataToCenterPlatForm(){
-        this.SynDataToCenterPlatForm(null);
+        this.SynDataToCenterPlatForm(null,null);
     }
     /**
      * 下载语音通话文件
      * @param startDate
      */
-    public void SynDataToCenterPlatForm(String startDate){
+    public void SynDataToCenterPlatForm(String startDate,String tableName){
         if(StringUtils.isEmpty(startDate)){
             // 获取当天的0点
             SimpleDateFormat dateFmt = new SimpleDateFormat(DateUtils.YYYY_MM_DD_HH_MM_SS);
@@ -84,23 +84,48 @@ public class SynDataToCenterPlatFormTask
 
         //获得SFTP链接
         SFTPUtil sftp = loginSftp();
-        //1、生成 sys_user 表数据，并上传FTP服务器
-        createUserFile(startDate,sftp);
-        //2、生成 sys_dept 表数据，并上传FTP服务器
-        createDeptFile(startDate,sftp);
-        //3、生成 org_package 表数据，并上传FTP服务器
-        createOrgPackageFile(startDate,sftp);
-        //4、生成 t_lc_call_record 表数据，并上传FTP服务器
-        createCallRecordFile(startDate,sftp);
-        //5、生成 t_lc_cust_contact 表数据，并上传FTP服务器
-        createCustContactFile(startDate,sftp);
-        //6、生成 t_lc_custinfo 表数据，并上传FTP服务器
-        createCustinfoFile(startDate,sftp);
-        //7、生成 t_lc_duncase 表数据，并上传FTP服务器
-        createDuncaseFile(startDate,sftp);
-        //8、生成 t_lc_task 表数据，并上传FTP服务器
-        createTaskFile(startDate,sftp);
-
+        if(StringUtils.isEmpty(tableName)){
+            //1、生成 sys_user 表数据，并上传FTP服务器
+            createUserFile(startDate,sftp);
+            //2、生成 sys_dept 表数据，并上传FTP服务器
+            createDeptFile(startDate,sftp);
+            //3、生成 org_package 表数据，并上传FTP服务器
+            createOrgPackageFile(startDate,sftp);
+            //4、生成 t_lc_call_record 表数据，并上传FTP服务器
+            createCallRecordFile(startDate,sftp);
+            //5、生成 t_lc_cust_contact 表数据，并上传FTP服务器
+            createCustContactFile(startDate,sftp);
+            //6、生成 t_lc_custinfo 表数据，并上传FTP服务器
+            createCustinfoFile(startDate,sftp);
+            //7、生成 t_lc_duncase 表数据，并上传FTP服务器
+            createDuncaseFile(startDate,sftp);
+            //8、生成 t_lc_task 表数据，并上传FTP服务器
+            createTaskFile(startDate,sftp);
+        }else if("sys_user".equals(tableName)){
+            //1、生成 sys_user 表数据，并上传FTP服务器
+            createUserFile(startDate,sftp);
+        }else if("sys_dept".equals(tableName)){
+            //1、生成 sys_dept 表数据，并上传FTP服务器
+            createDeptFile(startDate,sftp);
+        }else if("org_package".equals(tableName)){
+            //1、生成 org_package 表数据，并上传FTP服务器
+            createOrgPackageFile(startDate,sftp);
+        }else if("t_lc_call_record".equals(tableName)){
+            //1、生成 t_lc_call_record 表数据，并上传FTP服务器
+            createCallRecordFile(startDate,sftp);
+        }else if("t_lc_cust_contact".equals(tableName)){
+            //1、生成 t_lc_cust_contact 表数据，并上传FTP服务器
+            createCustContactFile(startDate,sftp);
+        }else if("t_lc_custinfo".equals(tableName)){
+            //1、生成 t_lc_custinfo 表数据，并上传FTP服务器
+            createCustinfoFile(startDate,sftp);
+        }else if("t_lc_duncase".equals(tableName)){
+            //1、生成 t_lc_duncase 表数据，并上传FTP服务器
+            createDuncaseFile(startDate,sftp);
+        }else if("t_lc_task".equals(tableName)){
+            //1、生成 t_lc_task 表数据，并上传FTP服务器
+            createTaskFile(startDate,sftp);
+        }
         //关闭SFTP连接
         logoutSftp(sftp);
     }
