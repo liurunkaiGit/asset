@@ -67,8 +67,12 @@ public interface ITLcScoreService
 
     public List<TLcScore> selectNotScoreList(TLcScore param);
 
+    public List<TLcScore> selectScoreListForDuncase(TLcScore param);
+
     public void batchUpdateScore(List<TLcScore> TLcScoreList);
     public void batchUpdateScore2(List<TLcScore> TLcScoreList);
+
+    public void batchUpdateDuncaseScore(List<TLcScore> TLcScoreList);
 
 
 }

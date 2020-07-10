@@ -1,6 +1,8 @@
 package com.ruoyi.task.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -10,6 +12,8 @@ import java.util.List;
  * @Date: 2020/3/10 15:51
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class QualityCheckResponse {
     private Integer code;
     private String message;
@@ -21,6 +25,8 @@ public class QualityCheckResponse {
     private String traceId;
 
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     class ResponseData {
         private String message;
         private String source_id;

@@ -82,6 +82,8 @@ public interface TLcCustContactMapper {
 
     List<TLcCustContact> findAllCustContactByCaseNo(@Param("caseNo") String caseNo, @Param("orgId") String orgId, @Param("importBatchNo") String importBatchNo);
 
+    List<TLcCustContact> findAllHisDuncaseCustContactByCaseNo(@Param("caseNo") String caseNo, @Param("orgId") String orgId, @Param("importBatchNo") String importBatchNo);
+
     public int updateIsClose(Map<String,String> param);
 
     /**
@@ -90,11 +92,11 @@ public interface TLcCustContactMapper {
      * 参数命名为 pageNum，pageSize，会自动触发 PageHelper，然后系统会自动给查询语句追加limit语句
      * @return
      */
-    List<Map<String,Object>> selectCustContactByTime(@Param("createTime") Date createTime, @Param("pnum")int pnum, @Param("psize")int psize);
+    List<Map<String,Object>> selectCustContactByTime(@Param("createTime") Date createTime,@Param("modifyTime")Date modifyTime, @Param("pnum")int pnum, @Param("psize")int psize);
     /**
      * 查询客户联系人信息表总数--定时任务同步数据中心 用
      * 2020-06-29 封志涛添加
      * @return
      */
-    Integer selectCustContactCount(@Param("createTime") Date createTime);
+    Integer selectCustContactCount(@Param("createTime") Date createTime, @Param("modifyTime")Date modifyTime);
 }

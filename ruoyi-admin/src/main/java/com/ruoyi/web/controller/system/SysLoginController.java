@@ -22,15 +22,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 登录验证
@@ -54,12 +53,14 @@ public class SysLoginController extends BaseController
     @GetMapping("/login")
     public String login(HttpServletRequest request, HttpServletResponse response)
     {
+        logger.info("进入登录页面开始");
         // 如果是Ajax请求，返回Json字符串。
         if (ServletUtils.isAjaxRequest(request))
         {
             return ServletUtils.renderString(response, "{\"code\":\"1\",\"msg\":\"未登录或登录超时。请重新登录\"}");
         }
 
+        logger.info("进入登录页面结束");
         return "login";
     }
 
@@ -71,6 +72,9 @@ public class SysLoginController extends BaseController
         Subject subject = SecurityUtils.getSubject();
         try
         {
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            String sessionId = request.getRequestedSessionId();
+            logger.info("开始登录sessionId="+sessionId);
             if(orgId == null || "".equals(orgId)){
                 SysUser user = new SysUser();
                 user.setLoginName(username);
@@ -78,6 +82,7 @@ public class SysLoginController extends BaseController
                 orgId = sysUser.getDeptId();
             }
             subject.login(token);
+            logger.info("登录成功loginName="+ShiroUtils.getLoginName());
             return success();
         }
         catch (AuthenticationException e)

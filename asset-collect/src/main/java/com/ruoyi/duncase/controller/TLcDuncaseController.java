@@ -281,8 +281,8 @@ public class TLcDuncaseController extends BaseController {
                 Long score = CollectionScoreUtil.getScore(result);
                 TLcScore tLcScore = new TLcScore();
                 tLcScore.setScore(score);
-                tLcScore.setUpdateBy(ShiroUtils.getLoginName());
-                tLcScore.setUpdateTime(new Date());
+//                tLcScore.setUpdateBy(ShiroUtils.getLoginName());
+//                tLcScore.setUpdateTime(new Date());
                 tLcScore.setOrgCasno(duncase.getCaseNo());
                 tLcScore.setOrgId(duncase.getOrgId());
                 tLcScore.setImportBatchNo(duncase.getImportBatchNo());
@@ -292,9 +292,9 @@ public class TLcDuncaseController extends BaseController {
                 logger.error("获取度小满评分失败{}",e);
             }
         }
-        //更新评分
+        //更新案件表评分
         if(updateList.size()>0){
-            this.tLcScoreService.batchUpdateScore2(updateList);
+            this.tLcDuncaseService.updateScore(updateList);
         }
 //        startPage();
 //        String callCodeHistoryListStr = request.getParameter("callCodeHistoryListStr");//历史电话码
@@ -302,7 +302,7 @@ public class TLcDuncaseController extends BaseController {
 //            tLcDuncase.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
 //        }
 //        List<TLcDuncase> list = tLcDuncaseService.selectTLcDuncaseByPage(tLcDuncase);
-        return getDataTable(null);
+        return new TableDataInfo();
     }
 
 }

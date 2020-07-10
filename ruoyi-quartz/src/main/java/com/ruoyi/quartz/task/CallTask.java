@@ -30,6 +30,8 @@ public class CallTask
     private ITLcCallRecordService tLcCallRecordService;
     @Autowired
     private ISysConfigService sysConfigService;
+    @Value("${isEnableTimer}")
+    private Boolean isEnableTimer;
 
     /**
      * 下载语音通话文件
@@ -44,6 +46,10 @@ public class CallTask
      * @param endDate
      */
     public void downloadCallFile(String startDate,String endDate){
+        if(!isEnableTimer){
+            log.info("下载录音定时任务已经再执行了");
+            return;
+        }
         if(StringUtils.isEmpty(startDate) && StringUtils.isEmpty(endDate)){
             // 获取前一天的0点和24点
             SimpleDateFormat dateFmt = new SimpleDateFormat(DateUtils.YYYY_MM_DD_HH_MM_SS);
