@@ -138,7 +138,9 @@ public class SFTPUtil {
      */
     public void upload(String directory, String sftpFileName, InputStream input) throws SftpException{
         try {
+            log.info("上传文件进入目录：{}",directory);
             sftp.cd(directory);
+            log.info("上传文件进入目录成功");
         } catch (SftpException e) {
             log.warn("directory is not exist");
             //本来这里可以在没有目录的时候创建目录的，但是由于会多次调用该方法，导致会重复创建目录，导致出现了 upload/upload/upload 这样的情况，所以注释掉了，只要在第一次调用的时候保证 目录传进来就可以了

@@ -443,9 +443,12 @@ public class CurAssetsPackageServiceImpl extends BaseController implements ICurA
                                 .setCreateBy(String.valueOf(ShiroUtils.getUserId()));
                         this.tlcImportFlowService.insertTLcImportFlow(tLcImportFlow);
                     }
-        //插入催收评分表
-        List<TLcScore> tLcScores = tlcScoreService.buildParam(paramList);
-        tlcScoreService.batchInsert(tLcScores);
+        OrgPackage orgPackage = orgPackageService.selectOrgPackageByOrgId(orgId);
+        if("1".equals(orgPackage.getIsAutoScore())){
+            //插入催收评分表
+            List<TLcScore> tLcScores = tlcScoreService.buildParam(paramList);
+            tlcScoreService.batchInsert(tLcScores);
+        }
     }
 
 
@@ -593,6 +596,16 @@ public class CurAssetsPackageServiceImpl extends BaseController implements ICurA
         param.setOrgCasno(orgCaseNo);
         param.setImportBatchNo(importBatchNo);
         CurAssetsPackage curAssets = this.curAssetsPackageMapper.selectCurAssetsPackageList(param).get(0);
+        curAssets.setPackNo(curAssets.getPackageId());
+        return curAssets;
+    }
+
+    @Override
+    public CurAssetsPackage selectHisAsset(String orgCaseNo, String importBatchNo) throws Exception {
+        CurAssetsPackage param = new CurAssetsPackage();
+        param.setOrgCasno(orgCaseNo);
+        param.setImportBatchNo(importBatchNo);
+        CurAssetsPackage curAssets = this.curAssetsPackageMapper.selectHisCurAssetsPackageList(param).get(0);
         curAssets.setPackNo(curAssets.getPackageId());
         return curAssets;
     }

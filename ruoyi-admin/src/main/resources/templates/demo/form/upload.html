@@ -2,53 +2,96 @@
 <html lang="zh">
 <head>
 	<th:block th:include="include :: header('文件上传')" />
-	<th:block th:include="include :: bootstrap-fileinput-css" />
+    <link th:href="@{/ajax/libs/layer/layui.css}" rel="stylesheet"/>
 </head>
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
-            <div class="col-sm-12">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>文件上传控件 <small>https://github.com/kartik-v/bootstrap-fileinput</small></h5>
-                    </div>
-                    <div class="ibox-content">
-                    	<div class="form-group">
-                            <label class="font-noraml">简单示例</label>
-	                        <div class="file-loading">
-					            <input class="file" type="file" multiple data-min-file-count="1" data-theme="fas">
-					        </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="font-noraml">多文件上传</label>
-	                        <div class="file-loading">
-					            <input id="fileinput-demo-1" type="file" multiple>
-					        </div>
-                        </div>
-                        <hr>
-                        <div class="form-group">
-                            <label class="font-noraml">相关参数详细信息</label>
-                            <div><a href="http://doc.ruoyi.vip/ruoyi/document/zjwd.html#bootstrap-fileinput" target="_blank">http://doc.ruoyi.vip/ruoyi/document/zjwd.html#bootstrap-fileinput</a></div>
-                        </div>
-                    </div>
+            <div class="col-sm-6">
+                <div class="layui-upload-list">
+                    <table class="layui-table">
+                        <thead>
+                        <tr><th>文件名</th>
+                            <th>大小</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr></thead>
+                        <tbody id="demoList"></tbody>
+                    </table>
                 </div>
+                <button type="button" class="layui-btn layui-btn-normal" id="uploadList">选择多文件</button><input class="layui-upload-file" type="file" accept="" name="file" multiple="">
+                <button type="button" class="layui-btn" id="uploadListAction">开始上传</button>
+            </div>
             </div>
         </div>
     </div>
     <th:block th:include="include :: footer" />
     <th:block th:include="include :: bootstrap-fileinput-js" />
+    <script th:src="@{/ajax/libs/layer/layui.all.js}"></script>
     <script type="text/javascript">
     $(document).ready(function () {
-        $("#fileinput-demo-1").fileinput({
-            'theme': 'explorer-fas',
-            'uploadUrl': '#',
-            overwriteInitial: false,
-            initialPreviewAsData: true,
-            initialPreview: [
-                "/img/profile.jpg"
-            ]
+        layui.use('upload', function(){
+            var $ = layui.jquery
+                ,upload = layui.upload;
+            var demoListView = $('#demoList')
+                ,uploadListIns = upload.render({
+                elem: '#uploadList'
+                ,url: 'https://httpbin.org/post' //改成您自己的上传接口
+                ,accept: 'file'
+                ,multiple: true
+                ,auto: false
+                ,number:2
+                ,exts:'xlsx|xls'
+                ,bindAction: '#uploadListAction'
+                ,choose: function(obj){
+                    var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                    //读取本地文件
+                    obj.preview(function(index, file, result){
+                        var tr = $(['<tr id="upload-'+ index +'">'
+                            ,'<td>'+ file.name +'</td>'
+                            ,'<td>'+ (file.size/1024).toFixed(1) +'kb</td>'
+                            ,'<td>等待上传</td>'
+                            ,'<td>'
+                            ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
+                            ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+                            ,'</td>'
+                            ,'</tr>'].join(''));
+
+                        //单个重传
+                        tr.find('.demo-reload').on('click', function(){
+                            obj.upload(index, file);
+                        });
+
+                        //删除
+                        tr.find('.demo-delete').on('click', function(){
+                            delete files[index]; //删除对应的文件
+                            tr.remove();
+                            uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                        });
+
+                        demoListView.append(tr);
+                    });
+                }
+                ,done: function(res, index, upload){
+                    if(res.files.file){ //上传成功
+                        var tr = demoListView.find('tr#upload-'+ index)
+                            ,tds = tr.children();
+                        tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+                        tds.eq(3).html(''); //清空操作
+                        return delete this.files[index]; //删除文件队列已经上传成功的文件
+                    }
+                    this.error(index, upload);
+                }
+                ,error: function(index, upload){
+                    var tr = demoListView.find('tr#upload-'+ index)
+                        ,tds = tr.children();
+                    tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+                    tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+                }
+            });
+
         });
+
     });
     </script>
 </body>

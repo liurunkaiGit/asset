@@ -833,6 +833,11 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     }
 
     @Override
+    public TLcTask selectHisTaskByCaseNo(String caseNo, String orgId, String importBatchNo) {
+        return this.tLcTaskMapper.selectHisTaskByCaseNo(caseNo, orgId, importBatchNo);
+    }
+
+    @Override
     public TLcTask selectTaskByRobotTaskId(String robotTaskId) {
         return this.tLcTaskMapper.selectTaskByRobotTaskId(robotTaskId);
     }
@@ -1027,7 +1032,20 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     }
 
     @Override
+    public CollJob hisDuncaseCollJobDetail(String caseNo, String orgId, String importBatchNo) {
+        log.info("caseNo is {}" + caseNo);
+        CollJob collJob = new CollJob();
+        // 通过案件编号、机构编号、导入批次号查询任务详情
+        TLcTask tLcTask = selectHisTaskByCaseNo(caseNo, orgId, importBatchNo);
+        //资产接口调用
+        Assets assets = callRemoteHis(caseNo, importBatchNo);
+        return collJob.setTLcTask(tLcTask)
+                .setAssets(assets);
+    }
+
+    @Override
     public Response addCallRecord(TLcCallRecord tLcCallRecord, String importBatchNo, String callStartTime, String callEndTime) {
+        log.info("添加通话记录开始");
 //        String filePath = Global.getUploadPath();
         SimpleDateFormat sdf = new SimpleDateFormat(DateUtils.YYYY_MM_DD_HH_MM_SS);
         try {
@@ -1101,6 +1119,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                     return Response.success(tLcCallRecord.getId());
                 }
                 tLcCallRecordService.updateTLcCallRecord(tLcCallRecord);
+                log.info("添加通话记录结束");
                 return Response.success(tLcCallRecord.getId());
             }
         } catch (Exception e) {
@@ -1170,6 +1189,20 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         Assets assets = null;
         try {
             CurAssetsPackage result = this.curAssetsPackageService.selectAsset(orgCaseNo,importBatchNo);
+            String jsonStr = JSON.toJSONString(result);
+            assets = JSONObject.parseObject(jsonStr, Assets.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("查询单条资产异常{}",e);
+        }
+        return assets;
+    }
+
+    private Assets callRemoteHis(String orgCaseNo, String importBatchNo) {
+        log.info("查询单条资产参数：orgCaseNo="+orgCaseNo+",importBatchNo="+importBatchNo);
+        Assets assets = null;
+        try {
+            CurAssetsPackage result = this.curAssetsPackageService.selectHisAsset(orgCaseNo,importBatchNo);
             String jsonStr = JSON.toJSONString(result);
             assets = JSONObject.parseObject(jsonStr, Assets.class);
         } catch (Exception e) {

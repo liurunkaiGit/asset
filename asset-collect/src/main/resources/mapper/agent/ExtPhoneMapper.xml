@@ -30,22 +30,45 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, agentId, skillDesc, dialPrefix, dialCaller, proxyUrl, isUsed, create_by, create_time, update_by, update_time, exon_num_group, exon_num_group_id, seat_name, seat_id, org_id, org_name, call_platform, password, domain from ext_phone
     </sql>
 
+    <sql id="selectExtPhoneColumn">
+        t.id,
+        t.agentId,
+        t.skillDesc,
+        t.dialPrefix,
+        t.dialCaller,
+        t.proxyUrl,
+        t.isUsed,
+        t.create_by,
+        t.create_time,
+        t.update_by,
+        t.update_time,
+        t.exon_num_group,
+        t.exon_num_group_id,
+        t.seat_name,
+        t.seat_id,
+        t.call_platform,
+        t.password,
+        t.domain
+    </sql>
+
     <select id="selectExtPhoneList" parameterType="com.ruoyi.agent.domain.ExtPhone" resultMap="ExtPhoneResult">
-        <include refid="selectExtPhoneVo"/>
-        <where>
-            <if test="agentid != null  and agentid != ''"> and agentId = #{agentid}</if>
-            <if test="skilldesc != null  and skilldesc != ''"> and skillDesc = #{skilldesc}</if>
-            <if test="dialprefix != null  and dialprefix != ''"> and dialPrefix = #{dialprefix}</if>
-            <if test="dialcaller != null  and dialcaller != ''"> and dialCaller = #{dialcaller}</if>
-            <if test="isused != null  and isused != ''"> and isUsed = #{isused}</if>
-            <if test="exonNumGroup != null  and exonNumGroup != ''"> and exon_num_group = #{exonNumGroup}</if>
-            <if test="exonNumGroupId != null "> and exon_num_group_id = #{exonNumGroupId}</if>
-            <if test="seatName != null  and seatName != ''"> and seat_name like concat('%', #{seatName}, '%')</if>
-            <if test="seatId != null "> and seat_id = #{seatId}</if>
-            <if test="orgName != null  and orgName != ''"> and org_name = #{orgName}</if>
-            <if test="orgId != null "> and org_id = #{orgId}</if>
-            <if test="callPlatform != null  and callPlatform != ''"> and call_platform = #{callPlatform}</if>
-        </where>
+        select
+        sd.dept_name as org_name,
+        <include refid="selectExtPhoneColumn"/>
+        from ext_phone t,sys_user su,sys_dept sd
+        where t.seat_id = su.user_id and su.dept_id = sd.dept_id
+        <if test="agentid != null  and agentid != ''"> and agentId = #{agentid}</if>
+        <if test="skilldesc != null  and skilldesc != ''"> and skillDesc = #{skilldesc}</if>
+        <if test="dialprefix != null  and dialprefix != ''"> and dialPrefix = #{dialprefix}</if>
+        <if test="dialcaller != null  and dialcaller != ''"> and dialCaller = #{dialcaller}</if>
+        <if test="isused != null  and isused != ''"> and isUsed = #{isused}</if>
+        <if test="exonNumGroup != null  and exonNumGroup != ''"> and exon_num_group = #{exonNumGroup}</if>
+        <if test="exonNumGroupId != null "> and exon_num_group_id = #{exonNumGroupId}</if>
+        <if test="seatName != null  and seatName != ''"> and seat_name like concat('%', #{seatName}, '%')</if>
+        <if test="seatId != null "> and seat_id = #{seatId}</if>
+        <if test="orgName != null  and orgName != ''"> and org_name = #{orgName}</if>
+        <if test="orgId != null "> and org_id = #{orgId}</if>
+        <if test="callPlatform != null  and callPlatform != ''"> and call_platform = #{callPlatform}</if>
     </select>
 
     <select id="selectExtPhoneById" parameterType="String" resultMap="ExtPhoneResult">

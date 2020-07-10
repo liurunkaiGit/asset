@@ -143,6 +143,8 @@ public interface TLcTaskMapper {
      */
     TLcTask selectTaskByCaseNo(@Param("caseNo") String caseNo, @Param("orgId") String orgId, @Param("importBatchNo") String importBatchNo);
 
+    TLcTask selectHisTaskByCaseNo(@Param("caseNo") String caseNo, @Param("orgId") String orgId, @Param("importBatchNo") String importBatchNo);
+
     /**
      * 查询我的任务列表
      *

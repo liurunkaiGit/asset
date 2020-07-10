@@ -1,5 +1,6 @@
 package com.ruoyi.custom.service;
 
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.custom.domain.AllCustContact;
 import com.ruoyi.custom.domain.TLcCustContact;
 
@@ -74,6 +75,8 @@ public interface ITLcCustContactService {
 
     List<TLcCustContact> findAllCustContactByCaseNo(String caseNo, String orgId, String importBatchNo);
 
+    List<TLcCustContact> findAllHisDuncaseCustContactByCaseNo(String caseNo, String orgId, String importBatchNo);
+
     public int updateIsClose(Map<String,String> param);
 
     /**
@@ -81,11 +84,11 @@ public interface ITLcCustContactService {
      * 2020-06-23 封志涛添加
      * @return
      */
-    List<Map<String,Object>> selectCustContactByTime(Date createTime, int pageNum, int pageSize);
+    List<Map<String,Object>> selectCustContactByTime(Date createTime, Date modifyTime, int pageNum, int pageSize);
     /**
      * 查询 客户联系人信息表 总数--定时任务同步数据中心 用
      * 2020-06-29 封志涛添加
      * @return
      */
-    Integer selectCustContactCount(Date createTime);
+    Integer selectCustContactCount(Date createTime, Date modifyTime);
 }

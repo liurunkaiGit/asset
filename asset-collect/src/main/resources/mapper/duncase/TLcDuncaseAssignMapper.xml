@@ -221,4 +221,12 @@
         ORDER BY t.create_time desc
     </select>
 
+    <select id="findHisDuncaseAssignByCaseNo" parameterType="java.lang.String" resultMap="TLcDuncaseAssignResult">
+        SELECT su.user_name AS owner_name,
+        <include refid="SELECT_DUNCASE_ASSIGN"/>
+        FROM t_lc_duncase_assign_his t LEFT JOIN sys_user su ON t.owner_id = su.user_id
+        WHERE  case_no = #{caseNo}
+        ORDER BY t.create_time desc
+    </select>
+
 </mapper>
