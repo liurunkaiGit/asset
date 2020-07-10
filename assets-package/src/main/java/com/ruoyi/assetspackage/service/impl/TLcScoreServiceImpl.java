@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ruoyi.common.core.text.Convert;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 催收评分Service业务层处理
@@ -124,6 +125,7 @@ public class TLcScoreServiceImpl implements ITLcScoreService
             tlcScore.setIsAutoScore(isAutoScore);
             tlcScore.setCreateBy(ShiroUtils.getLoginName());
             tlcScore.setCreateTime(new Date());
+            tlcScore.setSendflag("0");
             list.add(tlcScore);
         }
         return list;
@@ -156,6 +158,11 @@ public class TLcScoreServiceImpl implements ITLcScoreService
     }
 
     @Override
+    public List<TLcScore> selectScoreListForDuncase(TLcScore param) {
+        return this.tLcScoreMapper.selectScoreListForDuncase(param);
+    }
+
+    @Override
     public void batchUpdateScore(List<TLcScore> TLcScoreList){
         this.tLcScoreMapper.batchUpdateScore(TLcScoreList);
     }
@@ -163,5 +170,11 @@ public class TLcScoreServiceImpl implements ITLcScoreService
     @Override
     public void batchUpdateScore2(List<TLcScore> TLcScoreList){
         this.tLcScoreMapper.batchUpdateScore2(TLcScoreList);
+    }
+
+    @Override
+    @Transactional
+    public void batchUpdateDuncaseScore(List<TLcScore> TLcScoreList){
+        this.tLcScoreMapper.batchUpdateDuncaseScore(TLcScoreList);
     }
 }

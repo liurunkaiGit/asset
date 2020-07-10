@@ -516,6 +516,7 @@ public class CurAssetsPackageController extends BaseController {
     @PostMapping("/selectFreeImportList")
     @ResponseBody
     public List<Map<String,String>> selectFreeImportList(String caseNo) {
+        logger.info("查询补充信息开始caseNo="+caseNo);
         List<Map<String,String>> freeImportList = null;
         try {
             freeImportList = this.curAssetsPackageService.selectFreeImportByCaseno(caseNo);
@@ -523,6 +524,7 @@ public class CurAssetsPackageController extends BaseController {
             e.printStackTrace();
             logger.error("查询自由导入信息失败：{}",e);
         }
+        logger.info("查询补充信息结束caseNo="+caseNo);
         return freeImportList;
     }
 

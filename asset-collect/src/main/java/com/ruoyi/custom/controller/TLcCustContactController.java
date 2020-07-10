@@ -92,7 +92,9 @@ public class TLcCustContactController extends BaseController {
     @PostMapping("/addContact")
     @ResponseBody
     public AjaxResult addContact(TLcCustContact tLcCustContact) {
+        logger.info("保存客户联系人信息开始");
         tLcCustContactService.insertTLcCustContact(tLcCustContact);
+        logger.info("保存客户联系人信息结束");
         return success();
     }
 

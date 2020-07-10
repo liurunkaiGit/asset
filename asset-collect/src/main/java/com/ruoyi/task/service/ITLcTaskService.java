@@ -234,6 +234,8 @@ public interface ITLcTaskService {
      */
     TLcTask selectTaskByCaseNo(String caseNo, String orgId, String importBatchNo);
 
+    TLcTask selectHisTaskByCaseNo(String caseNo, String orgId, String importBatchNo);
+
     /**
      * 根据机器人任务id查询对应的任务
      *
@@ -250,6 +252,8 @@ public interface ITLcTaskService {
     AjaxResult sendRobot(String taskIds, String orgId, String speechcraftId, Integer callLineId);
 
     CollJob collJobDetail(String caseNo, String orgId, String importBatchNo);
+
+    CollJob hisDuncaseCollJobDetail(String caseNo, String orgId, String importBatchNo);
 
     Response addCallRecord(TLcCallRecord tLcCallRecord, String importBatchNo, String callStartTime, String callEndTime);
 

@@ -106,6 +106,28 @@ public class AsyncOptFactory {
 
 
 
+    /**
+     * 更新案件表评分执行器
+     * @param paramList
+     * @return
+     */
+    public TimerTask synUpdateScoreForDuncaseExecute(final List<TLcScore> paramList)
+    {
+        return new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                //更新评分
+                if(paramList.size()>0){
+                    SpringUtils.getBean(ITLcScoreService.class).batchUpdateDuncaseScore(paramList);
+                }
+            }
+        };
+    }
+
+
+
 
 
 

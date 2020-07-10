@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('案件列表')"/>
+    <style type="text/css">
+        .time-input{
+            display: inline;
+        }
+    </style>
+    <link th:href="@{/ajax/libs/bootstrap-select/bootstrap-select.css}" rel="stylesheet"/>
+</head>
+<body class="gray-bg">
+<div class="container-div" >
+    <div class="row" >
+        <div class="col-sm-12 search-collapse" >
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <input type="hidden" id="orgId" name="orgId" th:value="${orgId}">
+                        <li>
+                            <p>机构案件号：</p>
+                            <input type="text" name="caseNo"/>
+                        </li>
+                        <li>
+                            <p>姓名：</p>
+                            <input type="text" name="customName"/>
+                        </li>
+                       <!-- <li>
+                            <p>任务状态：</p>
+                            &lt;!&ndash; 1：未分配 2：催收中 3: 已结案&ndash;&gt;
+                            <select name="taskStatus" th:with="type=${@dict.getType('sys_task_state')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>-->
+                        <li>
+                            <p>任务状态：</p>
+                            <!-- 1：未分配 2：催收中 3: 已结案-->
+                            <select name="taskStatus">
+                                <option value="">所有</option>
+                                <option value="1">未分配</option>
+                                <option value="2">已分配</option>
+                                <option value="3">已结案</option>
+                            </select>
+                        </li>
+                       <!-- <li>
+                            <p>历史电话码：</p>
+                            <select name="callCodeHistoryListStr" id="callCodeHistoryListStr" th:with="dictList=${@dict.getType('call_record_code')}" class="selectpicker" title="全部" multiple data-live-search="true" data-actions-box="true" data-selected-text-format="count > 4">
+                                <option th:each="dict : ${dictList}" th:text=" ${dict.dictValue} + '(' +${dict.dictLabel} +')'"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>-->
+                        <li>
+                            <p>历史电话码：</p>
+                            <select name="callCodeHistoryListStr" id="callCodeHistoryListStr" class="selectpicker" title="全部" multiple="" data-live-search="true" data-actions-box="true" data-selected-text-format="count > 4" tabindex="-98">
+                                <option value="PTP">PTP(承诺还款)</option>
+                                <option value="CYH">CYH(称已还)</option>
+                                <option value="TP">TP(谈判沟通)</option>
+                                <option value="WCY">WCY(无诚意)</option>
+                                <option value="HKKN">HKKN(还款困难)</option>
+                                <option value="ZG">ZG(转告)</option>
+                                <option value="WRJT">WRJT(无人接听)</option>
+                                <option value="JJ">JJ(拒接)</option>
+                                <option value="ZX">ZX(占线忙音)</option>
+                                <option value="GJ">GJ(关机)</option>
+                                <option value="GD">GD(挂断)</option>
+                                <option value="KH">KH(空号)</option>
+                                <option value="BZ">BZ(不在)</option>
+                                <option value="WCR">WCR(无此人)</option>
+                                <option value="WHY">WHY(无回应)</option>
+                                <option value="SL">SL(失联)</option>
+                                <option value="R01">R01(已接听)</option>
+                                <option value="R02">R02(无法接通)</option>
+                                <option value="R03">R03(主叫号码不可用)</option>
+                                <option value="R04">R04(停机)</option>
+                                <option value="R05">R05(主叫欠费)</option>
+                                <option value="R06">R06(呼损)</option>
+                                <option value="R07">R07(黑名单)</option>
+                                <option value="R08">R08(线路盲区)</option>
+                            </select>
+                        </li>
+                        <!--自由查询开始-->
+                        <input type="hidden" id="freeSQL" name="freeSQL" />
+                        <li>
+                            <div class="freeSearch">
+                            <select id="oneAndOr"  style="width:85px;margin:0 0 0 10px;">
+                                <option value="AND" selected="selected">并且</option>
+                                <option value="OR">或者</option>
+                            </select>
+                            <select id="oneColumn" onchange="viewOption('oneColumn','oneOper','oneOption')">
+                                <option value="">字段</option>
+                            </select>
+                            <select id="oneOper" onchange="viewOption('oneColumn','oneOper','oneOption')" style="width: 93px;">
+                                <option value="">运算符</option>
+                                <option value="1">等于</option>
+                                <option value="2">包含</option>
+                                <option value="3">范围</option>
+                                <option value="4">不等于</option>
+                                <option value="5">开头字符</option>
+                                <option value="6">结尾字符</option>
+                                <option value="7">为空</option>
+                                <option value="8">不为空</option>
+                            </select>
+                            <span id="oneOption"><input type="text"/></span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="freeSearch">
+                            <select id="twoAndOr"  style="width:85px;margin:0 0 0 10px;">
+                                <option value="AND"  selected="selected">并且</option>
+                                <option value="OR">或者</option>
+                            </select>
+                            <select id="twoColumn" onchange="viewOption('twoColumn','twoOper','twoOption')">
+                                <option value="">字段</option>
+                            </select>
+                            <select id="twoOper" onchange="viewOption('twoColumn','twoOper','twoOption')" style="width: 93px;">
+                                <option value="">运算符</option>
+                                <option value="1">等于</option>
+                                <option value="2">包含</option>
+                                <option value="3">范围</option>
+                                <option value="4">不等于</option>
+                                <option value="5">开头字符</option>
+                                <option value="6">结尾字符</option>
+                                <option value="7">为空</option>
+                                <option value="8">不为空</option>
+                            </select>
+                            <span id="twoOption"><input type="text"/></span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="freeSearch">
+                            <select id="threeAndOr"  style="width:85px;margin:0 0 0 10px;">
+                                <option value="AND"  selected="selected">并且</option>
+                                <option value="OR">或者</option>
+                            </select>
+                            <select id="threeColumn" onchange="viewOption('threeColumn','threeOper','threeOption')">
+                                <option value="">字段</option>
+                            </select>
+                            <select id="threeOper" onchange="viewOption('threeColumn','threeOper','threeOption')" style="width: 93px;">
+                                <option value="">运算符</option>
+                                <option value="1">等于</option>
+                                <option value="2">包含</option>
+                                <option value="3">范围</option>
+                                <option value="4">不等于</option>
+                                <option value="5">开头字符</option>
+                                <option value="6">结尾字符</option>
+                                <option value="7">为空</option>
+                                <option value="8">不为空</option>
+                            </select>
+                            <span id="threeOption"><input type="text"/></span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="freeSearch">
+                            <select id="fourAndOr"  style="width:85px;margin:0 0 0 10px;">
+                                <option value="AND"  selected="selected">并且</option>
+                                <option value="OR">或者</option>
+                            </select>
+                            <select id="fourColumn" onchange="viewOption('fourColumn','fourOper','fourOption')">
+                                <option value="">字段</option>
+                            </select>
+                            <select id="fourOper" onchange="viewOption('fourColumn','fourOper','fourOption')" style="width: 93px;">
+                                <option value="">运算符</option>
+                                <option value="1">等于</option>
+                                <option value="2">包含</option>
+                                <option value="3">范围</option>
+                                <option value="4">不等于</option>
+                                <option value="5">开头字符</option>
+                                <option value="6">结尾字符</option>
+                                <option value="7">为空</option>
+                                <option value="8">不为空</option>
+                            </select>
+                            <span id="fourOption"><input type="text"/></span>
+                            </div>
+                        </li>
+                        <!--自由查询结束-->
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="selectSearch()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="his:duncase:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js" />
+<script th:src="@{/ajax/libs/bootstrap-select/bootstrap-select.min.js}"></script>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:duncase:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:duncase:remove')}]];
+    var caseStatusDatas = [[${@dict.getType('sys_case_status')}]];
+    var taskTypeDatas = [[${@dict.getType('sys_task_type')}]];
+    var prefix = ctx + "his/duncase";
+    var taskPrefix = ctx + "collect/task";
+    var columnQyeryPrefix = ctx + "column/query";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            clickToSelect:true,
+            modalName: "案件",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: '主键id',
+                    visible: false
+                },
+                {
+                    field: 'caseNo',
+                    title: '案件编号',
+                    formatter: function(value, row, index) {
+                        // return value;
+                        // alert(JSON.stringify(row))
+                        return "<a href='javascript:void(0)' onclick='detail(\""+value + "\",\""+row.orgId + "\",\""+row.importBatchNo+ "\")'>"+value+"</a>";
+                    }
+                },
+                {
+                    field: 'customName',
+                    title: '客户姓名'
+                },
+                {
+                    field: 'transferType',
+                    title: '手别'
+                },
+
+                {
+                    field: 'enterCollDate',
+                    title: '入催日'
+                },
+                {
+                    field: 'appointCaseBalance',
+                    title: '委案金额'
+                },
+                {
+                    field: 'closeCaseYhje',
+                    title: '结案应还金额'
+                },
+                {
+                    field: 'callSign',
+                    title: '最近电话码',
+                    formatter: function(value, row, index) {
+                        return getCallCode(value,row.callSignValue);
+                    }
+                },
+                {
+                    field: 'actionCode',
+                    title: '最近行动码',
+                    formatter: function(value, row, index) {
+                        return getActionCode(value,row.actionCodeValue);
+                    }
+                },
+                {
+                    field : 'recentlyAllotDate',
+                    title : '最近分配日期'
+                },
+                {
+                    field : 'recentlyFollowUpDate',
+                    title : '最近跟进日期'
+                },
+                {
+                    field : 'ownerName',
+                    title : '业务归属人'
+                },
+                {
+                    field : 'userGroup',
+                    title : '组别'
+                },
+                {
+                    field : 'taskType',
+                    title : '任务类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(taskTypeDatas, value);
+                    }
+                },
+                {
+                    field: 'taskStatus',
+                    title: '任务状态',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(caseStatusDatas, value);
+                    }
+                },
+                {
+                    field : 'productName',
+                    title : '产品名称'
+                },
+                {
+                    field: 'score',
+                    title: '催收评分'
+                }]
+        };
+        $.table.init(options);
+        initColumnQuery();
+    });
+
+    function reset() {
+        $.form.reset();
+        $(".selectpicker").selectpicker('deselectAll');
+    }
+
+    function viewOption(column,oper,option) {
+        var selectColumn = $("#"+column).val();
+        var selectOper = $("#"+oper).val();
+        $("#"+option).html('<input type="text" /> ');
+        if(selectColumn != null && selectColumn != '' && selectOper != null && selectOper != ''){
+            var columnName = selectColumn.split(",")[0];
+            var columnType = selectColumn.split(",")[1];
+            var beanName = selectColumn.split(",")[2];
+            if(selectOper == "1" || selectOper == "2" || selectOper == "4" || selectOper == "5" || selectOper == "6"){//等于、包含、不等于、开头、结尾
+                if(columnType == "date_interval"){//字段类型为日期
+                    $("#"+option).html('<input type="text"  placeholder="开始时间" style="width: 185px;" class="time-input"/>');
+                    if ($(".time-input").length > 0) {
+                        layui.use('laydate', function () {
+                            var com = layui.laydate;
+                            $(".time-input").each(function (index, item) {
+                                var time = $(item);
+                                var type = time.attr("data-type") || 'date';// 控制控件外观
+                                var format = time.attr("data-format") || 'yyyy-MM-dd';// 控制回显格式
+                                var buttons = time.attr("data-btn") || 'clear|now|confirm', newBtnArr = [];// 控制日期控件按钮
+                                var callback = time.attr("data-callback") || {};// 日期控件选择完成后回调处理
+                                if (buttons) {
+                                    if (buttons.indexOf("|") > 0) {
+                                        var btnArr = buttons.split("|"), btnLen = btnArr.length;
+                                        for (var j = 0; j < btnLen; j++) {
+                                            if ("clear" === btnArr[j] || "now" === btnArr[j] || "confirm" === btnArr[j]) {
+                                                newBtnArr.push(btnArr[j]);
+                                            }
+                                        }
+                                    } else {
+                                        if ("clear" === buttons || "now" === buttons || "confirm" === buttons) {
+                                            newBtnArr.push(buttons);
+                                        }
+                                    }
+                                } else {
+                                    newBtnArr = ['clear', 'now', 'confirm'];
+                                }
+                                com.render({
+                                    elem: item,
+                                    theme: 'molv',
+                                    trigger: 'click',
+                                    type: type,
+                                    format: format,
+                                    btns: newBtnArr,
+                                    done: function (value, data) {
+                                        if (typeof window[callback] != 'undefined'
+                                            && window[callback] instanceof Function) {
+                                            window[callback](value, data);
+                                        }
+                                    }
+                                });
+                            });
+                        });
+                    }
+                }else if(columnType == "dict"){//字段类型为数据字典
+                    $("#"+option).html("");
+                    var opt = "";
+                    var compareValue = selectColumn.split(",")[3];
+                    if (compareValue != null && compareValue != '') {
+                        for (var i = 0; i < compareValue.split("|").length; i++) {
+                            var dictValue = compareValue.split("|")[i];
+                            opt += "<option value='" + dictValue.split(":")[0] + "'>" + dictValue.split(":")[0] + "(" +dictValue.split(":")[1] +")</option>";
+                        }
+                    }
+                    $("#"+option).html('<select ><option value="">请选择</option>'+opt+'</select>');
+                }else{
+                    $("#"+option).html('<input type="text" /> ');
+                }
+
+            }else if(selectOper == "3" ) {//范围
+                var startName = "start_" + columnName;
+                var endName = "end_" + columnName;
+                    if(columnType == "date_interval"){//字段类型为日期
+                        $("#"+option).html('<input type="text"  placeholder="开始时间" style="width: 85px;" class="time-input"/> <span>-</span> <input type="text"  placeholder="结束时间" style="width: 85px;" class="time-input"/>');
+                        if ($(".time-input").length > 0) {
+                            layui.use('laydate', function () {
+                                var com = layui.laydate;
+                                $(".time-input").each(function (index, item) {
+                                    var time = $(item);
+                                    var type = time.attr("data-type") || 'date';// 控制控件外观
+                                    var format = time.attr("data-format") || 'yyyy-MM-dd';// 控制回显格式
+                                    var buttons = time.attr("data-btn") || 'clear|now|confirm', newBtnArr = [];// 控制日期控件按钮
+                                    var callback = time.attr("data-callback") || {};// 日期控件选择完成后回调处理
+                                    if (buttons) {
+                                        if (buttons.indexOf("|") > 0) {
+                                            var btnArr = buttons.split("|"), btnLen = btnArr.length;
+                                            for (var j = 0; j < btnLen; j++) {
+                                                if ("clear" === btnArr[j] || "now" === btnArr[j] || "confirm" === btnArr[j]) {
+                                                    newBtnArr.push(btnArr[j]);
+                                                }
+                                            }
+                                        } else {
+                                            if ("clear" === buttons || "now" === buttons || "confirm" === buttons) {
+                                                newBtnArr.push(buttons);
+                                            }
+                                        }
+                                    } else {
+                                        newBtnArr = ['clear', 'now', 'confirm'];
+                                    }
+                                    com.render({
+                                        elem: item,
+                                        theme: 'molv',
+                                        trigger: 'click',
+                                        type: type,
+                                        format: format,
+                                        btns: newBtnArr,
+                                        done: function (value, data) {
+                                            if (typeof window[callback] != 'undefined'
+                                                && window[callback] instanceof Function) {
+                                                window[callback](value, data);
+                                            }
+                                        }
+                                    });
+                                });
+                            });
+                        }
+                    }else if(columnType == "dict"){//字段类型为数据字典
+                        $("#"+option).html("");
+                        var opt = "";
+                        var compareValue = selectColumn.split(",")[3];
+                        if (compareValue != null && compareValue != '') {
+                            for (var i = 0; i < compareValue.split("|").length; i++) {
+                                var dictValue = compareValue.split("|")[i];
+                                opt += "<option value='" + dictValue.split(":")[0] + "'>" + dictValue.split(":")[0] + "(" +dictValue.split(":")[1] +")</option>";
+                            }
+                        }
+                        $("#"+option).html('<select   style="width: 85px;"><option value="">请选择</option>'+opt+'</select><span style="margin: 0 4px 0 4px;">-</span><select  style="width: 85px;" ><option value="">请选择</option>'+opt+'</select>');
+                    }else{
+                        $("#"+option).html('<input type="text"   style="width: 85px;"/><span style="margin: 0 4px 0 4px;">-</span><input type="text"   style="width: 85px;"/> ');
+                    }
+
+            }else if(selectOper == "7" || selectOper == "8" ) {//为空、不为空
+                $("#"+option).html('<input type="text"/> ');
+            }
+        }
+
+    }
+
+
+    function initColumnQuery() {
+        $.post(
+            columnQyeryPrefix + "/initColumnQuery",
+            {
+                tableName:'t_lc_duncase',
+                orgId:$('#orgId').val()
+            }, // 请求参数
+            function (data) {
+                // alert(JSON.stringify(data));
+                if (data.code == 0) {//请求成功
+                    for (var i = 0; i < data.rows.length; i++) {
+                        var opt = "<option value='" + data.rows[i].columnName + "," + data.rows[i].columnType + "," + data.rows[i].beanName + "," + data.rows[i].columnValue + "," + data.rows[i].tablePrefix + "'>" + data.rows[i].columnNameCn + "</option>";
+                        $("#oneColumn").append(opt);
+                        $("#twoColumn").append(opt);
+                        $("#threeColumn").append(opt);
+                        $("#fourColumn").append(opt);
+                    }
+                }
+            }
+        );
+    }
+
+
+    /*催收历史*/
+    function detail(caseNo,orgId,importBatchNo) {
+        var collHisUrl = ""
+        if (importBatchNo == 'null') {
+            collHisUrl = prefix + "/hisDuncaseCcollJob?caseNo="+caseNo+"&orgId="+orgId;
+        } else {
+            collHisUrl = prefix + "/hisDuncaseCcollJob?caseNo="+caseNo+"&orgId="+orgId+"&importBatchNo="+importBatchNo;
+        }
+        $.modal.openFull("案件信息|" + caseNo, collHisUrl);
+    }
+
+    function getCallCode(callCode, dictLabel) {
+        if (dictLabel != null && dictLabel != '') {
+            return callCode + "(" + dictLabel + ")";
+        }
+        return callCode;
+    }
+
+    function getActionCode(actionCode, dictLabel) {
+        if (dictLabel != null && dictLabel != '') {
+            return actionCode + "(" + dictLabel + ")";
+        }
+        return actionCode;
+    }
+
+    function initFreeSearch(){
+        var freeSQL = "";
+        $(".freeSearch").each(function(i,n){
+            var obj = $(n);
+            var andOr = obj.children().eq(0).val();//并且与或者
+            var columnInfo = obj.children().eq(1).val();//字段信息
+            var selectOper = obj.children().eq(2).val();//运算符
+            if(columnInfo != null && columnInfo != '' && selectOper != null && selectOper != ''){
+                var columnName = columnInfo.split(",")[0];
+                var columnType = columnInfo.split(",")[1];
+                var tablePrefix = columnInfo.split(",")[4];
+                var columnValue = obj.children().eq(3).children().eq(0).val();
+                if(selectOper == "1" ) {//等于
+                    if(columnValue != null && columnValue != ''){
+                        freeSQL += andOr +" " + tablePrefix +"." +  columnName + " ='" +  columnValue + "' ";
+                    }
+                }else if(selectOper == "2" ) {//包含
+                    if(columnValue != null && columnValue != ''){
+                        freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " like'%" +  columnValue + "%' ";
+                    }
+                }else if(selectOper == "3" ) {//范围
+                    var startValue = columnValue;
+                    var endValue = obj.children().eq(3).children().eq(2).val();
+                    if (columnType == "date_interval") {
+                        if(startValue != null && startValue != ''){
+                            freeSQL += andOr +" " + tablePrefix +"." +  columnName + " >='" +  startValue + "' ";
+                        }
+                        if(endValue != null && endValue != ''){
+                            freeSQL += andOr +" " + tablePrefix +"." +  columnName + " <='" +  endValue + " 23:59:59' ";
+                        }
+                    }else{
+                        if(startValue != null && startValue != ''){
+                            freeSQL += andOr +" " + tablePrefix +"." +  columnName + " >='" +  startValue + "' ";
+                        }
+                        if(endValue != null && endValue != ''){
+                            freeSQL += andOr +" " + tablePrefix +"." +  columnName + " <='" +  endValue + "' ";
+                        }
+                    }
+
+                }else if(selectOper == "4" ) {//不等于
+                    if(columnValue != null && columnValue != ''){
+                        freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " !='" +  columnValue + "' ";
+                    }
+                }else if(selectOper == "5" ) {//开头
+                    if(columnValue != null && columnValue != ''){
+                        freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " like'" +  columnValue + "%' ";
+                    }
+                }else if(selectOper == "6" ) {//结尾
+                    if(columnValue != null && columnValue != ''){
+                        freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " like'%" +  columnValue + "' ";
+                    }
+                }else if(selectOper == "7" ) {//为空
+                    freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " is null ";
+                }else if(selectOper == "8" ) {//不为空
+                    freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " is not null ";
+                }
+            }
+        });
+        $("#freeSQL").val(freeSQL);
+    }
+    function selectSearch(){
+        initFreeSearch();
+        $.table.search();
+    }
+    
+    
+    function findScore() {
+        var ids = $.table.selectFirstColumns().join();
+        if(ids==""){
+            $.modal.alertWarning("请选择需要查询的数据！");
+            return;
+        }
+        window.$.modal.loading("数据加载中，请稍后...");
+        if($.modal.confirm("您确定要查询这些数据吗？",function () {
+                $.ajax({
+                    url: prefix + "/findScore",
+                    type: 'post',
+                    data: {ids:ids},
+                    dataType: "json",
+                    success: function(result) {
+                        // var id = $(".bootstrap-table").find(".table").attr("id");
+                        // $.table.refresh(id);
+                        window.$.modal.closeLoading();
+                        $.table.search();
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown){
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                        console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
+                    }
+                });
+        }));
+
+    }
+</script>
+</body>
+</html>

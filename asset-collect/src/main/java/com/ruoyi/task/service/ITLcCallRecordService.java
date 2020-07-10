@@ -89,6 +89,8 @@ public interface ITLcCallRecordService {
      */
     List<TLcCallRecord> findCallRecordByCaseNo(String caseNo);
 
+    List<TLcCallRecord> findHisDuncaseCallRecordByCaseNo(String caseNo);
+
     List<CallContent> viewCallContent(String id);
 
     public void downRecord(HttpServletRequest request, HttpServletResponse response, String ids);

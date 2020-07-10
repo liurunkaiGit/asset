@@ -32,6 +32,8 @@ public interface CurAssetsPackageMapper
      */
     public List<CurAssetsPackage> selectCurAssetsPackageList(CurAssetsPackage curAssetsPackage);
 
+    public List<CurAssetsPackage> selectHisCurAssetsPackageList(CurAssetsPackage curAssetsPackage);
+
     /**
      * 查询客户资产列表
      *

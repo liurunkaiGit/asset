@@ -78,6 +78,8 @@ public interface TLcCallRecordMapper {
      */
     List<TLcCallRecord> findCallRecordByCaseNo(@Param("caseNo") String caseNo);
 
+    List<TLcCallRecord> findHisDuncaseCallRecordByCaseNo(@Param("caseNo") String caseNo);
+
 
     public List<TLcCallRecord> findListenCallRecord(TLcCallRecord tLcCallRecord);
 

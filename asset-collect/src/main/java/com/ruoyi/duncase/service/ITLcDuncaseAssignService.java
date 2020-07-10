@@ -77,5 +77,7 @@ public interface ITLcDuncaseAssignService {
      */
     List<TLcDuncaseAssign> findDuncaseAssignByCaseNo(String caseNo);
 
+    List<TLcDuncaseAssign> findHisDuncaseAssignByCaseNo(String caseNo);
+
     void batchInsertDuncaseAssign(List<TLcTask> taskList, SysUser sysUser, Integer code);
 }

@@ -47,6 +47,8 @@ public class TLcScore extends BaseEntity
     @Excel(name = "null")
     private String upadteBy;
 
+    private String sendflag;
+
     public void setId(Long id) 
     {
         this.id = id;
@@ -118,6 +120,14 @@ public class TLcScore extends BaseEntity
     public String getUpadteBy() 
     {
         return upadteBy;
+    }
+
+    public String getSendflag() {
+        return sendflag;
+    }
+
+    public void setSendflag(String sendflag) {
+        this.sendflag = sendflag;
     }
 
     @Override
