@@ -18,10 +18,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="taskStatus"    column="task_status"    />
         <result property="createTime"    column="create_time"    />
         <result property="createBy"    column="create_by"    />
+        <result property="remark"    column="remark"    />
     </resultMap>
 
     <sql id="selectTLcBatchCallVo">
-        select id, batch_no, case_no, phone, contact_name, contact_relation, exon_num, org_id, import_batch_no, phone_type, task_status, create_time, create_by from t_lc_batch_call
+        select id, batch_no, case_no, phone, contact_name, contact_relation, exon_num, org_id, import_batch_no, phone_type, task_status, create_time, create_by,remark from t_lc_batch_call
     </sql>
 
     <select id="selectTLcBatchCallList" parameterType="TLcBatchCall" resultMap="TLcBatchCallResult">
@@ -34,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contactRelation != null "> and contact_relation = #{contactRelation}</if>
             <if test="exonNum != null  and exonNum != ''"> and exon_num = #{exonNum}</if>
             <if test="phoneType != null  and phoneType != ''"> and phone_type = #{phoneType}</if>
-            <if test="taskStatus != null "> and task_status = #{taskStatus}</if>
+            <!--<if test="taskStatus != null "> and task_status = #{taskStatus}</if>-->
             <if test="createBy != null "> and create_by = #{createBy}</if>
             <if test="taskStatusList != null and taskStatusList.size() > 0">
                 and task_status in
@@ -66,6 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="taskStatus != null ">task_status,</if>
             <if test="createTime != null ">create_time,</if>
             <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="batchNo != null ">#{batchNo},</if>
@@ -80,6 +82,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="taskStatus != null ">#{taskStatus},</if>
             <if test="createTime != null ">#{createTime},</if>
             <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
          </trim>
     </insert>
 
@@ -98,6 +101,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="taskStatus != null ">task_status = #{taskStatus},</if>
             <if test="createTime != null ">create_time = #{createTime},</if>
             <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
         </trim>
         where id = #{id}
     </update>

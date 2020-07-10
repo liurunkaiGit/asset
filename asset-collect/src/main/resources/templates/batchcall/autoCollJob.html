@@ -1839,7 +1839,7 @@
     /**
      * HangupCall(挂机):座席在释放当前通话
      */
-    function hangUp(phone) {
+    function hangUp() {
         var platform = $("#callPlatform").val();
         if (platform == 'PA') {
             agentClient.hangupCall();

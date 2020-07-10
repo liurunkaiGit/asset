@@ -11,7 +11,6 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -47,10 +46,10 @@ public class TLcBatchCallController extends BaseController
     @GetMapping()
     public String batchcall(ModelMap modelMap)
     {
-        String isCanAutoCall = "1";//可自动外呼
+//        String isCanAutoCall = "1";//可自动外呼
         String deptId = ShiroUtils.getSysUser().getDeptId()+"";
         TLcBatchCallConfig tbcc = this.tLcBatchCallConfigService.selectTLcBatchCallConfigByDeptId(deptId);
-        if(tbcc != null){
+        /*if(tbcc != null){
             long now = DateUtils.getNowDate().getTime();//当前系统时间
             String startTime1 = DateUtils.getDate() + " " + tbcc.getStartTime1() + ":00";
             String endTime1 = DateUtils.getDate() + " " + tbcc.getEndTime1() + ":00";
@@ -81,9 +80,9 @@ public class TLcBatchCallController extends BaseController
                 }
             }
         }
-        logger.info("可自动外呼标志：isCanAutoCall={}",isCanAutoCall);
-        modelMap.put("isCanAutoCall",isCanAutoCall);
-        modelMap.put("tLcBatchCallConfig",tbcc);
+        logger.info("可自动外呼标志：isCanAutoCall={}",isCanAutoCall);*/
+//        modelMap.put("isCanAutoCall",isCanAutoCall);
+        modelMap.put("tLcBatchCallConfig",tbcc);//该部门的批量外呼配置信息
 
         ExtPhone extPhone = new ExtPhone();
         extPhone.setIsused("0");
@@ -98,6 +97,9 @@ public class TLcBatchCallController extends BaseController
             }
         }
         TLcBatchCall tLcBatchCall = new TLcBatchCall();
+        tLcBatchCall.setCreateBy(ShiroUtils.getUserId()+"");
+        //只查询状态为 暂停、外呼中、待外呼 的数据
+        tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.ZT,TLcBatchCall.WHZ,TLcBatchCall.DWH));
         List<TLcBatchCall> batchCallList = tLcBatchCallService.selectTLcBatchCallList(tLcBatchCall);
         if(batchCallList != null && batchCallList.size() > 0){
             modelMap.put("batchCallList", batchCallList);
@@ -117,6 +119,21 @@ public class TLcBatchCallController extends BaseController
     {
         startPage();
         tLcBatchCall.setCreateBy(ShiroUtils.getUserId()+"");
+        //只查询状态为 暂停、外呼中、待外呼 的数据
+        tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.ZT,TLcBatchCall.WHZ,TLcBatchCall.DWH));
+        List<TLcBatchCall> list = tLcBatchCallService.selectTLcBatchCallList(tLcBatchCall);
+        return getDataTable(list);
+    }
+
+    @RequiresPermissions("ruoyi:batchcall:alllist")
+    @PostMapping("/allList")
+    @ResponseBody
+    public TableDataInfo allList(TLcBatchCall tLcBatchCall)
+    {
+        startPage();
+        tLcBatchCall.setCreateBy(ShiroUtils.getUserId()+"");
+        //只查询状态为 暂停、外呼中、待外呼 的数据
+//        tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.ZT,TLcBatchCall.WHZ,TLcBatchCall.DWH));
         List<TLcBatchCall> list = tLcBatchCallService.selectTLcBatchCallList(tLcBatchCall);
         return getDataTable(list);
     }

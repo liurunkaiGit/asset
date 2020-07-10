@@ -17,6 +17,12 @@ public class TLcBatchCall extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
+    public static final int WHZ = 0;//外呼中
+    public static final int DWH = 1;//待外呼
+    public static final int YWC = 2;//已完成
+    public static final int YQX = 3;//已取消
+    public static final int ZT = 4;//暂停
+
     /** 主键ID */
     private Long id;
 
@@ -79,5 +85,9 @@ public class TLcBatchCall extends BaseEntity
      * 状态 汉字
      */
     private String taskStatusStr;
+    /**
+     * 备注
+     */
+    private String remark;
 
 }
