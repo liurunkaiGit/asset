@@ -223,14 +223,18 @@ public class TLcTaskController extends BaseController {
         extPhone.setCallPlatform(ShiroUtils.getSysUser().getPlatform());
         logger.info("查询分机号码开始");
         List<ExtPhone> list = extPhoneService.selectExtPhoneList(extPhone);
-        logger.info("查询分机号码结束");
+        List<String> extNumList = new ArrayList<>();
+                logger.info("查询分机号码结束");
         if (list != null && list.size() > 0) {
             // 分机号码
             modelMap.put("extPhone", list.get(0));
             // 查询外显号码
             logger.info("查询外显号码开始");
-            List<String> extNumList = this.extPhoneService.selectExtNumBySeat(String.valueOf(ShiroUtils.getSysUser().getUserId()), list.get(0).getAgentid(), ShiroUtils.getSysUser().getPlatform());
+            extNumList = this.extPhoneService.selectExtNumBySeat(String.valueOf(ShiroUtils.getSysUser().getUserId()), list.get(0).getAgentid(), ShiroUtils.getSysUser().getPlatform());
             logger.info("查询外显号码结束");
+            modelMap.put("extNumList",StringUtils.join(extNumList,","));
+        } else {
+            modelMap.put("extPhone", extPhone);
             modelMap.put("extNumList",StringUtils.join(extNumList,","));
         }
         modelMap.put("callPlatform", ShiroUtils.getSysUser().getPlatform());
@@ -1006,6 +1010,16 @@ public class TLcTaskController extends BaseController {
         List<TLcTask> list = tLcTaskService.selectTLcTaskByPage(tLcTask);
         ExcelUtil<TLcTask> util = new ExcelUtil<TLcTask>(TLcTask.class);
         return util.exportExcel(list, "task");
+    }
+
+    /**
+     * 坐席推送机器人申请
+     */
+    @PostMapping("/sendRobotApply")
+    @ResponseBody
+    public Response sendRobotApply(String taskIds) {
+        this.tLcTaskService.sendRobotApply(taskIds);
+        return Response.success(taskIds.split(",").length);
     }
 
     /**
