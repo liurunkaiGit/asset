@@ -146,8 +146,8 @@ public class TLcBatchCallServiceImpl implements ITLcBatchCallService
                 tLcBatchCall.setExonNum(exonNum);//外显号码
                 tLcBatchCall.setOrgId(orgId);//委托结构ID
                 tLcBatchCall.setImportBatchNo(tLcCustContact.getImportBatchNo());//案件导入批次号
-                tLcBatchCall.setPhoneType("1");//手机
-                tLcBatchCall.setTaskStatus(1);//待外呼
+                tLcBatchCall.setPhoneType(TLcBatchCall.SHOUJI);//手机
+                tLcBatchCall.setTaskStatus(TLcBatchCall.DWH);//待外呼
                 tLcBatchCall.setCreateTime(new Date());
                 tLcBatchCall.setCreateBy(ShiroUtils.getUserId().toString());
                 this.tLcBatchCallMapper.insertTLcBatchCall(tLcBatchCall);
@@ -158,7 +158,7 @@ public class TLcBatchCallServiceImpl implements ITLcBatchCallService
                     tLcBatchCall.setContactName(tLcCustContact.getContactName());
                     tLcBatchCall.setContactRelation(tLcCustContact.getRelation());*/
                     tLcBatchCall.setPhone(tLcCustContact.getTel());//固话
-                    tLcBatchCall.setPhoneType("2");//固话
+                    tLcBatchCall.setPhoneType(TLcBatchCall.GUHUA);//固话
                     /*tLcBatchCall.setTaskStatus(1);//待外呼
                     tLcBatchCall.setCreateTime(new Date());
                     tLcBatchCall.setCreateBy(ShiroUtils.getUserId().toString());*/

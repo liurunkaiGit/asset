@@ -95,9 +95,12 @@ public class TLcBatchCallController extends BaseController
                 modelMap.put("extPhone", list.get(0));
                 // 查询外显号码
             }
+        }else{
+            modelMap.put("extPhone", new ExtPhone());
         }
         TLcBatchCall tLcBatchCall = new TLcBatchCall();
         tLcBatchCall.setCreateBy(ShiroUtils.getUserId()+"");
+        tLcBatchCall.setOrgId(ShiroUtils.getSysUser().getOrgId()+"");
         //只查询状态为 暂停、外呼中、待外呼 的数据
         tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.ZT,TLcBatchCall.WHZ,TLcBatchCall.DWH));
         List<TLcBatchCall> batchCallList = tLcBatchCallService.selectTLcBatchCallList(tLcBatchCall);
@@ -119,10 +122,18 @@ public class TLcBatchCallController extends BaseController
     {
         startPage();
         tLcBatchCall.setCreateBy(ShiroUtils.getUserId()+"");
+        tLcBatchCall.setOrgId(ShiroUtils.getSysUser().getOrgId()+"");
         //只查询状态为 暂停、外呼中、待外呼 的数据
         tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.ZT,TLcBatchCall.WHZ,TLcBatchCall.DWH));
         List<TLcBatchCall> list = tLcBatchCallService.selectTLcBatchCallList(tLcBatchCall);
         return getDataTable(list);
+    }
+
+    @RequiresPermissions("ruoyi:batchcall:view")
+    @GetMapping("/all")
+    public String batchcallAll(ModelMap modelMap)
+    {
+        return prefix + "/batchcallall";
     }
 
     @RequiresPermissions("ruoyi:batchcall:alllist")
@@ -131,7 +142,7 @@ public class TLcBatchCallController extends BaseController
     public TableDataInfo allList(TLcBatchCall tLcBatchCall)
     {
         startPage();
-        tLcBatchCall.setCreateBy(ShiroUtils.getUserId()+"");
+//        tLcBatchCall.setCreateBy(ShiroUtils.getUserId()+"");
         //只查询状态为 暂停、外呼中、待外呼 的数据
 //        tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.ZT,TLcBatchCall.WHZ,TLcBatchCall.DWH));
         List<TLcBatchCall> list = tLcBatchCallService.selectTLcBatchCallList(tLcBatchCall);
@@ -298,7 +309,7 @@ public class TLcBatchCallController extends BaseController
      * @return
      */
     @GetMapping(value = "/toAutoCollJob")
-    public String toCollJob(String importBatchNo, String caseNo, String orgId, String exonNum,ModelMap modelMap) {
+    public String toCollJob(String importBatchNo, String caseNo, String orgId, String exonNum,ModelMap modelMap,String id) {
 //        modelMap.put("tLcTask", tLcTask);
         modelMap.put("currentCaseNo", caseNo);
         modelMap.put("currentImportBatchNo", importBatchNo);
@@ -318,6 +329,8 @@ public class TLcBatchCallController extends BaseController
                 // 查询外显号码
             }
         }
+        TLcBatchCall tLcBatchCall = this.tLcBatchCallService.selectTLcBatchCallById(Long.parseLong(id));
+        modelMap.put("batchCall", tLcBatchCall);
         modelMap.put("callPlatform", ShiroUtils.getSysUser().getPlatform());
         return prefix + "/autoCollJob";
     }

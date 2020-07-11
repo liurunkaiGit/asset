@@ -686,20 +686,13 @@
 <th:block th:include="include :: ztree-js"/>
 <th:block th:include="include :: datetimepicker-js" />
 <script th:inline="javascript">
-    // var currentCertificateNo; // 点击上一条和下一条按钮时使用，记录当前的客户的证件编号
-    var currentCaseNo; // 点击上一条和下一条按钮时使用，记录当前的案件编号
-    var currentImportBatchNo; // 点击上一条和下一条按钮时使用，记录当前的案件编号
-    var currentOrgId; // 点击上一条和下一条按钮时使用，记录当前的案件编号
+    var currentCaseNo; //记录当前的案件编号
+    var currentImportBatchNo; // 记录当前的案件编号
+    var currentOrgId; // 记录当前的案件编号
     var currentCertificateNo; //新增联系人时使用
-    // var allCertificateNo = new Array(); // 点击上一条和下一条按钮时使用，存放所有客户的证件编号
-    var allCaseNo = new Array(); // 点击上一条和下一条按钮时使用，存放所有案件编号
-    var allOrgId = new Array(); // 点击上一条和下一条按钮时使用，存放所有机构号
-    var allImportBatchNo = new Array(); // 点击上一条和下一条按钮时使用，存放所有案件导入批次号
     var currentTaskId;
-    //var currentDuncaseNo;
-    var editFlag = [[${@permission.hasPermi('system:user:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('system:user:remove')}]];
-    var resetPwdFlag = [[${@permission.hasPermi('system:user:resetPwd')}]];
+    var currentDuncaseNo;
+    var batchCall = [[${batchCall}]];//当前拨打电话的信息
     var prefix = ctx + "collect/task";
     var duncaseActionPrefix = ctx + "collect/duncase/action";
     var contactPrefix = ctx + "collect/cust/contact";
@@ -707,7 +700,7 @@
     var robotPrefix = ctx + "collect/robot";
     var curAssetsPrefix = ctx + "import/assets";
 
-    var agentClient = parent.agentClient;
+    var agentClient = parent.agentClient;//得到父页面的打电话的初始化对象
     var recordFile = null;
     var startTime = null;
     var endTime = null;
@@ -719,8 +712,6 @@
             panehHidden = true;
         }
         $('body').layout({initClosed: panehHidden, west__size: 185});
-        // 查询左边客户列表并显示第一个客户的数据
-        // findTaskByOwner(startNum,pageSize);
         collJobDetail($("#firstEnterCaseNo").val(),$("#orgId").val(),$("#firstImportBatchNo").val());
         // 初始化行动码下拉框
         // initActionCode();
@@ -749,7 +740,7 @@
             $("#platformName").text("平安话务平台");
         }
 
-        initial2();
+        // initial2();
     });
 
 
@@ -858,29 +849,30 @@
                     // 添加table数据x
                     var tp = $("#custContactTbody");
                     $.each(data, function (i, n) {
-                        if(n.isClose != null  && n.isClose == '1'){
-                            if (n.phone != null && n.phone.length > 4) {
-                                tp.append("<tr onclick='changeColor(this);'>" +
-                                    "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose'/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+n.phone+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
-                                    "<td  style='width: 30px;'></td><td style='width: 30px;'></td></tr>");
-                            }
-                            if (n.tel != null && n.tel.length > 4) {
-                                tp.append("<tr onclick='changeColor(this);'>" +
-                                    "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose'/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+n.tel+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
-                                    "<td style='width: 30px;'></td><td style='width: 30px;'></td></tr>");
-                            }
-                        }else if(n.isClose != null  && n.isClose == '0'){
+                        if(n.isClose != null  && n.isClose == '0'){
                             if (n.phone != null && n.phone.length >4) {
-                                tp.append("<tr onclick='changeColor(this);'>" +
-                                    "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose'/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+n.phone+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
-                                    "<td class='disclass'  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='call("+JSON.stringify(n.contactName)+","+n.id+","+n.relation+","+n.phone+")'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>"+"</td>" +
-                                    "<td  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='hangUp("+n.phone+")'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>"+"</td></tr>");
+                                if(n.phone == batchCall.phone && n.contactName == batchCall.contactName){//当前拨打的联系人记录
+                                    tp.append("<tr onclick='changeColor(this);'>" +
+                                        "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose'/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+n.phone+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
+                                        "<td class='disclass'  style='width: 30px;'></td>" +
+                                        "<td  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='hangUp("+n.phone+")'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>"+"</td></tr>");
+                                }else{
+                                    tp.append("<tr onclick='changeColor(this);'>" +
+                                        "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose'/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+n.phone+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
+                                        "<td  style='width: 30px;'></td><td style='width: 30px;'></td></tr>");
+                                }
                             }
                             if (n.tel != null && n.tel.length > 4) {
-                                tp.append("<tr onclick='changeColor(this);'>" +
-                                    "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose'/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+n.tel+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
-                                    "<td class='disclass'  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='call("+JSON.stringify(n.contactName)+","+n.id+","+n.relation+","+n.tel+")'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>"+"</td>" +
-                                    "<td  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='hangUp("+n.tel+")'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>"+"</td></tr>");
+                                if(n.tel == batchCall.phone && n.contactName == batchCall.contactName) {//当前拨打的联系人记录
+                                    tp.append("<tr onclick='changeColor(this);'>" +
+                                        "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose'/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+n.tel+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
+                                        "<td class='disclass'  style='width: 30px;'></td>" +
+                                        "<td  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='hangUp("+n.tel+")'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>"+"</td></tr>");
+                                }else{
+                                    tp.append("<tr onclick='changeColor(this);'>" +
+                                        "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose'/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+n.phone+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
+                                        "<td  style='width: 30px;'></td><td style='width: 30px;'></td></tr>");
+                                }
                             }
                         }
                     });
@@ -1584,147 +1576,6 @@
                 );
             }
         }};
-
-    function initial1() {
-        var agentId = $("#agentId").val();
-        if(agentId==null || agentId==''){
-            $.modal.msgWarning("请选择分机");
-            return;
-        }
-        var extPhone = [[${extPhone}]];
-        var platform = $("#callPlatform").val();
-        if (platform == 'PA') {
-            var skillDesc = extPhone.skilldesc;
-            var dialPrefix = extPhone.dialprefix;
-            var dialCaller = $("#exonNum").val();
-            var proxyUrl = extPhone.proxyUrl;
-            initial2(agentId,skillDesc,dialPrefix,dialCaller,proxyUrl);
-        } else if (platform == 'ZJ') {
-            var agent = $("#agentId").val(); //坐席工号
-            // var pwd = "1234"; //登录密码
-            var pwd = extPhone.password;
-            var extno = $("#agentId").val(); //登录分机号
-            // var domain = 'huadao'; //企业编号或域名
-            var domain = extPhone.domain; //企业编号或域名
-            var host = extPhone.proxyUrl.split(":")[0];
-            var port = extPhone.proxyUrl.split(":")[1];
-            // uKeFuSoftPhone.Initial("172.18.100.1","8088","0","0","0",Event);
-            console.log("pwd="+pwd+",domain="+domain+",host="+host+",port="+port);
-            uKeFuSoftPhone.Initial(host,port,"0","0","0",Event,domain);
-            console.log("初始化成功");
-            // 每次登陆之前先退出，然后再进行登录
-            uKeFuSoftPhone.AgentLogout(agent,domain, extno, pwd);
-            // console.log("---html退出成功---");
-            // uKeFuSoftPhone.AgentLogin(agent, extno, pwd, domain);
-            // console.log("---html登录成功---");
-
-        }
-    }
-
-    function initial2(agentId,skillDesc,dialPrefix,dialCaller,proxyUrl) {
-        /*agentClient = new AgentClient({
-            autoAnswer: true,
-            acwTime: 3000,
-            agentId: agentId,
-            agentDn: agentId,
-            agentName: agentId,
-            agentType: 1,
-            skillDesc: skillDesc,
-            proxyUrl: proxyUrl,
-            dialPrefix:dialPrefix,
-            dialCaller:dialCaller
-        });*/
-        agentClient.onOnline = function(event) {
-            printEvent('onOnline', event);
-        };
-
-        agentClient.onOffline = function(event) {
-            printEvent('onOffline', event);
-        };
-
-        agentClient.onStatusChanged = function(event) {
-            printEvent('onStatusChanged', event);
-        };
-
-        agentClient.onDialing = function(event) {
-            printEvent('onDialing', event);
-        };
-
-        agentClient.onOffering = function(event) {
-            printEvent('onOffering', event);
-        };
-
-        agentClient.onConnected = function(event) {
-            printEvent('onConnected', event);
-        };
-
-        agentClient.onReleased = function(event) {
-            printEvent('onReleased', event);
-        };
-
-        agentClient.onRecordEnd = function(event) {
-            resetTiming();
-            var freeCallFlag = $("#freeCallFlag").val();
-            printEvent('onRecordEnd', event);
-            recordFile = event.recordFile;
-            startTime = event.recordTime;
-            endTime = event.startTime;
-            recordDuration = String(event.recordDuration);
-            console.log("平安录音返回信息recordFile="+event.recordFile+",recordTime="+event.recordTime+",startTime="+event.startTime+",recordDuration="+event.recordDuration+",currentCaseNo="+currentCaseNo);
-            // 直接保存点催记录
-            var val = $('input[name="radioChoose"]:checked').parents("tr");
-            // if(freeCallFlag==null || freeCallFlag==""){
-            $.post(
-                prefix + "/addCallRecord",
-                {
-                    id:$("#callRecordId").val(),
-                    // certificateNo:val.find("[name='hideCerNo']").html(),
-                    contactName:val.find("[name='contactName']").html(),
-                    phone:val.find("[name='phone']").html(),
-                    contactRelation:val.find("[name='hidRelation']").html(),
-                    callSign:'R01',
-                    callStartTime:startTime,
-                    callEndTime:endTime,
-                    callLen:recordDuration,
-                    callRadioLocation:recordFile,
-                    caseNo:currentCaseNo,
-                    // remark:callRemark,
-                    importBatchNo:currentImportBatchNo,
-                    orgId:currentOrgId,
-                    // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
-                    sendRadioCheck:1
-                },
-                function(data) {
-                    // alert(JSON.stringify(data));
-                    if (data.status == 200) {//请求成功
-                        // $.modal.alertSuccess("保存成功");
-                        //collJobDetail(data.result);
-                        $("#callStartTime").val("");
-                        $("#callEndTime").val("");
-                        $("#callLen").val("");
-                        $("#callRadioLocation").val("");
-                        $("#callCode").val("");
-                        $("#callRemarkAdd").val("");
-                        $("#callRecordId").val(data.result);
-                        if($('#call').val() == '1') {
-                            callRecordList(currentCaseNo);
-                        }
-                    }
-                }
-            );
-        };
-
-        agentClient.onError = function(event) {
-            printEvent('onError', event);
-        };
-
-        agentClient.start();
-
-        function printEvent(handler, event) {
-            console.log(handler + ': ' + JSON.stringify(event, null, 4) + '\n\n');
-        }
-
-    }
 
     function getDestType(destDesc) {
         var destType = 3;

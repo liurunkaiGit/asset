@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <th:block th:include="include :: header('修改批量外呼')" />
+    <th:block th:include="include :: footer" />
     <th:block th:include="include :: datetimepicker-css" />
 </head>
 <body class="white-bg">
@@ -80,7 +81,6 @@
             </div>
         </form>
     </div>
-    <th:block th:include="include :: footer" />
     <th:block th:include="include :: datetimepicker-js" />
     <script type="text/javascript">
         var prefix = ctx + "ruoyi/batchcallconfig";

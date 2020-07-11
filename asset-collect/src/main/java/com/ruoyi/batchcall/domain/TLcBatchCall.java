@@ -23,6 +23,10 @@ public class TLcBatchCall extends BaseEntity
     public static final int YQX = 3;//已取消
     public static final int ZT = 4;//暂停
 
+    public static final String SHOUJI = "1";
+    public static final String GUHUA = "2";
+
+
     /** 主键ID */
     private Long id;
 
@@ -81,10 +85,6 @@ public class TLcBatchCall extends BaseEntity
      * 案件导入批次编号
      */
     private String importBatchNo;
-    /**
-     * 状态 汉字
-     */
-    private String taskStatusStr;
     /**
      * 备注
      */

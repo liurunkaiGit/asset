@@ -9,6 +9,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.framework.util.ShiroUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,6 +49,8 @@ public class TLcBatchCallConfigController extends BaseController
     public TableDataInfo list(TLcBatchCallConfig tLcBatchCallConfig)
     {
         startPage();
+        String orgId = ShiroUtils.getSysUser().getOrgId()+"";
+        tLcBatchCallConfig.setOrgId(orgId);
         List<TLcBatchCallConfig> list = tLcBatchCallConfigService.selectTLcBatchCallConfigList(tLcBatchCallConfig);
         return getDataTable(list);
     }
