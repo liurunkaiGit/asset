@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta http-equiv="Cache-Control" content="no-store">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link th:href="@{/css/agentcss/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/agentcss/agent-toolbar.css}" rel="stylesheet"/>
+
+    <!--[if lt IE 9]>
+    <script th:src="@{/ajax/libs/agentjs/html5shiv.min.js}"></script>
+    <script th:src="@{/ajax/libs/agentjs/respond.min.js}"></script>
+    <![endif]-->
+
+
+    <script th:src="@{/ajax/libs/agentjs/jquery.min.js}"></script>
+    <script th:src="@{/ajax/libs/agentjs/socket.io.min.js}"></script>
+    <script th:src="@{/ajax/libs/agentjs/agent-client.js}"></script>
+    <script th:src="@{/ajax/libs/agentjs/moment.min.js}"></script>
+    <script th:src="@{/ajax/libs/agentjs/agent-toolbar.js}"></script>
+
+    <th:block th:include="include :: header('批量外呼任务管理列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <input type="hidden" id="isCanAutoCall" name="isCanAutoCall" th:value="${isCanAutoCall}">
+                            <!--<input type="hidden" id="agentId" name="agentId" th:value="${extPhone.agentid}">-->
+                            <input type="hidden" id="callPlatform" name="callPlatform" th:value="${callPlatform}">
+                            <input type="hidden" id="exonNum" name="exonNum" value="">
+
+                            <!--<input type="hidden" id="currentPhone" name="curentPhone" value="">
+                            <input type="hidden" id="currentContactName" name="currentContactName" value="">
+                            <input type="hidden" id="currentContactRelation" name="currentContactRelation" value="">
+
+                            <input type="hidden" id="currentCaseNo" name="currentCaseNo" value="">
+                            <input type="hidden" id="currentImportBatchNo" name="currentImportBatchNo" value="">
+                            <input type="hidden" id="currentOrgId" name="currentOrgId" value="">-->
+                            <li>
+                                <p>机构案件号：</p>
+                                <input type="text" name="caseNo"/>
+                            </li>
+                            <li>
+                                <p>电话号码：</p>
+                                <input type="text" name="phone"/>
+                            </li>
+                            <li>
+                                <p>联系人姓名：</p>
+                                <input type="text" name="contactName"/>
+                            </li>
+                            <li>
+                                <p>与本人关系：</p>
+                                <input type="text" name="contactRelation"/>
+                            </li>
+                            <li>
+                                <p>任务状态：</p>
+                                <select name="taskStatus">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <button type="button" class="btn btn-success" onclick="pauseCall()">暂停</button>
+                <button type="button" class="btn btn-success" onclick="startCall()">启动</button>
+                <button type="button" class="btn btn-success" onclick="cancleCall()">取消任务</button>
+                <button type="button" class="btn btn-success" onclick="isCanCall()">拨打</button>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="callingContent" class="table table-hover" style="margin-bottom:0px;">
+
+                </table>
+                <table id="bootstrap-table"></table>
+            </div>
+
+        </div>
+
+         <div class="modal inmodal" id="myModal2" tabindex="-2" role="dialog" aria-hidden="true">
+             <div class="modal-dialog">
+                 <div class="modal-content animated flipInY">
+                     <div class="modal-header">
+                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+                         </button>
+                         <i class="fa fa-mobile-phone modal-icon"></i>
+                         <h4 class="modal-title">初始化窗口</h4>
+                     </div>
+                     <div class="modal-body" style="height: 250px;">
+                         <input id="callRecordId" name="callRecordId" class="form-control" type="text">
+                         <div class="form-group">
+                             <label class="col-sm-3 control-label">分机号码：</label>
+                             <div class="col-sm-8">
+                                 <input id="agentId" name="agentId" class="form-control" type="text" th:value="${extPhone.agentid}">
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label class="col-sm-3 control-label">坐席技能：</label>
+                             <div class="col-sm-8">
+                                 <input id="skillDesc" name="skillDesc" class="form-control" type="text">
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label class="col-sm-3 control-label">外呼前缀：</label>
+                             <div class="col-sm-8">
+                                 <input id="dialPrefix" name="dialPrefix" class="form-control" type="text">
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label class="col-sm-3 control-label">外显号码：</label>
+                             <div class="col-sm-8">
+                                 <input id="dialCaller" name="dialCaller" class="form-control" type="text">
+                             </div>
+                         </div>
+                         <div class="form-group" style="display: none">
+                             <label class="col-sm-3 control-label">代理地址：</label>
+                             <div class="col-sm-8">
+                                 <input id="proxyUrl" name="proxyUrl" class="form-control" type="text">
+                             </div>
+                         </div>
+                         <div class="form-group" style="display: none">
+                             <label class="col-sm-3 control-label">通话开始时间：</label>
+                             <div class="col-sm-8">
+                                 <input id="callStartTime" name="callStartTime" class="form-control" type="text">
+                             </div>
+                         </div>
+                         <div class="form-group" style="display: none">
+                             <label class="col-sm-3 control-label">通话结束时间：</label>
+                             <div class="col-sm-8">
+                                 <input id="callEndTime" name="callEndTime" class="form-control" type="text">
+                             </div>
+                         </div>
+                         <div class="form-group" style="display: none">
+                             <label class="col-sm-3 control-label">通话时长：</label>
+                             <div class="col-sm-8">
+                                 <input id="callLen" name="callLen" class="form-control" type="text">
+                             </div>
+                         </div>
+                         <div class="form-group" style="display: none">
+                             <label class="col-sm-3 control-label">录音文件地址：</label>
+                             <div class="col-sm-8">
+                                 <input id="callRadioLocation" name="callRadioLocation" class="form-control" type="text">
+                             </div>
+                         </div>
+
+                     </div>
+                     <div class="modal-footer">
+                         <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                         <!--<button type="button" class="btn btn-primary" onclick="initial();">保存</button>-->
+                     </div>
+                 </div>
+             </div>
+         </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('ruoyi:batchcall:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('ruoyi:batchcall:remove')}]];
+        var phoneTypes = [[${@dict.getType('phone_type')}]];
+        var batchCallStatus = [[${@dict.getType('batch_call_status')}]];
+        var prefix = ctx + "ruoyi/batchcall";
+        var collectPrefix = ctx + "collect/task";
+        var batchCallList = [[${batchCallList}]];
+        var exonNum ;//外显号码
+        if(batchCallList != null){
+            exonNum = batchCallList[0].exonNum;//因为创建外呼任务的时候就选择了外显号码，是唯一的，所以取第一条数据的外显号码，既是所有数据的外显号码值
+        }
+        $("#exonNum").val(exonNum);//同一批次只会有一个外显号码
+        var indexCall = 0;//从第1条开始拨打
+        var callRecordId = "";//电催记录ID，当前页面拨打之后，会赋值，然后作业页面挂电话，下电话码等操作的时候 会用到
+        var isCall = "1";//默认是1，可以外呼，0 不能外呼 ,用于页面暂停、启动操作之后，是否自动打电话
+        var currentCall ;//当前拨打 处理中的记录
+        var tbcc = [[${tLcBatchCallConfig}]];//批量外呼配置信息
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "批量外呼任务管理",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '主键ID',
+                    visible: false
+                },
+                {
+                    field : 'caseNo',
+                    title : '案件号',
+                    visible: false
+                },
+                {
+                    field : 'importBatchNo',
+                    title : '批次号',
+                    visible: false
+                },
+                {
+                    field : 'orgId',
+                    title : '委托机构ID',
+                    visible: false
+                },
+                {
+                    field : 'batchNo', 
+                    title : '批次号'
+                },
+                {
+                    field : 'caseNo', 
+                    title : '案件号'
+                },
+                {
+                    field : 'phone', 
+                    title : '电话号码'
+                },
+                {
+                    field : 'contactName', 
+                    title : '联系人姓名'
+                },
+                {
+                    field : 'contactRelation', 
+                    title : '与本人关系'
+                },
+                {
+                    field : 'exonNum',
+                    title : '外显号码'
+                },
+                {
+                    field : 'phoneType', 
+                    title : '电话类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(phoneTypes, value);
+                    }
+                },
+                {
+                    field : 'taskStatus', 
+                    title : '任务状态',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(batchCallStatus, value);
+                    }
+                }]
+            };
+            $.table.init(options);
+            //表格加载完成之后，会触及此方法
+            /*$('#bootstrap-table').on('load-success.bs.table', function (e,data) {
+                // alert(JSON.stringify(data.rows));
+                var isCanAutoCall = $("#isCanAutoCall").val();
+                if("1" == isCanAutoCall && batchCallArray.length > 0){//可自动外呼
+                    var obj = batchCallArray[0]
+                }
+            });*/
+            if(batchCallList != null){//只有有外呼任务的时候，才会初始化
+                initial1();//初始化打电话的JS
+            }
+        });
+
+        function openAutoCollJob(caseNo,importBatchNo,orgId,exonNum,id) {
+            var toAutoCollJobUrl = prefix + '/toAutoCollJob?orgId='+orgId +'&caseNo='+caseNo +'&importBatchNo='+importBatchNo+'&exonNum='+exonNum+'&id='+id;
+            var width = "800";
+            var height = $(window).height() - 50;
+            layer.open({
+                type: 2,
+                maxmin: true,
+                shade: 0.3,
+                title: "催收记录 | " + caseNo,
+                fix: false,
+                area: [width + 'px', height + 'px'],
+                content: toAutoCollJobUrl,
+                shadeClose: true,
+                btn: ['关闭'],
+                /*yes: function (index, layero) {//关闭按钮监听事件
+                    layer.close(index);
+                    alert("点击X 关闭");
+                    toNextCall();
+                },*/
+                cancel: function (index, layero) {//点击空白处
+
+                },
+                end:function (index, layero) {//点击窗口的x
+                    layer.close(index);
+                    // alert("点击关闭按钮");
+                    toNextCall();
+                }
+            });
+        }
+        // 进行下一条 拨打
+        function toNextCall() {
+            //把结束的通话设置为 已完成
+            hangUp();//挂断电话
+            updateStatus(currentCall.id,2,"电话已挂断");
+            if(indexCall < batchCallList.length){//还有下一条了
+                var nextBatchCall;
+                var tmpIndex = 0;//
+                if(tbcc.isCallOther == '0'){//批量配置为：本人接通后是否继续拨打本案其他号码：0 不呼叫
+                    //循环遍历当前 批量外呼数组，把本人的其他联系人拨打信息，都给踢出，然后继续拨打下一条非本人的信息
+                    for(var i = 0;i < batchCallList.length; i ++){
+                        var bc = batchCallList[i];
+                        if(bc.caseNo == currentCall.caseNo && bc.importBatchNo == currentCall.importBatchNo && bc.contactRelation != 1){//相同案件号和批次号，且联系人关系 非本人
+                            updateStatus(bc.id,3,"配置为本人拨打成功后，不拨打其他，状态置为取消");//状态修改为  已取消
+                        }
+                        //状态为待外呼，且是本人,且不是本案件，只有为0，第一次的时候，找到下一条要拨打的数据
+                        if(bc.taskStatus == 1 && bc.contactRelation == 1 && bc.caseNo != currentCall.caseNo && tmpIndex == 0){
+                            nextBatchCall = bc;
+                            indexCall = i;//数组全局序号 ，让下一次打电话取数据用
+                            tmpIndex ++;
+                        }
+                    }
+                    call(nextBatchCall);
+                }else{
+                    nextBatchCall = batchCallList[indexCall];
+                    call(nextBatchCall);
+                }
+            }else{
+                $.modal.alert("自动呼叫队列已呼叫完毕");
+            }
+        }
+
+        function initial1() {
+            var agentId = $("#agentId").val();
+            if(agentId==null || agentId==''){
+                $.modal.msgWarning("请选择分机");
+                return;
+            }
+            var extPhone = [[${extPhone}]];
+            var platform = $("#callPlatform").val();
+            if (platform == 'PA') {
+                var skillDesc = extPhone.skilldesc;
+                var dialPrefix = extPhone.dialprefix;
+                var dialCaller = exonNum;
+                var proxyUrl = extPhone.proxyUrl;
+                initial2(agentId,skillDesc,dialPrefix,dialCaller,proxyUrl);
+            } else if (platform == 'ZJ') {
+                var agent = $("#agentId").val(); //坐席工号
+                // var pwd = "1234"; //登录密码
+                var pwd = extPhone.password;
+                var extno = $("#agentId").val(); //登录分机号
+                // var domain = 'huadao'; //企业编号或域名
+                var domain = extPhone.domain; //企业编号或域名
+                var host = extPhone.proxyUrl.split(":")[0];
+                var port = extPhone.proxyUrl.split(":")[1];
+                // uKeFuSoftPhone.Initial("172.18.100.1","8088","0","0","0",Event);
+                console.log("pwd="+pwd+",domain="+domain+",host="+host+",port="+port);
+                uKeFuSoftPhone.Initial(host,port,"0","0","0",Event,domain);
+                console.log("初始化成功");
+                // 每次登陆之前先退出，然后再进行登录
+                uKeFuSoftPhone.AgentLogout(agent,domain, extno, pwd);
+            }
+        }
+
+        var agentClient = null;
+        var recordFile = null;
+        var startTime = null;
+        var endTime = null;
+        var recordDuration = null;
+        function initial2(agentId,skillDesc,dialPrefix,dialCaller,proxyUrl) {
+            agentClient = new AgentClient({
+                autoAnswer: true,
+                acwTime: 3000,
+                agentId: agentId,
+                agentDn: agentId,
+                agentName: agentId,
+                agentType: 1,
+                skillDesc: skillDesc,
+                proxyUrl: proxyUrl,
+                dialPrefix:dialPrefix,
+                dialCaller:dialCaller
+            });
+            console.log("初始化成功")
+            agentClient.onOnline = function(event) {
+                printEvent('onOnline', event);
+            };
+
+            agentClient.onOffline = function(event) {
+                printEvent('onOffline', event);
+            };
+
+            agentClient.onStatusChanged = function(event) {
+                printEvent('onStatusChanged', event);
+            };
+
+            agentClient.onDialing = function(event) {
+                printEvent('onDialing', event);
+            };
+
+            agentClient.onOffering = function(event) {
+                printEvent('onOffering', event);
+            };
+
+            agentClient.onConnected = function(event) {//电话接通
+                printEvent('onConnected', event);
+                var caseNo = currentCall.caseNo;
+                var importBatchNo = currentCall.importBatchNo;
+                var orgId = currentCall.orgId;
+                var exonNum = currentCall.exonNum;
+                var id = currentCall.id;
+                openAutoCollJob(caseNo,importBatchNo,orgId,exonNum,id);
+            };
+
+            agentClient.onReleased = function(event) {
+                printEvent('onReleased', event);
+            };
+
+            agentClient.onRecordEnd = function(event) {
+                // resetTiming();
+                printEvent('onRecordEnd', event);
+                recordFile = event.recordFile;
+                startTime = event.recordTime;
+                endTime = event.startTime;
+                recordDuration = String(event.recordDuration);
+                console.log("平安录音返回信息recordFile="+event.recordFile+",recordTime="+event.recordTime+",startTime="+event.startTime+",recordDuration="+event.recordDuration+",currentCaseNo="+currentCall.caseNo);
+                // 直接保存点催记录
+                // var val = $('input[name="radioChoose"]:checked').parents("tr");
+                $.post(
+                    collectPrefix + "/addCallRecord",
+                    {
+                        id:$("#callRecordId").val(),
+                        // certificateNo:val.find("[name='hideCerNo']").html(),
+                        contactName:currentCall.contactName,
+                        phone:currentCall.phone,
+                        contactRelation:currentCall.contactRelation,
+                        callSign:'R01',
+                        callStartTime:startTime,
+                        callEndTime:endTime,
+                        callLen:recordDuration,
+                        callRadioLocation:recordFile,
+                        caseNo:currentCall.caseNo,
+                        // remark:callRemark,
+                        importBatchNo:currentCall.importBatchNo,
+                        orgId:currentCall.orgId,
+                        // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
+                        sendRadioCheck:1
+                    },
+                    function(data) {
+                        // alert(JSON.stringify(data));
+                        if (data.status == 200) {//请求成功
+                            // $.modal.alertSuccess("保存成功");
+                            $("#callStartTime").val("");
+                            $("#callEndTime").val("");
+                            $("#callLen").val("");
+                            $("#callRadioLocation").val("");
+                            $("#callCode").val("");
+                            $("#callRemarkAdd").val("");
+                            $("#callRecordId").val(data.result);
+                            /*if($('#call').val() == '1') {
+                                callRecordList(currentCaseNo);
+                            }*/
+                        }
+                    }
+                );
+            };
+
+            agentClient.onError = function(event) {
+                printEvent('onError', event);
+            };
+
+            agentClient.start();
+
+            function printEvent(handler, event) {
+                console.log(handler + ': ' + JSON.stringify(event, null, 4) + '\n\n');
+            }
+            //电话初始完毕之后，停2秒之后，自动开始拨打第一条
+            window.setTimeout(function() {
+                var batchCall = batchCallList[indexCall];
+                call(batchCall);
+            },2000);
+        }
+
+        /**
+         * @description CallOut(外呼):座席主动出局语音呼叫
+         * @param pnumber:被叫号码
+         */
+        function call(batchCall) {
+            // var batchCall = batchCallList[0];
+            if(!isCanCallByTime()){
+                $.modal.alert("不在可外呼时间段内，请等到可外呼时间刷新页面再外呼");
+                return;
+            }
+            fuzhi(batchCall);
+            var contactName = batchCall.contactName;
+            var contactRelation = batchCall.contactRelation;
+            var phone = batchCall.phone;
+            var exonNum = batchCall.exonNum;
+            var currentCaseNo = batchCall.caseNo;
+            var currentImportBatchNo = batchCall.importBatchNo;
+            var currentOrgId = batchCall.orgId;
+            var callStartTime = $("#callStartTime").val();
+            var callEndTime = $("#callEndTime").val();
+            var callLen = $("#callLen").val();
+            var callRadioLocation = $("#callRadioLocation").val();
+
+            if(callRadioLocation!=""&&callRadioLocation!=null){
+                $.modal.alert("请保存通话记录再拨打电话");
+                return;
+            }
+            var agentId = $("#agentId").val();
+            if (agentId == null || agentId == '') {
+                $.modal.alert("分机号码为空，请先绑定坐席");
+                return;
+            }
+            // var exonNum = $("#exonNum").val();
+            if (exonNum == null || exonNum == '') {
+                $.modal.alert("请选择外显号码");
+                return;
+            }
+            var callPlatform = $("#callPlatform").val();
+            if (callPlatform == null || callPlatform == '') {
+                $.modal.alert("请配置当前机构的话务平台");
+                return;
+            }
+
+            var destDesc = "0"+phone;
+            if(callPlatform == 'PA') {
+                if (destDesc) {
+                    agentClient.makeCall(getDestType(destDesc), destDesc);
+                    indexCall = indexCall + 1;//变量+1，以备拨打下一条
+                }
+            } else if(callPlatform == 'ZJ') {
+                // 第一个参数是呼叫号码，第二个参数是外显号码
+                uKeFuSoftPhone.CallOut(phone,$('#exonNum').val());
+            }
+            // start();
+            // var val = $('input[name="radioChoose"]:checked').parents("tr");
+            var callStartTime = $("#callStartTime").val();
+            var callEndTime = $("#callEndTime").val();
+            var callLen = $("#callLen").val();
+            var callRadioLocation = $("#callRadioLocation").val();
+            var callRemark = $("#callRemarkAdd").val();
+            // var callRecordId = $("#callRecordId").val();
+            //更改状态,外呼中
+            updateStatus(batchCall.id,0,"开始拨打电话，外呼中");
+            $.post(
+                collectPrefix + "/addCallRecord",
+                {
+                    contactName:contactName,
+                    phone:phone,
+                    contactRelation:contactRelation,
+                    callSign:'R02',
+                    callStartTime:callStartTime,
+                    callEndTime:callEndTime,
+                    callLen:callLen,
+                    callRadioLocation:callRadioLocation,
+                    caseNo:currentCaseNo,
+                    remark:callRemark,
+                    importBatchNo:currentImportBatchNo,
+                    orgId:currentOrgId,
+                    type:1
+                },
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.status == 200) {//请求成功
+                        callRecordId = data.result;
+                    }
+                }
+            );
+        }
+
+        /**
+         * HangupCall(挂机):座席在释放当前通话
+         */
+        function hangUp(currentCall) {
+            var platform = $("#callPlatform").val();
+            if (platform == 'PA') {
+                agentClient.hangupCall();
+            } else if (platform == 'ZJ') {
+                uKeFuSoftPhone.HangupCall();
+            }
+            // resetTiming();
+        }
+        /**
+         * 给页面以及全局变量赋值
+         */
+        function fuzhi(obj) {
+            if(isCall == '0'){
+                return;
+            }
+            currentCall = obj;
+            //给正在外呼区域赋值
+            var str = "<tr><td>批次号：" + currentCall.batchNo +"</td>";
+            str = str + "<td>姓名：" + currentCall.contactName +"</td>";
+            str = str + "<td>电话号码：" + currentCall.phone +"</td></tr>";
+            /*str = str + "<td>状态：" + currentCall.taskStatus +"</td></tr>";*/
+            $("#callingContent").html(str);
+            /*$("#currentPhone").val(currentCall.phone);
+            $("#currentContactName").val(currentCall.contactName);
+            $("#currentContactRelation").val(currentCall.contactRelation);
+
+            $("#currentCaseNo").val(currentCall.caseNo);
+            $("#currentImportBatchNo").val(currentCall.importBatchNo);*/
+        }
+
+        function getDestType(destDesc) {
+            var destType = 3;
+            if (destDesc && destDesc.length <= 6 && destDesc.substring(0, 1) != '0' &&
+                destDesc.substring(0, 1) != '1' && destDesc.substring(0, 1) != '9') {
+                destType = 1;
+            }
+            return destType;
+        }
+        // 暂停
+        function pauseCall(){
+            if(batchCallList == null){//只有有外呼任务的时候，才操作
+                $.modal.alert("暂无数据，请勿操作");
+                return;
+            }
+            $.post(
+                prefix + "/editBatchCallStatus",
+                {
+                    flag:"pause"
+                },
+                function (data) {
+                    if (data.code == 0) {//请求成功
+                        $.modal.alert("暂停成功");
+                        isCall = 0;//停止自动外呼
+                        //循环遍历当前 批量外呼数组，把ID相同的数据 中的状态 也修改了
+                        for(var i = 0;i < batchCallList.length; i ++){
+                            var bc = batchCallList[i];
+                            if(bc.taskStatus == 1){//待外呼状态
+                                bc.taskStatus = 4;
+                            }
+                        }
+                    }else{
+                        $.modal.alert(data.msg);
+                    }
+                }
+            );
+        }
+        
+        function startCall() {
+            if(batchCallList == null){//只有有外呼任务的时候，才操作
+                $.modal.alert("暂无数据，请勿操作");
+                return;
+            }
+            $.post(
+                prefix + "/editBatchCallStatus",
+                {
+                    flag:"start"
+                },
+                function (data) {
+                    if (data.code == 0) {//请求成功
+                        $.modal.alert("启动成功");
+                        //循环遍历当前 批量外呼数组，把ID相同的数据 中的状态 也修改了
+                        for(var i = 0;i < batchCallList.length; i ++){
+                            var bc = batchCallList[i];
+                            if(bc.taskStatus == 4){//暂停状态
+                                bc.taskStatus = 1;
+                            }
+                        }
+                        isCall = 1;//启动自动外呼
+                        var batchCall = batchCallList[indexCall];
+                        call(batchCall);
+                    }else{
+                        $.modal.alert(data.msg);
+                    }
+                }
+            );
+        }
+        
+        function cancleCall() {
+            if(batchCallList == null){//只有有外呼任务的时候，才操作
+                $.modal.alert("暂无数据，请勿操作");
+                return;
+            }
+            $.post(
+                prefix + "/editBatchCallStatus",
+                {
+                    flag:"cancle"
+                },
+                function (data) {
+                    if (data.code == 0) {//请求成功
+                        $.modal.alert("取消成功");
+                        isCall = 0;//停止自动外呼
+                    }else{
+                        $.modal.alert(data.msg);
+                    }
+                }
+            );
+        }
+
+        /**
+         * 修改状态
+         */
+        function updateStatus(id,status,remark) {
+            $.post(
+                prefix + "/editBatchCall",
+                {
+                    id:id,
+                    taskStatus:status,
+                    remark:remark
+                },
+                function (data) {
+                    if (data.code == 0) {//请求成功
+                        //循环遍历当前 批量外呼数组，把ID相同的数据 中的状态 也修改了
+                        for(var i = 0;i < batchCallList.length; i ++){
+                            var bc = batchCallList[i];
+                            if(bc.id == id){
+                                bc.taskStatus = status;
+                                break;
+                            }
+                        }
+                    }
+                }
+            );
+        }
+
+        /**
+         * 根据当前系统时间，以及批量外呼配置信息，校验是否可外呼
+         */
+        function isCanCallByTime() {
+            var now = new Date();
+            var time = now.getHours()+""+now.getMinutes(); //截取当前系统时间
+            time = parseInt(time);
+            if(tbcc.startTime1 != ''){
+                var startTime1 = parseInt(tbcc.startTime1.replace(":",""));
+                var endTime1 = parseInt(tbcc.endTime1.replace(":",""));
+                if(time >= startTime1 && time <= endTime1){
+                    return false;
+                }
+            }else{
+                return false;
+            }
+            if(tbcc.startTime2 != ''){
+                var startTime2 = parseInt(tbcc.startTime2.replace(":",""));
+                var endTime2 = parseInt(tbcc.endTime2.replace(":",""));
+                if(time >= startTime2 && time <= endTime2){
+                    return false;
+                }
+            }
+            if(tbcc.startTime3 != ''){
+                var startTime3 = parseInt(tbcc.startTime3.replace(":",""));
+                var endTime3 = parseInt(tbcc.endTime3.replace(":",""));
+                if(time >= startTime3 && time <= endTime3){
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    </script>
+</body>
+</html>

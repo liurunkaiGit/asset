@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -51,15 +52,13 @@ public class SysLoginController extends BaseController
     private IExtPhoneService extPhoneService;
 
     @GetMapping("/login")
-    public String login(HttpServletRequest request, HttpServletResponse response)
-    {
+    public String login(HttpServletRequest request, HttpServletResponse response) throws IOException {
         logger.info("进入登录页面开始");
         // 如果是Ajax请求，返回Json字符串。
         if (ServletUtils.isAjaxRequest(request))
         {
             return ServletUtils.renderString(response, "{\"code\":\"1\",\"msg\":\"未登录或登录超时。请重新登录\"}");
         }
-
         logger.info("进入登录页面结束");
         return "login";
     }

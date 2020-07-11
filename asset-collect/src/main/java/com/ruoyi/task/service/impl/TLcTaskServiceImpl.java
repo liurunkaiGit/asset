@@ -1234,6 +1234,16 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         return this.tLcTaskMapper.selectTotalCountMoney(tLcTask);
     }
 
+    @Override
+    public void sendRobotApply(String taskIds) {
+        // 查询任务详情
+        Arrays.stream(taskIds.split(",")).forEach(taskId -> {
+            TLcTask tLcTask = new TLcTask();
+            tLcTask.setId(Long.valueOf(taskId)).setTaskType(TaskTypeEnum.SEND_ROBOT_APPLY.getCode());
+            this.tLcTaskMapper.updateTLcTask(tLcTask);
+        });
+    }
+
 }
 
 class AssetsRepayResponse {

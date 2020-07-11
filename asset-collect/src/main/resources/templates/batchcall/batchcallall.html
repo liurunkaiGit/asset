@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('批量外呼任务查询列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>机构案件号：</p>
+                                <input type="text" name="caseNo"/>
+                            </li>
+                            <li>
+                                <p>电话号码：</p>
+                                <input type="text" name="phone"/>
+                            </li>
+                            <li>
+                                <p>联系人姓名：</p>
+                                <input type="text" name="contactName"/>
+                            </li>
+                            <li>
+                                <p>与本人关系：</p>
+                                <input type="text" name="contactRelation"/>
+                            </li>
+                            <li>
+                                <p>任务状态：</p>
+                                <select name="taskStatus">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var phoneTypes = [[${@dict.getType('phone_type')}]];
+        var batchCallStatus = [[${@dict.getType('batch_call_status')}]];
+        var prefix = ctx + "ruoyi/batchcall";
+
+        $(function() {
+            var options = {
+                url: prefix + "/allList",
+                modalName: "批量外呼任务查询",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '主键ID',
+                    visible: false
+                },
+                {
+                    field : 'caseNo',
+                    title : '案件号',
+                    visible: false
+                },
+                {
+                    field : 'importBatchNo',
+                    title : '批次号',
+                    visible: false
+                },
+                {
+                    field : 'orgId',
+                    title : '委托机构ID',
+                    visible: false
+                },
+                {
+                    field : 'batchNo', 
+                    title : '批次号'
+                },
+                {
+                    field : 'caseNo', 
+                    title : '案件号'
+                },
+                {
+                    field : 'phone', 
+                    title : '电话号码'
+                },
+                {
+                    field : 'contactName', 
+                    title : '联系人姓名'
+                },
+                {
+                    field : 'contactRelation', 
+                    title : '与本人关系'
+                },
+                {
+                    field : 'exonNum',
+                    title : '外显号码'
+                },
+                {
+                    field : 'phoneType', 
+                    title : '电话类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(phoneTypes, value);
+                    }
+                },
+                {
+                    field : 'taskStatus', 
+                    title : '任务状态',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(batchCallStatus, value);
+                    }
+                }]
+            };
+            $.table.init(options);
+            //表格加载完成之后，会触及此方法
+            /*$('#bootstrap-table').on('load-success.bs.table', function (e,data) {
+                // alert(JSON.stringify(data.rows));
+                var isCanAutoCall = $("#isCanAutoCall").val();
+                if("1" == isCanAutoCall && batchCallArray.length > 0){//可自动外呼
+                    var obj = batchCallArray[0]
+                }
+            });*/
+
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.batchcall.mapper.TLcBatchCallMapper">
+    
+    <resultMap type="TLcBatchCall" id="TLcBatchCallResult">
+        <result property="id"    column="id"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="caseNo"    column="case_no"    />
+        <result property="phone"    column="phone"    />
+        <result property="contactName"    column="contact_name"    />
+        <result property="contactRelation"    column="contact_relation"    />
+        <result property="exonNum"    column="exon_num"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="phoneType"    column="phone_type"    />
+        <result property="taskStatus"    column="task_status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTLcBatchCallVo">
+        select id, batch_no, case_no, phone, contact_name, contact_relation, exon_num, org_id, import_batch_no, phone_type, task_status, create_time, create_by,remark from t_lc_batch_call
+    </sql>
+
+    <select id="selectTLcBatchCallList" parameterType="TLcBatchCall" resultMap="TLcBatchCallResult">
+        <include refid="selectTLcBatchCallVo"/>
+        <where>  
+            <if test="batchNo != null "> and batch_no = #{batchNo}</if>
+            <if test="caseNo != null  and caseNo != ''"> and case_no = #{caseNo}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="contactName != null  and contactName != ''"> and contact_name like concat('%', #{contactName}, '%')</if>
+            <if test="contactRelation != null "> and contact_relation = #{contactRelation}</if>
+            <if test="exonNum != null  and exonNum != ''"> and exon_num = #{exonNum}</if>
+            <if test="phoneType != null  and phoneType != ''"> and phone_type = #{phoneType}</if>
+            <!--<if test="taskStatus != null "> and task_status = #{taskStatus}</if>-->
+            <if test="createBy != null "> and create_by = #{createBy}</if>
+            <if test="taskStatusList != null and taskStatusList.size() > 0">
+                and task_status in
+                <foreach collection="taskStatusList" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        order by case_no desc,contact_relation asc,phone_type asc
+    </select>
+    
+    <select id="selectTLcBatchCallById" parameterType="Long" resultMap="TLcBatchCallResult">
+        <include refid="selectTLcBatchCallVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLcBatchCall" parameterType="TLcBatchCall" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_batch_call
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="batchNo != null ">batch_no,</if>
+            <if test="caseNo != null  and caseNo != ''">case_no,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="contactName != null  and contactName != ''">contact_name,</if>
+            <if test="contactRelation != null ">contact_relation,</if>
+            <if test="exonNum != null ">exon_num,</if>
+            <if test="orgId != null ">org_id,</if>
+            <if test="importBatchNo != null ">import_batch_no,</if>
+            <if test="phoneType != null  and phoneType != ''">phone_type,</if>
+            <if test="taskStatus != null ">task_status,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="batchNo != null ">#{batchNo},</if>
+            <if test="caseNo != null  and caseNo != ''">#{caseNo},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="contactName != null  and contactName != ''">#{contactName},</if>
+            <if test="contactRelation != null ">#{contactRelation},</if>
+            <if test="exonNum != null  and exonNum != ''">#{exonNum},</if>
+            <if test="orgId != null  and orgId != ''">#{orgId},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">#{importBatchNo},</if>
+            <if test="phoneType != null  and phoneType != ''">#{phoneType},</if>
+            <if test="taskStatus != null ">#{taskStatus},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLcBatchCall" parameterType="TLcBatchCall">
+        update t_lc_batch_call
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="batchNo != null ">batch_no = #{batchNo},</if>
+            <if test="caseNo != null  and caseNo != ''">case_no = #{caseNo},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="contactName != null  and contactName != ''">contact_name = #{contactName},</if>
+            <if test="contactRelation != null ">contact_relation = #{contactRelation},</if>
+            <if test="exonNum != null  and exonNum != ''">exon_num = #{exonNum},</if>
+            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no = #{importBatchNo},</if>
+            <if test="phoneType != null  and phoneType != ''">phone_type = #{phoneType},</if>
+            <if test="taskStatus != null ">task_status = #{taskStatus},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcBatchCallById" parameterType="Long">
+        delete from t_lc_batch_call where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcBatchCallByIds" parameterType="String">
+        delete from t_lc_batch_call where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="updateStatusByIds" >
+        update t_lc_batch_call
+        set task_status = #{taskStatus}
+        where id = in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="updateBatchCallByBatchNo" >
+        update t_lc_batch_call
+        set task_status = #{targetTaskStatus}
+        where create_by = #{createBy}
+        <if test="sourceTaskStatus != null ">
+            and task_status = #{sourceTaskStatus}
+        </if>
+    </update>
+
+    <select id="selectMaxBatchNo" resultType="java.util.Map">
+        SELECT
+            ( CASE WHEN MAX( batch_no ) IS NULL THEN 0 ELSE MAX( batch_no ) END ) batch_no
+        FROM
+            t_lc_batch_call
+        WHERE
+            create_by = #{createBy};
+    </select>
+    
+</mapper>

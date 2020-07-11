@@ -18,6 +18,8 @@
                         <ul>
                             <input type="hidden" id="orgId" name="orgId" th:value="${orgId}">
                             <input type="hidden" id="ownerId" name="ownerId" th:value="${ownerId}">
+                            <input type="hidden" id="callPlatform" name="callPlatform" th:value="${callPlatform}">
+                            <input type="hidden" id="agentId" name="agentId" th:value="${extPhone}">
                             <li>
                                 <p>机构案件号：</p>
                                 <input type="text" name="caseNo" id="caseNo"/>
@@ -219,11 +221,46 @@
             <div class="btn-group-sm" id="toolbar" role="group">
                 <button type="button" class="btn btn-success" onclick="toCollJob('','')">催收作业</button>
                 <button type="button" class="btn btn-success" onclick="signRepay('ALPA')">标记还款</button>
+                <button type="button" class="btn btn-success" onclick="toAutoCall()">自动拨打</button>
+                <!--<button type="button" class="btn btn-success" onclick="sendRobotApply()">机器人外呼</button>-->
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
             </div>
         </div>
+
+         <div class="col-sm-12">
+             <div class="modal" id="autoCallModal" tabindex="-1" role="dialog" aria-hidden="true">
+                 <div class="modal-dialog">
+                     <div class="modal-content animated bounceInRight">
+                         <div class="modal-header">
+                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
+                             </button>
+                         </div>
+                         <input type="hidden" id="closeCaseUrl" />
+                         <div class="modal-body" style="height: 200px;">
+                             <div class="form-group">
+                                 <span style="font-size: 15px;color:black;">&nbsp;&nbsp;*拨打号码设置：</span>
+                                 <label class="radio-box"><input type="radio" name="isCallOther" value="0" />拨打本人</label>
+                                 <label class="radio-box"><input type="radio" name="isCallOther" value="1" />拨打本人+其他</label>
+                             </div>
+                             <div class="form-group">
+                                 <span style="font-size: 15px;color:black;">&nbsp;&nbsp;*外显号码：</span>
+                                 <select  id="exonNum">
+                                 </select>
+                             </div>
+                             <div class="form-group">
+                                 <span style="font-size: 15px;color:black;">&nbsp;&nbsp;待拨打电话量：</span>
+                                 <input type="text" name="callNum" id="callNum" readonly="true"/>
+                             </div>
+                         </div>
+                         <div class="modal-footer">
+                             <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                             <button type="button" class="btn btn-primary" onclick="batchCallSave();">保存</button>
+                         </div>
+                     </div>
+                 </div>
+             </div>
     </div>
 
     <th:block th:include="include :: footer" />
@@ -241,6 +278,8 @@
         var firstOrgId; //直接点击催收作业时使用
         var firstImportBatchNo; //直接点击催收作业时使用
         var columnQyeryPrefix = ctx + "column/query";
+        var custContactPrefix = ctx + "collect/cust/contact";//直接点击自动拨打时使用
+        var batchCallPrefix = ctx + "ruoyi/batchcall";//保存自动拨打记录
 
         $(function() {
             var options = {
@@ -350,6 +389,24 @@
             // initCallCode();
             // initActionCode();
             initColumnQuery();
+
+            $.post(
+                prefix + "/selectExtNumBySeat",
+                {
+                    seatId:$("#ownerId").val(),
+                    agentId:$("#agentId").val(),
+                    callPlatform:$("#callPlatform").val()
+                },
+                function(data){
+                    var result = eval(data.msg);
+                    $("#exonNum").append("<option value=''>请选择</option>");
+                    $.each(result,function(index,obj){
+                        var agentId = obj;
+                        $("#exonNum").append("<option value='"+agentId+"'>"+agentId+"</option>");
+                    });
+                }
+
+            );
         });
 
         function initCallCode() {
@@ -624,6 +681,101 @@
         function reset() {
             $.form.reset();
             $(".selectpicker").selectpicker('deselectAll');
+        }
+
+        // 自动拨打
+        function toAutoCall() {
+            var taskIdRows = $.table.selectFirstColumns();
+            if (taskIdRows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            var caseNoRows = $.table.selectColumns("caseNo"); //返回的是一个数组
+            var caseNoStr = "";
+            for(var i = 0; i < caseNoRows.length; i ++){
+                caseNoStr = caseNoStr + caseNoRows[i] + ",";
+            }
+            $.post(
+                custContactPrefix + "/getCustCount",
+                {
+                    caseNoStr:caseNoStr
+                },
+                function (data) {
+                    if (data.code == 0) {//请求成功
+                        $("#callNum").val(data.data);
+                        $("#autoCallModal").show();
+                    }
+                }
+            );
+        }
+
+        // 推送机器人申请
+        function sendRobotApply() {
+            var taskIdRows = $.table.selectFirstColumns();
+            if (taskIdRows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.post(
+                prefix + "/sendRobotApply",
+                {
+                    taskIds:taskIdRows.join()
+                },
+                function (data) {
+                    if (data.status == 200) {//请求成功
+                        $.modal.alertSuccess("本次操作包含" + data.result + "条数据");
+                    }
+                }
+            );
+        }
+
+        /**
+         * 批量呼叫保存
+         */
+        function batchCallSave() {
+            var isCallOther = $('input:radio[name="isCallOther"]:checked').val();
+            var exonNum = $("#exonNum").val();
+            if(isCallOther == null){
+                $.modal.alert("请选择拨打号码设置");
+                return ;
+            }
+            if(exonNum == null || exonNum == ""){
+                $.modal.alert("请选择外显号码");
+                return ;
+            }
+            var caseNoRows = $.table.selectColumns("caseNo"); //返回的是一个数组
+            var importBatchNoRows = $.table.selectColumns("importBatchNo"); //返回的是一个数组
+            var caseNoStr = "";
+            var importBatchNoStr = "";
+            for(var i = 0; i < caseNoRows.length; i ++){
+                caseNoStr = caseNoStr + caseNoRows[i] + ",";
+                importBatchNoStr = importBatchNoStr + importBatchNoRows[i] + ",";
+            }
+            var callNum = $("#callNum").val();
+
+            $.post(
+                batchCallPrefix + "/add",
+                {
+                    isCallOther:isCallOther,
+                    exonNum:exonNum,
+                    caseNoStr:caseNoStr,
+                    importBatchNoStr:importBatchNoStr,
+                    callNum:callNum
+                },
+                function (data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        $.modal.alert("自动外呼任务创建成功");
+                        $("#autoCallModal").modal('hide');
+                        $.modal.openTab("作业催收", batchCallPrefix);
+                    }else{
+                        $.modal.alert(data.msg);
+                        $("#autoCallModal").modal('toggle');
+                        $.modal.openTab("作业催收", batchCallPrefix);
+                    }
+                }
+            );
+
         }
 
     </script>
