@@ -1,0 +1,1 @@
+update t_lc_column_query t set t.column_value= 'PTP:承诺还款|CYH:称已还|TP:谈判沟通|WCY:无诚意|HKKN:还款困难|ZG:转告|WRJT:无人接听|JJ:拒接|ZX:占线忙音|GJ:关机|GD:挂断|KH:空号|BZ:不在|WCR:无此人|WHY:无回应|SL:失联|BPHZG:不配合转告|FBRJT:非本人接听|R01:已接听|R02:无法接通|R03:主叫号码不可用|R04:停机|R05:主叫欠费|R06:呼损|R07:黑名单|R08:线路盲区' where t.column_name = 'call_sign'

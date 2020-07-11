@@ -404,7 +404,7 @@
                                         </li>-->
                                          <li class="select-time">
                                             <label class="labelInfo">电话码：</label>
-                                             <select class="form-control" name="callCode" id="callCode" style="width: 180px; height: 30px">
+                                             <select class="form-control" name="callCode" id="callCode" style="width: 180px; height: 30px" onchange ="callCodeChange()">
                                                  <option value="" selected>请选择</option>
                                                  <option value="PTP">PTP(承诺还款)</option>
                                                  <option value="CYH">CYH(称已还)</option>
@@ -422,6 +422,8 @@
                                                  <option value="WCR">WCR(无此人)</option>
                                                  <option value="WHY">WHY(无回应)</option>
                                                  <option value="SL">SL(失联)</option>
+                                                 <option value="BPHZG">BPHZG(不配合转告)</option>
+                                                 <option value="FBRJT">FBRJT(非本人接听)</option>
                                                <!--  <option value="R01">R01(已接听)</option>
                                                  <option value="R02">R02(无法接通)</option>
                                                  <option value="R03">R03(主叫号码不可用)</option>
@@ -1308,6 +1310,7 @@
         $("#callLen").val("");
         $("#callRadioLocation").val("");
         $("#callCode").val("");
+        $("#findDate").val("");
         $("#callRemarkAdd").val("");
         $("#cnhkDate").val("");
         $("#zclxDate").val("");
@@ -1992,7 +1995,7 @@
                         callLen:recordDuration,
                         callRadioLocation:recordFile,
                         caseNo:currentCaseNo,
-                        // remark:callRemark,
+                        remark:'已接听',
                         importBatchNo:currentImportBatchNo,
                         orgId:currentOrgId,
                         // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
@@ -2145,12 +2148,6 @@
         $.post(
             prefix + "/addCallRecord",
             {
-                // id:callRecordId,
-                // certificateNo:val.find("[name='hideCerNo']").html(),
-                // contactName:val.find("[name='contactName']").html(),
-                // phone:val.find("[name='phone']").html(),
-                // contactRelation:val.find("[name='hidRelation']").html(),
-                // certificateNo:certificateNo,
                 contactName:contactName,
                 phone:phone,
                 contactRelation:contactRelation,
@@ -2160,7 +2157,7 @@
                 callLen:callLen,
                 callRadioLocation:callRadioLocation,
                 caseNo:currentCaseNo,
-                remark:callRemark,
+                remark:'无法接通',
                 importBatchNo:currentImportBatchNo,
                 orgId:currentOrgId,
                 type:1
@@ -2623,17 +2620,18 @@
         });
         obj.style = "background:rgb(169,169,169)";
         $(obj.firstChild.firstChild).prop("checked",true);
-        // if(obj.style.background == "" || obj.style.background == null){
-        //
-        //     obj.style = "background:rgb(169,169,169)";
-        //     // $(obj.firstChild.lastChild).prop("checked",true);
-        // }else{
-        //     obj.style = "";
-        //     // $(obj.firstChild.lastChild).prop("checked",false);
-        //
-        // }
+    }
 
-
+    function callCodeChange(){
+        var callCode = $('#callCode').val();
+        if(callCode != null && callCode != ''){
+            var selectId = document.getElementById("callCode");
+            var value = selectId.options[selectId.selectedIndex].text;
+            var text = value.substring(value.indexOf("(")+1,value.indexOf(")"));
+            $('#callRemarkAdd').val(text);
+        }else{
+            $('#callRemarkAdd').val("");
+        }
     }
 
     function changeFinalColor(obj) {
