@@ -47,6 +47,7 @@
         <result property="dqyhje" column="dqyhje" jdbcType="DECIMAL"/>
         <result property="ljyhje" column="ljyhje" jdbcType="DECIMAL"/>
         <result property="score" column="score" jdbcType="INTEGER"/>
+        <result property="sendRobotBatchNo" column="send_robot_batch_no" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="SELECT_T_LC_TASK">
@@ -89,7 +90,8 @@
         t.call_sign,
         t.call_sign_value,
         t.phone,
-        t.dqyhje
+        t.dqyhje,
+        t.send_robot_batch_no
     </sql>
 
     <sql id="SELECT_TASK_WHERE">
@@ -177,9 +179,9 @@
         <if test="endRecentlyFollowUpDate != null">
             and t.recently_follow_up_date <![CDATA[<=]]> #{endRecentlyFollowUpDate}
         </if>
-      <!--  <if test="enterCollDate != null ">
-            and t.enter_coll_date = #{enterCollDate}
-        </if>-->
+        <!--  <if test="enterCollDate != null ">
+              and t.enter_coll_date = #{enterCollDate}
+          </if>-->
         <if test="startEnterCollDate != null">
             and t.enter_coll_date <![CDATA[>=]]> #{startEnterCollDate}
         </if>
@@ -227,10 +229,10 @@
 
     <select id="selectTLcTaskList" parameterType="com.ruoyi.task.domain.TLcTask" resultMap="TLcTaskResult">
         SELECT
-            (select user_group from sys_user where user_id = t.owner_id ) as userGroup,
-            <include refid="SELECT_T_LC_TASK"/>
-            FROM t_lc_task t
-        WHERE  t.allot_type = 1
+        (select user_group from sys_user where user_id = t.owner_id ) as userGroup,
+        <include refid="SELECT_T_LC_TASK"/>
+        FROM t_lc_task t
+        WHERE t.allot_type = 1
         <include refid="SELECT_TASK_WHERE"></include>
         <if test="userGroup != null and userGroup != ''">
             AND t.userGroup = #{userGroup}
@@ -239,63 +241,63 @@
     </select>
 
     <select id="selectTLcTaskByPage" parameterType="com.ruoyi.task.domain.TLcTask" resultMap="TLcTaskResult">
-                SELECT
-                (select user_group from sys_user where user_id = t.owner_id ) as userGroup,
-                t.id,
-                t.case_no,
-                t.transfer_type,
-                t.enter_coll_date,
-                t.custom_name,
-                t.arrears_total,
-                t.close_case_yhje,
-                t.task_status,
-                t.task_type,
-                t.recently_allot_date,
-                t.recently_follow_up_date,
-                t.owner_name,
-                t.call_sign,
-                t.call_sign_value,
-                t.action_code,
-                t.action_code_value,
-                t.org_id,
-                t.import_batch_no,
-                t.create_time,
-                t.dqyhje,
-                t.overdue_days,
-                d.ljyhje,
-                d.product_name AS productName,
-                d.score
-                FROM t_lc_task t,t_lc_duncase d
-                WHERE  t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no
-                       AND t.allot_type = 1 AND t.task_status != 3
-                <if test="orgId != null  and orgId != ''">
-                    and t.org_id = #{orgId}
-                </if>
-                and (1=1
-                <if test="caseNo != null  and caseNo != ''">
-                    and t.case_no = #{caseNo}
-                </if>
-                <if test="customName != null  and customName != ''">
-                    and t.custom_name like concat('%', #{customName}, '%')
-                </if>
-                <if test="taskStatus != null ">
-                    and t.task_status = #{taskStatus}
-                </if>
-                <if test="taskType != null ">
-                    and t.task_type = #{taskType}
-                </if>
-                <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
-                    and EXISTS(SELECT r.call_sign FROM t_lc_call_record r WHERE r.case_no = t.case_no and r.call_sign IN
-                    <foreach collection="callCodeHistoryList" item="cl" open="(" close=")" separator=",">
-                        #{cl}
-                    </foreach>
-                    )
-                </if>
-                <if test="freeSQL != null  and freeSQL != ''">
-                    ${freeSQL}
-                </if>
-                )
-                ORDER BY t.task_status ASC,t.create_time DESC,t.recently_allot_date ASC,t.enter_coll_date ASC,t.case_no ASC
+        SELECT
+        (select user_group from sys_user where user_id = t.owner_id ) as userGroup,
+        t.id,
+        t.case_no,
+        t.transfer_type,
+        t.enter_coll_date,
+        t.custom_name,
+        t.arrears_total,
+        t.close_case_yhje,
+        t.task_status,
+        t.task_type,
+        t.recently_allot_date,
+        t.recently_follow_up_date,
+        t.owner_name,
+        t.call_sign,
+        t.call_sign_value,
+        t.action_code,
+        t.action_code_value,
+        t.org_id,
+        t.import_batch_no,
+        t.create_time,
+        t.dqyhje,
+        t.overdue_days,
+        d.ljyhje,
+        d.product_name AS productName,
+        d.score
+        FROM t_lc_task t,t_lc_duncase d
+        WHERE t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no
+        AND t.allot_type = 1 AND t.task_status != 3
+        <if test="orgId != null  and orgId != ''">
+            and t.org_id = #{orgId}
+        </if>
+        and (1=1
+        <if test="caseNo != null  and caseNo != ''">
+            and t.case_no = #{caseNo}
+        </if>
+        <if test="customName != null  and customName != ''">
+            and t.custom_name like concat('%', #{customName}, '%')
+        </if>
+        <if test="taskStatus != null ">
+            and t.task_status = #{taskStatus}
+        </if>
+        <if test="taskType != null ">
+            and t.task_type = #{taskType}
+        </if>
+        <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
+            and EXISTS(SELECT r.call_sign FROM t_lc_call_record r WHERE r.case_no = t.case_no and r.call_sign IN
+            <foreach collection="callCodeHistoryList" item="cl" open="(" close=")" separator=",">
+                #{cl}
+            </foreach>
+            )
+        </if>
+        <if test="freeSQL != null  and freeSQL != ''">
+            ${freeSQL}
+        </if>
+        )
+        ORDER BY t.task_status ASC,t.create_time DESC,t.recently_allot_date ASC,t.enter_coll_date ASC,t.case_no ASC
     </select>
 
     <sql id="SELECT_TASK_WHERE_FIX_COLUMN">
@@ -432,7 +434,8 @@
         cust.custom_sex as customSex,
         <include refid="SELECT_T_LC_TASK"/>
         FROM t_lc_task t,t_lc_duncase dun,t_lc_custinfo cust
-        WHERE t.id = #{id} and t.case_no = dun.case_no and t.import_batch_no = dun.import_batch_no and t.case_no = cust.case_no and t.import_batch_no = cust.import_batch_no
+        WHERE t.id = #{id} and t.case_no = dun.case_no and t.import_batch_no = dun.import_batch_no and t.case_no =
+        cust.case_no and t.import_batch_no = cust.import_batch_no
     </select>
 
     <insert id="insertTLcTask" parameterType="com.ruoyi.task.domain.TLcTask" useGeneratedKeys="true" keyProperty="id">
@@ -474,7 +477,8 @@
         action_code_value,
         call_sign,
         call_sign_value,
-        phone
+        phone,
+        send_robot_batch_no
         ) VALUES (
             #{caseNo},
             #{certificateNo},
@@ -513,7 +517,8 @@
             #{actionCodeValue},
             #{callSign},
             #{callSignValue},
-            #{phone}
+            #{phone},
+            #{sendRobotBatchNo}
         )
     </insert>
 
@@ -579,6 +584,7 @@
             call_sign = #{callSign},
             call_sign_value = #{callSignValue},
             <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="sendRobotBatchNo != null  and sendRobotBatchNo != ''">send_robot_batch_no = #{sendRobotBatchNo},</if>
         </trim>
         WHERE id = #{id}
     </update>
@@ -719,16 +725,27 @@
                 <if test="task.enterCollDate != null ">enter_coll_date = #{task.enterCollDate},</if>
                 <if test="task.closeCaseYhje != null ">close_case_yhje = #{task.closeCaseYhje},</if>
                 <if test="task.recentlyAllotDate != null ">recently_allot_date = #{task.recentlyAllotDate},</if>
-                <if test="task.recentlyFollowUpDate != null ">recently_follow_up_date = #{task.recentlyFollowUpDate},</if>
+                <if test="task.recentlyFollowUpDate != null ">recently_follow_up_date = #{task.recentlyFollowUpDate},
+                </if>
                 <if test="task.hitRule != null  and task.hitRule != ''">hit_rule = #{task.hitRule},</if>
-                <if test="task.hitRuleDesc != null  and task.hitRuleDesc != ''">hit_rule_desc = #{task.hitRuleDesc},</if>
-                <if test="task.distributionStrategy != null  and task.distributionStrategy != ''">distribution_strategy = #{task.distributionStrategy},</if>
-                <if test="task.importBatchNo != null  and task.importBatchNo != ''">import_batch_no = #{task.importBatchNo},</if>
+                <if test="task.hitRuleDesc != null  and task.hitRuleDesc != ''">hit_rule_desc = #{task.hitRuleDesc},
+                </if>
+                <if test="task.distributionStrategy != null  and task.distributionStrategy != ''">distribution_strategy
+                    = #{task.distributionStrategy},
+                </if>
+                <if test="task.importBatchNo != null  and task.importBatchNo != ''">import_batch_no =
+                    #{task.importBatchNo},
+                </if>
                 <if test="task.actionCode != null  and task.actionCode != ''">action_code = #{task.actionCode},</if>
-                <if test="task.actionCodeValue != null  and task.actionCodeValue != ''">action_code_value = #{task.actionCodeValue},</if>
+                <if test="task.actionCodeValue != null  and task.actionCodeValue != ''">action_code_value =
+                    #{task.actionCodeValue},
+                </if>
                 <if test="task.callSign != null  and task.callSign != ''">call_sign = #{task.callSign},</if>
-                <if test="task.callSignValue != null  and task.callSignValue != ''">call_sign_value = #{task.callSignValue},</if>
+                <if test="task.callSignValue != null  and task.callSignValue != ''">call_sign_value =
+                    #{task.callSignValue},
+                </if>
                 <if test="task.phone != null  and task.phone != ''">phone = #{task.phone},</if>
+                <if test="task.sendRobotBatchNo != null  and task.sendRobotBatchNo != ''">send_robot_batch_no = #{task.sendRobotBatchNo},</if>
             </trim>
             WHERE id = #{task.id}
         </foreach>
@@ -849,119 +866,119 @@
 
     <select id="isHasCTSTask" parameterType="com.ruoyi.task.domain.TLcTask" resultType="java.lang.Integer">
         select count(1) from (
-            SELECT t.task_type,t.action_code FROM t_lc_task t,t_lc_duncase d
-            WHERE 1=1 AND t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no
-            AND t.org_id = #{orgId}
-            <include refid="SELECT_TASK_WHERE_FIX_COLUMN"></include>
-            <if test="area != null  and area != ''">
-                and d.area = #{area}
-            </if>
-            <if test="riskFlag != null  and riskFlag != ''">
-                and d.risk_flag = #{riskFlag}
-            </if>
-            <if test="startBackCaseDate != null">
-                and d.back_case_date <![CDATA[>=]]> #{startBackCaseDate}
-            </if>
-            <if test="endBackCaseDate != null">
-                and d.back_case_date <![CDATA[<=]]> #{endBackCaseDate}
-            </if>
-            <if test="contractType != null  and contractType != ''">
-                and d.contract_type = #{contractType}
-            </if>
-            <if test="reductionFlag != null  and reductionFlag != ''">
-                and d.reduction_flag = #{reductionFlag}
-            </if>
-            <if test="legalFlag != null  and legalFlag != ''">
-                and d.legal_flag = #{legalFlag}
-            </if>
-            <if test="stayCaseFlag != null  and stayCaseFlag != ''">
-                and d.stay_case_flag = #{stayCaseFlag}
-            </if>
-            <if test="productName != null  and productName != ''">
-                and d.product_name like concat('%', #{productName}, '%')
-            </if>
+        SELECT t.task_type,t.action_code FROM t_lc_task t,t_lc_duncase d
+        WHERE 1=1 AND t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no
+        AND t.org_id = #{orgId}
+        <include refid="SELECT_TASK_WHERE_FIX_COLUMN"></include>
+        <if test="area != null  and area != ''">
+            and d.area = #{area}
+        </if>
+        <if test="riskFlag != null  and riskFlag != ''">
+            and d.risk_flag = #{riskFlag}
+        </if>
+        <if test="startBackCaseDate != null">
+            and d.back_case_date <![CDATA[>=]]> #{startBackCaseDate}
+        </if>
+        <if test="endBackCaseDate != null">
+            and d.back_case_date <![CDATA[<=]]> #{endBackCaseDate}
+        </if>
+        <if test="contractType != null  and contractType != ''">
+            and d.contract_type = #{contractType}
+        </if>
+        <if test="reductionFlag != null  and reductionFlag != ''">
+            and d.reduction_flag = #{reductionFlag}
+        </if>
+        <if test="legalFlag != null  and legalFlag != ''">
+            and d.legal_flag = #{legalFlag}
+        </if>
+        <if test="stayCaseFlag != null  and stayCaseFlag != ''">
+            and d.stay_case_flag = #{stayCaseFlag}
+        </if>
+        <if test="productName != null  and productName != ''">
+            and d.product_name like concat('%', #{productName}, '%')
+        </if>
         ) td where td.task_type = 12 or td.action_code = 'TS'
     </select>
 
     <select id="selectTaskList" parameterType="com.ruoyi.task.domain.TLcTask" resultMap="TLcTaskResult">
-                SELECT
-                d.product_name as productName,
-                d.first_overdue_time as firstOverdueTime,
-                d.lowest_payment_rmb as lowestPaymentRmb,
-                cust.custom_sex as customSex,
-                d.ljyhje,
-                t.id,
-                t.case_no,
-                t.certificate_no,
-                t.certificate_type,
-                t.custom_code,
-                t.custom_name,
-                t.arrears_total,
-                t.task_status,
-                t.overdue_days,
-                t.overdue_aging,
-                t.owner_id,
-                t.owner_name,
-                t.org_id,
-                t.org_name,
-                t.close_date,
-                t.old_owner_id,
-                t.old_owner_name,
-                t.task_type,
-                t.allot_type,
-                t.create_time,
-                t.modify_time,
-                t.create_by,
-                t.modify_by,
-                t.robot_task_id,
-                t.robot_call_strategy_id,
-                t.transfer_type,
-                t.enter_coll_date,
-                t.close_case_yhje,
-                t.recently_allot_date,
-                t.recently_follow_up_date,
-                t.hit_rule,
-                t.hit_rule_desc,
-                t.distribution_strategy,
-                t.import_batch_no,
-                t.action_code,
-                t.action_code_value,
-                t.call_sign,
-                t.call_sign_value,
-                t.phone,
-                t.dqyhje,
-                d.score
-                FROM t_lc_task t,t_lc_duncase d,t_lc_custinfo cust
-                WHERE t.case_no = d.case_no and t.import_batch_no = d.import_batch_no and t.case_no = cust.case_no and
-                t.import_batch_no = cust.import_batch_no
-                AND t.allot_type = 1 AND t.task_status != 3
-                <if test="orgId != null  and orgId != ''">
-                    and t.org_id = #{orgId}
-                </if>
-                and (1=1
-                <if test="caseNo != null  and caseNo != ''">
-                    and t.case_no = #{caseNo}
-                </if>
-                <if test="customName != null  and customName != ''">
-                    and t.custom_name like concat('%', #{customName}, '%')
-                </if>
-                <if test="taskStatus != null ">
-                    and t.task_status = #{taskStatus}
-                </if>
-                <if test="taskType != null ">
-                    and t.task_type = #{taskType}
-                </if>
-                <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
-                    and EXISTS(SELECT r.call_sign FROM t_lc_call_record r WHERE r.case_no = t.case_no and r.call_sign IN
-                    <foreach collection="callCodeHistoryList" item="cl" open="(" close=")" separator=",">
-                        #{cl}
-                    </foreach>
-                    )
-                </if>
-                <if test="freeSQL != null  and freeSQL != ''">
-                    ${freeSQL}
-                </if>
-                )
+        SELECT
+        d.product_name as productName,
+        d.first_overdue_time as firstOverdueTime,
+        d.lowest_payment_rmb as lowestPaymentRmb,
+        cust.custom_sex as customSex,
+        d.ljyhje,
+        t.id,
+        t.case_no,
+        t.certificate_no,
+        t.certificate_type,
+        t.custom_code,
+        t.custom_name,
+        t.arrears_total,
+        t.task_status,
+        t.overdue_days,
+        t.overdue_aging,
+        t.owner_id,
+        t.owner_name,
+        t.org_id,
+        t.org_name,
+        t.close_date,
+        t.old_owner_id,
+        t.old_owner_name,
+        t.task_type,
+        t.allot_type,
+        t.create_time,
+        t.modify_time,
+        t.create_by,
+        t.modify_by,
+        t.robot_task_id,
+        t.robot_call_strategy_id,
+        t.transfer_type,
+        t.enter_coll_date,
+        t.close_case_yhje,
+        t.recently_allot_date,
+        t.recently_follow_up_date,
+        t.hit_rule,
+        t.hit_rule_desc,
+        t.distribution_strategy,
+        t.import_batch_no,
+        t.action_code,
+        t.action_code_value,
+        t.call_sign,
+        t.call_sign_value,
+        t.phone,
+        t.dqyhje,
+        d.score
+        FROM t_lc_task t,t_lc_duncase d,t_lc_custinfo cust
+        WHERE t.case_no = d.case_no and t.import_batch_no = d.import_batch_no and t.case_no = cust.case_no and
+        t.import_batch_no = cust.import_batch_no
+        AND t.allot_type = 1 AND t.task_status != 3
+        <if test="orgId != null  and orgId != ''">
+            and t.org_id = #{orgId}
+        </if>
+        and (1=1
+        <if test="caseNo != null  and caseNo != ''">
+            and t.case_no = #{caseNo}
+        </if>
+        <if test="customName != null  and customName != ''">
+            and t.custom_name like concat('%', #{customName}, '%')
+        </if>
+        <if test="taskStatus != null ">
+            and t.task_status = #{taskStatus}
+        </if>
+        <if test="taskType != null ">
+            and t.task_type = #{taskType}
+        </if>
+        <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
+            and EXISTS(SELECT r.call_sign FROM t_lc_call_record r WHERE r.case_no = t.case_no and r.call_sign IN
+            <foreach collection="callCodeHistoryList" item="cl" open="(" close=")" separator=",">
+                #{cl}
+            </foreach>
+            )
+        </if>
+        <if test="freeSQL != null  and freeSQL != ''">
+            ${freeSQL}
+        </if>
+        )
     </select>
 
     <select id="selectTaskByCaseAndNoCloseCase" parameterType="java.lang.String" resultMap="TLcTaskResult">
@@ -969,125 +986,127 @@
         <include refid="SELECT_T_LC_TASK"/>
         from t_lc_task t where case_no = #{caseNo} and task_status != 3
     </select>
-    <select id="selectTaskListNotExistRobotBlack" parameterType="com.ruoyi.task.domain.TLcTask" resultMap="TLcTaskResult">
-                SELECT
-                d.product_name as productName,
-                d.first_overdue_time as firstOverdueTime,
-                d.lowest_payment_rmb as lowestPaymentRmb,
-                cust.custom_sex as customSex,
-                d.ljyhje,
-                t.id,
-                t.case_no,
-                t.certificate_no,
-                t.certificate_type,
-                t.custom_code,
-                t.custom_name,
-                t.arrears_total,
-                t.task_status,
-                t.overdue_days,
-                t.overdue_aging,
-                t.owner_id,
-                t.owner_name,
-                t.org_id,
-                t.org_name,
-                t.close_date,
-                t.old_owner_id,
-                t.old_owner_name,
-                t.task_type,
-                t.allot_type,
-                t.create_time,
-                t.modify_time,
-                t.create_by,
-                t.modify_by,
-                t.robot_task_id,
-                t.robot_call_strategy_id,
-                t.transfer_type,
-                t.enter_coll_date,
-                t.close_case_yhje,
-                t.recently_allot_date,
-                t.recently_follow_up_date,
-                t.hit_rule,
-                t.hit_rule_desc,
-                t.distribution_strategy,
-                t.import_batch_no,
-                t.action_code,
-                t.action_code_value,
-                t.call_sign,
-                t.call_sign_value,
-                t.phone,
-                t.dqyhje,
-                d.score
-                FROM t_lc_task t,t_lc_duncase d,t_lc_custinfo cust
-                WHERE t.case_no = d.case_no and t.import_batch_no = d.import_batch_no and t.case_no = cust.case_no and t.import_batch_no = cust.import_batch_no
-                AND NOT EXISTS (select 1 from t_lc_robot_black rb where rb.case_no = t.case_no)
-                AND t.allot_type = 1 AND t.task_status != 3
-                <if test="orgId != null  and orgId != ''">
-                    and t.org_id = #{orgId}
-                </if>
-                and (1=1
-                <if test="caseNo != null  and caseNo != ''">
-                    and t.case_no = #{caseNo}
-                </if>
-                <if test="customName != null  and customName != ''">
-                    and t.custom_name like concat('%', #{customName}, '%')
-                </if>
-                <if test="taskStatus != null ">
-                    and t.task_status = #{taskStatus}
-                </if>
-                <if test="taskType != null ">
-                    and t.task_type = #{taskType}
-                </if>
-                <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
-                    and EXISTS(SELECT r.call_sign FROM t_lc_call_record r WHERE r.case_no = t.case_no and r.call_sign IN
-                    <foreach collection="callCodeHistoryList" item="cl" open="(" close=")" separator=",">
-                        #{cl}
-                    </foreach>
-                    )
-                </if>
-                <if test="freeSQL != null  and freeSQL != ''">
-                    ${freeSQL}
-                </if>
-                )
+    <select id="selectTaskListNotExistRobotBlack" parameterType="com.ruoyi.task.domain.TLcTask"
+            resultMap="TLcTaskResult">
+        SELECT
+        d.product_name as productName,
+        d.first_overdue_time as firstOverdueTime,
+        d.lowest_payment_rmb as lowestPaymentRmb,
+        cust.custom_sex as customSex,
+        d.ljyhje,
+        t.id,
+        t.case_no,
+        t.certificate_no,
+        t.certificate_type,
+        t.custom_code,
+        t.custom_name,
+        t.arrears_total,
+        t.task_status,
+        t.overdue_days,
+        t.overdue_aging,
+        t.owner_id,
+        t.owner_name,
+        t.org_id,
+        t.org_name,
+        t.close_date,
+        t.old_owner_id,
+        t.old_owner_name,
+        t.task_type,
+        t.allot_type,
+        t.create_time,
+        t.modify_time,
+        t.create_by,
+        t.modify_by,
+        t.robot_task_id,
+        t.robot_call_strategy_id,
+        t.transfer_type,
+        t.enter_coll_date,
+        t.close_case_yhje,
+        t.recently_allot_date,
+        t.recently_follow_up_date,
+        t.hit_rule,
+        t.hit_rule_desc,
+        t.distribution_strategy,
+        t.import_batch_no,
+        t.action_code,
+        t.action_code_value,
+        t.call_sign,
+        t.call_sign_value,
+        t.phone,
+        t.dqyhje,
+        d.score
+        FROM t_lc_task t,t_lc_duncase d,t_lc_custinfo cust
+        WHERE t.case_no = d.case_no and t.import_batch_no = d.import_batch_no and t.case_no = cust.case_no and
+        t.import_batch_no = cust.import_batch_no
+        AND NOT EXISTS (select 1 from t_lc_robot_black rb where rb.case_no = t.case_no)
+        AND t.allot_type = 1 AND t.task_status != 3
+        <if test="orgId != null  and orgId != ''">
+            and t.org_id = #{orgId}
+        </if>
+        and (1=1
+        <if test="caseNo != null  and caseNo != ''">
+            and t.case_no = #{caseNo}
+        </if>
+        <if test="customName != null  and customName != ''">
+            and t.custom_name like concat('%', #{customName}, '%')
+        </if>
+        <if test="taskStatus != null ">
+            and t.task_status = #{taskStatus}
+        </if>
+        <if test="taskType != null ">
+            and t.task_type = #{taskType}
+        </if>
+        <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
+            and EXISTS(SELECT r.call_sign FROM t_lc_call_record r WHERE r.case_no = t.case_no and r.call_sign IN
+            <foreach collection="callCodeHistoryList" item="cl" open="(" close=")" separator=",">
+                #{cl}
+            </foreach>
+            )
+        </if>
+        <if test="freeSQL != null  and freeSQL != ''">
+            ${freeSQL}
+        </if>
+        )
     </select>
 
-    <select id="selectCountExistRobotBlack"  parameterType="com.ruoyi.task.domain.TLcTask" resultType="java.lang.Long">
-                SELECT
-                count(1)
-                FROM t_lc_task t,t_lc_duncase d,t_lc_custinfo cust
-                WHERE t.case_no = d.case_no and t.import_batch_no = d.import_batch_no and t.case_no = cust.case_no and
-                t.import_batch_no = cust.import_batch_no
-                AND EXISTS (select 1 from t_lc_robot_black rb where rb.case_no = t.case_no)
-                AND t.allot_type = 1 AND t.task_status != 3
-                    <if test="orgId != null  and orgId != ''">and t.org_id = #{orgId}
-                    </if>
-                    and (1=1
-                    <if test="
+    <select id="selectCountExistRobotBlack" parameterType="com.ruoyi.task.domain.TLcTask" resultType="java.lang.Long">
+        SELECT
+        count(1)
+        FROM t_lc_task t,t_lc_duncase d,t_lc_custinfo cust
+        WHERE t.case_no = d.case_no and t.import_batch_no = d.import_batch_no and t.case_no = cust.case_no and
+        t.import_batch_no = cust.import_batch_no
+        AND EXISTS (select 1 from t_lc_robot_black rb where rb.case_no = t.case_no)
+        AND t.allot_type = 1 AND t.task_status != 3
+        <if test="orgId != null  and orgId != ''">and t.org_id = #{orgId}
+        </if>
+        and (1=1
+        <if test="
                 caseNo != null  and caseNo != ''">and t.case_no = #{caseNo}
-                    </if>
-                    <if test="
+        </if>
+        <if test="
                 customName != null  and customName != ''">
-                        and t.custom_name like concat('%', #{customName}, '%')
-                    </if>
-                    <if test="taskStatus != null ">
-                        and t.task_status = #{taskStatus}
-                    </if>
-                    <if test="taskType != null ">
-                        and t.task_type = #{taskType}
-                    </if>
-                    <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
-                        and EXISTS(SELECT r.call_sign FROM t_lc_call_record r WHERE r.case_no = t.case_no and r.call_sign IN
-                        <foreach collection="callCodeHistoryList" item="cl" open="(" close=")" separator=",">
-                            #{cl}
-                        </foreach>
-                        )
-                    </if>
-                    <if test="freeSQL != null  and freeSQL != ''">
-                        ${freeSQL}
-                    </if>
-                    )
+            and t.custom_name like concat('%', #{customName}, '%')
+        </if>
+        <if test="taskStatus != null ">
+            and t.task_status = #{taskStatus}
+        </if>
+        <if test="taskType != null ">
+            and t.task_type = #{taskType}
+        </if>
+        <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
+            and EXISTS(SELECT r.call_sign FROM t_lc_call_record r WHERE r.case_no = t.case_no and r.call_sign IN
+            <foreach collection="callCodeHistoryList" item="cl" open="(" close=")" separator=",">
+                #{cl}
+            </foreach>
+            )
+        </if>
+        <if test="freeSQL != null  and freeSQL != ''">
+            ${freeSQL}
+        </if>
+        )
     </select>
 
-    <select id="selectTLcTaskByIdsNotExistRobotBlack" resultMap="TLcTaskResult" >
+    <select id="selectTLcTaskByIdsNotExistRobotBlack" resultMap="TLcTaskResult">
         select
         d.product_name as productName,
         d.first_overdue_time as firstOverdueTime,
@@ -1135,7 +1154,8 @@
         t.phone,
         t.dqyhje
         FROM t_lc_task t,t_lc_duncase d,t_lc_custinfo cust
-        WHERE t.case_no = d.case_no and t.import_batch_no = d.import_batch_no and t.case_no = cust.case_no and t.import_batch_no = cust.import_batch_no
+        WHERE t.case_no = d.case_no and t.import_batch_no = d.import_batch_no and t.case_no = cust.case_no and
+        t.import_batch_no = cust.import_batch_no
         AND t.id in
         <foreach item="id" collection="taskIds" open="(" separator="," close=")">
             #{id}
@@ -1148,7 +1168,8 @@
         select
         count(1)
         FROM t_lc_task t,t_lc_duncase d,t_lc_custinfo cust
-        WHERE t.case_no = d.case_no and t.import_batch_no = d.import_batch_no and t.case_no = cust.case_no and t.import_batch_no = cust.import_batch_no
+        WHERE t.case_no = d.case_no and t.import_batch_no = d.import_batch_no and t.case_no = cust.case_no and
+        t.import_batch_no = cust.import_batch_no
         AND t.id in
         <foreach item="id" collection="taskIds" open="(" separator="," close=")">
             #{id}
@@ -1195,8 +1216,9 @@
         <result property="dqyhje" column="dqyhje" jdbcType="DECIMAL"/>
     </resultMap>
 
-    <select id="selectTaskByTime"  resultMap="mapResult">
-        select id, case_no, certificate_no,  custom_code, custom_name,arrears_total, task_status, overdue_days,overdue_aging,owner_id,org_id,close_date,
+    <select id="selectTaskByTime" resultMap="mapResult">
+        select id, case_no, certificate_no, custom_code, custom_name,arrears_total, task_status,
+        overdue_days,overdue_aging,owner_id,org_id,close_date,
         old_owner_id,task_type,allot_type,create_time,modify_time,create_by,modify_by,robot_task_id,
         robot_call_strategy_id,transfer_type,enter_coll_date,close_case_yhje,recently_allot_date,recently_follow_up_date,hit_rule,hit_rule_desc,distribution_strategy,import_batch_no,
         action_code,call_sign,phone,dqyhje from t_lc_task
@@ -1235,4 +1257,14 @@
         <include refid="SELECT_TASK_WHERE"></include>
         ORDER BY t.task_status ASC,t.create_time DESC,t.recently_allot_date ASC,t.enter_coll_date ASC,t.case_no ASC
     </select>
+
+    <select id="selectTaskListBySendRobotBatchNo" parameterType="java.lang.String" resultMap="TLcTaskResult">
+        select
+        <include refid="SELECT_T_LC_TASK"/>
+        from t_lc_task t where t.send_robot_batch_no = #{sendRobotBatchNo}
+    </select>
+
+    <update id="updateTLcTaskBySendRobotBatchNo" parameterType="com.ruoyi.task.domain.TLcTask">
+        UPDATE t_lc_task set task_type = #{taskType},modify_by = #{updateBy},modify_time = NOW() where send_robot_batch_no = #{sendRobotBatchNo}
+    </update>
 </mapper>

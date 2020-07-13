@@ -202,4 +202,7 @@ public interface TLcTaskMapper {
 
     Map<String, BigDecimal> selectTotalCountMoney(TLcTask tLcTask);
 
+    List<TLcTask> selectTaskListBySendRobotBatchNo(@Param("sendRobotBatchNo") String sendRobotBatchNo);
+
+    void updateTLcTaskBySendRobotBatchNo(TLcTask tLcTask);
 }

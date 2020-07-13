@@ -126,16 +126,16 @@ public class Schedule {
             TLcOrgSpeechcraftConf orgSpeechcraftConf = this.orgSpeechcraftConfService.selectTLcOrgSpeechcraftConfByOrgId(Long.valueOf(tLcCallStrategyConfig.getOrgId()));
             TLcRobotTask tLcRobotTask1 = this.tLcRobotTaskService.selectRobotTaskByRobotTaskIdAndTaskId(map.getValue().get(0).getRobotTaskId(), map.getValue().get(0).getId());
             if (map.getValue().size() <= Integer.valueOf(taskCallNum)) {
-                Integer robotTaskId = this.robotMethodUtil.createTask(map.getValue(), tLcCallStrategyConfig, tLcRobotTask1.getContinueDays() + 1,1, orgSpeechcraftConf);
+                Integer robotTaskId = this.robotMethodUtil.createTask(map.getValue(), tLcCallStrategyConfig, tLcRobotTask1.getContinueDays() + 1,1, orgSpeechcraftConf, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS,new Date()));
             } else {
                 Integer taskNums = map.getValue().size() / Integer.valueOf(taskCallNum);
                 for (int i = 0; i < taskNums; i++) {
                     List subTaskIdList = map.getValue().subList(i*Integer.valueOf(taskCallNum), (i+1)*Integer.valueOf(taskCallNum));
-                    Integer robotTaskId = this.robotMethodUtil.createTask(subTaskIdList, tLcCallStrategyConfig, tLcRobotTask1.getContinueDays() + 1,1, orgSpeechcraftConf);
+                    Integer robotTaskId = this.robotMethodUtil.createTask(subTaskIdList, tLcCallStrategyConfig, tLcRobotTask1.getContinueDays() + 1,1, orgSpeechcraftConf, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS,new Date()));
                 }
                 if (map.getValue().size() % Integer.valueOf(taskCallNum) != 0) {
                     List subTaskIdList = map.getValue().subList(Integer.valueOf(taskCallNum) * taskNums,map.getValue().size());
-                    Integer robotTaskId = this.robotMethodUtil.createTask(subTaskIdList, tLcCallStrategyConfig, tLcRobotTask1.getContinueDays() + 1,1, orgSpeechcraftConf);
+                    Integer robotTaskId = this.robotMethodUtil.createTask(subTaskIdList, tLcCallStrategyConfig, tLcRobotTask1.getContinueDays() + 1,1, orgSpeechcraftConf, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS,new Date()));
                 }
             }
         }

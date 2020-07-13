@@ -707,7 +707,7 @@ public class RobotMethodUtil {
      * @param taskList
      * @param tLcCallStrategyConfig
      */
-    public Integer createTask(List<TLcTask> taskList, TLcCallStrategyConfig tLcCallStrategyConfig, Integer continueCallDays, Integer continueCallFrequency, TLcOrgSpeechcraftConf orgSpeechcraftConf) {
+    public Integer createTask(List<TLcTask> taskList, TLcCallStrategyConfig tLcCallStrategyConfig, Integer continueCallDays, Integer continueCallFrequency, TLcOrgSpeechcraftConf orgSpeechcraftConf, String taskName) {
         Integer companyId = orgSpeechcraftConf.getCompanyId();
         CreateTaskParamVO createTaskParamVO = createRobotTask(companyId, tLcCallStrategyConfig, orgSpeechcraftConf.getConcurrentValue());
         RobotResponse createTaskResponse = aiccHttpUtils.sendPost(robotAppConfig.getCreateTask(), createTaskParamVO);
@@ -745,7 +745,7 @@ public class RobotMethodUtil {
         // 批量添加机器人任务明细
         this.tLcRobotTaskService.batchAddRobotTask(tLcRobotTaskList);
         // 将该任务添加到机器人任务总览表
-        TLcRobotTaskPandect tLcRobotTaskPandect = createRobotTaskPandect(taskList, tLcCallStrategyConfig, robotTaskId, "BR");
+        TLcRobotTaskPandect tLcRobotTaskPandect = createRobotTaskPandect(taskList, tLcCallStrategyConfig, robotTaskId, "BR", taskName);
         this.robotTaskPandectService.insertTLcRobotTaskPandect(tLcRobotTaskPandect);
         // 修改任务表
         this.tLcTaskMapper.batchUpdateTask(taskList);
@@ -815,10 +815,10 @@ public class RobotMethodUtil {
      * @param robotTaskId
      * @return
      */
-    private TLcRobotTaskPandect createRobotTaskPandect(List<TLcTask> taskList, TLcCallStrategyConfig tLcCallStrategyConfig, Integer robotTaskId, String robot) {
+    private TLcRobotTaskPandect createRobotTaskPandect(List<TLcTask> taskList, TLcCallStrategyConfig tLcCallStrategyConfig, Integer robotTaskId, String robot, String taskName) {
         TLcRobotTaskPandect tLcRobotTaskPandect = new TLcRobotTaskPandect();
         tLcRobotTaskPandect.setRobotTaskId(robotTaskId);
-        tLcRobotTaskPandect.setTaskName(DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS, new Date()));
+        tLcRobotTaskPandect.setTaskName(taskName);
         tLcRobotTaskPandect.setOrgId(Long.valueOf(taskList.get(0).getOrgId()));
         tLcRobotTaskPandect.setOrgName(taskList.get(0).getOrgName());
         tLcRobotTaskPandect.setSpeechCraftNameId(tLcCallStrategyConfig.getSpeechcraftId());

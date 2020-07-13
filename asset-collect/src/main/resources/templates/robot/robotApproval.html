@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('推送机器人申请列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <!--<li>
+                                <p>任务名称：</p>
+                                <input type="text" name="sendRobotBatchNo"/>
+                            </li>-->
+                            <li>
+                                <p>业务归属人：</p>
+                                <input type="text" name="ownerName"/>
+                            </li>
+                            <li class="select-time">
+                                <p>创建时间：</p>
+                                <input type="text" class="time-input" id="startCreateTime" placeholder="开始时间" name="startCreateTime"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endCreateTime" placeholder="结束时间" name="endCreateTime"/>
+                            </li>
+                            <li>
+                                <p>任务状态：</p>
+                                <select name="taskStatus">
+                                    <option value="">所有</option>
+                                    <option value="0">待审批</option>
+                                    <option value="1">审批通过</option>
+                                    <option value="2">审批拒绝</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="searchSendRobotApproval()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="approval(1)" >
+                    <i class="fa fa-plus"></i> 审批通过
+                </a>
+                <a class="btn btn-danger multiple disabled"  onclick="approval(2)" >
+                    <i class="fa fa-edit"></i> 审批拒绝
+                </a>
+                <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="ruoyi:apply:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>-->
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "robot/approval";
+        var taskPrefix = ctx + "collect/task";
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                exportUrl: prefix + "/export",
+                modalName: "推送机器人申请",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '主键id',
+                    visible: false
+                },
+                {
+                    field : 'sendRobotBatchNo', 
+                    title : '任务名称',
+                    formatter: function (value) {
+                        return value.split("_")[0];
+                    }
+                },
+                {
+                    field : 'orgName', 
+                    title : '机构名称'
+                },
+                {
+                    field : 'taskNum', 
+                    title : '号码总数'
+                },
+                {
+                    field : 'ownerName', 
+                    title : '业务归属人'
+                },
+                    {
+                        field : 'createTime',
+                        title : '创建时间'
+                    },
+                {
+                    field : 'taskStatus', 
+                    title : '任务状态',
+                    formatter: function (value) {
+                        if (value == 0) {
+                            return "待审批";
+                        }
+                        if (value == 1) {
+                            return "审批通过";
+                        }
+                        if (value == 2) {
+                            return "审批拒绝";
+                        }
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function searchSendRobotApproval() {
+            var endCreateTime = $("#endCreateTime").val();
+            if (endCreateTime != null && endCreateTime != '') {
+                endCreateTime = endCreateTime + " 23:59:59";
+                $("#endCreateTime").val(endCreateTime);
+            }
+            $.table.search();
+        }
+
+        function approval(status) {
+            var sendRobotBatchNos = $.table.selectColumns("sendRobotBatchNo");
+            var taskStatusRows = $.table.selectColumns("taskStatus");
+            for (var i = 0; i < taskStatusRows.join().length; i++) {
+                if (taskStatusRows.join()[i] == 1 || taskStatusRows.join()[i] == 2) {
+                    $.modal.alertError("已审批的任务不能再次审批");
+                    return;
+                }
+            }
+            // if (rows.length == 0) {
+            //     $.modal.alertWarning("请至少选择一条数据");
+            //     return;
+            // }
+            if (status == 1) {
+                // 审批通过
+                var toSendRobotUrl = taskPrefix + '/toSendRobot?sendRobotBatchNos='+sendRobotBatchNos.join();
+                $.modal.open("选择话术", toSendRobotUrl);
+            } else if (status == 2) {
+                // 审批拒绝
+                $.modal.confirm("确认要要执行此操作吗?", function() {
+                    // 查询当前机构下所有用户
+                    var approveSendRobotUrl = prefix + '/approveSendRobot?sendRobotBatchNos='+sendRobotBatchNos.join()+"&status="+status;
+                    $.operate.submit(approveSendRobotUrl);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
