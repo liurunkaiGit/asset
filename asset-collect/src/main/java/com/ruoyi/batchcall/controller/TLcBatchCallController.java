@@ -47,8 +47,8 @@ public class TLcBatchCallController extends BaseController
     public String batchcall(ModelMap modelMap)
     {
 //        String isCanAutoCall = "1";//可自动外呼
-        String deptId = ShiroUtils.getSysUser().getDeptId()+"";
-        TLcBatchCallConfig tbcc = this.tLcBatchCallConfigService.selectTLcBatchCallConfigByDeptId(deptId);
+        String orgId = ShiroUtils.getSysUser().getOrgId()+"";
+        TLcBatchCallConfig tbcc = this.tLcBatchCallConfigService.selectTLcBatchCallConfigByOrgId(orgId);
         /*if(tbcc != null){
             long now = DateUtils.getNowDate().getTime();//当前系统时间
             String startTime1 = DateUtils.getDate() + " " + tbcc.getStartTime1() + ":00";
@@ -189,10 +189,10 @@ public class TLcBatchCallController extends BaseController
         String callNum = request.getParameter("callNum");//一共有多少电话
         String[] caseNoArray = {};
         String[] importBatchNoArray = {};
-        String deptId = ShiroUtils.getSysUser().getDeptId()+"";
+        String orgId = ShiroUtils.getSysUser().getOrgId()+"";
         if(StringUtils.isNotEmpty(caseNoStr)){
             caseNoArray = caseNoStr.split(",");
-            TLcBatchCallConfig tbcc = this.tLcBatchCallConfigService.selectTLcBatchCallConfigByDeptId(deptId);
+            TLcBatchCallConfig tbcc = this.tLcBatchCallConfigService.selectTLcBatchCallConfigByOrgId(orgId);
             if(tbcc != null){
                 if(caseNoArray.length > tbcc.getBatchCallNum()){
                     return error("该委托机构配置的自动外呼案件数最大为"+tbcc.getBatchCallNum()+",你选择的案件数已经超过");
@@ -214,7 +214,7 @@ public class TLcBatchCallController extends BaseController
             return error("已经存在没有完成的自动外呼任务，请勿再发起自动外呼任务");
         }
 
-        return toAjax(tLcBatchCallService.insertTLcBatchCallByTask(isCallOther,exonNum,caseNoArray,importBatchNoArray,deptId));
+        return toAjax(tLcBatchCallService.insertTLcBatchCallByTask(isCallOther,exonNum,caseNoArray,importBatchNoArray,orgId));
     }
 
     /**

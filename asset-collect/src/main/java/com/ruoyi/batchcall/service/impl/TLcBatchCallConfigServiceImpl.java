@@ -123,7 +123,7 @@ public class TLcBatchCallConfigServiceImpl implements ITLcBatchCallConfigService
     }
 
     @Override
-    public TLcBatchCallConfig selectTLcBatchCallConfigByDeptId(String deptId) {
-        return tLcBatchCallConfigMapper.selectTLcBatchCallConfigByDeptId(deptId);
+    public TLcBatchCallConfig selectTLcBatchCallConfigByOrgId(String orgId) {
+        return tLcBatchCallConfigMapper.selectTLcBatchCallConfigByOrgId(orgId);
     }
 }

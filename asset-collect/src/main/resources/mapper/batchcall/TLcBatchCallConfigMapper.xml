@@ -111,7 +111,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <select id="selectTLcBatchCallConfigByDeptId" resultMap="TLcBatchCallConfigResult">
+    <select id="selectTLcBatchCallConfigByOrgId" resultMap="TLcBatchCallConfigResult">
         <include refid="selectTLcBatchCallConfigVo"/>
         where org_id = #{orgId}
     </select>
