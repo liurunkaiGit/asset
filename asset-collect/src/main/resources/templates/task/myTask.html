@@ -244,13 +244,13 @@
                                  <select  id="exonNum">
                                  </select>
                              </div>
-                             <div class="form-group">
+                             <!--<div class="form-group">
                                  <span style="font-size: 15px;color:black;">&nbsp;&nbsp;待拨打电话量：</span>
                                  <input type="text" name="callNum" id="callNum" readonly="true"/>
-                             </div>
+                             </div>-->
                          </div>
                          <div class="modal-footer">
-                             <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                             <button type="button" class="btn btn-white" data-dismiss="modal" onclick="closeDiv()">关闭</button>
                              <button type="button" class="btn btn-primary" onclick="batchCallSave();">保存</button>
                          </div>
                      </div>
@@ -685,7 +685,8 @@
                 $.modal.alertWarning("请至少选择一条记录");
                 return;
             }
-            var caseNoRows = $.table.selectColumns("caseNo"); //返回的是一个数组
+            $("#autoCallModal").show();
+            /*var caseNoRows = $.table.selectColumns("caseNo"); //返回的是一个数组
             var caseNoStr = "";
             for(var i = 0; i < caseNoRows.length; i ++){
                 caseNoStr = caseNoStr + caseNoRows[i] + ",";
@@ -701,7 +702,11 @@
                         $("#autoCallModal").show();
                     }
                 }
-            );
+            );*/
+        }
+        
+        function closeDiv() {
+            $("#autoCallModal").show('hide');
         }
 
         /**
