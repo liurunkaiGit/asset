@@ -1211,6 +1211,9 @@
                 importBatchNo:importBatchNo
             }, // 请求参数
             function(data) {
+                if (data.code == 1) {
+                    window.location.href="/login";
+                }
                 if(data != null) {
                     if(data.tlcTask != null){ //任务信息存在，填充任务信息
                         currentTaskId = data.tlcTask.id;
@@ -2390,6 +2393,12 @@
             transferType = '机器人协催';
         } else if(type == 17){
             transferType = '从机器人拉回';
+        } else if(type == 18){
+            transferType = '申请推送机器人';
+        } else if(type == 19){
+            transferType = '同意推送机器人';
+        } else if(type == 20){
+            transferType = '拒绝推送机器人';
         }
         return transferType;
     }

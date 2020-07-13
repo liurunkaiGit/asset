@@ -448,7 +448,7 @@ public class TLcTask extends BaseEntity {
     /**
      * 自由查询
      */
-    private String  freeSQL;
+    private String freeSQL;
 
     private Integer score;
     private String startScore;
@@ -459,6 +459,8 @@ public class TLcTask extends BaseEntity {
      */
     private String freeSQL2;
 
-
-
+    /**
+     * 推送任务批次号
+     */
+    private String sendRobotBatchNo;
 }

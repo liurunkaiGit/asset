@@ -249,7 +249,7 @@ public interface ITLcTaskService {
      *
      * @param taskIds
      */
-    AjaxResult sendRobot(String taskIds, String orgId, String speechcraftId, Integer callLineId);
+    AjaxResult sendRobot(String taskIds, String orgId, String speechcraftId, Integer callLineId, String sendRobotBatchNos);
 
     CollJob collJobDetail(String caseNo, String orgId, String importBatchNo);
 
@@ -309,5 +309,9 @@ public interface ITLcTaskService {
 
     Map<String, BigDecimal> selectTotalCountMoney(TLcTask tLcTask);
 
-    void sendRobotApply(String taskIds);
+    Response sendRobotApply(String taskIds);
+
+    List<TLcTask> selectTaskListBySendRobotBatchNo(String sendRobotBatchNo);
+
+    void updateTLcTaskBySendRobotBatchNo(TLcTask tLcTask);
 }

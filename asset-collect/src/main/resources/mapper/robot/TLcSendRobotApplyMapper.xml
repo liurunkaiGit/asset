@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.robot.mapper.TLcSendRobotApplyMapper">
+    
+    <resultMap type="com.ruoyi.robot.domain.TLcSendRobotApply" id="TLcSendRobotApplyResult">
+        <result property="id"    column="id"    />
+        <result property="sendRobotBatchNo"    column="send_robot_batch_no"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="taskNum"    column="task_num"    />
+        <result property="ownerId"    column="owner_id"    />
+        <result property="ownerName"    column="owner_name"    />
+        <result property="taskStatus"    column="task_status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTLcSendRobotApplyVo">
+        select id, send_robot_batch_no, org_id, org_name, task_num, owner_id, owner_name, task_status, create_by, create_time, update_by, update_time from t_lc_send_robot_apply
+    </sql>
+
+    <select id="selectTLcSendRobotApplyList" parameterType="com.ruoyi.robot.domain.TLcSendRobotApply" resultMap="TLcSendRobotApplyResult">
+        <include refid="selectTLcSendRobotApplyVo"/>
+        <where>  
+            <if test="sendRobotBatchNo != null  and sendRobotBatchNo != ''"> and send_robot_batch_no = #{sendRobotBatchNo}</if>
+            <if test="orgId != null "> and org_id = #{orgId}</if>
+            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+            <if test="taskNum != null "> and task_num = #{taskNum}</if>
+            <if test="ownerId != null "> and owner_id = #{ownerId}</if>
+            <if test="ownerName != null  and ownerName != ''"> and owner_name like concat('%', #{ownerName}, '%')</if>
+            <if test="taskStatus != null "> and task_status = #{taskStatus}</if>
+            <if test="startCreateTime != null"> and create_time <![CDATA[>=]]> #{startCreateTime}</if>
+            <if test="endCreateTime != null"> and create_time <![CDATA[<=]]> #{endCreateTime}</if>
+        </where>
+        order by task_status,create_time desc
+    </select>
+
+    <select id="selectSendRobotApplyListByStatus" parameterType="com.ruoyi.robot.domain.TLcSendRobotApply" resultMap="TLcSendRobotApplyResult">
+        <include refid="selectTLcSendRobotApplyVo"/>
+        where task_status = #{status}
+    </select>
+    
+    <select id="selectTLcSendRobotApplyById" parameterType="Integer" resultMap="TLcSendRobotApplyResult">
+        <include refid="selectTLcSendRobotApplyVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLcSendRobotApply" parameterType="com.ruoyi.robot.domain.TLcSendRobotApply" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_send_robot_apply
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sendRobotBatchNo != null  and sendRobotBatchNo != ''">send_robot_batch_no,</if>
+            <if test="orgId != null ">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="taskNum != null ">task_num,</if>
+            <if test="ownerId != null ">owner_id,</if>
+            <if test="ownerName != null  and ownerName != ''">owner_name,</if>
+            <if test="taskStatus != null ">task_status,</if>
+            <if test="createBy != null ">create_by,</if>
+            create_time
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sendRobotBatchNo != null  and sendRobotBatchNo != ''">#{sendRobotBatchNo},</if>
+            <if test="orgId != null ">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="taskNum != null ">#{taskNum},</if>
+            <if test="ownerId != null ">#{ownerId},</if>
+            <if test="ownerName != null  and ownerName != ''">#{ownerName},</if>
+            <if test="taskStatus != null ">#{taskStatus},</if>
+            <if test="createBy != null ">#{createBy},</if>
+            NOW()
+         </trim>
+    </insert>
+
+    <update id="updateTLcSendRobotApply" parameterType="com.ruoyi.robot.domain.TLcSendRobotApply">
+        update t_lc_send_robot_apply
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sendRobotBatchNo != null  and sendRobotBatchNo != ''">send_robot_batch_no = #{sendRobotBatchNo},</if>
+            <if test="orgId != null ">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="taskNum != null ">task_num = #{taskNum},</if>
+            <if test="ownerId != null ">owner_id = #{ownerId},</if>
+            <if test="ownerName != null  and ownerName != ''">owner_name = #{ownerName},</if>
+            <if test="taskStatus != null ">task_status = #{taskStatus},</if>
+            <if test="createBy != null ">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null ">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcSendRobotApplyById" parameterType="Integer">
+        delete from t_lc_send_robot_apply where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcSendRobotApplyByIds" parameterType="String">
+        delete from t_lc_send_robot_apply where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="updateSendRobotStatusBySendRobotBatchNo" parameterType="com.ruoyi.robot.domain.TLcSendRobotApply">
+        update t_lc_send_robot_apply set task_status = #{taskStatus},update_by = #{updateBy},update_time = NOW() where send_robot_batch_no = #{sendRobotBatchNo}
+    </update>
+</mapper>

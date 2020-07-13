@@ -286,6 +286,19 @@ public class TLcTaskController extends BaseController {
     }
 
     /**
+     * 查询任务列表
+     */
+    @PostMapping("/sendRobotApprovalList")
+    @ResponseBody
+    public TableDataInfo sendRobotApprovalList(TLcTask tLcTask) {
+        startPage();
+        tLcTask.setTaskType(TaskTypeEnum.SEND_ROBOT_APPLY.getCode());
+        tLcTask.setOrgId(ShiroUtils.getSysUser().getOrgId().toString());
+        List<TLcTask> list = tLcTaskService.selectTLcTaskByPage(tLcTask);
+        return getDataTable(list);
+    }
+
+    /**
      * 操作全部数据
      */
     @PostMapping("/opreAllFindData")
@@ -834,9 +847,9 @@ public class TLcTaskController extends BaseController {
      */
     @ResponseBody
     @PostMapping("/sendRobot")
-    public AjaxResult sendRobot(String taskIds, String orgId, String speechcraftIdAndSceneDefId, Integer callLineId) {
+    public AjaxResult sendRobot(String taskIds, String orgId, String speechcraftIdAndSceneDefId, Integer callLineId, String sendRobotBatchNos) {
         try {
-            return this.tLcTaskService.sendRobot(taskIds, orgId, speechcraftIdAndSceneDefId, callLineId);
+            return this.tLcTaskService.sendRobot(taskIds, ShiroUtils.getSysUser().getOrgId().toString(), speechcraftIdAndSceneDefId, callLineId, sendRobotBatchNos);
         } catch (Exception e) {
             log.error("推送到机器人失败，error is {}", e);
             return AjaxResult.success(AjaxResult.Type.ERROR, "推送失败", null);
@@ -864,9 +877,10 @@ public class TLcTaskController extends BaseController {
      * @param taskIds
      */
     @GetMapping("/toSendRobot")
-    public String toSendRobot(String taskIds, String orgId, ModelMap modelMap) {
+    public String toSendRobot(String taskIds, String orgId, ModelMap modelMap,String sendRobotBatchNos) {
         modelMap.put("taskIds", taskIds);
         modelMap.put("orgId", orgId);
+        modelMap.put("sendRobotBatchNos", sendRobotBatchNos);
         return prefix + "/sendRobot";
     }
 
@@ -1018,8 +1032,7 @@ public class TLcTaskController extends BaseController {
     @PostMapping("/sendRobotApply")
     @ResponseBody
     public Response sendRobotApply(String taskIds) {
-        this.tLcTaskService.sendRobotApply(taskIds);
-        return Response.success(taskIds.split(",").length);
+        return this.tLcTaskService.sendRobotApply(taskIds);
     }
 
     /**
