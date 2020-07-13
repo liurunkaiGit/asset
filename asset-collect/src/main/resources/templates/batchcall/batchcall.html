@@ -77,11 +77,11 @@
                 <button type="button" class="btn btn-success" onclick="pauseCall()">暂停</button>
                 <button type="button" class="btn btn-success" onclick="startCall()">启动</button>
                 <button type="button" class="btn btn-success" onclick="cancleCall()">取消任务</button>
-                <button type="button" class="btn btn-success" onclick="isCanCall()">拨打</button>
+                <!--<button type="button" class="btn btn-success" onclick="isCanCall()">拨打</button>-->
             </div>
 
             <div class="col-sm-12 select-table table-striped">
-                <table id="callingContent" class="table table-hover" style="margin-bottom:0px;">
+                <table id="callingContent" class="table table-hover" style="margin-bottom:0px;height: 40px;">
 
                 </table>
                 <table id="bootstrap-table"></table>
@@ -169,6 +169,7 @@
         var editFlag = [[${@permission.hasPermi('ruoyi:batchcall:edit')}]];
         var removeFlag = [[${@permission.hasPermi('ruoyi:batchcall:remove')}]];
         var phoneTypes = [[${@dict.getType('phone_type')}]];
+        var contactRelations = [[${@dict.getType('sys_custom_contact_rela')}]];
         var batchCallStatus = [[${@dict.getType('batch_call_status')}]];
         var prefix = ctx + "ruoyi/batchcall";
         var collectPrefix = ctx + "collect/task";
@@ -233,7 +234,10 @@
                 },
                 {
                     field : 'contactRelation', 
-                    title : '与本人关系'
+                    title : '与本人关系',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(contactRelations, value);
+                    }
                 },
                 {
                     field : 'exonNum',
@@ -270,8 +274,8 @@
 
         function openAutoCollJob(caseNo,importBatchNo,orgId,exonNum,id) {
             var toAutoCollJobUrl = prefix + '/toAutoCollJob?orgId='+orgId +'&caseNo='+caseNo +'&importBatchNo='+importBatchNo+'&exonNum='+exonNum+'&id='+id;
-            var width = "800";
-            var height = $(window).height() - 50;
+            var width = $(window).width();
+            var height = $(window).height();
             layer.open({
                 type: 2,
                 maxmin: true,
@@ -282,7 +286,7 @@
                 content: toAutoCollJobUrl,
                 shadeClose: true,
                 btn: ['关闭'],
-                /*yes: function (index, layero) {//关闭按钮监听事件
+                /*yes: function (index, layero) {//关闭按钮监听事件,测试显示，无论是点击X 还是点击 关闭， yes 和 end 方法都会触发
                     layer.close(index);
                     alert("点击X 关闭");
                     toNextCall();
@@ -611,7 +615,7 @@
             var str = "<tr><td>批次号：" + currentCall.batchNo +"</td>";
             str = str + "<td>姓名：" + currentCall.contactName +"</td>";
             str = str + "<td>电话号码：" + currentCall.phone +"</td></tr>";
-            /*str = str + "<td>状态：" + currentCall.taskStatus +"</td></tr>";*/
+            str = str + "<td>状态：外呼中</td></tr>";
             $("#callingContent").html(str);
             /*$("#currentPhone").val(currentCall.phone);
             $("#currentContactName").val(currentCall.contactName);
@@ -642,6 +646,7 @@
                 },
                 function (data) {
                     if (data.code == 0) {//请求成功
+                        $.table.refresh();
                         $.modal.alert("暂停成功");
                         isCall = 0;//停止自动外呼
                         //循环遍历当前 批量外呼数组，把ID相同的数据 中的状态 也修改了
@@ -670,6 +675,7 @@
                 },
                 function (data) {
                     if (data.code == 0) {//请求成功
+                        $.table.refresh();
                         $.modal.alert("启动成功");
                         //循环遍历当前 批量外呼数组，把ID相同的数据 中的状态 也修改了
                         for(var i = 0;i < batchCallList.length; i ++){
@@ -745,7 +751,7 @@
             if(tbcc.startTime1 != ''){
                 var startTime1 = parseInt(tbcc.startTime1.replace(":",""));
                 var endTime1 = parseInt(tbcc.endTime1.replace(":",""));
-                if(time >= startTime1 && time <= endTime1){
+                if(time < startTime1 && time > endTime1){
                     return false;
                 }
             }else{
@@ -754,14 +760,14 @@
             if(tbcc.startTime2 != ''){
                 var startTime2 = parseInt(tbcc.startTime2.replace(":",""));
                 var endTime2 = parseInt(tbcc.endTime2.replace(":",""));
-                if(time >= startTime2 && time <= endTime2){
+                if(time < startTime2 && time > endTime2){
                     return false;
                 }
             }
             if(tbcc.startTime3 != ''){
                 var startTime3 = parseInt(tbcc.startTime3.replace(":",""));
                 var endTime3 = parseInt(tbcc.endTime3.replace(":",""));
-                if(time >= startTime3 && time <= endTime3){
+                if(time < startTime3 && time > endTime3){
                     return false;
                 }
             }

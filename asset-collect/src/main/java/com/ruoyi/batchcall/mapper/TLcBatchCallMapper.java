@@ -1,6 +1,7 @@
 package com.ruoyi.batchcall.mapper;
 
 import com.ruoyi.batchcall.domain.TLcBatchCall;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -62,13 +63,13 @@ public interface TLcBatchCallMapper
     public int deleteTLcBatchCallByIds(String[] ids);
 
     /**
-     * 根据批次号 修改任务状态
-     * @param batchNo
+     * 根据创建人 修改任务状态
+     * @param createBy
      * @param sourceTaskStatus 原状态
      * @param targetTaskStatus 目标状态
      * @return
      */
-    public int updateBatchCallByBatchNo(String batchNo, Integer sourceTaskStatus, Integer targetTaskStatus);
+    public int updateBatchCallByBatchNo(@Param("createBy")String createBy, @Param("sourceTaskStatus")Integer sourceTaskStatus, @Param("targetTaskStatus")Integer targetTaskStatus);
 
     /**
      * 批量修改任务状态
