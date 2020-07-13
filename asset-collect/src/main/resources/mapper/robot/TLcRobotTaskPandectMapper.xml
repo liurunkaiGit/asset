@@ -200,5 +200,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectTLcRobotTaskPandectVo"/>
         where robot_task_id = #{robotTaskId}
     </select>
+
+    <select id="selectRobotTaskPandectByRobotTaskStatus" parameterType="java.lang.Integer" resultMap="TLcRobotTaskPandectResult">
+        <include refid="selectTLcRobotTaskPandectVo"/>
+        where robot_task_status = #{robotTaskStatus}
+    </select>
     
 </mapper>

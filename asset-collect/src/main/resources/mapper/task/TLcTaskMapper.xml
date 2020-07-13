@@ -413,7 +413,7 @@
         and t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no
         AND t.allot_type = 1
         AND t.task_status = 2
-        AND t.task_type NOT IN (10, 11, 12)
+        AND t.task_type NOT IN (10, 11, 12, 18, 19)
         <if test="startLjyhje != null">
             and d.ljyhje <![CDATA[>=]]> #{startLjyhje}
         </if>
@@ -755,7 +755,7 @@
         WHERE  t.owner_id = #{ownerId}
             AND t.allot_type = 1
             AND t.task_status = 2
-            AND t.task_type NOT IN (10, 11, 12)
+            AND t.task_type NOT IN (10, 11, 12, 18, 19)
         ORDER BY
 	        t.task_status ASC,
 	        t.create_time DESC,

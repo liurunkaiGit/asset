@@ -1,7 +1,9 @@
 package com.ruoyi.custom.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.custom.domain.TLcCustContact;
 import com.ruoyi.custom.service.ITLcCustContactService;
 import com.ruoyi.enums.ContactOriginEnum;
@@ -128,5 +130,25 @@ public class TLcCustContactController extends BaseController {
     @ResponseBody
     public AjaxResult remove(String ids) {
         return toAjax(tLcCustContactService.deleteTLcCustContactByIds(ids));
+    }
+
+    /**
+     * 根据案件编号，得到联系人
+     */
+    @Log(title = "客户联系人信息", businessType = BusinessType.UPDATE)
+    @PostMapping("/getCustCount")
+    @ResponseBody
+    public AjaxResult getCustContact(String caseNoStr) {
+        List<TLcCustContact> list = new ArrayList<TLcCustContact>();
+        if(StringUtils.isNotEmpty(caseNoStr)){
+            String[] caseNoRows = caseNoStr.split(",");
+            for (int i = 0; i < caseNoRows.length ; i ++){
+                List<TLcCustContact> tmplist = tLcCustContactService.findCustContactByCaseNo(caseNoRows[i]);
+                if(!tmplist.isEmpty()){
+                    list.addAll(tmplist) ;
+                }
+            }
+        }
+        return AjaxResult.success(list.size());
     }
 }

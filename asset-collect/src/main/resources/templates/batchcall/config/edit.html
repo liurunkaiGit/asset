@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改批量外呼')" />
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-batchcallconfig-edit" th:object="${tLcBatchCallConfig}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <input name="times" id="times" th:value="${times}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">委托方：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" readonly="true" th:field="${tLcBatchCallConfig.orgName}"/>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">批量外呼最大案件数：</label>
+                <div class="col-sm-8">
+                    <input name="batchCallNum" th:field="*{batchCallNum}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">可呼叫时间段：</label>
+                <div class="col-sm-5">
+                    <div class="input-group date">
+                        <input name="startTime1" id="startTime1" class="form-control" placeholder="HH-mm" type="text" style="width: 88px;" th:value="${tLcBatchCallConfig.startTime1}">
+                        <span class="form-control" style=" width: 20px;">-</span>
+                        <input name="endTime1" id="endTime1" class="form-control" placeholder="HH-mm" type="text" style="width: 88px;" th:value="${tLcBatchCallConfig.endTime1}">
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <input class="bottom" type="button" onclick="addTime()" value="添加时间段">
+                    <input class="bottom" type="button" onclick="delTime()" value="删除时间段">
+                </div>
+            </div>
+            <div class="form-group" id="startTime2Div" th:style="'display:' + @{(${tLcBatchCallConfig.startTime2 != ''} ? 'block' : 'none')} + ''">
+                <label class="col-sm-3 control-label">可呼叫时间段：</label>
+                <div class="col-sm-5">
+                    <div class="input-group date">
+                        <input name="startTime2" id="startTime2" class="form-control" placeholder="HH-mm" type="text" style="width: 88px;" th:value="${tLcBatchCallConfig.startTime2}">
+                        <span class="form-control" style=" width: 20px;">-</span>
+                        <input name="endTime2" id="endTime2" class="form-control" placeholder="HH-mm" type="text" style="width: 88px;" th:value="${tLcBatchCallConfig.endTime2}">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" id="startTime3Div" th:style="'display:' + @{(${tLcBatchCallConfig.startTime3 != ''} ? 'block' : 'none')} + ''">
+                <label class="col-sm-3 control-label">可呼叫时间段：</label>
+                <div class="col-sm-5">
+                    <div class="input-group date">
+                        <input name="startTime3" id="startTime3" class="form-control" placeholder="HH-mm" type="text" style="width: 88px;" th:value="${tLcBatchCallConfig.startTime3}">
+                        <span class="form-control" style=" width: 20px;">-</span>
+                        <input name="endTime3" id="endTime3" class="form-control" placeholder="HH-mm" type="text" style="width: 88px;" th:value="${tLcBatchCallConfig.endTime3}">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">本人接通后是否继续拨打本案其他号码：</label>
+                <div class="col-sm-8">
+                    <label class="radio-box"><input type="radio" name="isCallOther" value="0" th:checked="${tLcBatchCallConfig.isCallOther == '0'}"/>不呼叫</label>
+                    <label class="radio-box"><input type="radio" name="isCallOther" value="1" th:checked="${tLcBatchCallConfig.isCallOther == '1'}"/>呼叫</label>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "ruoyi/batchcallconfig";
+        $("#form-batchcallconfig-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            var batchCallNum = $("#batchCallNum").val();
+            var startTime1 = $("#startTime1").val();
+            var endTime1 = $("#endTime1").val();
+            var startTime2 = $("#startTime2").val();
+            var endTime2 = $("#endTime2").val();
+            var startTime3 = $("#startTime3").val();
+            var endTime3 = $("#endTime3").val();
+            var endTime3 = $("#endTime3").val();
+            var times = parseInt($("#times").val());
+
+            if(batchCallNum == ''){
+                $.modal.alert("批量外呼最大案件数");
+                return ;
+            }else{
+                var reg = /^[1-9]\d*$/; //正整数的正则表达式
+                if(!reg.test(batchCallNum)) {
+                    $.modal.alert("批量外呼最大案件数必须是大于0的正整数");
+                    return;
+                }
+                if(parseInt(batchCallNum) > 1000){
+                    $.modal.alert("批量外呼最大案件数最大只能为1000");
+                    return;
+                }
+            }
+            if(startTime1 == ''){
+                $.modal.alert("可呼叫时间段开始时间不能为空");
+                return ;
+            }
+            if(endTime1 == ''){
+                $.modal.alert("可呼叫时间段结束时间不能为空");
+                return ;
+            }
+            if(times == 1){
+                if(startTime2 == ''){
+                    $.modal.alert("可呼叫时间段开始时间不能为空");
+                    return ;
+                }
+                if(endTime2 == ''){
+                    $.modal.alert("可呼叫时间段结束时间不能为空");
+                    return ;
+                }
+            }else if(times == 2){
+                if(startTime3 == ''){
+                    $.modal.alert("可呼叫时间段开始时间不能为空");
+                    return ;
+                }
+                if(endTime3 == ''){
+                    $.modal.alert("可呼叫时间段结束时间不能为空");
+                    return ;
+                }
+            }
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-batchcallconfig-edit').serialize());
+            }
+        }
+
+        function addTime() {
+            var times = parseInt($("#times").val());
+            times = times + 1;
+            if(times == 1){
+                $("#startTime2Div").show();
+                $("#times").val(times)
+            }else if(times == 2){
+                $("#startTime2Div").show();
+                $("#startTime3Div").show();
+                $("#times").val(times)
+            }else {
+                times = 2;
+                $.modal.alert("可外呼时间段最多添加3个");
+            }
+        }
+
+        function delTime() {
+            var times = parseInt($("#times").val());
+            if(times == 2){
+                $("#startTime3Div").hide();
+                $("#startTime3").val("");
+                $("#endTime3").val("");
+                times = times - 1;
+                $("#times").val(times)
+            }else if(times = 1){
+                $("#startTime2Div").hide();
+                $("#startTime2").val("");
+                $("#endTime2").val("");
+                times = times - 1;
+                $("#times").val(times)
+            }else{
+                times = 0;
+                $("#times").val(times)
+                $.modal.alert("可外呼时间段最少为1个");
+            }
+        }
+
+        $("input[name='startTime1']").datetimepicker({
+            format: "hh:ii",
+            language: 'fr',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 1,
+            minView: 0,
+            maxView: 1,
+            forceParse: 0
+        });
+
+        $("input[name='endTime1']").datetimepicker({
+            format: "hh:ii",
+            language: 'fr',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 1,
+            minView: 0,
+            maxView: 1,
+            forceParse: 0
+        });
+
+        $("input[name='startTime2']").datetimepicker({
+            format: "hh:ii",
+            language: 'fr',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 1,
+            minView: 0,
+            maxView: 1,
+            forceParse: 0
+        });
+
+        $("input[name='endTime2']").datetimepicker({
+            format: "hh:ii",
+            language: 'fr',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 1,
+            minView: 0,
+            maxView: 1,
+            forceParse: 0
+        });
+
+        $("input[name='startTime3']").datetimepicker({
+            format: "hh:ii",
+            language: 'fr',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 1,
+            minView: 0,
+            maxView: 1,
+            forceParse: 0
+        });
+
+        $("input[name='endTime3']").datetimepicker({
+            format: "hh:ii",
+            language: 'fr',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 1,
+            minView: 0,
+            maxView: 1,
+            forceParse: 0
+        });
+
+    </script>
+</body>
+</html>
