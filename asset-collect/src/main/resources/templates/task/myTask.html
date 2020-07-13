@@ -218,6 +218,7 @@
                 <button type="button" class="btn btn-success" onclick="toCollJob('','')">催收作业</button>
                 <button type="button" class="btn btn-success" onclick="signRepay('ALPA')">标记还款</button>
                 <button type="button" class="btn btn-success" onclick="toAutoCall()">自动拨打</button>
+                <!--<button type="button" class="btn btn-success" onclick="sendRobotApply()">机器人外呼</button>-->
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -707,6 +708,26 @@
         
         function closeDiv() {
             $("#autoCallModal").show('hide');
+        }
+
+        // 推送机器人申请
+        function sendRobotApply() {
+            var taskIdRows = $.table.selectFirstColumns();
+            if (taskIdRows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.post(
+                prefix + "/sendRobotApply",
+                {
+                    taskIds:taskIdRows.join()
+                },
+                function (data) {
+                    if (data.status == 200) {//请求成功
+                        $.modal.alertSuccess("本次操作包含" + data.result + "条数据");
+                    }
+                }
+            );
         }
 
         /**

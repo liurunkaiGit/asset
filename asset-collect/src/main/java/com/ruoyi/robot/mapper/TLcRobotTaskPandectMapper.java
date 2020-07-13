@@ -1,6 +1,7 @@
 package com.ruoyi.robot.mapper;
 
 import com.ruoyi.robot.domain.TLcRobotTaskPandect;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -62,4 +63,6 @@ public interface TLcRobotTaskPandectMapper {
     TLcRobotTaskPandect selectTLcRobotTaskPandectByRobotTaskId(Integer robotTaskId);
 
     void updateRobotTaskPandectStatusByRobotTaskId(TLcRobotTaskPandect robotTaskPandect);
+
+    List<TLcRobotTaskPandect> selectRobotTaskPandectByRobotTaskStatus(@Param("robotTaskStatus") Integer robotTaskStatus);
 }

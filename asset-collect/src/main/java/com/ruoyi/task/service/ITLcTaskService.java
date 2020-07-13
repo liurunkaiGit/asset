@@ -309,4 +309,5 @@ public interface ITLcTaskService {
 
     Map<String, BigDecimal> selectTotalCountMoney(TLcTask tLcTask);
 
+    void sendRobotApply(String taskIds);
 }

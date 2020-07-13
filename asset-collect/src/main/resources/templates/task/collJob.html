@@ -1168,8 +1168,11 @@
                     if($('#find').val() == '1') {
                         selectRecordList(currentCaseNo);
                     }
+                }else if (data.code == 1) {
+                    $.modal.alertError("操作失败:"+data.msg);
+                    window.location.href="/login";
                 }else{
-                    $.modal.alertSuccess("操作失败:"+data.message);
+                    $.modal.alertError("操作失败:"+data.message);
                 }
             }
         );
@@ -1429,6 +1432,8 @@
                     if($('#call').val() == '1') {
                         callRecordList(currentCaseNo);
                     }
+                }else if (data.code == 1) {
+                    window.location.href="/login";
                 }else{
                     $.modal.alertSuccess("保存失败:"+data.message);
                 }
@@ -1581,6 +1586,8 @@
                     if($('#action').val() == '1') {
                         actionRecordList(currentCaseNo);
                     }
+                }else if (data.code == 1) {
+                    window.location.href="/login";
                 }
             }
         );
@@ -1752,10 +1759,12 @@
         var extNumList = $("#extNum").val();
         extNumList = extNumList.split(",");
         $("#exonNum").append("<option value=''>请选择</option>");
-        $.each(extNumList,function(index,obj){
-            var agentId = obj;
-            $("#exonNum").append("<option value='"+agentId+"'>"+agentId+"</option>");
-        });
+        if (extNumList != null && extNumList != "") {
+            $.each(extNumList,function(index,obj){
+                var agentId = obj;
+                $("#exonNum").append("<option value='"+agentId+"'>"+agentId+"</option>");
+            });
+        }
     });
 
 
@@ -2120,21 +2129,6 @@
             $(".disclass").css('pointer-events','');
             $(".disclass").css('background','');
         },10000);
-
-        var val = $('input[name="radioChoose"]:checked').parents("tr");
-        val.css('background','#dddada');
-        // var phone = val.find("[name='phone']").html();
-        var destDesc = "0"+phone;
-        temp_phone=phone;
-        if(callPlatform == 'PA') {
-            if (destDesc) {
-                agentClient.makeCall(getDestType(destDesc), destDesc);
-            }
-        } else if(callPlatform == 'ZJ') {
-            // 第一个参数是呼叫号码，第二个参数是外显号码
-            uKeFuSoftPhone.CallOut(phone,$('#exonNum').val());
-        }
-        start();
         var val = $('input[name="radioChoose"]:checked').parents("tr");
         var callStartTime = $("#callStartTime").val();
         var callEndTime = $("#callEndTime").val();
@@ -2174,9 +2168,25 @@
                     if($('#call').val() == '1') {
                         callRecordList(currentCaseNo);
                     }
+                }else if (data.code == 1) {
+                    window.location.href="/login";
                 }
             }
         );
+        var val = $('input[name="radioChoose"]:checked').parents("tr");
+        val.css('background','#dddada');
+        // var phone = val.find("[name='phone']").html();
+        var destDesc = "0"+phone;
+        temp_phone=phone;
+        start();
+        if(callPlatform == 'PA') {
+            if (destDesc) {
+                agentClient.makeCall(getDestType(destDesc), destDesc);
+            }
+        } else if(callPlatform == 'ZJ') {
+            // 第一个参数是呼叫号码，第二个参数是外显号码
+            uKeFuSoftPhone.CallOut(phone,$('#exonNum').val());
+        }
     }
 
     /**
@@ -2557,17 +2567,6 @@
             $(".disclass").css('pointer-events','');
             $(".disclass").css('background','');
         },10000);
-        var phone = $("#freeCall").val();
-        var destDesc = "0"+phone;
-        if(callPlatform == 'PA') {
-            if (destDesc) {
-                agentClient.makeCall(getDestType(destDesc), destDesc);
-            }
-        } else if(callPlatform == 'ZJ') {
-            // 第一个参数是呼叫号码，第二个参数是外显号码
-            uKeFuSoftPhone.CallOut($("#freeCall").val(),$('#exonNum').val());
-        }
-        start();
         var callStartTime = $("#callStartTime").val();
         var callEndTime = $("#callEndTime").val();
         var callLen = $("#callLen").val();
@@ -2598,9 +2597,22 @@
                     if($('#call').val() == '1') {
                         callRecordList(currentCaseNo);
                     }
+                }else if (data.code == 1) {
+                    window.location.href="/login";
                 }
             }
         );
+        var phone = $("#freeCall").val();
+        var destDesc = "0"+phone;
+        start();
+        if(callPlatform == 'PA') {
+            if (destDesc) {
+                agentClient.makeCall(getDestType(destDesc), destDesc);
+            }
+        } else if(callPlatform == 'ZJ') {
+            // 第一个参数是呼叫号码，第二个参数是外显号码
+            uKeFuSoftPhone.CallOut($("#freeCall").val(),$('#exonNum').val());
+        }
     }
 
 
