@@ -44,7 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 </foreach>
             </if>
         </where>
-        order by case_no desc,contact_relation asc,phone_type asc
+        order by case_no desc,contact_relation asc,phone_type asc,create_time desc
     </select>
     
     <select id="selectTLcBatchCallById" parameterType="Long" resultMap="TLcBatchCallResult">

@@ -301,32 +301,51 @@
         function toNextCall() {
             //把结束的通话设置为 已完成
             hangUp();//挂断电话
-            updateStatus(currentCall.id,2,"电话已挂断");
-            if(indexCall < batchCallList.length){//还有下一条了
-                var nextBatchCall;
-                var tmpIndex = 0;//
-                if(tbcc.isCallOther == '0'){//批量配置为：本人接通后是否继续拨打本案其他号码：0 不呼叫
-                    //循环遍历当前 批量外呼数组，把本人的其他联系人拨打信息，都给踢出，然后继续拨打下一条非本人的信息
-                    for(var i = 0;i < batchCallList.length; i ++){
-                        var bc = batchCallList[i];
-                        if(bc.caseNo == currentCall.caseNo && bc.importBatchNo == currentCall.importBatchNo && bc.contactRelation != 1){//相同案件号和批次号，且联系人关系 非本人
-                            updateStatus(bc.id,3,"配置为本人拨打成功后，不拨打其他，状态置为取消");//状态修改为  已取消
-                        }
-                        //状态为待外呼，且是本人,且不是本案件，只有为0，第一次的时候，找到下一条要拨打的数据
-                        if(bc.taskStatus == 1 && bc.contactRelation == 1 && bc.caseNo != currentCall.caseNo && tmpIndex == 0){
-                            nextBatchCall = bc;
-                            indexCall = i;//数组全局序号 ，让下一次打电话取数据用
-                            tmpIndex ++;
+            // updateStatus(currentCall.id,2,"电话已挂断");
+            $.post(
+                prefix + "/editBatchCall",
+                {
+                    id:currentCall.id,
+                    taskStatus:2,
+                    remark:"电话已挂断"
+                },
+                function (data) {
+                    if (data.code == 0) {//请求成功
+                        //把ID相同的数据 中的状态 也修改了
+                        currentCall.taskStatus = status;
+
+                        if(indexCall < batchCallList.length){//还有下一条了
+                            var nextBatchCall;
+                            var tmpIndex = 0;//
+                            if(tbcc.isCallOther == '0'){//批量配置为：本人接通后是否继续拨打本案其他号码：0 不呼叫
+                                //循环遍历当前 批量外呼数组，把本人的其他联系人拨打信息，都给踢出，然后继续拨打下一条非本人的信息
+                                for(var i = 0;i < batchCallList.length; i ++){
+                                    var bc = batchCallList[i];
+                                    if(bc.caseNo == currentCall.caseNo && bc.importBatchNo == currentCall.importBatchNo && bc.contactRelation != 1){//相同案件号和批次号，且联系人关系 非本人
+                                        updateStatus(bc.id,3,"配置为本人拨打成功后，不拨打其他，状态置为取消");//状态修改为  已取消
+                                    }
+                                    //状态为待外呼，且是本人,且不是本案件，只有为0，第一次的时候，找到下一条要拨打的数据
+                                    if(bc.taskStatus == 1 && bc.contactRelation == 1 && bc.caseNo != currentCall.caseNo && tmpIndex == 0){
+                                        nextBatchCall = bc;
+                                        indexCall = i;//数组全局序号 ，让下一次打电话取数据用
+                                        tmpIndex ++;
+                                    }
+                                }
+                                if(nextBatchCall == null){//没有下一条可拨打
+                                    $.modal.alert("自动呼叫队列已呼叫完毕");
+                                }else{
+                                    call(nextBatchCall);
+                                }
+                            }else{
+                                nextBatchCall = batchCallList[indexCall];
+                                call(nextBatchCall);
+                            }
+                        }else{
+                            $.modal.alert("自动呼叫队列已呼叫完毕");
                         }
                     }
-                    call(nextBatchCall);
-                }else{
-                    nextBatchCall = batchCallList[indexCall];
-                    call(nextBatchCall);
                 }
-            }else{
-                $.modal.alert("自动呼叫队列已呼叫完毕");
-            }
+            );
         }
 
         function initial1() {
