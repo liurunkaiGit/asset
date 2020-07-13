@@ -60,6 +60,12 @@
             </if>
             <if test="relation != null  and relation != ''">and relation = #{relation}</if>
             <if test="caseNo != null  and caseNo != ''">and case_no = #{caseNo}</if>
+            <if test="caseNoList != null  and caseNoList.size() > 0">
+                and case_no in
+                <foreach collection="caseNoList" item="cn" open="(" close=")" separator=",">
+                    #{cn}
+                </foreach>
+            </if>
             <if test="phone != null  and phone != ''">and phone = #{phone}</if>
             <if test="tel != null  and tel != ''">and tel = #{tel}</if>
             <if test="address != null  and address != ''">and address = #{address}</if>

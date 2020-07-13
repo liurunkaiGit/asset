@@ -1,6 +1,7 @@
 package com.ruoyi.custom.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.ruoyi.common.utils.StringUtils;
@@ -138,16 +139,24 @@ public class TLcCustContactController extends BaseController {
     @Log(title = "客户联系人信息", businessType = BusinessType.UPDATE)
     @PostMapping("/getCustCount")
     @ResponseBody
-    public AjaxResult getCustContact(String caseNoStr) {
+    public AjaxResult getCustContact(String caseNoStr,String isHasOther) {
         List<TLcCustContact> list = new ArrayList<TLcCustContact>();
         if(StringUtils.isNotEmpty(caseNoStr)){
             String[] caseNoRows = caseNoStr.split(",");
-            for (int i = 0; i < caseNoRows.length ; i ++){
+            TLcCustContact tcc = new TLcCustContact();
+            tcc.setCaseNoList(Arrays.asList(caseNoRows));
+            if(StringUtils.isNotEmpty(isHasOther)){
+                if("0".equals(isHasOther)){//只有本人
+                    tcc.setRelation(1);
+                }
+            }
+            list = this.tLcCustContactService.selectTLcCustContactList(tcc);
+            /*for (int i = 0; i < caseNoRows.length ; i ++){
                 List<TLcCustContact> tmplist = tLcCustContactService.findCustContactByCaseNo(caseNoRows[i]);
                 if(!tmplist.isEmpty()){
                     list.addAll(tmplist) ;
                 }
-            }
+            }*/
         }
         return AjaxResult.success(list.size());
     }

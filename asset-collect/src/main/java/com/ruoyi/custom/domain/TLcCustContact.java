@@ -11,6 +11,7 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 客户联系人信息对象 t_lc_cust_contact
@@ -120,5 +121,7 @@ public class TLcCustContact extends BaseEntity {
     @Excel(name = "导入批次号")
     private String importBatchNo;
     private String isClose;
+
+    private List<String> caseNoList;
 
 }

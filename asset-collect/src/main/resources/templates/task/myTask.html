@@ -241,18 +241,18 @@
                          <div class="modal-body" style="height: 200px;">
                              <div class="form-group">
                                  <span style="font-size: 15px;color:black;">&nbsp;&nbsp;*拨打号码设置：</span>
-                                 <label class="radio-box"><input type="radio" name="isCallOther" value="0" />拨打本人</label>
-                                 <label class="radio-box"><input type="radio" name="isCallOther" value="1" />拨打本人+其他</label>
+                                 <input type="radio" name="isCallOther" value="0" />拨打本人
+                                 <input type="radio" name="isCallOther" value="1" />拨打本人+其他
                              </div>
                              <div class="form-group">
-                                 <span style="font-size: 15px;color:black;">&nbsp;&nbsp;*外显号码：</span>
+                                 <span style="font-size: 15px;color:black;">&nbsp;&nbsp;*外显号码：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                  <select  id="exonNum">
                                  </select>
                              </div>
-                             <!--<div class="form-group">
+                             <div class="form-group">
                                  <span style="font-size: 15px;color:black;">&nbsp;&nbsp;待拨打电话量：</span>
                                  <input type="text" name="callNum" id="callNum" readonly="true"/>
-                             </div>-->
+                             </div>
                          </div>
                          <div class="modal-footer">
                              <button type="button" class="btn btn-white" data-dismiss="modal" onclick="closeDiv()">关闭</button>
@@ -684,14 +684,13 @@
         }
 
         // 自动拨打
-        function toAutoCall() {
+        function toAutoCall(isHasOther) {
             var taskIdRows = $.table.selectFirstColumns();
             if (taskIdRows.length == 0) {
                 $.modal.alertWarning("请至少选择一条记录");
                 return;
             }
-            $("#autoCallModal").show();
-            /*var caseNoRows = $.table.selectColumns("caseNo"); //返回的是一个数组
+            var caseNoRows = $.table.selectColumns("caseNo"); //返回的是一个数组
             var caseNoStr = "";
             for(var i = 0; i < caseNoRows.length; i ++){
                 caseNoStr = caseNoStr + caseNoRows[i] + ",";
@@ -699,7 +698,8 @@
             $.post(
                 custContactPrefix + "/getCustCount",
                 {
-                    caseNoStr:caseNoStr
+                    caseNoStr:caseNoStr,
+                    isHasOther:isHasOther
                 },
                 function (data) {
                     if (data.code == 0) {//请求成功
@@ -707,11 +707,11 @@
                         $("#autoCallModal").show();
                     }
                 }
-            );*/
+            );
         }
         
         function closeDiv() {
-            $("#autoCallModal").show('hide');
+            $("#autoCallModal").modal('hide');
         }
 
         // 推送机器人申请
@@ -782,6 +782,15 @@
             );
 
         }
+
+        // 点击事件change
+        $('input[type=radio][name=isCallOther]').click(function () {
+            // 获取input radio选中值，方法一
+            var isHasOther = $('input:radio[name="isCallOther"]:checked').val();
+            // 获取input radio选中值，方法二
+            // var myvalue = $(this).val();
+            toAutoCall(isHasOther);
+        });
 
     </script>
 </body>
