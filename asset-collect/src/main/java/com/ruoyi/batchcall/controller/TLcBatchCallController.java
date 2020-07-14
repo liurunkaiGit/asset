@@ -45,7 +45,7 @@ public class TLcBatchCallController extends BaseController
 
     @RequiresPermissions("ruoyi:batchcall:view")
     @GetMapping()
-    public String batchcall(ModelMap modelMap)
+    public String batchcall(ModelMap modelMap ,String isCanAutoCall)
     {
 //        String isCanAutoCall = "1";//可自动外呼
         String orgId = ShiroUtils.getSysUser().getOrgId()+"";
@@ -82,7 +82,7 @@ public class TLcBatchCallController extends BaseController
             }
         }
         logger.info("可自动外呼标志：isCanAutoCall={}",isCanAutoCall);*/
-//        modelMap.put("isCanAutoCall",isCanAutoCall);
+        modelMap.put("isCanAutoCall",isCanAutoCall);
         modelMap.put("tLcBatchCallConfig",tbcc);//该部门的批量外呼配置信息
 
         ExtPhone extPhone = new ExtPhone();

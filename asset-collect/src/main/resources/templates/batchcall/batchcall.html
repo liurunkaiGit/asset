@@ -262,12 +262,9 @@
             //表格加载完成之后，会触及此方法
             /*$('#bootstrap-table').on('load-success.bs.table', function (e,data) {
                 // alert(JSON.stringify(data.rows));
-                var isCanAutoCall = $("#isCanAutoCall").val();
-                if("1" == isCanAutoCall && batchCallArray.length > 0){//可自动外呼
-                    var obj = batchCallArray[0]
-                }
             });*/
-            if(currentCall != null){//只有有外呼任务的时候，才会初始化
+            var isCanAutoCall = $("#isCanAutoCall").val();//初次添加完成自动拨打任务之后，会往页面传值 为 1，点击菜单再进来的时候，不会赋值，就不自动拨打电话了
+            if(currentCall != null && isCanAutoCall == '1'){//只有有外呼任务的时候，才会初始化
                 initial1();//初始化打电话的JS
             }
         });
@@ -618,7 +615,7 @@
                             },
                             function (data) {
                                 if (data.code == 0) {//请求成功
-                                    if(data.data != ''){
+                                    if(data.data != '' && data.data != undefined){
                                         currentCall = data.data;
                                         // alert(currentCall);
                                         call(currentCall);

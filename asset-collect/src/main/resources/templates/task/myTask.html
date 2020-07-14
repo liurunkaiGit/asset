@@ -261,6 +261,7 @@
                      </div>
                  </div>
              </div>
+         </div>
     </div>
 
     <th:block th:include="include :: footer" />
@@ -772,7 +773,7 @@
                     if (data.code == 0) {//请求成功
                         $.modal.alert("自动外呼任务创建成功");
                         $("#autoCallModal").modal('hide');
-                        $.modal.openTab("作业催收", batchCallPrefix);
+                        $.modal.openTab("作业催收", batchCallPrefix + "?isCanAutoCall=1");
                     }else{
                         $.modal.alert(data.msg);
                         $("#autoCallModal").modal('toggle');
