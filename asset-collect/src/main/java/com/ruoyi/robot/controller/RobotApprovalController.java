@@ -3,6 +3,7 @@ package com.ruoyi.robot.controller;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.robot.domain.TLcSendRobotApply;
 import com.ruoyi.robot.service.ITLcSendRobotApplyService;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,7 @@ public class RobotApprovalController extends BaseController {
     @ResponseBody
     public TableDataInfo list(TLcSendRobotApply sendRobotApply) {
         startPage();
+        sendRobotApply.setOrgId(ShiroUtils.getSysUser().getOrgId());
         List<TLcSendRobotApply> list = sendRobotApplyService.selectTLcSendRobotApplyList(sendRobotApply);
         return getDataTable(list);
     }

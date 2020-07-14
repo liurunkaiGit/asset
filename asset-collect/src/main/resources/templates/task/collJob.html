@@ -1460,7 +1460,6 @@
      * @returns {string}
      */
     function prevOrNext(sign) {
-        debugger;
         for (var i = 0; i < allCaseNo.length; i++){
             if(sign == 1){ //上一条
                 if(allCaseNo[i] == currentCaseNo && allOrgId[i] == currentOrgId){
@@ -1979,12 +1978,12 @@
         };
 
         agentClient.onConnected = function(event) {
-            agentIsCalling = true;
-            console.log("用户接通，agentIsCalling=true");
             printEvent('onConnected', event);
         };
 
         agentClient.onReleased = function(event) {
+            agentIsCalling = false;
+            console.log("通话结束，agentIsCalling=false");
             printEvent('onReleased', event);
         };
 
@@ -2106,6 +2105,8 @@
      */
     var temp_phone = null;
     function call(contactName,id,contactRelation,phone) {
+        agentIsCalling = true;
+        console.log("坐席开始打电话，agentIsCalling=true");
         var callStartTime = $("#callStartTime").val();
         var callEndTime = $("#callEndTime").val();
         var callLen = $("#callLen").val();
@@ -2202,6 +2203,8 @@
      * HangupCall(挂机):座席在释放当前通话
      */
     function hangUp(phone) {
+        agentIsCalling = false;
+        console.log("通话结束，agentIsCalling=false");
         var platform = $("#callPlatform").val();
         if (platform == 'PA') {
             agentClient.hangupCall();
@@ -2545,6 +2548,8 @@
 
 
     function freeCall(){
+        agentIsCalling = true;
+        console.log("坐席开始打电话，agentIsCalling=true");
         // $("#freeCallFlag").val("freeCall");
         var callRadioLocation = $("#callRadioLocation").val();
         if(callRadioLocation!=""&&callRadioLocation!=null){
