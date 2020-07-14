@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contactRelation != null "> and contact_relation = #{contactRelation}</if>
             <if test="exonNum != null  and exonNum != ''"> and exon_num = #{exonNum}</if>
             <if test="phoneType != null  and phoneType != ''"> and phone_type = #{phoneType}</if>
-            <!--<if test="taskStatus != null "> and task_status = #{taskStatus}</if>-->
+            <if test="taskStatus != null "> and task_status = #{taskStatus}</if>
             <if test="createBy != null "> and create_by = #{createBy}</if>
             <if test="taskStatusList != null and taskStatusList.size() > 0">
                 and task_status in

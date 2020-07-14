@@ -56,12 +56,16 @@
                             </li>
                             <li>
                                 <p>与本人关系：</p>
-                                <input type="text" name="contactRelation"/>
+                                <select name="contactRelation" th:with="type=${@dict.getType('sys_custom_contact_rela')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
                             </li>
                             <li>
                                 <p>任务状态：</p>
-                                <select name="taskStatus">
+                                <select name="taskStatus" th:with="type=${@dict.getType('batch_call_status')}">
                                     <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
@@ -99,7 +103,6 @@
                          <h4 class="modal-title">初始化窗口</h4>
                      </div>
                      <div class="modal-body" style="height: 250px;">
-                         <input id="callRecordId" name="callRecordId" class="form-control" type="text">
                          <div class="form-group">
                              <label class="col-sm-3 control-label">分机号码：</label>
                              <div class="col-sm-8">
@@ -267,7 +270,16 @@
             if(currentCall != null && isCanAutoCall == '1'){//只有有外呼任务的时候，才会初始化
                 initial1();//初始化打电话的JS
             }
+            alert(parent.right.document.getElementById("test1"));
+            parent.$('.menuTabs').on('click', '.menuTab i', closeCurTab);
         });
+
+        function closeCurTab() {
+            $.modal.confirm("关闭当前页面，会暂停所有待外呼状态的数据，确认要关闭当前选项卡吗?", function() {
+                pauseCall();
+                closeTab();
+            });
+        }
 
         function openAutoCollJob(caseNo,importBatchNo,orgId,exonNum,id) {
             var toAutoCollJobUrl = prefix + '/toAutoCollJob?orgId='+orgId +'&caseNo='+caseNo +'&importBatchNo='+importBatchNo+'&exonNum='+exonNum+'&id='+id;
@@ -403,7 +415,7 @@
                 $.post(
                     collectPrefix + "/addCallRecord",
                     {
-                        id:$("#callRecordId").val(),
+                        id:callRecordId,
                         // certificateNo:val.find("[name='hideCerNo']").html(),
                         contactName:currentCall.contactName,
                         phone:currentCall.phone,
@@ -430,10 +442,13 @@
                             $("#callRadioLocation").val("");
                             $("#callCode").val("");
                             $("#callRemarkAdd").val("");
-                            $("#callRecordId").val(data.result);
+                            // $("#callRecordId").val(data.result);
+                            callRecordId = data.result;
                             /*if($('#call').val() == '1') {
                                 callRecordList(currentCaseNo);
                             }*/
+                        }else if (data.code == 1) {
+                            window.location.href="/login";
                         }
                     }
                 );
@@ -540,6 +555,8 @@
                     // alert(JSON.stringify(data));
                     if (data.status == 200) {//请求成功
                         callRecordId = data.result;
+                    }else if (data.code == 1) {
+                        window.location.href="/login";
                     }
                 }
             );
@@ -589,6 +606,8 @@
                         $.table.refresh();
                         $.modal.alert("暂停成功");
                         isCall = 0;//停止自动外呼
+                    }else if (data.code == 1) {
+                        window.location.href="/login";
                     }else{
                         $.modal.alert(data.msg);
                     }
@@ -626,6 +645,8 @@
                                 }
                             }
                         );
+                    }else if (data.code == 1) {
+                        window.location.href="/login";
                     }else{
                         $.modal.alert(data.msg);
                     }
@@ -643,6 +664,8 @@
                     if (data.code == 0) {//请求成功
                         $.modal.alert("取消成功");
                         isCall = 0;//停止自动外呼
+                    }else if (data.code == 1) {
+                        window.location.href="/login";
                     }else{
                         $.modal.alert(data.msg);
                     }
@@ -679,6 +702,8 @@
                                 $.modal.alert("自动呼叫队列已呼叫完毕");
                             }
                         }
+                    }else if (data.code == 1) {
+                        window.location.href="/login";
                     }
                 }
             );

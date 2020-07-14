@@ -234,8 +234,7 @@
                  <div class="modal-dialog">
                      <div class="modal-content animated bounceInRight">
                          <div class="modal-header">
-                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
-                             </button>
+
                          </div>
                          <input type="hidden" id="closeCaseUrl" />
                          <div class="modal-body" style="height: 200px;">
@@ -712,7 +711,7 @@
         }
         
         function closeDiv() {
-            $("#autoCallModal").modal('hide');
+            $("#autoCallModal").css('display','none');
         }
 
         // 推送机器人申请
@@ -772,12 +771,10 @@
                     // alert(JSON.stringify(data));
                     if (data.code == 0) {//请求成功
                         $.modal.alert("自动外呼任务创建成功");
-                        $("#autoCallModal").modal('hide');
+                        $("#autoCallModal").css('display','none');
                         $.modal.openTab("作业催收", batchCallPrefix + "?isCanAutoCall=1");
                     }else{
                         $.modal.alert(data.msg);
-                        $("#autoCallModal").modal('toggle');
-                        $.modal.openTab("作业催收", batchCallPrefix);
                     }
                 }
             );

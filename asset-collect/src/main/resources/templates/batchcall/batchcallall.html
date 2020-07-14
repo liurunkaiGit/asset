@@ -24,12 +24,16 @@
                             </li>
                             <li>
                                 <p>与本人关系：</p>
-                                <input type="text" name="contactRelation"/>
+                                <select name="contactRelation" th:with="type=${@dict.getType('sys_custom_contact_rela')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
                             </li>
                             <li>
                                 <p>任务状态：</p>
-                                <select name="taskStatus">
+                                <select name="taskStatus" th:with="type=${@dict.getType('batch_call_status')}">
                                     <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
