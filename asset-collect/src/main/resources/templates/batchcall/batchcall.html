@@ -672,7 +672,8 @@
                     if (data.code == 0) {//请求成功
                         $.table.refresh();
                         if(onlyUpdate == ''){//不是只更新
-                            if(data.data != '' && data.data != 'undefined'){
+                            // alert(JSON.stringify(data));
+                            if(data.data != '' && data.data != undefined){
                                 currentCall = data.data;
                                 // alert(currentCall);
                                 call(currentCall);

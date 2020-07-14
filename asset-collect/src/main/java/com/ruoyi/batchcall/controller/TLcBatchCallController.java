@@ -104,7 +104,7 @@ public class TLcBatchCallController extends BaseController
         tLcBatchCall.setOrgId(ShiroUtils.getSysUser().getOrgId()+"");
         tLcBatchCall.setIsOnlyOne("1");//查询第一条待拨电话
         //只查询状态为 暂停、外呼中、待外呼 的数据
-        tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.ZT,TLcBatchCall.WHZ,TLcBatchCall.DWH));
+        tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.WHZ,TLcBatchCall.DWH));
         List<TLcBatchCall> batchCallList = tLcBatchCallService.selectTLcBatchCallList(tLcBatchCall);
         if(batchCallList != null && batchCallList.size() > 0){
             modelMap.put("batchCall", batchCallList);
@@ -291,8 +291,8 @@ public class TLcBatchCallController extends BaseController
             tbc.setCreateBy(ShiroUtils.getUserId()+"");
             tbc.setOrgId(ShiroUtils.getSysUser().getOrgId()+"");
             tbc.setIsOnlyOne("1");//查询第一条待拨电话
-            //只查询状态为 暂停、外呼中、待外呼 的数据
-            tbc.setTaskStatusList(Arrays.asList(TLcBatchCall.DWH));
+            //只查询状态为 待外呼 的数据
+            tbc.setTaskStatusList(Arrays.asList(TLcBatchCall.DWH,TLcBatchCall.WHZ));
             List<TLcBatchCall> batchCallList = tLcBatchCallService.selectTLcBatchCallList(tbc);
             String result = "";
             if(batchCallList != null && batchCallList.size() > 0){//有要待外呼的数据
@@ -323,8 +323,8 @@ public class TLcBatchCallController extends BaseController
         tLcBatchCall.setCreateBy(ShiroUtils.getUserId()+"");
         tLcBatchCall.setOrgId(ShiroUtils.getSysUser().getOrgId()+"");
         tLcBatchCall.setIsOnlyOne("1");//查询第一条待拨电话
-        //只查询状态为 待外呼 的数据
-        tLcBatchCall.setTaskStatus(TLcBatchCall.DWH);
+        //只查询状态为 待外呼、外呼中 的数据
+        tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.DWH,TLcBatchCall.WHZ));
         List<TLcBatchCall> batchCallList = tLcBatchCallService.selectTLcBatchCallList(tLcBatchCall);
 
         if(batchCallList != null && batchCallList.size() > 0){
