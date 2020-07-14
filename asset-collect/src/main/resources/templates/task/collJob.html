@@ -778,6 +778,7 @@
     var curAssetsPrefix = ctx + "import/assets";
     var startNum = 1;
     var pageSize = 50;
+    var agentIsCalling;
     $(function () {
         var panehHidden = false;
         if ($(this).width() < 769) {
@@ -1199,6 +1200,10 @@
     }
 
     function collJobDetail(caseNo,orgId,importBatchNo) {
+        if (agentIsCalling) {
+            $.modal.alertError("正在通话中不能切换用户");
+            return;
+        }
         currentCaseNo = caseNo;
         currentImportBatchNo = importBatchNo;
         currentOrgId = orgId;
@@ -1975,6 +1980,8 @@
 
         agentClient.onConnected = function(event) {
             printEvent('onConnected', event);
+            agentIsCalling = true;
+            console.log("用户接通，agentIsCalling=true");
         };
 
         agentClient.onReleased = function(event) {
@@ -1985,6 +1992,8 @@
             resetTiming();
             var freeCallFlag = $("#freeCallFlag").val();
             printEvent('onRecordEnd', event);
+            agentIsCalling = false;
+            console.log("通话结束，agentIsCalling=false");
             recordFile = event.recordFile;
             startTime = event.recordTime;
             endTime = event.startTime;
