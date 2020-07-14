@@ -648,4 +648,51 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         delete from cur_assets_repayment_package_temp where import_batch_no = #{importBatchNo}
     </delete>
 
+    <insert id="batchInsertDuncaseAssign" parameterType="java.util.List">
+        INSERT INTO t_lc_duncase_assign (
+        custom_name,
+        certificate_no,
+        case_no,
+        task_id,
+        operation_id,
+        operation_name,
+        transfer_type,
+        task_status,
+        owner_id,
+        owner_name,
+        org_id,
+        org_name,
+        collect_team_id,
+        collect_team_name,
+        create_time,
+        create_by,
+        validate_status,
+        remark
+        )
+        VALUES
+        <foreach collection="duncaseAssignList" item="assign" separator=",">
+            (
+            #{assign.customName},
+            #{assign.certificateNo},
+            #{assign.caseNo},
+            #{assign.taskId},
+            #{assign.operationId},
+            #{assign.operationName},
+            #{assign.transferType},
+            #{assign.taskStatus},
+            #{assign.ownerId},
+            #{assign.ownerName},
+            #{assign.orgId},
+            #{assign.orgName},
+            #{assign.collectTeamId},
+            #{assign.collectTeamName},
+            NOW(),
+            #{assign.createBy},
+            #{assign.validateStatus},
+            #{assign.remark}
+            )
+        </foreach>
+    </insert>
+
+
 </mapper>
