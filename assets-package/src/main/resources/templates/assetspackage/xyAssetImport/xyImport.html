@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<th:block th:include="include :: header('兴业消金资产导入')" />
+    <link th:href="@{/layers/css/layui.css}" rel="stylesheet"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="layui-upload-list" style="display: none;" id="upTable">
+                <table class="layui-table">
+                    <thead>
+                    <tr><th>文件名</th>
+                        <th>大小</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr></thead>
+                    <tbody id="demoList"></tbody>
+                </table>
+            </div>
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">选择模板</button>
+                <button type="button" class="btn btn-success" id="uploadList">选择文件</button>
+                <button type="button" class="btn btn-primary" id="uploadListAction" >开始导入</button>
+            </div>
+        </div>
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <input type="hidden" name="importType" id="importType" value="1"/>
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>导入批次号：</p>
+                            <input type="text" name="importBatchNo"/>
+                        </li>
+                        <li class="select-time">
+                            <p>导入时间：</p>
+                            <input type="text" class="time-input" id="startCreateTime" placeholder="开始时间" name="startCreateTime"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endCreateTime" placeholder="结束时间" name="endCreateTime"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+        <div class="col-sm-12">
+            <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content animated bounceInRight">
+                        <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+                        </button>
+                        <i class="fa fa-cog modal-icon"></i>
+                        <h4 class="modal-title">模板选择窗口</h4>
+                    </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <span style="font-size: 15px;color:black;">&nbsp;&nbsp;模板选择：</span>
+                                <select name="templateId" id="templateId" style="padding: 3px;width:200px;">
+                                    <option value="">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: bootstrap-fileinput-js" />
+    <script th:src="@{/layers/layui.js}"></script>
+    <script th:inline="javascript">
+        var prefix = ctx + "xyImport/assets";
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "客户资产",
+                clickToSelect:true,
+                columns: [{
+                    checkbox: true
+                },
+                    {
+                        field : 'id',
+                        title : '主键',
+                        visible: false
+                    },
+                    {
+                        field : 'importBatchNo',
+                        title : '导入批次号',
+                        formatter: function (value, row, index) {
+                            return "<a href='javascript:void(0)' onclick='viewImportDetail(\""+value + "\")'>"+value+"</a>";
+                        }
+                    },
+                    {
+                        field : 'totalNum',
+                        title : '案件量'
+                    },
+                    {
+                        field : 'addNum',
+                        title : '新增案件'
+                    },
+                    {
+                        field : 'modifyNum',
+                        title : '更新案件'
+                    },
+                    {
+                        field : 'urgeNum',
+                        title : '出催案件'
+                    },
+                    {
+                        field : 'createBy',
+                        title : '操作人'
+                    },
+                    {
+                        field : 'createTime',
+                        title : '导入时间'
+                    }]
+            };
+            $.table.init(options);
+
+            $.ajax({
+                url: prefix+"/findTemplate",
+                dataType: "json",
+                type: "post",
+                success:function(data){
+                    $("#templateId").empty().append("<option value=''>请选择</option>");
+                    var result = JSON.parse(data.msg);
+                    $.each(result,function(index,obj){
+                        $("#templateId").append("<option value='"+index+"'>"+obj+"</option>");
+                    });
+                }
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        layui.use('upload', function(){
+            var $ = layui.jquery
+                ,upload = layui.upload;
+            var demoListView = $('#demoList')
+                ,uploadListIns = upload.render({
+                elem: '#uploadList'
+                ,url: prefix+'/upload' //改成您自己的上传接口
+                ,accept: 'file'
+                ,multiple: true
+                ,auto: false
+                ,number:3
+                ,data:{
+                    templateId: function(){
+                        return $('#templateId').val();
+                    }
+                }
+                ,exts:'xlsx|xls'
+                ,bindAction: '#uploadListAction'
+                ,choose: function(obj){
+                    $("#upTable").css('display','block');
+                    var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                    //读取本地文件
+                    obj.preview(function(index, file, result){
+                        var tr = $(['<tr id="upload-'+ index +'">'
+                            ,'<td>'+ file.name +'</td>'
+                            ,'<td>'+ (file.size/1024).toFixed(1) +'kb</td>'
+                            ,'<td>等待导入</td>'
+                            ,'<td>'
+                            /*,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重导</button>'*/
+                            ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+                            ,'</td>'
+                            ,'</tr>'].join(''));
+
+                        //单个重传
+                        tr.find('.demo-reload').on('click', function(){
+                            obj.upload(index, file);
+                        });
+
+                        //删除
+                        tr.find('.demo-delete').on('click', function(){
+                            delete files[index]; //删除对应的文件
+                            tr.remove();
+                            uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                        });
+
+                        demoListView.append(tr);
+                    });
+                }
+                ,before: function(obj){
+                    $.modal.loading("数据加载中，请稍后...");
+                }
+                ,done: function(res, index, upload){
+                    demoListView.find('tr').each(function(i,n){
+                        var tds = n.childNodes;
+                        $(tds[2]).html('<span style="color: #5FB878;">上传成功</span>');
+                    });
+                    if(res.msg=="导入临时表成功"){
+                        $.modal.closeLoading();
+                        var importBatchNo = res.data;
+                        var statisticsUrl = prefix + "/toStatistics/"+importBatchNo;
+                        var width = "800";
+                        var height = $(window).height() - 50;
+                        layer.open({
+                            type: 2,
+                            maxmin: true,
+                            shade: 0.3,
+                            title: "导入统计窗口",
+                            fix: false,
+                            area: [width + 'px', height + 'px'],
+                            content: statisticsUrl,
+                            shadeClose: true,
+                            btn: ['关闭'],
+                            yes: function (index, layero) {
+                                window.location.href=prefix+"/deleteTempTable/"+importBatchNo;
+                                layer.close(index);
+                                window.parent.$.modal.reload();
+                            },
+                            cancel: function (index, layero) {
+                                window.location.href=prefix+"/deleteTempTable/"+importBatchNo;
+                                layer.close(index);
+                                window.parent.$.modal.reload();
+                            },
+                            end:function (index, layero) {
+                                window.location.href=prefix+"/deleteTempTable/"+importBatchNo;
+                                layer.close(index);
+                                window.parent.$.modal.reload();
+                            }
+                        });
+                    }else{
+                        $.modal.alertWarning(res.msg);
+                        $.modal.closeLoading();
+                    }
+                }
+                ,error: function(index, upload,res){
+                    demoListView.find('tr').each(function(i,n){
+                        var tds = n.childNodes;
+                        $(tds[2]).html('<span style="color: #FF5722;">上传失败</span>');
+                    });
+                    $.modal.alertWarning("导入失败");
+                }
+            });
+
+        });
+
+        
+        function viewImportDetail(value) {
+            var url=prefix+"/fileDetail?importBatchNo="+value;
+            var width = "800";
+            var height = $(window).height() - 50;
+            layer.open({
+                type: 2,
+                maxmin: true,
+                shade: 0.3,
+                title: "文件详情",
+                fix: false,
+                area: [width + 'px', height + 'px'],
+                content: url,
+                shadeClose: true,
+
+            });
+        }
+
+
+    </script>
+
+</body>
+</html>

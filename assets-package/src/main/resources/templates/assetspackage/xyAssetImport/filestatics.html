@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('文件详情')" />
+    <style type="text/css">
+        #title{
+            padding-top: 10px;
+            text-align: center;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 select-table table-striped">
+            <label class="col-sm-12 control-label"  th:text="${importBatchNo}" id="title"></label>
+            <div class="col-sm-12 control-label" style="background-color: #ccc"></div>
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "xyImport/assets";
+        $(function() {
+            var options = {
+                url: prefix + "/fileList/"+$("#title").text(),
+                modalName: "文件详情",
+                clickToSelect:true,
+                showSearch:false,
+                showRefresh:false,
+                showToggle:false,
+                showColumns:false,
+                columns: [{
+                    checkbox: false
+                },
+                    {
+                        field : 'id',
+                        title : '主键',
+                        visible: false
+                    },
+                    {
+                        title: "序号",
+                        formatter: function (value, row, index) {
+                            return $.table.serialNumber(index);
+                        }
+                    },
+                    {
+                        field : 'name',
+                        title : '文件名称'
+                    },
+                    {
+                        field : 'size',
+                        title : '文件大小(KB)'
+                    }]
+            };
+            $.table.init(options);
+        });
+    </script>
+
+</body>
+</html>
