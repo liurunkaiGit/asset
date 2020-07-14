@@ -1,7 +1,9 @@
 package com.ruoyi.assetspackage.mapper;
 
 import com.ruoyi.assetspackage.domain.CurAssetsRepaymentPackage;
+import com.ruoyi.assetspackage.domain.DuncaseAssign;
 import com.ruoyi.assetspackage.domain.TempCurAssetsRepaymentPackage;
+import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -116,6 +118,13 @@ public interface CurAssetsRepaymentPackageMapper
     public void batchAddRepaymentTable(String importBatchNo)throws Exception;
 
     public int deleteTempTable(String importBatchNo)throws Exception;
+
+    /**
+     * 批量插入案件轨迹表
+     *
+     * @param duncaseAssignList
+     */
+    int batchInsertDuncaseAssign(@Param("duncaseAssignList") List<DuncaseAssign> duncaseAssignList);
 
 
 

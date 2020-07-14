@@ -18,6 +18,7 @@ import com.ruoyi.common.domain.CloseCase;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.RestTemplateUtil;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -782,27 +783,61 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
 
     private void closeCase2(List<CloseCase> remoteList) {
         List<String> caseNoList = new ArrayList<>();
+        List<Task> closeList = new ArrayList<>();
         List<Task> tLcTaskList = remoteList.stream()
                  .map(closeCase -> {
-                        Task tLcTask = this.taskMapper.selectTaskByCaseNo(closeCase.getCaseNo(), closeCase.getOrgId());
-                        Assert.notNull(tLcTask, String.format("案件号不存在，案件号是%s", closeCase.getCaseNo()));
-                        if (closeCase.getIsClose() != null && TaskStatusEnum.CLOSE.getStatus().equals(closeCase.getIsClose())) {
-                            tLcTask.setTaskStatus(TaskStatusEnum.CLOSE.getStatus());
-                            tLcTask.setTaskType(TaskTypeEnum.CLOSE_CASE_TRANSFER.getCode());
-                            tLcTask.setCloseDate(new Date());
-                            caseNoList.add(tLcTask.getCaseNo());
-                        }
-                        tLcTask.setCloseCaseYhje(closeCase.getJayhje());
-                        if (closeCase.getDqyhje() != null) {
-                            tLcTask.setDqyhje(closeCase.getDqyhje());
-                        }
-                        tLcTask.setModifyBy(ShiroUtils.getSysUser().getUserId());
-                        return tLcTask;
+                     Task tLcTask = this.taskMapper.selectTaskByCaseNo(closeCase.getCaseNo(), closeCase.getOrgId());
+                     Assert.notNull(tLcTask, String.format("案件号不存在，案件号是%s", closeCase.getCaseNo()));
+                     tLcTask.setCloseCaseYhje(closeCase.getJayhje());
+                     if (closeCase.getDqyhje() != null) {
+                         tLcTask.setDqyhje(closeCase.getDqyhje());
+                     }
+                     tLcTask.setModifyBy(ShiroUtils.getSysUser().getUserId());
+                     if (closeCase.getIsClose() != null && TaskStatusEnum.CLOSE.getStatus().equals(closeCase.getIsClose())) {
+                         tLcTask.setTaskStatus(TaskStatusEnum.CLOSE.getStatus());
+                         tLcTask.setTaskType(TaskTypeEnum.CLOSE_CASE_TRANSFER.getCode());
+                         tLcTask.setCloseDate(new Date());
+                         caseNoList.add(tLcTask.getCaseNo());
+                         closeList.add(tLcTask);
+                     }
+                     return tLcTask;
                  }).collect(Collectors.toList());
          this.taskMapper.batchUpdateTask(tLcTaskList);
         this.robotBlackService.batchDeleteRobotBlackByCaseNo(caseNoList);
+        this.insertDuncaseAssign(closeList, ShiroUtils.getSysUser());
     }
 
 
+
+    /**
+     * 添加到案件轨迹表中
+     *
+     * @param taskList
+     */
+    public void insertDuncaseAssign(List<Task> taskList, SysUser sysUser) {
+        List<DuncaseAssign> duncaseAssignList = taskList.stream()
+                .map(task -> {
+                    DuncaseAssign tLcDuncaseAssign = DuncaseAssign.builder()
+                            .ownerId(task.getOwnerId())
+                            .ownerName(task.getOwnerName())
+                            .taskId(task.getId().toString())
+                            .operationId(sysUser.getUserId())
+                            .customName(task.getCustomName())
+                            .collectTeamName(task.getCollectTeamName())
+                            .collectTeamId(task.getCollectTeamId())
+                            .certificateNo(task.getCertificateNo())
+                            .caseNo(task.getCaseNo())
+                            .operationName(sysUser.getUserName())
+                            .transferType(task.getTaskType())
+                            .orgId(task.getOrgId())
+                            .orgName(task.getOrgName())
+                            .taskStatus(task.getTaskStatus())
+                            .validateStatus(IsNoEnum.IS.getCode())
+                            .build();
+                    return tLcDuncaseAssign;
+                }).collect(Collectors.toList());
+        // 将该任务添加到案件历史轨迹表
+        this.curAssetsRepaymentPackageMapper.batchInsertDuncaseAssign(duncaseAssignList);
+    }
 
 }
