@@ -600,10 +600,6 @@
         }
         
         function startCall() {
-            if(batchCallList == null){//只有有外呼任务的时候，才操作
-                $.modal.alert("暂无数据，请勿操作");
-                return;
-            }
             $.post(
                 prefix + "/editBatchCallStatus",
                 {
@@ -622,8 +618,9 @@
                             },
                             function (data) {
                                 if (data.code == 0) {//请求成功
-                                    if(data.msg != ''){
-                                        currentCall = data.msg;
+                                    if(data.data != ''){
+                                        currentCall = data.data;
+                                        // alert(currentCall);
                                         call(currentCall);
                                     }else{
                                         $("#callingContent").html("");
@@ -674,9 +671,8 @@
                 function (data) {
                     if (data.code == 0) {//请求成功
                         $.table.refresh();
-                        // alert(JSON.stringify(data));
                         if(onlyUpdate == ''){//不是只更新
-                            if(data.msg != ''){
+                            if(data.data != '' && data.data != 'undefined'){
                                 currentCall = data.data;
                                 // alert(currentCall);
                                 call(currentCall);
