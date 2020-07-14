@@ -1,5 +1,6 @@
 package com.ruoyi.batchcall.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.ruoyi.agent.domain.ExtPhone;
 import com.ruoyi.agent.service.IExtPhoneService;
 import com.ruoyi.batchcall.domain.TLcBatchCall;
@@ -44,11 +45,11 @@ public class TLcBatchCallController extends BaseController
 
     @RequiresPermissions("ruoyi:batchcall:view")
     @GetMapping()
-    public String batchcall(ModelMap modelMap)
+    public String batchcall(ModelMap modelMap ,String isCanAutoCall)
     {
 //        String isCanAutoCall = "1";//可自动外呼
-        String deptId = ShiroUtils.getSysUser().getDeptId()+"";
-        TLcBatchCallConfig tbcc = this.tLcBatchCallConfigService.selectTLcBatchCallConfigByDeptId(deptId);
+        String orgId = ShiroUtils.getSysUser().getOrgId()+"";
+        TLcBatchCallConfig tbcc = this.tLcBatchCallConfigService.selectTLcBatchCallConfigByOrgId(orgId);
         /*if(tbcc != null){
             long now = DateUtils.getNowDate().getTime();//当前系统时间
             String startTime1 = DateUtils.getDate() + " " + tbcc.getStartTime1() + ":00";
@@ -81,7 +82,7 @@ public class TLcBatchCallController extends BaseController
             }
         }
         logger.info("可自动外呼标志：isCanAutoCall={}",isCanAutoCall);*/
-//        modelMap.put("isCanAutoCall",isCanAutoCall);
+        modelMap.put("isCanAutoCall",isCanAutoCall);
         modelMap.put("tLcBatchCallConfig",tbcc);//该部门的批量外呼配置信息
 
         ExtPhone extPhone = new ExtPhone();
@@ -101,11 +102,12 @@ public class TLcBatchCallController extends BaseController
         TLcBatchCall tLcBatchCall = new TLcBatchCall();
         tLcBatchCall.setCreateBy(ShiroUtils.getUserId()+"");
         tLcBatchCall.setOrgId(ShiroUtils.getSysUser().getOrgId()+"");
+        tLcBatchCall.setIsOnlyOne("1");//查询第一条待拨电话
         //只查询状态为 暂停、外呼中、待外呼 的数据
-        tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.ZT,TLcBatchCall.WHZ,TLcBatchCall.DWH));
+        tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.WHZ,TLcBatchCall.DWH));
         List<TLcBatchCall> batchCallList = tLcBatchCallService.selectTLcBatchCallList(tLcBatchCall);
         if(batchCallList != null && batchCallList.size() > 0){
-            modelMap.put("batchCallList", batchCallList);
+            modelMap.put("batchCall", batchCallList);
         }
         modelMap.put("callPlatform", ShiroUtils.getSysUser().getPlatform());
 
@@ -124,7 +126,7 @@ public class TLcBatchCallController extends BaseController
         tLcBatchCall.setCreateBy(ShiroUtils.getUserId()+"");
         tLcBatchCall.setOrgId(ShiroUtils.getSysUser().getOrgId()+"");
         //只查询状态为 暂停、外呼中、待外呼 的数据
-        tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.ZT,TLcBatchCall.WHZ,TLcBatchCall.DWH));
+//        tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.ZT,TLcBatchCall.WHZ,TLcBatchCall.DWH));
         List<TLcBatchCall> list = tLcBatchCallService.selectTLcBatchCallList(tLcBatchCall);
         return getDataTable(list);
     }
@@ -189,10 +191,10 @@ public class TLcBatchCallController extends BaseController
         String callNum = request.getParameter("callNum");//一共有多少电话
         String[] caseNoArray = {};
         String[] importBatchNoArray = {};
-        String deptId = ShiroUtils.getSysUser().getDeptId()+"";
+        String orgId = ShiroUtils.getSysUser().getOrgId()+"";
         if(StringUtils.isNotEmpty(caseNoStr)){
             caseNoArray = caseNoStr.split(",");
-            TLcBatchCallConfig tbcc = this.tLcBatchCallConfigService.selectTLcBatchCallConfigByDeptId(deptId);
+            TLcBatchCallConfig tbcc = this.tLcBatchCallConfigService.selectTLcBatchCallConfigByOrgId(orgId);
             if(tbcc != null){
                 if(caseNoArray.length > tbcc.getBatchCallNum()){
                     return error("该委托机构配置的自动外呼案件数最大为"+tbcc.getBatchCallNum()+",你选择的案件数已经超过");
@@ -208,23 +210,24 @@ public class TLcBatchCallController extends BaseController
         }
         TLcBatchCall tbc = new TLcBatchCall();
         tbc.setCreateBy(ShiroUtils.getUserId().toString());
+        tbc.setOrgId(orgId);
         tbc.setTaskStatusList(Arrays.asList(TLcBatchCall.DWH,TLcBatchCall.WHZ,TLcBatchCall.ZT));
         List<TLcBatchCall> list = this.tLcBatchCallService.selectTLcBatchCallList(tbc);
         if(!list.isEmpty()){
             return error("已经存在没有完成的自动外呼任务，请勿再发起自动外呼任务");
         }
 
-        return toAjax(tLcBatchCallService.insertTLcBatchCallByTask(isCallOther,exonNum,caseNoArray,importBatchNoArray,deptId));
+        return toAjax(tLcBatchCallService.insertTLcBatchCallByTask(isCallOther,exonNum,caseNoArray,importBatchNoArray,orgId));
     }
 
     /**
      * 修改批量外呼任务管理
      */
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap)
+    public String edit(@PathVariable("id") Long id, ModelMap map)
     {
         TLcBatchCall tLcBatchCall = tLcBatchCallService.selectTLcBatchCallById(id);
-        mmap.put("tLcBatchCall", tLcBatchCall);
+        map.put("tLcBatchCall", tLcBatchCall);
         return prefix + "/edit";
     }
 
@@ -250,12 +253,85 @@ public class TLcBatchCallController extends BaseController
      */
     @PostMapping("/editBatchCall")
     @ResponseBody
-    public AjaxResult editBatchCall(TLcBatchCall tLcBatchCall)
+    public AjaxResult editBatchCall(TLcBatchCall tLcBatchCall,String isCall,String onlyUpdate)
+    {
+        if("1".equals(onlyUpdate)){//只做状态更新
+            return toAjax(tLcBatchCallService.updateTLcBatchCall(tLcBatchCall));
+        }
+        int flag = tLcBatchCallService.updateTLcBatchCall(tLcBatchCall);
+        if(flag > 0){//更新状态成功
+            if("1".equals(isCall)){//是接通电话之后 ，然后挂断的电话
+                String orgId = ShiroUtils.getSysUser().getOrgId()+"";
+                TLcBatchCallConfig tbcc = this.tLcBatchCallConfigService.selectTLcBatchCallConfigByOrgId(orgId);
+                if(tbcc != null){
+                    if("0".equals(tbcc.getIsCallOther())){//批量配置为：本人接通后是否继续拨打本案其他号码：0 不呼叫
+                        TLcBatchCall tmp = this.tLcBatchCallService.selectTLcBatchCallById(tLcBatchCall.getId());
+                        //需要查询出该案件下所有非本人的电话，然后把 呼叫状态 修改为 取消
+                        TLcBatchCall tbc = new TLcBatchCall();
+                        tbc.setCreateBy(ShiroUtils.getUserId()+"");
+                        tbc.setOrgId(ShiroUtils.getSysUser().getOrgId()+"");
+                        tbc.setCaseNo(tmp.getCaseNo());
+                        List<TLcBatchCall> batchCallList = tLcBatchCallService.selectTLcBatchCallList(tbc);
+                        if(batchCallList != null && batchCallList.size() > 0){
+                            for(int i = 0 ; i < batchCallList.size(); i ++ ){
+                                TLcBatchCall tmptbc = batchCallList.get(i);
+                                if(tmptbc.getContactRelation() != 1){
+                                    tmptbc.setTaskStatus(TLcBatchCall.YQX);
+                                    tmptbc.setRemark("配置为本人拨打成功后，不拨打其他，状态置为取消");
+                                    tLcBatchCallService.updateTLcBatchCall(tmptbc);
+                                    logger.info("该案件下所有非本人的电话的通话状态修改已取消");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            TLcBatchCall tbc = new TLcBatchCall();
+            tbc.setCreateBy(ShiroUtils.getUserId()+"");
+            tbc.setOrgId(ShiroUtils.getSysUser().getOrgId()+"");
+            tbc.setIsOnlyOne("1");//查询第一条待拨电话
+            //只查询状态为 待外呼 的数据
+            tbc.setTaskStatusList(Arrays.asList(TLcBatchCall.DWH,TLcBatchCall.WHZ));
+            List<TLcBatchCall> batchCallList = tLcBatchCallService.selectTLcBatchCallList(tbc);
+            String result = "";
+            if(batchCallList != null && batchCallList.size() > 0){//有要待外呼的数据
+//                result = JSON.toJSONString(batchCallList.get(0));
+                logger.info("下一条待拨数据为：{}",JSON.toJSONString(batchCallList.get(0)));
+                return AjaxResult.success(batchCallList.get(0));
+            }else{//没有待外呼的数据
+                logger.info("没有下一条待拨数据了");
+                return AjaxResult.success(result);
+            }
+        }else{
+            return error("通话状态更新失败");
+        }
+
+    }
+
+    /**
+     *
+     * @param tLcBatchCall
+     * @return
+     */
+    @PostMapping("/getNextBatchCall")
+    @ResponseBody
+    public AjaxResult getNextBatchCall()
     {
 
-        /*TLcBatchCall tmp = this.tLcBatchCallService.selectTLcBatchCallById(tLcBatchCall.getId());
-        tmp.setTaskStatus(tLcBatchCall.getTaskStatus());*/
-        return toAjax(tLcBatchCallService.updateTLcBatchCall(tLcBatchCall));
+        TLcBatchCall tLcBatchCall = new TLcBatchCall();
+        tLcBatchCall.setCreateBy(ShiroUtils.getUserId()+"");
+        tLcBatchCall.setOrgId(ShiroUtils.getSysUser().getOrgId()+"");
+        tLcBatchCall.setIsOnlyOne("1");//查询第一条待拨电话
+        //只查询状态为 待外呼、外呼中 的数据
+        tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.DWH,TLcBatchCall.WHZ));
+        List<TLcBatchCall> batchCallList = tLcBatchCallService.selectTLcBatchCallList(tLcBatchCall);
+
+        if(batchCallList != null && batchCallList.size() > 0){
+            return AjaxResult.success(batchCallList.get(0));
+        }
+        logger.info("getNextBatchCall:没有下一条待拨数据了");
+        return AjaxResult.success("");
     }
 
     /**

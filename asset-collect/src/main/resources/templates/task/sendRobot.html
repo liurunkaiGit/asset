@@ -6,33 +6,13 @@
 <body class="gray-bg">
      <div class="container-div">
 		<div class="row">
-			<!--<div class="col-sm-12 search-collapse">
-				<form id="user-form">
-					<input type="hidden" id="deptId" name="deptId">
-					<input type="hidden" id="parentId" name="parentId">
-					<div class="select-list">
-						<ul>
-							<input type="hidden" name="taskIds" id="taskIds" th:value="${taskIds}">
-							<li>
-								选择话术：<select name="status" th:with="type=${@dict.getType('robot_speech_craft')}">
-								<option value="">所有</option>
-								<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-								</select>
-							</li>
-							<li>
-								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-							</li>
-						</ul>
-					</div>
-				</form>
-			</div>-->
 			<div class="col-sm-12 select-table table-striped">
 				<!--<table id="bootstrap-table"></table>-->
 				<div class="select-list">
 					<ul>
 						<input type="hidden" name="taskIds" id="taskIds" th:value="${taskIds}">
 						<input type="hidden" name="orgId" id="orgId" th:value="${orgId}">
+						<input type="hidden" name="sendRobotBatchNos" id="sendRobotBatchNos" th:value="${sendRobotBatchNos}">
 						<li>
 							选择话术：<select name="speechcraftIdAndSceneDefId" id="speechcraftId">
 							<option value="">所有</option>
@@ -87,7 +67,7 @@
 				$.modal.alertWarning("请选择线路");
 				return;
 			}
-			var data = {"taskIds": $("#taskIds").val(),"speechcraftIdAndSceneDefId":speechcraftId, "callLineId":callLineId, "orgId":$("#orgId").val()};
+			var data = {"taskIds": $("#taskIds").val(),"speechcraftIdAndSceneDefId":speechcraftId, "callLineId":callLineId, "orgId":$("#orgId").val(), "sendRobotBatchNos":$("#sendRobotBatchNos").val()};
 			//$.operate.submit(prefix + "/sendRobot", "post", "json", data);
 			window.$.modal.loading("请稍后...");
 			$.post(
@@ -108,8 +88,12 @@
 						// window.$.modal.closeLoading();
 						window.$.modal.closeLoading();
 						window.parent.$.table.refresh();
-						window.parent.resetSelectAll();
-						$.modal.alertSuccess(data.data.split(",")[0] + "条数据推送成功," + data.data.split(",")[1] + "条数据未推送");
+						// window.parent.resetSelectAll();
+						if (data.data.split(",").length > 1) {
+							$.modal.alertSuccess(data.data.split(",")[0] + "条数据推送成功," + data.data.split(",")[1] + "条数据未推送");
+						} else {
+							$.modal.alertSuccess(data.data.split(",")[0] + "条数据推送成功");
+						}
 					}
 			);
 		}

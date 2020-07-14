@@ -63,8 +63,8 @@ public interface TLcBatchCallConfigMapper
     /**
      * 根据机构ID查询批量外呼配置
      *
-     * @param deptId 批量外呼配置机构ID
+     * @param orgId 批量外呼配置机构ID
      * @return 批量外呼配置
      */
-    public TLcBatchCallConfig selectTLcBatchCallConfigByDeptId(String deptId);
+    public TLcBatchCallConfig selectTLcBatchCallConfigByOrgId(String orgId);
 }

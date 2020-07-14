@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('出催统计')" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <input type="hidden" name="importType" id="importType" value="1"/>
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>机构案件号：</p>
+                            <input type="text" name="orgCasNo"/>
+                        </li>
+                        <li>
+                            <p>业务归属人：</p>
+                            <input type="text" name="ownerName"/>
+                        </li>
+                        <li class="select-time">
+                            <p>生成时间：</p>
+                            <input type="text" class="time-input" id="startCreateTime" placeholder="开始时间" name="startCreateTime"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endCreateTime" placeholder="结束时间" name="endCreateTime"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.table.exportExcel()">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "xyImport/assets";
+        $(function() {
+            var options = {
+                url: prefix + "/urgeList",
+                exportUrl: prefix + "/urgeExport",
+                modalName: "客户资产",
+                clickToSelect:true,
+                columns: [{
+                    checkbox: true
+                },
+                    {
+                        field : 'id',
+                        title : '主键',
+                        visible: false
+                    },
+                    {
+                        title: "序号",
+                        formatter: function (value, row, index) {
+                            return $.table.serialNumber(index);
+                        }
+                    },
+                    {
+                        field : 'orgName',
+                        title : '委托方'
+                    },
+                    {
+                        field : 'orgCasNo',
+                        title : '机构案件号'
+                    },
+                    {
+                        field : 'customeName',
+                        title : '姓名'
+                    },
+                    {
+                        field : 'waje',
+                        title : '委案金额'
+                    },
+                    {
+                        field : 'dqyhje',
+                        title : '当前已还金额'
+                    },
+                    {
+                        field : 'ownerName',
+                        title : '业务归属人'
+                    },
+                    {
+                        field : 'type',
+                        title : '类型',
+                        formatter: function (value, row, index) {
+                            return value=="1"?"预测结清":"部分还款";
+                        }
+                    },
+                    {
+                        field : 'createTime1',
+                        title : '生成时间'
+                    }]
+            };
+            $.table.init(options);
+        });
+    </script>
+
+</body>
+</html>

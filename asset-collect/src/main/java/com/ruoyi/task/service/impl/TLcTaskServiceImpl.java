@@ -7,6 +7,7 @@ import com.ruoyi.assetspackage.domain.CurAssetsRepaymentPackage;
 import com.ruoyi.assetspackage.domain.RemoteConfigure;
 import com.ruoyi.assetspackage.service.ICurAssetsPackageService;
 import com.ruoyi.assetspackage.service.ICurAssetsRepaymentPackageService;
+import com.ruoyi.assetspackage.service.IOrgPackageService;
 import com.ruoyi.callConfig.domain.TLcCallStrategyConfig;
 import com.ruoyi.caseConfig.domain.TLcAllocatCaseConfig;
 import com.ruoyi.caseConfig.service.ITLcAllocatCaseConfigService;
@@ -23,18 +24,17 @@ import com.ruoyi.duncase.domain.TLcDuncaseAssign;
 import com.ruoyi.duncase.mapper.TLcDuncaseAssignMapper;
 import com.ruoyi.duncase.mapper.TLcDuncaseMapper;
 import com.ruoyi.duncase.service.ITLcDuncaseAssignService;
-import com.ruoyi.enums.AllocatRuleEnum;
-import com.ruoyi.enums.IsNoEnum;
-import com.ruoyi.enums.TaskStatusEnum;
-import com.ruoyi.enums.TaskTypeEnum;
+import com.ruoyi.enums.*;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.orgSpeechConf.domain.TLcOrgSpeechcraftConf;
 import com.ruoyi.orgSpeechConf.service.ITLcOrgSpeechcraftConfService;
 import com.ruoyi.robot.domain.TLcRobotBlack;
 import com.ruoyi.robot.domain.TLcRobotTask;
+import com.ruoyi.robot.domain.TLcSendRobotApply;
 import com.ruoyi.robot.enums.LocalRobotTaskStatus;
 import com.ruoyi.robot.enums.RobotBlackReasonEnum;
 import com.ruoyi.robot.service.ITLcRobotBlackService;
+import com.ruoyi.robot.service.ITLcSendRobotApplyService;
 import com.ruoyi.robot.utils.RobotMethodUtil;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.mapper.SysUserMapper;
@@ -98,7 +98,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     @Autowired
     private TLcDuncaseMapper tLcDuncaseMapper;
     @Autowired
-    private RestTemplateUtil restTemplateUtil;
+    private IOrgPackageService orgPackageService;
     @Autowired
     private SysUserMapper sysUserMapper;
     @Autowired
@@ -119,6 +119,8 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     private ITLcRobotBlackService robotBlackService;
     @Autowired
     private ICurAssetsRepaymentPackageService curAssetsRepaymentPackageService;
+    @Autowired
+    private ITLcSendRobotApplyService sendRobotApplyService;
 
     /**
      * 查询任务
@@ -400,7 +402,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 .collect(Collectors.toList());
         // 分配任务
         taskList = allocatTask(allocatRule, taskList, userList);
-        if(taskList != null && taskList.size() > 0){
+        if (taskList != null && taskList.size() > 0) {
             this.tLcTaskMapper.batchUpdateTask(taskList);
             // 异步更新案件表信息
 //        this.asyncITLcDuncaseService.updateDuncase(taskList,TaskTypeEnum.RE_ALLOCAT.getCode(),TaskStatusEnum.ALLOCATING.getStatus());
@@ -647,13 +649,13 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
 
     @Override
     public List<AssetsRepayment> viewRepayHis(String caseNo) {
-        log.info("查询还款明细参数："+caseNo);
+        log.info("查询还款明细参数：" + caseNo);
         List<AssetsRepayment> list = new ArrayList<>();
         //根据机构案件号查询还款明细
         CurAssetsRepaymentPackage curAssetsRepaymentPackage = new CurAssetsRepaymentPackage();
         curAssetsRepaymentPackage.setOrgCasno(caseNo);
-        List<CurAssetsRepaymentPackage> resultList =curAssetsRepaymentPackageService.selectCurAssetsRepaymentPackageList(curAssetsRepaymentPackage);
-        if(resultList.size()>0){
+        List<CurAssetsRepaymentPackage> resultList = curAssetsRepaymentPackageService.selectCurAssetsRepaymentPackageList(curAssetsRepaymentPackage);
+        if (resultList.size() > 0) {
             for (CurAssetsRepaymentPackage repayment : resultList) {
                 String jsonStr = JSON.toJSONString(repayment);
                 AssetsRepayment AssetsRepayment = JSONObject.parseObject(jsonStr, AssetsRepayment.class);
@@ -844,48 +846,85 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
 
     @Override
     @Transactional
-    public AjaxResult sendRobot(String taskIds, String orgId, String speechcraftIdAndSceneDefId, Integer callLineId) {
-//        List<TLcTask> taskList = Arrays.stream(taskIds.split(","))
-//                .map(taskId -> this.tLcTaskMapper.selectTLcTaskById(Long.valueOf(taskId)))
-//                .collect(Collectors.toList());
-        List<TLcTask> taskList = this.tLcTaskMapper.selectTLcTaskByIdsNotExistRobotBlack(taskIds.split(","));
-        // 查询机器人在黑名单数量
-        Long blackCount = this.tLcTaskMapper.selectCountByIdsNotExistRobotBlack(taskIds.split(","));
-        if (taskList == null || taskList.size() == 0) {
+    public AjaxResult sendRobot(String taskIds, String orgId, String speechcraftIdAndSceneDefId, Integer callLineId, String sendRobotBatchNos) {
+        if (StringUtils.isNotBlank(taskIds)) {
+            List<TLcTask> taskList = this.tLcTaskMapper.selectTLcTaskByIdsNotExistRobotBlack(taskIds.split(","));
+            // 查询机器人在黑名单数量
+            Long blackCount = this.tLcTaskMapper.selectCountByIdsNotExistRobotBlack(taskIds.split(","));
+            sendRobotByList(orgId, speechcraftIdAndSceneDefId, callLineId, taskList, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS,new Date()));
             return AjaxResult.success(AjaxResult.Type.SUCCESS, "推送成功", taskList.size() + "," + blackCount);
-        }
-        // 推送到机器人
-        TLcOrgSpeechcraftConf orgSpeechcraftConf = this.orgSpeechcraftConfService.selectTLcOrgSpeechcraftConfByOrgId(Long.valueOf(orgId));
-        String[] speechcraftIdAndSceneDefIds = speechcraftIdAndSceneDefId.split(",");
-        TLcCallStrategyConfig tLcCallStrategyConfig = TLcCallStrategyConfig.builder()
-                .id(-1L) // 如果是协催的话，策略id为-1，任务的呼叫策略配置id
-                .startCallDate(orgSpeechcraftConf.getStartCallTime())
-                .stopCallDate(orgSpeechcraftConf.getEndCallTime())
-                .speechcraftId(Integer.valueOf(speechcraftIdAndSceneDefIds[0]))
-                .sceneDefId(Integer.valueOf(speechcraftIdAndSceneDefIds[1]))
-                .speechcraftName(speechcraftIdAndSceneDefIds[2])
-                .callLineId(String.valueOf(callLineId)).build();
-        TLcAllocatCaseConfig caseConfig = this.caseConfigService.selectTLcAllocatCaseConfigByOrgId(orgId);
-        // 获取单次推送到机器人的号码数
-        String taskCallNum = this.sysDictDataService.selectDictLabel("robot_call_config", "task_call_num");
-        if (caseConfig.getRobot().equals("BR")) {
-            if (taskList.size() <= Integer.valueOf(taskCallNum)) {
-                this.robotMethodUtil.createTask(taskList, tLcCallStrategyConfig, 1, 1, orgSpeechcraftConf);
+        } else {
+            String successCount = "";
+            if (StringUtils.isNotBlank(sendRobotBatchNos)) {
+                successCount = String.valueOf(sendRobotBatchNos.split(",").length);
+                Arrays.stream(sendRobotBatchNos.split(",")).forEach(sendRobotBatchNo -> {
+                    List<TLcTask> taskList = this.tLcTaskMapper.selectTaskListBySendRobotBatchNo(sendRobotBatchNo);
+                    sendRobotByList(orgId, speechcraftIdAndSceneDefId, callLineId, taskList, sendRobotBatchNo.split("_")[0]);
+                    // 修改推送机器人申请状态为已审批、任务状态并插入案件历史轨迹
+                    updateSendRobotStatusTaskType(sendRobotBatchNo, taskList);
+                });
             } else {
-                Integer taskNums = taskList.size() / Integer.valueOf(taskCallNum);
-                for (int i = 0; i < taskNums; i++) {
-                    List subTaskIdList = taskList.subList(i * Integer.valueOf(taskCallNum), (i + 1) * Integer.valueOf(taskCallNum));
-                    this.robotMethodUtil.createTask(subTaskIdList, tLcCallStrategyConfig, 1, 1, orgSpeechcraftConf);
-                }
-                if (taskList.size() % Integer.valueOf(taskCallNum) != 0) {
-                    List subTaskIdList = taskList.subList(Integer.valueOf(taskCallNum) * taskNums, taskList.size());
-                    this.robotMethodUtil.createTask(subTaskIdList, tLcCallStrategyConfig, 1, 1, orgSpeechcraftConf);
+                // 查询所有待审批的任务
+                List<TLcSendRobotApply> sendRobotApplyList = this.sendRobotApplyService.selectSendRobotApplyListByStatus(SendRobotApplyTaskStatusEnum.WAIT_APPROVAL.getCode());
+                successCount = String.valueOf(sendRobotApplyList.size());
+                sendRobotApplyList.stream().forEach(sendRobotApply -> {
+                    List<TLcTask> taskList = this.tLcTaskMapper.selectTaskListBySendRobotBatchNo(sendRobotApply.getSendRobotBatchNo());
+                    sendRobotByList(orgId, speechcraftIdAndSceneDefId, callLineId, taskList, sendRobotApply.getSendRobotBatchNo().split("_")[0]);
+                    // 修改推送机器人申请状态为已审批、任务状态并插入案件历史轨迹
+                    updateSendRobotStatusTaskType(sendRobotApply.getSendRobotBatchNo(), taskList);
+                });
+            }
+            return AjaxResult.success(AjaxResult.Type.SUCCESS, "推送成功", successCount);
+        }
+    }
+
+    private void updateSendRobotStatusTaskType(String sendRobotBatchNo, List<TLcTask> taskList) {
+        // 修改推送机器人审批状态
+        TLcSendRobotApply sendRobotApply = new TLcSendRobotApply();
+        sendRobotApply.setSendRobotBatchNo(sendRobotBatchNo).setTaskStatus(SendRobotApplyTaskStatusEnum.APPROVAL_PASS.getCode()).setUpdateBy(ShiroUtils.getSysUser().getUserId().toString());
+        this.sendRobotApplyService.updateSendRobotStatusBySendRobotBatchNo(sendRobotApply);
+        // 修改任务表任务类型
+        TLcTask tLcTask = new TLcTask();
+        tLcTask.setSendRobotBatchNo(sendRobotBatchNo).setTaskType(TaskTypeEnum.SEND_ROBOT_APPLY_ALLOW.getCode()).setUpdateBy(ShiroUtils.getSysUser().getUserId().toString());
+        this.tLcTaskMapper.updateTLcTaskBySendRobotBatchNo(tLcTask);
+        // 异步插入案件历史轨迹表
+        this.duncaseAssignService.batchInsertDuncaseAssign(taskList, ShiroUtils.getSysUser(), TaskTypeEnum.SEND_ROBOT_APPLY_ALLOW.getCode());
+    }
+
+    private void sendRobotByList(String orgId, String speechcraftIdAndSceneDefId, Integer callLineId, List<TLcTask> taskList, String taskName) {
+        if (taskList != null && taskList.size() > 0) {
+            // 推送到机器人
+            TLcOrgSpeechcraftConf orgSpeechcraftConf = this.orgSpeechcraftConfService.selectTLcOrgSpeechcraftConfByOrgId(Long.valueOf(orgId));
+            String[] speechcraftIdAndSceneDefIds = speechcraftIdAndSceneDefId.split(",");
+            TLcCallStrategyConfig tLcCallStrategyConfig = TLcCallStrategyConfig.builder()
+                    .id(-1L) // 如果是协催的话，策略id为-1，任务的呼叫策略配置id
+                    .startCallDate(orgSpeechcraftConf.getStartCallTime())
+                    .stopCallDate(orgSpeechcraftConf.getEndCallTime())
+                    .speechcraftId(Integer.valueOf(speechcraftIdAndSceneDefIds[0]))
+                    .sceneDefId(Integer.valueOf(speechcraftIdAndSceneDefIds[1]))
+                    .speechcraftName(speechcraftIdAndSceneDefIds[2])
+                    .callLineId(String.valueOf(callLineId)).build();
+            TLcAllocatCaseConfig caseConfig = this.caseConfigService.selectTLcAllocatCaseConfigByOrgId(orgId);
+            // 获取单次推送到机器人的号码数
+            String taskCallNum = this.sysDictDataService.selectDictLabel("robot_call_config", "task_call_num");
+            if (caseConfig.getRobot().equals("BR")) {
+                if (taskList.size() <= Integer.valueOf(taskCallNum)) {
+                    this.robotMethodUtil.createTask(taskList, tLcCallStrategyConfig, 1, 1, orgSpeechcraftConf, taskName);
+                } else {
+                    Integer taskNums = taskList.size() / Integer.valueOf(taskCallNum);
+                    for (int i = 0; i < taskNums; i++) {
+                        List subTaskIdList = taskList.subList(i * Integer.valueOf(taskCallNum), (i + 1) * Integer.valueOf(taskCallNum));
+                        this.robotMethodUtil.createTask(subTaskIdList, tLcCallStrategyConfig, 1, 1, orgSpeechcraftConf, taskName);
+                    }
+                    if (taskList.size() % Integer.valueOf(taskCallNum) != 0) {
+                        List subTaskIdList = taskList.subList(Integer.valueOf(taskCallNum) * taskNums, taskList.size());
+                        this.robotMethodUtil.createTask(subTaskIdList, tLcCallStrategyConfig, 1, 1, orgSpeechcraftConf, taskName);
+                    }
                 }
             }
+            // 异步将任务插入到案件历史轨迹表
+            this.duncaseAssignService.batchInsertDuncaseAssign(taskList, ShiroUtils.getSysUser(), TaskTypeEnum.HELP_COLLECT_ROBOT.getCode());
         }
-        // 异步将任务插入到案件历史轨迹表
-        this.duncaseAssignService.batchInsertDuncaseAssign(taskList,ShiroUtils.getSysUser(),TaskTypeEnum.HELP_COLLECT_ROBOT.getCode());
-        return AjaxResult.success(AjaxResult.Type.SUCCESS, "推送成功", taskList.size() + "," + blackCount);
     }
 
     /**
@@ -942,40 +981,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         List<TLcTask> taskList = this.tLcTaskMapper.selectTaskListNotExistRobotBlack(tLcTask);
         // 查询在黑名单里的任务数量
         Long blackCount = this.tLcTaskMapper.selectCountExistRobotBlack(tLcTask);
-        if (taskList == null || taskList.size() == 0) {
-            return AjaxResult.success(AjaxResult.Type.SUCCESS, "推送成功", taskList.size() + "," + blackCount);
-        }
-        // 推送到机器人
-        TLcOrgSpeechcraftConf orgSpeechcraftConf = this.orgSpeechcraftConfService.selectTLcOrgSpeechcraftConfByOrgId(Long.valueOf(tLcTask.getOrgId()));
-        String[] speechcraftIdAndSceneDefIds = speechcraftIdAndSceneDefId.split(",");
-        TLcCallStrategyConfig tLcCallStrategyConfig = TLcCallStrategyConfig.builder()
-                .id(-1L) // 如果是协催的话，策略id为-1，任务的呼叫策略配置id
-                .startCallDate(orgSpeechcraftConf.getStartCallTime())
-                .stopCallDate(orgSpeechcraftConf.getEndCallTime())
-                .speechcraftId(Integer.valueOf(speechcraftIdAndSceneDefIds[0]))
-                .sceneDefId(Integer.valueOf(speechcraftIdAndSceneDefIds[1]))
-                .speechcraftName(speechcraftIdAndSceneDefIds[2])
-                .callLineId(String.valueOf(callLineId)).build();
-        TLcAllocatCaseConfig caseConfig = this.caseConfigService.selectTLcAllocatCaseConfigByOrgId(tLcTask.getOrgId());
-        // 获取单次推送到机器人的号码数
-        String taskCallNum = this.sysDictDataService.selectDictLabel("robot_call_config", "task_call_num");
-        if (caseConfig.getRobot().equals("BR")) {
-            if (taskList.size() <= Integer.valueOf(taskCallNum)) {
-                this.robotMethodUtil.createTask(taskList, tLcCallStrategyConfig, 1, 1, orgSpeechcraftConf);
-            } else {
-                Integer taskNums = taskList.size() / Integer.valueOf(taskCallNum);
-                for (int i = 0; i < taskNums; i++) {
-                    List subTaskIdList = taskList.subList(i * Integer.valueOf(taskCallNum), (i + 1) * Integer.valueOf(taskCallNum));
-                    this.robotMethodUtil.createTask(subTaskIdList, tLcCallStrategyConfig, 1, 1, orgSpeechcraftConf);
-                }
-                if (taskList.size() % Integer.valueOf(taskCallNum) != 0) {
-                    List subTaskIdList = taskList.subList(Integer.valueOf(taskCallNum) * taskNums, taskList.size());
-                    this.robotMethodUtil.createTask(subTaskIdList, tLcCallStrategyConfig, 1, 1, orgSpeechcraftConf);
-                }
-            }
-        }
-        // 异步将任务插入到案件历史轨迹表
-        this.duncaseAssignService.batchInsertDuncaseAssign(taskList,ShiroUtils.getSysUser(),TaskTypeEnum.HELP_COLLECT_ROBOT.getCode());
+        sendRobotByList(tLcTask.getOrgId(), speechcraftIdAndSceneDefId, callLineId, taskList, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS,new Date()));
         return AjaxResult.success(AjaxResult.Type.SUCCESS, "推送成功", taskList.size() + "," + blackCount);
     }
 
@@ -1090,20 +1096,20 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 return Response.success(tLcCallRecord.getId());
             } else {
                 log.info("通话记录id不为空：{},话务平台：{},案件编号：{},录音地址：{},联系人手机号：{}",
-                        tLcCallRecord.getId(),tLcCallRecord.getPlatform(),tLcCallRecord.getCaseNo(),tLcCallRecord.getCallRadioLocation(),tLcCallRecord.getPhone());
+                        tLcCallRecord.getId(), tLcCallRecord.getPlatform(), tLcCallRecord.getCaseNo(), tLcCallRecord.getCallRadioLocation(), tLcCallRecord.getPhone());
                 try {
                     if (StringUtils.isNoneBlank(tLcCallRecord.getPlatform()) && tLcCallRecord.getPlatform().equals("ZJ")) {
-                        log.info("通话开始时间：{}",tLcCallRecord.getCallStartTime());
+                        log.info("通话开始时间：{}", tLcCallRecord.getCallStartTime());
                         if (tLcCallRecord.getCallStartTime() != null) {
                             if (StringUtils.isBlank(tLcCallRecord.getCallLen())) {
                                 if (tLcCallRecord.getCallEndTime() == null) {
                                     long callLen = System.currentTimeMillis() - tLcCallRecord.getCallStartTime().getTime();
-                                    log.info("通话id：{}的通话时长为：{}",tLcCallRecord.getId(), callLen);
+                                    log.info("通话id：{}的通话时长为：{}", tLcCallRecord.getId(), callLen);
                                     tLcCallRecord.setCallLen(String.valueOf(callLen));
                                     tLcCallRecord.setCallEndTime(new Date());
                                 } else {
                                     long callLen = tLcCallRecord.getCallEndTime().getTime() - tLcCallRecord.getCallStartTime().getTime();
-                                    log.info("通话id：{}的通话时长为：{}",tLcCallRecord.getId(), callLen);
+                                    log.info("通话id：{}的通话时长为：{}", tLcCallRecord.getId(), callLen);
                                     tLcCallRecord.setCallLen(String.valueOf(callLen));
                                 }
                             } else {
@@ -1114,7 +1120,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                         }
                     }
                 } catch (Exception e) {
-                    log.error("电催记录{}计算通话时长错误：{}",tLcCallRecord.getId(),e);
+                    log.error("电催记录{}计算通话时长错误：{}", tLcCallRecord.getId(), e);
                     tLcCallRecordService.updateTLcCallRecord(tLcCallRecord);
                     return Response.success(tLcCallRecord.getId());
                 }
@@ -1183,31 +1189,30 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         }
         return assets;
     }*/
-
     private Assets callRemote(String orgCaseNo, String importBatchNo) {
-        log.info("查询单条资产参数：orgCaseNo="+orgCaseNo+",importBatchNo="+importBatchNo);
+        log.info("查询单条资产参数：orgCaseNo=" + orgCaseNo + ",importBatchNo=" + importBatchNo);
         Assets assets = null;
         try {
-            CurAssetsPackage result = this.curAssetsPackageService.selectAsset(orgCaseNo,importBatchNo);
+            CurAssetsPackage result = this.curAssetsPackageService.selectAsset(orgCaseNo, importBatchNo);
             String jsonStr = JSON.toJSONString(result);
             assets = JSONObject.parseObject(jsonStr, Assets.class);
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("查询单条资产异常{}",e);
+            log.error("查询单条资产异常{}", e);
         }
         return assets;
     }
 
     private Assets callRemoteHis(String orgCaseNo, String importBatchNo) {
-        log.info("查询单条资产参数：orgCaseNo="+orgCaseNo+",importBatchNo="+importBatchNo);
+        log.info("查询单条资产参数：orgCaseNo=" + orgCaseNo + ",importBatchNo=" + importBatchNo);
         Assets assets = null;
         try {
-            CurAssetsPackage result = this.curAssetsPackageService.selectHisAsset(orgCaseNo,importBatchNo);
+            CurAssetsPackage result = this.curAssetsPackageService.selectHisAsset(orgCaseNo, importBatchNo);
             String jsonStr = JSON.toJSONString(result);
             assets = JSONObject.parseObject(jsonStr, Assets.class);
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("查询单条资产异常{}",e);
+            log.error("查询单条资产异常{}", e);
         }
         return assets;
     }
@@ -1215,12 +1220,13 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     /**
      * 根据时间只查询 案件表--定时任务同步数据中心 用
      * 2020-06-24 封志涛添加
+     *
      * @return
      */
     @Override
-    public List<Map<String,Object>> selectTaskByTime(Date createTime, int pageNum, int pageSize) {
+    public List<Map<String, Object>> selectTaskByTime(Date createTime, int pageNum, int pageSize) {
 
-        return tLcTaskMapper.selectTaskByTime(createTime,pageNum,pageSize);
+        return tLcTaskMapper.selectTaskByTime(createTime, pageNum, pageSize);
     }
 
     @Override
@@ -1235,13 +1241,53 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     }
 
     @Override
-    public void sendRobotApply(String taskIds) {
-        // 查询任务详情
-        Arrays.stream(taskIds.split(",")).forEach(taskId -> {
-            TLcTask tLcTask = new TLcTask();
-            tLcTask.setId(Long.valueOf(taskId)).setTaskType(TaskTypeEnum.SEND_ROBOT_APPLY.getCode());
-            this.tLcTaskMapper.updateTLcTask(tLcTask);
-        });
+    public Response sendRobotApply(String taskIds) {
+        List<TLcTask> taskList = this.tLcTaskMapper.selectTLcTaskByIdsNotExistRobotBlack(taskIds.split(","));
+        // 查询机器人在黑名单数量
+        Long blackCount = this.tLcTaskMapper.selectCountByIdsNotExistRobotBlack(taskIds.split(","));
+        // 生成批次号
+        String sendRobotBatchNo = DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS, new Date()) + "_" + UUID.randomUUID().toString().replaceAll("-", "");
+        // 修改任务表数据
+        taskList = taskList.stream().map(task -> {
+            task.setTaskType(TaskTypeEnum.SEND_ROBOT_APPLY.getCode()).setSendRobotBatchNo(sendRobotBatchNo);
+            return task;
+        }).collect(Collectors.toList());
+        this.tLcTaskMapper.batchUpdateTask(taskList);
+        // 插入推送机器人申请表
+        createSendRobotApply(taskList.size(), sendRobotBatchNo);
+        // 异步将案件插入轨迹表
+        this.duncaseAssignService.batchInsertDuncaseAssign(taskList, ShiroUtils.getSysUser(), TaskTypeEnum.SEND_ROBOT_APPLY.getCode());
+        return Response.success(Response.ResponseStatusEnum.SUCCESS.getStatus(), "推送成功", taskList.size() + "," + blackCount);
+    }
+
+    @Override
+    public List<TLcTask> selectTaskListBySendRobotBatchNo(String sendRobotBatchNo) {
+        return this.tLcTaskMapper.selectTaskListBySendRobotBatchNo(sendRobotBatchNo);
+    }
+
+    @Override
+    public void updateTLcTaskBySendRobotBatchNo(TLcTask tLcTask) {
+        this.tLcTaskMapper.updateTLcTaskBySendRobotBatchNo(tLcTask);
+    }
+
+    /**
+     * 插入推送机器人申请表
+     *
+     * @param taskNum
+     * @param sendRobotBatchNo
+     */
+    private void createSendRobotApply(Integer taskNum, String sendRobotBatchNo) {
+        String orgName = this.orgPackageService.selectOrgPackageByOrgId(ShiroUtils.getSysUser().getOrgId().toString()).getOrgName();
+        TLcSendRobotApply sendRobotApply = new TLcSendRobotApply();
+        sendRobotApply.setSendRobotBatchNo(sendRobotBatchNo)
+                .setOrgId(ShiroUtils.getSysUser().getOrgId())
+                .setOrgName(orgName)
+                .setTaskNum(taskNum)
+                .setOwnerId(ShiroUtils.getSysUser().getUserId())
+                .setOwnerName(ShiroUtils.getSysUser().getUserName())
+                .setTaskStatus(SendRobotApplyTaskStatusEnum.WAIT_APPROVAL.getCode())
+                .setCreateBy(ShiroUtils.getSysUser().getUserId().toString());
+        this.sendRobotApplyService.insertTLcSendRobotApply(sendRobotApply);
     }
 
 }

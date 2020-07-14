@@ -440,7 +440,7 @@ public class TLcDuncaseServiceImpl implements ITLcDuncaseService {
                         TLcOrgSpeechcraftConf orgSpeechcraftConf = this.orgSpeechcraftConfService.selectTLcOrgSpeechcraftConfByOrgId(caseConfig.getOrgId());
                         if (caseConfig.getRobot().equals("BR")) {
                             if (taskList.size() <= Integer.valueOf(taskCallNum)) {
-                                Integer robotTaskId = this.robotMethodUtil.createTask(taskList, callStrategyConfig, tLcCallStrategyConfig.getContinueCallDays(), tLcCallStrategyConfig.getCallFrequencyDay(), orgSpeechcraftConf);
+                                Integer robotTaskId = this.robotMethodUtil.createTask(taskList, callStrategyConfig, tLcCallStrategyConfig.getContinueCallDays(), tLcCallStrategyConfig.getCallFrequencyDay(), orgSpeechcraftConf, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS,new Date()));
                                 taskList.stream().forEach(task -> {
                                     task.setRobotCallStrategyId(tLcCallStrategyConfig.getId());
                                     task.setRobotTaskId(robotTaskId);
@@ -450,7 +450,7 @@ public class TLcDuncaseServiceImpl implements ITLcDuncaseService {
                                 Integer taskNums = taskList.size() / Integer.valueOf(taskCallNum);
                                 for (int i = 0; i < taskNums; i++) {
                                     List subTaskIdList = taskList.subList(i * Integer.valueOf(taskCallNum), (i + 1) * Integer.valueOf(taskCallNum));
-                                    Integer robotTaskId = this.robotMethodUtil.createTask(subTaskIdList, callStrategyConfig, tLcCallStrategyConfig.getContinueCallDays(), tLcCallStrategyConfig.getCallFrequencyDay(), orgSpeechcraftConf);
+                                    Integer robotTaskId = this.robotMethodUtil.createTask(subTaskIdList, callStrategyConfig, tLcCallStrategyConfig.getContinueCallDays(), tLcCallStrategyConfig.getCallFrequencyDay(), orgSpeechcraftConf, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS,new Date()));
                                     taskList.stream().forEach(task -> {
                                         task.setRobotCallStrategyId(tLcCallStrategyConfig.getId());
                                         task.setRobotTaskId(robotTaskId);
@@ -459,7 +459,7 @@ public class TLcDuncaseServiceImpl implements ITLcDuncaseService {
                                 }
                                 if (taskList.size() % Integer.valueOf(taskCallNum) != 0) {
                                     List subTaskIdList = taskList.subList(Integer.valueOf(taskCallNum) * taskNums, taskList.size());
-                                    Integer robotTaskId = this.robotMethodUtil.createTask(subTaskIdList, callStrategyConfig, tLcCallStrategyConfig.getContinueCallDays(), tLcCallStrategyConfig.getCallFrequencyDay(), orgSpeechcraftConf);
+                                    Integer robotTaskId = this.robotMethodUtil.createTask(subTaskIdList, callStrategyConfig, tLcCallStrategyConfig.getContinueCallDays(), tLcCallStrategyConfig.getCallFrequencyDay(), orgSpeechcraftConf, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS,new Date()));
                                     taskList.stream().forEach(task -> {
                                         task.setRobotCallStrategyId(tLcCallStrategyConfig.getId());
                                         task.setRobotTaskId(robotTaskId);

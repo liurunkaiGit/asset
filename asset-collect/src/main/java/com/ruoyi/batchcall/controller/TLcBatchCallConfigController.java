@@ -10,6 +10,8 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysDept;
+import com.ruoyi.system.service.ISysDeptService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +34,8 @@ public class TLcBatchCallConfigController extends BaseController
 
     @Autowired
     private ITLcBatchCallConfigService tLcBatchCallConfigService;
+    @Autowired
+    private ISysDeptService sysDeptService;
 
     @RequiresPermissions("ruoyi:batchcallconfig:view")
     @GetMapping()
@@ -73,8 +77,10 @@ public class TLcBatchCallConfigController extends BaseController
      * 新增批量外呼配置
      */
     @GetMapping("/add")
-    public String add()
+    public String add(ModelMap map)
     {
+        SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getOrgId());
+        map.put("dept",dept);
         return prefix + "/config/add";
     }
 
@@ -87,7 +93,7 @@ public class TLcBatchCallConfigController extends BaseController
     @ResponseBody
     public AjaxResult addSave(TLcBatchCallConfig tLcBatchCallConfig)
     {
-        TLcBatchCallConfig tcc = this.tLcBatchCallConfigService.selectTLcBatchCallConfigByDeptId(tLcBatchCallConfig.getOrgId());
+        TLcBatchCallConfig tcc = this.tLcBatchCallConfigService.selectTLcBatchCallConfigByOrgId(tLcBatchCallConfig.getOrgId());
         if(tcc != null){//该机构已经存在
             return error("该机构已经存在过配置信息，不能重复配置");
         }

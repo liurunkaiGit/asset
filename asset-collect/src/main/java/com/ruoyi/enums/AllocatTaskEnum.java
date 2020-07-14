@@ -5,6 +5,7 @@ import com.ruoyi.assetspackage.domain.OrgPackage;
 import com.ruoyi.callConfig.domain.TLcCallStrategyConfig;
 import com.ruoyi.callConfig.service.impl.TLcCallStrategyConfigServiceImpl;
 import com.ruoyi.caseConfig.domain.TLcAllocatCaseConfig;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.config.AppConfig;
 import com.ruoyi.custom.domain.TLcCustContact;
@@ -35,6 +36,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -130,7 +132,7 @@ public enum AllocatTaskEnum {
             String taskCallNum = this.sysDictDataService.selectDictLabel("robot_call_config", "task_call_num");
             if (caseConfig.getRobot().equals("BR")) {
                 if (taskList.size() <= Integer.valueOf(taskCallNum)) {
-                    Integer robotTaskId = this.robotMethodUtil.createTask(taskList, callStrategyConfig, tLcCallStrategyConfig.getContinueCallDays(), tLcCallStrategyConfig.getCallFrequencyDay(), orgSpeechcraftConf);
+                    Integer robotTaskId = this.robotMethodUtil.createTask(taskList, callStrategyConfig, tLcCallStrategyConfig.getContinueCallDays(), tLcCallStrategyConfig.getCallFrequencyDay(), orgSpeechcraftConf, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS,new Date()));
                     taskList.stream().forEach(task -> {
                         task.setRobotCallStrategyId(tLcCallStrategyConfig.getId());
                         task.setRobotTaskId(robotTaskId);
@@ -140,7 +142,7 @@ public enum AllocatTaskEnum {
                     Integer taskNums = taskList.size() / Integer.valueOf(taskCallNum);
                     for (int i = 0; i < taskNums; i++) {
                         List subTaskIdList = taskList.subList(i * Integer.valueOf(taskCallNum), (i + 1) * Integer.valueOf(taskCallNum));
-                        Integer robotTaskId = this.robotMethodUtil.createTask(subTaskIdList, callStrategyConfig, tLcCallStrategyConfig.getContinueCallDays(), tLcCallStrategyConfig.getCallFrequencyDay(), orgSpeechcraftConf);
+                        Integer robotTaskId = this.robotMethodUtil.createTask(subTaskIdList, callStrategyConfig, tLcCallStrategyConfig.getContinueCallDays(), tLcCallStrategyConfig.getCallFrequencyDay(), orgSpeechcraftConf, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS,new Date()));
                         taskList.stream().forEach(task -> {
                             task.setRobotCallStrategyId(tLcCallStrategyConfig.getId());
                             task.setRobotTaskId(robotTaskId);
@@ -149,7 +151,7 @@ public enum AllocatTaskEnum {
                     }
                     if (taskList.size() % Integer.valueOf(taskCallNum) != 0) {
                         List subTaskIdList = taskList.subList(Integer.valueOf(taskCallNum) * taskNums, taskList.size());
-                        Integer robotTaskId = this.robotMethodUtil.createTask(subTaskIdList, callStrategyConfig, tLcCallStrategyConfig.getContinueCallDays(), tLcCallStrategyConfig.getCallFrequencyDay(), orgSpeechcraftConf);
+                        Integer robotTaskId = this.robotMethodUtil.createTask(subTaskIdList, callStrategyConfig, tLcCallStrategyConfig.getContinueCallDays(), tLcCallStrategyConfig.getCallFrequencyDay(), orgSpeechcraftConf, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS,new Date()));
                         taskList.stream().forEach(task -> {
                             task.setRobotCallStrategyId(tLcCallStrategyConfig.getId());
                             task.setRobotTaskId(robotTaskId);

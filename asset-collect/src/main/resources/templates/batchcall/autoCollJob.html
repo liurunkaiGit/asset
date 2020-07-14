@@ -2119,6 +2119,22 @@
     }
 
     function changeColor(obj) {
+        // 改变颜色前获取已选中的那一行
+        var allCustContact = $("#custContactTbody").find('tr');
+        var hisPhone;
+        var curPhone;
+        var freePhone = $("#freeCall").val();
+        if (freePhone == null || freePhone == "" || freePhone == undefined) {
+            $.each(allCustContact, function (i, n) {
+                var css = $(n).css("background");
+                if (JSON.stringify(css).indexOf("rgb(169, 169, 169)")>-1) {
+                    hisPhone = $(n).children().eq(2).text();
+                }
+            });
+        } else {
+            hisPhone = freePhone;
+        }
+        // alert(hisPhone);
         // document.getElementsByName("radioChoose").checked=false;
         var tp = $("#custContactTbody");
         var trs = $("#custContactTbody")[0].childNodes;
@@ -2140,11 +2156,21 @@
         //     // $(obj.firstChild.lastChild).prop("checked",false);
         //
         // }
-
+        $.each(allCustContact, function (i, n) {
+            var css = $(n).css("background");
+            if (JSON.stringify(css).indexOf("rgb(169, 169, 169)")>-1) {
+                curPhone = $(n).children().eq(2).text();
+            }
+        });
+        // alert(curPhone);
+        if (hisPhone != undefined && hisPhone != curPhone) {
+            $("#callRecordId").val("");
+        }
 
     }
 
     function changeFinalColor(obj) {
+        $("#callRecordId").val("");
         var tp = $("#custContactTbody");
         var trs = $("#custContactTbody")[0].childNodes;
         var strs = $("#finalContactTbody")[0].childNodes;

@@ -19,9 +19,11 @@ public class TLcBatchCall extends BaseEntity
 
     public static final int WHZ = 0;//外呼中
     public static final int DWH = 1;//待外呼
-    public static final int YWC = 2;//已完成
+    public static final int ZT = 2;//暂停
     public static final int YQX = 3;//已取消
-    public static final int ZT = 4;//暂停
+    public static final int YWC = 4;//已完成
+
+
 
     public static final String SHOUJI = "1";
     public static final String GUHUA = "2";
@@ -89,5 +91,9 @@ public class TLcBatchCall extends BaseEntity
      * 备注
      */
     private String remark;
+    /**
+     * 虚字段：是否只查询排序第一的 一条数据
+     */
+    private String isOnlyOne;
 
 }

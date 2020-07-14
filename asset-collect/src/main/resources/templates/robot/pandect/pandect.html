@@ -147,6 +147,12 @@
                     field : 'callDoneCount', 
                     title : '已完成'
                 },
+                    {
+                        title : '已完成百分比',
+                        formatter: function (value, row, index) {
+                            return ((row.callDoneCount / row.callTotalCount) * 100).toFixed(0) + "%";
+                        }
+                    },
                 {
                     field : 'callCalledCount', 
                     title : '已接听'
