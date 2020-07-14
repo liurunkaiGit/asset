@@ -144,6 +144,7 @@ public class TLcBatchCallController extends BaseController
     public TableDataInfo allList(TLcBatchCall tLcBatchCall)
     {
         startPage();
+        tLcBatchCall.setOrgId(ShiroUtils.getSysUser().getOrgId()+"");
 //        tLcBatchCall.setCreateBy(ShiroUtils.getUserId()+"");
         //只查询状态为 暂停、外呼中、待外呼 的数据
 //        tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.ZT,TLcBatchCall.WHZ,TLcBatchCall.DWH));
