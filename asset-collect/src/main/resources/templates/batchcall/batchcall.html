@@ -173,16 +173,18 @@
         var batchCallStatus = [[${@dict.getType('batch_call_status')}]];
         var prefix = ctx + "ruoyi/batchcall";
         var collectPrefix = ctx + "collect/task";
-        var batchCallList = [[${batchCallList}]];
+        var batchCallList = [[${batchCall}]];
+        var currentCall ;//当前拨打 处理中的记录
         var exonNum ;//外显号码
         if(batchCallList != null){
-            exonNum = batchCallList[0].exonNum;//因为创建外呼任务的时候就选择了外显号码，是唯一的，所以取第一条数据的外显号码，既是所有数据的外显号码值
+            currentCall = batchCallList[0];
+            exonNum = currentCall.exonNum;//因为创建外呼任务的时候就选择了外显号码，是唯一的，所以取第一条数据的外显号码，既是所有数据的外显号码值
+            $("#exonNum").val(exonNum);//同一批次只会有一个外显号码
         }
-        $("#exonNum").val(exonNum);//同一批次只会有一个外显号码
-        var indexCall = 0;//从第1条开始拨打
         var callRecordId = "";//电催记录ID，当前页面拨打之后，会赋值，然后作业页面挂电话，下电话码等操作的时候 会用到
         var isCall = "1";//默认是1，可以外呼，0 不能外呼 ,用于页面暂停、启动操作之后，是否自动打电话
-        var currentCall ;//当前拨打 处理中的记录
+        var isWjt = "";//如果此变量为空字符串，则表示客户未接通电话，如果此变量有值，且为 1 ，则为客户接通之后，又挂断电话的
+
         var tbcc = [[${tLcBatchCallConfig}]];//批量外呼配置信息
 
         $(function() {
@@ -265,7 +267,7 @@
                     var obj = batchCallArray[0]
                 }
             });*/
-            if(batchCallList != null){//只有有外呼任务的时候，才会初始化
+            if(currentCall != null){//只有有外呼任务的时候，才会初始化
                 initial1();//初始化打电话的JS
             }
         });
@@ -295,59 +297,11 @@
                 end:function (index, layero) {//点击窗口的x
                     layer.close(index);
                     // alert("点击关闭按钮");
-                    toNextCall();
+                    // toNextCall();
+                    hangUp();//挂断电话
+                    updateStatus(currentCall.id,4,currentCall.remark,"1","");//已完成
                 }
             });
-        }
-        // 进行下一条 拨打
-        function toNextCall() {
-            //把结束的通话设置为 已完成
-            hangUp();//挂断电话
-            // updateStatus(currentCall.id,2,"电话已挂断");
-            $.post(
-                prefix + "/editBatchCall",
-                {
-                    id:currentCall.id,
-                    taskStatus:2,
-                    remark:"电话已挂断"
-                },
-                function (data) {
-                    if (data.code == 0) {//请求成功
-                        //把ID相同的数据 中的状态 也修改了
-                        currentCall.taskStatus = status;
-
-                        if(indexCall < batchCallList.length){//还有下一条了
-                            var nextBatchCall;
-                            var tmpIndex = 0;//
-                            if(tbcc.isCallOther == '0'){//批量配置为：本人接通后是否继续拨打本案其他号码：0 不呼叫
-                                //循环遍历当前 批量外呼数组，把本人的其他联系人拨打信息，都给踢出，然后继续拨打下一条非本人的信息
-                                for(var i = 0;i < batchCallList.length; i ++){
-                                    var bc = batchCallList[i];
-                                    if(bc.caseNo == currentCall.caseNo && bc.importBatchNo == currentCall.importBatchNo && bc.contactRelation != 1){//相同案件号和批次号，且联系人关系 非本人
-                                        updateStatus(bc.id,3,"配置为本人拨打成功后，不拨打其他，状态置为取消");//状态修改为  已取消
-                                    }
-                                    //状态为待外呼，且是本人,且不是本案件，只有为0，第一次的时候，找到下一条要拨打的数据
-                                    if(bc.taskStatus == 1 && bc.contactRelation == 1 && bc.caseNo != currentCall.caseNo && tmpIndex == 0){
-                                        nextBatchCall = bc;
-                                        indexCall = i;//数组全局序号 ，让下一次打电话取数据用
-                                        tmpIndex ++;
-                                    }
-                                }
-                                if(nextBatchCall == null){//没有下一条可拨打
-                                    $.modal.alert("自动呼叫队列已呼叫完毕");
-                                }else{
-                                    call(nextBatchCall);
-                                }
-                            }else{
-                                nextBatchCall = batchCallList[indexCall];
-                                call(nextBatchCall);
-                            }
-                        }else{
-                            $.modal.alert("自动呼叫队列已呼叫完毕");
-                        }
-                    }
-                }
-            );
         }
 
         function initial1() {
@@ -423,6 +377,7 @@
 
             agentClient.onConnected = function(event) {//电话接通
                 printEvent('onConnected', event);
+                isWjt = "1";//赋值为 1 ，方便挂断时候判断用
                 var caseNo = currentCall.caseNo;
                 var importBatchNo = currentCall.importBatchNo;
                 var orgId = currentCall.orgId;
@@ -431,8 +386,11 @@
                 openAutoCollJob(caseNo,importBatchNo,orgId,exonNum,id);
             };
 
-            agentClient.onReleased = function(event) {
+            agentClient.onReleased = function(event) {//电话未接通
                 printEvent('onReleased', event);
+                if(isWjt == ""){
+                    updateStatus(currentCall.id,4,"客户未接通，已完成","","");//已完成
+                }
             };
 
             agentClient.onRecordEnd = function(event) {
@@ -495,7 +453,7 @@
             }
             //电话初始完毕之后，停2秒之后，自动开始拨打第一条
             window.setTimeout(function() {
-                var batchCall = batchCallList[indexCall];
+                var batchCall = currentCall;
                 call(batchCall);
             },2000);
         }
@@ -505,9 +463,11 @@
          * @param pnumber:被叫号码
          */
         function call(batchCall) {
-            // var batchCall = batchCallList[0];
             if(!isCanCallByTime()){
                 $.modal.alert("不在可外呼时间段内，请等到可外呼时间刷新页面再外呼");
+                return;
+            }
+            if(isCall == '0'){
                 return;
             }
             fuzhi(batchCall);
@@ -547,7 +507,6 @@
             if(callPlatform == 'PA') {
                 if (destDesc) {
                     agentClient.makeCall(getDestType(destDesc), destDesc);
-                    indexCall = indexCall + 1;//变量+1，以备拨打下一条
                 }
             } else if(callPlatform == 'ZJ') {
                 // 第一个参数是呼叫号码，第二个参数是外显号码
@@ -562,7 +521,7 @@
             var callRemark = $("#callRemarkAdd").val();
             // var callRecordId = $("#callRecordId").val();
             //更改状态,外呼中
-            updateStatus(batchCall.id,0,"开始拨打电话，外呼中");
+            updateStatus(batchCall.id,0,"开始拨打电话，外呼中",'0','1');//只更新状态
             $.post(
                 collectPrefix + "/addCallRecord",
                 {
@@ -605,22 +564,12 @@
          * 给页面以及全局变量赋值
          */
         function fuzhi(obj) {
-            if(isCall == '0'){
-                return;
-            }
-            currentCall = obj;
             //给正在外呼区域赋值
-            var str = "<tr><td>批次号：" + currentCall.batchNo +"</td>";
-            str = str + "<td>姓名：" + currentCall.contactName +"</td>";
-            str = str + "<td>电话号码：" + currentCall.phone +"</td></tr>";
+            var str = "<tr><td>批次号：" + obj.batchNo +"</td>";
+            str = str + "<td>姓名：" + obj.contactName +"</td>";
+            str = str + "<td>电话号码：" + obj.phone +"</td>";
             str = str + "<td>状态：外呼中</td></tr>";
             $("#callingContent").html(str);
-            /*$("#currentPhone").val(currentCall.phone);
-            $("#currentContactName").val(currentCall.contactName);
-            $("#currentContactRelation").val(currentCall.contactRelation);
-
-            $("#currentCaseNo").val(currentCall.caseNo);
-            $("#currentImportBatchNo").val(currentCall.importBatchNo);*/
         }
 
         function getDestType(destDesc) {
@@ -633,10 +582,6 @@
         }
         // 暂停
         function pauseCall(){
-            if(batchCallList == null){//只有有外呼任务的时候，才操作
-                $.modal.alert("暂无数据，请勿操作");
-                return;
-            }
             $.post(
                 prefix + "/editBatchCallStatus",
                 {
@@ -647,13 +592,6 @@
                         $.table.refresh();
                         $.modal.alert("暂停成功");
                         isCall = 0;//停止自动外呼
-                        //循环遍历当前 批量外呼数组，把ID相同的数据 中的状态 也修改了
-                        for(var i = 0;i < batchCallList.length; i ++){
-                            var bc = batchCallList[i];
-                            if(bc.taskStatus == 1){//待外呼状态
-                                bc.taskStatus = 4;
-                            }
-                        }
                     }else{
                         $.modal.alert(data.msg);
                     }
@@ -675,28 +613,33 @@
                     if (data.code == 0) {//请求成功
                         $.table.refresh();
                         $.modal.alert("启动成功");
-                        //循环遍历当前 批量外呼数组，把ID相同的数据 中的状态 也修改了
-                        for(var i = 0;i < batchCallList.length; i ++){
-                            var bc = batchCallList[i];
-                            if(bc.taskStatus == 4){//暂停状态
-                                bc.taskStatus = 1;
-                            }
-                        }
                         isCall = 1;//启动自动外呼
-                        var batchCall = batchCallList[indexCall];
-                        call(batchCall);
+                        //获取下一条待拨数据
+                        $.post(
+                            prefix + "/getNextBatchCall",
+                            {
+
+                            },
+                            function (data) {
+                                if (data.code == 0) {//请求成功
+                                    if(data.msg != ''){
+                                        currentCall = data.msg;
+                                        call(currentCall);
+                                    }else{
+                                        $("#callingContent").html("");
+                                        $.modal.alert("自动呼叫队列已呼叫完毕");
+                                    }
+                                }
+                            }
+                        );
                     }else{
                         $.modal.alert(data.msg);
                     }
                 }
             );
         }
-        
+        //取消
         function cancleCall() {
-            if(batchCallList == null){//只有有外呼任务的时候，才操作
-                $.modal.alert("暂无数据，请勿操作");
-                return;
-            }
             $.post(
                 prefix + "/editBatchCallStatus",
                 {
@@ -714,24 +657,32 @@
         }
 
         /**
-         * 修改状态
+         * 修改状态，并获取下一条拨打数据
+         * isCall: 1  表示接通之后挂断电话的，后台判断 接通之后 是否拨打其他联系人 用，其他情况可以不传，或者传其他值均可
+         * onlyUpdate：1 表示只更新，其他情况可以不传，或者传其他值均可
          */
-        function updateStatus(id,status,remark) {
+        function updateStatus(id,status,remark,isCall,onlyUpdate) {
             $.post(
                 prefix + "/editBatchCall",
                 {
                     id:id,
                     taskStatus:status,
-                    remark:remark
+                    remark:remark,
+                    isCall: isCall,
+                    onlyUpdate:onlyUpdate
                 },
                 function (data) {
                     if (data.code == 0) {//请求成功
-                        //循环遍历当前 批量外呼数组，把ID相同的数据 中的状态 也修改了
-                        for(var i = 0;i < batchCallList.length; i ++){
-                            var bc = batchCallList[i];
-                            if(bc.id == id){
-                                bc.taskStatus = status;
-                                break;
+                        $.table.refresh();
+                        // alert(JSON.stringify(data));
+                        if(onlyUpdate == ''){//不是只更新
+                            if(data.msg != ''){
+                                currentCall = data.data;
+                                // alert(currentCall);
+                                call(currentCall);
+                            }else{
+                                $("#callingContent").html("");
+                                $.modal.alert("自动呼叫队列已呼叫完毕");
                             }
                         }
                     }
