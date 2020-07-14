@@ -110,7 +110,11 @@ public class SysLoginController extends BaseController
             //根据用户账号查询用户信息
             SysUser user = new SysUser();
             user.setLoginName(username);
-            SysUser sysUser = userService.selectUserList(user).get(0);
+            List<SysUser> sysUsers = userService.selectUserList(user);
+            SysUser sysUser = null;
+            if(sysUsers.size() > 0){
+                sysUser = sysUsers.get(0);
+            }
             deptId = sysUser.getDeptId();
             //根据用户查询拥有的部门权限
             Set<Long> deptIds = dataPermissionUtil.selectDataPerNew(sysUser);
