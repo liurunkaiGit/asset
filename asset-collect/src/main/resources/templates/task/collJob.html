@@ -1979,9 +1979,9 @@
         };
 
         agentClient.onConnected = function(event) {
-            printEvent('onConnected', event);
             agentIsCalling = true;
             console.log("用户接通，agentIsCalling=true");
+            printEvent('onConnected', event);
         };
 
         agentClient.onReleased = function(event) {
@@ -1989,11 +1989,11 @@
         };
 
         agentClient.onRecordEnd = function(event) {
+            agentIsCalling = false;
+            console.log("通话结束，agentIsCalling=false");
             resetTiming();
             var freeCallFlag = $("#freeCallFlag").val();
             printEvent('onRecordEnd', event);
-            agentIsCalling = false;
-            console.log("通话结束，agentIsCalling=false");
             recordFile = event.recordFile;
             startTime = event.recordTime;
             endTime = event.startTime;
