@@ -111,30 +111,31 @@ public class SysLoginController extends BaseController
             SysUser user = new SysUser();
             user.setLoginName(username);
             List<SysUser> sysUsers = userService.selectUserList(user);
-            SysUser sysUser = null;
             if(sysUsers.size() > 0){
-                sysUser = sysUsers.get(0);
-            }
-            deptId = sysUser.getDeptId();
-            //根据用户查询拥有的部门权限
-            Set<Long> deptIds = dataPermissionUtil.selectDataPerNew(sysUser);
-            if(deptIds != null && !deptIds.contains(deptId)){
-                deptIds.add(deptId);
-            }
-            SysDept deptParam = new SysDept();
-            deptParam.setDeptIds(deptIds);
-            List<SysDept> sysDepts = deptService.selectDeptList(deptParam);
-            for (SysDept sysDept : sysDepts) {
-                if(!"MVP Group".equals(sysDept.getDeptName()) && sysDept.getDeptId() !=100){
-                    if(deptId.equals(sysDept.getDeptId())){
-                        list.add(0,sysDept);
-                    }else{
-                        list.add(sysDept);
+                SysUser sysUser = sysUsers.get(0);
+                deptId = sysUser.getDeptId();
+                //根据用户查询拥有的部门权限
+                Set<Long> deptIds = dataPermissionUtil.selectDataPerNew(sysUser);
+                if(deptIds != null && !deptIds.contains(deptId)){
+                    deptIds.add(deptId);
+                }
+                SysDept deptParam = new SysDept();
+                deptParam.setDeptIds(deptIds);
+                List<SysDept> sysDepts = deptService.selectDeptList(deptParam);
+                for (SysDept sysDept : sysDepts) {
+                    if(!"MVP Group".equals(sysDept.getDeptName()) && sysDept.getDeptId() !=100){
+                        if(deptId.equals(sysDept.getDeptId())){
+                            list.add(0,sysDept);
+                        }else{
+                            list.add(sysDept);
+                        }
                     }
                 }
+                String result = JSON.toJSONString(list);
+                return AjaxResult.success("成功",result);
+            }else{
+                return AjaxResult.success("没有数据","");
             }
-            String result = JSON.toJSONString(list);
-            return AjaxResult.success("成功",result);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("获取权限列表失败{}",e);
