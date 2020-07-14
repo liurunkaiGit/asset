@@ -778,6 +778,7 @@
     var curAssetsPrefix = ctx + "import/assets";
     var startNum = 1;
     var pageSize = 50;
+    var agentIsCalling;
     $(function () {
         var panehHidden = false;
         if ($(this).width() < 769) {
@@ -1199,6 +1200,10 @@
     }
 
     function collJobDetail(caseNo,orgId,importBatchNo) {
+        if (agentIsCalling) {
+            $.modal.alertError("正在通话中不能切换用户");
+            return;
+        }
         currentCaseNo = caseNo;
         currentImportBatchNo = importBatchNo;
         currentOrgId = orgId;
@@ -1974,6 +1979,8 @@
         };
 
         agentClient.onConnected = function(event) {
+            agentIsCalling = true;
+            console.log("用户接通，agentIsCalling=true");
             printEvent('onConnected', event);
         };
 
@@ -1982,6 +1989,8 @@
         };
 
         agentClient.onRecordEnd = function(event) {
+            agentIsCalling = false;
+            console.log("通话结束，agentIsCalling=false");
             resetTiming();
             var freeCallFlag = $("#freeCallFlag").val();
             printEvent('onRecordEnd', event);
@@ -2557,6 +2566,11 @@
             $.modal.alert("请选择话务平台");
             return;
         }
+        var phone = $("#freeCall").val();
+        if (phone == null || phone == '') {
+            $.modal.alert("请输入号码");
+            return;
+        }
 
        /* var trs = $("#custContactTbody")[0].childNodes;
         $.each(trs,function (i,n) {
@@ -2629,6 +2643,22 @@
     }
 
     function changeColor(obj) {
+        // 改变颜色前获取已选中的那一行
+        var allCustContact = $("#custContactTbody").find('tr');
+        var hisPhone;
+        var curPhone;
+        var freePhone = $("#freeCall").val();
+        if (freePhone == null || freePhone == "" || freePhone == undefined) {
+            $.each(allCustContact, function (i, n) {
+                var css = $(n).css("background");
+                if (JSON.stringify(css).indexOf("rgb(169, 169, 169)")>-1) {
+                    hisPhone = $(n).children().eq(2).text();
+                }
+            });
+        } else {
+            hisPhone = freePhone;
+        }
+        // alert(hisPhone);
         // document.getElementsByName("radioChoose").checked=false;
         var tp = $("#custContactTbody");
         var trs = $("#custContactTbody")[0].childNodes;
@@ -2641,6 +2671,16 @@
         });
         obj.style = "background:rgb(169,169,169)";
         $(obj.firstChild.firstChild).prop("checked",true);
+        $.each(allCustContact, function (i, n) {
+            var css = $(n).css("background");
+            if (JSON.stringify(css).indexOf("rgb(169, 169, 169)")>-1) {
+                curPhone = $(n).children().eq(2).text();
+            }
+        });
+        // alert(curPhone);
+        if (hisPhone != undefined && hisPhone != curPhone) {
+            $("#callRecordId").val("");
+        }
     }
 
     function callCodeChange(){
@@ -2656,6 +2696,7 @@
     }
 
     function changeFinalColor(obj) {
+        $("#callRecordId").val("");
         var tp = $("#custContactTbody");
         var trs = $("#custContactTbody")[0].childNodes;
         var strs = $("#finalContactTbody")[0].childNodes;
