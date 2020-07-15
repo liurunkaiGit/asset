@@ -90,7 +90,10 @@ public class SynDataToCenterPlatFormTask
             startDate = dateFmt.format(dBefore);
             startDate = startDate.substring(0, 10) + " 00:00:00";
             endDate = startDate.substring(0, 10) + " 23:59:59";
-        }else{//开始时间和结束时间都不为空
+        }else if(StringUtils.isEmpty(endDate)){//结束时间为空
+            startDate = startDate.substring(0, 10) + " 00:00:00";
+            endDate = startDate.substring(0, 10) + " 23:59:59";
+        }else {//开始时间和结束时间都不为空
             startDate = startDate.substring(0, 10) + " 00:00:00";
             endDate = endDate.substring(0, 10) + " 23:59:59";
         }
