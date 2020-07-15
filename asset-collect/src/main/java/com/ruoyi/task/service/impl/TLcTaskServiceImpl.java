@@ -1140,7 +1140,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 .callSignValue(tLcCallRecord.getCallResult())
                 .recentlyFollowUpDate(new Date())
                 .build();
-        this.tLcTaskMapper.updateTLcTask(tLcTask);
+        this.tLcTaskMapper.updateTaskByCaseNoAndImportBatchNoAndOrgId(tLcTask);
     }
 
     @Override

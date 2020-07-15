@@ -205,4 +205,6 @@ public interface TLcTaskMapper {
     List<TLcTask> selectTaskListBySendRobotBatchNo(@Param("sendRobotBatchNo") String sendRobotBatchNo);
 
     void updateTLcTaskBySendRobotBatchNo(TLcTask tLcTask);
+
+    void updateTaskByCaseNoAndImportBatchNoAndOrgId(TLcTask tLcTask);
 }

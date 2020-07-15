@@ -1267,4 +1267,13 @@
     <update id="updateTLcTaskBySendRobotBatchNo" parameterType="com.ruoyi.task.domain.TLcTask">
         UPDATE t_lc_task set task_type = #{taskType},modify_by = #{updateBy},modify_time = NOW() where send_robot_batch_no = #{sendRobotBatchNo}
     </update>
+
+    <update id="updateTaskByCaseNoAndImportBatchNoAndOrgId">
+        UPDATE t_lc_task set
+            recently_follow_up_date = #{recentlyFollowUpDate},
+            call_sign = #{callSign},
+            call_sign_value = #{callSignValue},
+            modify_time = NOW()
+        WHERE case_no = #{caseNo} AND org_id = #{orgId} AND import_batch_no = #{importBatchNo}
+    </update>
 </mapper>
