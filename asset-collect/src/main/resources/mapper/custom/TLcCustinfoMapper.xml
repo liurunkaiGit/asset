@@ -380,7 +380,7 @@
         email,income_year,address,marrage_status,has_child,has_house,has_car,validate_status,create_time,modify_time,create_by,modify_by,org_id,census_address,case_no,import_batch_no from t_lc_custinfo
         where 1 = 1
         <if test="createTime != null">
-            AND create_time <![CDATA[>=]]> #{createTime} OR modify_time <![CDATA[>=]]> #{createTime}
+            AND (create_time <![CDATA[>=]]> #{createTime} AND create_time <![CDATA[<]]> #{modifyTime}) OR (modify_time <![CDATA[>=]]> #{createTime} AND modify_time <![CDATA[<]]> #{modifyTime})
         </if>
         order by id desc
         limit #{pnum},#{psize}
@@ -390,7 +390,7 @@
         select count(1) from t_lc_custinfo
         where 1 = 1
         <if test="createTime != null">
-            AND create_time <![CDATA[>=]]> #{createTime} OR modify_time <![CDATA[>=]]> #{createTime}
+            AND (create_time <![CDATA[>=]]> #{createTime} AND create_time <![CDATA[<]]> #{modifyTime}) OR (modify_time <![CDATA[>=]]> #{createTime} AND modify_time <![CDATA[<]]> #{modifyTime})
         </if>
     </select>
 </mapper>

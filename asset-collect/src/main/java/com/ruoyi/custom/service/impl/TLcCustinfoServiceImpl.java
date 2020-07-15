@@ -107,12 +107,12 @@ public class TLcCustinfoServiceImpl implements ITLcCustinfoService {
     }
 
     @Override
-    public List<Map<String, Object>> selectCustinfoByTime(Date createTime, int pageNum, int pageSize) {
-        return this.tLcCustinfoMapper.selectCustinfoByTime(createTime,pageNum,pageSize);
+    public List<Map<String, Object>> selectCustinfoByTime(Date createTime, Date modifyTime, int pageNum, int pageSize) {
+        return this.tLcCustinfoMapper.selectCustinfoByTime(createTime,modifyTime,pageNum,pageSize);
     }
 
     @Override
-    public Integer selectCustinfoCount(Date createTime) {
-        return this.tLcCustinfoMapper.selectCustinfoCount(createTime);
+    public Integer selectCustinfoCount(Date createTime, Date modifyTime) {
+        return this.tLcCustinfoMapper.selectCustinfoCount(createTime,modifyTime);
     }
 }

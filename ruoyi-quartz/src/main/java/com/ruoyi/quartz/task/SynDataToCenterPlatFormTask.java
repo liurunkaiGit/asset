@@ -114,7 +114,7 @@ public class SynDataToCenterPlatFormTask
             //5、生成 t_lc_cust_contact 表数据，并上传FTP服务器
             createCustContactFile(startDate,endDate,sftp);
             //6、生成 t_lc_custinfo 表数据，并上传FTP服务器
-            createCustinfoFile(startDate,sftp);
+            createCustinfoFile(startDate,endDate,sftp);
             //7、生成 t_lc_duncase 表数据，并上传FTP服务器
             createDuncaseFile(startDate,sftp);
             //8、生成 t_lc_task 表数据，并上传FTP服务器
@@ -136,7 +136,7 @@ public class SynDataToCenterPlatFormTask
             createCustContactFile(startDate,endDate,sftp);
         }else if("t_lc_custinfo".equals(tableName)){
             //1、生成 t_lc_custinfo 表数据，并上传FTP服务器
-            createCustinfoFile(startDate,sftp);
+            createCustinfoFile(startDate,endDate,sftp);
         }else if("t_lc_duncase".equals(tableName)){
             //1、生成 t_lc_duncase 表数据，并上传FTP服务器
             createDuncaseFile(startDate,sftp);
@@ -262,16 +262,16 @@ public class SynDataToCenterPlatFormTask
      * @param startDate
      * @param sftp
      */
-    private void createCustinfoFile(String startDate,SFTPUtil sftp) {
+    private void createCustinfoFile(String startDate,String endDate,SFTPUtil sftp) {
         int pageSize = 10000;//每页的数据条数
         int pageCount = 0;//总页数
-        int count = tLcCustinfoService.selectCustinfoCount(DateUtils.parseDate(startDate));//总条数
+        int count = tLcCustinfoService.selectCustinfoCount(DateUtils.parseDate(startDate),DateUtils.parseDate(endDate));//总条数
         pageCount = count/pageSize + 1;
 
         List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
         List<Map<String,Object>> temp = null;
         for(int i = 0 ; i < pageCount; i ++){
-            temp = tLcCustinfoService.selectCustinfoByTime(DateUtils.parseDate(startDate),pageSize*i,pageSize);
+            temp = tLcCustinfoService.selectCustinfoByTime(DateUtils.parseDate(startDate),DateUtils.parseDate(endDate),pageSize*i,pageSize);
             log.info("第{}次查询t_lc_custinfo表数据结束",i+1);
             temp = formatCustinfoList(temp);
             list.addAll(temp);
