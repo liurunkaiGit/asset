@@ -358,11 +358,12 @@ public class TLcBatchCallController extends BaseController
         String flag = request.getParameter("flag");
         String userId = ShiroUtils.getUserId()+"";
         if("pause".equals(flag)){
-            return toAjax(tLcBatchCallService.updateBatchCallByBatchNo(userId,1,2));//待外呼状态 修改为 暂停状态
+            return success(tLcBatchCallService.updateBatchCallByBatchNo(userId,1,2)+"");
+//            return toAjax(tLcBatchCallService.updateBatchCallByBatchNo(userId,1,2));//待外呼状态 修改为 暂停状态
         }else if("start".equals(flag)){
-            return toAjax(tLcBatchCallService.updateBatchCallByBatchNo(userId,2,1));//暂停状态 修改为 待外呼状态
+            return success(tLcBatchCallService.updateBatchCallByBatchNo(userId,2,1)+"");//暂停状态 修改为 待外呼状态
         }else if("cancle".equals(flag)){
-            return toAjax(tLcBatchCallService.updateBatchCallByBatchNo(userId,null,3));//取消
+            return success(tLcBatchCallService.updateBatchCallByBatchNo(userId,null,3)+"");//取消
         }
         return error();
     }

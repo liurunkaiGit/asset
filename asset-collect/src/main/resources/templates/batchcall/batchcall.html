@@ -620,6 +620,10 @@
         }
         
         function startCall() {
+            if(!isCanCallByTime()){//不在可外呼时间段
+                $.modal.alert("不在可外呼时间段，无法启动");
+                return;
+            }
             $.post(
                 prefix + "/editBatchCallStatus",
                 {
@@ -745,7 +749,7 @@
             if(tbcc.startTime1 != ''){
                 var startTime1 = parseInt(tbcc.startTime1.replace(":",""));
                 var endTime1 = parseInt(tbcc.endTime1.replace(":",""));
-                if(time < startTime1 && time > endTime1){
+                if(time < startTime1 || time > endTime1){
                     return false;
                 }
             }else{
@@ -754,14 +758,14 @@
             if(tbcc.startTime2 != ''){
                 var startTime2 = parseInt(tbcc.startTime2.replace(":",""));
                 var endTime2 = parseInt(tbcc.endTime2.replace(":",""));
-                if(time < startTime2 && time > endTime2){
+                if(time < startTime2 || time > endTime2){
                     return false;
                 }
             }
             if(tbcc.startTime3 != ''){
                 var startTime3 = parseInt(tbcc.startTime3.replace(":",""));
                 var endTime3 = parseInt(tbcc.endTime3.replace(":",""));
-                if(time < startTime3 && time > endTime3){
+                if(time < startTime3 || time > endTime3){
                     return false;
                 }
             }
