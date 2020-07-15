@@ -28,9 +28,9 @@
                         <label class="col-sm-3 control-label">可呼叫时间段：</label>
                         <div class="col-sm-8">
                             <div class="input-group date">
-                                <input name="startTime1" id="startTime1" class="form-control" placeholder="HH-mm" type="text" style="width: 88px;" th:value="${tLcBatchCallConfig.startTime1}>
-                                <span class="form-control" style=" width: 20px;">-</span>
-                                <input name="endTime1" id="endTime1" class="form-control" placeholder="HH-mm" type="text" style="width: 88px;" th:value="${tLcBatchCallConfig.endTime1}>
+                                <input name="startTime1" id="startTime1" class="form-control" placeholder="HH-mm" type="text" style="width: 88px;" th:value="${tLcBatchCallConfig.startTime1}">
+                                <span class = "form-control" style=" width: 20px;">-</span>
+                                <input name="endTime1" id="endTime1" class="form-control" placeholder="HH-mm" type="text" style="width: 88px;" th:value="${tLcBatchCallConfig.endTime1}">
                             </div>
                         </div>
                     </div>
@@ -98,6 +98,7 @@
             var endTime3 = $("#endTime3").val();
             var endTime3 = $("#endTime3").val();
             var times = parseInt($("#times").val());
+            var res = /^(0\d{1}|1\d{1}|2[0-3]):[0-5]\d{1}/;//校验时间格式
 
             if(batchCallNum == ''){
                 $.modal.alert("批量外呼最大案件数");
@@ -121,22 +122,48 @@
                 $.modal.alert("可呼叫时间段结束时间不能为空");
                 return ;
             }
+            if(startTime1 == ''){
+                $.modal.alert("可呼叫时间段开始时间不能为空");
+                return ;
+            }else if(!res.test(startTime1)){
+                $.modal.alert("可呼叫时间段时间格式不正确");
+                return ;
+            }
+            if(endTime1 == ''){
+                $.modal.alert("可呼叫时间段结束时间不能为空");
+                return ;
+            }else if(!res.test(endTime1)){
+                $.modal.alert("可呼叫时间段时间格式不正确");
+                return ;
+            }
             if(times == 1){
                 if(startTime2 == ''){
                     $.modal.alert("可呼叫时间段开始时间不能为空");
                     return ;
+                }else if(!res.test(startTime2)){
+                    $.modal.alert("可呼叫时间段时间格式不正确");
+                    return ;
                 }
                 if(endTime2 == ''){
                     $.modal.alert("可呼叫时间段结束时间不能为空");
+                    return ;
+                }else if(!res.test(endTime2)){
+                    $.modal.alert("可呼叫时间段时间格式不正确");
                     return ;
                 }
             }else if(times == 2){
                 if(startTime3 == ''){
                     $.modal.alert("可呼叫时间段开始时间不能为空");
                     return ;
+                }else if(!res.test(startTime3)){
+                    $.modal.alert("可呼叫时间段时间格式不正确");
+                    return ;
                 }
                 if(endTime3 == ''){
                     $.modal.alert("可呼叫时间段结束时间不能为空");
+                    return ;
+                }else if(!res.test(endTime3)){
+                    $.modal.alert("可呼叫时间段时间格式不正确");
                     return ;
                 }
             }

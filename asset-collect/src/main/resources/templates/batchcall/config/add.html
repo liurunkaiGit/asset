@@ -99,6 +99,7 @@
             var endTime3 = $("#endTime3").val();
             var endTime3 = $("#endTime3").val();
             var isCallOther = $('input:radio[name="isCallOther"]:checked').val();
+            var res = /^(0\d{1}|1\d{1}|2[0-3]):[0-5]\d{1}/;//校验时间格式
 
             if(orgId == ''){
                 $.modal.alert("请选择委托方");
@@ -121,27 +122,45 @@
             if(startTime1 == ''){
                 $.modal.alert("可呼叫时间段开始时间不能为空");
                 return ;
+            }else if(!res.test(startTime1)){
+                $.modal.alert("可呼叫时间段时间格式不正确");
+                return ;
             }
             if(endTime1 == ''){
                 $.modal.alert("可呼叫时间段结束时间不能为空");
+                return ;
+            }else if(!res.test(endTime1)){
+                $.modal.alert("可呼叫时间段时间格式不正确");
                 return ;
             }
             if(times == 1){
                 if(startTime2 == ''){
                     $.modal.alert("可呼叫时间段开始时间不能为空");
                     return ;
+                }else if(!res.test(startTime2)){
+                    $.modal.alert("可呼叫时间段时间格式不正确");
+                    return ;
                 }
                 if(endTime2 == ''){
                     $.modal.alert("可呼叫时间段结束时间不能为空");
+                    return ;
+                }else if(!res.test(endTime2)){
+                    $.modal.alert("可呼叫时间段时间格式不正确");
                     return ;
                 }
             }else if(times == 2){
                 if(startTime3 == ''){
                     $.modal.alert("可呼叫时间段开始时间不能为空");
                     return ;
+                }else if(!res.test(startTime3)){
+                    $.modal.alert("可呼叫时间段时间格式不正确");
+                    return ;
                 }
                 if(endTime3 == ''){
                     $.modal.alert("可呼叫时间段结束时间不能为空");
+                    return ;
+                }else if(!res.test(endTime3)){
+                    $.modal.alert("可呼叫时间段时间格式不正确");
                     return ;
                 }
             }
