@@ -56,7 +56,6 @@ public class AssetsImportFromXYController extends BaseController {
     private ITemplatesPackageService templatesPackageService;
 
 
-
     @RequiresPermissions("xyImport:assets:view")
     @GetMapping()
     public String assetspackage() {
@@ -139,7 +138,49 @@ public class AssetsImportFromXYController extends BaseController {
     @ResponseBody
     public AjaxResult deleteTempTable(@PathVariable("importBatchNo") String importBatchNo,HttpServletRequest request) {
         try {
+            /**1删除临时表*/
             this.curAssetsPackageService.deleteTempCurAssetsPackage(importBatchNo);
+            /**2获取标识*/
+            String insertFlag = null;//新增标识
+            String updateFlag = null;//更新标识
+            Object value1 = request.getSession().getAttribute("insertFlag");
+            Object value2 = request.getSession().getAttribute("updateFlag");
+            if(value1 != null && value1 instanceof String){
+                insertFlag = (String)value1;
+            }
+            if(value2 != null && value2 instanceof String){
+                updateFlag = (String)value2;
+            }
+            /**3判断标识*/
+            if(insertFlag==null && updateFlag==null){//没有操作
+                this.assetsImportFromXYService.deleteFlowXyByBatchNo(importBatchNo);//删除流水表
+                //更新上一次的数据为 未比较状态
+                List<CurAssetsPackage> upNotCompareList = (List<CurAssetsPackage>)request.getSession().getAttribute("upNotCompareList");
+                if(upNotCompareList != null){
+                    this.assetsImportFromXYService.batchUpdateIsCompare(upNotCompareList);
+                }
+            }
+            if("error".equals(insertFlag)){//新增失败
+                if(!"success".equals(updateFlag)){
+                    this.assetsImportFromXYService.deleteFlowXyByBatchNo(importBatchNo);//删除流水表
+                    //更新上一次的数据为 未比较状态
+                    List<CurAssetsPackage> upNotCompareList = (List<CurAssetsPackage>)request.getSession().getAttribute("upNotCompareList");
+                    if(upNotCompareList != null){
+                        this.assetsImportFromXYService.batchUpdateIsCompare(upNotCompareList);
+                    }
+                }
+            }
+            if("error".equals(updateFlag)){//更新失败
+                if(!"success".equals(insertFlag)){
+                    this.assetsImportFromXYService.deleteFlowXyByBatchNo(importBatchNo);//删除流水表
+                    //更新上一次的数据为 未比较状态
+                    List<CurAssetsPackage> upNotCompareList = (List<CurAssetsPackage>)request.getSession().getAttribute("upNotCompareList");
+                    if(upNotCompareList != null){
+                        this.assetsImportFromXYService.batchUpdateIsCompare(upNotCompareList);
+                    }
+                }
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             logger.info("清空临时表异常",e);
@@ -210,13 +251,9 @@ public class AssetsImportFromXYController extends BaseController {
         try {
             List<TempCurAssetsPackage> insertList = this.curAssetsPackageService.selectInsertList(importBatchNo);
             this.assetsImportFromXYService.batchAddAssets(insertList);
+            request.getSession().setAttribute("insertFlag","success");
         } catch (Exception e) {
-            this.assetsImportFromXYService.deleteFlowXyByBatchNo(importBatchNo);//删除流水表
-            //更新上一次的数据为 未比较状态
-            List<CurAssetsPackage> upNotCompareList = (List<CurAssetsPackage>)request.getSession().getAttribute("upNotCompareList");
-            if(upNotCompareList != null){
-                this.assetsImportFromXYService.batchUpdateIsCompare(upNotCompareList);
-            }
+            request.getSession().setAttribute("insertFlag","error");
             e.printStackTrace();
             logger.error("新增失败"+e.getMessage(),e);
             return AjaxResult.success("新增失败");
@@ -235,13 +272,9 @@ public class AssetsImportFromXYController extends BaseController {
     public AjaxResult update(HttpServletRequest request,String importBatchNo) {
         try {
             this.curAssetsPackageService.updateHandler(request,importBatchNo);
+            request.getSession().setAttribute("updateFlag","success");
         } catch (Exception e) {
-            this.assetsImportFromXYService.deleteFlowXyByBatchNo(importBatchNo);//删除流水表
-            //更新上一次的数据为 未比较状态
-            List<CurAssetsPackage> upNotCompareList = (List<CurAssetsPackage>)request.getSession().getAttribute("upNotCompareList");
-            if(upNotCompareList != null){
-                this.assetsImportFromXYService.batchUpdateIsCompare(upNotCompareList);
-            }
+            request.getSession().setAttribute("updateFlag","error");
             e.printStackTrace();
             logger.error("更新失败"+e.getMessage(),e);
             return AjaxResult.error("更新失败");
