@@ -429,6 +429,7 @@
                         phone:currentCall.phone,
                         contactRelation:currentCall.contactRelation,
                         callSign:'R01',
+                        callResult:'已接听',
                         callStartTime:startTime,
                         callEndTime:endTime,
                         callLen:recordDuration,
@@ -438,7 +439,8 @@
                         importBatchNo:currentCall.importBatchNo,
                         orgId:currentCall.orgId,
                         // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
-                        sendRadioCheck:1
+                        sendRadioCheck:1,
+                        platform: 'PA'
                     },
                     function(data) {
                         // alert(JSON.stringify(data));
@@ -549,6 +551,7 @@
                     phone:phone,
                     contactRelation:contactRelation,
                     callSign:'R02',
+                    callResult:'无法接通',
                     callStartTime:callStartTime,
                     callEndTime:callEndTime,
                     callLen:callLen,
@@ -557,7 +560,8 @@
                     remark:callRemark,
                     importBatchNo:currentImportBatchNo,
                     orgId:currentOrgId,
-                    type:1
+                    type:1,
+                    platform: callPlatform
                 },
                 function(data) {
                     // alert(JSON.stringify(data));
