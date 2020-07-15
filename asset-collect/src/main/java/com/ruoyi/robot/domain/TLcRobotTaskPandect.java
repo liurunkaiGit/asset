@@ -171,6 +171,12 @@ public class TLcRobotTaskPandect extends BaseEntity {
     @Excel(name = "主叫欠费总数")
     private Integer callOverdueCount;
 
+    /**
+     * 任务实际可拨打的号码总数
+     */
+    @Excel(name = "任务实际可拨打的号码总数")
+    private Integer phoneNum;
+
     private Date startCreateTime;
     private Date endCreateTime;
     private Date startTaskStartTime;
