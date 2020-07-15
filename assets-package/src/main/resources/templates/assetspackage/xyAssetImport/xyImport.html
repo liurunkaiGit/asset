@@ -203,10 +203,6 @@
                     $.modal.loading("数据加载中，请稍后...");
                 }
                 ,done: function(res, index, upload){
-                    demoListView.find('tr').each(function(i,n){
-                        var tds = n.childNodes;
-                        $(tds[2]).html('<span style="color: #5FB878;">上传成功</span>');
-                    });
                     if(res.msg=="导入临时表成功"){
                         $.modal.closeLoading();
                         var importBatchNo = res.data;
@@ -238,6 +234,11 @@
                                 layer.close(index);
                                 window.parent.$.modal.reload();
                             }
+                        });
+
+                        demoListView.find('tr').each(function(i,n){
+                            var tds = n.childNodes;
+                            $(tds[2]).html('<span style="color: #5FB878;">上传成功</span>');
                         });
                     }else{
                         $.modal.alertWarning(res.msg);
