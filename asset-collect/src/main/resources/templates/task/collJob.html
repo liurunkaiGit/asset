@@ -346,7 +346,7 @@
                 <a onclick="stopCollApply();" title="停催申请" class="btn btn-primary" style="height: 25px;padding: 3px;">停催</a>
                     <a onclick="disableCall(1);" title="停止拨号" class="btn btn-danger" style="height: 25px;padding: 3px;">停拨</a>
                     <a onclick="disableCall(0)" title="取消停拨" class="btn btn-primary" style="height: 25px;padding: 3px;">取消停拨</a>
-
+                    <input id="callRecordId" name="callRecordId" class="form-control" type="text">
                 </div>
             </div>
             <div class="tab-pane" style="height: 189px;overflow: auto">
@@ -682,7 +682,7 @@
                 <h4 class="modal-title">初始化窗口</h4>
             </div>
             <div class="modal-body" style="height: 250px;">
-                <input id="callRecordId" name="callRecordId" class="form-control" type="text">
+                <!--<input id="callRecordId" name="callRecordId" class="form-control" type="text">-->
                 <div class="form-group">
                     <label class="col-sm-3 control-label">分机号码：</label>
                     <div class="col-sm-8">
@@ -2701,7 +2701,14 @@
     }
 
     function changeFinalColor(obj) {
-        $("#callRecordId").val("");
+        var allCustContact = $("#custContactTbody").find('tr');
+        var hisPhone;
+        $.each(allCustContact, function (i, n) {
+            var css = $(n).css("background");
+            if (JSON.stringify(css).indexOf("rgb(169, 169, 169)")>-1) {
+                hisPhone = $(n).children().eq(2).text();
+            }
+        });
         var tp = $("#custContactTbody");
         var trs = $("#custContactTbody")[0].childNodes;
         var strs = $("#finalContactTbody")[0].childNodes;
@@ -2710,6 +2717,11 @@
         });
         obj.style = "background:rgb(169,169,169)";
         $("#finalId").prop("checked",true);
+        var freePhone = $("#freeCall").val();
+        if (hisPhone != undefined && hisPhone != freePhone) {
+
+            $("#callRecordId").val("");
+        }
     }
 
 
