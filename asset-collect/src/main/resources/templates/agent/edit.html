@@ -113,10 +113,14 @@
                 return;
             }*/
             var seatId;
-            if ($("#seatId").val() != null && $("#seatId").val() != '') {
-                seatId = $("#seatId").val();
+            if ($("#seatName").val() == null || $("#seatName").val() == '') {
+                seatId = null;
             } else {
-                seatId = $("#seatIdValue").val();
+                if ($("#seatId").val() != null && $("#seatId").val() != '') {
+                    seatId = $("#seatId").val();
+                } else {
+                    seatId = $("#seatIdValue").val();
+                }
             }
             $.post(
                 prefix + "/edit",
