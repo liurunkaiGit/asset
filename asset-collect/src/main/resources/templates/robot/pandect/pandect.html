@@ -115,7 +115,7 @@
                     title : '话术名称'
                 },
                 {
-                    field : 'robotTaskStatus', 
+                    field : 'robotTaskStatus',
                     title : '任务状态',
                     formatter: function(value, row, index) {
                         if (value == 1) {
@@ -154,6 +154,12 @@
                     {
                         title : '已完成百分比',
                         formatter: function (value, row, index) {
+                            if (row.robotTaskStatus == 2) {
+                                return "100.00%";
+                            }
+                            if (row.callDoneCount == 0 || row.callDoneCount == null || row.callDoneCount == '') {
+                                return "0.00%";
+                            }
                             return ((row.callDoneCount / row.phoneNum) * 100).toFixed(2) + "%";
                         }
                     },

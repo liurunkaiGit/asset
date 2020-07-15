@@ -721,17 +721,20 @@
                 $.modal.alertWarning("请至少选择一条记录");
                 return;
             }
-            $.post(
-                prefix + "/sendRobotApply",
-                {
-                    taskIds:taskIdRows.join()
-                },
-                function (data) {
-                    if (data.status == 200) {//请求成功
-                        $.modal.alertSuccess(data.result.split(",")[0] + "条数据推送成功," + data.result.split(",")[1] + "条数据未推送");
+            $.modal.confirm("确认要对选中的" + taskIdRows.length + "条数据进行操作吗?", function() {
+                $.post(
+                    prefix + "/sendRobotApply",
+                    {
+                        taskIds: taskIdRows.join()
+                    },
+                    function (data) {
+                        if (data.status == 200) {//请求成功
+                            $.modal.alertSuccess(data.result.split(",")[0] + "条数据推送成功," + data.result.split(",")[1] + "条数据未推送");
+                        }
+                        $.table.search();
                     }
-                }
-            );
+                );
+            })
         }
 
         /**
