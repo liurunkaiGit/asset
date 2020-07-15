@@ -119,7 +119,7 @@ public class Test {
     }
 
     @org.junit.Test
-    public void testDate() {
+    public void testDate() throws ParseException {
 //        DateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//格式化一下时间
 //        Date dNow = new Date(); //当前时间
 //        Date dBefore = new Date();
@@ -132,15 +132,20 @@ public class Test {
 //        String defaultEndDate = defaultStartDate.substring(0, 10) + " 23:59:59";
 //        System.out.println(defaultStartDate);
 //        System.out.println(defaultEndDate);
-        System.out.println("今天开始时间：" + getStartOfDay(new Date()));
-        System.out.println("今天结束时间：" + getEndOfDay(new Date()));
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        System.out.println(sdf.format(getStartOfDay(new Date())));
-        System.out.println(sdf.format(getEndOfDay(new Date())));
-        Date firstDay = DateUtils.getFirstDay();
-        System.out.println("当月第一天" + sdf.format(firstDay));
+//        System.out.println("今天开始时间：" + getStartOfDay(new Date()));
+//        System.out.println("今天结束时间：" + getEndOfDay(new Date()));
+//
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//
+//        System.out.println(sdf.format(getStartOfDay(new Date())));
+//        System.out.println(sdf.format(getEndOfDay(new Date())));
+//        Date firstDay = DateUtils.getFirstDay();
+//        System.out.println("当月第一天" + sdf.format(firstDay));
+        SimpleDateFormat sdf = new SimpleDateFormat(DateUtils.YYYY_MM_DD_HH_MM_SS);
+        String time = "2020-07-15 17:35:03.081";
+        Date date = DateUtils.stringConvertDate(time, DateUtils.YYYY_MM_DD_HH_MM_SS);
+//        Date date = sdf.parse(time);
+        System.out.println(date);
     }
 
     @org.junit.Test

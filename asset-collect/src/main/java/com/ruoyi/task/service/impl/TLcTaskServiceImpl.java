@@ -851,7 +851,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             List<TLcTask> taskList = this.tLcTaskMapper.selectTLcTaskByIdsNotExistRobotBlack(taskIds.split(","));
             // 查询机器人在黑名单数量
             Long blackCount = this.tLcTaskMapper.selectCountByIdsNotExistRobotBlack(taskIds.split(","));
-            sendRobotByList(orgId, speechcraftIdAndSceneDefId, callLineId, taskList, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS,new Date()));
+            sendRobotByList(orgId, speechcraftIdAndSceneDefId, callLineId, taskList, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS, new Date()));
             return AjaxResult.success(AjaxResult.Type.SUCCESS, "推送成功", taskList.size() + "," + blackCount);
         } else {
             String successCount = "";
@@ -983,7 +983,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         List<TLcTask> taskList = this.tLcTaskMapper.selectTaskListNotExistRobotBlack(tLcTask);
         // 查询在黑名单里的任务数量
         Long blackCount = this.tLcTaskMapper.selectCountExistRobotBlack(tLcTask);
-        sendRobotByList(tLcTask.getOrgId(), speechcraftIdAndSceneDefId, callLineId, taskList, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS,new Date()));
+        sendRobotByList(tLcTask.getOrgId(), speechcraftIdAndSceneDefId, callLineId, taskList, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS, new Date()));
         return AjaxResult.success(AjaxResult.Type.SUCCESS, "推送成功", taskList.size() + "," + blackCount);
     }
 
@@ -1054,86 +1054,93 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     @Override
     public Response addCallRecord(TLcCallRecord tLcCallRecord, String importBatchNo, String callStartTime, String callEndTime) {
         log.info("添加通话记录开始");
-//        String filePath = Global.getUploadPath();
-        SimpleDateFormat sdf = new SimpleDateFormat(DateUtils.YYYY_MM_DD_HH_MM_SS);
         try {
-//            String[] split = tLcCallRecord.getCallRadioLocation().split("/");
-//            String fileName = split[split.length-1];
+            // 设置通话录音地址
             if (StringUtils.isNoneBlank(tLcCallRecord.getCallRadioLocation())) {
-                if (ShiroUtils.getSysUser().getPlatform().equals("PA")) {
+                if (tLcCallRecord.getPlatform().equals("PA")) {
                     String urlpath = remoteConfigure.getTelphoneRecordUrl() + tLcCallRecord.getCallRadioLocation();
                     tLcCallRecord.setCallRadioLocation(urlpath);
-                } else {
-                    tLcCallRecord.setCallRadioLocation(tLcCallRecord.getCallRadioLocation());
                 }
-
             }
-            //删除本地文件
-            //file.delete();
+            // 设置通话开始和通话结束时间
             if (StringUtils.isNotEmpty(callStartTime)) {
                 callStartTime = callStartTime.replace("T", " ");
-                Date startTime = sdf.parse(callStartTime);
-                tLcCallRecord.setCallStartTime(startTime);
+                tLcCallRecord.setCallStartTime(DateUtils.stringConvertDate(callStartTime, DateUtils.YYYY_MM_DD_HH_MM_SS));
             }
             if (StringUtils.isNotEmpty(callEndTime)) {
                 callEndTime = callEndTime.replace("T", " ");
-                Date endTime = sdf.parse(callEndTime);
-                tLcCallRecord.setCallEndTime(endTime);
+                tLcCallRecord.setCallEndTime(DateUtils.stringConvertDate(callEndTime, DateUtils.YYYY_MM_DD_HH_MM_SS));
             }
-            // 修改任务表和案件表中的最近跟进时间及电话码
-            TLcTask tLcTask = this.tLcTaskMapper.selectTaskByCaseNo(tLcCallRecord.getCaseNo(), tLcCallRecord.getOrgId(), importBatchNo);
-            String callSignValue = this.sysDictDataService.selectDictLabel("call_record_code", tLcCallRecord.getCallSign());
-//            String callSignValue = FinishedCallStatus.getDescBySign(tLcCallRecord.getCallSign());
-            tLcTask.setCallSign(tLcCallRecord.getCallSign());
-            tLcTask.setCallSignValue(callSignValue);
-            tLcTask.setRecentlyFollowUpDate(new Date());
-            this.tLcTaskMapper.updateTLcTask(tLcTask);
             // 新增或者修改电催记录
-            tLcCallRecord.setCallResult(callSignValue);
             if (tLcCallRecord.getId() == null) {
-//                TLcAllocatCaseConfig caseConfig = caseConfigService.selectTLcAllocatCaseConfigByOrgId(tLcCallRecord.getOrgId());
-                tLcCallRecord.setPlatform(ShiroUtils.getSysUser().getPlatform());
                 tLcCallRecord.setAgentName(ShiroUtils.getSysUser().getUserName());
                 tLcCallRecordService.insertTLcCallRecord(tLcCallRecord);
-                return Response.success(tLcCallRecord.getId());
             } else {
                 log.info("通话记录id不为空：{},话务平台：{},案件编号：{},录音地址：{},联系人手机号：{}",
                         tLcCallRecord.getId(), tLcCallRecord.getPlatform(), tLcCallRecord.getCaseNo(), tLcCallRecord.getCallRadioLocation(), tLcCallRecord.getPhone());
                 try {
-                    if (StringUtils.isNoneBlank(tLcCallRecord.getPlatform()) && tLcCallRecord.getPlatform().equals("ZJ")) {
-                        log.info("通话开始时间：{}", tLcCallRecord.getCallStartTime());
-                        if (tLcCallRecord.getCallStartTime() != null) {
-                            if (StringUtils.isBlank(tLcCallRecord.getCallLen())) {
-                                if (tLcCallRecord.getCallEndTime() == null) {
-                                    long callLen = System.currentTimeMillis() - tLcCallRecord.getCallStartTime().getTime();
-                                    log.info("通话id：{}的通话时长为：{}", tLcCallRecord.getId(), callLen);
-                                    tLcCallRecord.setCallLen(String.valueOf(callLen));
-                                    tLcCallRecord.setCallEndTime(new Date());
-                                } else {
-                                    long callLen = tLcCallRecord.getCallEndTime().getTime() - tLcCallRecord.getCallStartTime().getTime();
-                                    log.info("通话id：{}的通话时长为：{}", tLcCallRecord.getId(), callLen);
-                                    tLcCallRecord.setCallLen(String.valueOf(callLen));
-                                }
-                            } else {
-                                if (tLcCallRecord.getCallEndTime() == null) {
-                                    tLcCallRecord.setCallEndTime(new Date());
-                                }
-                            }
-                        }
-                    }
+                    // 如果是自建话务平台计算通话时长
+                    calCallLen(tLcCallRecord);
                 } catch (Exception e) {
                     log.error("电催记录{}计算通话时长错误：{}", tLcCallRecord.getId(), e);
+                } finally {
                     tLcCallRecordService.updateTLcCallRecord(tLcCallRecord);
-                    return Response.success(tLcCallRecord.getId());
                 }
-                tLcCallRecordService.updateTLcCallRecord(tLcCallRecord);
-                log.info("添加通话记录结束");
-                return Response.success(tLcCallRecord.getId());
             }
+            // 更新任务表数据
+            updateTask(tLcCallRecord, importBatchNo);
+            return Response.success(tLcCallRecord.getId());
         } catch (Exception e) {
             log.error("添加记录失败，error is {}", e);
             throw new RuntimeException("添加记录失败");
         }
+    }
+
+    /**
+     * 自建话务平台计算通话时长并且设置通话结束时间
+     *
+     * @param tLcCallRecord
+     */
+    private void calCallLen(TLcCallRecord tLcCallRecord) {
+        if (StringUtils.isNoneBlank(tLcCallRecord.getPlatform()) && tLcCallRecord.getPlatform().equals("ZJ")) {
+            log.info("通话开始时间：{}", tLcCallRecord.getCallStartTime());
+            if (tLcCallRecord.getCallStartTime() != null) {
+                if (StringUtils.isBlank(tLcCallRecord.getCallLen())) {
+                    if (tLcCallRecord.getCallEndTime() == null) {
+                        long callLen = System.currentTimeMillis() - tLcCallRecord.getCallStartTime().getTime();
+                        log.info("通话id：{}的通话时长为：{}", tLcCallRecord.getId(), callLen);
+                        tLcCallRecord.setCallLen(String.valueOf(callLen));
+                        tLcCallRecord.setCallEndTime(new Date());
+                    } else {
+                        long callLen = tLcCallRecord.getCallEndTime().getTime() - tLcCallRecord.getCallStartTime().getTime();
+                        log.info("通话id：{}的通话时长为：{}", tLcCallRecord.getId(), callLen);
+                        tLcCallRecord.setCallLen(String.valueOf(callLen));
+                    }
+                } else {
+                    if (tLcCallRecord.getCallEndTime() == null) {
+                        tLcCallRecord.setCallEndTime(new Date());
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 更新任务表数据--新增或者修改电催记录时
+     *
+     * @param tLcCallRecord
+     * @param importBatchNo
+     */
+    private void updateTask(TLcCallRecord tLcCallRecord, String importBatchNo) {
+        TLcTask tLcTask = TLcTask.builder()
+                .caseNo(tLcCallRecord.getCaseNo())
+                .importBatchNo(importBatchNo)
+                .orgId(tLcCallRecord.getOrgId())
+                .callSign(tLcCallRecord.getCallSign())
+                .callSignValue(tLcCallRecord.getCallResult())
+                .recentlyFollowUpDate(new Date())
+                .build();
+        this.tLcTaskMapper.updateTLcTask(tLcTask);
     }
 
     @Override

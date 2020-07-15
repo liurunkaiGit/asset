@@ -453,6 +453,7 @@
                                         <li class="select-time">
                                             <label class="labelInfo">备注：</label>
                                             <input th:type="text" class="form-control" name="callRemarkAdd" id="callRemarkAdd" style="width: 180px; height: 30px" />
+                                            <input type="hidden" class="form-control" name="callResult" id="callResult" style="width: 180px; height: 30px" />
                                         </li>
                                     </ul>
                                 </div>
@@ -661,6 +662,24 @@
                     <select class="form-control" name="updateCallCode" id="updateCallCode" style="width: 180px; height: 32px" >
                         <label class="labelInfo">电话码：</label>
                         <option value="" selected>请选择</option>
+                        <option value="PTP">PTP(承诺还款)</option>
+                        <option value="CYH">CYH(称已还)</option>
+                        <option value="TP">TP(谈判沟通)</option>
+                        <option value="WCY">WCY(无诚意)</option>
+                        <option value="HKKN">HKKN(还款困难)</option>
+                        <option value="ZG">ZG(转告)</option>
+                        <option value="WRJT">WRJT(无人接听)</option>
+                        <option value="JJ">JJ(拒接)</option>
+                        <option value="ZX">ZX(占线忙音)</option>
+                        <option value="GJ">GJ(关机)</option>
+                        <option value="GD">GD(挂断)</option>
+                        <option value="KH">KH(空号)</option>
+                        <option value="BZ">BZ(不在)</option>
+                        <option value="WCR">WCR(无此人)</option>
+                        <option value="WHY">WHY(无回应)</option>
+                        <option value="SL">SL(失联)</option>
+                        <option value="BPHZG">BPHZG(不配合转告)</option>
+                        <option value="FBRJT">FBRJT(非本人接听)</option>
                     </select>
                 </form>
             </div>
@@ -1418,6 +1437,7 @@
                 findDate:findDate,
                 //ownerId:$("#ownerId").val(),
                 callSign:sign,
+                callResult:$('#callResult').val(),
                 callStartTime:callStartTime,
                 callEndTime:callEndTime,
                 callLen:callLen,
@@ -1426,7 +1446,8 @@
                 remark:callRemark,
                 importBatchNo:currentImportBatchNo,
                 orgId:currentOrgId,
-                type:2
+                type:2,
+                platform: $("#callPlatform").val()
             },
             function(data) {
                 // alert(JSON.stringify(data));
@@ -1802,8 +1823,10 @@
                 var val = $('input[name="radioChoose"]:checked').parents("tr");
                 console.log("通话记录id：" + $("#callRecordId").val() + "，通话开始时间：" + data[0].BAnswerStamp + "，通话结束时间：" + data[0].BEndStamp + "，通话录音：" + data[0].RecordingFile);
                 var callSign = 'R02';
+                var callResult = '无法接通';
                 if (data[0].BAnswerStamp != null) {
                     callSign = 'R01';
+                    callResult = '已接听';
                 }
                 $.post(
                     prefix + "/addCallRecord",
@@ -1814,6 +1837,7 @@
                         phone:val.find("[name='phone']").html(),
                         contactRelation:val.find("[name='hidRelation']").html(),
                         callSign:callSign,
+                        callResult:callResult,
                         callStartTime:data[0].BAnswerStamp,
                         callEndTime:data[0].BEndStamp,
                         callLen:data[0].Mduration,
@@ -2010,6 +2034,7 @@
                         phone:val.find("[name='phone']").html(),
                         contactRelation:val.find("[name='hidRelation']").html(),
                         callSign:'R01',
+                        callResult:'已接听',
                         callStartTime:startTime,
                         callEndTime:endTime,
                         callLen:recordDuration,
@@ -2019,7 +2044,8 @@
                         importBatchNo:currentImportBatchNo,
                         orgId:currentOrgId,
                         // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
-                        sendRadioCheck:1
+                        sendRadioCheck:1,
+                        platform: 'PA'
                     },
                     function(data) {
                         // alert(JSON.stringify(data));
@@ -2159,6 +2185,7 @@
                 phone:phone,
                 contactRelation:contactRelation,
                 callSign:'R02',
+                callResult:'无法接通',
                 callStartTime:callStartTime,
                 callEndTime:callEndTime,
                 callLen:callLen,
@@ -2167,7 +2194,8 @@
                 remark:'无法接通',
                 importBatchNo:currentImportBatchNo,
                 orgId:currentOrgId,
-                type:1
+                type:1,
+                platform: callPlatform
             },
             function(data) {
                 // alert(JSON.stringify(data));
@@ -2604,6 +2632,7 @@
                 // id:callRecordId,
                 phone:phone,
                 callSign:'R02',
+                callResult:'无法接通',
                 callStartTime:callStartTime,
                 callEndTime:callEndTime,
                 callLen:callLen,
@@ -2611,7 +2640,8 @@
                 caseNo:currentCaseNo,
                 remark:'无法接通',
                 importBatchNo:currentImportBatchNo,
-                orgId:currentOrgId
+                orgId:currentOrgId,
+                platform: callPlatform
             },
             function(data) {
                 // alert(JSON.stringify(data));
@@ -2695,8 +2725,10 @@
             var value = selectId.options[selectId.selectedIndex].text;
             var text = value.substring(value.indexOf("(")+1,value.indexOf(")"));
             $('#callRemarkAdd').val(text);
+            $('#callResult').val(text);
         }else{
             $('#callRemarkAdd').val("");
+            $('#callResult').val("");
         }
     }
 
