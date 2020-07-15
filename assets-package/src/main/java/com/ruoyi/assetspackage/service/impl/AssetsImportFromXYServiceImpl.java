@@ -10,6 +10,8 @@ import com.ruoyi.assetspackage.util.ParseExcelUtil;
 import com.ruoyi.common.config.Global;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.domain.CloseCase;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +54,8 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
     private ITLcScoreService tlcScoreService;
     @Autowired
     private AssetsImportFromXYMapper assetsImportFromXYMapper;
+    @Autowired
+    private CurAssetsRepaymentPackageServiceImpl curAssetsRepaymentPackageServiceImpl;
 
 
 
@@ -310,6 +314,9 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
 
     @Override
     public List<TLcImportFlowForXy> selectFlowList(TLcImportFlowForXy param) throws Exception {
+        if (param.getEndCreateTime() != null) {
+            param.setEndCreateTime(DateUtils.getEndOfDay(param.getEndCreateTime()));
+        }
         return this.assetsImportFromXYMapper.selectFlowList(param);
     }
 
@@ -320,6 +327,9 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
 
     @Override
     public List<TLcUrge> selectUrgeList(TLcUrge TLcUrge){
+        if (TLcUrge.getEndCreateTime() != null) {
+            TLcUrge.setEndCreateTime(DateUtils.getEndOfDay(TLcUrge.getEndCreateTime()));
+        }
         return this.assetsImportFromXYMapper.selectUrgeList(TLcUrge);
     }
 
@@ -654,8 +664,10 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
      * @throws Exception
      */
     private void updateCloseCase(List<CurAssetsPackage> paramList,Date createTime) throws Exception{
+        List<CloseCase> remoteList = new ArrayList<>();
         for (CurAssetsPackage curAssetsPackage : paramList) {
             curAssetsPackage.setCloseCaseDate(createTime);//临时表的创建时间
+            remoteList.add(buildCloseCase(curAssetsPackage));
         }
         int total = paramList.size();
         int index = 500;
@@ -673,6 +685,10 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
                 this.assetsImportFromXYMapper.batchUpdateCloseCase(lt);
             }
         }
+
+        //催收模块结案
+        curAssetsRepaymentPackageServiceImpl.closeCase2(remoteList);
+
     }
 
 
@@ -736,7 +752,17 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
 
 
 
-
+    private CloseCase buildCloseCase(CurAssetsPackage curAssetsPackage) {
+        return CloseCase.builder()
+                .isExitCollect(curAssetsPackage.getIsExitCollect())
+                .caseNo(curAssetsPackage.getOrgCasno())
+                .importBatchNo(curAssetsPackage.getImportBatchNo())
+                .orgId(curAssetsPackage.getOrgId())
+                .isClose(3)
+                .dqyhje(curAssetsPackage.getDqyhje())
+                .jayhje(curAssetsPackage.getWaYe())
+                .build();
+    }
 
 
 

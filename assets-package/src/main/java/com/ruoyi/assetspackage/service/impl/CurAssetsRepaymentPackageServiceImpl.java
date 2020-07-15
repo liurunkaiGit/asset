@@ -781,7 +781,7 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
     }
 
 
-    private void closeCase2(List<CloseCase> remoteList) {
+    public void closeCase2(List<CloseCase> remoteList) {
         List<String> caseNoList = new ArrayList<>();
         List<Task> closeList = new ArrayList<>();
         List<Task> tLcTaskList = remoteList.stream()
