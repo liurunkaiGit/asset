@@ -24,7 +24,7 @@ ALTER TABLE t_lc_task ADD send_robot_batch_no varchar(255) DEFAULT NULL COMMENT 
 
 ALTER TABLE t_lc_robot_task_pandect add `phone_num` int(11) DEFAULT NULL COMMENT '任务实际可拨打的号码总数';
 
-update t_lc_robot_task_pandect set phone_num = call_total_count where robot_task_status in(2,6,50);
+update t_lc_robot_task_pandect set phone_num = call_total_count;
 
 INSERT INTO `sys_menu` (`menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
 VALUES ('呼叫审核管理',(SELECT t.menu_id from sys_menu t where t.menu_name = '机器人任务管理'), '3', '/robot/approval/view', 'menuItem', 'C', '0', 'robot:approval:view', '#', 'zhang', '2020-07-13 09:53:01', '', NULL, '');
@@ -41,4 +41,22 @@ values('审批拒绝', (SELECT t.menu_id from sys_menu t where t.menu_name = '�
 insert into sys_menu  (menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
 values('导出', (SELECT t.menu_id from sys_menu t where t.menu_name = '呼叫审核管理'), '5',  '#',  'F', '0', 'robot:approval:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
 
-INSERT INTO `sys_job` (`job_name`, `job_group`, `invoke_target`, `cron_expression`, `misfire_policy`, `concurrent`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('更新机器人呼叫统计', 'DEFAULT', 'robotTaskSchedule.updateRobotPandect', '0 0/10 * * * ?', '1', '0', '1', 'admin', '2020-07-11 09:42:05', 'admin', '2020-07-11 11:03:12', '更新机器人呼叫统计，每隔10分钟统计呼叫中的各个状态条数');
+INSERT INTO `sys_job` (`job_name`, `job_group`, `invoke_target`, `cron_expression`, `misfire_policy`, `concurrent`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES ('更新机器人呼叫统计', 'DEFAULT', 'robotTaskSchedule.updateRobotPandect', '0 0/10 * * * ?', '1', '0', '1', 'admin', '2020-07-11 09:42:05', 'admin', '2020-07-11 11:03:12', '更新机器人呼叫统计，每隔10分钟统计呼叫中的各个状态条数');
+
+INSERT INTO `sys_menu` (`menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES ('查询', (SELECT t.menu_id from sys_menu t where t.menu_name = '分机号码管理'), '18', '/agent/phone', 'menuItem', 'F', '0', 'agent:phone:list', '#', 'admin', '2020-03-03 09:16:55', 'admin', '2020-04-29 09:14:56', '');
+
+INSERT INTO `sys_menu` (`menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES ('导出', (SELECT t.menu_id from sys_menu t where t.menu_name = '分机号码管理'), '18', '/agent/phone', 'menuItem', 'F', '0', 'agent:phone:export', '#', 'admin', '2020-03-03 09:16:55', 'admin', '2020-04-29 09:14:56', '');
+
+INSERT INTO `sys_menu` (`menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES ('新增', (SELECT t.menu_id from sys_menu t where t.menu_name = '分机号码管理'), '18', '/agent/phone', 'menuItem', 'F', '0', 'agent:phone:add', '#', 'admin', '2020-03-03 09:16:55', 'admin', '2020-04-29 09:14:56', '');
+
+INSERT INTO `sys_menu` (`menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES ('修改', (SELECT t.menu_id from sys_menu t where t.menu_name = '分机号码管理'), '18', '/agent/phone', 'menuItem', 'F', '0', 'agent:phone:edit', '#', 'admin', '2020-03-03 09:16:55', 'admin', '2020-04-29 09:14:56', '');
+
+INSERT INTO `sys_menu` (`menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES ('删除', (SELECT t.menu_id from sys_menu t where t.menu_name = '分机号码管理'), '18', '/agent/phone', 'menuItem', 'F', '0', 'agent:phone:remove', '#', 'admin', '2020-03-03 09:16:55', 'admin', '2020-04-29 09:14:56', '');
+
+

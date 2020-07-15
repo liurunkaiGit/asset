@@ -66,4 +66,6 @@ public interface ExtPhoneMapper
     int updateExtPhoneStatus(ExtPhone extPhone);
 
     List<ExtPhone> selectExtPhoneListBySeatId(Long userId);
+
+    ExtPhone selectExtPhoneByAgent(ExtPhone extPhone);
 }

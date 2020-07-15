@@ -1247,18 +1247,20 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         List<TLcTask> taskList = this.tLcTaskMapper.selectTLcTaskByIdsNotExistRobotBlack(taskIds.split(","));
         // 查询机器人在黑名单数量
         Long blackCount = this.tLcTaskMapper.selectCountByIdsNotExistRobotBlack(taskIds.split(","));
-        // 生成批次号
-        String sendRobotBatchNo = DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS, new Date()) + "_" + UUID.randomUUID().toString().replaceAll("-", "");
-        // 修改任务表数据
-        taskList = taskList.stream().map(task -> {
-            task.setTaskType(TaskTypeEnum.SEND_ROBOT_APPLY.getCode()).setSendRobotBatchNo(sendRobotBatchNo);
-            return task;
-        }).collect(Collectors.toList());
-        this.tLcTaskMapper.batchUpdateTask(taskList);
-        // 插入推送机器人申请表
-        createSendRobotApply(taskList.size(), sendRobotBatchNo);
-        // 异步将案件插入轨迹表
-        this.duncaseAssignService.batchInsertDuncaseAssign(taskList, ShiroUtils.getSysUser(), TaskTypeEnum.SEND_ROBOT_APPLY.getCode());
+        if (taskList != null && taskList.size() > 0) {
+            // 生成批次号
+            String sendRobotBatchNo = DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS, new Date()) + "_" + UUID.randomUUID().toString().replaceAll("-", "");
+            // 修改任务表数据
+            taskList = taskList.stream().map(task -> {
+                task.setTaskType(TaskTypeEnum.SEND_ROBOT_APPLY.getCode()).setSendRobotBatchNo(sendRobotBatchNo);
+                return task;
+            }).collect(Collectors.toList());
+            this.tLcTaskMapper.batchUpdateTask(taskList);
+            // 插入推送机器人申请表
+            createSendRobotApply(taskList.size(), sendRobotBatchNo);
+            // 异步将案件插入轨迹表
+            this.duncaseAssignService.batchInsertDuncaseAssign(taskList, ShiroUtils.getSysUser(), TaskTypeEnum.SEND_ROBOT_APPLY.getCode());
+        }
         return Response.success(Response.ResponseStatusEnum.SUCCESS.getStatus(), "推送成功", taskList.size() + "," + blackCount);
     }
 

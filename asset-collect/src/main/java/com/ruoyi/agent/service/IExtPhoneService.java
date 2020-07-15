@@ -69,4 +69,6 @@ public interface IExtPhoneService
     List<Map<String, Object>> selectExtPhoneListByUsername(String username);
 
     List<String> selectExtNumBySeat(String seatId, String agentId, String callPlatform);
+
+    ExtPhone selectExtPhoneByAgent(ExtPhone extPhone);
 }

@@ -160,6 +160,16 @@ public class ExtPhoneController extends BaseController {
     }
 
     /**
+     * 分机号码状态修改
+     */
+    @PostMapping("/selectExtPhoneByAgent")
+    @ResponseBody
+    public String selectExtPhoneByAgent(ExtPhone extPhone) {
+        extPhone = this.extPhoneService.selectExtPhoneByAgent(extPhone);
+        return extPhone == null ? "0" : "1";
+    }
+
+    /**
      * 删除分机号码
      */
     @RequiresPermissions("agent:phone:remove")

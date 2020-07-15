@@ -53,10 +53,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectExtPhoneList" parameterType="com.ruoyi.agent.domain.ExtPhone" resultMap="ExtPhoneResult">
         select
-        sd.dept_name as org_name,
+        (select sd.dept_name from sys_user su,sys_dept sd WHERE t.seat_id = su.user_id AND su.dept_id = sd.dept_id ) as org_name,
         <include refid="selectExtPhoneColumn"/>
-        from ext_phone t,sys_user su,sys_dept sd
-        where t.seat_id = su.user_id and su.dept_id = sd.dept_id
+        from ext_phone t
+        where 1 = 1
         <if test="agentid != null  and agentid != ''"> and agentId = #{agentid}</if>
         <if test="skilldesc != null  and skilldesc != ''"> and skillDesc = #{skilldesc}</if>
         <if test="dialprefix != null  and dialprefix != ''"> and dialPrefix = #{dialprefix}</if>
@@ -203,8 +203,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             AND su.dept_id = #{deptId}
         </if>
     </select>
+
     <select id="selectExtPhoneListBySeatId" parameterType="java.lang.Long" resultMap="ExtPhoneResult">
         select call_platform from ext_phone where seat_id = #{userId}
+    </select>
+
+    <select id="selectExtPhoneByAgent" resultType="com.ruoyi.agent.domain.ExtPhone" resultMap="ExtPhoneResult">
+        <include refid="selectExtPhoneVo"/>
+        where agentId = #{agentid}
     </select>
 
 </mapper>

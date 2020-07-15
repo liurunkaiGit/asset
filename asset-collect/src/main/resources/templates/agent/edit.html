@@ -28,7 +28,7 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>分机号码：</label>
                 <div class="col-sm-8">
-                    <input name="agentid" id="agentid" th:field="*{agentid}" class="form-control" type="text" required>
+                    <input name="agentid" id="agentid" th:field="*{agentid}" class="form-control" type="text" readonly="true" required>
                 </div>
             </div>
             <div class="form-group">    
@@ -112,6 +112,12 @@
                 $.modal.alertWarning("分机号码不能为空");
                 return;
             }*/
+            var seatId;
+            if ($("#seatId").val() != null && $("#seatId").val() != '') {
+                seatId = $("#seatId").val();
+            } else {
+                seatId = $("#seatIdValue").val();
+            }
             $.post(
                 prefix + "/edit",
                 {
@@ -121,7 +127,7 @@
                     dialprefix:$("#dialprefix").val(),
                     exonNumGroupId:$("#exonNumGroupId").val(),
                     isused:$("#isused").val(),
-                    seatId:$("#seatIdValue").val(),
+                    seatId:seatId,
                     password:$("#password").val(),
                     domain:$("#domain").val()
                     //orgId:$("#orgId").val()

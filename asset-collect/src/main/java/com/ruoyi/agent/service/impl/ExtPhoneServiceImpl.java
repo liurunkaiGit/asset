@@ -187,4 +187,9 @@ public class ExtPhoneServiceImpl implements IExtPhoneService {
         }
         return exonNumGroupList;
     }
+
+    @Override
+    public ExtPhone selectExtPhoneByAgent(ExtPhone extPhone) {
+        return this.extPhoneMapper.selectExtPhoneByAgent(extPhone);
+    }
 }

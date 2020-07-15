@@ -57,7 +57,7 @@ public class RobotTaskSchedule {
      * @param taskDetail
      */
     private void updateRobotTaskPandect(TLcRobotTaskPandect robotTaskPandect, RobotTask taskDetail) {
-        robotTaskPandect.setPhoneNum(taskDetail.getPhoneNum());
+        robotTaskPandect.setPhoneNum(taskDetail.getTotalCount());
         robotTaskPandect.setCallDoneCount(taskDetail.getDoneCount());
         robotTaskPandect.setCallCalledCount(taskDetail.getCalledCount());
         robotTaskPandect.setCallRejectedCount(taskDetail.getRejectedCount());
