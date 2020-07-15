@@ -688,6 +688,14 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
         List<TLcUrge> TlcUrgeList = new ArrayList<>();
         for (CurAssetsPackage curAsset : paramList) {
             Map<String, Object> owner = this.assetsImportFromXYMapper.findOwner(curAsset);//上一次资产导入的批次号
+            Long ownerId = null;
+            String ownerName = null;
+            if(owner != null && owner.get("ownerId") != null && owner.get("ownerId") instanceof Long){
+                ownerId = (Long)owner.get("ownerId");
+            }
+            if(owner != null && owner.get("ownerName") != null && owner.get("ownerName") instanceof String){
+                ownerName = (String) owner.get("ownerName");
+            }
             TLcUrge entity  = new TLcUrge();
             entity.setImportBatchNo(importBatchNo)//临时表的批次号
                     .setOrgId(curAsset.getOrgId())
@@ -696,8 +704,8 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
                     .setCustomeName(curAsset.getCurName())
                     .setWaje(curAsset.getRmbYe())
                     .setDqyhje(curAsset.getDqyhje())
-                    .setOwnerId((Long)owner.get("ownerId"))
-                    .setOwnerName((String) owner.get("ownerName"))
+                    .setOwnerId(ownerId)
+                    .setOwnerName(ownerName)
                     .setType(type);
             entity.setCreateTime(createTime);//临时表的创建时间
             entity.setCreateBy(ShiroUtils.getLoginName());
