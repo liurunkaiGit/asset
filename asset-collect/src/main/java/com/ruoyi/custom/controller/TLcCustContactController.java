@@ -147,6 +147,7 @@ public class TLcCustContactController extends BaseController {
             TLcCustContact tcc = new TLcCustContact();
             tcc.setCaseNoList(Arrays.asList(caseNoRows));
             tcc.setImportBatchNoList(Arrays.asList(importBatchRows));
+            tcc.setIsClose("0");//正常，未停播
             if(StringUtils.isNotEmpty(isHasOther)){
                 if("0".equals(isHasOther)){//只有本人
                     tcc.setRelation(1);

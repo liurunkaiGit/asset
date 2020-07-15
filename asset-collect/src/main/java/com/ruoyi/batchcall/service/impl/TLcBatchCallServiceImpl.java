@@ -113,6 +113,7 @@ public class TLcBatchCallServiceImpl implements ITLcBatchCallService
             TLcCustContact tcc = new TLcCustContact();
             tcc.setCaseNoList(Arrays.asList(caseNoArray));
             tcc.setImportBatchNoList(Arrays.asList(importBatchNoArray));
+            tcc.setIsClose("0");//正常，未停播
             if("0".equals(isCallOther)){//只有本人
                 tcc.setRelation(1);
             }
