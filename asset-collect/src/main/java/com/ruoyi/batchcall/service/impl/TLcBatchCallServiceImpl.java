@@ -153,7 +153,7 @@ public class TLcBatchCallServiceImpl implements ITLcBatchCallService
                 tLcBatchCall.setPhoneType(TLcBatchCall.SHOUJI);//手机
                 tLcBatchCall.setTaskStatus(TLcBatchCall.DWH);//待外呼
                 tLcBatchCall.setCreateTime(new Date());
-                tLcBatchCall.setCreateBy(ShiroUtils.getUserId().toString());
+                tLcBatchCall.setCreateBy(ShiroUtils.getLoginName());
                 this.tLcBatchCallMapper.insertTLcBatchCall(tLcBatchCall);
                 //暂不考虑固话
                 /*if(StringUtils.isNotEmpty(tLcCustContact.getTel())){//固话不为空，则要再新增一条固话的外呼数据

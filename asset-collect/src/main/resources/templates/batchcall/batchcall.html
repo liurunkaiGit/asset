@@ -254,11 +254,15 @@
                     }
                 },
                 {
-                    field : 'taskStatus', 
+                    field : 'taskStatus',
                     title : '任务状态',
                     formatter: function(value, row, index) {
                         return $.table.selectDictLabel(batchCallStatus, value);
                     }
+                },
+                {
+                    field : 'createTime',
+                    title : '创建时间'
                 },
                 {
                     title: '操作',
@@ -645,7 +649,8 @@
                                     if(data.data != '' && data.data != undefined){
                                         currentCall = data.data;
                                         // alert(currentCall);
-                                        call(currentCall);
+                                        // call(currentCall);
+                                        initial1();//初始化打电话的JS
                                     }else{
                                         $("#callingContent").html("");
                                         $.modal.alert("自动呼叫队列已呼叫完毕");

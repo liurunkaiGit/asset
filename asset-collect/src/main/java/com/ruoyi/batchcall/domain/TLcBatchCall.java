@@ -4,6 +4,7 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -91,6 +92,7 @@ public class TLcBatchCall extends BaseEntity
      * 备注
      */
     private String remark;
+
     /**
      * 虚字段：是否只查询排序第一的 一条数据
      */
