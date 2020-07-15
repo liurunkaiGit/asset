@@ -72,14 +72,6 @@ public interface TLcBatchCallMapper
     public int updateBatchCallByBatchNo(@Param("createBy")String createBy, @Param("sourceTaskStatus")Integer sourceTaskStatus, @Param("targetTaskStatus")Integer targetTaskStatus);
 
     /**
-     * 批量修改任务状态
-     * @param ids
-     * @param taskStatus
-     * @return
-     */
-    public int updateStatusByIds(String ids, int taskStatus);
-
-    /**
      * 根据业务员ID获取最大批次号
      * @param createBy
      * @return

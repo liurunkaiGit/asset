@@ -80,14 +80,6 @@ public interface ITLcBatchCallService
     public int insertTLcBatchCallByTask(String isCallOther, String exonNum, String[] caseNoArray, String[] importBatchNoArray, String orgId);
 
     /**
-     * 批量修改任务状态
-     * @param ids
-     * @param taskStatus
-     * @return
-     */
-    public int updateStatusByIds(String ids, int taskStatus);
-
-    /**
      * 根据业务员ID获取最大批次号
      * @param createBy
      * @return

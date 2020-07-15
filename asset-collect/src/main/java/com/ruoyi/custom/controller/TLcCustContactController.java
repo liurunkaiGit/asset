@@ -139,12 +139,14 @@ public class TLcCustContactController extends BaseController {
     @Log(title = "客户联系人信息", businessType = BusinessType.UPDATE)
     @PostMapping("/getCustCount")
     @ResponseBody
-    public AjaxResult getCustContact(String caseNoStr,String isHasOther) {
+    public AjaxResult getCustContact(String caseNoStr,String importBatchNoStr,String isHasOther) {
         List<TLcCustContact> list = new ArrayList<TLcCustContact>();
         if(StringUtils.isNotEmpty(caseNoStr)){
             String[] caseNoRows = caseNoStr.split(",");
+            String[] importBatchRows = importBatchNoStr.split(",");
             TLcCustContact tcc = new TLcCustContact();
             tcc.setCaseNoList(Arrays.asList(caseNoRows));
+            tcc.setImportBatchNoList(Arrays.asList(importBatchRows));
             if(StringUtils.isNotEmpty(isHasOther)){
                 if("0".equals(isHasOther)){//只有本人
                     tcc.setRelation(1);

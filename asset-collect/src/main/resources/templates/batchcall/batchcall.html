@@ -259,6 +259,19 @@
                     formatter: function(value, row, index) {
                         return $.table.selectDictLabel(batchCallStatus, value);
                     }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        if(row.taskStatus == '1' || row.taskStatus == '2'){//待外呼、暂停 状态
+                            var actions = [];
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="cancle(\'' + row.id + '\')"><i class="fa fa-edit"></i>取消</a> ');
+                            return actions.join('');
+                        }else{
+                            return '';
+                        }
+                    }
                 }]
             };
             $.table.init(options);
@@ -270,16 +283,7 @@
             if(currentCall != null && isCanAutoCall == '1'){//只有有外呼任务的时候，才会初始化
                 initial1();//初始化打电话的JS
             }
-            alert(parent.right.document.getElementById("test1"));
-            parent.$('.menuTabs').on('click', '.menuTab i', closeCurTab);
         });
-
-        function closeCurTab() {
-            $.modal.confirm("关闭当前页面，会暂停所有待外呼状态的数据，确认要关闭当前选项卡吗?", function() {
-                pauseCall();
-                closeTab();
-            });
-        }
 
         function openAutoCollJob(caseNo,importBatchNo,orgId,exonNum,id) {
             var toAutoCollJobUrl = prefix + '/toAutoCollJob?orgId='+orgId +'&caseNo='+caseNo +'&importBatchNo='+importBatchNo+'&exonNum='+exonNum+'&id='+id;
@@ -662,8 +666,30 @@
                 },
                 function (data) {
                     if (data.code == 0) {//请求成功
+                        $.table.refresh();
                         $.modal.alert("取消成功");
                         isCall = 0;//停止自动外呼
+                    }else if (data.code == 1) {
+                        window.location.href="/login";
+                    }else{
+                        $.modal.alert(data.msg);
+                    }
+                }
+            );
+        }
+
+        function cancle(id) {
+            $.post(
+                prefix + "/editBatchCall",
+                {
+                    id:id,
+                    taskStatus:3,
+                    onlyUpdate:"1"
+                },
+                function (data) {
+                    if (data.code == 0) {//请求成功
+                        $.table.refresh();
+                        $.modal.alert("取消成功");
                     }else if (data.code == 1) {
                         window.location.href="/login";
                     }else{

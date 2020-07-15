@@ -12,10 +12,7 @@ import com.ruoyi.framework.util.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 批量外呼任务管理Service业务层处理
@@ -113,13 +110,19 @@ public class TLcBatchCallServiceImpl implements ITLcBatchCallService
     public int insertTLcBatchCallByTask(String isCallOther,String exonNum, String[] caseNoArray, String[] importBatchNoArray,String orgId) {
         List<TLcCustContact> totalCustContactList = new ArrayList<TLcCustContact>();
         if(caseNoArray != null && caseNoArray.length > 0){
-            TLcCustContact tLcCustContact = null;
+            TLcCustContact tcc = new TLcCustContact();
+            tcc.setCaseNoList(Arrays.asList(caseNoArray));
+            tcc.setImportBatchNoList(Arrays.asList(importBatchNoArray));
+            if("0".equals(isCallOther)){//只有本人
+                tcc.setRelation(1);
+            }
+            totalCustContactList = this.tLcCustContactService.selectTLcCustContactList(tcc);
+            /*TLcCustContact tLcCustContact = null;
             for(int i = 0;i < caseNoArray.length; i ++){
                 tLcCustContact = new TLcCustContact();
                 tLcCustContact.setCaseNo(caseNoArray[i]);
                 tLcCustContact.setImportBatchNo(importBatchNoArray[i]);
                 tLcCustContact.setIsClose("0");//正常，未停播
-                tLcCustContact.setValidateStatus(1);//状态有效
                 if("0".equals(isCallOther)){//只拨打本人
                     tLcCustContact.setRelation(1);
                 }
@@ -127,7 +130,7 @@ public class TLcBatchCallServiceImpl implements ITLcBatchCallService
                 if(!tmpList.isEmpty()){
                     totalCustContactList.addAll(tmpList);
                 }
-            }
+            }*/
         }
 
         if(totalCustContactList.size() > 0){
@@ -151,27 +154,23 @@ public class TLcBatchCallServiceImpl implements ITLcBatchCallService
                 tLcBatchCall.setCreateTime(new Date());
                 tLcBatchCall.setCreateBy(ShiroUtils.getUserId().toString());
                 this.tLcBatchCallMapper.insertTLcBatchCall(tLcBatchCall);
-                if(StringUtils.isNotEmpty(tLcCustContact.getTel())){//固话不为空，则要再新增一条固话的外呼数据
-                    /*tLcBatchCall = new TLcBatchCall();
+                //暂不考虑固话
+                /*if(StringUtils.isNotEmpty(tLcCustContact.getTel())){//固话不为空，则要再新增一条固话的外呼数据
+                    *//*tLcBatchCall = new TLcBatchCall();
                     tLcBatchCall.setBatchNo(1);
                     tLcBatchCall.setCaseNo(tLcCustContact.getCaseNo());
                     tLcBatchCall.setContactName(tLcCustContact.getContactName());
-                    tLcBatchCall.setContactRelation(tLcCustContact.getRelation());*/
+                    tLcBatchCall.setContactRelation(tLcCustContact.getRelation());*//*
                     tLcBatchCall.setPhone(tLcCustContact.getTel());//固话
                     tLcBatchCall.setPhoneType(TLcBatchCall.GUHUA);//固话
-                    /*tLcBatchCall.setTaskStatus(1);//待外呼
+                    *//*tLcBatchCall.setTaskStatus(1);//待外呼
                     tLcBatchCall.setCreateTime(new Date());
-                    tLcBatchCall.setCreateBy(ShiroUtils.getUserId().toString());*/
+                    tLcBatchCall.setCreateBy(ShiroUtils.getUserId().toString());*//*
                     this.tLcBatchCallMapper.insertTLcBatchCall(tLcBatchCall);
-                }
+                }*/
             }
         }
         return 1;
-    }
-
-    @Override
-    public int updateStatusByIds(String ids, int taskStatus) {
-        return this.tLcBatchCallMapper.updateStatusByIds(ids,taskStatus);
     }
 
     @Override

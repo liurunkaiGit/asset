@@ -44,7 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 </foreach>
             </if>
         </where>
-        order by phone_type asc,case_no desc,contact_relation asc,create_time desc
+        order by batch_no desc,task_status asc, case_no desc,contact_relation asc,phone_type asc,create_time desc
         <if test="isOnlyOne != null and isOnlyOne != '' ">
             limit 1
          </if>
@@ -119,15 +119,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
-
-    <update id="updateStatusByIds" >
-        update t_lc_batch_call
-        set task_status = #{taskStatus}
-        where id = in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-    </update>
 
     <update id="updateBatchCallByBatchNo" >
         update t_lc_batch_call

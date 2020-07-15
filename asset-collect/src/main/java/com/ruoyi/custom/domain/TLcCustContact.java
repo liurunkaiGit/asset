@@ -124,4 +124,6 @@ public class TLcCustContact extends BaseEntity {
 
     private List<String> caseNoList;
 
+    private List<String> importBatchNoList;
+
 }
