@@ -143,6 +143,10 @@
                     field : 'callTotalCount', 
                     title : '号码总数'
                 },
+                    {
+                        field : 'phoneNum',
+                        title : '外呼总数'
+                    },
                 {
                     field : 'callDoneCount', 
                     title : '已完成'
@@ -150,7 +154,7 @@
                     {
                         title : '已完成百分比',
                         formatter: function (value, row, index) {
-                            return ((row.callDoneCount / row.callTotalCount) * 100).toFixed(0) + "%";
+                            return ((row.callDoneCount / row.phoneNum) * 100).toFixed(2) + "%";
                         }
                     },
                 {

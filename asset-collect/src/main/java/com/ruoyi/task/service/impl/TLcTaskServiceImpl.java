@@ -879,16 +879,18 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     }
 
     private void updateSendRobotStatusTaskType(String sendRobotBatchNo, List<TLcTask> taskList) {
-        // 修改推送机器人审批状态
-        TLcSendRobotApply sendRobotApply = new TLcSendRobotApply();
-        sendRobotApply.setSendRobotBatchNo(sendRobotBatchNo).setTaskStatus(SendRobotApplyTaskStatusEnum.APPROVAL_PASS.getCode()).setUpdateBy(ShiroUtils.getSysUser().getUserId().toString());
-        this.sendRobotApplyService.updateSendRobotStatusBySendRobotBatchNo(sendRobotApply);
-        // 修改任务表任务类型
-        TLcTask tLcTask = new TLcTask();
-        tLcTask.setSendRobotBatchNo(sendRobotBatchNo).setTaskType(TaskTypeEnum.SEND_ROBOT_APPLY_ALLOW.getCode()).setUpdateBy(ShiroUtils.getSysUser().getUserId().toString());
-        this.tLcTaskMapper.updateTLcTaskBySendRobotBatchNo(tLcTask);
-        // 异步插入案件历史轨迹表
-        this.duncaseAssignService.batchInsertDuncaseAssign(taskList, ShiroUtils.getSysUser(), TaskTypeEnum.SEND_ROBOT_APPLY_ALLOW.getCode());
+        if (taskList != null && taskList.size() > 0) {
+            // 修改推送机器人审批状态
+            TLcSendRobotApply sendRobotApply = new TLcSendRobotApply();
+            sendRobotApply.setSendRobotBatchNo(sendRobotBatchNo).setTaskStatus(SendRobotApplyTaskStatusEnum.APPROVAL_PASS.getCode()).setUpdateBy(ShiroUtils.getSysUser().getUserId().toString());
+            this.sendRobotApplyService.updateSendRobotStatusBySendRobotBatchNo(sendRobotApply);
+            // 修改任务表任务类型
+            TLcTask tLcTask = new TLcTask();
+            tLcTask.setSendRobotBatchNo(sendRobotBatchNo).setTaskType(TaskTypeEnum.SEND_ROBOT_APPLY_ALLOW.getCode()).setUpdateBy(ShiroUtils.getSysUser().getUserId().toString());
+            this.tLcTaskMapper.updateTLcTaskBySendRobotBatchNo(tLcTask);
+            // 异步插入案件历史轨迹表
+            this.duncaseAssignService.batchInsertDuncaseAssign(taskList, ShiroUtils.getSysUser(), TaskTypeEnum.SEND_ROBOT_APPLY_ALLOW.getCode());
+        }
     }
 
     private void sendRobotByList(String orgId, String speechcraftIdAndSceneDefId, Integer callLineId, List<TLcTask> taskList, String taskName) {

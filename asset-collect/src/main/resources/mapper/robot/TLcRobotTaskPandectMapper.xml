@@ -33,10 +33,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="callFailCount"    column="call_fail_count"    />
         <result property="callLossCount"    column="call_loss_count"    />
         <result property="callOverdueCount"    column="call_overdue_count"    />
+        <result property="phoneNum"    column="phone_num"    />
     </resultMap>
 
     <sql id="selectTLcRobotTaskPandectVo">
-        select id, robot_task_id, task_name, speech_craft_name_id, speech_craft_name, robot_task_status, org_id, org_name, robot, call_total_count, call_done_count, call_called_count, call_rejected_count, call_unavailable_count, call_from_unavailable_count, create_by, create_time, task_start_time, task_end_time, call_busy_count, call_miss_count, call_blank_count, call_closed_count, call_down_count, call_black_count, call_fail_count, call_loss_count, call_overdue_count from t_lc_robot_task_pandect
+        select id, robot_task_id, task_name, speech_craft_name_id, speech_craft_name, robot_task_status, org_id, org_name, robot, call_total_count, call_done_count, call_called_count, call_rejected_count, call_unavailable_count, call_from_unavailable_count, create_by, create_time, task_start_time, task_end_time, call_busy_count, call_miss_count, call_blank_count, call_closed_count, call_down_count, call_black_count, call_fail_count, call_loss_count, call_overdue_count, phone_num from t_lc_robot_task_pandect
     </sql>
 
     <select id="selectTLcRobotTaskPandectList" parameterType="TLcRobotTaskPandect" resultMap="TLcRobotTaskPandectResult">
@@ -76,6 +77,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="endTaskEndTime != null">
                 and task_end_time <![CDATA[<=]]> #{endTaskEndTime}
             </if>
+            <if test="phoneNum != null "> and phone_num = #{phoneNum}</if>
         </where>
         ORDER BY create_time DESC
     </select>
@@ -115,6 +117,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="callFailCount != null ">call_fail_count,</if>
             <if test="callLossCount != null ">call_loss_count,</if>
             <if test="callOverdueCount != null ">call_overdue_count,</if>
+            <if test="phoneNum != null ">phone_num,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="robotTaskId != null ">#{robotTaskId},</if>
@@ -144,6 +147,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="callFailCount != null ">#{callFailCount},</if>
             <if test="callLossCount != null ">#{callLossCount},</if>
             <if test="callOverdueCount != null ">#{callOverdueCount},</if>
+            <if test="phoneNum != null ">#{phoneNum},</if>
          </trim>
     </insert>
 
@@ -177,6 +181,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="callFailCount != null ">call_fail_count = #{callFailCount},</if>
             <if test="callLossCount != null ">call_loss_count = #{callLossCount},</if>
             <if test="callOverdueCount != null ">call_overdue_count = #{callOverdueCount},</if>
+            <if test="phoneNum != null ">phone_num = #{phoneNum},</if>
         </trim>
         where id = #{id}
     </update>
