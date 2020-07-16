@@ -51,5 +51,10 @@ CREATE TABLE `t_lc_urge` (
 ) ENGINE=InnoDB AUTO_INCREMENT=392 DEFAULT CHARSET=utf8;
 alter table t_lc_urge comment '兴业资产出催统计表';
 
-INSERT INTO sys_menu ( `menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)VALUES ('兴业消金资产导入', (SELECT t.menu_id from sys_menu t where t.menu_name='资产管理'), '9', '/xyImport/assets', 'menuItem', 'C', '0', null, '#', 'admin', now(), 'admin', now(), '');
+INSERT INTO sys_menu ( `menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)VALUES ('兴业消金资产导入', (SELECT t.menu_id from sys_menu t where t.menu_name='资产管理'), '9', '/xyImport/assets', 'menuItem', 'C', '0', 'xyImport:assets:view', '#', 'admin', now(), 'admin', now(), '');
 INSERT INTO sys_menu ( `menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)VALUES ('出催统计', (SELECT t.menu_id from sys_menu t where t.menu_name='资产管理'), '10', '/xyImport/assets/urge', 'menuItem', 'C', '0', null, '#', 'admin', now(), 'admin', now(), '');
+
+-- CREATE INDEX org_id_index on cur_assets_package(org_id);
+-- CREATE INDEX org_casNo_index on cur_assets_package(org_casNo);
+-- CREATE INDEX org_casNo_index on cur_assets_package_temp(org_casNo);
+-- CREATE INDEX org_id_index on cur_assets_package_temp(org_id);
