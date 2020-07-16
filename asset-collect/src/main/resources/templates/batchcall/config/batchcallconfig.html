@@ -58,7 +58,7 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('ruoyi:batchcallconfig:edit')}]];
         var removeFlag = [[${@permission.hasPermi('ruoyi:batchcallconfig:remove')}]];
-        var prefix = ctx + "ruoyi/batchcallconfig";
+        var prefix = ctx + "batchcallconfig";
         var taskPrefix = ctx + "collect/task";
 
         $(function() {
