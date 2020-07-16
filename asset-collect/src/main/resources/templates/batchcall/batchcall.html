@@ -21,6 +21,14 @@
     <script th:src="@{/ajax/libs/agentjs/moment.min.js}"></script>
     <script th:src="@{/ajax/libs/agentjs/agent-toolbar.js}"></script>
 
+    <!--自建话务平台需要引用的js-->
+    <script th:src="@{/assets/js/jquery-1.10.2.min.js}"></script>
+    <script th:src="@{/assets/js/layer/layer.js}"></script>
+    <script th:src="@{/assets/js/SoftPhone.js}"></script>
+
+    <script th:src="@{/assets/js/sockjs.js}"></script>
+    <script th:src="@{/assets/js/callcenter.js}"></script>
+
     <th:block th:include="include :: header('批量外呼任务管理列表')" />
 </head>
 <body class="gray-bg">
@@ -290,6 +298,88 @@
             }
         });
 
+        //自建 事件监听
+        var Event = {
+            listen: function (type,data) {
+                console.log('##########' + type,JSON.stringify(data))
+                if(type=="EVENT_AGENT_STATE_SUCCESS"){
+                    console.log(data[0].AgentName)
+                }
+                if(type == "EVNET_INITIAL_SUCCESS"){
+                    console.log('初使化成功' + type,JSON.stringify(data))
+                }
+                if(type == "EVENT_CALLOUT_FAIL"){
+                    console.log('callout' + type,JSON.stringify(data))
+                }
+                if(type == "EVENT_CALLOUT_SUCCESS"){//呼叫成功
+                    console.log('EVENT_CALLOUT_SUCCESS' + type,JSON.stringify(data))
+                    isWjt = "1";//赋值为 1 ，方便挂断时候判断用
+                    var caseNo = currentCall.caseNo;
+                    var importBatchNo = currentCall.importBatchNo;
+                    var orgId = currentCall.orgId;
+                    var exonNum = currentCall.exonNum;
+                    var id = currentCall.id;
+                    openAutoCollJob(caseNo,importBatchNo,orgId,exonNum,id);
+                }
+                if(type == "EVENT_OUTBOUND_CUSTOMER_HANGUP" || type == "EVENT_HUNGUP_SUCCESS"){//客户挂机 或者 坐席挂机
+                    if(isWjt == ""){
+                        updateStatus(currentCall.id,4,"客户未接通，已完成","","");//已完成
+                    }
+                }
+                // if(type == "EVENT_HUNGUP_SUCCESS" || type == "EVENT_HUNGUP" || type == "EVENT_OUTBOUND_AGNET_HANGUP" || type == "EVENT_OUTBOUND_CUSTOMER_HANGUP" || type == "EVENT_OUTBOUND_FORECAST_AGNET_HANGUP" || type == "EVENT_OUTBOUND_FORECAST_CUSTOMER_HANGUP"){
+                if(type == "EVENT_HUNGUP"){//接通之后挂掉电话
+                    console.log('hangup' + type,JSON.stringify(data));
+                    console.log("自建录音返回信息RecordingFile="+data[0].RecordingFile+",recordTime="+",currentCaseNo="+currentCaseNo);
+                    resetTiming();
+                    // 直接保存点催记录
+                    var val = $('input[name="radioChoose"]:checked').parents("tr");
+                    console.log("通话记录id：" + $("#callRecordId").val() + "，通话开始时间：" + data[0].BAnswerStamp + "，通话结束时间：" + data[0].BEndStamp + "，通话录音：" + data[0].RecordingFile);
+                    var callSign = 'R02';
+                    var callResult = '无法接通';
+                    if (data[0].BAnswerStamp != null) {
+                        callSign = 'R01';
+                        callResult = '已接听';
+                    }
+                    $.post(
+                        prefix + "/addCallRecord",
+                        {
+                            id:$("#callRecordId").val(),
+                            // certificateNo:val.find("[name='hideCerNo']").html(),
+                            contactName:currentCall.contactName,
+                            phone:currentCall.phone,
+                            contactRelation:currentCall.contactRelation,
+                            callSign:callSign,
+                            callResult:callResult,
+                            callStartTime:data[0].BAnswerStamp,
+                            callEndTime:data[0].BEndStamp,
+                            callLen:data[0].Mduration,
+                            callRadioLocation:data[0].RecordingFile,
+                            caseNo:currentCaseNo,
+                            // remark:callRemark,
+                            importBatchNo:currentCall.importBatchNo,
+                            orgId:currentCall.orgId,
+                            // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
+                            sendRadioCheck:1,
+                            platform: "ZJ"
+                        },
+                        function(data) {
+                            // alert(JSON.stringify(data));
+                            if (data.status == 200) {//请求成功
+                                // $.modal.alertSuccess("保存成功");
+                                //collJobDetail(data.result);
+                                $("#callStartTime").val("");
+                                $("#callEndTime").val("");
+                                $("#callLen").val("");
+                                $("#callRadioLocation").val("");
+                                $("#callCode").val("");
+                                $("#callRemarkAdd").val("");
+                                callRecordId = data.result;
+                            }
+                        }
+                    );
+                }
+            }};
+
         function openAutoCollJob(caseNo,importBatchNo,orgId,exonNum,id) {
             var toAutoCollJobUrl = prefix + '/toAutoCollJob?orgId='+orgId +'&caseNo='+caseNo +'&importBatchNo='+importBatchNo+'&exonNum='+exonNum+'&id='+id;
             var width = $(window).width();
@@ -328,7 +418,7 @@
                         alert(222);
                     })*/
                 }
-                /*end:function (index, layero) {//点击窗口的x
+                /*end:function (index, layero) {//页面关闭,无论是点击X ，还是点击 关闭按钮，均会触发
                     alert(index);
                     layer.close(index);
                     // alert("点击关闭按钮");
@@ -596,7 +686,8 @@
         /**
          * HangupCall(挂机):座席在释放当前通话
          */
-        function hangUp(currentCall) {
+        function hangUp() {
+            isWjt = "";//挂完电话，清空 ，方便挂断时候判断用
             var platform = $("#callPlatform").val();
             if (platform == 'PA') {
                 agentClient.hangupCall();
@@ -779,7 +870,7 @@
             }
             var time = now.getHours()+""+m; //截取当前系统时间
             time = parseInt(time);
-            if(tbcc.startTime1 != ''){
+            if(tbcc != null && tbcc.startTime1 != ''){
                 var startTime1 = parseInt(tbcc.startTime1.replace(":",""));
                 var endTime1 = parseInt(tbcc.endTime1.replace(":",""));
                 if(time < startTime1 || time > endTime1){
