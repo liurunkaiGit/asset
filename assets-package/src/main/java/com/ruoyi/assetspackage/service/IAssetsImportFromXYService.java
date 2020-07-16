@@ -33,7 +33,7 @@ public interface IAssetsImportFromXYService {
 
     public int deleteFlowXyByBatchNo(String importBatchNo);
 
-    public void batchUpdateIsCompare(@Param(value="CurAssetsList")List<CurAssetsPackage> CurAssetsList);
+   /* public void batchUpdateIsCompare(@Param(value="CurAssetsList")List<CurAssetsPackage> CurAssetsList);*/
 
     public List<TLcImportFlowForXy> selectFlowList(TLcImportFlowForXy param)throws Exception;
 

@@ -140,6 +140,8 @@ public interface TaskMapper {
      */
     Task selectTaskByCaseNo(@Param("caseNo") String caseNo, @Param("orgId") String orgId);
 
+    Task selectTaskByCaseNo3(@Param("caseNo") String caseNo, @Param("orgId") String orgId);
+
 
     /**
      * 查询我的任务列表
