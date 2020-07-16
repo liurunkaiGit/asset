@@ -691,7 +691,7 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
         }
 
         //催收模块结案
-        curAssetsRepaymentPackageServiceImpl.closeCase3(remoteList);
+        curAssetsRepaymentPackageServiceImpl.closeCase2(remoteList);
 
     }
 

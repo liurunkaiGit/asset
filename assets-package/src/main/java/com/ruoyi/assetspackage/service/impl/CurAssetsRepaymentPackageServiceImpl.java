@@ -808,7 +808,7 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
         this.insertDuncaseAssign(closeList, ShiroUtils.getSysUser());
     }
 
-    public void closeCase3(List<CloseCase> remoteList) {
+  /*  public void closeCase3(List<CloseCase> remoteList) {
         List<String> caseNoList = new ArrayList<>();
         List<Task> closeList = new ArrayList<>();
         List<Task> tLcTaskList = remoteList.stream()
@@ -832,7 +832,7 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
         this.taskMapper.batchUpdateTask(tLcTaskList);
         this.robotBlackService.batchDeleteRobotBlackByCaseNo(caseNoList);
         this.insertDuncaseAssign(closeList, ShiroUtils.getSysUser());
-    }
+    }*/
 
     /**
      * 添加到案件轨迹表中
