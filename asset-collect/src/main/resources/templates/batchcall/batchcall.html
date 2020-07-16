@@ -753,7 +753,12 @@
          */
         function isCanCallByTime() {
             var now = new Date();
-            var time = now.getHours()+""+now.getMinutes(); //截取当前系统时间
+            var m = now.getMinutes();//分钟，小于10分钟的时候，取出来的是 1,2 这样的数字，不带0
+            m = parseInt(m);
+            if(m < 10 ){
+                m = "0" + m;
+            }
+            var time = now.getHours()+""+m; //截取当前系统时间
             time = parseInt(time);
             if(tbcc.startTime1 != ''){
                 var startTime1 = parseInt(tbcc.startTime1.replace(":",""));

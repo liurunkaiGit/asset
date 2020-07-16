@@ -82,6 +82,7 @@
                     #{item}
                 </foreach>
             </if>
+            <if test="isClose != null  and isClose != ''"> and is_close = #{isClose}</if>
         </where>
     </select>
 
