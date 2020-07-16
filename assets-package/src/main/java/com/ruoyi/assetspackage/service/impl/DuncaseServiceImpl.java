@@ -87,7 +87,7 @@ public class DuncaseServiceImpl implements IDuncaseService {
                 /*.setOrgId(duncase.getOrgId())
                 .setOrgName(duncase.getOrgName())*/
                 .setOldOwnerId(null)
-                .setCloseDate(null)
+               /* .setCloseDate(null)*/
                 .setValidateStatus(IsNoEnum.IS.getCode())
                 .setModifyBy(duncase.getModifyBy())
                 .setTransferType(duncase.getTransferType()) //手别
