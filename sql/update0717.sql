@@ -22,6 +22,8 @@ CREATE TABLE `t_lc_send_robot_apply` (
 
 ALTER TABLE t_lc_task ADD send_robot_batch_no varchar(255) DEFAULT NULL COMMENT '推送任务批次号';
 
+ALTER TABLE t_lc_task_his ADD send_robot_batch_no varchar(255) DEFAULT NULL COMMENT '推送任务批次号';
+
 ALTER TABLE t_lc_robot_task_pandect add `phone_num` int(11) DEFAULT NULL COMMENT '任务实际可拨打的号码总数';
 
 update t_lc_robot_task_pandect set phone_num = call_total_count;
