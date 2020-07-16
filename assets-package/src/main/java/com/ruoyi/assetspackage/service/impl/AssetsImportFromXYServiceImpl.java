@@ -668,30 +668,32 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
      * @throws Exception
      */
     private void updateCloseCase(List<CurAssetsPackage> paramList,Date createTime) throws Exception{
-        List<CloseCase> remoteList = new ArrayList<>();
-        for (CurAssetsPackage curAssetsPackage : paramList) {
-            curAssetsPackage.setCloseCaseDate(createTime);//临时表的创建时间
-            remoteList.add(buildCloseCase(curAssetsPackage));
-        }
-        int total = paramList.size();
-        int index = 500;
-        int pagesize = total/index;
-        if(total <=index){
-            this.assetsImportFromXYMapper.batchUpdateCloseCase(paramList);
-        }else{
-            for(int i=0;i<pagesize;i++){
-                List lt = paramList.subList(i*index, (i+1)*index);
-                this.assetsImportFromXYMapper.batchUpdateCloseCase(lt);
-
+        if(paramList != null && paramList.size() >0) {
+            List<CloseCase> remoteList = new ArrayList<>();
+            for (CurAssetsPackage curAssetsPackage : paramList) {
+                curAssetsPackage.setCloseCaseDate(createTime);//临时表的创建时间
+                remoteList.add(buildCloseCase(curAssetsPackage));
             }
-            if(total % index != 0){
-                List lt = paramList.subList(index * pagesize,total);
-                this.assetsImportFromXYMapper.batchUpdateCloseCase(lt);
-            }
-        }
+            int total = paramList.size();
+            int index = 500;
+            int pagesize = total / index;
+            if (total <= index) {
+                this.assetsImportFromXYMapper.batchUpdateCloseCase(paramList);
+            } else {
+                for (int i = 0; i < pagesize; i++) {
+                    List lt = paramList.subList(i * index, (i + 1) * index);
+                    this.assetsImportFromXYMapper.batchUpdateCloseCase(lt);
 
-        //催收模块结案
-        curAssetsRepaymentPackageServiceImpl.closeCase2(remoteList);
+                }
+                if (total % index != 0) {
+                    List lt = paramList.subList(index * pagesize, total);
+                    this.assetsImportFromXYMapper.batchUpdateCloseCase(lt);
+                }
+            }
+
+            //催收模块结案
+            curAssetsRepaymentPackageServiceImpl.closeCase2(remoteList);
+        }
 
     }
 

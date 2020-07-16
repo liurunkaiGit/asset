@@ -22,6 +22,8 @@ CREATE TABLE `t_lc_send_robot_apply` (
 
 ALTER TABLE t_lc_task ADD send_robot_batch_no varchar(255) DEFAULT NULL COMMENT '推送任务批次号';
 
+ALTER TABLE t_lc_task_his ADD send_robot_batch_no varchar(255) DEFAULT NULL COMMENT '推送任务批次号';
+
 ALTER TABLE t_lc_robot_task_pandect add `phone_num` int(11) DEFAULT NULL COMMENT '任务实际可拨打的号码总数';
 
 update t_lc_robot_task_pandect set phone_num = call_total_count;
@@ -60,10 +62,10 @@ INSERT INTO `sys_menu` (`menu_name`, `parent_id`, `order_num`, `url`, `target`, 
 VALUES ('删除', (SELECT t.menu_id from sys_menu t where t.menu_name = '分机号码管理'), '18', '/agent/phone', 'menuItem', 'F', '0', 'agent:phone:remove', '#', 'admin', '2020-03-03 09:16:55', 'admin', '2020-04-29 09:14:56', '');
 
 INSERT INTO `sys_menu` (`menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES ('查询', (SELECT t.menu_id from sys_menu t where t.menu_name = '历史案件综合查询'), '1', '#', '', 'F', '0', 'his:duncase:list', '#', 'admin', '2020-05-22 16:38:06', 'admin', '2020-05-22 16:38:06', '');
+VALUES ('查询', (SELECT t.menu_id from sys_menu t where t.menu_name = '历史案件查询'), '1', '#', '', 'F', '0', 'his:duncase:list', '#', 'admin', '2020-05-22 16:38:06', 'admin', '2020-05-22 16:38:06', '');
 
 INSERT INTO `sys_menu` (`menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES ('导出', (SELECT t.menu_id from sys_menu t where t.menu_name = '历史案件综合查询'), '1', '#', '', 'F', '0', 'his:duncase:export', '#', 'admin', '2020-05-22 16:38:06', 'admin', '2020-05-22 16:38:06', '');
+VALUES ('导出', (SELECT t.menu_id from sys_menu t where t.menu_name = '历史案件查询'), '1', '#', '', 'F', '0', 'his:duncase:export', '#', 'admin', '2020-05-22 16:38:06', 'admin', '2020-05-22 16:38:06', '');
 
 CREATE TABLE `t_lc_batch_call` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
