@@ -96,7 +96,7 @@ CREATE TABLE `t_lc_batch_call_config` (
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 INSERT INTO `asset`.`sys_dict_type`(`dict_name`, `dict_type`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('电话类型', 'phone_type', '0', 'admin', '2020-07-13 10:06:08', 'admin', '2020-07-16 13:52:50', '电话类型');
-INSERT INTO `asset`.`sys_dict_type`(dict_name`, `dict_type`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('批量外呼任务状态', 'batch_call_status', '0', 'admin', '2020-07-13 10:07:14', 'admin', '2020-07-16 13:52:43', '批量外呼任务状态');
+INSERT INTO `asset`.`sys_dict_type`(`dict_name`, `dict_type`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('批量外呼任务状态', 'batch_call_status', '0', 'admin', '2020-07-13 10:07:14', 'admin', '2020-07-16 13:52:43', '批量外呼任务状态');
 
 
 

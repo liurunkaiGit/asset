@@ -182,12 +182,16 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
         //查询上一次导入的数据（比较的数据）
         Map<String,Object> paramMap = new HashMap<>();
         paramMap.put("orgId",orgId);
-//        Long upNotCompareTotal = this.assetsImportFromXYMapper.selectUpNotCompareTotal(paramMap);
-        List<CurAssetsPackage> upNotCompareList = this.assetsImportFromXYMapper.findUpNotCompareList(paramMap);
-        if(upNotCompareList.size() > 0){//上一次存在没有比较的数据
-            preSettleList = this.assetsImportFromXYMapper.findPreSettleList();//需要结案
-            urgeList = this.assetsImportFromXYMapper.findUrgeList();//出催案件
-            partRepaymentList = this.assetsImportFromXYMapper.findPartRepaymentList();//部分还款
+        String maxBatchNo = this.assetsImportFromXYMapper.selectMaxBatchNo(paramMap);
+        Map<String,Object> paramMap2 = new HashMap<>();
+        paramMap2.put("orgId",orgId);
+        paramMap2.put("importBatchNo",maxBatchNo);
+//        List<CurAssetsPackage> upNotCompareList = this.assetsImportFromXYMapper.findUpNotCompareList(paramMap2);
+        Long Uptotal = this.assetsImportFromXYMapper.selectUpNotCompareTotal(paramMap2);
+        if(Uptotal != null && Uptotal > 0){//上一次存在没有比较的数据
+            preSettleList = this.assetsImportFromXYMapper.findPreSettleList(maxBatchNo);//需要结案
+            urgeList = this.assetsImportFromXYMapper.findUrgeList(maxBatchNo);//出催案件
+            partRepaymentList = this.assetsImportFromXYMapper.findPartRepaymentList(maxBatchNo);//部分还款
             urgeNum = urgeList.size() + partRepaymentList.size();
             //结案处理
             this.updateCloseCase(preSettleList,createTime);
@@ -211,12 +215,12 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
             importFlow.setCreateTime(createTime);
             importFlow.setCreateBy(ShiroUtils.getLoginName());
             this.assetsImportFromXYMapper.insetflowForXy(importFlow);
-            //修改上一次为 已比较状态
+          /*  //修改上一次为 已比较状态
             Map<String,Object> modifyParam = new HashMap<>();
             modifyParam.put("orgId",orgId);
             modifyParam.put("isCompare",'1');//已经比较
             this.assetsImportFromXYMapper.modifyUpNotCompareList(modifyParam);
-            request.getSession().setAttribute("upNotCompareList",upNotCompareList);
+            request.getSession().setAttribute("upNotCompareList",upNotCompareList);*/
         }else{
             //插入流水表
             TLcImportFlowForXy importFlow = new TLcImportFlowForXy();
@@ -307,10 +311,10 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
         return this.assetsImportFromXYMapper.deleteFlowXyByBatchNo(importBatchNo);
     }
 
-    @Override
+   /* @Override
     public void batchUpdateIsCompare(List<CurAssetsPackage> CurAssetsList) {
         this.assetsImportFromXYMapper.batchUpdateIsCompare(CurAssetsList);
-    }
+    }*/
 
     @Override
     public List<TLcImportFlowForXy> selectFlowList(TLcImportFlowForXy param) throws Exception {
@@ -687,7 +691,7 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
         }
 
         //催收模块结案
-        curAssetsRepaymentPackageServiceImpl.closeCase2(remoteList);
+        curAssetsRepaymentPackageServiceImpl.closeCase3(remoteList);
 
     }
 
