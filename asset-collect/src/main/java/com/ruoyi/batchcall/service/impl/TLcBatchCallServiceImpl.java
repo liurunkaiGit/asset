@@ -137,7 +137,7 @@ public class TLcBatchCallServiceImpl implements ITLcBatchCallService
         if(totalCustContactList.size() > 0){
             TLcCustContact tLcCustContact = null;
             TLcBatchCall tLcBatchCall = null;
-            int batchNo = this.selectMaxBatchNo(ShiroUtils.getUserId().toString());
+            int batchNo = this.selectMaxBatchNo(ShiroUtils.getLoginName().toString());
             batchNo = batchNo + 1;
             for(int i = 0;i < totalCustContactList.size();i ++){
                 tLcCustContact = totalCustContactList.get(i);

@@ -189,6 +189,7 @@
         var isWjt = "";//如果此变量为空字符串，则表示客户未接通电话，如果此变量有值，且为 1 ，则为客户接通之后，又挂断电话的
 
         var tbcc = [[${tLcBatchCallConfig}]];//批量外呼配置信息
+        var childObj ;//子页面对象，再子页面成功打开之后，赋值，然后，电话挂断的监听事件会用到
 
         $(function() {
             var options = {
@@ -303,21 +304,35 @@
                 content: toAutoCollJobUrl,
                 shadeClose: true,
                 btn: ['关闭'],
-                /*yes: function (index, layero) {//关闭按钮监听事件,测试显示，无论是点击X 还是点击 关闭， yes 和 end 方法都会触发
-                    layer.close(index);
-                    alert("点击X 关闭");
-                    toNextCall();
-                },*/
-                cancel: function (index, layero) {//点击空白处
-
-                },
-                end:function (index, layero) {//点击窗口的x
+                yes: function (index, layero) {//关闭按钮监听事件,测试显示，无论是点击X 还是点击 关闭， yes 和 end 方法都会触发
                     layer.close(index);
                     // alert("点击关闭按钮");
                     // toNextCall();
                     hangUp();//挂断电话
                     updateStatus(currentCall.id,4,currentCall.remark,"1","");//已完成
+                },
+                cancel: function (index, layero) {//点击空白处
+
+                },
+                success: function(layero, index){
+                    var body = layer.getChildFrame('body', index);//获取子页面内容
+                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                    // iframeWin.test2();//执行子页面的方法
+                    childObj = iframeWin;
+                    /*body.find("#transmit").click();//执行子页面的方法
+                    body.find('input').val('Hi，我是从父页来的')
+                    $(".but_par").click(function(){
+                        alert(222);
+                    })*/
                 }
+                /*end:function (index, layero) {//点击窗口的x
+                    alert(index);
+                    layer.close(index);
+                    // alert("点击关闭按钮");
+                    // toNextCall();
+                    hangUp();//挂断电话
+                    updateStatus(currentCall.id,4,currentCall.remark,"1","");//已完成
+                }*/
             });
         }
 
@@ -411,6 +426,7 @@
             };
 
             agentClient.onRecordEnd = function(event) {
+                childObj.resetTiming();//调用子页面的方法
                 // resetTiming();
                 printEvent('onRecordEnd', event);
                 recordFile = event.recordFile;
