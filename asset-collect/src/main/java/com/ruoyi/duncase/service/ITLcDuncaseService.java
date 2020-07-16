@@ -90,13 +90,13 @@ public interface ITLcDuncaseService {
      * 2020-06-24 封志涛添加
      * @return
      */
-    List<Map<String,Object>> selectDuncaseByTime(Date createTime, int pageNum, int pageSize);
+    List<Map<String,Object>> selectDuncaseByTime(Date createTime, Date modifyTime, int pageNum, int pageSize);
     /**
      * 查询案件表总数--定时任务同步数据中心 用
      * 2020-06-29 封志涛添加
      * @return
      */
-    Integer selectDuncaseCount(Date createTime);
+    Integer selectDuncaseCount(Date createTime, Date modifyTime);
 
     public void updateScore(List<TLcScore> TLcScoreList);
 

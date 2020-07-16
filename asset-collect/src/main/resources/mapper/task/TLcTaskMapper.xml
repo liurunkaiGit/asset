@@ -1224,7 +1224,7 @@
         action_code,call_sign,phone,dqyhje from t_lc_task
         where 1 = 1
         <if test="createTime != null">
-            AND create_time <![CDATA[>=]]> #{createTime} OR modify_time <![CDATA[>=]]> #{createTime}
+            AND (create_time <![CDATA[>=]]> #{createTime} AND create_time <![CDATA[<]]> #{modifyTime}) OR (modify_time <![CDATA[>=]]> #{createTime} AND modify_time <![CDATA[<]]> #{modifyTime})
         </if>
         order by id desc
         limit #{pnum},#{psize}
@@ -1235,7 +1235,7 @@
         select count(1) from t_lc_task
         where 1 = 1
         <if test="createTime != null">
-            AND create_time <![CDATA[>=]]> #{createTime} OR modify_time <![CDATA[>=]]> #{createTime}
+            AND (create_time <![CDATA[>=]]> #{createTime} AND create_time <![CDATA[<]]> #{modifyTime}) OR (modify_time <![CDATA[>=]]> #{createTime} AND modify_time <![CDATA[<]]> #{modifyTime})
         </if>
     </select>
     <select id="selectTotalCountMoney" parameterType="com.ruoyi.task.domain.TLcTask" resultType="java.util.Map">

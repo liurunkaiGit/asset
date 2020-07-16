@@ -1100,14 +1100,14 @@ public class TLcDuncaseServiceImpl implements ITLcDuncaseService {
     }
 
     @Override
-    public List<Map<String,Object>> selectDuncaseByTime(Date createTime, int pageNum, int pageSize) {
-        return this.tLcDuncaseMapper.selectDuncaseByTime(createTime,pageNum,pageSize);
+    public List<Map<String,Object>> selectDuncaseByTime(Date createTime, Date modifyTime, int pageNum, int pageSize) {
+        return this.tLcDuncaseMapper.selectDuncaseByTime(createTime,modifyTime,pageNum,pageSize);
     }
 
     @Override
-    public Integer selectDuncaseCount(Date createTime) {
+    public Integer selectDuncaseCount(Date createTime, Date modifyTime) {
 
-        return tLcDuncaseMapper.selectDuncaseCount(createTime);
+        return tLcDuncaseMapper.selectDuncaseCount(createTime,modifyTime);
     }
 
     @Override

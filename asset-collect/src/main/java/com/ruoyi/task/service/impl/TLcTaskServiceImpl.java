@@ -1233,15 +1233,15 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
      * @return
      */
     @Override
-    public List<Map<String, Object>> selectTaskByTime(Date createTime, int pageNum, int pageSize) {
+    public List<Map<String, Object>> selectTaskByTime(Date createTime, Date modifyTime, int pageNum, int pageSize) {
 
-        return tLcTaskMapper.selectTaskByTime(createTime, pageNum, pageSize);
+        return tLcTaskMapper.selectTaskByTime(createTime, modifyTime,pageNum, pageSize);
     }
 
     @Override
-    public Integer selectTaskCount(Date createTime) {
+    public Integer selectTaskCount(Date createTime, Date modifyTime) {
 
-        return tLcTaskMapper.selectTaskCount(createTime);
+        return tLcTaskMapper.selectTaskCount(createTime,modifyTime);
     }
 
     @Override

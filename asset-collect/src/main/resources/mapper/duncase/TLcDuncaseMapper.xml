@@ -797,7 +797,7 @@
         back_case_date,loan_type,stay_case_flag,risk_flag,contract_type,reduction_flag,legal_flag,ljyhje from t_lc_duncase
         where 1 = 1
         <if test="createTime != null">
-            AND create_time <![CDATA[>=]]> #{createTime} OR modify_time <![CDATA[>=]]> #{createTime}
+            AND (create_time <![CDATA[>=]]> #{createTime} AND create_time <![CDATA[<]]> #{modifyTime}) OR (modify_time <![CDATA[>=]]> #{createTime} AND modify_time <![CDATA[<]]> #{modifyTime})
         </if>
         order by id desc
         limit #{pnum},#{psize}
@@ -807,7 +807,7 @@
         select count(1) from t_lc_duncase
         where 1 = 1
         <if test="createTime != null">
-            AND create_time <![CDATA[>=]]> #{createTime} OR modify_time <![CDATA[>=]]> #{createTime}
+            AND (create_time <![CDATA[>=]]> #{createTime} AND create_time <![CDATA[<]]> #{modifyTime}) OR (modify_time <![CDATA[>=]]> #{createTime} AND modify_time <![CDATA[<]]> #{modifyTime})
         </if>
     </select>
 
