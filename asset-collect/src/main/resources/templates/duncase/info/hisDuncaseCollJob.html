@@ -305,15 +305,20 @@
                     var tp = $("#callContactTrNew");
                     $.each(data, function (i, n) {
                         if (n.callRadioLocation != null && n.callRadioLocation != '') {
-                            tp.append("<tr><td>"+n.contactName+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.callSign,n.dictLabel)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>" +revert(nullToEmpty(n.callLen))+"</td>" +
+                            tp.append("<tr ondblclick='hiddenTr(this)'><td>"+n.contactName+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.callSign,n.dictLabel)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>" +revert(nullToEmpty(n.callLen))+"</td>" +
                                 "<td><a href='javascript:void(0)' onclick='listen("+n.id+")'><img src='/img/speaker.png'  class='imgso' width='20px' height='25px' alt='收听' title='收听'/></a>&nbsp;&nbsp;<a href='javascript:void(0)' onclick='downLoad("+n.id+")'><img src='/img/download.png'  class='imgso' width='20px' height='25px' alt='下载' title='下载'/></a></td></tr>");
                         } else {
-                            tp.append("<tr><td>"+n.contactName+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.callSign,n.dictLabel)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>"+nullToEmpty(n.callLen)+"</td>"+"<td></td></tr>");
+                            tp.append("<tr ondblclick='hiddenTr(this)'><td>"+n.contactName+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.callSign,n.dictLabel)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>"+nullToEmpty(n.callLen)+"</td>"+"<td></td></tr>");
                         }
                     });
                 }
             }
         );
+    }
+
+    function hiddenTr(obj){
+        var tp = $("#callContactTrNew");
+        obj.style.display = "none";
     }
 
     function  actionRecordList(caseNo){//获取行动历史记录
