@@ -27,7 +27,7 @@ public class QualityCheckResponse {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    class ResponseData {
+    public static class ResponseData {
         private String message;
         private String source_id;
         private boolean success;

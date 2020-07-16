@@ -27,7 +27,7 @@ import java.util.List;
  * @date 2020-06-28
  */
 @Controller
-@RequestMapping("/ruoyi/batchcallconfig")
+@RequestMapping("/batchcallconfig")
 public class TLcBatchCallConfigController extends BaseController
 {
     private String prefix = "batchcall";

@@ -59,4 +59,44 @@ VALUES ('修改', (SELECT t.menu_id from sys_menu t where t.menu_name = '分机�
 INSERT INTO `sys_menu` (`menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
 VALUES ('删除', (SELECT t.menu_id from sys_menu t where t.menu_name = '分机号码管理'), '18', '/agent/phone', 'menuItem', 'F', '0', 'agent:phone:remove', '#', 'admin', '2020-03-03 09:16:55', 'admin', '2020-04-29 09:14:56', '');
 
+CREATE TABLE `t_lc_batch_call` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `batch_no` int(8) DEFAULT NULL COMMENT '批次号',
+  `case_no` varchar(255) DEFAULT NULL COMMENT '案件号',
+  `phone` varchar(30) DEFAULT NULL COMMENT '电话号码',
+  `contact_name` varchar(255) DEFAULT NULL COMMENT '联系人姓名',
+  `contact_relation` int(10) DEFAULT NULL COMMENT '与本人关系',
+  `exon_num` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '外显号码',
+  `org_id` varchar(30) DEFAULT NULL COMMENT '委托机构ID',
+  `import_batch_no` varchar(50) DEFAULT NULL COMMENT '案件导入批次编号',
+  `phone_type` varchar(2) DEFAULT NULL COMMENT '电话类型：1 手机；2 固话',
+  `task_status` int(10) DEFAULT NULL COMMENT '任务状态',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建人',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=228 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `t_lc_batch_call_config` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `org_id` varchar(64) DEFAULT NULL COMMENT '机构ID',
+  `batch_call_num` int(11) DEFAULT NULL COMMENT '批量外呼最大案件数',
+  `start_time1` varchar(100) DEFAULT NULL COMMENT '可呼叫开始时间1',
+  `end_time1` varchar(100) DEFAULT NULL COMMENT '可呼叫结束时间1',
+  `start_time2` varchar(100) DEFAULT NULL COMMENT '可呼叫开始时间2',
+  `end_time2` varchar(100) DEFAULT NULL COMMENT '可呼叫结束时间2',
+  `start_time3` varchar(100) DEFAULT NULL COMMENT '可呼叫开始时间3',
+  `end_time3` varchar(100) DEFAULT NULL COMMENT '可呼叫结束时间3',
+  `is_call_other` varchar(2) DEFAULT NULL COMMENT '本人接通后是否继续拨打本案其他号码：0 不呼叫，1 呼叫',
+  `create_by` varchar(64) DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_by` varbinary(64) DEFAULT NULL COMMENT '修改人',
+  `update_time` datetime DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+
+INSERT INTO `asset`.`sys_dict_type`(`dict_name`, `dict_type`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('电话类型', 'phone_type', '0', 'admin', '2020-07-13 10:06:08', 'admin', '2020-07-16 13:52:50', '电话类型');
+INSERT INTO `asset`.`sys_dict_type`(dict_name`, `dict_type`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('批量外呼任务状态', 'batch_call_status', '0', 'admin', '2020-07-13 10:07:14', 'admin', '2020-07-16 13:52:43', '批量外呼任务状态');
+
+
 
