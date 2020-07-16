@@ -100,13 +100,13 @@ public interface TLcDuncaseMapper {
      * 参数命名为 pageNum，pageSize，会自动触发 PageHelper，然后系统会自动给查询语句追加limit语句
      * @return
      */
-    List<Map<String,Object>> selectDuncaseByTime(@Param("createTime") Date createTime, @Param("pnum")int pnum, @Param("psize")int psize);
+    List<Map<String,Object>> selectDuncaseByTime(@Param("createTime") Date createTime, @Param("modifyTime")Date modifyTime, @Param("pnum")int pnum, @Param("psize")int psize);
     /**
      * 查询案件表总数--定时任务同步数据中心 用
      * 2020-06-29 封志涛添加
      * @return
      */
-    Integer selectDuncaseCount(@Param("createTime") Date createTime);
+    Integer selectDuncaseCount(@Param("createTime") Date createTime, @Param("modifyTime")Date modifyTime);
 
     public void updateScore(@Param(value="TLcScoreList")List<TLcScore> TLcScoreList);
 }

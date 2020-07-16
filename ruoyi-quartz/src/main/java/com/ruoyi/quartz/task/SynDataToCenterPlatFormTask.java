@@ -116,9 +116,9 @@ public class SynDataToCenterPlatFormTask
             //6、生成 t_lc_custinfo 表数据，并上传FTP服务器
             createCustinfoFile(startDate,endDate,sftp);
             //7、生成 t_lc_duncase 表数据，并上传FTP服务器
-            createDuncaseFile(startDate,sftp);
+            createDuncaseFile(startDate,endDate,sftp);
             //8、生成 t_lc_task 表数据，并上传FTP服务器
-            createTaskFile(startDate,sftp);
+            createTaskFile(startDate,endDate,sftp);
         }else if("sys_user".equals(tableName)){
             //1、生成 sys_user 表数据，并上传FTP服务器
             createUserFile(startDate,sftp);
@@ -139,10 +139,10 @@ public class SynDataToCenterPlatFormTask
             createCustinfoFile(startDate,endDate,sftp);
         }else if("t_lc_duncase".equals(tableName)){
             //1、生成 t_lc_duncase 表数据，并上传FTP服务器
-            createDuncaseFile(startDate,sftp);
+            createDuncaseFile(startDate,endDate,sftp);
         }else if("t_lc_task".equals(tableName)){
             //1、生成 t_lc_task 表数据，并上传FTP服务器
-            createTaskFile(startDate,sftp);
+            createTaskFile(startDate,endDate,sftp);
         }
         //关闭SFTP连接
         logoutSftp(sftp);
@@ -286,17 +286,17 @@ public class SynDataToCenterPlatFormTask
      * @param startDate
      * @param sftp
      */
-    private void createDuncaseFile(String startDate,SFTPUtil sftp) {
+    private void createDuncaseFile(String startDate,String endDate,SFTPUtil sftp) {
 
         int pageSize = 10000;//每页的数据条数
         int pageCount = 0;//总页数
-        int count = tLcDuncaseService.selectDuncaseCount(DateUtils.parseDate(startDate));//总条数
+        int count = tLcDuncaseService.selectDuncaseCount(DateUtils.parseDate(startDate),DateUtils.parseDate(endDate));//总条数
         pageCount = count/pageSize + 1;
 
         List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
         List<Map<String,Object>> temp = null;
         for(int i = 0 ; i < pageCount; i ++){
-            temp = tLcDuncaseService.selectDuncaseByTime(DateUtils.parseDate(startDate),pageSize*i,pageSize);
+            temp = tLcDuncaseService.selectDuncaseByTime(DateUtils.parseDate(startDate),DateUtils.parseDate(endDate),pageSize*i,pageSize);
             log.info("第{}次查询t_lc_duncase表数据结束",i+1);
             temp = formatDuncaseList(temp);
             list.addAll(temp);
@@ -311,18 +311,18 @@ public class SynDataToCenterPlatFormTask
      * @param startDate
      * @param sftp
      */
-    private void createTaskFile(String startDate,SFTPUtil sftp) {
+    private void createTaskFile(String startDate,String endDate,SFTPUtil sftp) {
 
         int pageSize = 10000;//每页的数据条数
         int pageCount = 0;//总页数
-        int count = tLcTaskService.selectTaskCount(DateUtils.parseDate(startDate));//总条数
+        int count = tLcTaskService.selectTaskCount(DateUtils.parseDate(startDate),DateUtils.parseDate(endDate));//总条数
         log.info("t_lc_task表总数={}",count);
         pageCount = count/pageSize + 1;
 
         List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
         List<Map<String,Object>> temp = null;
         for(int i = 0 ; i < pageCount; i ++){
-            temp = tLcTaskService.selectTaskByTime(DateUtils.parseDate(startDate),pageSize*i,pageSize);
+            temp = tLcTaskService.selectTaskByTime(DateUtils.parseDate(startDate),DateUtils.parseDate(endDate),pageSize*i,pageSize);
             log.info("第{}次查询t_lc_task表数据结束",i+1);
             temp = formatTaskList(temp);
             list.addAll(temp);

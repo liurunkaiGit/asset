@@ -298,14 +298,14 @@ public interface ITLcTaskService {
      * 2020-06-24 封志涛添加
      * @return
      */
-    List<Map<String,Object>> selectTaskByTime(Date createTime, int pageNum, int pageSize);
+    List<Map<String,Object>> selectTaskByTime(Date createTime, Date modifyTime, int pageNum, int pageSize);
 
     /**
      * 查询任务表总数--定时任务同步数据中心 用
      * 2020-06-29 封志涛添加
      * @return
      */
-    Integer selectTaskCount(Date createTime);
+    Integer selectTaskCount(Date createTime, Date modifyTime);
 
     Map<String, BigDecimal> selectTotalCountMoney(TLcTask tLcTask);
 

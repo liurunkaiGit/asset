@@ -311,8 +311,11 @@
                     hangUp();//挂断电话
                     updateStatus(currentCall.id,4,currentCall.remark,"1","");//已完成
                 },
-                cancel: function (index, layero) {//点击空白处
-
+                cancel: function (index, layero) {//点击右上角 X 关闭
+                    layer.close(index);
+                    // toNextCall();
+                    hangUp();//挂断电话
+                    updateStatus(currentCall.id,4,currentCall.remark,"1","");//已完成
                 },
                 success: function(layero, index){
                     var body = layer.getChildFrame('body', index);//获取子页面内容
@@ -502,7 +505,7 @@
          */
         function call(batchCall) {
             if(!isCanCallByTime()){
-                $.modal.alert("不在可外呼时间段内，请等到可外呼时间刷新页面再外呼");
+                $.modal.alert("不在可外呼时间段内，请等到可外呼时间，刷新页面再外呼");
                 return;
             }
             if(isCall == '0'){
@@ -780,24 +783,26 @@
                 var startTime1 = parseInt(tbcc.startTime1.replace(":",""));
                 var endTime1 = parseInt(tbcc.endTime1.replace(":",""));
                 if(time < startTime1 || time > endTime1){
-                    return false;
+                    if(tbcc.startTime2 != ''){
+                        var startTime2 = parseInt(tbcc.startTime2.replace(":",""));
+                        var endTime2 = parseInt(tbcc.endTime2.replace(":",""));
+                        if(time < startTime2 || time > endTime2){
+                            if(tbcc.startTime3 != ''){
+                                var startTime3 = parseInt(tbcc.startTime3.replace(":",""));
+                                var endTime3 = parseInt(tbcc.endTime3.replace(":",""));
+                                if(time < startTime3 || time > endTime3){
+                                    return false;
+                                }
+                            }else{
+                                return false;
+                            }
+                        }
+                    }else{
+                        return false;
+                    }
                 }
             }else{
                 return false;
-            }
-            if(tbcc.startTime2 != ''){
-                var startTime2 = parseInt(tbcc.startTime2.replace(":",""));
-                var endTime2 = parseInt(tbcc.endTime2.replace(":",""));
-                if(time < startTime2 || time > endTime2){
-                    return false;
-                }
-            }
-            if(tbcc.startTime3 != ''){
-                var startTime3 = parseInt(tbcc.startTime3.replace(":",""));
-                var endTime3 = parseInt(tbcc.endTime3.replace(":",""));
-                if(time < startTime3 || time > endTime3){
-                    return false;
-                }
             }
 
             return true;

@@ -21,19 +21,21 @@ public interface AssetsImportFromXYMapper
 
    /* public int updateflowForXy(TLcImportFlowForXy param) throws Exception;*/
 
+    public String selectMaxBatchNo(Map<String,Object> param)throws Exception;
+
     public Long selectUpNotCompareTotal(Map<String,Object> param)throws Exception;
 
     public List<CurAssetsPackage> findUpNotCompareList(Map<String,Object> param)throws Exception;
 
-    public void modifyUpNotCompareList(Map<String,Object> param)throws Exception;
+   /* public void modifyUpNotCompareList(Map<String,Object> param)throws Exception;*/
 
-    public void batchUpdateIsCompare(@Param(value="CurAssetsList")List<CurAssetsPackage> CurAssetsList);
+  /*  public void batchUpdateIsCompare(@Param(value="CurAssetsList")List<CurAssetsPackage> CurAssetsList);*/
 
     public void batchAddAssets(List<TempCurAssetsPackage> paramList)throws Exception;
 
-    public List<CurAssetsPackage> findPreSettleList()throws Exception;
-    public List<CurAssetsPackage> findUrgeList()throws Exception;
-    public List<CurAssetsPackage> findPartRepaymentList()throws Exception;
+    public List<CurAssetsPackage> findPreSettleList(String importBatchNo)throws Exception;
+    public List<CurAssetsPackage> findUrgeList(String importBatchNo)throws Exception;
+    public List<CurAssetsPackage> findPartRepaymentList(String importBatchNo)throws Exception;
 
     public void batchUpdateCloseCase(@Param(value="CurAssetsList")List<CurAssetsPackage> CurAssetsList)throws Exception;
 
