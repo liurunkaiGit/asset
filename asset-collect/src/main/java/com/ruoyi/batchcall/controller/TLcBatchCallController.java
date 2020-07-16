@@ -356,7 +356,7 @@ public class TLcBatchCallController extends BaseController
     public AjaxResult editBatchCallStatus(HttpServletRequest request)
     {
         String flag = request.getParameter("flag");
-        String userId = ShiroUtils.getUserId()+"";
+        String userId = ShiroUtils.getLoginName();
         if("pause".equals(flag)){
             return success(tLcBatchCallService.updateBatchCallByBatchNo(userId,1,2)+"");
 //            return toAjax(tLcBatchCallService.updateBatchCallByBatchNo(userId,1,2));//待外呼状态 修改为 暂停状态
