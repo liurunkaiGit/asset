@@ -718,7 +718,8 @@
     var robotPrefix = ctx + "collect/robot";
     var curAssetsPrefix = ctx + "import/assets";
 
-    var agentClient = parent.agentClient;//得到父页面的打电话的初始化对象
+    var agentClient = parent.agentClient;//得到父页面的平安打电话的初始化对象
+    var uKeFuSoftPhone = parent.uKeFuSoftPhone;//得到父页面的自建打电话的初始化对象
     var recordFile = null;
     var startTime = null;
     var endTime = null;
@@ -1556,76 +1557,6 @@
 
     var reset = new Reset(window);
     reset.resetByClass("ui-layout-resizer ui-layout-resizer-east ui-layout-resizer-open ui-layout-resizer-east-open","ui-layout-resizer ui-layout-resizer-west ui-layout-resizer-open ui-layout-resizer-west-open");
-
-    var Event = {
-        listen: function (type,data) {
-            console.log('##########' + type,JSON.stringify(data))
-            if(type=="EVENT_AGENT_STATE_SUCCESS"){
-                console.log(data[0].AgentName)
-            }
-            if(type == "EVNET_INITIAL_SUCCESS"){
-                console.log('初使化成功' + type,JSON.stringify(data))
-            }
-            if(type == "EVENT_CALLOUT_FAIL"){
-                console.log('callout' + type,JSON.stringify(data))
-            }
-            // if(type == "EVENT_HUNGUP_SUCCESS" || type == "EVENT_HUNGUP" || type == "EVENT_OUTBOUND_AGNET_HANGUP" || type == "EVENT_OUTBOUND_CUSTOMER_HANGUP" || type == "EVENT_OUTBOUND_FORECAST_AGNET_HANGUP" || type == "EVENT_OUTBOUND_FORECAST_CUSTOMER_HANGUP"){
-            if(type == "EVENT_HUNGUP"){
-                console.log('hangup' + type,JSON.stringify(data));
-                console.log("自建录音返回信息RecordingFile="+data[0].RecordingFile+",recordTime="+",currentCaseNo="+currentCaseNo);
-                resetTiming();
-                // 直接保存点催记录
-                var val = $('input[name="radioChoose"]:checked').parents("tr");
-                console.log("通话记录id：" + parent.callRecordId + "，通话开始时间：" + data[0].BAnswerStamp + "，通话结束时间：" + data[0].BEndStamp + "，通话录音：" + data[0].RecordingFile);
-                var callSign = 'R02';
-                var callResult = '无法接通';
-                if (data[0].BAnswerStamp != null) {
-                    callSign = 'R01';
-                    callResult = '已接听';
-                }
-                $.post(
-                    prefix + "/addCallRecord",
-                    {
-                        id:parent.callRecordId,
-                        // certificateNo:val.find("[name='hideCerNo']").html(),
-                        contactName:val.find("[name='contactName']").html(),
-                        phone:val.find("[name='phone']").html(),
-                        contactRelation:val.find("[name='hidRelation']").html(),
-                        callSign:callSign,
-                        callResult:callResult,
-                        callStartTime:data[0].BAnswerStamp,
-                        callEndTime:data[0].BEndStamp,
-                        callLen:data[0].Mduration,
-                        callRadioLocation:data[0].RecordingFile,
-                        caseNo:currentCaseNo,
-                        // remark:callRemark,
-                        importBatchNo:currentImportBatchNo,
-                        orgId:currentOrgId,
-                        // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
-                        sendRadioCheck:1,
-                        platform: "ZJ"
-                    },
-                    function(data) {
-                        // alert(JSON.stringify(data));
-                        if (data.status == 200) {//请求成功
-                            // $.modal.alertSuccess("保存成功");
-                            //collJobDetail(data.result);
-                            $("#callStartTime").val("");
-                            $("#callEndTime").val("");
-                            $("#callLen").val("");
-                            $("#callRadioLocation").val("");
-                            $("#callCode").val("");
-                            $("#callRemarkAdd").val("");
-                            parent.callRecordId = data.result;
-                            // $("#callRecordId").val(data.result);
-                            if($('#call').val() == '1') {
-                                callRecordList(currentCaseNo);
-                            }
-                        }
-                    }
-                );
-            }
-        }};
 
     function getDestType(destDesc) {
         var destType = 3;
