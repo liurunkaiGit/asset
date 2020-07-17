@@ -179,19 +179,20 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
         List<CurAssetsPackage> urgeList = null;
         List<CurAssetsPackage> partRepaymentList = null;
         int urgeNum = 0;
-        //查询上一次导入的数据（比较的数据）
-        Map<String,Object> paramMap = new HashMap<>();
-        paramMap.put("orgId",orgId);
-        String maxBatchNo = this.assetsImportFromXYMapper.selectMaxBatchNo(paramMap);
+//        //查询上一次导入的数据（比较的数据）
+//        Map<String,Object> paramMap = new HashMap<>();
+//        paramMap.put("orgId",orgId);
+//        String maxBatchNo = this.assetsImportFromXYMapper.selectMaxBatchNo(paramMap);
         Map<String,Object> paramMap2 = new HashMap<>();
         paramMap2.put("orgId",orgId);
-        paramMap2.put("importBatchNo",maxBatchNo);
+        paramMap2.put("closeCase",1);
+//        paramMap2.put("importBatchNo",maxBatchNo);
 //        List<CurAssetsPackage> upNotCompareList = this.assetsImportFromXYMapper.findUpNotCompareList(paramMap2);
         Long Uptotal = this.assetsImportFromXYMapper.selectUpNotCompareTotal(paramMap2);
         if(Uptotal != null && Uptotal > 0){//上一次存在没有比较的数据
-            preSettleList = this.assetsImportFromXYMapper.findPreSettleList(maxBatchNo);//需要结案
-            urgeList = this.assetsImportFromXYMapper.findUrgeList(maxBatchNo);//出催案件
-            partRepaymentList = this.assetsImportFromXYMapper.findPartRepaymentList(maxBatchNo);//部分还款
+            preSettleList = this.assetsImportFromXYMapper.findPreSettleList(orgId);//需要结案
+            urgeList = this.assetsImportFromXYMapper.findUrgeList(orgId);//出催案件
+            partRepaymentList = this.assetsImportFromXYMapper.findPartRepaymentList(orgId);//部分还款
             urgeNum = urgeList.size() + partRepaymentList.size();
             //结案处理
             this.updateCloseCase(preSettleList,createTime);
