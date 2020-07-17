@@ -55,6 +55,7 @@
     <script th:inline="javascript">
         var phoneTypes = [[${@dict.getType('phone_type')}]];
         var batchCallStatus = [[${@dict.getType('batch_call_status')}]];
+        var contactRelations = [[${@dict.getType('sys_custom_contact_rela')}]];
         var prefix = ctx + "batchcall";
 
         $(function() {
@@ -99,8 +100,11 @@
                     title : '联系人姓名'
                 },
                 {
-                    field : 'contactRelation', 
-                    title : '与本人关系'
+                    field : 'contactRelation',
+                    title : '与本人关系',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(contactRelations, value);
+                    }
                 },
                 {
                     field : 'exonNum',
