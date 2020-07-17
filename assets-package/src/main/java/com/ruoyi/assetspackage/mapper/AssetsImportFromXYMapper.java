@@ -25,7 +25,7 @@ public interface AssetsImportFromXYMapper
 
     public Long selectUpNotCompareTotal(Map<String,Object> param)throws Exception;
 
-    public List<CurAssetsPackage> findUpNotCompareList(Map<String,Object> param)throws Exception;
+   /* public List<CurAssetsPackage> findUpNotCompareList(Map<String,Object> param)throws Exception;*/
 
    /* public void modifyUpNotCompareList(Map<String,Object> param)throws Exception;*/
 
