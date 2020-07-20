@@ -54,12 +54,6 @@ import java.util.stream.Collectors;
 public class CallbackServiceImpl implements CallbackService {
 
     @Autowired
-    private TLcRobotCallRecordMeteDataMapper callRecordMeteDataMapper;
-    @Autowired
-    private TLcRobotCallAnalyseResultMapper callAnalyseResultMapper;
-    @Autowired
-    private TLcRobotCallDetailMapper callDetailMapper;
-    @Autowired
     private ITLcTaskService tLcTaskService;
     @Autowired
     private ITLcCallStrategyConfigService callStrategyConfigService;
@@ -72,31 +66,19 @@ public class CallbackServiceImpl implements CallbackService {
     @Autowired
     private ITLcCallRecordService tLcCallRecordService;
     @Autowired
-    private ITLcCustinfoService tLcCustinfoService;
-    @Autowired
-    private ISysDictDataService sysDictDataService;
-    @Autowired
     private ITLcRobotTaskPandectService robotTaskPandectService;
 
     @Override
     @Transactional
     public String callCallback(CallCallback callCallback) {
-//        log.info("机器人回调参数是{},机器人任务id是{}", callCallback, callCallback.getData().getData().getSceneInstance().getCallJobId());
         CallCallback.CallCallbackData data = callCallback.getData();
-        String dataType = data.getDataType();
         CallCallback.CallCallbackData.CallData callData = data.getData();
-        List<TLcRobotTask> tLcRobotTaskList = this.tLcRobotTaskService.selectListByRobotTaskId(callData.getSceneInstance().getCallJobId());
-        if (tLcRobotTaskList == null || tLcRobotTaskList.size() == 0) {
+        // 根据机器人任务id和手机号查询任务列表
+        List<TLcTask> tLcTaskList = this.tLcTaskService.selectTaskListByRobotTaskIdAndPhone(String.valueOf(callData.getSceneInstance().getCallJobId()), callData.getSceneInstance().getCustomerTelephone());
+        if (tLcTaskList == null || tLcTaskList.size() == 0) {
             return "success";
         }
-        // 构建并插入通话记录相关元数据
-        buildCallRecordMeteData(dataType, callData);
-        // 构建并插入通话分析的结果
-        buildCallAnalyseResult(dataType, callData);
-        // 构建并插入对话详情
-        buildCallDetail(dataType, callData);
-        // 分析通话结果并判断是否需要重复拨打(重复开启任务)
-        return analyseAndReCall(callData);
+        return analyseAndReCall(callData, tLcTaskList);
     }
 
     /**
@@ -104,16 +86,15 @@ public class CallbackServiceImpl implements CallbackService {
      *
      * @param callData
      */
-    private String analyseAndReCall(CallCallback.CallCallbackData.CallData callData) {
+    private String analyseAndReCall(CallCallback.CallCallbackData.CallData callData, List<TLcTask> tLcTaskList) {
         try {
             TLcRobotCallRecordMeteData sceneInstance = callData.getSceneInstance();
             log.info("进入了判断是否重复呼叫的方法...任务id{},手机号是{}", sceneInstance.getCallJobId(), sceneInstance.getCustomerTelephone());
             List<TLcRobotCallAnalyseResult> taskResultList = callData.getTaskResult();
-            // 获取任务信息及分案策略
-            TLcTask tLcTask = this.tLcTaskService.selectTaskListByRobotTaskIdAndPhone(String.valueOf(sceneInstance.getCallJobId()), sceneInstance.getCustomerTelephone()).get(0);
             TLcRobotTask tLcRobotTask = new TLcRobotTask();
-            if (tLcTask.getRobotCallStrategyId() != null && tLcTask.getRobotCallStrategyId() != -1L) { //说明不是协催，协催一天呼叫一次，只呼叫一天
-                TLcCallStrategyConfig callStrategyConfig = this.callStrategyConfigService.selectTLcCallStrategyConfigById(tLcTask.getRobotCallStrategyId());
+            // 判断是否是协催，协催一天呼叫一次，只呼叫一天
+            if (tLcTaskList.get(0).getRobotCallStrategyId() != null && tLcTaskList.get(0).getRobotCallStrategyId() != -1L) {
+                TLcCallStrategyConfig callStrategyConfig = this.callStrategyConfigService.selectTLcCallStrategyConfigById(tLcTaskList.get(0).getRobotCallStrategyId());
                 // 是否需要重复呼叫
                 Integer reCallCode = isReCall(callData, callStrategyConfig, taskResultList);
                 if (reCallCode.equals(IsReCallEnum.RE_CALL.getCode())) {
@@ -131,13 +112,11 @@ public class CallbackServiceImpl implements CallbackService {
             // 修改机器人任务明细表数据
             updateRobotTask(callData, tLcRobotTask);
             log.info("修改机器人任务表数据成功...任务id{},手机号是{}", sceneInstance.getCallJobId(), sceneInstance.getCustomerTelephone());
-            // 根据机器人任务id和手机号查询任务列表
-            List<TLcTask> tLcTaskList = this.tLcTaskService.selectTaskListByRobotTaskIdAndPhone(String.valueOf(sceneInstance.getCallJobId()), callData.getSceneInstance().getCustomerTelephone());
             // 插入到电催记录表
             insertCallRecord(tLcTaskList, callData);
             log.info("插入到电催记录表成功...任务id{},手机号是{}", sceneInstance.getCallJobId(), sceneInstance.getCustomerTelephone());
             // 根据机器人任务id和手机号修改任务表和案件表中的最近跟进时间及电话码
-            updateTaskByRobotTaskIdAndPhone(sceneInstance, tLcTaskList);
+            updateTaskByRobotTaskIdAndPhone(sceneInstance);
             log.info("根据机器人任务id和手机号修改任务表中的最近跟进时间及电话码成功...");
         } catch (Exception e) {
             log.error("呼入回调接口分析通话是否重复拨打发生异常，exception is {}", e);
@@ -147,38 +126,11 @@ public class CallbackServiceImpl implements CallbackService {
     }
 
     /**
-     * 创建机器人任务
-     *
-     * @param tLcTask
-     * @param robotTaskId
-     * @return
-     */
-    private TLcRobotTask createRobotTask(TLcTask tLcTask, Integer robotTaskId, String speechCraftName) {
-        TLcCustinfo custinfo = this.tLcCustinfoService.findCustByCaseNo(tLcTask.getCaseNo(), tLcTask.getOrgId(), tLcTask.getImportBatchNo());
-        TLcRobotTask tLcRobotTask = new TLcRobotTask();
-        tLcRobotTask.setTaskId(tLcTask.getId())
-                .setRobotTastId(robotTaskId)
-                .setTaskName(tLcTask.getCustomName() + tLcTask.getCaseNo())
-                .setOwnerName(tLcTask.getOwnerName())
-                .setTransferType(tLcTask.getTransferType())
-                .setArrearsTotal(tLcTask.getArrearsTotal())
-                .setSpeechCraftName(speechCraftName)
-                .setTaskStatus(tLcTask.getTaskStatus())
-                .setTaskType(tLcTask.getTaskType())
-                .setOrgId(tLcTask.getOrgId())
-                .setOrgName(tLcTask.getOrgName())
-                .setCurName(tLcTask.getCustomName())
-                .setPhone(custinfo.getPhone())
-                .setCreateBy(String.valueOf(ShiroUtils.getUserId()));
-        return tLcRobotTask;
-    }
-
-    /**
      * 插入到电催记录表
      *
      * @param callData
      */
-    public List<TLcTask> insertCallRecord(List<TLcTask> tLcTaskList, CallCallback.CallCallbackData.CallData callData) {
+    public void insertCallRecord(List<TLcTask> tLcTaskList, CallCallback.CallCallbackData.CallData callData) {
         TLcRobotCallRecordMeteData sceneInstance = callData.getSceneInstance();
         // 创建对话详情
         if (tLcTaskList != null && tLcTaskList.size() > 0) {
@@ -205,7 +157,6 @@ public class CallbackServiceImpl implements CallbackService {
                 this.tLcCallRecordService.insertTLcCallRecord(tLcCallRecord);
             });
         }
-        return tLcTaskList;
     }
 
     /**
@@ -213,14 +164,13 @@ public class CallbackServiceImpl implements CallbackService {
      *
      * @param sceneInstance
      */
-    private void updateTaskByRobotTaskIdAndPhone(TLcRobotCallRecordMeteData sceneInstance, List<TLcTask> tLcTaskList) {
+    private void updateTaskByRobotTaskIdAndPhone(TLcRobotCallRecordMeteData sceneInstance) {
         TLcTask tLcTask = new TLcTask();
-        String callSignValue = this.sysDictDataService.selectDictLabel("call_record_code", FinishedCallStatus.getSignByCode(sceneInstance.getFinishStatus()));
         tLcTask.setRobotTaskId(sceneInstance.getCallJobId());
         tLcTask.setPhone(sceneInstance.getCustomerTelephone());
         tLcTask.setRecentlyFollowUpDate(new Date());
         tLcTask.setCallSign(FinishedCallStatus.getSignByCode(sceneInstance.getFinishStatus()));
-        tLcTask.setCallSignValue(callSignValue);
+        tLcTask.setCallSignValue(FinishedCallStatus.getDescByCode(sceneInstance.getFinishStatus()));
         this.tLcTaskService.updateTLcTaskByRobotTaskIdAndPhone(tLcTask);
     }
 
@@ -293,22 +243,16 @@ public class CallbackServiceImpl implements CallbackService {
         //说明通话结果【客户意向等级】没有达到策略里面配置的停止呼叫任务条件
         TLcRobotTask tLcRobotTask = this.tLcRobotTaskService.selectRobotTaskByRobotTaskIdAndPhone(sceneInstance.getCallJobId(), customPhone);
         if (!stopFlag) {
-            // 获取连续呼叫天数
-//            Integer phoneContinueCallDays = localCacheUtil.getPhoneContinueCallDays(LocalCacheKeyUtils.phoneContinueCallDaysKey(customPhone));
             //连续呼叫天数没有达到上限
             Integer phoneContinueCallDays = tLcRobotTask.getContinueDays();
-//            if (phoneContinueCallDays < callStrategyConfig.getContinueCallDays()) {
             if (phoneContinueCallDays < callStrategyConfig.getContinueCallDays()) {
                 // 判断是否达到当天停止呼叫任务条件
                 boolean curDayStopFlag = isCurDayStopConditon(callStrategyConfig, sceneInstance);
                 if (!curDayStopFlag) {
                     // 获取呼叫次数并且呼叫次数+1，判断呼叫次数是否达到当天的呼叫次数上限
-//                    Integer phoneCurDayCallNums = localCacheUtil.getPhoneCurDayCallNums(LocalCacheKeyUtils.phoneCurDayCallNumsKey(customPhone));
                     Integer phoneCurDayCallNums = tLcRobotTask.getContinueFrequency();
-//                    phoneCurDayCallNums++;
                     if (phoneCurDayCallNums < callStrategyConfig.getCallFrequencyDay()) {
                         // 说明当天呼叫次数没有达到上限
-//                        localCacheUtil.setPhoneCurDayCallNums(LocalCacheKeyUtils.phoneCurDayCallNumsKey(customPhone), phoneCurDayCallNums);
                         log.info("需要继续呼叫，次数没有达到上限，手机号是{}，外呼策略是id{},呼叫次数是{}", customPhone, callStrategyConfig.getId(), phoneCurDayCallNums);
                         // 继续呼叫
                         return IsReCallEnum.RE_CALL.getCode();
@@ -394,84 +338,6 @@ public class CallbackServiceImpl implements CallbackService {
             }
         }
         return false;
-    }
-
-    /**
-     * 构建并插入对话详情
-     *
-     * @param dataType
-     * @param callData
-     */
-    @Override
-    public void buildCallDetail(String dataType, CallCallback.CallCallbackData.CallData callData) {
-        CallCallback.CallCallbackData.CallData.PhoneLog phoneLog = callData.getPhoneLog();
-        phoneLog.getPhoneLogs().stream()
-                .forEach(callDetail -> {
-                    callDetail.setDataType(dataType)
-                            .setInboundInstanceId(callDetail.getSceneInstanceId())
-                            .setSign(callData.getSign())
-                            .setDateTime(callData.getDateTime())
-                            .setLuyinOssUrl(phoneLog.getLuyinOssUrl())
-                            .setAiUnknownValue(booleanReverInteger(callDetail.getAiUnknown()))
-                            .setUserMeanDetail(String.valueOf(callDetail.getUserMeanDetail()));
-                    this.callDetailMapper.insertTLcRobotCallDetail(callDetail);
-                });
-        log.info("插入对话详情成功");
-    }
-
-    /**
-     * 构建并插入通话分析的结果
-     *
-     * @param dataType
-     * @param callData
-     */
-    @Override
-    public void buildCallAnalyseResult(String dataType, CallCallback.CallCallbackData.CallData callData) {
-        List<TLcRobotCallAnalyseResult> taskResult = callData.getTaskResult();
-        taskResult.stream()
-                .forEach(callAnalyseResult -> {
-                    callAnalyseResult.setDataType(dataType)
-                            .setSign(callData.getSign())
-                            .setDateTime(callData.getDateTime())
-                            .setInboundInstanceId(callAnalyseResult.getSceneInstanceId())
-                            .setResultLabels(String.valueOf(callAnalyseResult.getResultLabels()))
-                            .setArtificialChangedValue(booleanReverInteger(callAnalyseResult.getArtificialChanged()));
-                    this.callAnalyseResultMapper.insertTLcRobotCallAnalyseResult(callAnalyseResult);
-                });
-        log.info("插入通话分析的结果成功，任务id{}", taskResult.get(0).getCallJobId());
-    }
-
-    /**
-     * boolean转integer
-     *
-     * @param artificialChanged
-     * @return
-     */
-    private Integer booleanReverInteger(Boolean artificialChanged) {
-        if (artificialChanged == null) {
-            return null;
-        }
-        if (artificialChanged) {
-            return IsNoEnum.IS.getCode();
-        }
-        return IsNoEnum.NO.getCode();
-    }
-
-    /**
-     * 构建通话记录相关元数据
-     *
-     * @param dataType
-     * @param callData
-     */
-    @Override
-    public void buildCallRecordMeteData(String dataType, CallCallback.CallCallbackData.CallData callData) {
-        TLcRobotCallRecordMeteData sceneInstance = callData.getSceneInstance();
-        TLcRobotCallRecordMeteData callRecordMeteData = sceneInstance.setDataType(dataType)
-                .setSign(callData.getSign())
-                .setDateTime(callData.getDateTime())
-                .setPropertiesMap(String.valueOf(sceneInstance.getPropertiesMap()));
-        this.callRecordMeteDataMapper.insertTLcRobotCallRecordMeteData(callRecordMeteData);
-        log.info("插入通话记录相关元数据成功，任务id{},手机号是{}", sceneInstance.getCallJobId(), sceneInstance.getCustomerTelephone());
     }
 
     /**

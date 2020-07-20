@@ -108,7 +108,6 @@ public class TLcReportRecoveryServiceImpl extends BaseController implements ITLc
 
     @Override
     public List<TLcReportRecovery> selectRecoveryByPayment(Map<String, Object> param) {
-//        return this.tLcReportRecoveryMapper.selectRecoveryByPayment(param);
         return this.tLcReportRecoveryMapper.selectRecovery(param);
     }
 }

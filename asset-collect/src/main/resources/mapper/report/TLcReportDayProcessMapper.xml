@@ -294,7 +294,8 @@
         FROM
         t_lc_duncase_action_record t,t_lc_task ta
         WHERE
-        t.action_code = 'TS'
+        t.case_no = ta.case_no
+        and t.action_code = 'TS'
         and ta.task_status != 3
         <if test="startDate != null">
             AND t.create_time <![CDATA[>=]]> #{startDate}
