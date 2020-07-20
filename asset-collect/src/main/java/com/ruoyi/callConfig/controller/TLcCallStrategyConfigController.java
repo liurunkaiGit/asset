@@ -221,17 +221,19 @@ public class TLcCallStrategyConfigController extends BaseController {
     @ResponseBody
     @PostMapping("/initSpeechCraftByOrgId")
     public TableDataInfo initSpeechCraftByOrgId(Long orgId) {
-        TLcOrgSpeechcraftConf tLcOrgSpeechcraftConf = this.orgSpeechcraftConfService.selectTLcOrgSpeechcraftConfByOrgId(ShiroUtils.getSysUser().getOrgId());
-        String[] ids = tLcOrgSpeechcraftConf.getSpeechcraftId().split(",");
-        String[] names = tLcOrgSpeechcraftConf.getSpeechcraftName().split(",");
-        String[] scendDefIds = tLcOrgSpeechcraftConf.getSceneDefId().split(",");
         List<Robot> robots = new ArrayList<>();
-        for (int i = 0; i < ids.length; i++) {
-            Robot robot = new Robot();
-            robot.setRobotDefId(Integer.valueOf(ids[i]));
-            robot.setRobotName(names[i]);
-            robot.setSceneDefId(Integer.valueOf(scendDefIds[i]));
-            robots.add(robot);
+        TLcOrgSpeechcraftConf tLcOrgSpeechcraftConf = this.orgSpeechcraftConfService.selectTLcOrgSpeechcraftConfByOrgId(ShiroUtils.getSysUser().getOrgId());
+        if (tLcOrgSpeechcraftConf != null) {
+            String[] ids = tLcOrgSpeechcraftConf.getSpeechcraftId().split(",");
+            String[] names = tLcOrgSpeechcraftConf.getSpeechcraftName().split(",");
+            String[] scendDefIds = tLcOrgSpeechcraftConf.getSceneDefId().split(",");
+            for (int i = 0; i < ids.length; i++) {
+                Robot robot = new Robot();
+                robot.setRobotDefId(Integer.valueOf(ids[i]));
+                robot.setRobotName(names[i]);
+                robot.setSceneDefId(Integer.valueOf(scendDefIds[i]));
+                robots.add(robot);
+            }
         }
         return getDataTable(robots);
     }
