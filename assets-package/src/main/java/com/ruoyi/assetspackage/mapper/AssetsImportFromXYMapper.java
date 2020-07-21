@@ -33,9 +33,9 @@ public interface AssetsImportFromXYMapper
 
     public void batchAddAssets(List<TempCurAssetsPackage> paramList)throws Exception;
 
-    public List<CurAssetsPackage> findPreSettleList(String importBatchNo)throws Exception;
-    public List<CurAssetsPackage> findUrgeList(String importBatchNo)throws Exception;
-    public List<CurAssetsPackage> findPartRepaymentList(String importBatchNo)throws Exception;
+    public List<CurAssetsPackage> findPreSettleList(@Param(value="orgId")String orgId, @Param(value="importBatchNo")String importBatchNo)throws Exception;
+    public List<CurAssetsPackage> findUrgeList(@Param(value="orgId")String orgId, @Param(value="importBatchNo")String importBatchNo)throws Exception;
+    public List<CurAssetsPackage> findPartRepaymentList(@Param(value="orgId")String orgId, @Param(value="importBatchNo")String importBatchNo)throws Exception;
 
     public void batchUpdateCloseCase(@Param(value="CurAssetsList")List<CurAssetsPackage> CurAssetsList)throws Exception;
 

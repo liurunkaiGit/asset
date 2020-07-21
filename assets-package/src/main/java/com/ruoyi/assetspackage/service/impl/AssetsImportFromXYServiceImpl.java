@@ -179,20 +179,15 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
         List<CurAssetsPackage> urgeList = null;
         List<CurAssetsPackage> partRepaymentList = null;
         int urgeNum = 0;
-//        //查询上一次导入的数据（比较的数据）
-//        Map<String,Object> paramMap = new HashMap<>();
-//        paramMap.put("orgId",orgId);
-//        String maxBatchNo = this.assetsImportFromXYMapper.selectMaxBatchNo(paramMap);
+        //查询上一次导入的数据（比较的数据）
         Map<String,Object> paramMap2 = new HashMap<>();
         paramMap2.put("orgId",orgId);
         paramMap2.put("closeCase",1);
-//        paramMap2.put("importBatchNo",maxBatchNo);
-//        List<CurAssetsPackage> upNotCompareList = this.assetsImportFromXYMapper.findUpNotCompareList(paramMap2);
         Long Uptotal = this.assetsImportFromXYMapper.selectUpNotCompareTotal(paramMap2);
         if(Uptotal != null && Uptotal > 0){//上一次存在没有比较的数据
-            preSettleList = this.assetsImportFromXYMapper.findPreSettleList(orgId);//需要结案
-            urgeList = this.assetsImportFromXYMapper.findUrgeList(orgId);//出催案件
-            partRepaymentList = this.assetsImportFromXYMapper.findPartRepaymentList(orgId);//部分还款
+            preSettleList = this.assetsImportFromXYMapper.findPreSettleList(orgId,importBatchNo);//需要结案
+            urgeList = this.assetsImportFromXYMapper.findUrgeList(orgId,importBatchNo);//出催案件
+            partRepaymentList = this.assetsImportFromXYMapper.findPartRepaymentList(orgId,importBatchNo);//部分还款
             urgeNum = urgeList.size() + partRepaymentList.size();
             //结案处理
             this.updateCloseCase(preSettleList,createTime);
@@ -216,12 +211,6 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
             importFlow.setCreateTime(createTime);
             importFlow.setCreateBy(ShiroUtils.getLoginName());
             this.assetsImportFromXYMapper.insetflowForXy(importFlow);
-          /*  //修改上一次为 已比较状态
-            Map<String,Object> modifyParam = new HashMap<>();
-            modifyParam.put("orgId",orgId);
-            modifyParam.put("isCompare",'1');//已经比较
-            this.assetsImportFromXYMapper.modifyUpNotCompareList(modifyParam);
-            request.getSession().setAttribute("upNotCompareList",upNotCompareList);*/
         }else{
             //插入流水表
             TLcImportFlowForXy importFlow = new TLcImportFlowForXy();
@@ -247,39 +236,6 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
     @Override
     public void batchAddAssets(List<TempCurAssetsPackage> paramList) throws Exception {
         String orgId = paramList.get(0).getOrgId();
-        String orgName= paramList.get(0).getOrg();
-        String importBatchNo= paramList.get(0).getImportBatchNo();
-        Date createTime = paramList.get(0).getCreateTime();
-
-        /*List<CurAssetsPackage> preSettleList = null;
-        List<CurAssetsPackage> urgeList = null;
-        List<CurAssetsPackage> partRepaymentList = null;
-        int urgeNum = 0;
-        //查询上一次导入的数据（比较的数据）
-        Map<String,Object> paramMap = new HashMap<>();
-        paramMap.put("orgId",orgId);
-        paramMap.put("importBatchNo",importBatchNo);
-        Long upNotCompareTotal = this.assetsImportFromXYMapper.selectUpNotCompareTotal(paramMap);
-        if(upNotCompareTotal > 0){//上一次存在没有比较的数据
-            preSettleList = this.assetsImportFromXYMapper.findPreSettleList();//需要结案
-            urgeList = this.assetsImportFromXYMapper.findUrgeList();//出催案件
-            partRepaymentList = this.assetsImportFromXYMapper.findPartRepaymentList();//部分还款
-            urgeNum = urgeList.size() + partRepaymentList.size();
-            //结案处理
-            this.updateCloseCase(preSettleList,createTime);
-            //插入出催表
-            this.insertUrge(urgeList,"1",createTime,importBatchNo);//预测结清
-            this.insertUrge(partRepaymentList,"2",createTime,importBatchNo);//部分还款
-            //更新流水表
-            if (paramList != null && paramList.size() > 0) {
-                TLcImportFlowForXy ImportFlow = new TLcImportFlowForXy();
-                ImportFlow.setImportBatchNo(importBatchNo)
-                        .setOrgId(orgId)
-                        .setOrgName(orgName)
-                        .setUrgeNum(urgeNum);
-                this.assetsImportFromXYMapper.updateflowForXy(ImportFlow);
-            }
-        }*/
         //把这一次导入的数据插入数据库
         int total = paramList.size();
         int index = 500;
