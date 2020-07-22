@@ -1,4 +1,6 @@
-INSERT INTO `sys_job` (`job_name`, `job_group`, `invoke_target`, `cron_expression`, `misfire_policy`, `concurrent`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('报表生成', 'DEFAULT', 'reportSchedule.createReport', '0 0 22 * * ?', '1', '1', '0', 'zhang', '2020-07-21 09:47:34', '', '2020-07-21 09:51:57', '每天晚上10点定时生成报表');
+INSERT INTO `sys_job` (`job_name`, `job_group`, `invoke_target`, `cron_expression`, `misfire_policy`, `concurrent`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('每日过程指标', 'DEFAULT', 'reportSchedule.createDayProcessReport', '0 0 22 * * ?', '1', '1', '1', 'zhang', '2020-07-21 09:47:34', 'zhang', '2020-07-22 09:29:36', '每天晚上10点定时生成每日过程指标报表');
+INSERT INTO `sys_job` (`job_name`, `job_group`, `invoke_target`, `cron_expression`, `misfire_policy`, `concurrent`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('回收率报表', 'DEFAULT', 'reportSchedule.createRecoveryReport', '0 0 22 * * ?', '1', '1', '1', 'zhang', '2020-07-21 20:34:12', '', NULL, '每天晚上10点生成回收率报表');
+INSERT INTO `sys_job` (`job_name`, `job_group`, `invoke_target`, `cron_expression`, `misfire_policy`, `concurrent`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES ('案件可联率报表', 'DEFAULT', 'reportSchedule.createCaseContactReport', '0 0 22 * * ?', '1', '1', '1', 'zhang', '2020-07-21 20:35:18', '', NULL, '每天晚上10点生成案件可联率报表');
 
 update sys_menu set menu_name = '呼叫明细管理' where menu_name = '呼叫明细查询';
 

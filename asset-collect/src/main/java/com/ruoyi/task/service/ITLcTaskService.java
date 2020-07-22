@@ -316,4 +316,6 @@ public interface ITLcTaskService {
     void updateTLcTaskBySendRobotBatchNo(TLcTask tLcTask);
 
     List<AssetsRepayment> viewHisRepayHis(String caseNo);
+
+    void insertDuncaseAssign(Integer robotTaskId);
 }

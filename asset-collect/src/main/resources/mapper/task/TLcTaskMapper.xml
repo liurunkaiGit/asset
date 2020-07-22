@@ -685,6 +685,28 @@
         </foreach>
     </insert>
 
+    <insert id="insertDuncaseAssign" parameterType="java.lang.Long">
+        INSERT INTO t_lc_duncase_assign (
+        custom_name,
+        certificate_no,
+        case_no,
+        task_id,
+        operation_id,
+        operation_name,
+        transfer_type,
+        task_status,
+        owner_id,
+        owner_name,
+        org_id,
+        org_name,
+        create_time,
+        create_by,
+        validate_status
+        )
+        select custom_name,certificate_no,case_no,id,-1,"机器人",task_type,task_status,owner_id,owner_name,org_id,org_name,now(),-1,1
+        from t_lc_task WHERE robot_task_id = #{robotTaskId}
+    </insert>
+
     <update id="batchUpdateTask" parameterType="java.util.List">
         <foreach collection="taskList" item="task" separator=";">
             UPDATE t_lc_task
@@ -1281,6 +1303,6 @@
     <update id="updateTaskFromRobotTask" parameterType="java.lang.Integer">
         UPDATE t_lc_task t,t_lc_robot_task rt
         SET t.call_sign = rt.call_sign,t.call_sign_value = rt.call_sign_value,t.recently_follow_up_date = rt.call_back_time,t.task_type = 17,t.allot_type = 1
-        WHERE t.robot_task_id = rt.robot_tast_id AND t.phone = rt.phone
+        WHERE t.robot_task_id = rt.robot_tast_id AND t.phone = rt.phone and rt.task_id = t.id
     </update>
 </mapper>

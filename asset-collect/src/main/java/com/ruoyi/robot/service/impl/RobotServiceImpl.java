@@ -111,16 +111,17 @@ public class RobotServiceImpl implements RobotService {
         this.tLcTaskMapper.updateTaskFromRobotTask(robotTaskId);
         log.info("拉回成功，修改任务表数据成功");
         // 插入案件历史轨迹
-        List<TLcTask> taskList = this.tLcTaskMapper.selectTaskListByRobotTaskId(robotTaskId);
-        if (taskList != null && taskList.size() > 0) {
-            SysUser sysUser = ShiroUtils.getSysUser();
-            if (sysUser == null) {
-                sysUser = new SysUser();
-                sysUser.setUserId(-1L);
-                sysUser.setUserName("机器人");
-            }
-            this.tLcTaskService.insertDuncaseAssign(taskList, sysUser);
-        }
+//        List<TLcTask> taskList = this.tLcTaskMapper.selectTaskListByRobotTaskId(robotTaskId);
+//        if (taskList != null && taskList.size() > 0) {
+//            SysUser sysUser = ShiroUtils.getSysUser();
+//            if (sysUser == null) {
+//                sysUser = new SysUser();
+//                sysUser.setUserId(-1L);
+//                sysUser.setUserName("机器人");
+//            }
+//            this.tLcTaskService.insertDuncaseAssign(taskList, sysUser);
+//        }
+        this.tLcTaskService.insertDuncaseAssign(robotTaskId);
     }
 
     @Override

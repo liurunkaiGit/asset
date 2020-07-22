@@ -6,32 +6,23 @@ import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.callConfig.domain.TLcCallStrategyConfig;
 import com.ruoyi.callConfig.service.ITLcCallStrategyConfigService;
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.custom.domain.TLcCustinfo;
-import com.ruoyi.custom.service.ITLcCustinfoService;
 import com.ruoyi.enums.ContactRelaEnum;
-import com.ruoyi.enums.IsNoEnum;
 import com.ruoyi.enums.IsReCallEnum;
 import com.ruoyi.enums.StopCallConditionEnum;
-import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.robot.domain.*;
 import com.ruoyi.robot.enums.FinishedCallStatus;
 import com.ruoyi.robot.enums.LocalRobotTaskStatus;
 import com.ruoyi.robot.enums.TaskStatus;
-import com.ruoyi.robot.mapper.TLcRobotCallAnalyseResultMapper;
-import com.ruoyi.robot.mapper.TLcRobotCallDetailMapper;
-import com.ruoyi.robot.mapper.TLcRobotCallRecordMeteDataMapper;
 import com.ruoyi.robot.service.CallbackService;
 import com.ruoyi.robot.service.ITLcRobotTaskPandectService;
 import com.ruoyi.robot.service.ITLcRobotTaskService;
 import com.ruoyi.robot.service.RobotService;
 import com.ruoyi.robot.utils.RobotMethodUtil;
 import com.ruoyi.robot.utils.RobotResponse;
-import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.task.domain.TLcCallRecord;
 import com.ruoyi.task.domain.TLcTask;
 import com.ruoyi.task.service.ITLcCallRecordService;
 import com.ruoyi.task.service.ITLcTaskService;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,12 +65,23 @@ public class CallbackServiceImpl implements CallbackService {
     public String callCallback(CallCallback callCallback) {
         CallCallback.CallCallbackData data = callCallback.getData();
         CallCallback.CallCallbackData.CallData callData = data.getData();
+        TLcRobotCallRecordMeteData sceneInstance = callData.getSceneInstance();
         // 根据机器人任务id和手机号查询任务列表
-        List<TLcTask> tLcTaskList = this.tLcTaskService.selectTaskListByRobotTaskIdAndPhone(String.valueOf(callData.getSceneInstance().getCallJobId()), callData.getSceneInstance().getCustomerTelephone());
-        if (tLcTaskList == null || tLcTaskList.size() == 0) {
+        List<TLcRobotTask> tLcRobotTaskList = this.tLcRobotTaskService.selectRobotTaskByRobotTaskIdAndPhone(sceneInstance.getCallJobId(), callData.getSceneInstance().getCustomerTelephone());
+        if (tLcRobotTaskList == null || tLcRobotTaskList.size() == 0) {
             return "success";
         }
-        return analyseAndReCall(callData, tLcTaskList);
+        try {
+            // 修改机器人任务明细表数据
+            TLcRobotTask tLcRobotTask = new TLcRobotTask();
+            updateRobotTask(callData, tLcRobotTask);
+            log.info("修改机器人任务表数据成功...任务id{},手机号是{}", sceneInstance.getCallJobId(), sceneInstance.getCustomerTelephone());
+        } catch (Exception e) {
+            log.info("修改机器人任务表数据失败...任务id{},手机号是{}", sceneInstance.getCallJobId(), sceneInstance.getCustomerTelephone());
+            return "error";
+        }
+        return "success";
+//        return analyseAndReCall(callData, tLcTaskList);
     }
 
     /**
@@ -111,8 +113,8 @@ public class CallbackServiceImpl implements CallbackService {
                 tLcRobotTask.setIsRecall(IsReCallEnum.STOP_CALL.getCode());
             }
             // 修改机器人任务明细表数据
-            updateRobotTask(callData, tLcRobotTask);
-            log.info("修改机器人任务表数据成功...任务id{},手机号是{}", sceneInstance.getCallJobId(), sceneInstance.getCustomerTelephone());
+//            updateRobotTask(callData, tLcRobotTask);
+//            log.info("修改机器人任务表数据成功...任务id{},手机号是{}", sceneInstance.getCallJobId(), sceneInstance.getCustomerTelephone());
             // 插入到电催记录表
 //            insertCallRecord(tLcTaskList, callData);
 //            log.info("插入到电催记录表成功...任务id{},手机号是{}", sceneInstance.getCallJobId(), sceneInstance.getCustomerTelephone());
@@ -398,9 +400,10 @@ public class CallbackServiceImpl implements CallbackService {
                 robotService.pullback(LocalRobotTaskStatus.FINISHED.getCode(), data.getCallJobId());
                 // 插入电催记录表
                 this.tLcRobotTaskService.batchInsertCallRecord(data.getCallJobId());
+                log.info("机器人任务id：{}的任务插入点催记录成功", data.getCallJobId());
                 // 修改机器人任务总览表
                 RobotTask taskDetail = this.robotMethodUtil.getTaskDetail(data.getCallJobId());
-                log.info("任务id：{}的任务详情：{}",data.getCallJobId(), JSON.toJSONString(taskDetail));
+                log.info("任务id：{}的任务详情：{}", data.getCallJobId(), JSON.toJSONString(taskDetail));
                 updateRobotTaskPandect(data, taskDetail);
                 log.info("任务状态是已完成，修改任务总览表成功...任务id{}", data.getCallJobId());
             } catch (NumberFormatException e) {

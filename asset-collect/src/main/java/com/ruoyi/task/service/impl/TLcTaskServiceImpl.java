@@ -685,6 +685,11 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         return list;
     }
 
+    @Override
+    public void insertDuncaseAssign(Integer robotTaskId) {
+        this.tLcTaskMapper.insertDuncaseAssign(robotTaskId);
+    }
+
     /**
      * 查询我的任务列表
      *

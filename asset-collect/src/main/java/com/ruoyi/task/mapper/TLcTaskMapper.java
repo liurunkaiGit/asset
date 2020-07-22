@@ -209,4 +209,6 @@ public interface TLcTaskMapper {
     void updateTaskByCaseNoAndImportBatchNoAndOrgId(TLcTask tLcTask);
 
     void updateTaskFromRobotTask(Integer robotTaskId);
+
+    void insertDuncaseAssign(@Param("robotTaskId") Integer robotTaskId);
 }
