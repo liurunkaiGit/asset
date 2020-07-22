@@ -29,4 +29,6 @@ public interface ITLcSelectRecordService {
      * @return
      */
     List<TLcSelectRecord> findSelectRecordByCaseNo(String caseNo);
+
+    List<TLcSelectRecord> findHisSelectRecordByCaseNo(String caseNo);
 }

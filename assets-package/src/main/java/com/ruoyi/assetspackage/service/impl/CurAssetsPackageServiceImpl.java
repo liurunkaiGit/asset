@@ -724,6 +724,11 @@ public class CurAssetsPackageServiceImpl extends BaseController implements ICurA
     }
 
     @Override
+    public List<Map<String,String>> selectHisFreeImportByCaseno(String orgCasno) throws Exception {
+        return this.curAssetsPackageMapper.selectHisFreeImportByCaseno(orgCasno);
+    }
+
+    @Override
     public void updateCloseCase(List<CurAssetsPackage> CurAssetsList) throws Exception {
         this.curAssetsPackageMapper.updateCloseCase(CurAssetsList);
     }

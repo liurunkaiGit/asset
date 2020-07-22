@@ -5,6 +5,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.robot.domain.CallContent;
+import com.ruoyi.robot.domain.PhoneLogInfo;
 import com.ruoyi.robot.domain.TLcRobotTask;
 import com.ruoyi.robot.mapper.TLcRobotTaskMapper;
 import com.ruoyi.robot.service.ITLcRobotTaskService;
@@ -62,94 +63,6 @@ public class TLcRobotTaskServiceImpl extends BaseController implements ITLcRobot
         if (tLcRobotTask.getEndCreateTime() != null) {
             tLcRobotTask.setEndCreateTime(DateUtils.getEndOfDay(tLcRobotTask.getEndCreateTime()));
         }
-//        StringBuilder sb = new StringBuilder();
-//        if (StringUtils.isNoneBlank(tLcRobotTask.getTransfer_type())) {
-//            for (Map.Entry<String, String[]> map : parameterMap.entrySet()) {
-//                if (map.getKey().equals("compareMethod_transfer_type")) {
-//                    List<String> values = Arrays.asList(map.getValue());
-//                    if (values.get(0).equals("equal")) {
-//                        sb.append(" and t.transfer_type = '"+tLcRobotTask.getTransfer_type()+"'");
-//                    }
-//                    if (values.get(0).equals("like")) {
-//                        sb.append(" and t.transfer_type like '%"+tLcRobotTask.getTransfer_type()+"%'");
-//                    }
-//                    break;
-//                }
-//            }
-//        }
-//        if (StringUtils.isNoneBlank(tLcRobotTask.getPhone())) {
-//            for (Map.Entry<String, String[]> map : parameterMap.entrySet()) {
-//                if (map.getKey().equals("compareMethod_phone")) {
-//                    List<String> values = Arrays.asList(map.getValue());
-//                    if (values.get(0).equals("equal")) {
-//                        sb.append(" and t.phone = " + tLcRobotTask.getPhone());
-//                    }
-//                    if (values.get(0).equals("like")) {
-//                        sb.append(" and t.phone like '%"+tLcRobotTask.getPhone()+"%'");
-//                    }
-//                    break;
-//                }
-//            }
-//        }
-//        if (StringUtils.isNoneBlank(tLcRobotTask.getOwner_name())) {
-//            for (Map.Entry<String, String[]> map : parameterMap.entrySet()) {
-//                if (map.getKey().equals("compareMethod_owner_name")) {
-//                    List<String> values = Arrays.asList(map.getValue());
-//                    if (values.get(0).equals("equal")) {
-//                        sb.append(" and t.owner_name = '" + tLcRobotTask.getOwner_name()+"'");
-//                    }
-//                    if (values.get(0).equals("like")) {
-//                        sb.append(" and t.owner_name like '%"+tLcRobotTask.getOwner_name()+"%'");
-//                    }
-//                    break;
-//                }
-//            }
-//        }
-//        if (StringUtils.isNoneBlank(tLcRobotTask.getCur_name())) {
-//            for (Map.Entry<String, String[]> map : parameterMap.entrySet()) {
-//                if (map.getKey().equals("compareMethod_cur_name")) {
-//                    List<String> values = Arrays.asList(map.getValue());
-//                    if (values.get(0).equals("equal")) {
-//                        sb.append(" and t.cur_name = '" + tLcRobotTask.getCur_name()+"'");
-//                    }
-//                    if (values.get(0).equals("like")) {
-//                        sb.append(" and t.cur_name like '%"+tLcRobotTask.getCur_name()+"%'");
-//                    }
-//                    break;
-//                }
-//            }
-//        }
-//        if (tLcRobotTask.getStart_call_len() != null) {
-//            sb.append(" and t.call_len >= " + tLcRobotTask.getStart_call_len());
-//        }
-//        if (tLcRobotTask.getEnd_call_len() != null) {
-//            sb.append(" and t.call_len <= " + tLcRobotTask.getEnd_call_len());
-//        }
-//        if (StringUtils.isNoneBlank(tLcRobotTask.getSpeechCraftName())) {
-//            sb.append(" and t.speech_craft_name = '" + tLcRobotTask.getSpeechCraftName()+"'");
-//        }
-//        if (StringUtils.isNoneBlank(tLcRobotTask.getResult_value_alias())) {
-//            sb.append(" and t.result_value_alias = '" + tLcRobotTask.getResult_value_alias()+"'");
-//        }
-//        if (StringUtils.isNoneBlank(tLcRobotTask.getTask_type())) {
-//            sb.append(" and t.task_type = " + tLcRobotTask.getTask_type());
-//        }
-//        if (tLcRobotTask.getStart_create_time() != null) {
-//            sb.append(" and t.create_time >= '" + DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS,tLcRobotTask.getStart_create_time())+"'");
-//        }
-//        if (tLcRobotTask.getEnd_create_time() != null) {
-//            sb.append(" and t.create_time <= '" + DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS,DateUtils.getEndOfDay(tLcRobotTask.getEnd_create_time()))+"'");
-//        }
-//        if (tLcRobotTask.getStart_call_end_date() != null) {
-//            sb.append(" and t.call_end_date >= '" + DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS,tLcRobotTask.getStart_call_end_date())+"'");
-//        }
-//        if (tLcRobotTask.getEnd_call_end_date() != null) {
-//            sb.append(" and t.call_end_date <= '" + DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS,DateUtils.getEndOfDay(tLcRobotTask.getEnd_call_end_date()))+"'");
-//        }
-//        if (StringUtils.isNoneBlank(sb.toString())) {
-//            tLcRobotTask.setSql(sb.toString());
-//        }
-//        log.info("动态查询的sql是{}", tLcRobotTask.getSql());
         return tLcRobotTaskMapper.selectTLcRobotTaskList(tLcRobotTask);
     }
 
@@ -238,11 +151,6 @@ public class TLcRobotTaskServiceImpl extends BaseController implements ITLcRobot
     }
 
     @Override
-    public TLcRobotTask selectRobotTaskByRobotTaskIdAndPhone(Integer robotTaskId, String customerTelephone) {
-        return this.tLcRobotTaskMapper.selectRobotTaskByRobotTaskIdAndPhone(robotTaskId,customerTelephone);
-    }
-
-    @Override
     public List<TLcRobotTask> selectCallbackFaild(int callJobId) {
         return this.tLcRobotTaskMapper.selectCallbackFaild(callJobId);
     }
@@ -260,5 +168,39 @@ public class TLcRobotTaskServiceImpl extends BaseController implements ITLcRobot
     @Override
     public void updateRobotTaskStatusByRobotTaskId(TLcRobotTask tLcRobotTask) {
         this.tLcRobotTaskMapper.updateRobotTaskStatusByRobotTaskId(tLcRobotTask);
+    }
+
+    @Override
+    public List<TLcRobotTask> selectTLcRobotTaskHisList(TLcRobotTask tLcRobotTask, HttpServletRequest request) {
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        if (tLcRobotTask.getEndCallEndDate() != null) {
+            tLcRobotTask.setEndCallEndDate(DateUtils.getEndOfDay(tLcRobotTask.getEndCallEndDate()));
+        }
+        if (tLcRobotTask.getEndCreateTime() != null) {
+            tLcRobotTask.setEndCreateTime(DateUtils.getEndOfDay(tLcRobotTask.getEndCreateTime()));
+        }
+        return tLcRobotTaskMapper.selectTLcRobotTaskHisList(tLcRobotTask);
+    }
+
+    @Override
+    public TLcRobotTask selectHisTLcRobotTaskById(Long id) {
+        return tLcRobotTaskMapper.selectHisTLcRobotTaskById(id);
+    }
+
+    @Override
+    public List<CallContent>  viewHisCallContent(String id) {
+        TLcRobotTask tLcRobotTask = this.tLcRobotTaskMapper.selectHisTLcRobotTaskById(Long.valueOf(id));
+        List<CallContent> callContentList = JSONObject.parseArray(tLcRobotTask.getCallContent(), CallContent.class);
+        return callContentList;
+    }
+
+    @Override
+    public List<TLcRobotTask> selectRobotTaskByRobotTaskIdAndPhone(Integer callJobId, String customPhone) {
+        return this.tLcRobotTaskMapper.selectRobotTaskByRobotTaskIdAndPhone(callJobId, customPhone);
+    }
+
+    @Override
+    public void batchInsertCallRecord(int callJobId) {
+        this.tLcRobotTaskMapper.batchInsertCallRecord(callJobId);
     }
 }

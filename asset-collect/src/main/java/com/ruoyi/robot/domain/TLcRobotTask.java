@@ -210,6 +210,35 @@ public class TLcRobotTask extends BaseEntity {
      */
     private String freeSQL;
 
+    /**
+     * 电话码键值
+     */
+    @Excel(name = "电话码键值")
+    private String callSign;
+
+    /**
+     * 电话码中文
+     */
+    @Excel(name = "电话码中文")
+    private String callSignValue;
+
+    /**
+     * 修改人
+     */
+    @Excel(name = "修改人")
+    private Long modifyBy;
+
+    /**
+     * 修改时间
+     */
+    @Excel(name = "修改时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date modifyTime;
+
+    /**
+     * 呼入回调时间
+     */
+    @Excel(name = "呼入回调时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date callBackTime;
 
 
     // ====字段动态查询======

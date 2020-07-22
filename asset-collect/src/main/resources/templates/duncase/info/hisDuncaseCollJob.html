@@ -343,7 +343,7 @@
 
     function  repaymentList(caseNo){//读取还款历史信息
         $.post(
-            prefix + "/repaymentList",     // 请求路径url
+            hisDuncasePrefix + "/hisRepaymentList",     // 请求路径url
             {
                 caseNo:caseNo
             }, // 请求参数
@@ -389,7 +389,7 @@
 
     function findAppendInfo(caseNo){//自由导入补充信息
         $.post(
-            curAssetsPrefix + "/selectFreeImportList",     // 请求路径url
+            hisDuncasePrefix + "/selectHisFreeImportList",     // 请求路径url
             {
                 caseNo:caseNo
             }, // 请求参数
@@ -429,7 +429,7 @@
 
     function  selectRecordList(caseNo){//获取查找记录
         $.post(
-            prefix + "/selectRecordList",     // 请求路径url
+            hisDuncasePrefix + "/selectHisRecordList",     // 请求路径url
             {
                 caseNo:caseNo
             }, // 请求参数

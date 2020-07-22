@@ -33,6 +33,11 @@
         <result property="isRecall"    column="is_recall"    />
         <result property="continueDays"    column="continue_days"    />
         <result property="continueFrequency"    column="continue_frequency"    />
+        <result property="callSign"    column="call_sign"    />
+        <result property="callSignValue"    column="call_sign_value"    />
+        <result property="modifyBy"    column="modify_by"    />
+        <result property="modifyTime"    column="modify_time"    />
+        <result property="callBackTime"    column="call_back_time"    />
     </resultMap>
 
     <sql id="selectTLcRobotTaskVo">
@@ -63,7 +68,12 @@
         t.robot,
         t.is_recall,
         t.continue_days,
-        t.continue_frequency
+        t.continue_frequency,
+        t.call_sign,
+        t.call_sign_value,
+        t.modify_by,
+        t.modify_time,
+        t.call_back_time
     </sql>
 
     <sql id="WHERE_COLUMN">
@@ -233,6 +243,11 @@
             <if test="isRecall != null ">is_recall,</if>
             <if test="continueDays != null ">continue_days,</if>
             <if test="continueFrequency != null ">continue_frequency,</if>
+            <if test="callSign != null  and callSign != ''">call_sign,</if>
+            <if test="callSignValue != null  and callSignValue != ''">call_sign_value,</if>
+            <if test="modifyBy != null ">modify_by,</if>
+            <if test="modifyTime != null ">modify_time,</if>
+            <if test="callBackTime != null ">call_back_time,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="taskId != null ">#{taskId},</if>
@@ -262,6 +277,11 @@
             <if test="isRecall != null ">#{isRecall},</if>
             <if test="continueDays != null ">#{continueDays},</if>
             <if test="continueFrequency != null ">#{continueFrequency},</if>
+            <if test="callSign != null  and callSign != ''">#{callSign},</if>
+            <if test="callSignValue != null  and callSignValue != ''">#{callSignValue},</if>
+            <if test="modifyBy != null ">#{modifyBy},</if>
+            <if test="modifyTime != null ">#{modifyTime},</if>
+            <if test="callBackTime != null ">#{callBackTime},</if>
         </trim>
     </insert>
 
@@ -293,7 +313,12 @@
             robot,
             is_recall,
             continue_days,
-            continue_frequency
+            continue_frequency,
+            call_sign,
+            call_sign_value,
+            modify_by,
+            modify_time,
+            call_back_time
         ) VALUES
         <foreach collection="tLcRobotTaskList" item="robotTask" separator=",">
             (
@@ -323,7 +348,12 @@
             #{robotTask.robot},
             #{robotTask.isRecall},
             #{robotTask.continueDays},
-            #{robotTask.continueFrequency}
+            #{robotTask.continueFrequency},
+            #{robotTask.callSign},
+            #{robotTask.callSignValue},
+            #{robotTask.modifyBy},
+            #{robotTask.modifyTime},
+            #{robotTask.callBackTime}
             )
         </foreach>
     </insert>
@@ -358,6 +388,11 @@
             <if test="isRecall != null ">is_recall = #{isRecall},</if>
             <if test="continueDays != null ">continue_days = #{continueDays},</if>
             <if test="continueFrequency != null ">continue_frequency = #{continueFrequency},</if>
+            <if test="callSign != null  and callSign != ''">call_sign = #{callSign},</if>
+            <if test="callSignValue != null  and callSignValue != ''">call_sign_value = #{callSignValue},</if>
+            <if test="modifyBy != null ">modify_by = #{modifyBy},</if>
+            <if test="modifyTime != null ">modify_time = #{modifyTime},</if>
+            <if test="callBackTime != null ">call_back_time = #{callBackTime},</if>
         </trim>
         where id = #{id}
     </update>
@@ -392,6 +427,11 @@
             <if test="isRecall != null ">is_recall = #{isRecall},</if>
             <if test="continueDays != null ">continue_days = #{continueDays},</if>
             <if test="continueFrequency != null ">continue_frequency = #{continueFrequency},</if>
+            <if test="callSign != null  and callSign != ''">call_sign = #{callSign},</if>
+            <if test="callSignValue != null  and callSignValue != ''">call_sign_value = #{callSignValue},</if>
+            <if test="modifyBy != null ">modify_by = #{modifyBy},</if>
+            <if test="modifyTime != null ">modify_time = #{modifyTime},</if>
+            <if test="callBackTime != null ">call_back_time = #{callBackTime},</if>
         </trim>
         where robot_tast_id = #{robotTastId} AND phone = #{phone}
     </update>
@@ -453,8 +493,68 @@
         AND t.call_status IS NULL
     </select>
 
+    <select id="selectTLcRobotTaskHisList" parameterType="com.ruoyi.robot.domain.TLcRobotTask" resultMap="TLcRobotTaskResult">
+        SELECT
+        t.case_no as caseNo,
+        <include refid="selectTLcRobotTaskVo"/>
+        FROM t_lc_robot_task_his t
+        WHERE 1=1
+        <if test="orgId != null">
+            and t.org_id = #{orgId}
+        </if>
+        and (1=1
+        <if test="caseNo != null  and caseNo != ''">
+            and t.case_no = #{caseNo}
+        </if>
+        <if test="taskId != null ">
+            and t.task_id = #{taskId}
+        </if>
+        <if test="robotTastId != null ">
+            and t.robot_tast_id = #{robotTastId}
+        </if>
+        <if test="robotTaskStatus != null  and robotTaskStatus != ''">
+            and t.robot_task_status = #{robotTaskStatus}
+        </if>
+        <if test="callStatus != null  and callStatus != ''">
+            and t.call_status = #{callStatus}
+        </if>
+        <if test="freeSQL != null  and freeSQL != ''">
+            ${freeSQL}
+        </if>
+        )
+        ORDER BY t.create_time DESC
+    </select>
+
+    <select id="selectHisTLcRobotTaskById" resultType="com.ruoyi.robot.domain.TLcRobotTask">
+        SELECT
+        <include refid="selectTLcRobotTaskVo"/>
+        FROM t_lc_robot_task_his t
+        where id = #{id}
+    </select>
+
     <update id="updateRobotTaskStatusByRobotTaskId" parameterType="com.ruoyi.robot.domain.TLcRobotTask">
         update t_lc_robot_task set robot_task_status = #{robotTaskStatus} where robot_tast_id = #{robotTastId}
+    </update>
+
+    <update id="batchInsertCallRecord" parameterType="java.lang.Integer">
+        INSERT INTO t_lc_call_record (
+            call_radio_location,
+            contact_name,
+            phone,
+            contact_relation,
+            call_start_time,
+            call_end_time,
+            call_len,
+            call_sign,
+            call_result,
+            case_no,
+            create_time,
+            create_by,
+            remark,
+            agent_name
+        )
+        select rt.call_radio,rt.cur_name,rt.phone,1,rt.call_start_date,rt.call_end_date,rt.call_len,rt.call_sign,rt.call_sign_value,t.case_no,rt.call_back_time,-1,rt.call_content,"-1"
+        from t_lc_robot_task rt,t_lc_task t where rt.robot_tast_id = t.robot_task_id and rt.phone = t.phone and rt.robot_tast_id = #{robotTaskId}
     </update>
 
 </mapper>

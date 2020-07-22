@@ -207,4 +207,6 @@ public interface TLcTaskMapper {
     void updateTLcTaskBySendRobotBatchNo(TLcTask tLcTask);
 
     void updateTaskByCaseNoAndImportBatchNoAndOrgId(TLcTask tLcTask);
+
+    void updateTaskFromRobotTask(Integer robotTaskId);
 }

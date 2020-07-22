@@ -89,8 +89,6 @@ public interface ITLcRobotTaskService {
 
     TLcRobotTask selectRobotTaskByRobotTaskIdAndTaskId(Integer robotTaskId, Long taskId);
 
-    TLcRobotTask selectRobotTaskByRobotTaskIdAndPhone(Integer callJobId, String customerTelephone);
-
     List<TLcRobotTask> selectCallbackFaild(int callJobId);
 
     void batchAddRobotTask(List<TLcRobotTask> tLcRobotTaskList);
@@ -98,4 +96,14 @@ public interface ITLcRobotTaskService {
     void updateTLcRobotTaskByRobotTaskIdAndPhone(TLcRobotTask tLcRobotTask);
 
     void updateRobotTaskStatusByRobotTaskId(TLcRobotTask tLcRobotTask);
+
+    List<TLcRobotTask> selectTLcRobotTaskHisList(TLcRobotTask tLcRobotTask, HttpServletRequest request);
+
+    TLcRobotTask selectHisTLcRobotTaskById(Long id);
+
+    List<CallContent> viewHisCallContent(String id);
+
+    List<TLcRobotTask> selectRobotTaskByRobotTaskIdAndPhone(Integer callJobId, String customPhone);
+
+    void batchInsertCallRecord(int callJobId);
 }

@@ -1,6 +1,5 @@
 package com.ruoyi.robot.controller;
 
-import com.ruoyi.columnQuery.domain.TLcColumnQuery;
 import com.ruoyi.columnQuery.service.ITLcColumnQueryService;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
@@ -9,13 +8,11 @@ import com.ruoyi.common.core.page.PageDomain;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.page.TableSupport;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.common.enums.TableEnum;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.robot.domain.CallContent;
 import com.ruoyi.robot.domain.TLcRobotCallRecordMeteData;
 import com.ruoyi.robot.domain.TLcRobotTask;
-import com.ruoyi.robot.enums.LocalRobotTaskStatus;
 import com.ruoyi.robot.service.ITLcRobotCallRecordMeteDataService;
 import com.ruoyi.robot.service.ITLcRobotTaskService;
 import com.ruoyi.robot.service.RobotService;
@@ -36,14 +33,14 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @Description: 机器人controller
+ * @Description: 机器人历史呼叫明细controller
  * @author: liurunkai
  * @Date: 2020/2/7 16:57
  */
 @Slf4j
 @Controller
-@RequestMapping("/collect/robot")
-public class RobotController extends BaseController {
+@RequestMapping("/robot/his")
+public class RobotHisController extends BaseController {
 
     private String prefix = "robot";
     private String taskPrefix = "task";
@@ -57,22 +54,22 @@ public class RobotController extends BaseController {
     @Autowired
     private DataPermissionUtil dataPermissionUtil;
 
-    @RequiresPermissions("collect:robot:view")
+    @RequiresPermissions("robot:his:view")
     @GetMapping(value = "/view")
-    public String toView(HttpServletRequest request, ModelMap modelMap) {
+    public String toView(ModelMap modelMap) {
         modelMap.put("orgId", ShiroUtils.getSysUser().getOrgId());
-        return prefix + "/robot";
+        return prefix + "/robotHis";
     }
 
     /**
      * 查询机器人任务列表
      */
-    @RequiresPermissions("collect:robot:list")
+    @RequiresPermissions("robot:his:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(TLcRobotTask tLcRobotTask, HttpServletRequest request) {
         startPage();
-        List<TLcRobotTask> tLcRobotTasks = this.tLcRobotTaskService.selectTLcRobotTaskList(tLcRobotTask, request);
+        List<TLcRobotTask> tLcRobotTasks = this.tLcRobotTaskService.selectTLcRobotTaskHisList(tLcRobotTask, request);
         return getDataTable(tLcRobotTasks);
     }
 
@@ -85,20 +82,9 @@ public class RobotController extends BaseController {
     @ResponseBody
     public AjaxResult export(TLcRobotTask tLcRobotTask, HttpServletRequest request) {
         startPage();
-        List<TLcRobotTask> tLcRobotTasks = this.tLcRobotTaskService.selectTLcRobotTaskList(tLcRobotTask, request);
+        List<TLcRobotTask> tLcRobotTasks = this.tLcRobotTaskService.selectTLcRobotTaskHisList(tLcRobotTask, request);
         ExcelUtil<TLcRobotTask> util = new ExcelUtil<TLcRobotTask>(TLcRobotTask.class);
         return util.exportExcel(tLcRobotTasks, "robotTask");
-    }
-
-    /**
-     * 从机器人任务列表中拉回
-     */
-    @RequiresPermissions("robot:pandect:pullback")
-    @GetMapping("/pullback")
-    @ResponseBody
-    public AjaxResult pullback(String robotTaskIds) {
-        robotService.pullback(robotTaskIds, LocalRobotTaskStatus.PULL_BACK.getCode());
-        return AjaxResult.success();
     }
 
     /**
@@ -120,70 +106,6 @@ public class RobotController extends BaseController {
     public TableDataInfo viewCollectRecord(TLcRobotCallRecordMeteData callRecordMeteData) {
         List<TLcRobotCallRecordMeteData> callRecordMeteDataList = this.callRecordMeteDataService.selectTLcRobotCallRecordMeteDataList(callRecordMeteData);
         return getDataTable(callRecordMeteDataList);
-    }
-
-    /**
-     * 启动
-     * 可以启动的任务：未开始、人工牛暂停；
-     * 可以暂停的任务：调度中、进行中、自动暂停、排队中；
-     * 可以停止的任务：未开始、调度中、进行中、人工暂停、系统暂停、排队中
-     */
-    @RequiresPermissions("robot:pandect:start")
-    @GetMapping("/start")
-    @ResponseBody
-    public AjaxResult start(String robotTaskIds) {
-        robotService.start(robotTaskIds);
-        return AjaxResult.success();
-    }
-
-    /**
-     * 暂停
-     * 可以启动的任务：未开始、人工暂停；
-     * 可以暂停的任务：调度中、进行中、自动暂停、排队中；
-     * 可以停止的任务：未开始、调度中、进行中、人工暂停、系统暂停、排队中
-     */
-    @RequiresPermissions("robot:pandect:pause")
-    @GetMapping("/pause")
-    @ResponseBody
-    public AjaxResult pause(String robotTaskIds) {
-        robotService.pause(robotTaskIds);
-        return AjaxResult.success();
-    }
-
-    /**
-     * 停止
-     * 可以启动的任务：未开始、人工牛暂停；
-     * 可以暂停的任务：调度中、进行中、自动暂停、排队中；
-     * 可以停止的任务：未开始、调度中、进行中、人工暂停、系统暂停、排队中
-     */
-    @RequiresPermissions("robot:pandect:stop")
-    @GetMapping("/stop")
-    @ResponseBody
-    public AjaxResult stop(String robotTaskIds) {
-        robotService.stop(robotTaskIds);
-        return AjaxResult.success();
-    }
-
-    @RequiresPermissions("collect:hand:callback")
-    @GetMapping("/handCallback")
-    @ResponseBody
-    public AjaxResult handCallback(String ids) {
-        robotService.handCallback(ids);
-        return AjaxResult.success();
-    }
-
-    /**
-     * 删除
-     * 可以启动的任务：未开始、人工牛暂停；
-     * 可以暂停的任务：调度中、进行中、自动暂停、排队中；
-     * 可以停止的任务：未开始、调度中、进行中、人工暂停、系统暂停、排队中
-     */
-    @RequiresPermissions("collect:robot:delete")
-    @GetMapping("/delete")
-    @ResponseBody
-    public AjaxResult delete(String robotTaskIds) {
-        robotService.delete(robotTaskIds);
-        return AjaxResult.success();
     }
 
     /**
@@ -233,20 +155,6 @@ public class RobotController extends BaseController {
      * 跳转到查看通话内容页面
      *
      * @param id
-     * @param modelMap
-     * @return
-     */
-    @GetMapping("/toViewRobotCallContent")
-    public String toViewCallContent(String id, ModelMap modelMap) {
-        modelMap.put("id", id);
-        return prefix + "/viewRobotCallContent";
-    }
-
-
-    /**
-     * 跳转到查看通话内容页面
-     *
-     * @param id
      * @return
      */
     @ResponseBody
@@ -263,35 +171,50 @@ public class RobotController extends BaseController {
      * @return
      */
     @ResponseBody
-    @PostMapping("/viewCallContentFromRobot")
+    @PostMapping("/viewHisCallContentFromRobot")
     public TableDataInfo viewCallContentFromRobot(String id) {
         TableDataInfo rspData = new TableDataInfo();
-        List<CallContent> callContentList = this.tLcRobotTaskService.viewCallContent(id);
-        PageDomain pageDomain = TableSupport.buildPageRequest();
-        if (null == pageDomain.getPageNum() || null == pageDomain.getPageSize()) {
-            rspData.setRows(callContentList);
+        List<CallContent> callContentList = this.tLcRobotTaskService.viewHisCallContent(id);
+        if (callContentList != null && callContentList.size() > 0) {
+            PageDomain pageDomain = TableSupport.buildPageRequest();
+            if (null == pageDomain.getPageNum() || null == pageDomain.getPageSize()) {
+                rspData.setRows(callContentList);
+                rspData.setTotal(callContentList.size());
+                return rspData;
+            }
+            Integer pageNum = (pageDomain.getPageNum() - 1) * 10;
+            Integer pageSize = pageDomain.getPageNum() * 10;
+            if (pageSize > callContentList.size()) {
+                pageSize = callContentList.size();
+            }
+            rspData.setRows(callContentList.subList(pageNum, pageSize));
             rspData.setTotal(callContentList.size());
-            return rspData;
         }
-        Integer pageNum = (pageDomain.getPageNum() - 1) * 10;
-        Integer pageSize = pageDomain.getPageNum() * 10;
-        if (pageSize > callContentList.size()) {
-            pageSize = callContentList.size();
-        }
-        rspData.setRows(callContentList.subList(pageNum, pageSize));
-        rspData.setTotal(callContentList.size());
         return rspData;
     }
 
     /**
-     * 跳转签入页面
+     * 录音播放
      */
     @GetMapping("/recordAudio")
     public String recordAudio(String id, ModelMap mmap) {
-        TLcRobotTask tLcRobotTask = tLcRobotTaskService.selectTLcRobotTaskById(Long.valueOf(id));
+        TLcRobotTask tLcRobotTask = tLcRobotTaskService.selectHisTLcRobotTaskById(Long.valueOf(id));
         String callRadioLocation = tLcRobotTask.getCallRadio();
         mmap.put("callRadioLocation", callRadioLocation);
         return taskPrefix + "/recordAudio";
+    }
+
+    /**
+     * 跳转到查看通话内容页面
+     *
+     * @param id
+     * @param modelMap
+     * @return
+     */
+    @GetMapping("/toViewHisRobotCallContent")
+    public String toViewHisRobotCallContent(String id, ModelMap modelMap) {
+        modelMap.put("id", id);
+        return prefix + "/viewHisRobotCallContent";
     }
 
     /**
@@ -305,13 +228,5 @@ public class RobotController extends BaseController {
         rspData.setTotal(total);
         return rspData;
     }
-
-//    @ResponseBody
-//    @PostMapping("/initColumnQuery")
-//    public TableDataInfo initColumnQuery() {
-//        TLcColumnQuery tLcColumnQuery = TLcColumnQuery.builder().orgId(ShiroUtils.getSysUser().getOrgId()).tableName(TableEnum.ROBOT_TASK.getTableName()).build();
-//        List<TLcColumnQuery> columnQueryList = this.columnQueryService.selectTLcColumnQueryList(tLcColumnQuery);
-//        return getDataTable(columnQueryList);
-//    }
 
 }

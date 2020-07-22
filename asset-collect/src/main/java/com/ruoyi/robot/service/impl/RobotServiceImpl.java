@@ -91,49 +91,35 @@ public class RobotServiceImpl implements RobotService {
                 this.robotTaskPandectService.updateTLcRobotTaskPandect(robotTaskPandect);
                 // 根据机器人任务id查询机器人任务明细
                 List<TLcRobotTask> robotTaskList = this.tLcRobotTaskMapper.selectListByRobotTaskId(Integer.valueOf(robotTaskId));
-                this.pullback(robotTaskList, robotTaskStatus, Integer.valueOf(robotTaskId));
+                this.pullback(robotTaskStatus, Integer.valueOf(robotTaskId));
             }
         }
     }
 
     @Override
-    public void pullback(List<TLcRobotTask> robotTaskList, Integer robotTaskStatus, Integer robotTaskId) {
-        if (robotTaskList != null && robotTaskList.size() > 0) {
-//            for (TLcRobotTask tLcRobotTask : robotTaskList) {
-//                // 修改机器人任务表数据
-//                tLcRobotTask.setRobotTaskStatus(robotTaskStatus);
-//                this.tLcRobotTaskMapper.updateTLcRobotTask(tLcRobotTask);
-//                // 修改任务表数据
-//                List<TLcTask> tLcTaskList = this.tLcTaskService.selectTaskListByRobotTaskIdAndPhone(String.valueOf(tLcRobotTask.getRobotTastId()), tLcRobotTask.getPhone());
-//                if (tLcTaskList != null && tLcTaskList.size() > 0) {
-//                    for (TLcTask tLcTask : tLcTaskList) {
-//                        tLcTask.setTaskType(TaskTypeEnum.PULL_BACK_ROBOT.getCode());
-//                        tLcTask.setAllotType(AllocatTaskEnum.MANUAL.getAllocatCode());
-//                        taskList.add(tLcTask);
-//                    }
-//                }
-//            }
-            // 修改机器人任务明细
-            TLcRobotTask tLcRobotTask = new TLcRobotTask();
-            tLcRobotTask.setRobotTastId(robotTaskId).setRobotTaskStatus(robotTaskStatus);
-            this.tLcRobotTaskMapper.updateTLcRobotTaskByRobotTaskId(tLcRobotTask);
-            log.info("拉回操作时修改机器人任务明细表数据成功");
-            // 修改任务类型和分配类型
-            TLcTask tLcTask = new TLcTask();
-            tLcTask.setRobotTaskId(robotTaskId).setTaskType(TaskTypeEnum.PULL_BACK_ROBOT.getCode()).setAllotType(AllocatTaskEnum.MANUAL.getAllocatCode());
-            this.tLcTaskMapper.updateTLcTaskByRobotTaskId(tLcTask);
-            log.info("拉回成功，修改任务表数据成功");
-            // 插入案件历史轨迹
+    public void pullback(Integer robotTaskStatus, Integer robotTaskId) {
+        // 修改机器人任务明细
+        TLcRobotTask tLcRobotTask = new TLcRobotTask();
+        tLcRobotTask.setRobotTastId(robotTaskId).setRobotTaskStatus(robotTaskStatus);
+        this.tLcRobotTaskMapper.updateTLcRobotTaskByRobotTaskId(tLcRobotTask);
+        log.info("拉回操作时修改机器人任务明细表数据成功");
+        // 修改任务类型和分配类型
+//            TLcTask tLcTask = new TLcTask();
+//            tLcTask.setRobotTaskId(robotTaskId).setTaskType(TaskTypeEnum.PULL_BACK_ROBOT.getCode()).setAllotType(AllocatTaskEnum.MANUAL.getAllocatCode());
+//            this.tLcTaskMapper.updateTLcTaskByRobotTaskId(tLcTask);
+        // 任务状态回调时，修改任务类型、分配类型、最近跟进时间、最近电话码及电话码中文
+        this.tLcTaskMapper.updateTaskFromRobotTask(robotTaskId);
+        log.info("拉回成功，修改任务表数据成功");
+        // 插入案件历史轨迹
+        List<TLcTask> taskList = this.tLcTaskMapper.selectTaskListByRobotTaskId(robotTaskId);
+        if (taskList != null && taskList.size() > 0) {
             SysUser sysUser = ShiroUtils.getSysUser();
             if (sysUser == null) {
                 sysUser = new SysUser();
                 sysUser.setUserId(-1L);
                 sysUser.setUserName("机器人");
             }
-            List<TLcTask> taskList = this.tLcTaskMapper.selectTaskListByRobotTaskId(robotTaskId);
-            if (taskList != null && taskList.size() > 0) {
-                this.tLcTaskService.insertDuncaseAssign(taskList, sysUser);
-            }
+            this.tLcTaskService.insertDuncaseAssign(taskList, sysUser);
         }
     }
 

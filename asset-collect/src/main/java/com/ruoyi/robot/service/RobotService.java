@@ -29,11 +29,10 @@ public interface RobotService {
     void pullback(String robotTaskIds, Integer robotTaskStatus);
 
     /**
-     * 根据任务集合任务拉回
+     * 任务拉回
      *
-     * @param stopCallRobotTaskList
      */
-    void pullback(List<TLcRobotTask> stopCallRobotTaskList, Integer robotTaskStatus, Integer robotTaskId);
+    void pullback(Integer robotTaskStatus, Integer robotTaskId);
 
     /**
      * 启动任务

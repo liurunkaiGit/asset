@@ -64,4 +64,6 @@ public interface ITLcRobotTaskPandectService {
     void updateRobotTaskPandectStatusByRobotTaskId(TLcRobotTaskPandect robotTaskPandect);
 
     List<TLcRobotTaskPandect> selectRobotTaskPandectByRobotTaskStatus(Integer robotTaskStatus);
+
+    List<TLcRobotTaskPandect> selectTLcRobotTaskPandectHisList(TLcRobotTaskPandect tLcRobotTaskPandect);
 }

@@ -20,7 +20,7 @@ public interface CallbackService {
      */
     String callCallback(CallCallback callCallback);
 
-    void updateRobotTask(CallCallback.CallCallbackData.CallData callData);
+//    void updateRobotTask(CallCallback.CallCallbackData.CallData callData);
 
     String taskStatusCallback(TaskStatusCallback taskStatusCallback);
 }

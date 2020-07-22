@@ -31,6 +31,7 @@ import com.ruoyi.task.domain.TLcCallRecord;
 import com.ruoyi.task.domain.TLcTask;
 import com.ruoyi.task.service.ITLcCallRecordService;
 import com.ruoyi.task.service.ITLcTaskService;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,11 +114,11 @@ public class CallbackServiceImpl implements CallbackService {
             updateRobotTask(callData, tLcRobotTask);
             log.info("修改机器人任务表数据成功...任务id{},手机号是{}", sceneInstance.getCallJobId(), sceneInstance.getCustomerTelephone());
             // 插入到电催记录表
-            insertCallRecord(tLcTaskList, callData);
-            log.info("插入到电催记录表成功...任务id{},手机号是{}", sceneInstance.getCallJobId(), sceneInstance.getCustomerTelephone());
+//            insertCallRecord(tLcTaskList, callData);
+//            log.info("插入到电催记录表成功...任务id{},手机号是{}", sceneInstance.getCallJobId(), sceneInstance.getCustomerTelephone());
             // 根据机器人任务id和手机号修改任务表和案件表中的最近跟进时间及电话码
-            updateTaskByRobotTaskIdAndPhone(sceneInstance);
-            log.info("根据机器人任务id和手机号修改任务表中的最近跟进时间及电话码成功...");
+//            updateTaskByRobotTaskIdAndPhone(sceneInstance);
+//            log.info("根据机器人任务id和手机号修改任务表中的最近跟进时间及电话码成功...");
         } catch (Exception e) {
             log.error("呼入回调接口分析通话是否重复拨打发生异常，exception is {}", e);
             return "error";
@@ -138,7 +139,6 @@ public class CallbackServiceImpl implements CallbackService {
                 JSONArray jsonArray = new JSONArray();
                 JSONArray callContentJsonArray = createCllConten(jsonArray, callData);
                 TLcCallRecord tLcCallRecord = TLcCallRecord.builder().callRadioLocation(sceneInstance.getLuyinOssUrl())
-                        .certificateNo(tLcTask.getCertificateNo())
                         .contactName(tLcTask.getCustomName())
                         .phone(sceneInstance.getCustomerTelephone())
                         .contactRelation(ContactRelaEnum.SELE.getCode())
@@ -179,30 +179,30 @@ public class CallbackServiceImpl implements CallbackService {
      *
      * @param callData
      */
-    @Override
-    public void updateRobotTask(CallCallback.CallCallbackData.CallData callData) {
-        TLcRobotCallRecordMeteData sceneInstance = callData.getSceneInstance();
-        List<TLcRobotCallAnalyseResult> taskResultList = callData.getTaskResult();
-        String resultValueAlias = taskResultList.stream()
-                .filter(taskResult -> StringUtils.isNotEmpty(taskResult.getResultValueAlias()))
-                .map(taskResult -> taskResult.getResultValueAlias())
-                .collect(Collectors.joining(","));
-        // 创建对话详情
-        JSONArray jsonArray = new JSONArray();
-        JSONArray callContentJsonArray = createCllConten(jsonArray, callData);
-        // 修改机器人任务
-        TLcRobotTask tLcRobotTask = this.tLcRobotTaskService.selectRobotTaskByRobotTaskIdAndPhone(sceneInstance.getCallJobId(), sceneInstance.getCustomerTelephone());
-        tLcRobotTask.setCallEndDate(sceneInstance.getEndTime())
-                .setCallStartDate(sceneInstance.getStartTime())
-                .setRobotTastId(sceneInstance.getCallJobId())
-                .setRobotTaskStatus(LocalRobotTaskStatus.FINISHED.getCode())
-                .setResultValueAlias(resultValueAlias)
-                .setCallStatus(String.valueOf(sceneInstance.getFinishStatus()))
-                .setCallLen(String.valueOf(sceneInstance.getDuration()))
-                .setCallContent(callContentJsonArray.toJSONString())
-                .setCallRadio(sceneInstance.getLuyinOssUrl());
-        this.tLcRobotTaskService.updateTLcRobotTask(tLcRobotTask);
-    }
+//    @Override
+//    public void updateRobotTask(CallCallback.CallCallbackData.CallData callData) {
+//        TLcRobotCallRecordMeteData sceneInstance = callData.getSceneInstance();
+//        List<TLcRobotCallAnalyseResult> taskResultList = callData.getTaskResult();
+//        String resultValueAlias = taskResultList.stream()
+//                .filter(taskResult -> StringUtils.isNotEmpty(taskResult.getResultValueAlias()))
+//                .map(taskResult -> taskResult.getResultValueAlias())
+//                .collect(Collectors.joining(","));
+//        // 创建对话详情
+//        JSONArray jsonArray = new JSONArray();
+//        JSONArray callContentJsonArray = createCllConten(jsonArray, callData);
+//        // 修改机器人任务
+//        TLcRobotTask tLcRobotTask = this.tLcRobotTaskService.selectRobotTaskByRobotTaskIdAndPhone(sceneInstance.getCallJobId(), sceneInstance.getCustomerTelephone());
+//        tLcRobotTask.setCallEndDate(sceneInstance.getEndTime())
+//                .setCallStartDate(sceneInstance.getStartTime())
+//                .setRobotTastId(sceneInstance.getCallJobId())
+//                .setRobotTaskStatus(LocalRobotTaskStatus.FINISHED.getCode())
+//                .setResultValueAlias(resultValueAlias)
+//                .setCallStatus(String.valueOf(sceneInstance.getFinishStatus()))
+//                .setCallLen(String.valueOf(sceneInstance.getDuration()))
+//                .setCallContent(callContentJsonArray.toJSONString())
+//                .setCallRadio(sceneInstance.getLuyinOssUrl());
+//        this.tLcRobotTaskService.updateTLcRobotTask(tLcRobotTask);
+//    }
 
     /**
      * 创建对话详情
@@ -241,7 +241,7 @@ public class CallbackServiceImpl implements CallbackService {
         // 判断是否达到停止呼叫任务的条件
         boolean stopFlag = isStopCllContion(callStrategyConfig, taskResultList);
         //说明通话结果【客户意向等级】没有达到策略里面配置的停止呼叫任务条件
-        TLcRobotTask tLcRobotTask = this.tLcRobotTaskService.selectRobotTaskByRobotTaskIdAndPhone(sceneInstance.getCallJobId(), customPhone);
+        TLcRobotTask tLcRobotTask = this.tLcRobotTaskService.selectRobotTaskByRobotTaskIdAndPhone(sceneInstance.getCallJobId(), customPhone).get(0);
         if (!stopFlag) {
             //连续呼叫天数没有达到上限
             Integer phoneContinueCallDays = tLcRobotTask.getContinueDays();
@@ -296,6 +296,10 @@ public class CallbackServiceImpl implements CallbackService {
                 .setRobotTaskStatus(LocalRobotTaskStatus.FINISHED.getCode())
                 .setResultValueAlias(resultValueAlias)
                 .setCallStatus(String.valueOf(sceneInstance.getFinishStatus()))
+                .setCallSign(FinishedCallStatus.getSignByCode(sceneInstance.getFinishStatus()))
+                .setCallSignValue(FinishedCallStatus.getDescByCode(sceneInstance.getFinishStatus()))
+                .setModifyTime(new Date())
+                .setCallBackTime(new Date())
                 .setCallLen(String.valueOf(sceneInstance.getDuration()))
                 .setCallContent(callContentJsonArray.toJSONString())
                 .setCallRadio(sceneInstance.getLuyinOssUrl());
@@ -370,9 +374,9 @@ public class CallbackServiceImpl implements CallbackService {
 //                    }
 //                }
                 // 查询当天任务状态为已完成并且是继续呼叫的任务 // 查询当前任务下状态为已完成并且是继续呼叫的任务
-                TLcRobotTask tLcRobotTask = new TLcRobotTask();
+//                TLcRobotTask tLcRobotTask = new TLcRobotTask();
 //                tLcRobotTask.setIsRecall(IsReCallEnum.RE_CALL.getCode());
-                tLcRobotTask.setRobotTastId(data.getCallJobId());
+//                tLcRobotTask.setRobotTastId(data.getCallJobId());
                 // 不能查当天的，因为任务有可能隔天打完，将当前任务需要继续呼叫的任务重新创建并启动任务
 //                List<TLcRobotTask> robotTaskList = this.tLcRobotTaskService.selectTLcRobotTaskList(tLcRobotTask);
 //                List<TLcTask> taskList = robotTaskList.stream().map(robotTask -> this.tLcTaskService.selectTLcTaskById(robotTask.getTaskId())).collect(Collectors.toList());
@@ -384,12 +388,16 @@ public class CallbackServiceImpl implements CallbackService {
 //                }
                 // 查询停止呼叫的任务并拉回
 //                tLcRobotTask.setIsRecall(IsReCallEnum.STOP_CALL.getCode());
-                List<TLcRobotTask> stopCallRobotTaskList = this.tLcRobotTaskService.selectTLcRobotTaskList(tLcRobotTask);
-                log.info("任务状态是已完成，需要拉回的任务明细有{}条，任务id{}", stopCallRobotTaskList.size(), data.getCallJobId());
-                if (stopCallRobotTaskList != null && stopCallRobotTaskList.size() > 0) {
-                    robotService.pullback(stopCallRobotTaskList, LocalRobotTaskStatus.FINISHED.getCode(), data.getCallJobId());
-                    log.info("任务状态是已完成，任务拉回成功...任务id{}", data.getCallJobId());
-                }
+//                List<TLcRobotTask> stopCallRobotTaskList = this.tLcRobotTaskService.selectTLcRobotTaskList(tLcRobotTask);
+//                log.info("任务状态是已完成，需要拉回的任务明细有{}条，任务id{}", stopCallRobotTaskList.size(), data.getCallJobId());
+//                if (stopCallRobotTaskList != null && stopCallRobotTaskList.size() > 0) {
+//                    robotService.pullback(LocalRobotTaskStatus.FINISHED.getCode(), data.getCallJobId());
+//                    log.info("任务状态是已完成，任务拉回成功...任务id{}", data.getCallJobId());
+//                }
+                // 任务拉回
+                robotService.pullback(LocalRobotTaskStatus.FINISHED.getCode(), data.getCallJobId());
+                // 插入电催记录表
+                this.tLcRobotTaskService.batchInsertCallRecord(data.getCallJobId());
                 // 修改机器人任务总览表
                 RobotTask taskDetail = this.robotMethodUtil.getTaskDetail(data.getCallJobId());
                 log.info("任务id：{}的任务详情：{}",data.getCallJobId(), JSON.toJSONString(taskDetail));

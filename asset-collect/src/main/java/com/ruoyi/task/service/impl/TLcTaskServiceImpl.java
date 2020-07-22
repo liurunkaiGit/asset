@@ -665,6 +665,24 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         return list;
     }
 
+    @Override
+    public List<AssetsRepayment> viewHisRepayHis(String caseNo) {
+        log.info("查询还款明细参数：" + caseNo);
+        List<AssetsRepayment> list = new ArrayList<>();
+        //根据机构案件号查询还款明细
+        CurAssetsRepaymentPackage curAssetsRepaymentPackage = new CurAssetsRepaymentPackage();
+        curAssetsRepaymentPackage.setOrgCasno(caseNo);
+        List<CurAssetsRepaymentPackage> resultList = curAssetsRepaymentPackageService.selectHisCurAssetsRepaymentPackageList(curAssetsRepaymentPackage);
+        if (resultList.size() > 0) {
+            for (CurAssetsRepaymentPackage repayment : resultList) {
+                String jsonStr = JSON.toJSONString(repayment);
+                AssetsRepayment AssetsRepayment = JSONObject.parseObject(jsonStr, AssetsRepayment.class);
+                list.add(AssetsRepayment);
+            }
+        }
+        return list;
+    }
+
     /**
      * 查询我的任务列表
      *

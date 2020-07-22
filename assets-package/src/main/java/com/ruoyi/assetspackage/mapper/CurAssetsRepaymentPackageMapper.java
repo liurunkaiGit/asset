@@ -127,5 +127,5 @@ public interface CurAssetsRepaymentPackageMapper
     int batchInsertDuncaseAssign(@Param("duncaseAssignList") List<DuncaseAssign> duncaseAssignList);
 
 
-
+    List<CurAssetsRepaymentPackage> selectHisCurAssetsRepaymentPackageList(CurAssetsRepaymentPackage curAssetsRepaymentPackage);
 }

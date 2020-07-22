@@ -314,4 +314,6 @@ public interface ITLcTaskService {
     List<TLcTask> selectTaskListBySendRobotBatchNo(String sendRobotBatchNo);
 
     void updateTLcTaskBySendRobotBatchNo(TLcTask tLcTask);
+
+    List<AssetsRepayment> viewHisRepayHis(String caseNo);
 }

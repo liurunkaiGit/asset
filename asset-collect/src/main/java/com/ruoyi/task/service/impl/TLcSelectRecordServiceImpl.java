@@ -43,4 +43,9 @@ public class TLcSelectRecordServiceImpl implements ITLcSelectRecordService {
         return this.tLcSelectRecordMapper.findSelectRecordByCaseNo(caseNo);
     }
 
+    @Override
+    public List<TLcSelectRecord> findHisSelectRecordByCaseNo(String caseNo) {
+        return this.tLcSelectRecordMapper.findHisSelectRecordByCaseNo(caseNo);
+    }
+
 }

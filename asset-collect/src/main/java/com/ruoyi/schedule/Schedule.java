@@ -1,27 +1,16 @@
 package com.ruoyi.schedule;
 
-import com.ruoyi.assetspackage.domain.OrgPackage;
-import com.ruoyi.assetspackage.service.IOrgPackageService;
 import com.ruoyi.callConfig.domain.TLcCallStrategyConfig;
 import com.ruoyi.callConfig.service.ITLcCallStrategyConfigService;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.config.AppConfig;
-import com.ruoyi.custom.domain.TLcCustinfo;
-import com.ruoyi.custom.service.ITLcCustinfoService;
 import com.ruoyi.duncase.domain.TLcDuncaseActionRecord;
 import com.ruoyi.duncase.service.ITLcDuncaseActionRecordService;
 import com.ruoyi.enums.BusinessSceneEnum;
 import com.ruoyi.enums.IsReCallEnum;
 import com.ruoyi.enums.TaskStatusEnum;
-import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.orgSpeechConf.domain.TLcOrgSpeechcraftConf;
 import com.ruoyi.orgSpeechConf.service.ITLcOrgSpeechcraftConfService;
-import com.ruoyi.report.domain.TLcReportCaseContact;
-import com.ruoyi.report.domain.TLcReportDayProcess;
-import com.ruoyi.report.domain.TLcReportRecovery;
-import com.ruoyi.report.service.ITLcReportCaseContactService;
-import com.ruoyi.report.service.ITLcReportDayProcessService;
-import com.ruoyi.report.service.ITLcReportRecoveryService;
 import com.ruoyi.robot.domain.TLcRobotTask;
 import com.ruoyi.robot.enums.LocalRobotTaskStatus;
 import com.ruoyi.robot.service.ITLcRobotTaskService;
@@ -38,9 +27,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -59,8 +49,6 @@ public class Schedule {
     @Autowired
     private ITLcTaskService tLcTaskService;
     @Autowired
-    private IOrgPackageService orgPackageService;
-    @Autowired
     private ITLcCallStrategyConfigService callStrategyConfigService;
     @Autowired
     private RobotMethodUtil robotMethodUtil;
@@ -69,15 +57,7 @@ public class Schedule {
     @Autowired
     private ITLcDuncaseActionRecordService duncaseActionRecordService;
     @Autowired
-    private ITLcReportRecoveryService reportRecoveryService;
-    @Autowired
-    private ITLcReportDayProcessService reportDayProcessService;
-    @Autowired
-    private ITLcReportCaseContactService caseContactService;
-    @Autowired
     private ITLcRobotTaskService tLcRobotTaskService;
-    @Autowired
-    private ITLcCustinfoService tLcCustinfoService;
     @Autowired
     private ISysDictDataService sysDictDataService;
     @Autowired
@@ -141,81 +121,6 @@ public class Schedule {
         }
         localCacheUtil.addPhoneToStart(LocalCacheKeyUtils.taskWaitStartList(), new ArrayList<>());
         log.info("完成执行定时启动机器人任务...");
-    }
-
-    /**
-     * 创建机器人任务
-     *
-     * @param tLcTask
-     * @param robotTaskId
-     * @return
-     */
-    private TLcRobotTask createRobotTask(TLcTask tLcTask, Integer robotTaskId, String speechCraftName) {
-        TLcCustinfo custinfo = this.tLcCustinfoService.findCustByCaseNo(tLcTask.getCaseNo(),tLcTask.getOrgId(),tLcTask.getImportBatchNo());
-        TLcRobotTask tLcRobotTask = new TLcRobotTask();
-        tLcRobotTask.setTaskId(tLcTask.getId())
-                .setRobotTastId(robotTaskId)
-                .setTaskName(tLcTask.getCustomName() + tLcTask.getCaseNo())
-                .setOwnerName(tLcTask.getOwnerName())
-                .setTransferType(tLcTask.getTransferType())
-                .setArrearsTotal(tLcTask.getArrearsTotal())
-                .setSpeechCraftName(speechCraftName)
-                .setTaskStatus(tLcTask.getTaskStatus())
-                .setTaskType(tLcTask.getTaskType())
-                .setOrgId(tLcTask.getOrgId())
-                .setOrgName(tLcTask.getOrgName())
-                .setCurName(tLcTask.getCustomName())
-                .setPhone(custinfo.getPhone())
-                .setCreateBy(String.valueOf(ShiroUtils.getUserId()));
-        return tLcRobotTask;
-    }
-
-    /**
-     * 每天晚上0点定时生成报表任务
-     */
-    @Scheduled(cron = "${cron.createReport}")
-    private void createReport() {
-        if (!appConfig.getCreateReport()) {
-            log.info("定时生成报表任务任务未开启");
-            return;
-        }
-        log.info("开始定时生成报表任务任务");
-        // 查找所有的委托方
-        List<OrgPackage> orgPackageList = this.orgPackageService.selectOrgPackageList(new OrgPackage());
-        // 查询回收率报表对应的数据
-        Map<String, Object> recoveryParam = new HashMap<>();
-        recoveryParam.put("startDate", DateUtils.getFirstDay());
-        recoveryParam.put("day", 0);
-        // 生成每个机构的回收率报表数据和合计数据
-        if (orgPackageList != null && orgPackageList.size() > 0) {
-            orgPackageList.stream().forEach(orgPackage -> {
-                recoveryParam.put("orgId",orgPackage.getDeptId());
-                List<TLcReportRecovery> reportRecoveryList = this.reportRecoveryService.selectRecoveryByPayment(recoveryParam);
-                reportRecoveryList.stream().forEach(reportRecovery -> this.reportRecoveryService.insertTLcReportRecovery(reportRecovery));
-                log.info("{}生成回收率报表成功,{}",orgPackage.getOrgName(),DateUtils.getNowDate());
-            });
-        }
-        // 查询可联案件渗透率报表数据
-        Map<String, Object> contactParam = new HashMap<>();
-        contactParam.put("startDate", DateUtils.getFirstDay());
-        contactParam.put("day", 0);
-        List<TLcReportCaseContact> caseContactList = this.caseContactService.selectCaseContactList(contactParam);
-        caseContactList.stream().forEach(caseContact -> this.caseContactService.insertTLcReportCaseContact(caseContact));
-        log.info("生成案件可联率报表成功,{}",DateUtils.getNowDate());
-        // 查询每日过程指标数据
-        Map<String, Object> processParam = new HashMap<>();
-        processParam.put("startDate", DateUtils.getStartOfDay(new Date()));
-        processParam.put("endDate", DateUtils.getEndOfDay(new Date()));
-        processParam.put("day", 0);
-        if (orgPackageList != null && orgPackageList.size() > 0) {
-            orgPackageList.stream().forEach(orgPackage -> {
-                processParam.put("orgId",orgPackage.getDeptId());
-                List<TLcReportDayProcess> reportDayProcessList = this.reportDayProcessService.selectDayProcess(processParam);
-                reportDayProcessList.stream().forEach(reportRecovery -> this.reportDayProcessService.insertTLcReportDayProcess(reportRecovery));
-                log.info("{}生成每日过程指标报表成功,{}",orgPackage.getOrgName(),DateUtils.getNowDate());
-            });
-        }
-        log.info("完成定时生成报表任务任务...");
     }
 
 }
