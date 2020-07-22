@@ -102,4 +102,9 @@ public class TLcRobotTaskPandectServiceImpl implements ITLcRobotTaskPandectServi
     public List<TLcRobotTaskPandect> selectRobotTaskPandectByRobotTaskStatus(Integer robotTaskStatus) {
         return this.tLcRobotTaskPandectMapper.selectRobotTaskPandectByRobotTaskStatus(robotTaskStatus);
     }
+
+    @Override
+    public List<TLcRobotTaskPandect> selectTLcRobotTaskPandectHisList(TLcRobotTaskPandect tLcRobotTaskPandect) {
+        return tLcRobotTaskPandectMapper.selectTLcRobotTaskPandectHisList(tLcRobotTaskPandect);
+    }
 }

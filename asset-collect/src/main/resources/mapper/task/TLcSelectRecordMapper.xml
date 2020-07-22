@@ -23,6 +23,10 @@
         select id, case_no,  contact_relation, search_type, validate_status, other_remark, create_time, create_by, content, obj_name, create_time, user_name,other_contact_relation from t_lc_select_record
     </sql>
 
+    <sql id="selectHisTLcSelectRecordVo">
+        select id, case_no,  contact_relation, search_type, validate_status, other_remark, create_time, create_by, content, obj_name, create_time, user_name,other_contact_relation from t_lc_select_record_his
+    </sql>
+
     <insert id="insertTLcSelectRecord" parameterType="com.ruoyi.task.domain.TLcSelectRecord" useGeneratedKeys="true" keyProperty="id">
         insert into t_lc_select_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -57,6 +61,12 @@
 
     <select id="findSelectRecordByCaseNo" parameterType="java.lang.String" resultMap="TLcSelectRecordResult">
         <include refid="selectTLcSelectRecordVo"/>
+        WHERE case_no = #{caseNo}
+        ORDER BY create_time desc
+    </select>
+
+    <select id="findHisSelectRecordByCaseNo" resultType="com.ruoyi.task.domain.TLcSelectRecord">
+        <include refid="selectHisTLcSelectRecordVo"/>
         WHERE case_no = #{caseNo}
         ORDER BY create_time desc
     </select>

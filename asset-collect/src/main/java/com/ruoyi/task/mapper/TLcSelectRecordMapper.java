@@ -32,5 +32,5 @@ public interface TLcSelectRecordMapper {
     List<TLcSelectRecord> findSelectRecordByCaseNo(@Param("caseNo") String caseNo);
 
 
-
+    List<TLcSelectRecord> findHisSelectRecordByCaseNo(@Param("caseNo") String caseNo);
 }

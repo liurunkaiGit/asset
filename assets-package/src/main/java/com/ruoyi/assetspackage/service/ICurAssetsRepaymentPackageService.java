@@ -129,4 +129,5 @@ public interface ICurAssetsRepaymentPackageService
 
     public Map<String, String> checkData(HttpServletRequest request,String importBatchNo)throws Exception;
 
+    List<CurAssetsRepaymentPackage> selectHisCurAssetsRepaymentPackageList(CurAssetsRepaymentPackage curAssetsRepaymentPackage);
 }

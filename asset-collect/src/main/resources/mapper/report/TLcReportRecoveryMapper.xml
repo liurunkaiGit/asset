@@ -138,199 +138,6 @@
         </foreach>
     </delete>
 
-    <select id="selectRecoveryByPayment" parameterType="java.util.Map" resultMap="TLcReportRecoveryResult">
-        SELECT
-			(
-				SELECT
-					date_sub(curdate(), INTERVAL #{day} DAY)
-			) AS report_date,
-			t.user_group AS seat_group,
-			t.user_id AS seat_num,
-			t.user_name AS seat_name,
-			t.dept_id AS org_id,
-			t2.collecting_case_num AS colling_case_num,
-			t2.collecting_total_money AS colling_case_money,
-			t3.confired_case_num AS confirmed_recycle_case_num,
-			t3.confired_total_money AS confirmed_recycle_case_money,
-			t4.unconfired_case_num AS unconfirmed_recycle_case_num,
-			t4.unconfired_total_money AS unconfirmed_recycle_case_money,
-			t3.confired_case_num / t2.collecting_case_num AS case_recovery,
-			t3.confired_total_money / t2.collecting_total_money AS money_recovery
-		FROM
-			(
-				SELECT
-					su.user_group,
-					su.user_id,
-					su.user_name,
-					su.dept_id
-				FROM
-					org_package o
-				LEFT JOIN sys_user su ON su.dept_id = o.dept_id
-				WHERE
-					su.user_id != 1
-				GROUP BY
-					su.user_id,
-					o.dept_id
-			) t
-		LEFT JOIN (
-			SELECT
-				count(1) AS collecting_case_num,
-				t.owner_id,
-				t.create_time,
-				sum(t.arrears_total) AS collecting_total_money
-			FROM
-				t_lc_task t
-			WHERE
-				t.allot_type = 1
-			AND t.task_status = 2
-			GROUP BY
-				t.owner_id,
-				t.org_id
-		) t2 ON t.user_id = t2.owner_id
-		LEFT JOIN (
-			SELECT
-				count(1) AS confired_case_num,
-				t.owner_id,
-				sum(t.arrears_total) AS confired_total_money
-			FROM
-				t_lc_task t
-			LEFT JOIN cur_assets_repayment_package p ON p.org_casNo = t.case_no
-			WHERE
-				t.allot_type = 1
-			AND p.is_exit_collect = 1
-			GROUP BY
-				t.owner_id,
-				t.org_id
-		) t3 ON t.user_id = t3.owner_id
-		LEFT JOIN (
-			SELECT
-				count(1) AS unconfired_case_num,
-				t.owner_id,
-				sum(t.arrears_total) AS unconfired_total_money
-			FROM
-				t_lc_task t
-			LEFT JOIN t_lc_duncase_action_record r ON r.id IN (
-				SELECT
-					max(id)
-				FROM
-					t_lc_duncase_action_record
-				GROUP BY
-					task_id
-			)
-			AND t.id = r.task_id
-			WHERE
-				t.allot_type = 1
-			AND r.action_code = 'ALPA'
-			GROUP BY
-				t.owner_id,
-				t.org_id
-		) t4 ON t.user_id = t4.owner_id
-		WHERE
-			1 = 1
-		<if test="orgId != null and orgId != ''">
-			AND t.dept_id = #{orgId}
-		</if>
-		<if test="startDate != null">
-			and t2.create_time <![CDATA[>=]]> #{startDate}
-		</if>
-		UNION ALL
-            SELECT
-			(
-				SELECT
-					date_sub(curdate(), INTERVAL #{day} DAY)
-			) AS report_date,
-			'合计' AS seat_group,
-			NULL,
-			NULL,
-			t.dept_id AS org_id,
-			sum(t2.collecting_case_num) AS colling_case_num,
-			sum(t2.collecting_total_money) AS colling_case_money,
-			sum(t3.confired_case_num) AS confirmed_recycle_case_num,
-			sum(t3.confired_total_money) AS confirmed_recycle_case_money,
-			sum(t4.unconfired_case_num) AS unconfirmed_recycle_case_num,
-			sum(t4.unconfired_total_money) AS unconfirmed_recycle_case_money,
-			sum(t3.confired_case_num) / sum(t2.collecting_case_num) AS case_recovery,
-			sum(t3.confired_total_money) / sum(t2.collecting_total_money) AS money_recovery
-		FROM
-			(
-				SELECT
-					su.user_group,
-					su.user_id,
-					su.user_name,
-					su.dept_id
-				FROM
-					org_package o
-				LEFT JOIN sys_user su ON su.dept_id = o.dept_id
-				WHERE
-					su.user_id != 1
-				GROUP BY
-					su.user_id,
-					o.dept_id
-			) t
-		LEFT JOIN (
-			SELECT
-				count(1) AS collecting_case_num,
-				t.owner_id,
-				t.create_time,
-				sum(t.arrears_total) AS collecting_total_money
-			FROM
-				t_lc_task t
-			WHERE
-				t.allot_type = 1
-			AND t.task_status = 2
-			GROUP BY
-				t.owner_id,
-				t.org_id
-		) t2 ON t.user_id = t2.owner_id
-		LEFT JOIN (
-			SELECT
-				count(1) AS confired_case_num,
-				t.owner_id,
-				sum(t.arrears_total) AS confired_total_money
-			FROM
-				t_lc_task t
-			LEFT JOIN cur_assets_repayment_package p ON p.org_casNo = t.case_no
-			WHERE
-				t.allot_type = 1
-			AND p.is_exit_collect = 1
-			GROUP BY
-				t.owner_id,
-				t.org_id
-		) t3 ON t.user_id = t3.owner_id
-		LEFT JOIN (
-			SELECT
-				count(1) AS unconfired_case_num,
-				t.owner_id,
-				sum(t.arrears_total) AS unconfired_total_money
-			FROM
-				t_lc_task t
-			LEFT JOIN t_lc_duncase_action_record r ON r.id IN (
-				SELECT
-					max(id)
-				FROM
-					t_lc_duncase_action_record
-				GROUP BY
-					task_id
-			)
-			AND t.id = r.task_id
-			WHERE
-				t.allot_type = 1
-			AND r.action_code = 'ALPA'
-			GROUP BY
-				t.owner_id,
-				t.org_id
-		) t4 ON t.user_id = t4.owner_id
-		WHERE
-			1 = 1
-		<if test="orgId != null and orgId != ''">
-			AND t.dept_id = #{orgId}
-		</if>
-		<if test="startDate != null">
-			and t2.create_time <![CDATA[>=]]> #{startDate}
-		</if>
-		GROUP BY t.dept_id
-    </select>
-
 	<select id="selectRecovery" parameterType="java.util.Map" resultMap="TLcReportRecoveryResult">
 		SELECT
 			(
@@ -345,8 +152,6 @@
 			t2.collecting_total_money AS colling_case_money,
 			t3.confired_case_num AS confirmed_recycle_case_num,
 			t3.confired_total_money AS confirmed_recycle_case_money,
-			t4.unconfired_case_num AS unconfirmed_recycle_case_num,
-			t4.unconfired_total_money AS unconfirmed_recycle_case_money,
 			t3.confired_case_num / t2.collecting_case_num AS case_recovery,
 			t3.confired_total_money / t2.collecting_total_money AS money_recovery
 		FROM
@@ -365,55 +170,30 @@
 				t.owner_id = su.user_id
 			AND	t.allot_type = 1
 			AND t.task_status = 2
+			AND t.task_type NOT IN (10, 11, 12, 18, 19)
 			AND t.org_id = #{orgId}
 			GROUP BY
 				t.owner_id,
 				t.org_id
 		) t2
 		LEFT JOIN (
-					SELECT
-						count(1) AS confired_case_num,
-						t.owner_id,
-						sum(t.arrears_total) AS confired_total_money
-					FROM
-						t_lc_task t
-					LEFT JOIN cur_assets_package p ON p.org_casNo = t.case_no and t.import_batch_no = p.import_batch_no and t.org_id = p.org_id
-					WHERE
-						t.allot_type = 1
-					AND p.is_exit_collect = 1
-					AND t.org_id = #{orgId}
-					GROUP BY
-						t.owner_id,
-						t.org_id
-				) t3 ON t2.owner_id = t3.owner_id
-		LEFT JOIN (
 			SELECT
-				count(1) AS unconfired_case_num,
+				count(1) AS confired_case_num,
 				t.owner_id,
-				sum(t.arrears_total) AS unconfired_total_money
+				sum(t.arrears_total) AS confired_total_money
 			FROM
 				t_lc_task t
-			LEFT JOIN t_lc_duncase_action_record r ON r.id IN (
-				SELECT
-					max(id)
-				FROM
-					t_lc_duncase_action_record
-				GROUP BY
-					task_id
-			)
-			AND t.id = r.task_id
+			LEFT JOIN cur_assets_package p ON p.org_casNo = t.case_no and t.import_batch_no = p.import_batch_no and t.org_id = p.org_id
 			WHERE
 				t.allot_type = 1
-				AND t.org_id = #{orgId}
-			AND r.action_code = 'ALPA'
+			AND p.is_exit_collect = 1
+			AND p.ajhssj <![CDATA[>=]]> #{startDate}
+			AND t.org_id = #{orgId}
 			GROUP BY
 				t.owner_id,
 				t.org_id
-		) t4 ON t2.owner_id = t4.owner_id
-		WHERE
-			1 = 1
-		AND t2.org_id = #{orgId}
-		AND t2.create_time <![CDATA[>=]]> #{startDate}
+		) t3 ON t2.owner_id = t3.owner_id
+		WHERE 1 = 1
 		UNION ALL
 		SELECT
 			(
@@ -428,8 +208,6 @@
 			sum(t2.collecting_total_money) AS colling_case_money,
 			sum(t3.confired_case_num) AS confirmed_recycle_case_num,
 			sum(t3.confired_total_money) AS confirmed_recycle_case_money,
-			sum(t4.unconfired_case_num) AS unconfirmed_recycle_case_num,
-			sum(t4.unconfired_total_money) AS unconfirmed_recycle_case_money,
 			sum(t3.confired_case_num) / sum(t2.collecting_case_num) AS case_recovery,
 			sum(t3.confired_total_money) / sum(t2.collecting_total_money) AS money_recovery
 		FROM
@@ -445,8 +223,9 @@
 				t_lc_task t
 			WHERE
 				t.allot_type = 1
-			AND t.org_id = #{orgId}
 			AND t.task_status = 2
+			AND t.task_type NOT IN (10, 11, 12, 18, 19)
+			AND t.org_id = #{orgId}
 			GROUP BY
 				t.owner_id,
 				t.org_id
@@ -458,45 +237,17 @@
 				sum(t.arrears_total) AS confired_total_money
 			FROM
 				t_lc_task t
-			LEFT JOIN cur_assets_repayment_package p ON p.org_casNo = t.case_no and t.import_batch_no = p.import_batch_no and t.org_id = p.org_id
+			LEFT JOIN cur_assets_package p ON p.org_casNo = t.case_no and t.import_batch_no = p.import_batch_no and t.org_id = p.org_id
 			WHERE
 				t.allot_type = 1
 			AND p.is_exit_collect = 1
+			AND p.ajhssj <![CDATA[>=]]> #{startDate}
 			AND t.org_id = #{orgId}
 			GROUP BY
 				t.owner_id,
 				t.org_id
 		) t3 ON t2.owner_id = t3.owner_id
-		LEFT JOIN (
-			SELECT
-				count(1) AS unconfired_case_num,
-				t.owner_id,
-				sum(t.arrears_total) AS unconfired_total_money
-			FROM
-				t_lc_task t
-			LEFT JOIN t_lc_duncase_action_record r ON r.id IN (
-				SELECT
-					max(id)
-				FROM
-					t_lc_duncase_action_record
-				GROUP BY
-					task_id
-			)
-			AND t.id = r.task_id
-			WHERE
-				t.allot_type = 1
-			AND r.action_code = 'ALPA'
-			AND t.org_id = #{orgId}
-			GROUP BY
-				t.owner_id,
-				t.org_id
-		) t4 ON t2.owner_id = t4.owner_id
-		WHERE
-			1 = 1
-		AND t2.org_id = #{orgId}
-		AND t2.create_time <![CDATA[>=]]> #{startDate}
-		GROUP BY
-			t2.org_id
+		WHERE 1 = 1
 	</select>
 
 </mapper>

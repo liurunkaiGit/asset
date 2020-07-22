@@ -40,6 +40,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, robot_task_id, task_name, speech_craft_name_id, speech_craft_name, robot_task_status, org_id, org_name, robot, call_total_count, call_done_count, call_called_count, call_rejected_count, call_unavailable_count, call_from_unavailable_count, create_by, create_time, task_start_time, task_end_time, call_busy_count, call_miss_count, call_blank_count, call_closed_count, call_down_count, call_black_count, call_fail_count, call_loss_count, call_overdue_count, phone_num from t_lc_robot_task_pandect
     </sql>
 
+    <sql id="selectTLcRobotTaskPandectHisVo">
+        select id, robot_task_id, task_name, speech_craft_name_id, speech_craft_name, robot_task_status, org_id, org_name, robot, call_total_count, call_done_count, call_called_count, call_rejected_count, call_unavailable_count, call_from_unavailable_count, create_by, create_time, task_start_time, task_end_time, call_busy_count, call_miss_count, call_blank_count, call_closed_count, call_down_count, call_black_count, call_fail_count, call_loss_count, call_overdue_count, phone_num from t_lc_robot_task_pandect_his
+    </sql>
+
     <select id="selectTLcRobotTaskPandectList" parameterType="TLcRobotTaskPandect" resultMap="TLcRobotTaskPandectResult">
         <include refid="selectTLcRobotTaskPandectVo"/>
         <where>  
@@ -210,5 +214,47 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectTLcRobotTaskPandectVo"/>
         where robot_task_status = #{robotTaskStatus}
     </select>
-    
+
+    <select id="selectTLcRobotTaskPandectHisList" parameterType="TLcRobotTaskPandect" resultMap="TLcRobotTaskPandectResult">
+        <include refid="selectTLcRobotTaskPandectHisVo"/>
+        <where>
+            <if test="robotTaskId != null "> and robot_task_id = #{robotTaskId}</if>
+            <if test="taskName != null  and taskName != ''"> and task_name like concat('%', #{taskName}, '%')</if>
+            <if test="speechCraftNameId != null "> and speech_craft_name_id = #{speechCraftNameId}</if>
+            <if test="speechCraftName != null  and speechCraftName != ''"> and speech_craft_name like concat('%', #{speechCraftName}, '%')</if>
+            <if test="robotTaskStatus != null  and robotTaskStatus != ''"> and robot_task_status = #{robotTaskStatus}</if>
+            <if test="orgId != null "> and org_id = #{orgId}</if>
+            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+            <if test="robot != null  and robot != ''"> and robot = #{robot}</if>
+            <if test="callTotalCount != null "> and call_total_count = #{callTotalCount}</if>
+            <if test="callDoneCount != null "> and call_done_count = #{callDoneCount}</if>
+            <if test="callCalledCount != null "> and call_called_count = #{callCalledCount}</if>
+            <if test="callRejectedCount != null "> and call_rejected_count = #{callRejectedCount}</if>
+            <if test="callUnavailableCount != null "> and call_unavailable_count = #{callUnavailableCount}</if>
+            <if test="callFromUnavailableCount != null "> and call_from_unavailable_count = #{callFromUnavailableCount}</if>
+            <if test="callBusyCount != null "> and call_busy_count = #{callBusyCount}</if>
+            <if test="callMissCount != null "> and call_miss_count = #{callMissCount}</if>
+            <if test="startCreateTime != null">
+                and create_time <![CDATA[>=]]> #{startCreateTime}
+            </if>
+            <if test="endCreateTime != null">
+                and create_time <![CDATA[<=]]> #{endCreateTime}
+            </if>
+            <if test="startTaskStartTime != null">
+                and task_start_time <![CDATA[>=]]> #{startTaskStartTime}
+            </if>
+            <if test="endTaskStartTime != null">
+                and task_start_time <![CDATA[<=]]> #{endTaskStartTime}
+            </if>
+            <if test="startTaskEndTime != null">
+                and task_end_time <![CDATA[>=]]> #{startTaskEndTime}
+            </if>
+            <if test="endTaskEndTime != null">
+                and task_end_time <![CDATA[<=]]> #{endTaskEndTime}
+            </if>
+            <if test="phoneNum != null "> and phone_num = #{phoneNum}</if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
 </mapper>

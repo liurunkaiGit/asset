@@ -1608,6 +1608,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by create_time desc
     </select>
 
+    <select id="selectHisFreeImportByCaseno" resultType="java.util.Map">
+        SET SESSION group_concat_max_len = 10240;
+        SELECT group_concat(value order by create_time desc) value,import_batch_no importBatchNo
+        from free_import_his
+        WHERE value != '{}' and org_casno=#{orgCasno}
+        group by import_batch_no
+        order by create_time desc
+    </select>
+
 
     <update id="updateCloseCase" parameterType="java.util.List">
         <foreach collection="CurAssetsList" item="CurAssets" separator=";">

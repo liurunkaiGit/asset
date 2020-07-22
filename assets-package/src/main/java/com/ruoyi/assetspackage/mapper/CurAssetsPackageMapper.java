@@ -153,4 +153,5 @@ public interface CurAssetsPackageMapper
 
     public void updateNoCloseCase(@Param(value="CurAssetsList")List<CurAssetsPackage> CurAssetsList)throws Exception;
 
+    List<Map<String, String>> selectHisFreeImportByCaseno(String orgCasno);
 }

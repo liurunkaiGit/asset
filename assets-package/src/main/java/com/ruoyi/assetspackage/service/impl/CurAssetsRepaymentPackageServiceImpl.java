@@ -96,6 +96,20 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
     }
 
     /**
+     * 查询资产还款列表
+     *
+     * @param curAssetsRepaymentPackage 资产还款
+     * @return 资产还款
+     */
+    @Override
+    public List<CurAssetsRepaymentPackage> selectHisCurAssetsRepaymentPackageList(CurAssetsRepaymentPackage curAssetsRepaymentPackage) {
+        if (curAssetsRepaymentPackage.getEndDate() != null) {
+            curAssetsRepaymentPackage.setEndDate(DateUtils.getEndOfDay(curAssetsRepaymentPackage.getEndDate()));
+        }
+        return curAssetsRepaymentPackageMapper.selectHisCurAssetsRepaymentPackageList(curAssetsRepaymentPackage);
+    }
+
+    /**
      * 新增资产还款
      *
      * @param curAssetsRepaymentPackage 资产还款

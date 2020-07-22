@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('【请填写功能名称】列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <input type="hidden" id="orgId" name="orgId" th:value="${orgId}">
+                            <li>
+                                <p>任务id：</p>
+                                <input type="text" name="robotTaskId"/>
+                            </li>
+                            <li>
+                                <p>任务名称：</p>
+                                <input type="text" name="taskName"/>
+                            </li>
+                            <li>
+                                <p>任务状态：</p>
+                                <select name="robotTaskStatus">
+                                    <option value="">所有</option>
+                                    <option th:value="1">外呼中</option>
+                                    <option th:value="2">已完成</option>
+                                    <option th:value="4">暂停</option>
+                                    <option th:value="6">停止</option>
+                                    <option th:value="50">拉回</option>
+                                </select>
+                            </li>
+                            <li class="select-time">
+                                <p>创建时间：</p>
+                                <input type="text" class="time-input" id="startCreateTime" placeholder="开始时间" name="startCreateTime"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endCreateTime" placeholder="结束时间" name="endCreateTime"/>
+                            </li>
+                            <li class="select-time">
+                                <p>结束时间：</p>
+                                <input type="text" class="time-input" id="startTaskEndTime" placeholder="开始时间" name="startTaskEndTime"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTaskEndTime" placeholder="结束时间" name="endTaskEndTime"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <!--<a class="btn btn-success" onclick="$.table.exportExcel()" shiro:hasPermission="robot:pandect:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+                <a class="btn btn-success" onclick="pullback()" shiro:hasPermission="robot:pandect:pullback">
+                    <i class="fa fa-download"></i> 拉回
+                </a>
+                <a class="btn btn-success" onclick="start()" shiro:hasPermission="robot:pandect:start">
+                    <i class="fa fa-download"></i> 启动
+                </a>
+                <a class="btn btn-success" onclick="pause()" shiro:hasPermission="robot:pandect:pause">
+                    <i class="fa fa-download"></i> 暂停
+                </a>-->
+                <!--<a class="btn btn-success" onclick="stop()" shiro:hasPermission="robot:pandect:stop">
+                    <i class="fa fa-download"></i> 停止
+                </a>-->
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('ruoyi:pandect:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('ruoyi:pandect:remove')}]];
+        var prefix = ctx + "robot/pandect/his";
+        var robotPrefix = ctx + "collect/robot";
+        var taskPrefix = ctx + "collect/task";
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                // createUrl: prefix + "/add",
+                createUrl: prefix + "/pullback",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                clickToSelect: true,
+                modalName: "【请填写功能名称】",
+                columns: [{
+                    checkbox: true
+                },
+                /*{
+                    field : 'id', 
+                    title : '主键id',
+                    visible: false
+                },*/
+                {
+                    field : 'robotTaskId', 
+                    title : '任务id'
+                },
+                {
+                    field : 'taskName', 
+                    title : '任务名称'
+                },
+                /*{
+                    field : 'speechCraftNameId', 
+                    title : '机器人话术id'
+                },*/
+                {
+                    field : 'speechCraftName', 
+                    title : '话术名称'
+                },
+                {
+                    field : 'robotTaskStatus',
+                    title : '任务状态',
+                    formatter: function(value, row, index) {
+                        if (value == 1) {
+                            return '外呼中';
+                        } else if (value == 2) {
+                            return '已完成';
+                        } else if (value == 4) {
+                            return '暂停';
+                        } else if (value == 6) {
+                            return '停止';
+                        } else if (value == 50) {
+                            return '拉回';
+                        }
+                    }
+                },
+                {
+                    field : 'orgName', 
+                    title : '机构名称'
+                },
+                /*{
+                    field : 'robot', 
+                    title : '所属机器人'
+                },*/
+                {
+                    field : 'callTotalCount', 
+                    title : '号码总数'
+                },
+                    {
+                        field : 'phoneNum',
+                        title : '外呼总数'
+                    },
+                {
+                    field : 'callDoneCount', 
+                    title : '已完成'
+                },
+                    {
+                        title : '已完成百分比',
+                        formatter: function (value, row, index) {
+                            if (row.robotTaskStatus == 2) {
+                                return "100.00%";
+                            }
+                            if (row.callDoneCount == 0 || row.callDoneCount == null || row.callDoneCount == '') {
+                                return "0.00%";
+                            }
+                            return ((row.callDoneCount / row.phoneNum) * 100).toFixed(2) + "%";
+                        }
+                    },
+                {
+                    field : 'callCalledCount', 
+                    title : '已接听'
+                },
+                    {
+                        field : 'callBusyCount',
+                        title : '占线'
+                    },
+                {
+                    field : 'callRejectedCount', 
+                    title : '拒接'
+                },
+                    {
+                    field : 'callMissCount',
+                    title : '未接'
+                },
+                {
+                    field : 'callUnavailableCount', 
+                    title : '无法接通'
+                },
+                /*{
+                    field : 'callFromUnavailableCount', 
+                    title : '号码不可用'
+                },*/{
+                        field : 'callFailCount',
+                        title : '外呼失败'
+                    },
+                    {
+                        field : 'callBlankCount',
+                        title : '空号'
+                    },
+                    {
+                        field : 'callClosedCount',
+                        title : '关机'
+                    },
+                    {
+                        field : 'callDownCount',
+                        title : '停机'
+                    },
+                    {
+                        field : 'callBlackCount',
+                        title : '黑名单'
+                    },
+                    {
+                        field : 'callFailCount',
+                        title : '外呼失败'
+                    },
+                    {
+                        field : 'callLossCount',
+                        title : '呼损'
+                    },
+                    {
+                        field : 'callOverdueCount',
+                        title : '主叫欠费'
+                    }/*,
+                    {
+                        field : 'taskStartTime',
+                        title : '任务开始时间'
+                    },
+                    {
+                        field : 'taskEndTime',
+                        title : '任务结束时间'
+                    }*/]
+            };
+            $.table.init(options);
+        });
+
+        /*拉回*/
+        function pullback(){
+            // 获取列表中选中数据的第一列的值
+            var rows = $.table.selectFirstColumns(); // 返回的是一个数组
+            //alert(rows.join());   // join()函数将数组分成以逗号分隔的字符串
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            // var array = $.table.selectColumns("robotTaskStatus");
+            // for (var i = 0; i < array.length; i++) {
+            //     if(array[i] != 4 && array[i] != 6) {
+            //         $.modal.alertWarning("只有暂停和停止的任务可以拉回");
+            //         return;
+            //     }
+            // }
+            var robotTaskIds = $.table.selectColumns("robotTaskId"); // 返回的是一个数组
+            $.modal.confirm("确认要对选中的" + rows.length + "条数据进行操作吗?", function() {
+                var pullbackUrl = robotPrefix + '/pullback?robotTaskIds='+robotTaskIds.join();
+                $.operate.submit(pullbackUrl);
+            });
+        }
+
+        /*启动*/
+        function start(){
+            // 获取列表中选中数据的第一列的值
+            var rows = $.table.selectFirstColumns(); // 返回的是一个数组
+            //alert(rows.join());   // join()函数将数组分成以逗号分隔的字符串
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            var array = $.table.selectColumns("robotTaskStatus");
+            for (var i = 0; i < array.length; i++) {
+                if(array[i] != 4) {
+                    $.modal.alertWarning("只有暂停和未开始的任务可以启动");
+                    return;
+                }
+            }
+            var robotTaskIds = $.table.selectColumns("robotTaskId"); // 返回的是一个数组
+            $.modal.confirm("确认要对选中的" + rows.length + "条数据启动吗?", function() {
+                var startUrl = robotPrefix + '/start?robotTaskIds='+robotTaskIds.join();
+                $.operate.submit(startUrl);
+            });
+        }
+
+        /*暂停*/
+        function pause(){
+            // 获取列表中选中数据的第一列的值
+            var rows = $.table.selectFirstColumns(); // 返回的是一个数组
+            //alert(rows.join());   // join()函数将数组分成以逗号分隔的字符串
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            /*var array = $.table.selectColumns("robotTaskStatus");
+            for (var i = 0; i < array.length; i++) {
+                if(array[i] != 1) {
+                    $.modal.alertWarning("只有调度中、进行中、自动暂停、排队中的任务可以暂停");
+                    return;
+                }
+            }*/
+            var robotTaskIds = $.table.selectColumns("robotTaskId"); // 返回的是一个数组
+            $.modal.confirm("确认要对选中的" + rows.length + "条数据暂停吗?", function() {
+                var pauseUrl = robotPrefix + '/pause?robotTaskIds='+robotTaskIds.join();
+                $.operate.submit(pauseUrl);
+            });
+        }
+
+        /*停止*/
+        function stop(){
+            // 获取列表中选中数据的第一列的值
+            var rows = $.table.selectFirstColumns(); // 返回的是一个数组
+            //alert(rows.join());   // join()函数将数组分成以逗号分隔的字符串
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            /*var array = $.table.selectColumns("robotTaskStatus");
+            for (var i = 0; i < array.length; i++) {
+                if(array[i] != 1 && array[i] != 4) {
+                    $.modal.alertWarning("只有未开始、调度中、进行中、人工暂停、系统暂停、排队中的任务可以停止");
+                    return;
+                }
+            }*/
+            var robotTaskIds = $.table.selectColumns("robotTaskId"); // 返回的是一个数组
+            $.modal.confirm("确认要对选中的" + rows.length + "条数据停止吗?", function() {
+                var stopUrl = robotPrefix + '/stop?robotTaskIds='+robotTaskIds.join();
+                $.operate.submit(stopUrl);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -66,7 +66,7 @@ public interface TLcRobotTaskMapper {
 
     TLcRobotTask selectRobotTaskByRobotTaskIdAndTaskId(@Param("robotTaskId") Integer robotTaskId, @Param("taskId") Long taskId);
 
-    TLcRobotTask selectRobotTaskByRobotTaskIdAndPhone(@Param("robotTaskId") Integer robotTaskId, @Param("phone") String phone);
+    List<TLcRobotTask> selectRobotTaskByRobotTaskIdAndPhone(@Param("robotTaskId") Integer robotTaskId, @Param("phone") String phone);
 
     List<TLcRobotTask> selectCallbackFaild(int callJobId);
 
@@ -77,4 +77,10 @@ public interface TLcRobotTaskMapper {
     void updateTLcRobotTaskByRobotTaskId(TLcRobotTask tLcRobotTask);
 
     void updateRobotTaskStatusByRobotTaskId(TLcRobotTask tLcRobotTask);
+
+    List<TLcRobotTask> selectTLcRobotTaskHisList(TLcRobotTask tLcRobotTask);
+
+    TLcRobotTask selectHisTLcRobotTaskById(Long id);
+
+    void batchInsertCallRecord(@Param("robotTaskId") Integer robotTaskId);
 }

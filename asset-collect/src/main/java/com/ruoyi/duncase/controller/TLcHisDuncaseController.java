@@ -1,5 +1,6 @@
 package com.ruoyi.duncase.controller;
 
+import com.ruoyi.assetspackage.service.ICurAssetsPackageService;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -9,6 +10,7 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.custom.domain.TLcCustContact;
 import com.ruoyi.custom.service.ITLcCustContactService;
+import com.ruoyi.duncase.domain.AssetsRepayment;
 import com.ruoyi.duncase.domain.TLcDuncase;
 import com.ruoyi.duncase.domain.TLcDuncaseActionRecord;
 import com.ruoyi.duncase.domain.TLcDuncaseAssign;
@@ -17,8 +19,11 @@ import com.ruoyi.duncase.service.ITLcDuncaseAssignService;
 import com.ruoyi.duncase.service.ITLcHisDuncaseService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.task.domain.TLcCallRecord;
+import com.ruoyi.task.domain.TLcSelectRecord;
 import com.ruoyi.task.domain.TLcTask;
 import com.ruoyi.task.service.ITLcCallRecordService;
+import com.ruoyi.task.service.ITLcSelectRecordService;
+import com.ruoyi.task.service.ITLcTaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -57,6 +62,12 @@ public class TLcHisDuncaseController extends BaseController {
     private ITLcDuncaseActionRecordService tLcDuncaseActionRecordService;
     @Autowired
     private ITLcCustContactService tLcCustContactService;
+    @Autowired
+    private ITLcTaskService tLcTaskService;
+    @Autowired
+    private ICurAssetsPackageService curAssetsPackageService;
+    @Autowired
+    private ITLcSelectRecordService tLcSelectRecordService;
 
     @RequiresPermissions("his:duncase:view")
     @GetMapping(value = "/view")
@@ -192,6 +203,50 @@ public class TLcHisDuncaseController extends BaseController {
         List<TLcCustContact> custContactList = this.tLcCustContactService.findAllHisDuncaseCustContactByCaseNo(caseNo, orgId, importBatchNo);
         logger.info("查询联系人结束caseNo="+caseNo);
         return custContactList;
+    }
+
+    /**
+     * 读取还款历史记录
+     */
+    @PostMapping("/hisRepaymentList")
+    @ResponseBody
+    public List<AssetsRepayment> repaymentList(String caseNo) {
+        logger.info("查询还款历史记录开始caseNo="+caseNo);
+        List<AssetsRepayment> repayHisList = this.tLcTaskService.viewHisRepayHis(caseNo);
+        logger.info("查询还款历史记录结束caseNo="+caseNo);
+        return repayHisList;
+    }
+
+    /**
+     * 查询自由导入信息
+     * @param caseNo
+     * @return
+     */
+    @PostMapping("/selectHisFreeImportList")
+    @ResponseBody
+    public List<Map<String,String>> selectFreeImportList(String caseNo) throws Exception {
+        logger.info("查询补充信息开始caseNo="+caseNo);
+        List<Map<String,String>> freeImportList = null;
+        try {
+            freeImportList = this.curAssetsPackageService.selectHisFreeImportByCaseno(caseNo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("查询自由导入信息失败：{}",e);
+        }
+        logger.info("查询补充信息结束caseNo="+caseNo);
+        return freeImportList;
+    }
+
+    /**
+     * 查询 查找记录
+     */
+    @PostMapping("/selectHisRecordList")
+    @ResponseBody
+    public List<TLcSelectRecord> selectRecordList(String caseNo) {
+        logger.info("查询查找记录开始caseNo="+caseNo);
+        List<TLcSelectRecord> selectRecordList = this.tLcSelectRecordService.findHisSelectRecordByCaseNo(caseNo);
+        logger.info("查询查找记录结束caseNo="+caseNo);
+        return selectRecordList;
     }
 
 }

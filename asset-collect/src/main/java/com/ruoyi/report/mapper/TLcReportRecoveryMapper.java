@@ -60,7 +60,5 @@ public interface TLcReportRecoveryMapper {
      */
     public int deleteTLcReportRecoveryByIds(String[] ids);
 
-    List<TLcReportRecovery> selectRecoveryByPayment(Map<String, Object> param);
-
     List<TLcReportRecovery> selectRecovery(Map<String, Object> param);
 }
