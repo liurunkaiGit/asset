@@ -400,30 +400,14 @@
     <update id="updateTLcRobotTaskByRobotTaskIdAndPhone" parameterType="com.ruoyi.robot.domain.TLcRobotTask">
         update t_lc_robot_task
         <trim prefix="SET" suffixOverrides=",">
-            <if test="taskId != null ">task_id = #{taskId},</if>
-            <if test="robotTastId != null ">robot_tast_id = #{robotTastId},</if>
-            <if test="createBy != null ">create_by = #{createBy},</if>
-            <if test="createTime != null ">create_time = #{createTime},</if>
-            <if test="taskName != null  and taskName != ''">task_name = #{taskName},</if>
-            <if test="ownerName != null  and ownerName != ''">owner_name = #{ownerName},</if>
-            <if test="transferType != null  and transferType != ''">transfer_type = #{transferType},</if>
-            <if test="arrearsTotal != null ">arrears_total = #{arrearsTotal},</if>
-            <if test="speechCraftName != null  and speechCraftName != ''">speech_craft_name = #{speechCraftName},</if>
             <if test="callEndDate != null ">call_end_date = #{callEndDate},</if>
             <if test="robotTaskStatus != null  and robotTaskStatus != ''">robot_task_status = #{robotTaskStatus},</if>
             <if test="resultValueAlias != null  and resultValueAlias != ''">result_value_alias = #{resultValueAlias},</if>
             <if test="callStatus != null  and callStatus != ''">call_status = #{callStatus},</if>
             <if test="callLen != null  and callLen != ''">call_len = #{callLen},</if>
-            <if test="taskStatus != null ">task_status = #{taskStatus},</if>
-            <if test="taskType != null ">task_type = #{taskType},</if>
             <if test="callContent != null  and callContent != ''">call_content = #{callContent},</if>
             <if test="callRadio != null  and callRadio != ''">call_radio = #{callRadio},</if>
             <if test="callStartDate != null ">call_start_date = #{callStartDate},</if>
-            <if test="curName != null  and curName != ''">cur_name = #{curName},</if>
-            <if test="phone != null  and phone != ''">phone = #{phone},</if>
-            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
-            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
-            <if test="robot != null  and robot != ''">robot = #{robot},</if>
             <if test="isRecall != null ">is_recall = #{isRecall},</if>
             <if test="continueDays != null ">continue_days = #{continueDays},</if>
             <if test="continueFrequency != null ">continue_frequency = #{continueFrequency},</if>
