@@ -685,7 +685,7 @@
         </foreach>
     </insert>
 
-    <insert id="insertDuncaseAssign" parameterType="java.lang.Long">
+    <insert id="insertDuncaseAssign" parameterType="java.lang.Integer">
         INSERT INTO t_lc_duncase_assign (
         custom_name,
         certificate_no,
