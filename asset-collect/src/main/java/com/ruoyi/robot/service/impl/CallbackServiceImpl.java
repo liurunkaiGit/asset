@@ -359,7 +359,7 @@ public class CallbackServiceImpl implements CallbackService {
             log.info("根据机器人任务id找不到对应的机器人任务总览数据，id是{}", data.getCallJobId());
             return "success";
         }
-        if (data.getStatus() == TaskStatus.FINISHED.getCode() || data.getStatus() == TaskStatus.STOP.getCode()) {
+        if (data.getStatus() == TaskStatus.FINISHED.getCode()) {
             try {
                 // 查询呼入回调失败的通话记录进行手工回调
 //                Integer pageNum = 1;
@@ -398,9 +398,6 @@ public class CallbackServiceImpl implements CallbackService {
 //                }
                 // 任务拉回
                 robotService.pullback(LocalRobotTaskStatus.FINISHED.getCode(), data.getCallJobId());
-                // 插入电催记录表
-                this.tLcRobotTaskService.batchInsertCallRecord(data.getCallJobId());
-                log.info("机器人任务id：{}的任务插入点催记录成功", data.getCallJobId());
                 // 修改机器人任务总览表
                 RobotTask taskDetail = this.robotMethodUtil.getTaskDetail(data.getCallJobId());
                 log.info("任务id：{}的任务详情：{}", data.getCallJobId(), JSON.toJSONString(taskDetail));

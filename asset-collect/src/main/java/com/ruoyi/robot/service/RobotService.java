@@ -1,5 +1,6 @@
 package com.ruoyi.robot.service;
 
+import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.robot.domain.RobotTask;
 import com.ruoyi.robot.domain.RobotTaskDto;
 import com.ruoyi.robot.domain.TLcRobotTask;
@@ -26,7 +27,7 @@ public interface RobotService {
      *
      * @param robotTaskIds
      */
-    void pullback(String robotTaskIds, Integer robotTaskStatus);
+    AjaxResult pullback(String robotTaskIds, Integer robotTaskStatus);
 
     /**
      * 任务拉回

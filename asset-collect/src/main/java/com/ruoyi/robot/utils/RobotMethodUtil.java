@@ -270,11 +270,7 @@ public class RobotMethodUtil {
 //            throw new BusinessException(robotTaskId + "暂停失败:" + robotResponse.getResultMsg());
         } else {
             log.info("任务暂停成功，robotTaskId is {}", robotTaskId);
-            // 修改机器人任务明细表和任务总览表状态
-            TLcRobotTask tLcRobotTask = new TLcRobotTask();
-            tLcRobotTask.setRobotTastId(Integer.valueOf(robotTaskId));
-            tLcRobotTask.setRobotTaskStatus(LocalRobotTaskStatus.USER_PAUSE.getCode());
-            this.tLcRobotTaskService.updateRobotTaskStatusByRobotTaskId(tLcRobotTask);
+            // 修改任务总览表状态
             TLcRobotTaskPandect robotTaskPandect = this.robotTaskPandectService.selectTLcRobotTaskPandectByRobotTaskId(robotTaskId);
             robotTaskPandect.setRobotTaskStatus(LocalRobotTaskStatus.USER_PAUSE.getCode());
             this.robotTaskPandectService.updateTLcRobotTaskPandect(robotTaskPandect);
@@ -294,12 +290,7 @@ public class RobotMethodUtil {
 //            throw new BusinessException(robotTaskId + "停止失败:" + robotResponse.getResultMsg());
         } else {
             log.info("任务停止成功，robotTaskId is {}", robotTaskId);
-            // 修改机器人任务明细表和任务总览表状态
-            List<TLcRobotTask> tLcRobotTaskList = this.robotTaskService.selectListByRobotTaskId(robotTaskId);
-            tLcRobotTaskList.stream().forEach(tLcRobotTask -> {
-                tLcRobotTask.setRobotTaskStatus(LocalRobotTaskStatus.STOP.getCode());
-                this.robotTaskService.updateTLcRobotTask(tLcRobotTask);
-            });
+            // 修改任务总览表状态
             TLcRobotTaskPandect robotTaskPandect = this.robotTaskPandectService.selectTLcRobotTaskPandectByRobotTaskId(robotTaskId);
             robotTaskPandect.setRobotTaskStatus(LocalRobotTaskStatus.STOP.getCode());
             this.robotTaskPandectService.updateTLcRobotTaskPandect(robotTaskPandect);

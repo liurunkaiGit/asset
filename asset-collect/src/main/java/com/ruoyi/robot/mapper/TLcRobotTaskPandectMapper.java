@@ -67,4 +67,6 @@ public interface TLcRobotTaskPandectMapper {
     List<TLcRobotTaskPandect> selectRobotTaskPandectByRobotTaskStatus(@Param("robotTaskStatus") Integer robotTaskStatus);
 
     List<TLcRobotTaskPandect> selectTLcRobotTaskPandectHisList(TLcRobotTaskPandect tLcRobotTaskPandect);
+
+    void updateTLcRobotTaskPandectByRobotTaskId(TLcRobotTaskPandect robotTaskPandect);
 }

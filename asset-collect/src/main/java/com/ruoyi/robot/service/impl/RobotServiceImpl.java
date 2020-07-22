@@ -1,5 +1,6 @@
 package com.ruoyi.robot.service.impl;
 
+import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.enums.AllocatTaskEnum;
 import com.ruoyi.enums.TaskTypeEnum;
@@ -61,18 +62,20 @@ public class RobotServiceImpl implements RobotService {
     }
 
     @Override
-    public void pullback(String robotTaskIds, Integer robotTaskStatus) {
+    public AjaxResult pullback(String robotTaskIds, Integer robotTaskStatus) {
         for (String robotTaskId : robotTaskIds.split(",")) {
-            // 调用百融机器人获取当前任务状态，只有、停止或者已完成的可以拉回 todo 是否需要做重复拉回的限制
-            // 未开始(为了防止拉回之后，机器人开始了，所以拉回状态只包含暂停、停止或者已完成)，如果未开始的想要拉回，可以先暂停
+            // 调用百融机器人获取当前任务状态，只有、停止或者暂停的可以拉回
+            // 未开始(为了防止拉回之后，机器人开始了，所以拉回状态只包含暂停、停止)，如果未开始和外呼中的想要拉回，可以先暂停
             RobotTask taskDetail = this.robotMethodUtil.getTaskDetail(Integer.valueOf(robotTaskId));
-            if (TaskStatus.FINISHED.getCode().equals(taskDetail.getStatus()) || TaskStatus.STOP.getCode().equals(taskDetail.getStatus()) || TaskStatus.USER_PAUSE.getCode().equals(taskDetail.getStatus())) {
+            if (TaskStatus.STOP.getCode().equals(taskDetail.getStatus()) || TaskStatus.USER_PAUSE.getCode().equals(taskDetail.getStatus())) {
                 if (TaskStatus.USER_PAUSE.getCode().equals(taskDetail.getStatus())) {
                     // 如果任务状态是暂停，在拉回的时候需要先停止
                     this.robotMethodUtil.stopTask(Integer.valueOf(robotTaskId));
                 }
                 // 修改机器人任务总览表数据状态为拉回
-                TLcRobotTaskPandect robotTaskPandect = this.robotTaskPandectService.selectTLcRobotTaskPandectByRobotTaskId(Integer.valueOf(robotTaskId));
+//                TLcRobotTaskPandect robotTaskPandect = this.robotTaskPandectService.selectTLcRobotTaskPandectByRobotTaskId(Integer.valueOf(robotTaskId));
+                TLcRobotTaskPandect robotTaskPandect = new TLcRobotTaskPandect();
+                robotTaskPandect.setRobotTaskId(Integer.valueOf(robotTaskId));
                 robotTaskPandect.setRobotTaskStatus(robotTaskStatus);
                 robotTaskPandect.setCallDoneCount(taskDetail.getDoneCount());
                 robotTaskPandect.setCallCalledCount(taskDetail.getCalledCount());
@@ -88,21 +91,24 @@ public class RobotServiceImpl implements RobotService {
                 robotTaskPandect.setCallFailCount(taskDetail.getFromUnavailableCount());
                 robotTaskPandect.setCallLossCount(taskDetail.getLostCount());
                 robotTaskPandect.setCallOverdueCount(taskDetail.getOverdueCount());
-                this.robotTaskPandectService.updateTLcRobotTaskPandect(robotTaskPandect);
-                // 根据机器人任务id查询机器人任务明细
-                List<TLcRobotTask> robotTaskList = this.tLcRobotTaskMapper.selectListByRobotTaskId(Integer.valueOf(robotTaskId));
+                this.robotTaskPandectService.updateTLcRobotTaskPandectByRobotTaskId(robotTaskPandect);
+                // 任务拉回
                 this.pullback(robotTaskStatus, Integer.valueOf(robotTaskId));
             }
         }
+        return AjaxResult.success();
     }
 
     @Override
     public void pullback(Integer robotTaskStatus, Integer robotTaskId) {
         // 修改机器人任务明细
-        TLcRobotTask tLcRobotTask = new TLcRobotTask();
-        tLcRobotTask.setRobotTastId(robotTaskId).setRobotTaskStatus(robotTaskStatus);
-        this.tLcRobotTaskMapper.updateTLcRobotTaskByRobotTaskId(tLcRobotTask);
-        log.info("拉回操作时修改机器人任务明细表数据成功");
+//        TLcRobotTask tLcRobotTask = new TLcRobotTask();
+//        tLcRobotTask.setRobotTastId(robotTaskId).setRobotTaskStatus(robotTaskStatus);
+//        this.tLcRobotTaskMapper.updateTLcRobotTaskByRobotTaskId(tLcRobotTask);
+//        log.info("拉回操作时修改机器人任务明细表数据成功");
+        // 插入电催记录表
+        this.tLcRobotTaskMapper.batchInsertCallRecord(robotTaskId);
+        log.info("机器人任务id：{}的任务插入点催记录成功", robotTaskId);
         // 修改任务类型和分配类型
 //            TLcTask tLcTask = new TLcTask();
 //            tLcTask.setRobotTaskId(robotTaskId).setTaskType(TaskTypeEnum.PULL_BACK_ROBOT.getCode()).setAllotType(AllocatTaskEnum.MANUAL.getAllocatCode());

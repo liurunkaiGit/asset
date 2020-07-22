@@ -97,8 +97,7 @@ public class RobotController extends BaseController {
     @GetMapping("/pullback")
     @ResponseBody
     public AjaxResult pullback(String robotTaskIds) {
-        robotService.pullback(robotTaskIds, LocalRobotTaskStatus.PULL_BACK.getCode());
-        return AjaxResult.success();
+        return robotService.pullback(robotTaskIds, LocalRobotTaskStatus.PULL_BACK.getCode());
     }
 
     /**

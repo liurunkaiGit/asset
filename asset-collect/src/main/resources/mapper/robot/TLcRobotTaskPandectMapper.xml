@@ -194,6 +194,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update t_lc_robot_task_pandect set robot_task_status = #{robotTaskStatus} where robot_task_id = #{robotTaskId}
     </update>
 
+    <update id="updateTLcRobotTaskPandectByRobotTaskId" parameterType="TLcRobotTaskPandect">
+        update t_lc_robot_task_pandect
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="robotTaskId != null ">robot_task_id = #{robotTaskId},</if>
+            <if test="taskName != null  and taskName != ''">task_name = #{taskName},</if>
+            <if test="speechCraftNameId != null ">speech_craft_name_id = #{speechCraftNameId},</if>
+            <if test="speechCraftName != null  and speechCraftName != ''">speech_craft_name = #{speechCraftName},</if>
+            <if test="robotTaskStatus != null  and robotTaskStatus != ''">robot_task_status = #{robotTaskStatus},</if>
+            <if test="orgId != null ">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="robot != null  and robot != ''">robot = #{robot},</if>
+            <if test="callTotalCount != null ">call_total_count = #{callTotalCount},</if>
+            <if test="callDoneCount != null ">call_done_count = #{callDoneCount},</if>
+            <if test="callCalledCount != null ">call_called_count = #{callCalledCount},</if>
+            <if test="callRejectedCount != null ">call_rejected_count = #{callRejectedCount},</if>
+            <if test="callUnavailableCount != null ">call_unavailable_count = #{callUnavailableCount},</if>
+            <if test="callFromUnavailableCount != null ">call_from_unavailable_count = #{callFromUnavailableCount},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="taskStartTime != null ">task_start_time = #{taskStartTime},</if>
+            <if test="taskEndTime != null ">task_end_time = #{taskEndTime},</if>
+            <if test="callBusyCount != null ">call_busy_count = #{callBusyCount},</if>
+            <if test="callMissCount != null ">call_miss_count = #{callMissCount},</if>
+            <if test="callBlankCount != null ">call_blank_count = #{callBlankCount},</if>
+            <if test="callClosedCount != null ">call_closed_count = #{callClosedCount},</if>
+            <if test="callDownCount != null ">call_down_count = #{callDownCount},</if>
+            <if test="callBlackCount != null ">call_black_count = #{callBlackCount},</if>
+            <if test="callFailCount != null ">call_fail_count = #{callFailCount},</if>
+            <if test="callLossCount != null ">call_loss_count = #{callLossCount},</if>
+            <if test="callOverdueCount != null ">call_overdue_count = #{callOverdueCount},</if>
+            <if test="phoneNum != null ">phone_num = #{phoneNum},</if>
+        </trim>
+        where robot_task_id = #{robotTaskId}
+    </update>
+
     <delete id="deleteTLcRobotTaskPandectById" parameterType="Long">
         delete from t_lc_robot_task_pandect where id = #{id}
     </delete>

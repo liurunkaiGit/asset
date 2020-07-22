@@ -239,13 +239,13 @@
                 $.modal.alertWarning("请至少选择一条记录");
                 return;
             }
-            // var array = $.table.selectColumns("robotTaskStatus");
-            // for (var i = 0; i < array.length; i++) {
-            //     if(array[i] != 4 && array[i] != 6) {
-            //         $.modal.alertWarning("只有暂停和停止的任务可以拉回");
-            //         return;
-            //     }
-            // }
+            var array = $.table.selectColumns("robotTaskStatus");
+            for (var i = 0; i < array.length; i++) {
+                if(array[i] == 2 || array[i] == 50) {
+                    $.modal.alertWarning("已完成和已拉回的任务不能重复拉回");
+                    return;
+                }
+            }
             var robotTaskIds = $.table.selectColumns("robotTaskId"); // 返回的是一个数组
             $.modal.confirm("确认要对选中的" + rows.length + "条数据进行操作吗?", function() {
                 var pullbackUrl = robotPrefix + '/pullback?robotTaskIds='+robotTaskIds.join();
