@@ -2861,7 +2861,7 @@ public class DataImportUtil {
 
             dto.setOrg(orgName);
             dto.setCloseCase(IsCloseCaseEnum.NOT_CLOSE_CASE.getValue());
-            dto.setIsExitCollect(IsNoEnum.NO.getCode().toString());
+//            dto.setIsExitCollect(IsNoEnum.NO.getCode().toString());
             dto.setPackageFlag(PackageFlagEnum.NOT_PACKAGE.getValue());//打包标识
             list.add(dto);
         }

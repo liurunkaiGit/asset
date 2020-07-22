@@ -158,4 +158,6 @@ public interface CurAssetsPackageMapper
 
     public void clearTempTable();
 
+    public List<CurAssetsPackage> findNowNeedClose(CurAssetsPackage curAssetsPackage);
+
 }

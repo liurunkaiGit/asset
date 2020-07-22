@@ -2,17 +2,15 @@ package com.ruoyi.assetspackage.task;
 
 import com.ruoyi.assetspackage.domain.CurAssetsPackage;
 import com.ruoyi.assetspackage.mapper.AssetsImportFromXYMapper;
-import com.ruoyi.assetspackage.service.ICurAssetsPackageService;
-import com.ruoyi.assetspackage.service.impl.AssetsImportFromXYServiceImpl;
-import com.ruoyi.assetspackage.service.impl.CurAssetsPackageServiceImpl;
+import com.ruoyi.assetspackage.mapper.CurAssetsPackageMapper;
 import com.ruoyi.assetspackage.service.impl.CurAssetsRepaymentPackageServiceImpl;
 import com.ruoyi.common.domain.CloseCase;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +24,7 @@ import java.util.List;
 public class CloseTimer {
 
     @Autowired
-    private CurAssetsPackageServiceImpl CurAssetsPackageServiceImpl;
+    private CurAssetsPackageMapper CurAssetsPackageMapper;
     @Autowired
     private AssetsImportFromXYMapper assetsImportFromXYMapper;
     @Autowired
@@ -46,21 +44,12 @@ public class CloseTimer {
         log.info("执行定时结案任务开始============================");
 
         Date date = new Date();
-        long now = date.getTime();
         try {
-            List<CurAssetsPackage> closeList = new ArrayList<>();
             CurAssetsPackage param = new CurAssetsPackage();
             param.setCloseCase("0");
-            List<CurAssetsPackage> curAssetsList = CurAssetsPackageServiceImpl.selectCurAssetsPackageList(param);
-            for (CurAssetsPackage assets : curAssetsList) {
-                long tar = assets.getTar().getTime();
-                if(tar < now){
-                    //加入结案集合
-                    closeList.add(assets);
-                }
-            }
+            List<CurAssetsPackage> curAssetsList = CurAssetsPackageMapper.findNowNeedClose(param);
             //结案处理
-            this.updateCloseCase(closeList,date,"2");//到期回收结案
+            this.updateCloseCase(curAssetsList,date,"2");//到期回收结案
         } catch (Exception e) {
             e.printStackTrace();
             log.error("执行定时结案失败{}",e);
@@ -74,7 +63,8 @@ public class CloseTimer {
      * @param closeCaseDate 临时表的创建时间
      * @throws Exception
      */
-    private void updateCloseCase(List<CurAssetsPackage> paramList,Date closeCaseDate,String isExitCollect) throws Exception{
+    @Transactional
+    public void updateCloseCase(List<CurAssetsPackage> paramList,Date closeCaseDate,String isExitCollect) throws Exception{
         if(paramList != null && paramList.size() >0) {
             List<CloseCase> remoteList = new ArrayList<>();
             for (CurAssetsPackage curAssetsPackage : paramList) {
@@ -100,7 +90,7 @@ public class CloseTimer {
             }
 
             //催收模块结案
-            curAssetsRepaymentPackageServiceImpl.closeCase2(remoteList);
+            curAssetsRepaymentPackageServiceImpl.closeCase3(remoteList);
         }
 
     }

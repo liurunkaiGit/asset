@@ -1,4 +1,4 @@
-alter table cur_assets_package MODIFY COLUMN is_exit_collect int(1) DEFAULT NULL COMMENT '结案类型：1出催结案，2回收结案，3到期结案';
+alter table cur_assets_package MODIFY COLUMN is_exit_collect int(1) DEFAULT NULL COMMENT '结案类型：1出催结案，2回收结案';
 alter table cur_assets_package MODIFY COLUMN wa_ye decimal(20,2) DEFAULT NULL COMMENT '结案应还金额';
 alter table cur_assets_package MODIFY COLUMN rmb_ye decimal(20,2) DEFAULT NULL COMMENT '委案金额';
 

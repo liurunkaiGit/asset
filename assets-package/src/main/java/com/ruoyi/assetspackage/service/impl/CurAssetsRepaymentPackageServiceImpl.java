@@ -832,37 +832,36 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
         this.insertDuncaseAssign(closeList, ShiroUtils.getSysUser());
     }
 
-    /*public void closeCase3(List<CloseCase> remoteList) {
+    public void closeCase3(List<CloseCase> remoteList) {
         List<String> caseNoList = new ArrayList<>();
         List<Task> closeList = new ArrayList<>();
         List<Task> tLcTaskList = remoteList.stream()
                 .map(closeCase -> {
-                    Task tLcTask = this.taskMapper.selectTaskByCaseNo3(closeCase.getCaseNo(), closeCase.getOrgId());
+                    Task tLcTask = this.taskMapper.selectTaskByCaseNo(closeCase.getCaseNo(), closeCase.getOrgId());
                     Assert.notNull(tLcTask, String.format("案件号不存在，案件号是%s", closeCase.getCaseNo()));
                     tLcTask.setCloseCaseYhje(closeCase.getJayhje());
                     if (closeCase.getDqyhje() != null) {
                         tLcTask.setDqyhje(closeCase.getDqyhje());
                     }
-                    tLcTask.setModifyBy(ShiroUtils.getSysUser().getUserId());
                     if (closeCase.getIsClose() != null && TaskStatusEnum.CLOSE.getStatus().equals(closeCase.getIsClose())) {
                         tLcTask.setTaskStatus(TaskStatusEnum.CLOSE.getStatus());
                         tLcTask.setTaskType(TaskTypeEnum.CLOSE_CASE_TRANSFER.getCode());
                         tLcTask.setCloseDate(new Date());
+                        String isExitCollect = closeCase.getIsExitCollect();
+                        Integer closeType = null;
+                        if(isExitCollect != null && !"".equals(isExitCollect)){
+                            closeType = Integer.valueOf(isExitCollect);
+                        }
+                        tLcTask.setCloseType(closeType);//结案类型
                         caseNoList.add(tLcTask.getCaseNo());
                         closeList.add(tLcTask);
                     }
-                    String isExitCollect = closeCase.getIsExitCollect();
-                    Integer closeType = null;
-                    if(isExitCollect != null && !"".equals(isExitCollect)){
-                        closeType = Integer.valueOf(isExitCollect);
-                    }
-                    tLcTask.setCloseType(closeType);
                     return tLcTask;
                 }).collect(Collectors.toList());
         this.taskMapper.batchUpdateTask(tLcTaskList);
         this.robotBlackService.batchDeleteRobotBlackByCaseNo(caseNoList);
-        this.insertDuncaseAssign(closeList, ShiroUtils.getSysUser());
-    }*/
+        this.insertDuncaseAssign(closeList, new SysUser());
+    }
 
     /**
      * 添加到案件轨迹表中

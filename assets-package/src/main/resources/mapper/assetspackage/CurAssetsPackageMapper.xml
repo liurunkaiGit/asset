@@ -1660,8 +1660,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     
     <delete id="clearTempTable">
-        TRUNCATE TABLE cur_assets_package_temp
+        delete from cur_assets_package_temp
     </delete>
 
+
+    <select id="findNowNeedClose" parameterType="CurAssetsPackage" resultMap="CurAssetsPackageResult">
+        <include refid="selectCurAssetsPackageVo"/>
+        where close_case= #{closeCase} and tar <![CDATA[<]]> CURDATE()
+    </select>
 
 </mapper>
