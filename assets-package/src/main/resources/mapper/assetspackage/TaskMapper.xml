@@ -645,6 +645,7 @@
                 <if test="task.callSignValue != null  and task.callSignValue != ''">call_sign_value = #{task.callSignValue},</if>
                 <if test="task.phone != null  and task.phone != ''">phone = #{task.phone},</if>
                 <if test="task.dqyhje != null  and task.dqyhje != ''">dqyhje = #{task.dqyhje},</if>
+                <if test="task.closeType != null">close_type = #{task.closeType},</if>
             </trim>
             WHERE case_no = #{task.caseNo} and task_status !=3
         </foreach>

@@ -185,12 +185,13 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
         paramMap2.put("closeCase",1);
         Long Uptotal = this.assetsImportFromXYMapper.selectUpNotCompareTotal(paramMap2);
         if(Uptotal != null && Uptotal > 0){//上一次存在没有比较的数据
-            preSettleList = this.assetsImportFromXYMapper.findPreSettleList(orgId,importBatchNo);//需要结案
+            preSettleList = this.assetsImportFromXYMapper.findPreSettleList(orgId,importBatchNo);//回收结案
             urgeList = this.assetsImportFromXYMapper.findUrgeList(orgId,importBatchNo);//出催案件
             partRepaymentList = this.assetsImportFromXYMapper.findPartRepaymentList(orgId,importBatchNo);//部分还款
             urgeNum = urgeList.size() + partRepaymentList.size();
             //结案处理
-            this.updateCloseCase(preSettleList,createTime);
+            this.updateCloseCase(preSettleList,createTime,"2");//回收结案=需要结案-出催案件
+            this.updateCloseCase(urgeList,createTime,"1");//出催案件
             //插入出催表
             if(urgeList.size()>0){
                 this.insertUrge(urgeList,"1",createTime,importBatchNo);//预测结清
@@ -624,11 +625,12 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
      * @param createTime 临时表的创建时间
      * @throws Exception
      */
-    private void updateCloseCase(List<CurAssetsPackage> paramList,Date createTime) throws Exception{
+    private void updateCloseCase(List<CurAssetsPackage> paramList,Date createTime,String isExitCollect) throws Exception{
         if(paramList != null && paramList.size() >0) {
             List<CloseCase> remoteList = new ArrayList<>();
             for (CurAssetsPackage curAssetsPackage : paramList) {
                 curAssetsPackage.setCloseCaseDate(createTime);//临时表的创建时间
+                curAssetsPackage.setIsExitCollect(isExitCollect);
                 remoteList.add(buildCloseCase(curAssetsPackage));
             }
             int total = paramList.size();
@@ -647,7 +649,6 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
                     this.assetsImportFromXYMapper.batchUpdateCloseCase(lt);
                 }
             }
-
             //催收模块结案
             curAssetsRepaymentPackageServiceImpl.closeCase2(remoteList);
         }
@@ -726,6 +727,27 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
                 .jayhje(curAssetsPackage.getWaYe())
                 .build();
     }
+
+
+   /* *//**
+     * @方法描述：获取两个ArrayList的差集
+     * @param firstArrayList 第一个ArrayList
+     * @param secondArrayList 第二个ArrayList
+     * @return resultList 差集ArrayList
+     *//*
+    public List<CurAssetsPackage> receiveDefectList(List<CurAssetsPackage> firstArrayList, List<CurAssetsPackage> secondArrayList) {
+        List<CurAssetsPackage> resultList = new ArrayList<CurAssetsPackage>();
+        LinkedList<CurAssetsPackage> result = new LinkedList<CurAssetsPackage>(firstArrayList);// 大集合用linkedlist
+        HashSet<CurAssetsPackage> othHash = new HashSet<CurAssetsPackage>(secondArrayList);// 小集合用hashset
+        Iterator<CurAssetsPackage> iter = result.iterator();// 采用Iterator迭代器进行数据的操作
+        while(iter.hasNext()){
+            if(othHash.contains(iter.next())){
+                iter.remove();
+            }
+        }
+        resultList = new ArrayList<CurAssetsPackage>(result);
+        return resultList;
+    }*/
 
 
 

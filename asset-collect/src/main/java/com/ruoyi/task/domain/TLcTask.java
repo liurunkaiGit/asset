@@ -463,4 +463,8 @@ public class TLcTask extends BaseEntity {
      * 推送任务批次号
      */
     private String sendRobotBatchNo;
+
+    private Integer closeType;
+
+
 }

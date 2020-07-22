@@ -264,6 +264,10 @@
                     title: '结案应还金额'
                 },
                 {
+                    field: 'dqyhje',
+                    title: '当期已还金额'
+                },
+                {
                     field: 'callSign',
                     title: '最近电话码',
                     formatter: function(value, row, index) {
@@ -310,6 +314,22 @@
                 {
                     field : 'productName',
                     title : '产品名称'
+                },
+                {
+                    field : 'closeType',
+                    title : '结案类型',
+                    formatter: function (value, row, index) {
+                        if(value=="1"){
+                            value="出催结案"
+                        }else if(value=="2"){
+                            value="回收结案"
+                        }
+                        return value;
+                    }
+                },
+                {
+                    field : 'closeDate',
+                    title : '结案时间'
                 },
                 {
                     field: 'score',

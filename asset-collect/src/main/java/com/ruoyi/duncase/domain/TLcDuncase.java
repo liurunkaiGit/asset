@@ -725,6 +725,10 @@ public class TLcDuncase extends BaseEntity {
     private String startScore;
     private String endScore;
 
+    private Integer closeType;
+    private Date closeDate;
+    private BigDecimal dqyhje;
+
     /**
      * 自由查询sql
      */

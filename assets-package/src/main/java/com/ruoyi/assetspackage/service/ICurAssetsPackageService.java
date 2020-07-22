@@ -224,5 +224,8 @@ public interface ICurAssetsPackageService {
 
     public void updateNoCloseCase(@Param(value="CurAssetsList")List<CurAssetsPackage> CurAssetsList)throws Exception;
 
+
     List<Map<String, String>> selectHisFreeImportByCaseno(String caseNo) throws Exception;
+
+    public void clearTempTable();
 }

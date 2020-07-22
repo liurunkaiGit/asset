@@ -395,6 +395,8 @@ public class Task extends BaseEntity {
 
     private BigDecimal dqyhje;
 
+    private Integer closeType;
+
     // 动态查询条件使用
 //    private BigDecimal start_arrears_total;
 //    private BigDecimal end_arrears_total;

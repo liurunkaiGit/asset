@@ -17,6 +17,7 @@ import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.domain.CloseCase;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.RestTemplateUtil;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
 import org.slf4j.Logger;
@@ -663,6 +664,7 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
                     // 修改资产结案信息
                     closeCaseList = updateAssetCloseCaseInfo2(curAssetsPackage, assetsRepayment,closeCaseList);
                     // 将结案数据添加到结案列表
+                    assetsRepayment.setIsExitCollect("1");//出催结案
                     remoteList.add(buildCloseCase(assetsRepayment,curAssetsPackage));
                 }else{
                     String id = curAssetsPackage.getId();
@@ -712,9 +714,11 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
     private List<CurAssetsPackage> updateAssetCloseCaseInfo2(CurAssetsPackage curAssetsPackage, CurAssetsRepaymentPackage assetsRepayment,List<CurAssetsPackage> closeCaseList) {
         curAssetsPackage.setCloseCase(IsCloseCaseEnum.CLOSE_CASE.getValue());
         curAssetsPackage.setCloseCaseDate(new Date());
-        curAssetsPackage.setIsExitCollect(assetsRepayment.getIsExitCollect());
         if (assetsRepayment.getIsExitCollect().equals(IsNoEnum.IS.getCode().toString())) {
+            curAssetsPackage.setIsExitCollect(assetsRepayment.getIsExitCollect());
             curAssetsPackage.setAjhssj(assetsRepayment.getAjhsrq());
+        }else{
+            curAssetsPackage.setIsExitCollect("1");//出催结案
         }
         closeCaseList.add(curAssetsPackage);
         return closeCaseList;
@@ -747,7 +751,7 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
      */
     private CloseCase buildNotCloseCase(CurAssetsRepaymentPackage assetsRepayment,CurAssetsPackage curAssetsPackage) {
         return CloseCase.builder()
-                .isExitCollect(assetsRepayment.getIsExitCollect())
+//                .isExitCollect(assetsRepayment.getIsExitCollect())
                 .caseNo(assetsRepayment.getOrgCasno())
                 .importBatchNo(curAssetsPackage.getImportBatchNo())
                 .orgId(assetsRepayment.getOrgId())
@@ -812,6 +816,12 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
                         tLcTask.setTaskStatus(TaskStatusEnum.CLOSE.getStatus());
                         tLcTask.setTaskType(TaskTypeEnum.CLOSE_CASE_TRANSFER.getCode());
                         tLcTask.setCloseDate(new Date());
+                        String isExitCollect = closeCase.getIsExitCollect();
+                        Integer closeType = null;
+                        if(isExitCollect != null && !"".equals(isExitCollect)){
+                            closeType = Integer.valueOf(isExitCollect);
+                        }
+                        tLcTask.setCloseType(closeType);//结案类型
                         caseNoList.add(tLcTask.getCaseNo());
                         closeList.add(tLcTask);
                     }
@@ -822,7 +832,7 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
         this.insertDuncaseAssign(closeList, ShiroUtils.getSysUser());
     }
 
-  /*  public void closeCase3(List<CloseCase> remoteList) {
+    /*public void closeCase3(List<CloseCase> remoteList) {
         List<String> caseNoList = new ArrayList<>();
         List<Task> closeList = new ArrayList<>();
         List<Task> tLcTaskList = remoteList.stream()
@@ -841,6 +851,12 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
                         caseNoList.add(tLcTask.getCaseNo());
                         closeList.add(tLcTask);
                     }
+                    String isExitCollect = closeCase.getIsExitCollect();
+                    Integer closeType = null;
+                    if(isExitCollect != null && !"".equals(isExitCollect)){
+                        closeType = Integer.valueOf(isExitCollect);
+                    }
+                    tLcTask.setCloseType(closeType);
                     return tLcTask;
                 }).collect(Collectors.toList());
         this.taskMapper.batchUpdateTask(tLcTaskList);

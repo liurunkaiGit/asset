@@ -69,6 +69,9 @@
         <result property="reductionFlag" column="reduction_flag" jdbcType="VARCHAR"/>
         <result property="legalFlag" column="legal_flag" jdbcType="VARCHAR"/>
         <result property="score" column="score" jdbcType="INTEGER"/>
+        <result property="closeType" column="close_type" jdbcType="INTEGER"/>
+        <result property="closeDate" column="close_date" />
+        <result property="dqyhje" column="dqyhje" jdbcType="DECIMAL"/>
     </resultMap>
 
     <select id="selectTLcDuncaseList" parameterType="com.ruoyi.duncase.domain.TLcDuncase" resultMap="TLcDuncaseResult">
@@ -107,6 +110,9 @@
             ta.import_batch_no,
             ta.org_id,
             ta.task_status AS taskStatus,
+            ta.close_type,
+            ta.close_date,
+            ta.dqyhje,
             t.score
             FROM t_lc_duncase t, t_lc_task ta
             WHERE t.case_no = ta.case_no AND t.import_batch_no = ta.import_batch_no

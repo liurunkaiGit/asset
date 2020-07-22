@@ -1558,6 +1558,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 <if test="TempCurAssets.fifthLiaisonName != null  and TempCurAssets.fifthLiaisonName != ''">fifth_liaison_name = #{TempCurAssets.fifthLiaisonName},</if>
                 <if test="TempCurAssets.fifthLiaisonRelation != null  and TempCurAssets.fifthLiaisonRelation != ''">fifth_liaison_relation = #{TempCurAssets.fifthLiaisonRelation},</if>
                 <if test="TempCurAssets.fifthLiaisonMobile != null  and TempCurAssets.fifthLiaisonMobile != ''">fifth_liaison_mobile = #{TempCurAssets.fifthLiaisonMobile},</if>
+                update_time = now()
                 <!--<if test="TempCurAssets.freeImport != null  and TempCurAssets.freeImport != ''">free_import = #{TempCurAssets.freeImport},</if>-->
             </trim>
             where org_casNo=#{TempCurAssets.orgCasno} AND close_case=0
@@ -1657,6 +1658,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </update>
 
+    
+    <delete id="clearTempTable">
+        TRUNCATE TABLE cur_assets_package_temp
+    </delete>
 
 
 </mapper>

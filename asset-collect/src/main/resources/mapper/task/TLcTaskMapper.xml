@@ -746,6 +746,7 @@
                 </if>
                 <if test="task.phone != null  and task.phone != ''">phone = #{task.phone},</if>
                 <if test="task.sendRobotBatchNo != null  and task.sendRobotBatchNo != ''">send_robot_batch_no = #{task.sendRobotBatchNo},</if>
+                <if test="task.closeType != null">close_type = #{task.closeType},</if>
             </trim>
             WHERE id = #{task.id}
         </foreach>

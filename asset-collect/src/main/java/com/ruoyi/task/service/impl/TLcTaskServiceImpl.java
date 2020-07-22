@@ -544,6 +544,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                     tLcTask.setTaskType(TaskTypeEnum.CLOSE_CASE_TRANSFER.getCode());
                     tLcTask.setCloseDate(new Date());
                     tLcTask.setModifyBy(ShiroUtils.getUserId());
+                    tLcTask.setCloseType(Integer.valueOf(closeCaseType));
 //                    CloseCase closeCase = CloseCase.builder().caseNo(tLcTask.getCaseNo()).orgId(tLcTask.getOrgId()).importBatchNo(tLcTask.getImportBatchNo()).isExitCollect(IsNoEnum.NO.getCode().toString()).build();
                     CloseCase closeCase = CloseCase.builder().caseNo(tLcTask.getCaseNo()).orgId(tLcTask.getOrgId()).importBatchNo(tLcTask.getImportBatchNo()).isExitCollect(closeCaseType).isClose(TaskStatusEnum.CLOSE.getStatus()).build();
                     closeCaseList.add(closeCase);
@@ -566,6 +567,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             tlcTask.setTaskType(TaskTypeEnum.CLOSE_CASE_TRANSFER.getCode());
             tlcTask.setCloseDate(new Date());
             tlcTask.setModifyBy(ShiroUtils.getUserId());
+            tlcTask.setCloseType(Integer.valueOf(closeCaseType));
             CloseCase closeCase = CloseCase.builder().caseNo(tlcTask.getCaseNo()).orgId(tlcTask.getOrgId()).importBatchNo(tlcTask.getImportBatchNo()).isExitCollect(closeCaseType).isClose(TaskStatusEnum.CLOSE.getStatus()).build();
             closeCaseList.add(closeCase);
             return tlcTask.getCaseNo();

@@ -486,6 +486,9 @@ public class CurAssetsPackage extends BaseEntity {
      */
     private String packNo;
 
+    private String updateBy;
+    private Date updateTime;
+
     @Override
     public String getCreateBy() {
         return createBy;

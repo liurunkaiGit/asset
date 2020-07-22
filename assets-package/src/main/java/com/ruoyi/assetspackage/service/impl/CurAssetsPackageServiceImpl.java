@@ -738,6 +738,11 @@ public class CurAssetsPackageServiceImpl extends BaseController implements ICurA
         this.curAssetsPackageMapper.updateNoCloseCase(CurAssetsList);
     }
 
+    @Override
+    public void clearTempTable(){
+        this.curAssetsPackageMapper.clearTempTable();
+    }
+
 
     @Override
     @Transactional

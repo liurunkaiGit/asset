@@ -930,9 +930,9 @@ public class RepaymentDataImportUtil {
                     if(entry.getValue() != null && !"".equals(entry.getValue())) {
                         dto.setSfjq(entry.getValue());//是否出催
                         dto.setIsExitCollect(String.valueOf(IsNoEnum.getCodeByDes(entry.getValue())));
-                    } else {
+                    }/* else {
                         dto.setIsExitCollect(IsNoEnum.NO.getCode().toString());
-                    }
+                    }*/
                     continue;
                 }
                 if("本月委案".equals(entry.getKey())){
