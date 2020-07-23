@@ -3,8 +3,9 @@ DROP PROCEDURE IF EXISTS his_data_migrate;
 CREATE PROCEDURE `his_data_migrate`(in days int(2))
 begin
 -- 插入还款历史表：只有这个案件没有在催案件，还款才会转移到历史表
-    INSERT INTO `cur_assets_repayment_package_his` (`org_casNo`, `jyqtfy`, `jylx`, `jybj`, `jyznf`, `jy_type`, `jyje`, `product_type`, `jjh`, `csr`, `csjd`, `fprq`, `area_center`, `accept_city`, `hth`, `dqsyb_yj`, `dqsyb_ej`, `wbqs`, `wbjb`, `warq`, `cur_name`, `khjlxm`, `sjrq`, `sfwbcs`, `sfjq`, `bywa`, `ajhsrq`, `xfjrzh`, `tzsx`, `tzje`, `zhzt`, `hkrq`, `hksyqqs`, `hkje`, `yqcplx`, `yqjd`, `quota_product`, `org_id`, `jazt`, `create_by`, `create_time`, `is_exit_collect`, `import_batch_no`, `close_case_date`, `org_name`)
+    INSERT INTO `cur_assets_repayment_package_his` (`id`, `org_casNo`, `jyqtfy`, `jylx`, `jybj`, `jyznf`, `jy_type`, `jyje`, `product_type`, `jjh`, `csr`, `csjd`, `fprq`, `area_center`, `accept_city`, `hth`, `dqsyb_yj`, `dqsyb_ej`, `wbqs`, `wbjb`, `warq`, `cur_name`, `khjlxm`, `sjrq`, `sfwbcs`, `sfjq`, `bywa`, `ajhsrq`, `xfjrzh`, `tzsx`, `tzje`, `zhzt`, `hkrq`, `hksyqqs`, `hkje`, `yqcplx`, `yqjd`, `quota_product`, `org_id`, `jazt`, `create_by`, `create_time`, `is_exit_collect`, `import_batch_no`, `close_case_date`, `org_name`)
     SELECT
+        t.id,
         t.org_casNo,
         t.jyqtfy,
         t.jylx,
