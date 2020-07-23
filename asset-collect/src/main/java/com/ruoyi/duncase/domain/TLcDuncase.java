@@ -82,6 +82,9 @@ public class TLcDuncase extends BaseEntity {
     @Excel(name = "结案应还金额")
     private BigDecimal closeCaseYhje;
 
+    @Excel(name = "当前已还金额")
+    private BigDecimal dqyhje;
+
     /** 电话码键值 */
     @Excel(name = "电话码")
     private String callSign;
@@ -717,6 +720,14 @@ public class TLcDuncase extends BaseEntity {
      */
     private String freeSQL;
 
+
+    @Excel(name = "结案类型", readConverterExp = "1=出催结案,2=回收结案")
+    private Integer closeType;
+
+    @Excel(name = "结案时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date closeDate;
+
     /**
      * 催收评分
      */
@@ -725,9 +736,9 @@ public class TLcDuncase extends BaseEntity {
     private String startScore;
     private String endScore;
 
-    private Integer closeType;
-    private Date closeDate;
-    private BigDecimal dqyhje;
+
+
+
 
     /**
      * 自由查询sql
