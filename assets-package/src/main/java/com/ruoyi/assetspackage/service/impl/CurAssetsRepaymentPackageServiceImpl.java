@@ -660,7 +660,7 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
             } else {
                 // 未出催判断还款金额是否大于委案金额 或者大于结案应还金额
 //                BigDecimal hkje = this.selectHkjeByOrgCasNo(assetsRepayment.getOrgCasno());
-                if (hkje.compareTo(curAssetsPackage.getRmbYe()) > -1 || hkje.compareTo(curAssetsPackage.getWaYe()) > -1) {
+                if (hkje.compareTo(curAssetsPackage.getRmbYe()) > -1 || hkje.compareTo(jayhje) > -1) {
                     // 修改资产结案信息
                     closeCaseList = updateAssetCloseCaseInfo2(curAssetsPackage, assetsRepayment,closeCaseList);
                     // 将结案数据添加到结案列表
