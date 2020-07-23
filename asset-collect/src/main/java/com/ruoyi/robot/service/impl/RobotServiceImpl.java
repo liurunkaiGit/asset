@@ -2,6 +2,7 @@ package com.ruoyi.robot.service.impl;
 
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.enums.AllocatTaskEnum;
 import com.ruoyi.enums.TaskTypeEnum;
 import com.ruoyi.framework.util.ShiroUtils;
@@ -63,39 +64,34 @@ public class RobotServiceImpl implements RobotService {
 
     @Override
     public AjaxResult pullback(String robotTaskIds, Integer robotTaskStatus) {
-        for (String robotTaskId : robotTaskIds.split(",")) {
-            // 调用百融机器人获取当前任务状态，只有、停止或者暂停的可以拉回
-            // 未开始(为了防止拉回之后，机器人开始了，所以拉回状态只包含暂停、停止)，如果未开始和外呼中的想要拉回，可以先暂停
-            RobotTask taskDetail = this.robotMethodUtil.getTaskDetail(Integer.valueOf(robotTaskId));
-            if (TaskStatus.STOP.getCode().equals(taskDetail.getStatus()) || TaskStatus.USER_PAUSE.getCode().equals(taskDetail.getStatus())) {
-                if (TaskStatus.USER_PAUSE.getCode().equals(taskDetail.getStatus())) {
-                    // 如果任务状态是暂停，在拉回的时候需要先停止
-                    this.robotMethodUtil.stopTask(Integer.valueOf(robotTaskId));
-                }
-                // 修改机器人任务总览表数据状态为拉回
-//                TLcRobotTaskPandect robotTaskPandect = this.robotTaskPandectService.selectTLcRobotTaskPandectByRobotTaskId(Integer.valueOf(robotTaskId));
-                TLcRobotTaskPandect robotTaskPandect = new TLcRobotTaskPandect();
-                robotTaskPandect.setRobotTaskId(Integer.valueOf(robotTaskId));
-                robotTaskPandect.setRobotTaskStatus(robotTaskStatus);
-                robotTaskPandect.setCallDoneCount(taskDetail.getDoneCount());
-                robotTaskPandect.setCallCalledCount(taskDetail.getCalledCount());
-                robotTaskPandect.setCallMissCount(taskDetail.getMissCount());
-                robotTaskPandect.setCallBusyCount(taskDetail.getBusyCount());
-                robotTaskPandect.setCallFromUnavailableCount(taskDetail.getFromUnavailableCount());
-                robotTaskPandect.setCallUnavailableCount(taskDetail.getUnavailableCount());
-                robotTaskPandect.setCallRejectedCount(taskDetail.getRejectedCount());
-                robotTaskPandect.setCallBlankCount(taskDetail.getBlankCount());
-                robotTaskPandect.setCallClosedCount(taskDetail.getClosedCount());
-                robotTaskPandect.setCallDownCount(taskDetail.getDownCount());
-                robotTaskPandect.setCallBlackCount(taskDetail.getBlacklistCount());
-                robotTaskPandect.setCallFailCount(taskDetail.getFromUnavailableCount());
-                robotTaskPandect.setCallLossCount(taskDetail.getLostCount());
-                robotTaskPandect.setCallOverdueCount(taskDetail.getOverdueCount());
-                this.robotTaskPandectService.updateTLcRobotTaskPandectByRobotTaskId(robotTaskPandect);
-                // 任务拉回
-                this.pullback(robotTaskStatus, Integer.valueOf(robotTaskId));
-            }
+        RobotTask taskDetail = this.robotMethodUtil.getTaskDetail(Integer.valueOf(robotTaskIds));
+        // 未开始、调度中、进行中、人工暂停、系统暂停、排队中的任务想要拉回，需要先停止，为了防止拉回之后，机器人和坐席同时外呼
+        if (TaskStatus.NOT_START.getCode().equals(taskDetail.getStatus()) || TaskStatus.CAN_RUNNING.getCode().equals(taskDetail.getStatus()) || TaskStatus.RUNNING.getCode().equals(taskDetail.getStatus()) ||
+                TaskStatus.USER_PAUSE.getCode().equals(taskDetail.getStatus()) || TaskStatus.SYSTEM_PAUSE.getCode().equals(taskDetail.getStatus()) || TaskStatus.QUEUEING.getCode().equals(taskDetail.getStatus()) ) {
+            this.robotMethodUtil.stopTask(Integer.valueOf(robotTaskIds));
         }
+        // 修改机器人任务总览表数据状态为拉回
+//                TLcRobotTaskPandect robotTaskPandect = this.robotTaskPandectService.selectTLcRobotTaskPandectByRobotTaskId(Integer.valueOf(robotTaskId));
+        TLcRobotTaskPandect robotTaskPandect = new TLcRobotTaskPandect();
+        robotTaskPandect.setRobotTaskId(Integer.valueOf(robotTaskIds));
+        robotTaskPandect.setRobotTaskStatus(robotTaskStatus);
+        robotTaskPandect.setCallDoneCount(taskDetail.getDoneCount());
+        robotTaskPandect.setCallCalledCount(taskDetail.getCalledCount());
+        robotTaskPandect.setCallMissCount(taskDetail.getMissCount());
+        robotTaskPandect.setCallBusyCount(taskDetail.getBusyCount());
+        robotTaskPandect.setCallFromUnavailableCount(taskDetail.getFromUnavailableCount());
+        robotTaskPandect.setCallUnavailableCount(taskDetail.getUnavailableCount());
+        robotTaskPandect.setCallRejectedCount(taskDetail.getRejectedCount());
+        robotTaskPandect.setCallBlankCount(taskDetail.getBlankCount());
+        robotTaskPandect.setCallClosedCount(taskDetail.getClosedCount());
+        robotTaskPandect.setCallDownCount(taskDetail.getDownCount());
+        robotTaskPandect.setCallBlackCount(taskDetail.getBlacklistCount());
+        robotTaskPandect.setCallFailCount(taskDetail.getFromUnavailableCount());
+        robotTaskPandect.setCallLossCount(taskDetail.getLostCount());
+        robotTaskPandect.setCallOverdueCount(taskDetail.getOverdueCount());
+        this.robotTaskPandectService.updateTLcRobotTaskPandectByRobotTaskId(robotTaskPandect);
+        // 任务拉回
+        this.pullback(robotTaskStatus, Integer.valueOf(robotTaskIds));
         return AjaxResult.success();
     }
 
@@ -113,8 +109,10 @@ public class RobotServiceImpl implements RobotService {
 //            TLcTask tLcTask = new TLcTask();
 //            tLcTask.setRobotTaskId(robotTaskId).setTaskType(TaskTypeEnum.PULL_BACK_ROBOT.getCode()).setAllotType(AllocatTaskEnum.MANUAL.getAllocatCode());
 //            this.tLcTaskMapper.updateTLcTaskByRobotTaskId(tLcTask);
-        // 任务状态回调时，修改任务类型、分配类型、最近跟进时间、最近电话码及电话码中文
+        // 任务状态回调时，最近跟进时间、最近电话码及电话码中文
         this.tLcTaskMapper.updateTaskFromRobotTask(robotTaskId);
+        // 修改任务类型、分配类型
+        this.tLcTaskMapper.updateTaskTypeAllocatType(robotTaskId);
         log.info("拉回成功，修改任务表数据成功");
         // 插入案件历史轨迹
 //        List<TLcTask> taskList = this.tLcTaskMapper.selectTaskListByRobotTaskId(robotTaskId);
@@ -137,10 +135,11 @@ public class RobotServiceImpl implements RobotService {
 
     @Override
     public void pause(String robotTaskIds) {
-        Arrays.stream(robotTaskIds.split(","))
-                .forEach(robotTaskId -> {
-                    robotMethodUtil.pauseTask(Integer.valueOf(robotTaskId));
-                });
+//        Arrays.stream(robotTaskIds.split(","))
+//                .forEach(robotTaskId -> {
+//                    robotMethodUtil.pauseTask(Integer.valueOf(robotTaskId));
+//                });
+        robotMethodUtil.pauseTask(Integer.valueOf(robotTaskIds));
     }
 
     @Override

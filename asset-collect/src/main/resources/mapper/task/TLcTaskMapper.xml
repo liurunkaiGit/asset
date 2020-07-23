@@ -1302,7 +1302,13 @@
 
     <update id="updateTaskFromRobotTask" parameterType="java.lang.Integer">
         UPDATE t_lc_task t,t_lc_robot_task rt
-        SET t.call_sign = rt.call_sign,t.call_sign_value = rt.call_sign_value,t.recently_follow_up_date = rt.call_back_time,t.task_type = 17,t.allot_type = 1
-        WHERE t.robot_task_id = rt.robot_tast_id AND t.phone = rt.phone and rt.task_id = t.id and rt.robot_tast_id = #{robotTaskId}
+        SET t.call_sign = rt.call_sign,t.call_sign_value = rt.call_sign_value,t.recently_follow_up_date = rt.call_back_time
+        WHERE rt.task_id = t.id and rt.robot_tast_id = #{robotTaskId} and rt.call_status is not null
+    </update>
+
+    <update id="updateTaskTypeAllocatType" parameterType="java.lang.Integer">
+        UPDATE t_lc_task t,t_lc_robot_task rt
+        SET t.task_type = 17,t.allot_type = 1
+        WHERE rt.task_id = t.id and rt.robot_tast_id = #{robotTaskId}
     </update>
 </mapper>

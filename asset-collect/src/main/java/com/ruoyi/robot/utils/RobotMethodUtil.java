@@ -267,7 +267,7 @@ public class RobotMethodUtil {
         RobotResponse robotResponse = aiccHttpUtils.sendPost(robotAppConfig.getPause(), taskParamVO);
         if (robotResponse.getCode() != HttpStatus.OK.value()) {
             log.error("暂停任务错误,error is {},robotTaskId is {}", robotResponse.getResultMsg(), robotTaskId);
-//            throw new BusinessException(robotTaskId + "暂停失败:" + robotResponse.getResultMsg());
+            throw new BusinessException("暂停失败:" + robotResponse.getResultMsg());
         } else {
             log.info("任务暂停成功，robotTaskId is {}", robotTaskId);
             // 修改任务总览表状态
@@ -862,12 +862,9 @@ public class RobotMethodUtil {
                     RobotResponse robotResponse = aiccHttpUtils.sendPost(robotAppConfig.getStart(), taskParamVO);
                     if (robotResponse.getCode() != HttpStatus.OK.value()) {
                         log.error("机器人任务启动失败，taskId is {}, error is {}", Integer.valueOf(robotTaskId), robotResponse.getResultMsg());
+                        throw new BusinessException("启动失败:" + robotResponse.getResultMsg());
                     }else {
-                        // 修改机器人任务明细表和任务总览表状态为外呼中
-                        TLcRobotTask tLcRobotTask = new TLcRobotTask();
-                        tLcRobotTask.setRobotTastId(Integer.valueOf(robotTaskId));
-                        tLcRobotTask.setRobotTaskStatus(LocalRobotTaskStatus.RUNNING.getCode());
-                        this.tLcRobotTaskService.updateRobotTaskStatusByRobotTaskId(tLcRobotTask);
+                        // 修改机器人任务总览表状态为外呼中
                         TLcRobotTaskPandect robotTaskPandect = new TLcRobotTaskPandect();
                         robotTaskPandect.setRobotTaskStatus(LocalRobotTaskStatus.RUNNING.getCode());
                         robotTaskPandect.setRobotTaskId(Integer.valueOf(robotTaskId));

@@ -211,4 +211,6 @@ public interface TLcTaskMapper {
     void updateTaskFromRobotTask(@Param("robotTaskId") Integer robotTaskId);
 
     void insertDuncaseAssign(@Param("robotTaskId") Integer robotTaskId);
+
+    void updateTaskTypeAllocatType(@Param("robotTaskId") Integer robotTaskId);
 }

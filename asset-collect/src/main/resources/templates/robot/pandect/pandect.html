@@ -55,18 +55,15 @@
                 <a class="btn btn-success" onclick="$.table.exportExcel()" shiro:hasPermission="robot:pandect:export">
                     <i class="fa fa-download"></i> 导出
                  </a>
-                <a class="btn btn-success" onclick="pullback()" shiro:hasPermission="robot:pandect:pullback">
+                <a class="btn btn-primary single disabled" onclick="pullback()" shiro:hasPermission="robot:pandect:pullback">
                     <i class="fa fa-download"></i> 拉回
                 </a>
-                <a class="btn btn-success" onclick="start()" shiro:hasPermission="robot:pandect:start">
+                <a class="btn btn-primary single disabled" onclick="start()" shiro:hasPermission="robot:pandect:start">
                     <i class="fa fa-download"></i> 启动
                 </a>
-                <a class="btn btn-success" onclick="pause()" shiro:hasPermission="robot:pandect:pause">
+                <a class="btn btn-primary single disabled" onclick="pause()" shiro:hasPermission="robot:pandect:pause">
                     <i class="fa fa-download"></i> 暂停
                 </a>
-                <!--<a class="btn btn-success" onclick="stop()" shiro:hasPermission="robot:pandect:stop">
-                    <i class="fa fa-download"></i> 停止
-                </a>-->
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -265,7 +262,7 @@
             var array = $.table.selectColumns("robotTaskStatus");
             for (var i = 0; i < array.length; i++) {
                 if(array[i] != 4) {
-                    $.modal.alertWarning("只有暂停和未开始的任务可以启动");
+                    $.modal.alertWarning("只有暂停的任务可以启动");
                     return;
                 }
             }
@@ -296,29 +293,6 @@
             $.modal.confirm("确认要对选中的" + rows.length + "条数据暂停吗?", function() {
                 var pauseUrl = robotPrefix + '/pause?robotTaskIds='+robotTaskIds.join();
                 $.operate.submit(pauseUrl);
-            });
-        }
-
-        /*停止*/
-        function stop(){
-            // 获取列表中选中数据的第一列的值
-            var rows = $.table.selectFirstColumns(); // 返回的是一个数组
-            //alert(rows.join());   // join()函数将数组分成以逗号分隔的字符串
-            if (rows.length == 0) {
-                $.modal.alertWarning("请至少选择一条记录");
-                return;
-            }
-            /*var array = $.table.selectColumns("robotTaskStatus");
-            for (var i = 0; i < array.length; i++) {
-                if(array[i] != 1 && array[i] != 4) {
-                    $.modal.alertWarning("只有未开始、调度中、进行中、人工暂停、系统暂停、排队中的任务可以停止");
-                    return;
-                }
-            }*/
-            var robotTaskIds = $.table.selectColumns("robotTaskId"); // 返回的是一个数组
-            $.modal.confirm("确认要对选中的" + rows.length + "条数据停止吗?", function() {
-                var stopUrl = robotPrefix + '/stop?robotTaskIds='+robotTaskIds.join();
-                $.operate.submit(stopUrl);
             });
         }
     </script>
