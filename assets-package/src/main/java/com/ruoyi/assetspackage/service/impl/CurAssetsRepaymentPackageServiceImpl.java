@@ -832,6 +832,10 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
         this.insertDuncaseAssign(closeList, ShiroUtils.getSysUser());
     }
 
+    /**
+     * 定时结案使用(去掉shiro)
+     * @param remoteList
+     */
     public void closeCase3(List<CloseCase> remoteList) {
         List<String> caseNoList = new ArrayList<>();
         List<Task> closeList = new ArrayList<>();
