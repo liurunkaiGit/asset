@@ -1828,7 +1828,7 @@
                 console.log("通话记录id：" + $("#callRecordId").val() + "，通话开始时间：" + data[0].BAnswerStamp + "，通话结束时间：" + data[0].BEndStamp + "，通话录音：" + data[0].RecordingFile);
                 var callSign = 'R02';
                 var callResult = '无法接通';
-                if (data[0].BAnswerStamp != null) {
+                if (data[0].BAnswerStamp != null && data[0].BAnswerStamp != '') {
                     callSign = 'R01';
                     callResult = '已接听';
                 }
@@ -1847,7 +1847,7 @@
                         callLen:data[0].Mduration,
                         callRadioLocation:data[0].RecordingFile,
                         caseNo:currentCaseNo,
-                        // remark:callRemark,
+                        remark:callResult,
                         importBatchNo:currentImportBatchNo,
                         orgId:currentOrgId,
                         // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
