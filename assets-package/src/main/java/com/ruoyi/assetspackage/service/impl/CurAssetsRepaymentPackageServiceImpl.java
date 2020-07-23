@@ -719,7 +719,7 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
     private List<CurAssetsPackage> updateAssetCloseCaseInfo2(CurAssetsPackage curAssetsPackage, CurAssetsRepaymentPackage assetsRepayment,List<CurAssetsPackage> closeCaseList) {
         curAssetsPackage.setCloseCase(IsCloseCaseEnum.CLOSE_CASE.getValue());
         curAssetsPackage.setCloseCaseDate(new Date());
-        if (assetsRepayment.getIsExitCollect().equals(IsNoEnum.IS.getCode().toString())) {
+        if (assetsRepayment.getIsExitCollect()!=null && assetsRepayment.getIsExitCollect().equals(IsNoEnum.IS.getCode().toString())) {
             curAssetsPackage.setIsExitCollect(assetsRepayment.getIsExitCollect());
             curAssetsPackage.setAjhssj(assetsRepayment.getAjhsrq());
         }else{
