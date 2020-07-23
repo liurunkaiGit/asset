@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @Description: 机器人回调接口controller
  * @author: liurunkai
@@ -45,7 +47,9 @@ public class CallbackController {
      * @return
      */
     @PostMapping(value = "/taskStatus", consumes = "text/plain;charset=UTF-8")
-    public String taskStatusCallback(@RequestBody String params) {
+    public String taskStatusCallback(@RequestBody String params) throws InterruptedException {
+        // 休眠5秒，为了防止任务状态回调早于呼入回调
+        TimeUnit.SECONDS.sleep(5);
         log.info("任务状态回调参数是{}", params);
         TaskStatusCallback taskStatusCallback = JSONObject.parseObject(params, TaskStatusCallback.class);
         log.info("进入了任务状态回调接口，任务id{}，任务状态是{}", taskStatusCallback.getData().getData().getCallJobId(), taskStatusCallback.getData().getData().getStatus());
