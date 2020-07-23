@@ -33,6 +33,7 @@ public class HisDataMigrate {
         if (isEnableTimer) {
             log.info("开始执行数据迁移，时间：{}", LocalDateTime.now(ZoneId.systemDefault()));
             this.hisDataMigrateService.hisDataMigrate();
+            log.info("完成执行数据迁移，时间：{}", LocalDateTime.now(ZoneId.systemDefault()));
         } else {
             log.info("定时历史数据迁移任务未开启");
         }
