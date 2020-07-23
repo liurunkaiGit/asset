@@ -651,8 +651,13 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
             }
             BigDecimal subtract = jayhje.subtract(hkje);
             curAssetsPackage.setWaYe(subtract);
+            //是否出催
+            String isExitCollect = assetsRepayment.getIsExitCollect();
+            if(isExitCollect == null || "".equals(isExitCollect)){
+                isExitCollect="-1";
+            }
             // 判断是否出催
-            if (Integer.valueOf(assetsRepayment.getIsExitCollect()).equals(IsNoEnum.IS.getCode())) {
+            if (Integer.valueOf(isExitCollect).equals(IsNoEnum.IS.getCode())) {
                 // 修改资产结案信息
                 closeCaseList = updateAssetCloseCaseInfo2(curAssetsPackage, assetsRepayment,closeCaseList);
                 // 将结案数据添加到结案列表
