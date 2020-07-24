@@ -460,7 +460,9 @@
                 uKeFuSoftPhone.AgentLogout(agent,domain, extno, pwd);
                 window.setTimeout(function() {
                     var batchCall = currentCall;
-                    uKeFuSoftPhone.CallOut(batchCall,exonNum);
+                    var phone = batchCall.phone;
+                    var exonNum2 = batchCall.exonNum;
+                    uKeFuSoftPhone.CallOut(phone,exonNum2);
                 },2000);
             }
         }
