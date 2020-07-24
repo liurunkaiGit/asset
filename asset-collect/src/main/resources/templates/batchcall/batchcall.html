@@ -311,8 +311,8 @@
                 if(type == "EVENT_CALLOUT_FAIL"){
                     console.log('callout' + type,JSON.stringify(data))
                 }
-                if(type == "EVENT_CALLOUT_SUCCESS"){//呼叫成功
-                    console.log('EVENT_CALLOUT_SUCCESS' + type,JSON.stringify(data))
+                if(type == "EVENT_OUTBOUND_CUSTOMER_ANSWERED"){//电话接通
+                    console.log('EVENT_OUTBOUND_CUSTOMER_ANSWERED' + type,JSON.stringify(data))
                     isWjt = "1";//赋值为 1 ，方便挂断时候判断用
                     var caseNo = currentCall.caseNo;
                     var importBatchNo = currentCall.importBatchNo;
@@ -321,7 +321,7 @@
                     var id = currentCall.id;
                     openAutoCollJob(caseNo,importBatchNo,orgId,exonNum,id);
                 }
-                if(type == "EVENT_OUTBOUND_CUSTOMER_HANGUP" || type == "EVENT_HUNGUP_SUCCESS"){//客户挂机 或者 坐席挂机
+                if(type == "EVENT_OUTBOUND_CUSTOMER_HANGUP" || type == "EVENT_HUNGUP_SUCCESS" || type=="EVENT_OUTBOUND_AGNET_HANGUP"){//客户挂机 或者 坐席挂机
                     if(isWjt == ""){
                         updateStatus(currentCall.id,4,"客户未接通，已完成","","");//已完成
                     }
@@ -329,7 +329,7 @@
                 // if(type == "EVENT_HUNGUP_SUCCESS" || type == "EVENT_HUNGUP" || type == "EVENT_OUTBOUND_AGNET_HANGUP" || type == "EVENT_OUTBOUND_CUSTOMER_HANGUP" || type == "EVENT_OUTBOUND_FORECAST_AGNET_HANGUP" || type == "EVENT_OUTBOUND_FORECAST_CUSTOMER_HANGUP"){
                 if(type == "EVENT_HUNGUP"){//接通之后挂掉电话
                     console.log('hangup' + type,JSON.stringify(data));
-                    console.log("自建录音返回信息RecordingFile="+data[0].RecordingFile+",recordTime="+",currentCaseNo="+currentCaseNo);
+                    // console.log("自建录音返回信息RecordingFile="+data[0].RecordingFile+",recordTime="+",currentCaseNo="+currentCaseNo);
                     resetTiming();
                     // 直接保存点催记录
                     var val = $('input[name="radioChoose"]:checked').parents("tr");
