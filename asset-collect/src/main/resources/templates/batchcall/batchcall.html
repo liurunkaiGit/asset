@@ -330,7 +330,7 @@
                 if(type == "EVENT_HUNGUP"){//接通之后挂掉电话
                     console.log('hangup' + type,JSON.stringify(data));
                     // console.log("自建录音返回信息RecordingFile="+data[0].RecordingFile+",recordTime="+",currentCaseNo="+currentCaseNo);
-                    resetTiming();
+                    childObj.resetTiming();
                     // 直接保存点催记录
                     var val = $('input[name="radioChoose"]:checked').parents("tr");
                     console.log("通话记录id：" + $("#callRecordId").val() + "，通话开始时间：" + data[0].BAnswerStamp + "，通话结束时间：" + data[0].BEndStamp + "，通话录音：" + data[0].RecordingFile);
@@ -532,7 +532,7 @@
                 startTime = event.recordTime;
                 endTime = event.startTime;
                 recordDuration = String(event.recordDuration);
-                console.log("平安录音返回信息recordFile="+event.recordFile+",recordTime="+event.recordTime+",startTime="+event.startTime+",recordDuration="+event.recordDuration+",currentCaseNo="+currentCall.caseNo);
+                // console.log("平安录音返回信息recordFile="+event.recordFile+",recordTime="+event.recordTime+",startTime="+event.startTime+",recordDuration="+event.recordDuration+",currentCaseNo="+currentCall.caseNo);
                 // 直接保存点催记录
                 // var val = $('input[name="radioChoose"]:checked').parents("tr");
                 $.post(
