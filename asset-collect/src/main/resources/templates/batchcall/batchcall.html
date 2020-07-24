@@ -458,6 +458,10 @@
                 console.log("初始化成功");
                 // 每次登陆之前先退出，然后再进行登录
                 uKeFuSoftPhone.AgentLogout(agent,domain, extno, pwd);
+                window.setTimeout(function() {
+                    var batchCall = currentCall;
+                    uKeFuSoftPhone.CallOut(batchCall,exonNum);
+                },2000);
             }
         }
 
