@@ -167,11 +167,6 @@
     <update id="updateTLcCallRecord" parameterType="com.ruoyi.task.domain.TLcCallRecord">
         update t_lc_call_record
         <trim prefix="SET" suffixOverrides=",">
-            <!--<if test="certificateNo != null  and certificateNo != ''">certificate_no = #{certificateNo},</if>-->
-            <if test="caseNo != null  and caseNo != ''">case_no = #{caseNo},</if>
-            <if test="contactName != null  and contactName != ''">contact_name = #{contactName},</if>
-            <if test="phone != null  and phone != ''">phone = #{phone},</if>
-            <if test="contactRelation != null ">contact_relation = #{contactRelation},</if>
             <if test="callStartTime != null ">call_start_time = #{callStartTime},</if>
             <if test="callEndTime != null ">call_end_time = #{callEndTime},</if>
             <if test="callLen != null and callLen != ''">call_len = #{callLen},</if>
@@ -179,11 +174,8 @@
             <if test="callResult != null  and callResult != ''">call_result = #{callResult},</if>
             <if test="callRadioLocation != null  and callRadioLocation != ''">call_radio_location = #{callRadioLocation},</if>
             <if test="callRadio != null  and callRadio != ''">call_radio = #{callRadio},</if>
-            <if test="createTime != null ">create_time = #{createTime},</if>
-            <if test="createBy != null ">create_by = #{createBy},</if>
             <if test="findDate != null  and findDate != ''">find_date = #{findDate},</if>
             <if test="remark != null ">remark = #{remark},</if>
-            <if test="platform != null ">platform = #{platform},</if>
         </trim>
         where id = #{id}
     </update>
