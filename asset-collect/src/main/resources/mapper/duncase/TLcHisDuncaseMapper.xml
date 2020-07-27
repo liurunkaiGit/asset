@@ -91,7 +91,7 @@
             t.case_no,
             t.custom_name,
             t.transfer_type,
-            t.enter_coll_date,
+            ta.enter_coll_date,
             ta.arrears_total as appoint_case_balance,
             t.overdue_days,
             ta.close_case_yhje,
