@@ -290,6 +290,7 @@
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
                 clickToSelect:true,
+                showFooter: true,
                 modalName: "任务",
                 columns: [{
                     checkbox: true
@@ -308,7 +309,10 @@
                             firstImportBatchNo = row.importBatchNo;
                         }
                         return "<a href='javascript:void(0)' onclick='toCollJob(\""+value + "\",\""+row.importBatchNo + "\")'>"+value+"</a>";
-                    }
+                    },
+                        footerFormatter:function (value) {
+                            return "<font color=\"black\"> <b>合计</b></font>";
+                        }
                 },
                 {
                     field : 'customName',
@@ -317,23 +321,57 @@
                 {
                     field : 'arrearsTotal',
                     title : '委案金额',
-                    sortable: true
+                    sortable: true,
+                    footerFormatter:function (value) {
+                        var sumBalance = 0;
+                        for (var i in value) {
+                            sumBalance += parseFloat(value[i].arrearsTotal);
+                        }
+                        return "<font color=\"#8b0000\"><b>" + sumBalance.toFixed(2) + "</b></font>";
+                    }
                 },
                     {
                         field : 'closeCaseYhje',
                         title : '结案应还金额',
-                        sortable: true
+                        sortable: true,
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                if(value[i].closeCaseYhje != null && value[i].closeCaseYhje != "") {
+                                    sumBalance += parseFloat(value[i].closeCaseYhje);
+                                }
+                            }
+                            return "<font color=\"#ff8c00\"> <b>" + sumBalance.toFixed(2) + "</b></font>";
+                        }
                     },
                     {
                         field : 'dqyhje',
                         title : '当前已还金额',
-                        sortable: true
+                        sortable: true,
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                if(value[i].dqyhje != null && value[i].dqyhje != "") {
+                                    sumBalance += parseFloat(value[i].dqyhje);
+                                }
+                            }
+                            return "<font color=\"#006400\"><b>" + sumBalance.toFixed(2) + "</b></font>";
+                        }
 
                     },
                     {
                         field : 'ljyhje',
                         title : '累计已还金额',
-                        sortable: true
+                        sortable: true,
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                if(value[i].ljyhje != null && value[i].ljyhje != "") {
+                                    sumBalance += parseFloat(value[i].ljyhje);
+                                }
+                            }
+                            return "<font color=\"#7fff00\"><b>" + sumBalance.toFixed(2) + "</b></font>";
+                        }
 
                     },
                     {

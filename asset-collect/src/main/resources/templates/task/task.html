@@ -230,7 +230,7 @@
                          <div class="modal-footer">
                              <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
                              <button type="button" class="btn btn-primary" onclick="closeCaseSave();">保存</button>
-                         </div>
+                     </div>
                      </div>
                  </div>
              </div>
@@ -266,6 +266,7 @@
                 clickToSelect:true,
                 firstLoad:false,
                 rememberSelected:true,
+                showFooter: true,
                 modalName: "任务",
                 columns: [{
                     field: 'state',
@@ -280,7 +281,11 @@
                     title : '机构案件号',
                     formatter: function(value, row, index) {
                         return "<a href='javascript:void(0)' onclick='collHis(\""+value + "\",\""+row.orgId + "\",\""+row.importBatchNo+ "\")'>"+value+"</a>";
-                    }
+                    },
+                        footerFormatter:function (value) {
+                            return "<font color=\"black\"> <b>合计</b></font>";
+                        }
+
                 },
                 {
                     field : 'transferType',
@@ -297,25 +302,58 @@
                 {
                     field : 'arrearsTotal',
                     title : '委案金额',
-                    sortable: true
-
+                    sortable: true,
+                    footerFormatter:function (value) {
+                        var sumBalance = 0;
+                        for (var i in value) {
+                            sumBalance += parseFloat(value[i].arrearsTotal);
+                        }
+                        return "<font color=\"#8b0000\"><b>" + sumBalance.toFixed(2) + "</b></font>";
+                    }
                 },
                 {
                     field : 'closeCaseYhje',
                     title : '结案应还金额',
-                    sortable: true
+                    sortable: true,
+                    footerFormatter:function (value) {
+                        var sumBalance = 0;
+                        for (var i in value) {
+                            if(value[i].closeCaseYhje != null && value[i].closeCaseYhje != "") {
+                                sumBalance += parseFloat(value[i].closeCaseYhje);
+                            }
+                        }
+                        return "<font color=\"#ff8c00\"> <b>" + sumBalance.toFixed(2) + "</b></font>";
+                    }
 
                 },
                     {
                         field : 'dqyhje',
                         title : '当前已还金额',
-                        sortable: true
+                        sortable: true,
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                if(value[i].dqyhje != null && value[i].dqyhje != "") {
+                                    sumBalance += parseFloat(value[i].dqyhje);
+                                }
+                            }
+                            return "<font color=\"#006400\"><b>" + sumBalance.toFixed(2) + "</b></font>";
+                        }
 
                     },
                     {
                         field : 'ljyhje',
                         title : '累计已还金额',
-                        sortable: true
+                        sortable: true,
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                if(value[i].ljyhje != null && value[i].ljyhje != "") {
+                                    sumBalance += parseFloat(value[i].ljyhje);
+                                }
+                            }
+                            return "<font color=\"#7fff00\"><b>" + sumBalance.toFixed(2) + "</b></font>";
+                        }
 
                     },
                 {
