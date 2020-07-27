@@ -13,8 +13,14 @@ import com.ruoyi.enums.StopCallConditionEnum;
 import com.ruoyi.robot.domain.*;
 import com.ruoyi.robot.utils.RobotResponse;
 import com.ruoyi.utils.LocalDateTimeUtil;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.javassist.runtime.Inner;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import sun.audio.AudioPlayer;
@@ -28,6 +34,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 /**
@@ -381,5 +388,87 @@ public class Test {
         System.out.println(JSON.toJSONString(integers));
         List<String> list = JSONUtil.toList(JSONUtil.parseArray(JSON.toJSONString(integers)), String.class);
         list.forEach(s -> System.out.println(s));
+    }
+
+    @org.junit.Test
+    public void testCopyOnWriteArrayList() {
+        List<User> userList = new ArrayList<>();
+        for (int i = 1; i <= 3; i++) {
+            userList.add(new User(i));
+        }
+        userList = new CopyOnWriteArrayList(userList.toArray());
+        userList.stream().forEach(user -> log.info("user is:{}",user));
+    }
+
+    /**
+     * 新增金额&数量均分规则
+     */
+    @org.junit.Test
+    public void testMoneyNumAllocat() {
+        CopyOnWriteArrayList<User> userList = new CopyOnWriteArrayList<>();
+        for (int i = 1; i <= 3; i++) {
+            userList.add(new User(i));
+        }
+//        userList.stream().forEach(user -> log.info("user is:{}",user));
+        CopyOnWriteArrayList<Task> taskList = new CopyOnWriteArrayList<>();
+        for (int i = 1; i <= 100000; i++) {
+            taskList.add(new Task(i,new BigDecimal(i),null));
+        }
+//        taskList.stream().forEach(task -> log.info("task is:{}",task));
+//        for (Task task : taskList) {
+//            for (int i = 0; i < userList.size(); i++) {
+//                task.setUserId(userList.get(i).getUserId());
+//                taskList.remove(task);
+//            }
+//        }
+        long start = System.currentTimeMillis();
+        CopyOnWriteArrayList<Task> newTaskList = new CopyOnWriteArrayList<>();
+        for (int j = 0; j < taskList.size(); j++) {
+            if (taskList == null || taskList.size() == 0) {
+                break;
+            }
+            for (int i = 0; i < userList.size(); i++) {
+                if (taskList == null || taskList.size() == 0) {
+                    break;
+                }
+                taskList.get(0).setUserId(userList.get(i).getUserId());
+                newTaskList.add(taskList.get(0));
+                taskList.remove(taskList.get(0));
+            }
+//            break;
+            for (int i = 0; i < userList.size(); i++) {
+                if (taskList == null || taskList.size() == 0) {
+                    break;
+                }
+                Task task = taskList.get(taskList.size() - 1);
+                task.setUserId(userList.get(i).getUserId());
+                newTaskList.add(task);
+                taskList.remove(task);
+            }
+        }
+        long end = System.currentTimeMillis();
+        log.info("分配所用时间：{}", end - start);
+//        log.info("分配后旧的任务集合+++++++++++++++++++++++++++++++++");
+//        taskList.stream().forEach(task -> log.info("task is:{}",task));
+//        log.info("分配新旧的任务集合---------------------------");
+//        newTaskList.stream().forEach(task -> log.info("newTask is:{}",task));
+    }
+
+    @ToString
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    class User{
+        private Integer userId;
+    }
+
+    @ToString
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    class Task{
+        private Integer taskId;
+        private BigDecimal money;
+        private Integer userId;
     }
 }

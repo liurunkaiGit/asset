@@ -134,13 +134,8 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
      */
     @Override
     public int updateTLcCallRecord(TLcCallRecord tLcCallRecord) {
-        OrgPackage orgPackage = this.orgPackageService.selectOrgPackageByOrgId(tLcCallRecord.getOrgId());
-        // 通话录音地址不为空并且通话录音是否推送到质检系统
-        if (!"-1".equals(tLcCallRecord.getCreateBy()) && StringUtils.isNotBlank(tLcCallRecord.getCallRadioLocation()) && tLcCallRecord.getSendRadioCheck() != null &&
-                tLcCallRecord.getSendRadioCheck() == 1 && orgPackage != null && orgPackage.getSendRadioQc().equals(IsNoEnum.IS.getCode())) {
-            // 异步将录音文件推送到录音质检系统
-            this.sendRadioQcRecordService.sendRadioToQualityCheck(tLcCallRecord, orgPackage);
-        }
+        // 异步将录音文件推送到录音质检系统
+        this.sendRadioQcRecordService.sendRadioToQualityCheck(tLcCallRecord);
         return tLcCallRecordMapper.updateTLcCallRecord(tLcCallRecord);
     }
 

@@ -11,6 +11,7 @@ import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 /**
@@ -73,5 +74,55 @@ public class AllocatRuleUtil {
             }
         }
         return sortTaskByArrearsTotalList;
+    }
+
+    /**
+     * 按照金额和数量平均分配
+     *
+     * @param taskList
+     * @param userList
+     * @return
+     */
+    public static List<TLcTask> averageAllocatTaskByMoneyNum(List<TLcTask> taskList, List<SysUser> userList) {
+        // 先对案件根据金额进行排序
+        List<TLcTask> sortTaskByArrearsNumTotalList = taskList.stream().sorted(Comparator.comparing(TLcTask::getArrearsTotal)).collect(Collectors.toList());
+        sortTaskByArrearsNumTotalList = new CopyOnWriteArrayList(sortTaskByArrearsNumTotalList.toArray());
+        // 创建一个新的任务集合用来保存分配后的任务
+        CopyOnWriteArrayList<TLcTask> newTaskList = new CopyOnWriteArrayList<>();
+        for (int j = 0; j < sortTaskByArrearsNumTotalList.size(); j++) {
+            if (sortTaskByArrearsNumTotalList == null || sortTaskByArrearsNumTotalList.size() == 0) {
+                break;
+            }
+            // 正着给每个坐席分配一个任务
+            for (int i = 0; i < userList.size(); i++) {
+                if (sortTaskByArrearsNumTotalList == null || sortTaskByArrearsNumTotalList.size() == 0) {
+                    break;
+                }
+                sortTaskByArrearsNumTotalList.get(0).setOwnerId(userList.get(i).getUserId());
+                sortTaskByArrearsNumTotalList.get(0).setOwnerName(userList.get(i).getUserName());
+                sortTaskByArrearsNumTotalList.get(0).setTaskType(TaskTypeEnum.RE_ALLOCAT.getCode());
+                sortTaskByArrearsNumTotalList.get(0).setTaskStatus(TaskStatusEnum.ALLOCATING.getStatus());
+                sortTaskByArrearsNumTotalList.get(0).setModifyOwnerTime(LocalDateTime.now(ZoneId.systemDefault()));
+                sortTaskByArrearsNumTotalList.get(0).setRecentlyAllotDate(new Date());
+                newTaskList.add(sortTaskByArrearsNumTotalList.get(0));
+                sortTaskByArrearsNumTotalList.remove(sortTaskByArrearsNumTotalList.get(0));
+            }
+            // 倒着给每个坐席分配一个任务
+            for (int i = 0; i < userList.size(); i++) {
+                if (sortTaskByArrearsNumTotalList == null || sortTaskByArrearsNumTotalList.size() == 0) {
+                    break;
+                }
+                TLcTask task = sortTaskByArrearsNumTotalList.get(sortTaskByArrearsNumTotalList.size() - 1);
+                task.setOwnerId(userList.get(i).getUserId());
+                task.setOwnerName(userList.get(i).getUserName());
+                task.setTaskType(TaskTypeEnum.RE_ALLOCAT.getCode());
+                task.setTaskStatus(TaskStatusEnum.ALLOCATING.getStatus());
+                task.setModifyOwnerTime(LocalDateTime.now(ZoneId.systemDefault()));
+                task.setRecentlyAllotDate(new Date());
+                newTaskList.add(task);
+                sortTaskByArrearsNumTotalList.remove(task);
+            }
+        }
+        return newTaskList;
     }
 }

@@ -418,7 +418,9 @@ public class CallbackServiceImpl implements CallbackService {
      * @param taskDetail
      */
     private void updateRobotTaskPandect(TaskStatusCallback.TaskStatusCallbackData.taskStatusData data, RobotTask taskDetail) {
-        TLcRobotTaskPandect robotTaskPandect = this.robotTaskPandectService.selectTLcRobotTaskPandectByRobotTaskId(data.getCallJobId());
+//        TLcRobotTaskPandect robotTaskPandect = this.robotTaskPandectService.selectTLcRobotTaskPandectByRobotTaskId(data.getCallJobId());
+        TLcRobotTaskPandect robotTaskPandect = new TLcRobotTaskPandect();
+        robotTaskPandect.setRobotTaskId(data.getCallJobId());
         robotTaskPandect.setRobotTaskStatus(LocalRobotTaskStatus.FINISHED.getCode());
         robotTaskPandect.setTaskEndTime(DateUtils.dateTime(DateUtils.YYYY_MM_DD, data.getEndDate()));
         robotTaskPandect.setPhoneNum(taskDetail.getTotalCount());
@@ -436,7 +438,7 @@ public class CallbackServiceImpl implements CallbackService {
         robotTaskPandect.setCallFailCount(taskDetail.getFromUnavailableCount());
         robotTaskPandect.setCallLossCount(taskDetail.getLostCount());
         robotTaskPandect.setCallOverdueCount(taskDetail.getOverdueCount());
-        this.robotTaskPandectService.updateTLcRobotTaskPandect(robotTaskPandect);
+        this.robotTaskPandectService.updateTLcRobotTaskPandectByRobotTaskId(robotTaskPandect);
     }
 
     /**

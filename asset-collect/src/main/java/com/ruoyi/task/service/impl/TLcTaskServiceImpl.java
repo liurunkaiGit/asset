@@ -44,6 +44,7 @@ import com.ruoyi.task.domain.CollJob;
 import com.ruoyi.task.domain.TLcCallRecord;
 import com.ruoyi.task.domain.TLcTask;
 import com.ruoyi.task.mapper.TLcTaskMapper;
+import com.ruoyi.task.service.AsyncTaskService;
 import com.ruoyi.task.service.ITLcCallRecordService;
 import com.ruoyi.task.service.ITLcTaskService;
 import com.ruoyi.utils.AllocatRuleUtil;
@@ -121,6 +122,8 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     private ICurAssetsRepaymentPackageService curAssetsRepaymentPackageService;
     @Autowired
     private ITLcSendRobotApplyService sendRobotApplyService;
+    @Autowired
+    private AsyncTaskService asyncTaskService;
 
     /**
      * 查询任务
@@ -404,14 +407,9 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         taskList = allocatTask(allocatRule, taskList, userList);
         if (taskList != null && taskList.size() > 0) {
             this.tLcTaskMapper.batchUpdateTask(taskList);
-            // 异步更新案件表信息
-//        this.asyncITLcDuncaseService.updateDuncase(taskList,TaskTypeEnum.RE_ALLOCAT.getCode(),TaskStatusEnum.ALLOCATING.getStatus());
-//        // 修改案件表
-//        updateDuncase(taskList,TaskTypeEnum.RE_ALLOCAT.getCode(),TaskStatusEnum.ALLOCATING.getStatus());
-//        // 添加到案件轨迹表中
+            // 添加到案件轨迹表中
             insertDuncaseAssign(taskList, ShiroUtils.getSysUser());
         }
-
         return AjaxResult.success();
     }
 
@@ -734,6 +732,9 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         } else if (allocatRule.equals(AllocatRuleEnum.DUNCASE_MONEY_AVERAGE.getCode())) {
             // 案件金额平均分配
             taskList = AllocatRuleUtil.averageAllocatTaskByMoney(taskList, userList);
+        } else if (allocatRule.equals(AllocatRuleEnum.DUNCASE_MONEY_NUM_AVERAGE.getCode())) {
+            // 案件金额和数量平均分配
+            taskList = AllocatRuleUtil.averageAllocatTaskByMoneyNum(taskList, userList);
         }
         return taskList;
     }
@@ -1112,8 +1113,9 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                     tLcCallRecordService.updateTLcCallRecord(tLcCallRecord);
                 }
             }
-            // 更新任务表数据
-            updateTask(tLcCallRecord, importBatchNo);
+            // 异步更新任务表数据
+            this.asyncTaskService.updateTask(tLcCallRecord, importBatchNo);
+            log.info("添加通话记录结束");
             return Response.success(tLcCallRecord.getId());
         } catch (Exception e) {
             log.error("添加记录失败，error is {}", e);
@@ -1148,24 +1150,6 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 }
             }
         }
-    }
-
-    /**
-     * 更新任务表数据--新增或者修改电催记录时
-     *
-     * @param tLcCallRecord
-     * @param importBatchNo
-     */
-    private void updateTask(TLcCallRecord tLcCallRecord, String importBatchNo) {
-        TLcTask tLcTask = TLcTask.builder()
-                .caseNo(tLcCallRecord.getCaseNo())
-                .importBatchNo(importBatchNo)
-                .orgId(tLcCallRecord.getOrgId())
-                .callSign(tLcCallRecord.getCallSign())
-                .callSignValue(tLcCallRecord.getCallResult())
-                .recentlyFollowUpDate(new Date())
-                .build();
-        this.tLcTaskMapper.updateTaskByCaseNoAndImportBatchNoAndOrgId(tLcTask);
     }
 
     @Override

@@ -65,7 +65,6 @@ public interface ITLcSendRadioQcRecordService {
      * 异步将录音文件推送到录音质检系统
      *
      * @param tLcCallRecord
-     * @param orgPackage
      */
-    void sendRadioToQualityCheck(TLcCallRecord tLcCallRecord, OrgPackage orgPackage);
+    void sendRadioToQualityCheck(TLcCallRecord tLcCallRecord);
 }
