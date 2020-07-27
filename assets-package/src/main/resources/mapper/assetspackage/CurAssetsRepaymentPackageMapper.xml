@@ -408,7 +408,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         import_batch_no,
         close_case_date,
         org_name,
-        is_exception)
+        is_exception,
+        transferType,
+        rmb_ye,
+        owner_name,
+        asset_batch_no)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
             (#{item.id},
@@ -457,7 +461,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{item.importBatchNo},
             #{item.closeCaseDate},
             #{item.orgName},
-            0)
+            0,
+            #{item.transferType},
+            #{item.rmbYe},
+            #{item.ownerName},
+            #{item.assetBatchNO})
         </foreach>
     </insert>
     
@@ -663,7 +671,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         is_exit_collect,
         import_batch_no,
         close_case_date,
-        org_name
+        org_name,
+        transferType,
+        owner_name,
+        rmb_ye,
+        asset_batch_no
         )
         SELECT
         id,
@@ -711,7 +723,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         is_exit_collect,
         import_batch_no,
         close_case_date,
-        org_name
+        org_name,
+        transferType,
+        owner_name,
+        rmb_ye,
+        asset_batch_no
         FROM cur_assets_repayment_package_temp WHERE import_batch_no=#{importBatchNo} AND is_exception='0'
     </insert>
 

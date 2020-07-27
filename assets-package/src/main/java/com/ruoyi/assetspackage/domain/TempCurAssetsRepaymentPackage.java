@@ -288,4 +288,12 @@ public class TempCurAssetsRepaymentPackage extends BaseEntity {
      * 拥有查看数据权限的部门集合
      */
     private Set<Long> deptIds;
+
+    private String ownerName;
+    private BigDecimal rmbYe;
+    private String transferType;
+    /**
+     * 资产批次号
+     */
+    private String assetBatchNO;
 }

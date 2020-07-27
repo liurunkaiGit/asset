@@ -1,11 +1,11 @@
 package com.ruoyi.assetspackage.util;
 
-import com.ruoyi.assetspackage.domain.CurAssetsRepaymentPackage;
-import com.ruoyi.assetspackage.domain.RepaymentImportDataMapping;
-import com.ruoyi.assetspackage.domain.TempCurAssetsPackage;
-import com.ruoyi.assetspackage.domain.TempCurAssetsRepaymentPackage;
+import com.ruoyi.assetspackage.domain.*;
 import com.ruoyi.assetspackage.enums.IsCloseCaseEnum;
 import com.ruoyi.assetspackage.enums.IsNoEnum;
+import com.ruoyi.assetspackage.service.IAssetsRepaymenFromXYService;
+import com.ruoyi.assetspackage.service.ICurAssetsPackageService;
+import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 
 import java.math.BigDecimal;
@@ -794,6 +794,7 @@ public class RepaymentDataImportUtil {
     }
 
     public static List<TempCurAssetsRepaymentPackage> dataConvert2(List<Map<String, String>> datas, String orgId,String importBatchNo,String orgName) throws Exception{
+        IAssetsRepaymenFromXYService service = SpringUtils.getBean(IAssetsRepaymenFromXYService.class);
         List<TempCurAssetsRepaymentPackage> list = new ArrayList<TempCurAssetsRepaymentPackage>();
         String loginName = ShiroUtils.getLoginName();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -1008,11 +1009,27 @@ public class RepaymentDataImportUtil {
             dto.setImportBatchNo(importBatchNo);
             dto.setOrgName(orgName);
             dto.setJazt(IsCloseCaseEnum.NOT_CLOSE_CASE.getValue());
+//            if(orgName != null && orgName.contains("兴业消金")){
+                //查询 委案金额、手别、资产批次号、业务归属人
+                Map<String,String> param = new HashMap<>();
+                param.put("orgId",orgId);
+                param.put("orgCasNo",dto.getOrgCasno());
+                param.put("hkrq",dto.getHkrq());
+                CurAssetsPackage assetsInfo = service.findAssetsInfo(param);
+                String ownerName = service.findOwnerName(param);
+                if(assetsInfo != null){
+                    dto.setRmbYe(assetsInfo.getRmbYe());
+                    dto.setTransferType(assetsInfo.getTransfertype());
+                    dto.setAssetBatchNO(assetsInfo.getImportBatchNo());
+                }
+                dto.setOwnerName(ownerName);
+//            }
+
             list.add(dto);
         }
-
         return list;
     }
+
 
     private static Date getDateByFormat(String value) throws ParseException {
         if (value.length() == 8) {
