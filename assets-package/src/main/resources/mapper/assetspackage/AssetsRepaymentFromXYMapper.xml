@@ -54,6 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="ownerName"    column="owner_name"    />
         <result property="rmbYe"    column="rmb_ye"    />
         <result property="assetBatchNO"    column="asset_batch_no"    />
+        <result property="sque"    column="sque"    />
     </resultMap>
 
     <resultMap type="com.ruoyi.assetspackage.domain.CurAssetsPackage" id="CurAssetsPackageResult">
@@ -177,21 +178,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <select id="findCurAssetsRepaymentList" parameterType="CurAssetsRepaymentPackage" resultMap="CurAssetsRepaymentPackageResult">
-        SELECT id,org_casNo,org_name,transferType,hksyqqs,cur_name,rmb_ye,hkje,hkrq,create_time,owner_name
-        from cur_assets_repayment_package
+        SELECT (@a :=@a + 1) as sque,t.id,t.org_casNo,t.org_name,t.transferType,t.hksyqqs,t.cur_name,t.rmb_ye,t.hkje,t.hkrq,t.create_time,t.owner_name
+        from cur_assets_repayment_package t,(SELECT @a := 0) t1
         <where>
-            <if test="orgCasno != null  and orgCasno != ''"> and org_casNo = #{orgCasno}</if>
-            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
-            <if test="startDate != null"> and hkrq <![CDATA[>=]]> #{startDate}</if>
-            <if test="endDate != null"> and hkrq <![CDATA[<=]]> #{endDate}</if>
+            <if test="orgCasno != null  and orgCasno != ''"> and t.org_casNo = #{orgCasno}</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and t.import_batch_no = #{importBatchNo}</if>
+            <if test="startDate != null"> and t.hkrq <![CDATA[>=]]> #{startDate}</if>
+            <if test="endDate != null"> and t.hkrq <![CDATA[<=]]> #{endDate}</if>
             <choose>
                 <when test="orgId != null and orgId != ''">
-                    and org_id = #{orgId}
+                    and t.org_id = #{orgId}
                 </when>
                 <otherwise>
                     <choose>
                         <when test="deptIds != null">
-                            and org_id in
+                            and t.org_id in
                             <foreach collection="deptIds" item="deptId" open="(" close=")" separator=",">
                                 #{deptId}
                             </foreach>
@@ -200,6 +201,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 </otherwise>
             </choose>
         </where>
+        ORDER BY t.create_time DESC
     </select>
     
 
@@ -212,6 +214,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
        SELECT owner_name as ownerName
        from t_lc_duncase_assign  where org_id=#{orgId} and case_no=#{orgCasNo}
        and date_format(create_time, '%Y-%m-%d')= #{hkrq}
+       group by owner_name
     </select>
 
     <select id="findOwnerNameByTask" parameterType="java.util.Map" resultType="java.lang.String">

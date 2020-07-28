@@ -624,6 +624,7 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
     }
 
     @Override
+    @Transactional
     public AjaxResult callRemote2(List<CurAssetsRepaymentPackage> list,String importBatchNo) throws Exception{
         List<CloseCase> remoteList = new ArrayList<>();
         List<CurAssetsPackage> closeCaseList = new ArrayList<>();

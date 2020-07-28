@@ -26,6 +26,9 @@ public class CurAssetsRepaymentPackage extends BaseEntity {
      */
     private String id;
 
+    @Excel(name = "序号")
+    private Integer sque;
+
     /**
      * 机构案件号
      */
