@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.AssetsRepaymentFromXYMapper">
+    
+    <resultMap type="com.ruoyi.assetspackage.domain.CurAssetsRepaymentPackage" id="CurAssetsRepaymentPackageResult">
+        <result property="id"    column="id"    />
+        <result property="orgCasno"    column="org_casNo"    />
+        <result property="jyqtfy"    column="jyqtfy"    />
+        <result property="jylx"    column="jylx"    />
+        <result property="jybj"    column="jybj"    />
+        <result property="jyznf"    column="jyznf"    />
+        <result property="jyType"    column="jy_type"    />
+        <result property="jyje"    column="jyje"    />
+        <result property="productType"    column="product_type"    />
+        <result property="jjh"    column="jjh"    />
+        <result property="csr"    column="csr"    />
+        <result property="csjd"    column="csjd"    />
+        <result property="fprq"    column="fprq"    />
+        <result property="areaCenter"    column="area_center"    />
+        <result property="acceptCity"    column="accept_city"    />
+        <result property="hth"    column="hth"    />
+        <result property="dqsybYj"    column="dqsyb_yj"    />
+        <result property="dqsybEj"    column="dqsyb_ej"    />
+        <result property="wbqs"    column="wbqs"    />
+        <result property="wbjb"    column="wbjb"    />
+        <result property="warq"    column="warq"    />
+        <result property="curName"    column="cur_name"    />
+        <result property="khjlxm"    column="khjlxm"    />
+        <result property="sjrq"    column="sjrq"    />
+        <result property="sfwbcs"    column="sfwbcs"    />
+        <result property="sfjq"    column="sfjq"    />
+        <result property="bywa"    column="bywa"    />
+        <result property="ajhsrq"    column="ajhsrq"    />
+        <result property="xfjrzh"    column="xfjrzh"    />
+        <result property="tzsx"    column="tzsx"    />
+        <result property="tzje"    column="tzje"    />
+        <result property="zhzt"    column="zhzt"    />
+        <result property="hkrq"    column="hkrq"    />
+        <result property="hksyqqs"    column="hksyqqs"    />
+        <result property="hkje"    column="hkje"    />
+        <result property="yqcplx"    column="yqcplx"    />
+        <result property="yqjd"    column="yqjd"    />
+        <result property="quotaProduct"    column="quota_product"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="jazt"    column="jazt"    />
+        <result property="isExitCollect"    column="is_exit_collect"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="transferType"    column="transferType"    />
+        <result property="ownerName"    column="owner_name"    />
+        <result property="rmbYe"    column="rmb_ye"    />
+        <result property="assetBatchNO"    column="asset_batch_no"    />
+    </resultMap>
+
+    <resultMap type="com.ruoyi.assetspackage.domain.CurAssetsPackage" id="CurAssetsPackageResult">
+        <result property="id"    column="id"    />
+        <result property="orgCasno"    column="org_casNo"    />
+        <result property="org"    column="org"    />
+        <result property="transfertype"    column="transferType"    />
+        <result property="rmbYe"    column="rmb_ye"    />
+        <result property="rmbYhfxzje"    column="rmb_yhfxzje"    />
+        <result property="rmbYhlizje"    column="rmb_yhlizje"    />
+        <result property="rmbYhbjzje"    column="rmb_yhbjzje"    />
+        <result property="rmbYhfyzje"    column="rmb_yhfyzje"    />
+        <result property="rmbZdyhje"    column="rmb_zdyhje"    />
+        <result property="rmbQkzje"    column="rmb_qkzje"    />
+        <result property="borrowNo"    column="borrow_no"    />
+        <result property="borrowBlank"    column="borrow_blank"    />
+        <result property="borrowEd"    column="borrow_ed"    />
+        <result property="rcr"    column="rcr"    />
+        <result property="fz"    column="fz"    />
+        <result property="areaCenter"    column="area_center"    />
+        <result property="maxYqtsHis"    column="max_yqts_his"    />
+        <result property="sumYqtsHis"    column="sum_yqts_his"    />
+        <result property="sumYqcsHis"    column="sum_yqcs_his"    />
+        <result property="wwCityName"    column="ww_city_name"    />
+        <result property="waYe"    column="wa_ye"    />
+        <result property="billAddress"    column="bill_address"    />
+        <result property="yearRates"    column="year_rates"    />
+        <result property="tjFirm"    column="tj_firm"    />
+        <result property="tjWd"    column="tj_wd"    />
+        <result property="dayRates"    column="day_rates"    />
+        <result property="accountDate"    column="account_date"    />
+        <result property="overdueDays"    column="overdue_days"    />
+        <result property="firstYqDate"    column="first_yq_date"    />
+        <result property="firstYqjcDate"    column="first_yqjc_date"    />
+        <result property="firstYqFlag"    column="first_yq_flag"    />
+        <result property="curName"    column="cur_name"    />
+        <result property="curSex"    column="cur_sex"    />
+        <result property="certificateNo"    column="certificate_no"    />
+        <result property="certificateAddress"    column="certificate_address"    />
+        <result property="registAddress"    column="regist_address"    />
+        <result property="email"    column="email"    />
+        <result property="marriage"    column="marriage"    />
+        <result property="education"    column="education"    />
+        <result property="customerMobile"    column="customer_mobile"    />
+        <result property="customerHomeTel"    column="customer_home_tel"    />
+        <result property="customerHomeAddress"    column="customer_home_address"    />
+        <result property="workName"    column="work_name"    />
+        <result property="workAddress"    column="work_address"    />
+        <result property="workTel"    column="work_tel"    />
+        <result property="firstLiaisonName"    column="first_liaison_name"    />
+        <result property="firstLiaisonRelation"    column="first_liaison_relation"    />
+        <result property="firstLiaisonMobile"    column="first_liaison_mobile"    />
+        <result property="firstLiaisonTel"    column="first_liaison_tel"    />
+        <result property="secondLiaisonName"    column="second_liaison_name"    />
+        <result property="secondLiaisonRelation"    column="second_liaison_relation"    />
+        <result property="secondLiaisonMobile"    column="second_liaison_mobile"    />
+        <result property="secondLiaisonTel"    column="second_liaison_tel"    />
+        <result property="threeLiaisonName"    column="three_liaison_name"    />
+        <result property="threeLiaisonRelation"    column="three_liaison_relation"    />
+        <result property="threeLiaisonMobile"    column="three_liaison_mobile"    />
+        <result property="threeLiaisonTel"    column="three_liaison_tel"    />
+        <result property="cpmc"    column="cpmc"    />
+        <result property="hkType"    column="hk_type"    />
+        <result property="znj"    column="znj"    />
+        <result property="ajhssj"    column="ajhssj"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="packageFlag"    column="package_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="closeCase"    column="close_case"    />
+        <result property="isExitCollect"    column="is_exit_collect"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="closeCaseDate"    column="close_case_date"    />
+        <result property="packageId"    column="package_id"    />
+        <result property="accountAge"    column="account_age"    />
+        <result property="laFlag"    column="la_flag"    />
+        <result property="fxFlag"    column="fx_flag"    />
+        <result property="htlx"    column="htlx"    />
+        <result property="jmbq"    column="jmbq"    />
+        <result property="fcbq"    column="fcbq"    />
+        <result property="fxsfbh"    column="fxsfbh"    />
+        <result property="remark"    column="remark"    />
+        <result property="tar"    column="tar"    />
+        <result property="jkrq"    column="jkrq"    />
+        <result property="zhychkr"    column="zhychkr"    />
+        <result property="mqhkje"    column="mqhkje"    />
+        <result property="dqqkje"    column="dqqkje"    />
+        <result property="ljyhje"    column="ljyhje"    />
+        <result property="sfje"    column="sfje"    />
+        <result property="zdhkzh1"    column="zdhkzh1"    />
+        <result property="zdhkzh2"    column="zdhkzh2"    />
+        <result property="zdhkzhhm1"    column="zdhkzhhm1"    />
+        <result property="zdhkzhhm2"    column="zdhkzhhm2"    />
+        <result property="zdhkqd1"    column="zdhkqd1"    />
+        <result property="zdhkqd2"    column="zdhkqd2"    />
+        <result property="khmb"    column="khmb"    />
+        <result property="spjg"    column="spjg"    />
+        <result property="dklx"    column="dklx"    />
+        <result property="jkbs"    column="jkbs"    />
+        <result property="spxx"    column="spxx"    />
+        <result property="wacs"    column="wacs"    />
+        <result property="ykqs"    column="ykqs"    />
+        <result property="workDept"    column="work_dept"    />
+        <result property="customerMobile2"    column="customer_mobile2"    />
+        <result property="customerMobile3"    column="customer_mobile3"    />
+        <result property="customerMobile4"    column="customer_mobile4"    />
+        <result property="fourthLiaisonName"    column="fourth_liaison_name"    />
+        <result property="fourthLiaisonRelation"    column="fourth_liaison_relation"    />
+        <result property="fourthLiaisonMobile"    column="fourth_liaison_mobile"    />
+        <result property="fifthLiaisonName"    column="fifth_liaison_name"    />
+        <result property="fifthLiaisonRelation"    column="fifth_liaison_relation"    />
+        <result property="fifthLiaisonMobile"    column="fifth_liaison_mobile"    />
+        <result property="dqyhje"    column="dqyhje"    />
+        <!--<result property="freeImport"    column="free_import"    />-->
+    </resultMap>
+
+    <!--<sql id="selectCurAssetsRepaymentPackageVo">
+        select id, org_casNo, jyqtfy, jylx, jybj, jyznf, jy_type, jyje, product_type, jjh, csr, csjd, fprq, area_center, accept_city, hth, dqsyb_yj, dqsyb_ej, wbqs, wbjb, warq, cur_name, khjlxm, sjrq, sfwbcs, sfjq, bywa, ajhsrq, xfjrzh, tzsx, tzje, zhzt, hkrq, hksyqqs, hkje, yqcplx, yqjd, quota_product, org_id, jazt, is_exit_collect, create_by, create_time, import_batch_no, org_name from cur_assets_repayment_package
+    </sql>-->
+
+
+
+    <select id="findCurAssetsRepaymentList" parameterType="CurAssetsRepaymentPackage" resultMap="CurAssetsRepaymentPackageResult">
+        SELECT id,org_casNo,org_name,transferType,hksyqqs,cur_name,rmb_ye,hkje,hkrq,create_time,owner_name
+        from cur_assets_repayment_package
+        <where>
+            <if test="orgCasno != null  and orgCasno != ''"> and org_casNo = #{orgCasno}</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+            <if test="startDate != null"> and hkrq <![CDATA[>=]]> #{startDate}</if>
+            <if test="endDate != null"> and hkrq <![CDATA[<=]]> #{endDate}</if>
+            <choose>
+                <when test="orgId != null and orgId != ''">
+                    and org_id = #{orgId}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="deptIds != null">
+                            and org_id in
+                            <foreach collection="deptIds" item="deptId" open="(" close=")" separator=",">
+                                #{deptId}
+                            </foreach>
+                        </when>
+                    </choose>
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+    
+
+    <select id="findAssetsInfo" parameterType="java.util.Map" resultMap="CurAssetsPackageResult">
+        SELECT org_casNo,transferType,rmb_ye,import_batch_no
+        from cur_assets_package where org_id=#{orgId} and org_casNo=#{orgCasNo} and close_case = 0
+    </select>
+
+    <select id="findOwnerNameByAssign" parameterType="java.util.Map" resultType="java.lang.String">
+       SELECT owner_name as ownerName
+       from t_lc_duncase_assign  where org_id=#{orgId} and case_no=#{orgCasNo}
+       and date_format(create_time, '%Y-%m-%d')= #{hkrq}
+    </select>
+
+    <select id="findOwnerNameByTask" parameterType="java.util.Map" resultType="java.lang.String">
+      SELECT owner_name as ownerName
+      from t_lc_task  where org_id=#{orgId} and case_no=#{orgCasNo} and task_status != 3
+      group by owner_name
+    </select>
+
+</mapper>
