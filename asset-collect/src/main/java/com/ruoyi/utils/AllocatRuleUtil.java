@@ -51,7 +51,7 @@ public class AllocatRuleUtil {
      */
     public static List<TLcTask> averageAllocatTaskByMoney(List<TLcTask> taskList, List<SysUser> userList) {
         // 先对案件根据金额进行排序
-        List<TLcTask> sortTaskByArrearsTotalList = taskList.stream().sorted(Comparator.comparing(TLcTask::getArrearsTotal)).collect(Collectors.toList());
+        List<TLcTask> sortTaskByArrearsTotalList = taskList.stream().sorted(Comparator.comparing(TLcTask::getArrearsTotal).reversed()).collect(Collectors.toList());
         int uid = 0;
         for (int i = 1; i <= sortTaskByArrearsTotalList.size(); i++) {
             if ((i + (2 * userList.size() - 1)) % (2 * userList.size()) > userList.size() - 1) {
@@ -62,7 +62,6 @@ public class AllocatRuleUtil {
                 sortTaskByArrearsTotalList.get(i - 1).setTaskStatus(TaskStatusEnum.ALLOCATING.getStatus());
                 sortTaskByArrearsTotalList.get(i - 1).setModifyOwnerTime(LocalDateTime.now(ZoneId.systemDefault()));
                 sortTaskByArrearsTotalList.get(i - 1).setRecentlyAllotDate(new Date());
-
             } else {
                 uid = (i + (userList.size() * 2 - 1)) % (2 * userList.size());
                 sortTaskByArrearsTotalList.get(i - 1).setOwnerId(userList.get(uid).getUserId());
@@ -84,8 +83,8 @@ public class AllocatRuleUtil {
      * @return
      */
     public static List<TLcTask> averageAllocatTaskByMoneyNum(List<TLcTask> taskList, List<SysUser> userList) {
-        // 先对案件根据金额进行排序
-        List<TLcTask> sortTaskByArrearsNumTotalList = taskList.stream().sorted(Comparator.comparing(TLcTask::getArrearsTotal)).collect(Collectors.toList());
+        // 先对案件根据金额进行排序：默认升序，.reversed()倒叙
+        List<TLcTask> sortTaskByArrearsNumTotalList = taskList.stream().sorted(Comparator.comparing(TLcTask::getArrearsTotal).reversed()).collect(Collectors.toList());
         sortTaskByArrearsNumTotalList = new CopyOnWriteArrayList(sortTaskByArrearsNumTotalList.toArray());
         // 创建一个新的任务集合用来保存分配后的任务
         CopyOnWriteArrayList<TLcTask> newTaskList = new CopyOnWriteArrayList<>();

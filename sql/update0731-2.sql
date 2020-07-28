@@ -1,0 +1,1 @@
+update t_lc_robot_task_his t,t_lc_task ta set t.case_no = ta.case_no where t.task_id = ta.id;

@@ -1,36 +1,28 @@
 package com.ruoyi.enums;
 
-import com.alibaba.druid.sql.visitor.functions.Isnull;
-import com.ruoyi.assetspackage.domain.OrgPackage;
 import com.ruoyi.callConfig.domain.TLcCallStrategyConfig;
 import com.ruoyi.callConfig.service.impl.TLcCallStrategyConfigServiceImpl;
 import com.ruoyi.caseConfig.domain.TLcAllocatCaseConfig;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.config.AppConfig;
-import com.ruoyi.custom.domain.TLcCustContact;
 import com.ruoyi.custom.service.impl.TLcCustContactServiceImpl;
 import com.ruoyi.duncase.domain.TLcDuncase;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.orgSpeechConf.domain.TLcOrgSpeechcraftConf;
-import com.ruoyi.orgSpeechConf.service.ITLcOrgSpeechcraftConfService;
 import com.ruoyi.orgSpeechConf.service.impl.TLcOrgSpeechcraftConfServiceImpl;
 import com.ruoyi.robot.domain.TLcRobotTask;
 import com.ruoyi.robot.service.impl.TLcRobotTaskServiceImpl;
 import com.ruoyi.robot.utils.RobotMethodUtil;
-import com.ruoyi.system.domain.SysDictType;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.impl.SysDictDataServiceImpl;
-import com.ruoyi.system.service.impl.SysDictTypeServiceImpl;
 import com.ruoyi.task.domain.TLcTask;
 import com.ruoyi.task.service.impl.TLcTaskServiceImpl;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -38,6 +30,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 /**
@@ -64,14 +57,9 @@ public enum AllocatTaskEnum {
             SysUser sysUser = new SysUser();
             sysUser.setDeptId(Long.valueOf(manualList.get(0).getOrgId()));
             List<SysUser> userList = this.tLcTaskService.searchUserByDept(sysUser);
-            //构建任务对象
-            List<TLcTask> taskList = manualList.stream()
-                    .map(duncase -> createTask(duncase, AllocatTaskEnum.MANUAL.getAllocatCode()))
-                    .collect(Collectors.toList());
             // 判断是否自动分配任务
             if (caseConfig.getAutoAllocatCase().equals(IsNoEnum.IS.getCode())) {
                 // 如果开启自动分配任务就将任务状态改为分配中，否则默认未分配
-                taskList.stream().forEach(task -> task.setTaskStatus(TaskStatusEnum.ALLOCATING.getStatus()));
                 manualList.stream().forEach(duncase -> duncase.setCaseStatus(TaskStatusEnum.ALLOCATING.getStatus()));
                 if (caseConfig.getAllocatCaseRule().equals(AllocatRuleEnum.DUNCASE_NUM_AVERAGE.getCode())) {
                     // 利用取模法按照数量平均分配任务
@@ -79,8 +67,17 @@ public enum AllocatTaskEnum {
                 } else if (caseConfig.getAllocatCaseRule().equals(AllocatRuleEnum.DUNCASE_MONEY_AVERAGE.getCode())) {
                     // 按照逾期金额平均分配任务
                     averageAllocatTaskByMoney(manualList, userList);
+                } else if (caseConfig.getAllocatCaseRule().equals(AllocatRuleEnum.DUNCASE_MONEY_NUM_AVERAGE.getCode())) {
+                    // 按照逾期金额和数量平均分配任务
+                    averageAllocatTaskByMoneyNum(manualList, userList);
                 }
+            } else {
+                manualList.stream().forEach(duncase -> duncase.setCaseStatus(TaskStatusEnum.NO_ALLOCAT.getStatus()));
             }
+            //构建任务对象
+            List<TLcTask> taskList = manualList.stream()
+                    .map(duncase -> createTask(duncase, AllocatTaskEnum.MANUAL.getAllocatCode()))
+                    .collect(Collectors.toList());
             // 对任务标的数据进行更新即将案件插入到任务表中
             if (taskList != null && taskList.size() > 0) {
                 this.tLcTaskService.batchInsertTask(taskList);
@@ -93,7 +90,7 @@ public enum AllocatTaskEnum {
         TLcTaskServiceImpl tLcTaskService = (TLcTaskServiceImpl) SpringUtils.getBean("com.ruoyi.task.service.impl.TLcTaskServiceImpl");
 
         @Override
-        public void allocatTask(List<TLcDuncase> manualList,TLcAllocatCaseConfig caseConfig) {
+        public void allocatTask(List<TLcDuncase> manualList, TLcAllocatCaseConfig caseConfig) {
             log.info("执行委外分配任务方法开始......");
             //构建任务对象
             List<TLcTask> taskList = manualList.stream()
@@ -117,11 +114,15 @@ public enum AllocatTaskEnum {
         TLcOrgSpeechcraftConfServiceImpl orgSpeechcraftConfService = (TLcOrgSpeechcraftConfServiceImpl) SpringUtils.getBean("com.ruoyi.orgSpeechConf.service.impl.TLcOrgSpeechcraftConfServiceImpl");
 
         @Override
-        public void allocatTask(List<TLcDuncase> manualList,TLcAllocatCaseConfig caseConfig) {
+        public void allocatTask(List<TLcDuncase> manualList, TLcAllocatCaseConfig caseConfig) {
             log.info("进入了机器人分配案件方法......");
             //构建任务对象--本地保存一份机器人任务的数据
             List<TLcTask> taskList = manualList.stream()
-                    .map(duncase -> createTask(duncase, AllocatTaskEnum.ROBOT.getAllocatCode()))
+                    .map(duncase -> {
+                        duncase.setCaseStatus(TaskStatusEnum.NO_ALLOCAT.getStatus());
+                        TLcTask task = createTask(duncase, AllocatTaskEnum.ROBOT.getAllocatCode());
+                        return task;
+                    })
                     .collect(Collectors.toList());
             log.info("执行机器人分配任务方法开始......");
             // 获取新案机器人呼叫策略规则
@@ -132,7 +133,7 @@ public enum AllocatTaskEnum {
             String taskCallNum = this.sysDictDataService.selectDictLabel("robot_call_config", "task_call_num");
             if (caseConfig.getRobot().equals("BR")) {
                 if (taskList.size() <= Integer.valueOf(taskCallNum)) {
-                    Integer robotTaskId = this.robotMethodUtil.createTask(taskList, callStrategyConfig, tLcCallStrategyConfig.getContinueCallDays(), tLcCallStrategyConfig.getCallFrequencyDay(), orgSpeechcraftConf, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS,new Date()));
+                    Integer robotTaskId = this.robotMethodUtil.createTask(taskList, callStrategyConfig, tLcCallStrategyConfig.getContinueCallDays(), tLcCallStrategyConfig.getCallFrequencyDay(), orgSpeechcraftConf, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS, new Date()));
                     taskList.stream().forEach(task -> {
                         task.setRobotCallStrategyId(tLcCallStrategyConfig.getId());
                         task.setRobotTaskId(robotTaskId);
@@ -142,7 +143,7 @@ public enum AllocatTaskEnum {
                     Integer taskNums = taskList.size() / Integer.valueOf(taskCallNum);
                     for (int i = 0; i < taskNums; i++) {
                         List subTaskIdList = taskList.subList(i * Integer.valueOf(taskCallNum), (i + 1) * Integer.valueOf(taskCallNum));
-                        Integer robotTaskId = this.robotMethodUtil.createTask(subTaskIdList, callStrategyConfig, tLcCallStrategyConfig.getContinueCallDays(), tLcCallStrategyConfig.getCallFrequencyDay(), orgSpeechcraftConf, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS,new Date()));
+                        Integer robotTaskId = this.robotMethodUtil.createTask(subTaskIdList, callStrategyConfig, tLcCallStrategyConfig.getContinueCallDays(), tLcCallStrategyConfig.getCallFrequencyDay(), orgSpeechcraftConf, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS, new Date()));
                         taskList.stream().forEach(task -> {
                             task.setRobotCallStrategyId(tLcCallStrategyConfig.getId());
                             task.setRobotTaskId(robotTaskId);
@@ -151,7 +152,7 @@ public enum AllocatTaskEnum {
                     }
                     if (taskList.size() % Integer.valueOf(taskCallNum) != 0) {
                         List subTaskIdList = taskList.subList(Integer.valueOf(taskCallNum) * taskNums, taskList.size());
-                        Integer robotTaskId = this.robotMethodUtil.createTask(subTaskIdList, callStrategyConfig, tLcCallStrategyConfig.getContinueCallDays(), tLcCallStrategyConfig.getCallFrequencyDay(), orgSpeechcraftConf, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS,new Date()));
+                        Integer robotTaskId = this.robotMethodUtil.createTask(subTaskIdList, callStrategyConfig, tLcCallStrategyConfig.getContinueCallDays(), tLcCallStrategyConfig.getCallFrequencyDay(), orgSpeechcraftConf, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS, new Date()));
                         taskList.stream().forEach(task -> {
                             task.setRobotCallStrategyId(tLcCallStrategyConfig.getId());
                             task.setRobotTaskId(robotTaskId);
@@ -187,7 +188,7 @@ public enum AllocatTaskEnum {
         TLcTaskServiceImpl tLcTaskService = (TLcTaskServiceImpl) SpringUtils.getBean("com.ruoyi.task.service.impl.TLcTaskServiceImpl");
 
         @Override
-        public void allocatTask(List<TLcDuncase> manualList,TLcAllocatCaseConfig caseConfig) {
+        public void allocatTask(List<TLcDuncase> manualList, TLcAllocatCaseConfig caseConfig) {
             log.info("执行法催分配任务方法开始......");
             //构建任务对象
             List<TLcTask> taskList = manualList.stream()
@@ -250,7 +251,7 @@ public enum AllocatTaskEnum {
      */
     public static List<TLcDuncase> averageAllocatTaskByMoney(List<TLcDuncase> duncaseList, List<SysUser> userList) {
         // 先对案件根据金额进行排序
-        List<TLcDuncase> sortDuncaseList = duncaseList.stream().sorted(Comparator.comparing(TLcDuncase::getTotalDebtAmountRmb)).collect(Collectors.toList());
+        List<TLcDuncase> sortDuncaseList = duncaseList.stream().sorted(Comparator.comparing(TLcDuncase::getTotalDebtAmountRmb).reversed()).collect(Collectors.toList());
         int uid = 0;
         for (int i = 1; i <= sortDuncaseList.size(); i++) {
             if ((i + (2 * userList.size() - 1)) % (2 * userList.size()) > userList.size() - 1) {
@@ -266,6 +267,48 @@ public enum AllocatTaskEnum {
         return sortDuncaseList;
     }
 
+    /**
+     * 按照金额进行平均分配任务
+     *
+     * @param duncaseList
+     * @param userList
+     * @return
+     */
+    public static List<TLcDuncase> averageAllocatTaskByMoneyNum(List<TLcDuncase> duncaseList, List<SysUser> userList) {
+        // 先对案件根据金额进行排序
+        List<TLcDuncase> sortTaskByArrearsNumTotalList = duncaseList.stream().sorted(Comparator.comparing(TLcDuncase::getTotalDebtAmountRmb).reversed()).collect(Collectors.toList());
+        sortTaskByArrearsNumTotalList = new CopyOnWriteArrayList(sortTaskByArrearsNumTotalList.toArray());
+        // 创建一个新的任务集合用来保存分配后的任务
+        CopyOnWriteArrayList<TLcDuncase> newDuncaseList = new CopyOnWriteArrayList<>();
+        for (int j = 0; j < sortTaskByArrearsNumTotalList.size(); j++) {
+            if (sortTaskByArrearsNumTotalList == null || sortTaskByArrearsNumTotalList.size() == 0) {
+                break;
+            }
+            // 正着给每个坐席分配一个任务
+            for (int i = 0; i < userList.size(); i++) {
+                if (sortTaskByArrearsNumTotalList == null || sortTaskByArrearsNumTotalList.size() == 0) {
+                    break;
+                }
+                sortTaskByArrearsNumTotalList.get(0).setOwnerId(userList.get(i).getUserId());
+                sortTaskByArrearsNumTotalList.get(0).setOwnerName(userList.get(i).getUserName());
+                newDuncaseList.add(sortTaskByArrearsNumTotalList.get(0));
+                sortTaskByArrearsNumTotalList.remove(sortTaskByArrearsNumTotalList.get(0));
+            }
+            // 倒着给每个坐席分配一个任务
+            for (int i = 0; i < userList.size(); i++) {
+                if (sortTaskByArrearsNumTotalList == null || sortTaskByArrearsNumTotalList.size() == 0) {
+                    break;
+                }
+                TLcDuncase duncase = sortTaskByArrearsNumTotalList.get(sortTaskByArrearsNumTotalList.size() - 1);
+                duncase.setOwnerId(userList.get(i).getUserId());
+                duncase.setOwnerName(userList.get(i).getUserName());
+                newDuncaseList.add(duncase);
+                sortTaskByArrearsNumTotalList.remove(duncase);
+            }
+        }
+        return newDuncaseList;
+    }
+
     private static TLcTask createTask(TLcDuncase duncase, Integer allocatCode) {
         TLcTask task = TLcTask.builder()
                 .caseNo(duncase.getCaseNo())
@@ -274,7 +317,7 @@ public enum AllocatTaskEnum {
                 .customCode(duncase.getCustomNo())
                 .customName(duncase.getCustomName())
                 .arrearsTotal(duncase.getAppointCaseBalance())
-                .taskStatus(TaskStatusEnum.NO_ALLOCAT.getStatus())
+                .taskStatus(duncase.getCaseStatus())
                 .modifyOwnerTime(LocalDateTime.now(ZoneId.systemDefault()))
                 .overdueDays(duncase.getOverdueDays())
                 .collectTimeLimit(null)
@@ -355,7 +398,6 @@ public enum AllocatTaskEnum {
 
     /**
      * 定义一个抽象方法实现任务分配
-     *
      */
     public abstract void allocatTask(List<TLcDuncase> manualList, TLcAllocatCaseConfig caseConfig);
 
