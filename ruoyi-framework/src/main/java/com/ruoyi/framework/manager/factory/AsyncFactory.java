@@ -41,19 +41,19 @@ public class AsyncFactory
             @Override
             public void run()
             {
-                SysUserOnline online = new SysUserOnline();
-                online.setSessionId(String.valueOf(session.getId()));
-                online.setDeptName(session.getDeptName());
-                online.setLoginName(session.getLoginName());
-                online.setStartTimestamp(session.getStartTimestamp());
-                online.setLastAccessTime(session.getLastAccessTime());
-                online.setExpireTime(session.getTimeout());
-                online.setIpaddr(session.getHost());
-                online.setLoginLocation(AddressUtils.getRealAddressByIP(session.getHost()));
-                online.setBrowser(session.getBrowser());
-                online.setOs(session.getOs());
-                online.setStatus(session.getStatus());
-                SpringUtils.getBean(ISysUserOnlineService.class).saveOnline(online);
+//                SysUserOnline online = new SysUserOnline();
+//                online.setSessionId(String.valueOf(session.getId()));
+//                online.setDeptName(session.getDeptName());
+//                online.setLoginName(session.getLoginName());
+//                online.setStartTimestamp(session.getStartTimestamp());
+//                online.setLastAccessTime(session.getLastAccessTime());
+//                online.setExpireTime(session.getTimeout());
+//                online.setIpaddr(session.getHost());
+//                online.setLoginLocation(AddressUtils.getRealAddressByIP(session.getHost()));
+//                online.setBrowser(session.getBrowser());
+//                online.setOs(session.getOs());
+//                online.setStatus(session.getStatus());
+//                SpringUtils.getBean(ISysUserOnlineService.class).saveOnline(online);
 
             }
         };
@@ -73,8 +73,8 @@ public class AsyncFactory
             public void run()
             {
                 // 远程查询操作地点
-                operLog.setOperLocation(AddressUtils.getRealAddressByIP(operLog.getOperIp()));
-                SpringUtils.getBean(ISysOperLogService.class).insertOperlog(operLog);
+//                operLog.setOperLocation(AddressUtils.getRealAddressByIP(operLog.getOperIp()));
+//                SpringUtils.getBean(ISysOperLogService.class).insertOperlog(operLog);
             }
         };
     }
