@@ -19,6 +19,7 @@ import com.ruoyi.robot.domain.CallContent;
 import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.task.domain.TLcCallRecord;
+import com.ruoyi.task.domain.TLcCallRecordForXY;
 import com.ruoyi.task.mapper.TLcCallRecordMapper;
 import com.ruoyi.task.service.ITLcCallRecordService;
 import com.ruoyi.task.service.ITLcTaskService;
@@ -31,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -99,6 +101,62 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
         }
         return tLcCallRecordMapper.selectTLcCallRecordList(tLcCallRecord);
     }
+
+    @Override
+    public List<TLcCallRecordForXY> selectTLcCallRecordListForXY(TLcCallRecord tLcCallRecord) {
+        if (tLcCallRecord.getEndCreateTime() != null) {
+            tLcCallRecord.setEndCreateTime(DateUtils.getEndOfDay(tLcCallRecord.getEndCreateTime()));
+        }
+        if (tLcCallRecord.getEndCallStartTime() != null) {
+            tLcCallRecord.setEndCallStartTime(DateUtils.getEndOfDay(tLcCallRecord.getEndCallStartTime()));
+        }
+        if (tLcCallRecord.getStartCallLen() != null) {
+            tLcCallRecord.setStartCallLen(tLcCallRecord.getStartCallLen() * 1000);
+        }
+        if (tLcCallRecord.getEndCallLen() != null) {
+            tLcCallRecord.setEndCallLen(tLcCallRecord.getEndCallLen() * 1000);
+        }
+        List<TLcCallRecord> list = tLcCallRecordMapper.selectTLcCallRecordList(tLcCallRecord);
+        List<TLcCallRecordForXY> xyList = this.ConvertXYList(list);
+        return xyList;
+    }
+
+    private List<TLcCallRecordForXY> ConvertXYList(List<TLcCallRecord> list){
+        List<TLcCallRecordForXY> resultList = new ArrayList<>();
+        for (TLcCallRecord tLcCallRecord : list) {
+            TLcCallRecordForXY xyEntity = new TLcCallRecordForXY();
+            xyEntity.setSque(tLcCallRecord.getSque());
+            xyEntity.setCaseNo(tLcCallRecord.getCaseNo());
+            xyEntity.setYwdetp(tLcCallRecord.getYwdetp());
+            xyEntity.setWbjb(tLcCallRecord.getWbjb());
+            xyEntity.setCustomName(tLcCallRecord.getCustomName());
+            xyEntity.setProductName(tLcCallRecord.getProductName());
+            xyEntity.setCsdz(tLcCallRecord.getCsdz());
+            xyEntity.setCreateTime(tLcCallRecord.getCreateTime());
+            xyEntity.setPhone(tLcCallRecord.getPhone());
+            xyEntity.setEnterCollDate(tLcCallRecord.getEnterCollDate());
+            xyEntity.setTar(tLcCallRecord.getTar());
+            xyEntity.setCallResult(tLcCallRecord.getCallResult());
+            //特殊字段处理
+            String contactName = tLcCallRecord.getContactName();
+            Integer contactRelation = tLcCallRecord.getContactRelation();
+            String relateion = this.getRelateion(contactRelation);
+            contactName = relateion+"-"+contactName;
+            xyEntity.setContactName(contactName);
+
+            String remark = tLcCallRecord.getRemark();
+            if(remark != null && !"".equals(remark) && !"[]".equals(remark)){
+                xyEntity.setRemarkDetail(remark);
+            }else{
+                xyEntity.setRemarkDetail(tLcCallRecord.getCallResult());
+            }
+            resultList.add(xyEntity);
+        }
+        return resultList;
+    }
+
+
+
 
     /**
      * 新增通话结果记录
@@ -289,5 +347,56 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
     public Integer selectCallRecordCount(Date createTime) {
         return tLcCallRecordMapper.selectCallRecordCount(createTime);
     }
+
+
+
+
+    private String getRelateion(Integer contactRelation){
+        String relateion = "";
+        if(contactRelation == 1){
+            relateion = "本人";
+        }else if(contactRelation == 2){
+            relateion = "直系";
+        }else if(contactRelation == 3){
+            relateion = "亲戚";
+        }else if(contactRelation == 4){
+            relateion = "朋友";
+        }else if(contactRelation == 5){
+            relateion = "父母";
+        }else if(contactRelation == 6){
+            relateion = "配偶";
+        }else if(contactRelation == 7){
+            relateion = "兄弟";
+        }else if(contactRelation == 8){
+            relateion = "姐妹";
+        }else if(contactRelation == 9){
+            relateion = "哥哥";
+        }else if(contactRelation == 10){
+            relateion = "兄长";
+        }else if(contactRelation == 11){
+            relateion = "弟弟";
+        }else if(contactRelation == 12){
+            relateion = "姐姐";
+        }else if(contactRelation == 13){
+            relateion = "妹妹";
+        }else if(contactRelation == 14){
+            relateion = "家人";
+        }else if(contactRelation == 15){
+            relateion = "老公";
+        }else if(contactRelation == 16){
+            relateion = "老婆";
+        }else if(contactRelation == 17){
+            relateion = "同事";
+        }else if(contactRelation == 18){
+            relateion = "公司";
+        }else{
+            relateion = "其它";
+        }
+        return relateion;
+    }
+
+
+
+
 
 }

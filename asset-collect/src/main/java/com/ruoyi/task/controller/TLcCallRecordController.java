@@ -7,11 +7,12 @@ import com.ruoyi.common.core.page.PageDomain;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.page.TableSupport;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.robot.domain.CallContent;
+import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.task.domain.TLcCallRecord;
+import com.ruoyi.task.domain.TLcCallRecordForXY;
 import com.ruoyi.task.service.ITLcCallRecordService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,9 @@ public class TLcCallRecordController extends BaseController {
 
     @Autowired
     private ITLcCallRecordService tLcCallRecordService;
+
+    @Autowired
+    private ISysConfigService sysConfigService;
 
     @RequiresPermissions("call:record:view")
     @GetMapping()
@@ -71,9 +75,17 @@ public class TLcCallRecordController extends BaseController {
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(TLcCallRecord tLcCallRecord) {
-        List<TLcCallRecord> list = tLcCallRecordService.selectTLcCallRecordList(tLcCallRecord);
-        ExcelUtil<TLcCallRecord> util = new ExcelUtil<TLcCallRecord>(TLcCallRecord.class);
-        return util.exportExcel(list, "record");
+        String configValue = sysConfigService.selectConfigByKey("orgId");
+        String orgId = tLcCallRecord.getOrgId();
+        if(configValue.equals(orgId)){//兴业导出
+            List<TLcCallRecordForXY> list = tLcCallRecordService.selectTLcCallRecordListForXY(tLcCallRecord);
+            ExcelUtil<TLcCallRecordForXY> util = new ExcelUtil<TLcCallRecordForXY>(TLcCallRecordForXY.class);
+            return util.exportExcel(list, "record");
+        }else {
+            List<TLcCallRecord> list = tLcCallRecordService.selectTLcCallRecordList(tLcCallRecord);
+            ExcelUtil<TLcCallRecord> util = new ExcelUtil<TLcCallRecord>(TLcCallRecord.class);
+            return util.exportExcel(list, "record");
+        }
     }
 
     /**

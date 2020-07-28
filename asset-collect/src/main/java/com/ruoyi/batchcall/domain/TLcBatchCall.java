@@ -4,6 +4,7 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -97,5 +98,19 @@ public class TLcBatchCall extends BaseEntity
      * 虚字段：是否只查询排序第一的 一条数据
      */
     private String isOnlyOne;
+
+
+    /**
+     * 委案金额
+     */
+    private BigDecimal arrearsTotal;
+    /**
+     * 结案应还金额
+     */
+    private BigDecimal closeCaseYhje;
+    /**
+     * 当前已还金额
+     */
+    private BigDecimal dqyhje;
 
 }

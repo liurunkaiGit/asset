@@ -241,4 +241,19 @@ public class TLcCallRecord extends BaseEntity {
      */
     private List<String> platFormList;
 
+
+    /**
+     *兴业导出使用字段
+     */
+    private Integer sque;
+    private String productName;
+    private Date tar;
+    private String ywdetp;
+    private String wbjb;
+    private String csdz;
+
+
+
+
+
 }

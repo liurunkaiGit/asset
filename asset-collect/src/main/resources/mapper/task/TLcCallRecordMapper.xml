@@ -31,7 +31,14 @@
         <result property="orgName" column="org_name"/>
         <result property="createName" column="user_name"/>
         <result property="loginName" column="login_name"/>
+        <result property="sque" column="sque"/>
+        <result property="productName" column="product_name"/>
+        <result property="tar" column="back_case_date"/>
+        <result property="ywdetp" column="ywdetp"/>
+        <result property="wbjb" column="wbjb"/>
+        <result property="csdz" column="csdz"/>
     </resultMap>
+
 
     <sql id="selectTLcCallRecordVo">
         select id, case_no,  contact_name, phone, contact_relation, call_start_time, call_end_time, call_len, call_sign, call_result, call_radio_location, call_radio, create_time, create_by, remark, platform, star, type from t_lc_call_record
@@ -61,7 +68,7 @@
         t.make_call_time
     </sql>
 
-    <select id="selectTLcCallRecordList" parameterType="com.ruoyi.task.domain.TLcCallRecord" resultMap="TLcCallRecordResult">
+    <!--<select id="selectTLcCallRecordList" parameterType="com.ruoyi.task.domain.TLcCallRecord" resultMap="TLcCallRecordResult">
         SELECT
         re.case_no,
         ta.custom_name as customName,
@@ -84,9 +91,68 @@
         re.call_radio_location
         FROM
         t_lc_call_record re,
-        t_lc_task ta
+        t_lc_task ta,
+        t_lc_duncase du
         WHERE
-        re.case_no = ta.case_no
+        re.case_no = ta.case_no and re.case_no = du.case_no
+        AND ta.org_id = #{orgId}
+        <if test="startCreateTime != null">
+            AND re.create_time <![CDATA[>=]]> #{startCreateTime}
+        </if>
+        <if test="endCreateTime != null">
+            AND re.create_time <![CDATA[<=]]> #{endCreateTime}
+        </if>
+        <if test="startCallStartTime != null">
+            AND re.call_start_time <![CDATA[>=]]> #{startCallStartTime}
+        </if>
+        <if test="endCallStartTime != null">
+            AND re.call_start_time <![CDATA[<=]]> #{endCallStartTime}
+        </if>
+        <if test="startCallLen != null">
+            AND re.call_len <![CDATA[>=]]> #{startCallLen}
+        </if>
+        <if test="endCallLen != null">
+            AND re.call_len <![CDATA[<=]]> #{endCallLen}
+        </if>
+        <if test="caseNo != null and case_no != '' ">
+            AND re.case_no = #{caseNo}
+        </if>
+    </select>-->
+
+    <select id="selectTLcCallRecordList" parameterType="com.ruoyi.task.domain.TLcCallRecord" resultMap="TLcCallRecordResult">
+        SELECT
+        (@a :=@a + 1) as sque,
+        re.case_no,
+        ta.custom_name as customName,
+        ta.certificate_no,
+        ta.enter_coll_date AS enterCollDate,
+        ta.arrears_total AS arrearsTotal,
+        ta.close_case_yhje AS closeCaseYhje,
+        ta.overdue_days AS overdueDays,
+        re.contact_name,
+        re.contact_relation,
+        re.phone,
+        (SELECT su.user_name FROM sys_user su WHERE re.create_by = su.user_id) AS agent_name,
+        CONCAT(re.call_sign,'(',re.call_result,')') AS call_sign,
+        re.find_date,
+        re.remark,
+        re.create_time,
+        re.call_start_time,
+        re.call_end_time,
+        re.call_len / 1000 AS call_len,
+        re.call_radio_location,
+        du.product_name,
+        du.back_case_date,
+        '外包公司' AS ywdetp,
+        '华道数据' AS wbjb,
+        '电催' AS csdz,
+        re.call_result
+        FROM
+        t_lc_call_record re,
+        t_lc_task ta,
+        t_lc_duncase du,(SELECT @a := 0) t1
+        WHERE
+        re.case_no = ta.case_no and re.case_no = du.case_no
         AND ta.org_id = #{orgId}
         <if test="startCreateTime != null">
             AND re.create_time <![CDATA[>=]]> #{startCreateTime}

@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.batchcall.mapper.TLcBatchCallMapper">
     
-    <resultMap type="TLcBatchCall" id="TLcBatchCallResult">
+    <resultMap type="com.ruoyi.batchcall.domain.TLcBatchCall" id="TLcBatchCallResult">
         <result property="id"    column="id"    />
         <result property="batchNo"    column="batch_no"    />
         <result property="caseNo"    column="case_no"    />
@@ -19,6 +19,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="createBy"    column="create_by"    />
         <result property="remark"    column="remark"    />
+        <result property="arrearsTotal"    column="arrears_total"    />
+        <result property="closeCaseYhje"    column="close_case_yhje"    />
+        <result property="dqyhje"    column="dqyhje"    />
     </resultMap>
 
     <sql id="selectTLcBatchCallVo">
@@ -26,25 +29,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectTLcBatchCallList" parameterType="TLcBatchCall" resultMap="TLcBatchCallResult">
-        <include refid="selectTLcBatchCallVo"/>
-        <where>  
-            <if test="batchNo != null "> and batch_no = #{batchNo}</if>
-            <if test="caseNo != null  and caseNo != ''"> and case_no = #{caseNo}</if>
-            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
-            <if test="contactName != null  and contactName != ''"> and contact_name like concat('%', #{contactName}, '%')</if>
-            <if test="contactRelation != null "> and contact_relation = #{contactRelation}</if>
-            <if test="exonNum != null  and exonNum != ''"> and exon_num = #{exonNum}</if>
-            <if test="phoneType != null  and phoneType != ''"> and phone_type = #{phoneType}</if>
-            <if test="taskStatus != null "> and task_status = #{taskStatus}</if>
-            <if test="createBy != null "> and create_by = #{createBy}</if>
+        select t.id, t.batch_no, t.case_no, t.phone, t.contact_name, t.contact_relation, t.exon_num, t.org_id, t.import_batch_no, t.phone_type, t.task_status, t.create_time, t.create_by, t.remark,
+        ta.arrears_total,ta.close_case_yhje,ta.dqyhje
+        from t_lc_batch_call t,t_lc_task ta
+        <where>
+            and t.case_no = ta.case_no and t.import_batch_no = ta.import_batch_no
+            <if test="batchNo != null "> and t.batch_no = #{batchNo}</if>
+            <if test="caseNo != null  and caseNo != ''"> and t.case_no = #{caseNo}</if>
+            <if test="phone != null  and phone != ''"> and t.phone = #{phone}</if>
+            <if test="contactName != null  and contactName != ''"> and t.contact_name like concat('%', #{contactName}, '%')</if>
+            <if test="contactRelation != null "> and t.contact_relation = #{contactRelation}</if>
+            <if test="exonNum != null  and exonNum != ''"> and t.exon_num = #{exonNum}</if>
+            <if test="phoneType != null  and phoneType != ''"> and t.phone_type = #{phoneType}</if>
+            <if test="taskStatus != null "> and t.task_status = #{taskStatus}</if>
+            <if test="createBy != null "> and t.create_by = #{createBy}</if>
             <if test="taskStatusList != null and taskStatusList.size() > 0">
-                and task_status in
+                and t.task_status in
                 <foreach collection="taskStatusList" index="index" item="item" open="(" separator="," close=")">
                     #{item}
                 </foreach>
             </if>
         </where>
-        order by batch_no desc,task_status asc, case_no desc,contact_relation asc,phone_type asc,create_time desc
+        order by t.batch_no desc,t.task_status asc, t.case_no desc,t.contact_relation asc,t.phone_type asc,t.create_time desc
         <if test="isOnlyOne != null and isOnlyOne != '' ">
             limit 1
          </if>

@@ -2,6 +2,7 @@ package com.ruoyi.task.service;
 
 import com.ruoyi.robot.domain.CallContent;
 import com.ruoyi.task.domain.TLcCallRecord;
+import com.ruoyi.task.domain.TLcCallRecordForXY;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +32,7 @@ public interface ITLcCallRecordService {
      * @return 通话结果记录集合
      */
     public List<TLcCallRecord> selectTLcCallRecordList(TLcCallRecord tLcCallRecord);
+    public List<TLcCallRecordForXY> selectTLcCallRecordListForXY(TLcCallRecord tLcCallRecord);
 
     /**
      * 新增通话结果记录

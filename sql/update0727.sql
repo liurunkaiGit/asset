@@ -21,4 +21,4 @@ INSERT INTO sys_menu ( `menu_name`, `parent_id`, `order_num`, `url`, `target`, `
 INSERT INTO sys_menu ( `menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)VALUES ('导出', (SELECT t.menu_id from sys_menu t where t.menu_name='回款明细导入'), '3', '#', 'menuItem', 'F', '0', 'assetspackage:xyRepayment:export', '#', 'admin', now(), 'admin', now(), '');
 
 
-insert into sys_config ( config_name, config_key, config_value, config_type, create_by, create_time )values( '催记报表特殊处理机构id', 'orgId', '207', 'N', 'admin', sysdate() )
+insert into sys_config ( config_name, config_key, config_value, config_type, create_by, create_time )values( '催记报表特殊处理机构id', 'orgId', '213', 'N', 'admin', sysdate() )
