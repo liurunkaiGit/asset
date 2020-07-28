@@ -213,4 +213,6 @@ public interface TLcTaskMapper {
     void insertDuncaseAssign(@Param("robotTaskId") Integer robotTaskId);
 
     void updateTaskTypeAllocatType(@Param("robotTaskId") Integer robotTaskId);
+
+    Map<String, BigDecimal> searchAllTaskTotalMoney(TLcTask tLcTask);
 }

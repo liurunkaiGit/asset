@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -247,6 +248,21 @@ public class TLcHisDuncaseController extends BaseController {
         List<TLcSelectRecord> selectRecordList = this.tLcSelectRecordService.findHisSelectRecordByCaseNo(caseNo);
         logger.info("查询查找记录结束caseNo="+caseNo);
         return selectRecordList;
+    }
+
+    /**
+     * 查询委案总金额及当前已还总金额
+     */
+    @PostMapping("/searchHisDuncaseTotalMoney")
+    @ResponseBody
+    public Map<String, BigDecimal> searchHisDuncaseTotalMoney(TLcDuncase tLcDuncase, HttpServletRequest request) {
+        String callCodeHistoryListStr = request.getParameter("callCodeHistoryListStr");//历史电话码
+        if(StringUtils.isNotEmpty(callCodeHistoryListStr)){
+            tLcDuncase.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
+        }
+        tLcDuncase.setOrgId(ShiroUtils.getSysUser().getOrgId().toString());
+        Map<String, BigDecimal> resultMap = this.hisDuncaseService.searchHisDuncaseTotalMoney(tLcDuncase);
+        return resultMap;
     }
 
 }

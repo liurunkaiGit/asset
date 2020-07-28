@@ -24,6 +24,7 @@ import com.ruoyi.duncase.domain.TLcDuncase;
 import com.ruoyi.duncase.service.ITLcDuncaseService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.task.domain.CollJob;
+import com.ruoyi.task.domain.TLcTask;
 import com.ruoyi.utils.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -33,6 +34,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -303,6 +305,21 @@ public class TLcDuncaseController extends BaseController {
 //        }
 //        List<TLcDuncase> list = tLcDuncaseService.selectTLcDuncaseByPage(tLcDuncase);
         return new TableDataInfo();
+    }
+
+    /**
+     * 查询委案总金额及当前已还总金额
+     */
+    @PostMapping("/searchAllDuncaseTotalMoney")
+    @ResponseBody
+    public Map<String, BigDecimal> searchAllDuncaseTotalMoney(TLcDuncase tLcDuncase, HttpServletRequest request) {
+        String callCodeHistoryListStr = request.getParameter("callCodeHistoryListStr");//历史电话码
+        if(StringUtils.isNotEmpty(callCodeHistoryListStr)){
+            tLcDuncase.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
+        }
+        tLcDuncase.setOrgId(ShiroUtils.getSysUser().getOrgId().toString());
+        Map<String, BigDecimal> resultMap = this.tLcDuncaseService.searchAllDuncaseTotalMoney(tLcDuncase);
+        return resultMap;
     }
 
 }

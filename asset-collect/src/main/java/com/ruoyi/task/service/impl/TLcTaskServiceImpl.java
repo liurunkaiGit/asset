@@ -688,6 +688,11 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         this.tLcTaskMapper.insertDuncaseAssign(robotTaskId);
     }
 
+    @Override
+    public Map<String, BigDecimal> searchAllTaskTotalMoney(TLcTask tLcTask) {
+        return this.tLcTaskMapper.searchAllTaskTotalMoney(tLcTask);
+    }
+
     /**
      * 查询我的任务列表
      *

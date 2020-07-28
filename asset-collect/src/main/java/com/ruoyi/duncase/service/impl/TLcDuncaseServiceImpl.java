@@ -50,6 +50,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -1113,6 +1114,11 @@ public class TLcDuncaseServiceImpl implements ITLcDuncaseService {
     @Override
     public void updateScore(List<TLcScore> TLcScoreList) {
          tLcDuncaseMapper.updateScore(TLcScoreList);
+    }
+
+    @Override
+    public Map<String, BigDecimal> searchAllDuncaseTotalMoney(TLcDuncase tLcDuncase) {
+        return this.tLcDuncaseMapper.searchAllDuncaseTotalMoney(tLcDuncase);
     }
 
 }

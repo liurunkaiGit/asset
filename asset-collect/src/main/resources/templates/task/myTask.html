@@ -7,7 +7,12 @@
         .time-input{
             display: inline;
         }
-    </style>
+        #title2{
+            position: absolute;
+            left: 60%;
+            top: 15px;
+        }
+</style>
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -210,7 +215,7 @@
                             </li>-->
 
                             <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="searchMyTask()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
                         </ul>
@@ -225,6 +230,11 @@
                 <button type="button" class="btn btn-success" onclick="sendRobotApply()">机器人外呼</button>
             </div>
             <div class="col-sm-12 select-table table-striped">
+                <div id="title2">
+                    <label id="totalArrears"></label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label id="totalPay" ></label>
+                </div>
                 <table id="bootstrap-table"></table>
             </div>
         </div>
@@ -427,7 +437,7 @@
             // initCallCode();
             // initActionCode();
             initColumnQuery();
-
+            searchTotalMoney();
             $.post(
                 prefix + "/selectExtNumBySeat",
                 {
@@ -826,6 +836,65 @@
                 }
             );
 
+        }
+
+        function searchMyTask() {
+            $.table.search();
+            searchTotalMoney();
+        }
+
+        // 案件回款总金额、委案总金额
+        function searchTotalMoney() {
+            var caseNo = $("#caseNo").val();
+            var customName = $("#customName").val();
+            var startArrearsTotal = $("#startArrearsTotal").val();
+            var endArrearsTotal = $("#endArrearsTotal").val();
+            var callCode = $("#callCode").val();
+            var transferType = encodeURIComponent($("#transferType").val());
+            var phone = $("#phone").val();
+            var startCloseCaseYhje = $("#startCloseCaseYhje").val();
+            var endCloseCaseYhje = $("#endCloseCaseYhje").val();
+            var actionCode = $("#actionCode").val();
+            var taskType = $("#taskType").val();
+            var startRecentlyAllotDate = $("#startRecentlyAllotDate").val();
+            var endRecentlyAllotDate = $("#endRecentlyAllotDate").val();
+            var startRecentlyFollowUpDate = $("#startRecentlyFollowUpDate").val();
+            var endRecentlyFollowUpDate = $("#endRecentlyFollowUpDate").val();
+            var callCodeHistoryListStr = $('#callCodeHistoryListStr').selectpicker('val');
+            $.post(
+                prefix + "/searchTotalMoney",
+                {
+                    caseNo:caseNo,
+                    customName:customName,
+                    startArrearsTotal:startArrearsTotal,
+                    endArrearsTotal:endArrearsTotal,
+                    callCode:callCode,
+                    transferType:transferType,
+                    phone:phone,
+                    startCloseCaseYhje:startCloseCaseYhje,
+                    endCloseCaseYhje:endCloseCaseYhje,
+                    actionCode:actionCode,
+                    taskType:taskType,
+                    startRecentlyAllotDate:startRecentlyAllotDate,
+                    endRecentlyAllotDate:endRecentlyAllotDate,
+                    startRecentlyFollowUpDate:startRecentlyFollowUpDate,
+                    endRecentlyFollowUpDate:endRecentlyFollowUpDate,
+                    callCodeHistoryList:callCodeHistoryListStr
+                },
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    var totalArrears = "0.00";
+                    if (data.totalArrears != null) {
+                        totalArrears = data.totalArrears;
+                    }
+                    var totalPay = "0.00";
+                    if (data.totalPay != null) {
+                        totalPay = data.totalPay;
+                    }
+                    $("#totalArrears").text("委案总金额：" + totalArrears);
+                    $("#totalPay").text("回款总金额：" + totalPay);
+                }
+            );
         }
 
         // 点击事件change

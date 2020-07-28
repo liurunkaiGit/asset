@@ -3,6 +3,7 @@ package com.ruoyi.duncase.mapper;
 import com.ruoyi.duncase.domain.TLcDuncase;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -47,4 +48,5 @@ public interface TLcHisDuncaseMapper {
      */
     TLcDuncase findDuncaseByCaseNoAndImportBatchNo(@Param("caseNo") String caseNo, @Param("orgId") String orgId, @Param("importBatchNo") String importBatchNo);
 
+    Map<String, BigDecimal> searchHisDuncaseTotalMoney(TLcDuncase tLcDuncase);
 }

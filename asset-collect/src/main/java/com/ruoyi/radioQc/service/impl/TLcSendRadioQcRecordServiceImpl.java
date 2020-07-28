@@ -129,14 +129,14 @@ public class TLcSendRadioQcRecordServiceImpl implements ITLcSendRadioQcRecordSer
     @Override
     @Async
     public void sendRadioToQualityCheck(TLcCallRecord tLcCallRecord) {
-        OrgPackage orgPackage = this.orgPackageService.selectOrgPackageByOrgId(tLcCallRecord.getOrgId());
-        // 通话录音地址不为空并且通话录音是否推送到质检系统
-        if (!"-1".equals(tLcCallRecord.getCreateBy()) && StringUtils.isNotBlank(tLcCallRecord.getCallRadioLocation()) && tLcCallRecord.getSendRadioCheck() != null &&
-                tLcCallRecord.getSendRadioCheck() == 1 && orgPackage != null && orgPackage.getSendRadioQc().equals(IsNoEnum.IS.getCode())) {
-            RadioQualityCheck radioQualityCheck = createRadioQualityCheck(tLcCallRecord,orgPackage);
-            ResponseEntity<QualityCheckResponse> qualityCheckResponse = restTemplateUtil.getRestTemplate().postForEntity(sendRadioQualityCheck, radioQualityCheck, QualityCheckResponse.class);
-            log.info("推送语音质检返回的结果数据：{}", JSON.toJSONString(qualityCheckResponse));
-            if (qualityCheckResponse.getStatusCodeValue() == HttpStatus.OK.value() && qualityCheckResponse.getBody().getCode() == 0) {
+        if (!"-1".equals(tLcCallRecord.getCreateBy()) && StringUtils.isNotBlank(tLcCallRecord.getCallRadioLocation()) && tLcCallRecord.getSendRadioCheck() != null && tLcCallRecord.getSendRadioCheck() == 1) {
+            OrgPackage orgPackage = this.orgPackageService.selectOrgPackageByOrgId(tLcCallRecord.getOrgId());
+            // 通话录音地址不为空并且通话录音是否推送到质检系统
+            if (orgPackage != null && orgPackage.getSendRadioQc().equals(IsNoEnum.IS.getCode())) {
+                RadioQualityCheck radioQualityCheck = createRadioQualityCheck(tLcCallRecord, orgPackage);
+                ResponseEntity<QualityCheckResponse> qualityCheckResponse = restTemplateUtil.getRestTemplate().postForEntity(sendRadioQualityCheck, radioQualityCheck, QualityCheckResponse.class);
+                log.info("推送语音质检返回的结果数据：{}", JSON.toJSONString(qualityCheckResponse));
+                if (qualityCheckResponse.getStatusCodeValue() == HttpStatus.OK.value() && qualityCheckResponse.getBody().getCode() == 0) {
 //            QualityCheckResponse checkResponseBody = qualityCheckResponse.getBody();
 //            TLcSendRadioQcRecord tLcSendRadioQcRecord = TLcSendRadioQcRecord.builder()
 //                    .callRecordId(tLcCallRecord.getId())
@@ -148,9 +148,10 @@ public class TLcSendRadioQcRecordServiceImpl implements ITLcSendRadioQcRecordSer
 //                    .status(checkResponseBody.getSuccess() ? IsNoEnum.IS.getCode() : IsNoEnum.NO.getCode())
 //                    .build();
 //            this.tLcSendRadioQcRecordMapper.insertTLcSendRadioQcRecord(tLcSendRadioQcRecord);
-                log.info("通话记录id为：{}推送录音到录音质检系统成功",tLcCallRecord.getId());
-            } else {
-                log.error("通话记录id为：{}推送录音到录音质检系统失败",tLcCallRecord.getId());
+                    log.info("通话记录id为：{}推送录音到录音质检系统成功", tLcCallRecord.getId());
+                } else {
+                    log.error("通话记录id为：{}推送录音到录音质检系统失败", tLcCallRecord.getId());
+                }
             }
         }
     }

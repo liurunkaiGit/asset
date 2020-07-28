@@ -199,28 +199,26 @@
 
     <select id="findCallRecordByCaseNo" parameterType="java.lang.String" resultMap="TLcCallRecordResult">
         SELECT
+        (select dict_label from sys_dict_data where dict_value = t.call_sign) as dictLabel,
         CASE t.agent_name
         WHEN '-1' THEN '机器人'
         ELSE t.agent_name
         END AS agent_name,
-        t4.dict_label AS dictLabel,
         <include refid="SELECT_CALL_RECORD"/>
         FROM t_lc_call_record t
-        LEFT JOIN sys_dict_data t4 ON t4.dict_value = t.call_sign
         WHERE case_no = #{caseNo}
         ORDER BY t.create_time desc
     </select>
 
     <select id="findHisDuncaseCallRecordByCaseNo" parameterType="java.lang.String" resultMap="TLcCallRecordResult">
         SELECT
+        (select dict_label from sys_dict_data where dict_value = t.call_sign) as dictLabel,
         CASE t.agent_name
         WHEN '-1' THEN '机器人'
         ELSE t.agent_name
         END AS agent_name,
-        t4.dict_label AS dictLabel,
         <include refid="SELECT_CALL_RECORD"/>
         FROM t_lc_call_record_his t
-        LEFT JOIN sys_dict_data t4 ON t4.dict_value = t.call_sign
         WHERE case_no = #{caseNo}
         ORDER BY t.create_time desc
     </select>

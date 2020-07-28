@@ -318,4 +318,6 @@ public interface ITLcTaskService {
     List<AssetsRepayment> viewHisRepayHis(String caseNo);
 
     void insertDuncaseAssign(Integer robotTaskId);
+
+    Map<String, BigDecimal> searchAllTaskTotalMoney(TLcTask tLcTask);
 }

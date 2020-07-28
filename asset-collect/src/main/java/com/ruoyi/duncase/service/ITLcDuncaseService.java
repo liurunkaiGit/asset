@@ -5,6 +5,7 @@ import com.ruoyi.duncase.domain.Assets;
 import com.ruoyi.duncase.domain.TLcDuncase;
 import com.ruoyi.utils.Response;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -100,4 +101,5 @@ public interface ITLcDuncaseService {
 
     public void updateScore(List<TLcScore> TLcScoreList);
 
+    Map<String, BigDecimal> searchAllDuncaseTotalMoney(TLcDuncase tLcDuncase);
 }

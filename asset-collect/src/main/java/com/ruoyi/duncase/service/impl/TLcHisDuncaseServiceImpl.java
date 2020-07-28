@@ -9,7 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 案件Service业务层处理
@@ -67,6 +69,11 @@ public class TLcHisDuncaseServiceImpl implements ITLcHisDuncaseService {
     @Override
     public TLcDuncase findDuncaseByCaseNoAndImportBatchNo(String caseNo, String orgId, String importBatchNo) {
         return this.hisDuncaseMapper.findDuncaseByCaseNoAndImportBatchNo(caseNo, orgId, importBatchNo);
+    }
+
+    @Override
+    public Map<String, BigDecimal> searchHisDuncaseTotalMoney(TLcDuncase tLcDuncase) {
+        return hisDuncaseMapper.searchHisDuncaseTotalMoney(tLcDuncase);
     }
 
 }

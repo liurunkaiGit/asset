@@ -4,6 +4,7 @@ import com.ruoyi.duncase.domain.Assets;
 import com.ruoyi.duncase.domain.TLcDuncase;
 import com.ruoyi.utils.Response;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -47,4 +48,6 @@ public interface ITLcHisDuncaseService {
      * @return
      */
     TLcDuncase findDuncaseByCaseNoAndImportBatchNo(String caseNo, String orgId, String importBatchNo);
+
+    Map<String, BigDecimal> searchHisDuncaseTotalMoney(TLcDuncase tLcDuncase);
 }

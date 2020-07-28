@@ -6,6 +6,11 @@
         .time-input{
             display: inline;
         }
+        #title2{
+            position: absolute;
+            left: 60%;
+            top: 15px;
+        }
     </style>
     <link th:href="@{/ajax/libs/bootstrap-select/bootstrap-select.css }"rel="stylesheet"/>
 </head>
@@ -205,6 +210,11 @@
                 选择全部&nbsp;&nbsp;<input id="selectAll" type="checkbox" onclick="chackAll()">
             </div>
             <div class="col-sm-12 select-table table-striped">
+                <div id="title2">
+                    <label id="totalArrears"></label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label id="totalPay" ></label>
+                </div>
                 <table id="bootstrap-table"></table>
             </div>
         </div>
@@ -640,6 +650,7 @@
             $("#selectAll").prop("checked",false);
             initFreeSearch();
             $.table.search();
+            searchTotalMoney();
         }
 
 
@@ -1103,6 +1114,39 @@
                     }else{
                         $.modal.alertSuccess("查询失败");
                     }
+                }
+            );
+        }
+
+        // 案件回款总金额、委案总金额
+        function searchTotalMoney() {
+            var caseNo = $("#caseNo").val();
+            var customName = $("#customName").val();
+            var taskStatus = $("#taskStatus").val();
+            var callCodeHistoryListStr = $('#callCodeHistoryListStr').selectpicker('val');
+            var freeSQL = $("#freeSQL").val();
+            freeSQL = encodeURIComponent(freeSQL);
+            $.post(
+                prefix + "/searchAllTaskTotalMoney",
+                {
+                    caseNo:caseNo,
+                    customName:customName,
+                    taskStatus:taskStatus,
+                    callCodeHistoryList:callCodeHistoryListStr,
+                    freeSQL:freeSQL
+                },
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    var totalArrears = "0.00";
+                    if (data.totalArrears != null) {
+                        totalArrears = data.totalArrears;
+                    }
+                    var totalPay = "0.00";
+                    if (data.totalPay != null) {
+                        totalPay = data.totalPay;
+                    }
+                    $("#totalArrears").text("委案总金额：" + totalArrears);
+                    $("#totalPay").text("回款总金额：" + totalPay);
                 }
             );
         }

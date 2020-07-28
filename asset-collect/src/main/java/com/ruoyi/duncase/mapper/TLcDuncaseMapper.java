@@ -4,6 +4,7 @@ import com.ruoyi.assetspackage.domain.score.TLcScore;
 import com.ruoyi.duncase.domain.TLcDuncase;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -109,4 +110,6 @@ public interface TLcDuncaseMapper {
     Integer selectDuncaseCount(@Param("createTime") Date createTime, @Param("modifyTime")Date modifyTime);
 
     public void updateScore(@Param(value="TLcScoreList")List<TLcScore> TLcScoreList);
+
+    Map<String, BigDecimal> searchAllDuncaseTotalMoney(TLcDuncase tLcDuncase);
 }

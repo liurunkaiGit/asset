@@ -6,6 +6,11 @@
         .time-input{
             display: inline;
         }
+        #title2{
+            position: absolute;
+            left: 60%;
+            top: 15px;
+        }
     </style>
     <link th:href="@{/ajax/libs/bootstrap-select/bootstrap-select.css}" rel="stylesheet"/>
 </head>
@@ -19,11 +24,11 @@
                         <input type="hidden" id="orgId" name="orgId" th:value="${orgId}">
                         <li>
                             <p>机构案件号：</p>
-                            <input type="text" name="caseNo"/>
+                            <input type="text" name="caseNo" id="caseNo"/>
                         </li>
                         <li>
                             <p>姓名：</p>
-                            <input type="text" name="customName"/>
+                            <input type="text" name="customName" id="customName"/>
                         </li>
                        <!-- <li>
                             <p>任务状态：</p>
@@ -36,7 +41,7 @@
                         <li>
                             <p>任务状态：</p>
                             <!-- 1：未分配 2：催收中 3: 已结案-->
-                            <select name="taskStatus">
+                            <select name="taskStatus" id="taskStatus">
                                 <option value="">所有</option>
                                 <option value="1">未分配</option>
                                 <option value="2">已分配</option>
@@ -196,6 +201,11 @@
             </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
+            <div id="title2">
+                <label id="totalArrears"></label>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <label id="totalPay" ></label>
+            </div>
             <table id="bootstrap-table"></table>
         </div>
     </div>
@@ -624,9 +634,42 @@
     function selectSearch(){
         initFreeSearch();
         $.table.search();
+        searchTotalMoney();
     }
-    
-    
+
+    // 案件回款总金额、委案总金额
+    function searchTotalMoney() {
+        var caseNo = $("#caseNo").val();
+        var customName = $("#customName").val();
+        var taskStatus = $("#taskStatus").val();
+        var callCodeHistoryListStr = $('#callCodeHistoryListStr').selectpicker('val');
+        var freeSQL = $("#freeSQL").val();
+        freeSQL = encodeURIComponent(freeSQL);
+        $.post(
+            prefix + "/searchAllDuncaseTotalMoney",
+            {
+                caseNo:caseNo,
+                customName:customName,
+                taskStatus:taskStatus,
+                callCodeHistoryList:callCodeHistoryListStr,
+                freeSQL:freeSQL
+            },
+            function(data) {
+                // alert(JSON.stringify(data));
+                var totalArrears = "0.00";
+                if (data.totalArrears != null) {
+                    totalArrears = data.totalArrears;
+                }
+                var totalPay = "0.00";
+                if (data.totalPay != null) {
+                    totalPay = data.totalPay;
+                }
+                $("#totalArrears").text("委案总金额：" + totalArrears);
+                $("#totalPay").text("回款总金额：" + totalPay);
+            }
+        );
+    }
+
     function findScore() {
         var ids = $.table.selectFirstColumns().join();
         if(ids==""){
