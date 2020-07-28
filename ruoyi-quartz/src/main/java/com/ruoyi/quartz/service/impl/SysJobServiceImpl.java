@@ -42,7 +42,7 @@ public class SysJobServiceImpl implements ISysJobService
         List<SysJob> jobList = jobMapper.selectJobAll();
         for (SysJob job : jobList)
         {
-            updateSchedulerJob(job, job.getJobGroup());
+//            updateSchedulerJob(job, job.getJobGroup());
         }
     }
 

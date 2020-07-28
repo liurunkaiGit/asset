@@ -1,3 +1,5 @@
+alter TABLE t_lc_duncase_his add COLUMN score int(11) DEFAULT NULL COMMENT '催收评分';
+
 delete from t_lc_report_day_process where report_date = '2020-07-20';
 delete from t_lc_report_day_process where report_date = '2020-07-21';
 delete from t_lc_report_day_process where report_date = '2020-07-22';

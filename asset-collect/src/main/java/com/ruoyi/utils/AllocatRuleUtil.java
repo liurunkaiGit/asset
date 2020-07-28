@@ -88,7 +88,8 @@ public class AllocatRuleUtil {
         sortTaskByArrearsNumTotalList = new CopyOnWriteArrayList(sortTaskByArrearsNumTotalList.toArray());
         // 创建一个新的任务集合用来保存分配后的任务
         CopyOnWriteArrayList<TLcTask> newTaskList = new CopyOnWriteArrayList<>();
-        for (int j = 0; j < sortTaskByArrearsNumTotalList.size(); j++) {
+        Integer taskNum = sortTaskByArrearsNumTotalList.size();
+        for (int j = 0; j < taskNum; j++) {
             if (sortTaskByArrearsNumTotalList == null || sortTaskByArrearsNumTotalList.size() == 0) {
                 break;
             }

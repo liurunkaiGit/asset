@@ -107,10 +107,9 @@
             ta.import_batch_no,
             ta.org_id,
             ta.task_status AS taskStatus,
-            tt.score
-            FROM t_lc_duncase_his t, t_lc_task_his ta,t_lc_score tt
+            t.score
+            FROM t_lc_duncase_his t, t_lc_task_his ta
             WHERE t.case_no = ta.case_no AND t.import_batch_no = ta.import_batch_no
-            and t.case_no = tt.org_casno AND t.import_batch_no = tt.import_batch_no
             <if test="orgId != null  and orgId != ''">
                 and t.org_id = #{orgId}
             </if>

@@ -61,8 +61,13 @@ public class BaseController {
     /**
      * 设置请求分页数据
      */
-    protected void startPageCustom(Integer startNum, Integer endNum) {
-        PageHelper.startPage(startNum, endNum);
+    protected void startPageCustom(Integer startNum, Integer endNum, String orderByColumn, String isAsc) {
+        String orderBy = "";
+        if (StringUtils.isNotEmpty(orderByColumn))
+        {
+            orderBy = StringUtils.toUnderScoreCase(orderByColumn) + " " + isAsc;
+        }
+        PageHelper.startPage(startNum, endNum, orderBy);
     }
 
     /**

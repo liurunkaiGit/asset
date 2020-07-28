@@ -396,24 +396,18 @@ public class Test {
     @org.junit.Test
     public void testMoneyNumAllocat() {
         CopyOnWriteArrayList<User> userList = new CopyOnWriteArrayList<>();
-        for (int i = 1; i <= 2; i++) {
+        for (int i = 1; i <= 3; i++) {
             userList.add(new User(i));
         }
 //        userList.stream().forEach(user -> log.info("user is:{}",user));
         CopyOnWriteArrayList<Task> taskList = new CopyOnWriteArrayList<>();
-        for (int i = 1; i <= 3; i++) {
-            taskList.add(new Task(i, new BigDecimal(i * 10000), null));
+        for (int i = 1; i <= 100; i++) {
+            taskList.add(new Task(i, new BigDecimal(i), null));
         }
-//        taskList.stream().forEach(task -> log.info("task is:{}",task));
-//        for (Task task : taskList) {
-//            for (int i = 0; i < userList.size(); i++) {
-//                task.setUserId(userList.get(i).getUserId());
-//                taskList.remove(task);
-//            }
-//        }
-        long start = System.currentTimeMillis();
+//        long start = System.currentTimeMillis();
         CopyOnWriteArrayList<Task> newTaskList = new CopyOnWriteArrayList<>();
-        for (int j = 0; j < taskList.size(); j++) {
+        Integer taskNum = taskList.size();
+        for (int j = 0; j < taskNum; j++) {
             if (taskList == null || taskList.size() == 0) {
                 break;
             }
@@ -425,7 +419,6 @@ public class Test {
                 newTaskList.add(taskList.get(0));
                 taskList.remove(taskList.get(0));
             }
-//            break;
             for (int i = 0; i < userList.size(); i++) {
                 if (taskList == null || taskList.size() == 0) {
                     break;
@@ -436,8 +429,8 @@ public class Test {
                 taskList.remove(task);
             }
         }
-        long end = System.currentTimeMillis();
-        log.info("分配所用时间：{}", end - start);
+//        long end = System.currentTimeMillis();
+//        log.info("分配所用时间：{}", end - start);
         log.info("分配后旧的任务集合+++++++++++++++++++++++++++++++++");
         taskList.stream().forEach(task -> log.info("task is:{}",task));
         log.info("分配新的任务集合---------------------------");

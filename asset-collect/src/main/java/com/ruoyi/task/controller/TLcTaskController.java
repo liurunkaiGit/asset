@@ -383,6 +383,10 @@ public class TLcTaskController extends BaseController {
         if(StringUtils.isNotEmpty(callCodeHistoryListStr)&& !"null".equals(callCodeHistoryListStr)){
             tLcTask.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
         }
+        String orderByColumn = request.getParameter("orderByColumn");
+        String isAsc = request.getParameter("isAsc");
+        request.getSession().setAttribute("orderByColumn",orderByColumn);
+        request.getSession().setAttribute("isAsc",isAsc);
         List<TLcTask> list = tLcTaskService.selectMyTaskList(tLcTask);
         logger.info("我的任务页面查询list结束");
         return getDataTable(list);
@@ -396,7 +400,9 @@ public class TLcTaskController extends BaseController {
         if(StringUtils.isNotEmpty(callCodeHistoryListStr) && !"null".equals(callCodeHistoryListStr)){
             tLcTask.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
         }
-        startPageCustom(Integer.valueOf(request.getParameter("startNum")), Integer.valueOf(request.getParameter("endNum")));
+        String orderByColumn = (String) request.getSession().getAttribute("orderByColumn");
+        String isAsc = (String) request.getSession().getAttribute("isAsc");
+        startPageCustom(Integer.valueOf(request.getParameter("startNum")), Integer.valueOf(request.getParameter("endNum")), orderByColumn, isAsc);
         List<TLcTask> list = tLcTaskService.selectMyTaskList(tLcTask);
         logger.info("查询客户列表结束ownerId="+tLcTask.getOwnerId());
         return list;

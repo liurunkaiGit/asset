@@ -68,7 +68,7 @@ begin
 -- 删除资产表
     DELETE from cur_assets_package where close_case = 1 AND NOW() >= (SELECT date_sub(close_case_date, INTERVAL - days DAY));
 -- 插入案件历史表
-    INSERT INTO `t_lc_duncase_his` (`case_no`, `custom_name`, `certificate_no`, `custom_phone`, `month_repay_day`, `first_overdue_time`, `overdue_days`, `overdue_aging`, `max_overdue_day`, `org_id`, `org_name`, `repay_date`, `borrow_line`, `borrow_card_no`, `borrow_bank`, `total_interest_rmb`, `total_principal_rmb`, `total_default_interest_rmb`, `total_expenses_payable_rmb`, `lowest_payment_rmb`, `total_debt_amount_rmb`, `appoint_case_balance`, `create_time`, `create_by`, `modify_time`, `modify_by`, `transfer_type`, `enter_coll_date`, `close_case_yhje`, `overdue_fine`, `city`, `area`, `recommend_vendor`, `recommend_website`, `product_name`, `repay_method`, `aging_periods`, `bill_address`, `year_interest_rate`, `day_interest_rate`, `first_overdue_sign`, `total_overdue_day`, `overdue_frequency`, `import_batch_no`, `pack_no`, `back_case_date`, `loan_type`, `stay_case_flag`, `risk_flag`, `contract_type`, `reduction_flag`, `legal_flag`, `ljyhje`)
+    INSERT INTO `t_lc_duncase_his` (`case_no`, `custom_name`, `certificate_no`, `custom_phone`, `month_repay_day`, `first_overdue_time`, `overdue_days`, `overdue_aging`, `max_overdue_day`, `org_id`, `org_name`, `repay_date`, `borrow_line`, `borrow_card_no`, `borrow_bank`, `total_interest_rmb`, `total_principal_rmb`, `total_default_interest_rmb`, `total_expenses_payable_rmb`, `lowest_payment_rmb`, `total_debt_amount_rmb`, `appoint_case_balance`, `create_time`, `create_by`, `modify_time`, `modify_by`, `transfer_type`, `enter_coll_date`, `close_case_yhje`, `overdue_fine`, `city`, `area`, `recommend_vendor`, `recommend_website`, `product_name`, `repay_method`, `aging_periods`, `bill_address`, `year_interest_rate`, `day_interest_rate`, `first_overdue_sign`, `total_overdue_day`, `overdue_frequency`, `import_batch_no`, `pack_no`, `back_case_date`, `loan_type`, `stay_case_flag`, `risk_flag`, `contract_type`, `reduction_flag`, `legal_flag`, `ljyhje`, `score`)
     SELECT
         t.case_no,
         t.custom_name,
@@ -122,7 +122,8 @@ begin
         t.contract_type,
         t.reduction_flag,
         t.legal_flag,
-        t.ljyhje
+        t.ljyhje,
+        t.score
     FROM
         t_lc_duncase t,t_lc_task ta
     where t.case_no = ta.case_no and t.import_batch_no = ta.import_batch_no and t.org_id = ta.org_id and ta.task_status = 3 AND NOW() >= (SELECT date_sub(ta.close_date, INTERVAL - days DAY));
