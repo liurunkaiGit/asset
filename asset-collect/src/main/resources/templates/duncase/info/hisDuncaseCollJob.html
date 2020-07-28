@@ -830,7 +830,7 @@
 
     function tellToMd5(tell){
         if(tell != null && tell != ""){
-            tell = tell.substring(0,3) + "****" + tell.substring(7);
+            //tell = tell.substring(0,3) + "****" + tell.substring(7);
         }else{
             tell = "";
         }
@@ -839,7 +839,7 @@
     //银行卡、身份证脱敏
     function cardToMd5(cardno){
         if(cardno != null && cardno != ""){
-            cardno = cardno.substring(0,2) + "************" + cardno.substring(14);
+            //cardno = cardno.substring(0,2) + "************" + cardno.substring(14);
         }else {
             cardno ="";
         }
