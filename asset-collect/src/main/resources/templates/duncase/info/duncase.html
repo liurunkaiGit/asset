@@ -644,7 +644,7 @@
         var taskStatus = $("#taskStatus").val();
         var callCodeHistoryListStr = $('#callCodeHistoryListStr').selectpicker('val');
         var freeSQL = $("#freeSQL").val();
-        freeSQL = encodeURIComponent(freeSQL);
+        // freeSQL = encodeURIComponent(freeSQL);
         $.post(
             prefix + "/searchAllDuncaseTotalMoney",
             {

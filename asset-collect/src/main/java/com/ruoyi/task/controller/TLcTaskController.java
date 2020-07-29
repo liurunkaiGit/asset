@@ -304,6 +304,8 @@ public class TLcTaskController extends BaseController {
     @PostMapping("/searchTotalMoney")
     @ResponseBody
     public Map<String, BigDecimal> searchTotalMoney(TLcTask tLcTask) {
+        tLcTask.setOwnerId(ShiroUtils.getSysUser().getUserId());
+        tLcTask.setOrgId(ShiroUtils.getSysUser().getOrgId().toString());
         Map<String, BigDecimal> resultMap = this.tLcTaskService.selectTotalCountMoney(tLcTask);
         return resultMap;
     }
