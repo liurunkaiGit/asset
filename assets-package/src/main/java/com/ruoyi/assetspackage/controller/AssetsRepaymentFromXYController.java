@@ -82,8 +82,10 @@ public class AssetsRepaymentFromXYController extends BaseController {
     @ResponseBody
     public TableDataInfo list(CurAssetsRepaymentPackage curAssetsRepaymentPackage) {
         startPage();
-        Set<Long> deptIds = dataPermissionUtils.selectDataPer();
-        curAssetsRepaymentPackage.setDeptIds(deptIds);
+        /*Set<Long> deptIds = dataPermissionUtils.selectDataPer();
+        curAssetsRepaymentPackage.setDeptIds(deptIds);*/
+        Long orgId = ShiroUtils.getSysUser().getOrgId();
+        curAssetsRepaymentPackage.setOrgId(String.valueOf(orgId));
         List<CurAssetsRepaymentPackage> list = assetsRepaymenFromXYService.findCurAssetsRepaymentList(curAssetsRepaymentPackage);
         return getDataTable(list);
     }

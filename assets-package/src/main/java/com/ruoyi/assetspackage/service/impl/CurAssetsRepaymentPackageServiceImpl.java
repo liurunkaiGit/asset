@@ -834,8 +834,12 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
                     return tLcTask;
                 }).collect(Collectors.toList());
         this.taskMapper.batchUpdateTask(tLcTaskList);
-        this.robotBlackService.batchDeleteRobotBlackByCaseNo(caseNoList);
-        this.insertDuncaseAssign(closeList, ShiroUtils.getSysUser());
+        if(caseNoList.size() > 0){
+            this.robotBlackService.batchDeleteRobotBlackByCaseNo(caseNoList);
+        }
+        if(closeList.size() > 0){
+            this.insertDuncaseAssign(closeList, ShiroUtils.getSysUser());
+        }
     }
 
     /**
@@ -869,8 +873,12 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
                     return tLcTask;
                 }).collect(Collectors.toList());
         this.taskMapper.batchUpdateTask(tLcTaskList);
-        this.robotBlackService.batchDeleteRobotBlackByCaseNo(caseNoList);
-        this.insertDuncaseAssign(closeList, new SysUser());
+        if(caseNoList.size() > 0){
+            this.robotBlackService.batchDeleteRobotBlackByCaseNo(caseNoList);
+        }
+        if(closeList.size() > 0){
+            this.insertDuncaseAssign(closeList, new SysUser());
+        }
     }
 
     /**
