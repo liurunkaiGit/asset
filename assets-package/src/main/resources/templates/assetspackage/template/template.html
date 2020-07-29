@@ -44,31 +44,16 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-               <!-- <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:package:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:package:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:package:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:package:export">
-                    <i class="fa fa-download"></i> 导出
-                 </a>-->
-                <a class="btn btn-success"  data-toggle="modal" data-target="#myModal" shiro:hasPermission="system:package:upload">
+                <a class="btn btn-success"  data-toggle="modal" data-target="#myModal" >
                     <i class="glyphicon glyphicon-cloud-upload"></i> 上传
                 </a>
-                <a class="btn btn-primary single disabled" id="matching" onclick="matchViwe();" shiro:hasPermission="system:package:upload">
+                <a class="btn btn-primary single disabled" id="matching" onclick="matchViwe();" >
                     <i class="glyphicon glyphicon-pencil"></i> 设置
                 </a>
-               <!-- <a class="btn btn-warning single disabled" id="look" onclick="lookUp();" shiro:hasPermission="system:package:upload">
-                    <i class="glyphicon glyphicon-eye-open"></i> 查看
-                </a>-->
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:package:remove">
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" >
                     <i class="fa fa-remove"></i> 删除
                 </a>
-                <a class="btn btn-warning single disabled" onclick="downLoad();" shiro:hasPermission="system:package:remove">
+                <a class="btn btn-warning single disabled" onclick="downLoad();" >
                     <i class="glyphicon glyphicon-cloud-download"></i> 下载
                 </a>
             </div>

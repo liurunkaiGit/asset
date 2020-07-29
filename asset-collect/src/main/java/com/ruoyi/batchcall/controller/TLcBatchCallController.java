@@ -312,7 +312,7 @@ public class TLcBatchCallController extends BaseController
 
     /**
      *
-     * @param tLcBatchCall
+     * @param
      * @return
      */
     @PostMapping("/getNextBatchCall")
