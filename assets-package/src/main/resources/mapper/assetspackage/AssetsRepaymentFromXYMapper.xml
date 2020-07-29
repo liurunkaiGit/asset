@@ -213,7 +213,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="findOwnerNameByAssign" parameterType="java.util.Map" resultType="java.lang.String">
        SELECT owner_name as ownerName
        from t_lc_duncase_assign  where org_id=#{orgId} and case_no=#{orgCasNo}
-       and date_format(create_time, '%Y-%m-%d')= #{hkrq}
+       and (date_format(create_time, '%Y-%m-%d')= #{hkrq} or date_format(create_time, '%Y/%m/%d')= #{hkrq})
        group by owner_name
     </select>
 
