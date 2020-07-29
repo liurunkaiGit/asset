@@ -3,7 +3,7 @@ DROP PROCEDURE IF EXISTS his_data_migrate;
 CREATE PROCEDURE `his_data_migrate`(in days int(2))
 begin
 -- 插入还款历史表：只有这个案件没有在催案件，还款才会转移到历史表
-    INSERT INTO `cur_assets_repayment_package_his` (`id`, `org_casNo`, `jyqtfy`, `jylx`, `jybj`, `jyznf`, `jy_type`, `jyje`, `product_type`, `jjh`, `csr`, `csjd`, `fprq`, `area_center`, `accept_city`, `hth`, `dqsyb_yj`, `dqsyb_ej`, `wbqs`, `wbjb`, `warq`, `cur_name`, `khjlxm`, `sjrq`, `sfwbcs`, `sfjq`, `bywa`, `ajhsrq`, `xfjrzh`, `tzsx`, `tzje`, `zhzt`, `hkrq`, `hksyqqs`, `hkje`, `yqcplx`, `yqjd`, `quota_product`, `org_id`, `jazt`, `create_by`, `create_time`, `is_exit_collect`, `import_batch_no`, `close_case_date`, `org_name`)
+    INSERT INTO `cur_assets_repayment_package_his` (`id`, `org_casNo`, `jyqtfy`, `jylx`, `jybj`, `jyznf`, `jy_type`, `jyje`, `product_type`, `jjh`, `csr`, `csjd`, `fprq`, `area_center`, `accept_city`, `hth`, `dqsyb_yj`, `dqsyb_ej`, `wbqs`, `wbjb`, `warq`, `cur_name`, `khjlxm`, `sjrq`, `sfwbcs`, `sfjq`, `bywa`, `ajhsrq`, `xfjrzh`, `tzsx`, `tzje`, `zhzt`, `hkrq`, `hksyqqs`, `hkje`, `yqcplx`, `yqjd`, `quota_product`, `org_id`, `jazt`, `create_by`, `create_time`, `is_exit_collect`, `import_batch_no`, `close_case_date`, `org_name`, `transferType`, `owner_name`, `rmb_ye`, `asset_batch_no`)
     SELECT
         t.id,
         t.org_casNo,
@@ -50,7 +50,11 @@ begin
         t.is_exit_collect,
         t.import_batch_no,
         t.close_case_date,
-        t.org_name
+        t.org_name,
+        t.transferType,
+        t.owner_name,
+        t.rmb_ye,
+        t.asset_batch_no
     from cur_assets_repayment_package t
     where EXISTS (
                   select org_casNo from cur_assets_package p where not EXISTS (
@@ -63,8 +67,9 @@ begin
                           select org_casNo from cur_assets_package c where c.close_case = 0 and p.org_casNo = c.org_casNo) and NOW() >= (SELECT date_sub(p.close_case_date, INTERVAL - days DAY)) and t.org_casNo = p.org_casNo
               );
     -- 插入资产历史表
-    INSERT INTO `cur_assets_package_his` (`id`, `org_casNo`, `org`, `transferType`, `rmb_ye`, `rmb_yhfxzje`, `rmb_yhlizje`, `rmb_yhbjzje`, `rmb_yhfyzje`, `rmb_zdyhje`, `rmb_qkzje`, `borrow_no`, `borrow_blank`, `borrow_ed`, `rcr`, `fz`, `area_center`, `max_yqts_his`, `sum_yqts_his`, `sum_yqcs_his`, `ww_city_name`, `wa_ye`, `bill_address`, `year_rates`, `tj_firm`, `tj_wd`, `day_rates`, `account_date`, `overdue_days`, `first_yq_date`, `first_yqjc_date`, `first_yq_flag`, `cur_name`, `cur_sex`, `certificate_no`, `certificate_address`, `regist_address`, `email`, `marriage`, `education`, `customer_mobile`, `customer_home_tel`, `customer_home_address`, `work_name`, `work_address`, `work_tel`, `first_liaison_name`, `first_liaison_relation`, `first_liaison_mobile`, `first_liaison_tel`, `second_liaison_name`, `second_liaison_relation`, `second_liaison_mobile`, `second_liaison_tel`, `three_liaison_name`, `three_liaison_relation`, `three_liaison_mobile`, `three_liaison_tel`, `cpmc`, `hk_type`, `znj`, `ajhssj`, `org_id`, `package_flag`, `create_by`, `create_time`, `close_case`, `is_exit_collect`, `import_batch_no`, `close_case_date`, `package_id`, `account_age`, `la_flag`, `fx_flag`, `htlx`, `jmbq`, `fcbq`, `fxsfbh`, `remark`, `tar`, `jkrq`, `zhychkr`, `mqhkje`, `dqqkje`, `ljyhje`, `sfje`, `zdhkzh1`, `zdhkzh2`, `zdhkzhhm1`, `zdhkzhhm2`, `zdhkqd1`, `zdhkqd2`, `khmb`, `spjg`, `dklx`, `jkbs`, `spxx`, `wacs`, `ykqs`, `work_dept`, `customer_mobile2`, `customer_mobile3`, `customer_mobile4`, `fourth_liaison_name`, `fourth_liaison_relation`, `fourth_liaison_mobile`, `fifth_liaison_name`, `fifth_liaison_relation`, `fifth_liaison_mobile`, `dqyhje`)
-    SELECT `id`, `org_casNo`, `org`, `transferType`, `rmb_ye`, `rmb_yhfxzje`, `rmb_yhlizje`, `rmb_yhbjzje`, `rmb_yhfyzje`, `rmb_zdyhje`, `rmb_qkzje`, `borrow_no`, `borrow_blank`, `borrow_ed`, `rcr`, `fz`, `area_center`, `max_yqts_his`, `sum_yqts_his`, `sum_yqcs_his`, `ww_city_name`, `wa_ye`, `bill_address`, `year_rates`, `tj_firm`, `tj_wd`, `day_rates`, `account_date`, `overdue_days`, `first_yq_date`, `first_yqjc_date`, `first_yq_flag`, `cur_name`, `cur_sex`, `certificate_no`, `certificate_address`, `regist_address`, `email`, `marriage`, `education`, `customer_mobile`, `customer_home_tel`, `customer_home_address`, `work_name`, `work_address`, `work_tel`, `first_liaison_name`, `first_liaison_relation`, `first_liaison_mobile`, `first_liaison_tel`, `second_liaison_name`, `second_liaison_relation`, `second_liaison_mobile`, `second_liaison_tel`, `three_liaison_name`, `three_liaison_relation`, `three_liaison_mobile`, `three_liaison_tel`, `cpmc`, `hk_type`, `znj`, `ajhssj`, `org_id`, `package_flag`, `create_by`, `create_time`, `close_case`, `is_exit_collect`, `import_batch_no`, `close_case_date`, `package_id`, `account_age`, `la_flag`, `fx_flag`, `htlx`, `jmbq`, `fcbq`, `fxsfbh`, `remark`, `tar`, `jkrq`, `zhychkr`, `mqhkje`, `dqqkje`, `ljyhje`, `sfje`, `zdhkzh1`, `zdhkzh2`, `zdhkzhhm1`, `zdhkzhhm2`, `zdhkqd1`, `zdhkqd2`, `khmb`, `spjg`, `dklx`, `jkbs`, `spxx`, `wacs`, `ykqs`, `work_dept`, `customer_mobile2`, `customer_mobile3`, `customer_mobile4`, `fourth_liaison_name`, `fourth_liaison_relation`, `fourth_liaison_mobile`, `fifth_liaison_name`, `fifth_liaison_relation`, `fifth_liaison_mobile`, `dqyhje` from `cur_assets_package` where close_case = 1 AND NOW() >= (SELECT date_sub(close_case_date, INTERVAL - days DAY));
+    INSERT INTO `cur_assets_package_his` (`id`, `org_casNo`, `org`, `transferType`, `rmb_ye`, `rmb_yhfxzje`, `rmb_yhlizje`, `rmb_yhbjzje`, `rmb_yhfyzje`, `rmb_zdyhje`, `rmb_qkzje`, `borrow_no`, `borrow_blank`, `borrow_ed`, `rcr`, `fz`, `area_center`, `max_yqts_his`, `sum_yqts_his`, `sum_yqcs_his`, `ww_city_name`, `wa_ye`, `bill_address`, `year_rates`, `tj_firm`, `tj_wd`, `day_rates`, `account_date`, `overdue_days`, `first_yq_date`, `first_yqjc_date`, `first_yq_flag`, `cur_name`, `cur_sex`, `certificate_no`, `certificate_address`, `regist_address`, `email`, `marriage`, `education`, `customer_mobile`, `customer_home_tel`, `customer_home_address`, `work_name`, `work_address`, `work_tel`, `first_liaison_name`, `first_liaison_relation`, `first_liaison_mobile`, `first_liaison_tel`, `second_liaison_name`, `second_liaison_relation`, `second_liaison_mobile`, `second_liaison_tel`, `three_liaison_name`, `three_liaison_relation`, `three_liaison_mobile`, `three_liaison_tel`, `cpmc`, `hk_type`, `znj`, `ajhssj`, `org_id`, `package_flag`, `create_by`, `create_time`, `close_case`, `is_exit_collect`, `import_batch_no`, `close_case_date`, `package_id`, `account_age`, `la_flag`, `fx_flag`, `htlx`, `jmbq`, `fcbq`, `fxsfbh`, `remark`, `tar`, `jkrq`, `zhychkr`, `mqhkje`, `dqqkje`, `ljyhje`, `sfje`, `zdhkzh1`, `zdhkzh2`, `zdhkzhhm1`, `zdhkzhhm2`, `zdhkqd1`, `zdhkqd2`, `khmb`, `spjg`, `dklx`, `jkbs`, `spxx`, `wacs`, `ykqs`, `work_dept`, `customer_mobile2`, `customer_mobile3`, `customer_mobile4`, `fourth_liaison_name`, `fourth_liaison_relation`, `fourth_liaison_mobile`, `fifth_liaison_name`, `fifth_liaison_relation`, `fifth_liaison_mobile`, `dqyhje`, `update_time`, `update_by`)
+    SELECT `id`, `org_casNo`, `org`, `transferType`, `rmb_ye`, `rmb_yhfxzje`, `rmb_yhlizje`, `rmb_yhbjzje`, `rmb_yhfyzje`, `rmb_zdyhje`, `rmb_qkzje`, `borrow_no`, `borrow_blank`, `borrow_ed`, `rcr`, `fz`, `area_center`, `max_yqts_his`, `sum_yqts_his`, `sum_yqcs_his`, `ww_city_name`, `wa_ye`, `bill_address`, `year_rates`, `tj_firm`, `tj_wd`, `day_rates`, `account_date`, `overdue_days`, `first_yq_date`, `first_yqjc_date`, `first_yq_flag`, `cur_name`, `cur_sex`, `certificate_no`, `certificate_address`, `regist_address`, `email`, `marriage`, `education`, `customer_mobile`, `customer_home_tel`, `customer_home_address`, `work_name`, `work_address`, `work_tel`, `first_liaison_name`, `first_liaison_relation`, `first_liaison_mobile`, `first_liaison_tel`, `second_liaison_name`, `second_liaison_relation`, `second_liaison_mobile`, `second_liaison_tel`, `three_liaison_name`, `three_liaison_relation`, `three_liaison_mobile`, `three_liaison_tel`, `cpmc`, `hk_type`, `znj`, `ajhssj`, `org_id`, `package_flag`, `create_by`, `create_time`, `close_case`, `is_exit_collect`, `import_batch_no`, `close_case_date`, `package_id`, `account_age`, `la_flag`, `fx_flag`, `htlx`, `jmbq`, `fcbq`, `fxsfbh`, `remark`, `tar`, `jkrq`, `zhychkr`, `mqhkje`, `dqqkje`, `ljyhje`, `sfje`, `zdhkzh1`, `zdhkzh2`, `zdhkzhhm1`, `zdhkzhhm2`, `zdhkqd1`, `zdhkqd2`, `khmb`, `spjg`, `dklx`, `jkbs`, `spxx`, `wacs`, `ykqs`, `work_dept`, `customer_mobile2`, `customer_mobile3`, `customer_mobile4`, `fourth_liaison_name`, `fourth_liaison_relation`, `fourth_liaison_mobile`, `fifth_liaison_name`, `fifth_liaison_relation`, `fifth_liaison_mobile`, `dqyhje`, `update_time`, `update_by`
+    from `cur_assets_package` where close_case = 1 AND NOW() >= (SELECT date_sub(close_case_date, INTERVAL - days DAY));
 -- 删除资产表
     DELETE from cur_assets_package where close_case = 1 AND NOW() >= (SELECT date_sub(close_case_date, INTERVAL - days DAY));
 -- 插入案件历史表
@@ -326,7 +331,7 @@ begin
 -- 删除案件轨迹表
     DELETE t from t_lc_select_record t,t_lc_task ta where t.case_no = ta.case_no and t.create_time <= ta.close_date and ta.task_status = 3 AND NOW() >= (SELECT date_sub(ta.close_date, INTERVAL - days DAY));
 -- 插入机器人任务明细历史表
-    INSERT INTO `t_lc_robot_task_his` (`task_id`, `robot_tast_id`, `create_by`, `create_time`, `task_name`, `owner_name`, `transfer_type`, `arrears_total`, `speech_craft_name`, `call_end_date`, `robot_task_status`, `result_value_alias`, `call_status`, `call_len`, `task_status`, `task_type`, `call_content`, `call_radio`, `call_start_date`, `cur_name`, `phone`, `org_id`, `org_name`, `robot`, `is_recall`, `continue_days`, `continue_frequency`, `case_no`)
+    INSERT INTO `t_lc_robot_task_his` (`task_id`, `robot_tast_id`, `create_by`, `create_time`, `task_name`, `owner_name`, `transfer_type`, `arrears_total`, `speech_craft_name`, `call_end_date`, `robot_task_status`, `result_value_alias`, `call_status`, `call_len`, `task_status`, `task_type`, `call_content`, `call_radio`, `call_start_date`, `cur_name`, `phone`, `org_id`, `org_name`, `robot`, `is_recall`, `continue_days`, `continue_frequency`, `call_sign`, `call_sign_value`, `modify_by`, `modify_time`, `call_back_time`, `case_no`)
     SELECT
         t.task_id,
         t.robot_tast_id,
@@ -355,6 +360,11 @@ begin
         t.is_recall,
         t.continue_days,
         t.continue_frequency,
+        t.call_sign,
+        t.call_sign_value,
+        t.modify_by,
+        t.modify_time,
+        t.call_back_time,
         ta.case_no
     from t_lc_robot_task t,t_lc_robot_task_pandect p,t_lc_task ta where t.task_id = ta.id and t.robot_tast_id = p.robot_task_id and (p.robot_task_status = 2 or p.robot_task_status = 50);
 -- 删除机器人任务明细表
@@ -423,7 +433,7 @@ begin
 -- 删除机器人任务总览表
     DELETE from t_lc_robot_task_pandect t where t.robot_task_status = 2 or t.robot_task_status = 50;
 -- 插入任务历史表
-    INSERT INTO `t_lc_task_his` (`case_no`, `certificate_no`, `certificate_type`, `custom_code`, `custom_name`, `arrears_total`, `task_status`, `overdue_days`, `overdue_aging`, `owner_id`, `owner_name`, `org_id`, `org_name`, `close_date`, `old_owner_id`, `task_type`, `allot_type`, `create_time`, `modify_time`, `create_by`, `modify_by`, `old_owner_name`, `robot_task_id`, `robot_call_strategy_id`, `transfer_type`, `enter_coll_date`, `close_case_yhje`, `recently_allot_date`, `recently_follow_up_date`, `hit_rule`, `hit_rule_desc`, `distribution_strategy`, `import_batch_no`, `action_code`, `action_code_value`, `call_sign`, `call_sign_value`, `phone`, `dqyhje`)
+    INSERT INTO `t_lc_task_his` (`case_no`, `certificate_no`, `certificate_type`, `custom_code`, `custom_name`, `arrears_total`, `task_status`, `overdue_days`, `overdue_aging`, `owner_id`, `owner_name`, `org_id`, `org_name`, `close_date`, `old_owner_id`, `task_type`, `allot_type`, `create_time`, `modify_time`, `create_by`, `modify_by`, `old_owner_name`, `robot_task_id`, `robot_call_strategy_id`, `transfer_type`, `enter_coll_date`, `close_case_yhje`, `recently_allot_date`, `recently_follow_up_date`, `hit_rule`, `hit_rule_desc`, `distribution_strategy`, `import_batch_no`, `action_code`, `action_code_value`, `call_sign`, `call_sign_value`, `phone`, `dqyhje`, `send_robot_batch_no`, `close_type`)
     SELECT
         case_no,
         certificate_no,
@@ -463,7 +473,9 @@ begin
         call_sign,
         call_sign_value,
         phone,
-        dqyhje
+        dqyhje,
+        send_robot_batch_no,
+        close_type
     FROM
         t_lc_task
     where task_status = 3 AND NOW() >= (SELECT date_sub(close_date, INTERVAL - days DAY));
