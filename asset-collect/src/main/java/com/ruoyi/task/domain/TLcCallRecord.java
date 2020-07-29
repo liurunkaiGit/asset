@@ -251,6 +251,7 @@ public class TLcCallRecord extends BaseEntity {
     private String ywdetp;
     private String wbjb;
     private String csdz;
+    private String recommendVendor;
 
 
 

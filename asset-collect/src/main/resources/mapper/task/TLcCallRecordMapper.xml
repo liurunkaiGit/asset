@@ -31,12 +31,13 @@
         <result property="orgName" column="org_name"/>
         <result property="createName" column="user_name"/>
         <result property="loginName" column="login_name"/>
+        <!-- <result property="ywdetp" column="ywdetp"/>-->
         <result property="sque" column="sque"/>
         <result property="productName" column="product_name"/>
         <result property="tar" column="back_case_date"/>
-        <result property="ywdetp" column="ywdetp"/>
         <result property="wbjb" column="wbjb"/>
         <result property="csdz" column="csdz"/>
+        <result property="recommendVendor" column="recommend_vendor"/>
     </resultMap>
 
 
@@ -147,7 +148,7 @@
         re.call_radio_location,
         du.product_name,
         du.back_case_date,
-        '外包公司' AS ywdetp,
+        du.recommend_vendor,
         '华道数据' AS wbjb,
         '电催' AS csdz,
         re.call_result
