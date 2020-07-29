@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
@@ -52,6 +53,7 @@ import java.util.Map;
 @RequestMapping("/his/duncase")
 public class TLcHisDuncaseController extends BaseController {
     private String prefix = "duncase/info";
+    private String taskPrefix = "task";
 
     @Autowired
     private ITLcHisDuncaseService hisDuncaseService;
@@ -263,6 +265,31 @@ public class TLcHisDuncaseController extends BaseController {
         tLcDuncase.setOrgId(ShiroUtils.getSysUser().getOrgId().toString());
         Map<String, BigDecimal> resultMap = this.hisDuncaseService.searchHisDuncaseTotalMoney(tLcDuncase);
         return resultMap;
+    }
+
+    /**
+     * 跳转录音播放窗口
+     */
+    @GetMapping("/recordHisAudio")
+    public String recordHisAudio(String id, ModelMap mmap) {
+        TLcCallRecord tLcCallRecord = tLcCallRecordService.selectTLcHisCallRecordById(Long.valueOf(id));
+        String callRadioLocation = tLcCallRecord.getCallRadioLocation();
+//        mmap.put("callRadioLocation", remoteConfigure.getRecordUrl() + callRadioLocation);
+        mmap.put("callRadioLocation", callRadioLocation);
+        return taskPrefix + "/recordAudio";
+    }
+
+    /**
+     * 从平安下载录音
+     *
+     * @param request
+     * @param response
+     * @param id
+     */
+    @GetMapping("/downLoadHis")
+    @ResponseBody
+    public void downLoadHis(HttpServletRequest request, HttpServletResponse response, String id) {
+        this.tLcCallRecordService.downLoadHisRadio(request, response, id);
     }
 
 }

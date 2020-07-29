@@ -119,4 +119,8 @@ public interface ITLcCallRecordService {
      * @return
      */
     Integer selectCallRecordCount(Date createTime);
+
+    TLcCallRecord selectTLcHisCallRecordById(Long valueOf);
+
+    void downLoadHisRadio(HttpServletRequest request, HttpServletResponse response, String id);
 }

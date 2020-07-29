@@ -105,4 +105,7 @@ public interface TLcCallRecordMapper {
      * @return
      */
     Integer selectCallRecordCount(@Param("createTime") Date createTime);
+
+    TLcCallRecord selectTLcHisCallRecordById(@Param("id") Long id);
+
 }

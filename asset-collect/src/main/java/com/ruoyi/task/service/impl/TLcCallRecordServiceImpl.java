@@ -348,7 +348,37 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
         return tLcCallRecordMapper.selectCallRecordCount(createTime);
     }
 
+    @Override
+    public TLcCallRecord selectTLcHisCallRecordById(Long id) {
+        return this.tLcCallRecordMapper.selectTLcHisCallRecordById(id);
+    }
 
+    @Override
+    public void downLoadHisRadio(HttpServletRequest request, HttpServletResponse response, String id) {
+        //查询录音地址
+        TLcCallRecord tLcCallRecord = selectTLcHisCallRecordById(Long.valueOf(id));
+        try {
+            // 下载地址
+//            String urlpath = remoteConfigure.getTelphoneRecordUrl()+tLcCallRecord.getCallRadioLocation();
+            String urlpath = tLcCallRecord.getCallRadioLocation();
+            // 下载名称
+            String[] split = tLcCallRecord.getCallRadioLocation().split("/");
+            String fileName = split[split.length-1];
+//            response.setCharacterEncoding("utf-8");
+//            response.setContentType("multipart/form-data");
+//            response.setHeader("Content-Disposition",
+//                    "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, fileName));
+//            FileUtils.writeBytes(urlpath, response.getOutputStream());
+            if (urlpath.startsWith("https://")) {
+                DownLoadFromHttpsUtil.downLoadFromHttps(response,urlpath);
+            } else if (urlpath.startsWith("http://")) {
+                DownLoadFromHttpsUtil.downLoadFromHttp(response,urlpath);
+            }
+        } catch (Exception e) {
+            log.error("下载录音异常，exception is {}", e);
+            throw new RuntimeException("下载录音异常");
+        }
+    }
 
 
     private String getRelateion(Integer contactRelation){

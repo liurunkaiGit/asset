@@ -44,6 +44,10 @@
         select id, case_no,  contact_name, phone, contact_relation, call_start_time, call_end_time, call_len, call_sign, call_result, call_radio_location, call_radio, create_time, create_by, remark, platform, star, type from t_lc_call_record
     </sql>
 
+    <sql id="selectTLcHisCallRecordVo">
+        select id, case_no,  contact_name, phone, contact_relation, call_start_time, call_end_time, call_len, call_sign, call_result, call_radio_location, call_radio, create_time, create_by, remark, platform, star, type from t_lc_call_record_his
+    </sql>
+
     <sql id="SELECT_CALL_RECORD">
         t.id,
         t.case_no,
@@ -392,6 +396,11 @@
         <if test="createTime != null">
             AND create_time <![CDATA[>=]]> #{createTime}
         </if>
+    </select>
+
+    <select id="selectTLcHisCallRecordById" parameterType="Long" resultMap="TLcCallRecordResult">
+        <include refid="selectTLcHisCallRecordVo"/>
+        where id = #{id}
     </select>
 
 </mapper>
