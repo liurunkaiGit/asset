@@ -643,6 +643,9 @@
         var customName = $("#customName").val();
         var taskStatus = $("#taskStatus").val();
         var callCodeHistoryListStr = $('#callCodeHistoryListStr').selectpicker('val');
+        if (callCodeHistoryListStr != null) {
+            callCodeHistoryListStr = callCodeHistoryListStr.join();
+        }
         var freeSQL = $("#freeSQL").val();
         // freeSQL = encodeURIComponent(freeSQL);
         $.post(
@@ -664,8 +667,8 @@
                 if (data.totalPay != null) {
                     totalPay = data.totalPay;
                 }
-                $("#totalArrears").text("委案总金额：" + totalArrears);
-                $("#totalPay").text("回款总金额：" + totalPay);
+                $("#totalArrears").html("<b>委案总金额：</b>" + parseFloat(totalArrears).toFixed(2));
+                $("#totalPay").html("<b>回款总金额：</b>" + parseFloat(totalPay).toFixed(2));
             }
         );
     }
