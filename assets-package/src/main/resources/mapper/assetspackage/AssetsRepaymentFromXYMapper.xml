@@ -206,8 +206,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
 
     <select id="findAssetsInfo" parameterType="java.util.Map" resultMap="CurAssetsPackageResult">
-        SELECT org_casNo,transferType,rmb_ye,import_batch_no
-        from cur_assets_package where org_id=#{orgId} and org_casNo=#{orgCasNo} and close_case = 0
+        SELECT org_casNo,transferType,rmb_ye,import_batch_no,cur_name
+        from cur_assets_package where org_id=#{orgId} and org_casNo=#{orgCasNo}
+        order by create_time
+        limit 1
     </select>
 
     <select id="findOwnerNameByAssign" parameterType="java.util.Map" resultType="java.lang.String">

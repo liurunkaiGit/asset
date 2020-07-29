@@ -1021,6 +1021,7 @@ public class RepaymentDataImportUtil {
                     dto.setRmbYe(assetsInfo.getRmbYe());
                     dto.setTransferType(assetsInfo.getTransfertype());
                     dto.setAssetBatchNO(assetsInfo.getImportBatchNo());
+                    dto.setCurName(assetsInfo.getCurName());//以资产为准(还款导入不算)
                 }
                 dto.setOwnerName(ownerName);
 //            }
