@@ -127,7 +127,7 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
             TLcCallRecordForXY xyEntity = new TLcCallRecordForXY();
             xyEntity.setSque(tLcCallRecord.getSque());
             xyEntity.setCaseNo(tLcCallRecord.getCaseNo());
-            xyEntity.setYwdetp(tLcCallRecord.getYwdetp());
+//            xyEntity.setYwdetp(tLcCallRecord.getYwdetp());
             xyEntity.setWbjb(tLcCallRecord.getWbjb());
             xyEntity.setCustomName(tLcCallRecord.getCustomName());
             xyEntity.setProductName(tLcCallRecord.getProductName());
@@ -136,8 +136,18 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
             xyEntity.setPhone(tLcCallRecord.getPhone());
             xyEntity.setEnterCollDate(tLcCallRecord.getEnterCollDate());
             xyEntity.setTar(tLcCallRecord.getTar());
-            xyEntity.setCallResult(tLcCallRecord.getCallResult());
+//            xyEntity.setCallResult(tLcCallRecord.getCallResult());
             //特殊字段处理
+            String recommendVendor = tLcCallRecord.getRecommendVendor();//推荐商户
+            if(recommendVendor != null) {
+                xyEntity.setYwdetp(getYwDetp(recommendVendor.trim()));
+            }
+
+            String callRecord = tLcCallRecord.getCallResult();//电话码中文
+            if(callRecord != null) {
+                xyEntity.setCallResult(getCallResult(callRecord.trim()));
+            }
+
             String contactName = tLcCallRecord.getContactName();
             Integer contactRelation = tLcCallRecord.getContactRelation();
             String relateion = this.getRelateion(contactRelation);
@@ -426,7 +436,102 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
     }
 
 
+    private String getYwDetp(String recommendVendor){
+        String ywDept = "";
+        if(recommendVendor.contains("助学事业部")){
+            ywDept = "高校";
+        }
+        if(recommendVendor.contains("特商事业部")){
+            ywDept = "电商";
+        }
+        if(recommendVendor.contains("网商事业部")){
+            ywDept = "网商";
+        }
+        return ywDept;
+    }
 
+    private String getCallResult(String callResult){
+        String result = "";
+        if("承诺还款".equals(callResult)){
+            result = "承诺还款";
+        }
+        if("称已还".equals(callResult)){
+            result = "承诺还款";
+        }
+        if("谈判沟通".equals(callResult)){
+            result = "无承诺还款";
+        }
+        if("无诚意".equals(callResult)){
+            result = "无承诺还款";
+        }
+        if("还款困难".equals(callResult)){
+            result = "无承诺还款";
+        }
+        if("不在".equals(callResult)){
+            result = "无承诺还款";
+        }
+        if("已接听".equals(callResult)){
+            result = "无承诺还款";
+        }
+        if("不配合转告".equals(callResult)){
+            result = "无承诺还款";
+        }
+        if("非本人接听".equals(callResult)){
+            result = "无承诺还款";
+        }
+        if("转告".equals(callResult)){
+            result = "转告还款";
+        }
+        if("失联".equals(callResult)){
+            result = "转告还款";
+        }
+        if("无人接听".equals(callResult)){
+            result = "未接通";
+        }
+        if("拒接".equals(callResult)){
+            result = "未接通";
+        }
+        if("占线忙音".equals(callResult)){
+            result = "未接通";
+        }
+        if("关机".equals(callResult)){
+            result = "未接通";
+        }
+        if("挂断".equals(callResult)){
+            result = "未接通";
+        }
+        if("空号".equals(callResult)){
+            result = "未接通";
+        }
+        if("无此人".equals(callResult)){
+            result = "未接通";
+        }
+        if("无回应".equals(callResult)){
+            result = "未接通";
+        }
+        if("无法接通".equals(callResult)){
+            result = "未接通";
+        }
+        if("主叫号码不可用".equals(callResult)){
+            result = "未接通";
+        }
+        if("停机".equals(callResult)){
+            result = "未接通";
+        }
+        if("主叫欠费".equals(callResult)){
+            result = "未接通";
+        }
+        if("呼损".equals(callResult)){
+            result = "未接通";
+        }
+        if("黑名单".equals(callResult)){
+            result = "未接通";
+        }
+        if("线路盲区".equals(callResult)){
+            result = "未接通";
+        }
+        return result;
+    }
 
 
 }

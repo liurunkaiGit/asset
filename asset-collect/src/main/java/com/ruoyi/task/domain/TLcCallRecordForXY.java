@@ -34,7 +34,10 @@ public class TLcCallRecordForXY extends BaseEntity {
     @Excel(name = "贷款合同号")
     private String caseNo;
 
-    @Excel(name = "业务部门")//写死
+    /**
+     * 推荐商户 转码
+     */
+    @Excel(name = "业务部门")
     private String ywdetp;
 
     @Excel(name = "外包经办")
@@ -59,7 +62,7 @@ public class TLcCallRecordForXY extends BaseEntity {
     private Date createTime;
 
     /**
-     * 电话码汉字
+     * 电话码汉字 再转码
      */
     @Excel(name = "催收结果")
     private String callResult;
