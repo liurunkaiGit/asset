@@ -418,7 +418,7 @@
             and ta.task_status = #{taskStatus}
         </if>
         <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
-            and EXISTS(SELECT r.call_sign FROM t_lc_call_record r WHERE r.case_no = t.case_no and r.call_sign IN
+            and EXISTS(SELECT r.call_sign FROM t_lc_call_record_his r WHERE r.case_no = t.case_no and r.call_sign IN
             <foreach collection="callCodeHistoryList" item="cl" open="(" close=")" separator=",">
                 #{cl}
             </foreach>
