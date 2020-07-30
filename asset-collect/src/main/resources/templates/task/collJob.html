@@ -939,8 +939,8 @@
                     if (startNum > totalPage) {
                         $("#more").remove();
                     }
-                    $("#customCount").text(num + "件");
-                    $("#allCustomTotalDebtAmount").text(parseFloat(allCustomTotalDebtAmount).toFixed(2) + "元");
+                    $("#customCount").text($("#totalCaseNum").val() + "件");
+                    $("#allCustomTotalDebtAmount").text(parseFloat($("#totalArrears").val()).toFixed(2) + "元");
                     // $("#allCustomTotalDebtAmount").text(allCustomTotalDebtAmount.toFixed(2) + "元");
                     collJobDetail($("#firstEnterCaseNo").val(),$("#orgId").val(),$("#firstImportBatchNo").val());
 

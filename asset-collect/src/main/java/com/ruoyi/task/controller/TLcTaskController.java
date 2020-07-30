@@ -210,6 +210,15 @@ public class TLcTaskController extends BaseController {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String sessionId = request.getRequestedSessionId();
         logger.info("催收作业页面查询数据开始sessionId="+sessionId);
+        if(StringUtils.isNotEmpty(callCodeHistoryListStr)&& !"null".equals(callCodeHistoryListStr)){
+            tLcTask.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
+        }
+        if (tLcTask.getEndRecentlyAllotDate() != null) {
+            tLcTask.setEndRecentlyAllotDate(DateUtils.getEndOfDay(tLcTask.getEndRecentlyAllotDate()));
+        }
+        if (tLcTask.getEndRecentlyFollowUpDate() != null) {
+            tLcTask.setEndRecentlyFollowUpDate(DateUtils.getEndOfDay(tLcTask.getEndRecentlyFollowUpDate()));
+        }
         modelMap.put("tLcTask", tLcTask);
         modelMap.put("currentCaseNo", currentCaseNo);
         modelMap.put("currentImportBatchNo", currentImportBatchNo);
