@@ -288,6 +288,20 @@
                     }
                 },
                 {
+                    field: 'dqyhje',
+                    title: '当前已还金额',
+                    footerFormatter:function (value) {
+                        var sumBalance = 0;
+                        for (var i in value) {
+                            if(value[i].dqyhje != null && value[i].dqyhje != "") {
+                                sumBalance += parseFloat(value[i].dqyhje);
+                            }
+                        }
+                        return "<font color=\"#006400\"><b>" + sumBalance.toFixed(2) + "</b></font>";
+                    }
+
+                },
+                {
                     field: 'callSign',
                     title: '最近电话码',
                     formatter: function(value, row, index) {
