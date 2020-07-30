@@ -64,7 +64,7 @@ public class DynamicSqlUtil{
     }
 
 
-    public int toExecute(String sql){
+    public int toExecute(String sql) throws Exception{
         int result = 0;
         try {
             conn=getConnection();
@@ -73,6 +73,7 @@ public class DynamicSqlUtil{
         } catch (Exception e) {
             log.error("执行toExcute方法异常"+e.getMessage(),e);
             e.printStackTrace();
+            throw new RuntimeException(e);
         }finally {
             closeConnection();
         }

@@ -120,11 +120,14 @@ public class DynamicSqlController extends BaseController
     public AjaxResult apply(String sql, HttpServletResponse response)throws Exception{
 //        boolean boo = checkSql(sql);
 //        if(!boo){
-            int result = dynamicSqlUtil.toExecute(sql);
-            if(result > 0){
-                return AjaxResult.success("执行成功");
-            }
+        int result = 0;
+        try {
+            result = dynamicSqlUtil.toExecute(sql);
+            return AjaxResult.success("执行成功");
+        } catch (Exception e) {
+            e.printStackTrace();
             return AjaxResult.error("执行失败");
+        }
 //        }else{
 //            List<Map<String, Object>> queryResult = dynamicSqlUtil.toQuery(sql);
 //            HSSFWorkbook wb = dynamicSqlUtil.getHSSFWorkbook("sheet1", queryResult);
