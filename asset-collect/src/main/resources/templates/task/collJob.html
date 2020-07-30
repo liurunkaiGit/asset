@@ -854,6 +854,10 @@
         /*  var endEnterCollDate = $("#endEnterCollDateSearch").val();*/
         var startEnterCollDate = new Date(Date.parse($("#startEnterCollDateSearch").val())).toLocaleDateString();
         var endEnterCollDate = new Date(Date.parse($("#endEnterCollDateSearch").val())).toLocaleDateString();
+        var startRecentlyAllotDate = new Date(Date.parse($("#startRecentlyAllotDateSearch").val())).toLocaleDateString();
+        var endRecentlyAllotDate = new Date(Date.parse($("#endRecentlyAllotDateSearch").val())).toLocaleDateString();
+        var startRecentlyFollowUpDate = new Date(Date.parse($("#startRecentlyFollowUpDateSearch").val())).toLocaleDateString();
+        var endRecentlyFollowUpDate = new Date(Date.parse($("#endRecentlyFollowUpDateSearch").val())).toLocaleDateString();
         var productName = $("#productNameSearch").val();
         var startDqyhje = $("#startDqyhjeSearch").val();
         var endDqyhje = $("#endDqyhjeSearch").val();
@@ -878,11 +882,11 @@
                 actionCode : $("#actionCodeSearch").val(),
                 taskType : $("#taskTypeSearch").val(),
                 /*taskStatus : $("#taskStatusSearch").val(),*/
-                startRecentlyAllotDate : $("#startRecentlyAllotDateSearch").val(),
-                endRecentlyAllotDate : $("#endRecentlyAllotDateSearch").val(),
-                startRecentlyFollowUpDate : $("#startRecentlyFollowUpDateSearch").val(),
+                startRecentlyAllotDate : startRecentlyAllotDate,
+                endRecentlyAllotDate : endRecentlyAllotDate,
+                startRecentlyFollowUpDate : startRecentlyFollowUpDate,
                 callCodeHistoryListStr : $("#callCodeHistoryListStr").val(),
-                endRecentlyFollowUpDate : $("#endRecentlyFollowUpDateSearch").val(),
+                endRecentlyFollowUpDate : endRecentlyFollowUpDate,
                 taskStatus : taskStatus,
                 startEnterCollDate : startEnterCollDate,
                 endEnterCollDate : endEnterCollDate,
@@ -935,8 +939,8 @@
                     if (startNum > totalPage) {
                         $("#more").remove();
                     }
-                    $("#customCount").text($("#totalCaseNum").val() + "件");
-                    $("#allCustomTotalDebtAmount").text(parseFloat($("#totalArrears").val()).toFixed(2) + "元");
+                    $("#customCount").text(num + "件");
+                    $("#allCustomTotalDebtAmount").text(parseFloat(allCustomTotalDebtAmount).toFixed(2) + "元");
                     // $("#allCustomTotalDebtAmount").text(allCustomTotalDebtAmount.toFixed(2) + "元");
                     collJobDetail($("#firstEnterCaseNo").val(),$("#orgId").val(),$("#firstImportBatchNo").val());
 
