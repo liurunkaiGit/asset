@@ -150,7 +150,11 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
 
             String contactName = tLcCallRecord.getContactName();
             Integer contactRelation = tLcCallRecord.getContactRelation();
-            String relateion = this.getRelateion(contactRelation);
+            String relateion="";
+            if(contactRelation != null){
+                relateion = this.getRelateion(contactRelation);
+            }
+//            String relateion = this.getRelateion(contactRelation);
             contactName = relateion+"-"+contactName;
             xyEntity.setContactName(contactName);
 
