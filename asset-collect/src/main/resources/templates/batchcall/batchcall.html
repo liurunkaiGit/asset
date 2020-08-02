@@ -347,7 +347,7 @@
                     }
                     // 直接保存点催记录
                     var val = $('input[name="radioChoose"]:checked').parents("tr");
-                    console.log("通话记录id：" + $("#callRecordId").val() + "，通话开始时间：" + data[0].BAnswerStamp + "，通话结束时间：" + data[0].BEndStamp + "，通话录音：" + data[0].RecordingFile);
+                    console.log("通话记录id：" + callRecordId + "，通话开始时间：" + data[0].BAnswerStamp + "，通话结束时间：" + data[0].BEndStamp + "，通话录音：" + data[0].RecordingFile);
                     var callSign = 'R02';
                     var callResult = '无法接通';
                     if (data[0].BAnswerStamp != null && data[0].BAnswerStamp != '') {
