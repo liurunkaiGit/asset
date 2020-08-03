@@ -221,8 +221,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="findOwnerNameByTask" parameterType="java.util.Map" resultType="java.lang.String">
       SELECT owner_name as ownerName
-      from t_lc_task  where org_id=#{orgId} and case_no=#{orgCasNo} and task_status != 3
+      from t_lc_task  where org_id=#{orgId} and case_no=#{orgCasNo}
       group by owner_name
+      order by create_time
+      limit 1
     </select>
 
 </mapper>
