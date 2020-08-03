@@ -208,7 +208,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="findAssetsInfo" parameterType="java.util.Map" resultMap="CurAssetsPackageResult">
         SELECT org_casNo,transferType,rmb_ye,import_batch_no,cur_name
         from cur_assets_package where org_id=#{orgId} and org_casNo=#{orgCasNo}
-        order by create_time
+        order by create_time desc
         limit 1
     </select>
 
@@ -220,10 +220,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="findOwnerNameByTask" parameterType="java.util.Map" resultType="java.lang.String">
-      SELECT owner_name as ownerName
+      SELECT DISTINCT owner_name as ownerName
       from t_lc_task  where org_id=#{orgId} and case_no=#{orgCasNo}
-      group by owner_name
-      order by create_time
+      order by create_time desc
       limit 1
     </select>
 
