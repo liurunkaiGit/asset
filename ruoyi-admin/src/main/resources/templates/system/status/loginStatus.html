@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('登录状态列表')" />
+    <style type="text/css">
+        .small{
+            padding: 3px 15px;
+            font-size: 12px;
+            line-height: 1.5;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li class="select-time">
+                                <p>统计日期：</p>
+                                <input type="text" class="time-input" id="startCensusDate" placeholder="开始时间" name="startCensusDate"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endCensusDate" placeholder="结束时间" name="endCensusDate"/>
+                            </li>
+                            <li>
+                                <p>员工姓名：</p>
+                                <input type="text" name="userName"/>
+                            </li>
+                            <li>
+                                <p>当前状态：</p>
+                                <select name="status">
+                                    <option value="">请选择</option>
+                                    <option value="1">在线</option>
+                                    <option value="0">离线</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:status:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "system/status";
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                exportUrl: prefix + "/export",
+                modalName: "登录状态",
+                columns: [{
+                    checkbox: false
+                },
+                {
+                    field : 'sque',
+                    title : '序号'
+                },
+                {
+                    field : 'censusDate',
+                    title : '统计日期'
+                },
+                {
+                    field : 'loginName',
+                    title : '登录名称'
+                },
+                {
+                    field : 'userName',
+                    title : '员工姓名'
+                },
+                {
+                    field : 'orgName',
+                    title : '归属部门'
+                },
+                {
+                    field : 'startTime', 
+                    title : '首次登录时间'
+                },
+                {
+                    field : 'endTime', 
+                    title : '最后访问时间'
+                },
+                {
+                    field : 'loginNum', 
+                    title : '登录次数'
+                },
+                {
+                    field : 'onlineLen', 
+                    title : '在线时长(分钟)'
+                },
+                {
+                    field : 'status', 
+                    title : '当前状态',
+                    formatter: function(value, row, index) {
+                        var icon = '';
+                        if(value == '1'){
+                            icon = icon +'<a class="btn btn-primary small" href="javascript:void(0)">在线</a>';
+                        }else{
+                            icon = icon +'<a class="btn btn-danger small" href="javascript:void(0)">离线</a>';
+                        }
+                        return icon;
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>
