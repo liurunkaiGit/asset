@@ -97,7 +97,7 @@ public class OnlineSessionDAO extends EnterpriseCacheSessionDAO
         {
             onlineSession.resetAttributeChanged();
         }
-        AsyncManager.me().execute(AsyncFactory.syncSessionToDb(onlineSession));
+        //AsyncManager.me().execute(AsyncFactory.syncSessionToDb(onlineSession));
     }
 
     /**
