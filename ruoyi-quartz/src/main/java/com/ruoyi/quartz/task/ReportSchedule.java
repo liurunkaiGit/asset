@@ -3,11 +3,12 @@ package com.ruoyi.quartz.task;
 import com.ruoyi.assetspackage.domain.OrgPackage;
 import com.ruoyi.assetspackage.service.IOrgPackageService;
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.report.domain.TLcReportCaseContact;
-import com.ruoyi.report.domain.TLcReportDayProcess;
-import com.ruoyi.report.domain.TLcReportRecovery;
+import com.ruoyi.report.domain.*;
+import com.ruoyi.report.mapper.TLcReportPersonalMapper;
+import com.ruoyi.report.mapper.TLcReportPlatformMapper;
 import com.ruoyi.report.service.ITLcReportCaseContactService;
 import com.ruoyi.report.service.ITLcReportDayProcessService;
+import com.ruoyi.report.service.ITLcReportPlatformService;
 import com.ruoyi.report.service.ITLcReportRecoveryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,10 @@ public class ReportSchedule {
     private ITLcReportDayProcessService reportDayProcessService;
     @Autowired
     private ITLcReportCaseContactService caseContactService;
+    @Autowired
+    private TLcReportPlatformMapper platformMapper;
+    @Autowired
+    private TLcReportPersonalMapper personalMapper;
 
     /**
      * 每日过程指标
@@ -108,6 +113,40 @@ public class ReportSchedule {
             List<TLcReportCaseContact> caseContactList = this.caseContactService.selectCaseContactList(contactParam);
             caseContactList.stream().forEach(caseContact -> this.caseContactService.insertTLcReportCaseContact(caseContact));
             log.info("生成案件可联率报表成功,{}", DateUtils.getNowDate());
+        }
+    }
+
+    /**
+     * 通时通次-平台汇总报表
+     */
+    public void createPlatformReport() {
+        if (!isEnableTimer) {
+            log.info("定时生成通时通次-平台汇总报表任务未开启");
+        } else {
+            log.info("开始定时生成通时通次-平台汇总报表任务");
+            // 查询通时通次-平台汇总报表数据
+            Map<String, Object> param = new HashMap<>();
+            param.put("day", 1);
+            List<TLcReportPlatform> platformList = this.platformMapper.selectReportPlatformList(param);
+            platformList.stream().forEach(platform -> this.platformMapper.insertTLcReportPlatform(platform));
+            log.info("生成通时通次-平台汇总报表成功,{}", DateUtils.getNowDate());
+        }
+    }
+
+    /**
+     * 通时通次-个人明细汇总报表
+     */
+    public void createPersonalReport() {
+        if (!isEnableTimer) {
+            log.info("定时生成通时通次-个人明细汇总报表任务未开启");
+        } else {
+            log.info("开始定时生成通时通次-个人明细汇总报表任务");
+            // 查询通时通次-平台汇总报表数据
+            Map<String, Object> param = new HashMap<>();
+            param.put("day", 1);
+            List<TLcReportPersonal> personalList = this.personalMapper.selectReportPersonalList(param);
+            personalList.stream().forEach(personal -> this.personalMapper.insertTLcReportPersonal(personal));
+            log.info("生成通时通次-个人明细汇总报表成功,{}", DateUtils.getNowDate());
         }
     }
 }

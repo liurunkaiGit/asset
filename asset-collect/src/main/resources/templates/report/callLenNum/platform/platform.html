@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('【请填写功能名称】列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li class="select-time">
+                                <p>报表日期：</p>
+                                <input type="text" class="time-input" id="reportData" placeholder="报表日期" name="reportData"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="report:platform:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "report/platform";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "【请填写功能名称】",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'reportData',
+                    title : '报表日期',
+                    visible: false
+                },
+                {
+                    field : 'timePeriod',
+                    title : '时间段'
+                },
+                {
+                    field : 'paCalledNum',
+                    title : '平安通话次数'
+                },
+                {
+                    field : 'paCallLen',
+                    title : '平安通话时长',
+                    formatter: function (value) {
+                        return callLenFix(value);
+                    }
+                },
+                {
+                    field : 'paCallNum',
+                    title : '平安拨打次数'
+                },
+                {
+                    field : 'zjCalledNum',
+                    title : '自建通话次数'
+                },
+                {
+                    field : 'zjCallLen',
+                    title : '自建通话时长',
+                    formatter: function (value) {
+                        return callLenFix(value);
+                    }
+                },
+                {
+                    field : 'zjCallNum',
+                    title : '自建拨打次数'
+                },
+                {
+                    field : 'totalCalledNum',
+                    title : '全部通话次数'
+                },
+                {
+                    field : 'totalCallLen',
+                    title : '全部通话时长',
+                    formatter: function (value) {
+                        return callLenFix(value);
+                    }
+                },
+                {
+                    field : 'totalCallNum',
+                    title : '全部拨打次数'
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function callLenFix(callLen) {
+            if (callLen == null || callLen == '') {
+                return callLen;
+            } else {
+                return parseFloat(callLen).toFixed(2);
+            }
+        }
+    </script>
+</body>
+</html>

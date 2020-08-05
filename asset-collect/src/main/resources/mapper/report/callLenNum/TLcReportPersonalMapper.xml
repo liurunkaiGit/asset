@@ -1,0 +1,946 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.report.mapper.TLcReportPersonalMapper">
+    
+    <resultMap type="com.ruoyi.report.domain.TLcReportPersonal" id="TLcReportPersonalResult">
+        <result property="reportData"    column="report_data"    />
+        <result property="timePeriod"    column="time_period"    />
+        <result property="paCalledNum"    column="pa_called_num"    />
+        <result property="paCallLen"    column="pa_call_len"    />
+        <result property="paCallNum"    column="pa_call_num"    />
+        <result property="zjCalledNum"    column="zj_called_num"    />
+        <result property="zjCallLen"    column="zj_call_len"    />
+        <result property="zjCallNum"    column="zj_call_num"    />
+        <result property="totalCalledNum"    column="total_called_num"    />
+        <result property="totalCallLen"    column="total_call_len"    />
+        <result property="totalCallNum"    column="total_call_num"    />
+        <result property="userGroup"    column="user_group"    />
+        <result property="loginName"    column="login_name"    />
+        <result property="userName"    column="user_name"    />
+    </resultMap>
+
+    <sql id="selectTLcReportPersonalVo">
+        select report_data, time_period, pa_called_num, pa_call_len, pa_call_num, zj_called_num, zj_call_len, zj_call_num, total_called_num, total_call_len, total_call_num, user_group, login_name, user_name from t_lc_report_personal
+    </sql>
+
+    <select id="selectTLcReportPersonalList" parameterType="com.ruoyi.report.domain.TLcReportPersonal" resultMap="TLcReportPersonalResult">
+        <include refid="selectTLcReportPersonalVo"/>
+        <where>  
+            <if test="reportData != null "> and report_data = #{reportData}</if>
+            <if test="timePeriod != null  and timePeriod != ''"> and time_period = #{timePeriod}</if>
+            <if test="paCalledNum != null "> and pa_called_num = #{paCalledNum}</if>
+            <if test="paCallLen != null  and paCallLen != ''"> and pa_call_len = #{paCallLen}</if>
+            <if test="paCallNum != null "> and pa_call_num = #{paCallNum}</if>
+            <if test="zjCalledNum != null "> and zj_called_num = #{zjCalledNum}</if>
+            <if test="zjCallLen != null  and zjCallLen != ''"> and zj_call_len = #{zjCallLen}</if>
+            <if test="zjCallNum != null "> and zj_call_num = #{zjCallNum}</if>
+            <if test="totalCalledNum != null "> and total_called_num = #{totalCalledNum}</if>
+            <if test="totalCallLen != null  and totalCallLen != ''"> and total_call_len = #{totalCallLen}</if>
+            <if test="totalCallNum != null "> and total_call_num = #{totalCallNum}</if>
+            <if test="userGroup != null  and userGroup != ''"> and user_group = #{userGroup}</if>
+            <if test="loginName != null  and loginName != ''"> and login_name like concat('%', #{loginName}, '%')</if>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectReportPersonalList" parameterType="java.util.Map" resultMap="TLcReportPersonalResult">
+        select * from (
+            select
+                (SELECT date_sub(curdate(), INTERVAL #{day} DAY)) AS report_data,zz.user_group,zz.login_name,zz.user_name,'0-9' as time_period,
+                MAX(zz.pa_called_num) as pa_called_num,MAX(zz.pa_call_len) as pa_call_len,MAX(zz.pa_call_num) as pa_call_num,
+                MAX(zz.zj_called_num) as zj_called_num,MAX(zz.zj_call_len) as zj_call_len,MAX(zz.zj_call_num) as zj_call_num,
+                MAX(zz.total_called_num) as total_called_num,MAX(zz.total_call_len) as total_call_len,MAX(zz.total_call_num) as total_call_num
+            from(
+                SELECT
+                    CASE z.platform WHEN 'PA' THEN z.call_num END  'pa_call_num' ,
+                    CASE z.platform WHEN 'ZJ' THEN z.call_num END  'zj_call_num',
+                    CASE z.platform WHEN 'PA' THEN z.call_len END  'pa_call_len',
+                    CASE z.platform WHEN 'ZJ' THEN z.call_len END  'zj_call_len',
+                    CASE z.platform WHEN 'PA' THEN z.called_num END  'pa_called_num',
+                    CASE z.platform WHEN 'ZJ' THEN z.called_num END  'zj_called_num',
+                    z.total_called_num,
+                    z.total_call_len,
+                    z.total_call_num,
+                    z.user_group,
+                    z.login_name,
+                    z.user_name
+                from (
+                    SELECT
+                        t1.user_group,
+                        t1.login_name,
+                        t1.user_name,
+                        t1.platform,
+                        t1.call_num,
+                        t1.create_by,
+                        t1.called_num,
+                        t1.call_len,
+                        t1.total_call_num,
+                        t1.total_call_len,
+                        t1.total_called_num
+                    FROM
+                        (
+                            SELECT
+                                su.user_group,
+                                su.login_name,
+                                su.user_name,
+                                COUNT(1) AS call_num,
+                                re.platform,
+                                re.create_by,
+                                (SELECT COUNT(1) as qbbdcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 00:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 08:59:59') and r.create_by = re.create_by GROUP BY r.create_by ) total_call_num,
+                                (SELECT COUNT(1) as thcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 00:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 08:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
+                                (SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 00:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 08:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len,
+                                (SELECT sum(r.call_len) / 1000 / 60 as qbthsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 00:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 08:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_call_len,
+                                (SELECT COUNT(1) as qbthcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 00:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 08:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_called_num
+                            FROM
+                                t_lc_call_record re,sys_user su
+                            WHERE re.create_by = su.user_id AND re.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 00:00:00') AND re.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 08:59:59')
+                            GROUP BY
+                                re.platform,re.create_by
+                        ) t1
+                ) z
+            ) zz GROUP BY zz.login_name
+            UNION ALL
+            select
+                (SELECT date_sub(curdate(), INTERVAL #{day} DAY)) AS report_data,zz.user_group,zz.login_name,zz.user_name,'9-10' as time_period,
+                MAX(zz.pa_called_num) as pa_called_num,MAX(zz.pa_call_len) as pa_call_len,MAX(zz.pa_call_num) as pa_call_num,
+                MAX(zz.zj_called_num) as zj_called_num,MAX(zz.zj_call_len) as zj_call_len,MAX(zz.zj_call_num) as zj_call_num,
+                MAX(zz.total_called_num) as total_called_num,MAX(zz.total_call_len) as total_call_len,MAX(zz.total_call_num) as total_call_num
+            from(
+                SELECT
+                    CASE z.platform WHEN 'PA' THEN z.call_num END  'pa_call_num' ,
+                    CASE z.platform WHEN 'ZJ' THEN z.call_num END  'zj_call_num',
+                    CASE z.platform WHEN 'PA' THEN z.call_len END  'pa_call_len',
+                    CASE z.platform WHEN 'ZJ' THEN z.call_len END  'zj_call_len',
+                    CASE z.platform WHEN 'PA' THEN z.called_num END  'pa_called_num',
+                    CASE z.platform WHEN 'ZJ' THEN z.called_num END  'zj_called_num',
+                    z.total_called_num,
+                    z.total_call_len,
+                    z.total_call_num,
+                    z.user_group,
+                    z.login_name,
+                    z.user_name
+                from (
+                    SELECT
+                        t1.user_group,
+                        t1.login_name,
+                        t1.user_name,
+                        t1.platform,
+                        t1.call_num,
+                        t1.create_by,
+                        t1.called_num,
+                        t1.call_len,
+                        t1.total_call_num,
+                        t1.total_call_len,
+                        t1.total_called_num
+                    FROM
+                        (
+                            SELECT
+                                su.user_group,
+                                su.login_name,
+                                su.user_name,
+                                COUNT(1) AS call_num,
+                                re.platform,
+                                re.create_by,
+                                (SELECT COUNT(1) as qbbdcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 09:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 09:59:59') and r.create_by = re.create_by GROUP BY r.create_by ) total_call_num,
+                                (SELECT COUNT(1) as thcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 09:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 09:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
+                                (SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 09:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 09:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len,
+                                (SELECT sum(r.call_len) / 1000 / 60 as qbthsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 09:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 09:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_call_len,
+                                (SELECT COUNT(1) as qbthcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 09:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 09:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_called_num
+                            FROM
+                                t_lc_call_record re,sys_user su
+                            WHERE re.create_by = su.user_id AND re.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 09:00:00') AND re.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 09:59:59')
+                            GROUP BY
+                                re.platform,re.create_by
+                        ) t1
+                ) z
+            ) zz GROUP BY zz.login_name
+            UNION ALL
+            select
+                (SELECT date_sub(curdate(), INTERVAL #{day} DAY)) AS report_data,zz.user_group,zz.login_name,zz.user_name,'10-11' as time_period,
+                MAX(zz.pa_called_num) as pa_called_num,MAX(zz.pa_call_len) as pa_call_len,MAX(zz.pa_call_num) as pa_call_num,
+                MAX(zz.zj_called_num) as zj_called_num,MAX(zz.zj_call_len) as zj_call_len,MAX(zz.zj_call_num) as zj_call_num,
+                MAX(zz.total_called_num) as total_called_num,MAX(zz.total_call_len) as total_call_len,MAX(zz.total_call_num) as total_call_num
+            from(
+                SELECT
+                    CASE z.platform WHEN 'PA' THEN z.call_num END  'pa_call_num' ,
+                    CASE z.platform WHEN 'ZJ' THEN z.call_num END  'zj_call_num',
+                    CASE z.platform WHEN 'PA' THEN z.call_len END  'pa_call_len',
+                    CASE z.platform WHEN 'ZJ' THEN z.call_len END  'zj_call_len',
+                    CASE z.platform WHEN 'PA' THEN z.called_num END  'pa_called_num',
+                    CASE z.platform WHEN 'ZJ' THEN z.called_num END  'zj_called_num',
+                    z.total_called_num,
+                    z.total_call_len,
+                    z.total_call_num,
+                    z.user_group,
+                    z.login_name,
+                    z.user_name
+                from (
+                    SELECT
+                        t1.user_group,
+                        t1.login_name,
+                        t1.user_name,
+                        t1.platform,
+                        t1.call_num,
+                        t1.create_by,
+                        t1.called_num,
+                        t1.call_len,
+                        t1.total_call_num,
+                        t1.total_call_len,
+                        t1.total_called_num
+                    FROM
+                        (
+                            SELECT
+                                su.user_group,
+                                su.login_name,
+                                su.user_name,
+                                COUNT(1) AS call_num,
+                                re.platform,
+                                re.create_by,
+                                (SELECT COUNT(1) as qbbdcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 10:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 10:59:59') and r.create_by = re.create_by GROUP BY r.create_by ) total_call_num,
+                                (SELECT COUNT(1) as thcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 10:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 10:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
+                                (SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 10:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 10:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len,
+                                (SELECT sum(r.call_len) / 1000 / 60 as qbthsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 10:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 10:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_call_len,
+                                (SELECT COUNT(1) as qbthcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 10:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 10:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_called_num
+                            FROM
+                                t_lc_call_record re,sys_user su
+                            WHERE
+                                re.create_by = su.user_id and re.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 10:00:00') AND re.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 10:59:59')
+                            GROUP BY
+                                re.platform,re.create_by
+                        ) t1
+                ) z
+            ) zz GROUP BY zz.login_name
+            UNION ALL
+            select
+                (SELECT date_sub(curdate(), INTERVAL #{day} DAY)) AS report_data,zz.user_group,zz.login_name,zz.user_name,'11-12' as time_period,
+                MAX(zz.pa_called_num) as pa_called_num,MAX(zz.pa_call_len) as pa_call_len,MAX(zz.pa_call_num) as pa_call_num,
+                MAX(zz.zj_called_num) as zj_called_num,MAX(zz.zj_call_len) as zj_call_len,MAX(zz.zj_call_num) as zj_call_num,
+                MAX(zz.total_called_num) as total_called_num,MAX(zz.total_call_len) as total_call_len,MAX(zz.total_call_num) as total_call_num
+            from(
+                SELECT
+                    CASE z.platform WHEN 'PA' THEN z.call_num END  'pa_call_num' ,
+                    CASE z.platform WHEN 'ZJ' THEN z.call_num END  'zj_call_num',
+                    CASE z.platform WHEN 'PA' THEN z.call_len END  'pa_call_len',
+                    CASE z.platform WHEN 'ZJ' THEN z.call_len END  'zj_call_len',
+                    CASE z.platform WHEN 'PA' THEN z.called_num END  'pa_called_num',
+                    CASE z.platform WHEN 'ZJ' THEN z.called_num END  'zj_called_num',
+                    z.total_called_num,
+                    z.total_call_len,
+                    z.total_call_num,
+                    z.user_group,
+                    z.login_name,
+                    z.user_name
+                from (
+                    SELECT
+                        t1.user_group,
+                        t1.login_name,
+                        t1.user_name,
+                        t1.platform,
+                        t1.call_num,
+                        t1.create_by,
+                        t1.called_num,
+                        t1.call_len,
+                        t1.total_call_num,
+                        t1.total_call_len,
+                        t1.total_called_num
+                    FROM
+                        (
+                            SELECT
+                                su.user_group,
+                                su.login_name,
+                                su.user_name,
+                                COUNT(1) AS call_num,
+                                re.platform,
+                                re.create_by,
+                                (SELECT COUNT(1) as qbbdcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 11:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 11:59:59') and r.create_by = re.create_by GROUP BY r.create_by ) total_call_num,
+                                (SELECT COUNT(1) as thcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 11:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 11:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
+                                (SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 11:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 11:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len,
+                                (SELECT sum(r.call_len) / 1000 / 60 as qbthsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 11:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 11:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_call_len,
+                                (SELECT COUNT(1) as qbthcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 11:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 11:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_called_num
+                            FROM
+                                t_lc_call_record re,sys_user su
+                            WHERE
+                                re.create_by = su.user_id and re.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 11:00:00') AND re.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 11:59:59')
+                            GROUP BY
+                                re.platform,re.create_by
+                        ) t1
+                ) z
+            ) zz GROUP BY zz.login_name
+            UNION ALL
+            select
+                (SELECT date_sub(curdate(), INTERVAL #{day} DAY)) AS report_data,zz.user_group,zz.login_name,zz.user_name,'12-13' as time_period,
+                MAX(zz.pa_called_num) as pa_called_num,MAX(zz.pa_call_len) as pa_call_len,MAX(zz.pa_call_num) as pa_call_num,
+                MAX(zz.zj_called_num) as zj_called_num,MAX(zz.zj_call_len) as zj_call_len,MAX(zz.zj_call_num) as zj_call_num,
+                MAX(zz.total_called_num) as total_called_num,MAX(zz.total_call_len) as total_call_len,MAX(zz.total_call_num) as total_call_num
+            from(
+                SELECT
+                    CASE z.platform WHEN 'PA' THEN z.call_num END  'pa_call_num' ,
+                    CASE z.platform WHEN 'ZJ' THEN z.call_num END  'zj_call_num',
+                    CASE z.platform WHEN 'PA' THEN z.call_len END  'pa_call_len',
+                    CASE z.platform WHEN 'ZJ' THEN z.call_len END  'zj_call_len',
+                    CASE z.platform WHEN 'PA' THEN z.called_num END  'pa_called_num',
+                    CASE z.platform WHEN 'ZJ' THEN z.called_num END  'zj_called_num',
+                    z.total_called_num,
+                    z.total_call_len,
+                    z.total_call_num,
+                    z.user_group,
+                    z.login_name,
+                    z.user_name
+                from (
+                    SELECT
+                        t1.user_group,
+                        t1.login_name,
+                        t1.user_name,
+                        t1.platform,
+                        t1.call_num,
+                        t1.create_by,
+                        t1.called_num,
+                        t1.call_len,
+                        t1.total_call_num,
+                        t1.total_call_len,
+                        t1.total_called_num
+                    FROM
+                        (
+                            SELECT
+                                su.user_group,
+                                su.login_name,
+                                su.user_name,
+                                COUNT(1) AS call_num,
+                                re.platform,
+                                re.create_by,
+                                (SELECT COUNT(1) as qbbdcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 12:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 12:59:59') and r.create_by = re.create_by GROUP BY r.create_by ) total_call_num,
+                                (SELECT COUNT(1) as thcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 12:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 12:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
+                                (SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 12:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 12:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len,
+                                (SELECT sum(r.call_len) / 1000 / 60 as qbthsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 12:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 12:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_call_len,
+                                (SELECT COUNT(1) as qbthcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 12:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 12:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_called_num
+                            FROM
+                                t_lc_call_record re,sys_user su
+                            WHERE
+                                re.create_by = su.user_id and re.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 12:00:00') AND re.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 12:59:59')
+                            GROUP BY
+                                re.platform,re.create_by
+                        ) t1
+                ) z
+            ) zz GROUP BY zz.login_name
+            UNION ALL
+            select
+                (SELECT date_sub(curdate(), INTERVAL #{day} DAY)) AS report_data,zz.user_group,zz.login_name,zz.user_name,'13-14' as time_period,
+                MAX(zz.pa_called_num) as pa_called_num,MAX(zz.pa_call_len) as pa_call_len,MAX(zz.pa_call_num) as pa_call_num,
+                MAX(zz.zj_called_num) as zj_called_num,MAX(zz.zj_call_len) as zj_call_len,MAX(zz.zj_call_num) as zj_call_num,
+                MAX(zz.total_called_num) as total_called_num,MAX(zz.total_call_len) as total_call_len,MAX(zz.total_call_num) as total_call_num
+            from(
+                SELECT
+                    CASE z.platform WHEN 'PA' THEN z.call_num END  'pa_call_num' ,
+                    CASE z.platform WHEN 'ZJ' THEN z.call_num END  'zj_call_num',
+                    CASE z.platform WHEN 'PA' THEN z.call_len END  'pa_call_len',
+                    CASE z.platform WHEN 'ZJ' THEN z.call_len END  'zj_call_len',
+                    CASE z.platform WHEN 'PA' THEN z.called_num END  'pa_called_num',
+                    CASE z.platform WHEN 'ZJ' THEN z.called_num END  'zj_called_num',
+                    z.total_called_num,
+                    z.total_call_len,
+                    z.total_call_num,
+                    z.user_group,
+                    z.login_name,
+                    z.user_name
+                from (
+                    SELECT
+                        t1.user_group,
+                        t1.login_name,
+                        t1.user_name,
+                        t1.platform,
+                        t1.call_num,
+                        t1.create_by,
+                        t1.called_num,
+                        t1.call_len,
+                        t1.total_call_num,
+                        t1.total_call_len,
+                        t1.total_called_num
+                    FROM
+                        (
+                            SELECT
+                                su.user_group,
+                                su.login_name,
+                                su.user_name,
+                                COUNT(1) AS call_num,
+                                re.platform,
+                                re.create_by,
+                                (SELECT COUNT(1) as qbbdcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 13:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 13:59:59') and r.create_by = re.create_by GROUP BY r.create_by ) total_call_num,
+                                (SELECT COUNT(1) as thcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 13:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 13:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
+                                (SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 13:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 13:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len,
+                                (SELECT sum(r.call_len) / 1000 / 60 as qbthsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 13:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 13:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_call_len,
+                                (SELECT COUNT(1) as qbthcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 13:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 13:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_called_num
+                            FROM
+                                t_lc_call_record re,sys_user su
+                            WHERE
+                                re.create_by = su.user_id and re.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 13:00:00') AND re.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 13:59:59')
+                            GROUP BY
+                                re.platform,re.create_by
+                        ) t1
+                ) z
+            ) zz GROUP BY zz.login_name
+            UNION ALL
+            select
+                (SELECT date_sub(curdate(), INTERVAL #{day} DAY)) AS report_data,zz.user_group,zz.login_name,zz.user_name,'14-15' as time_period,
+                MAX(zz.pa_called_num) as pa_called_num,MAX(zz.pa_call_len) as pa_call_len,MAX(zz.pa_call_num) as pa_call_num,
+                MAX(zz.zj_called_num) as zj_called_num,MAX(zz.zj_call_len) as zj_call_len,MAX(zz.zj_call_num) as zj_call_num,
+                MAX(zz.total_called_num) as total_called_num,MAX(zz.total_call_len) as total_call_len,MAX(zz.total_call_num) as total_call_num
+            from(
+                SELECT
+                    CASE z.platform WHEN 'PA' THEN z.call_num END  'pa_call_num' ,
+                    CASE z.platform WHEN 'ZJ' THEN z.call_num END  'zj_call_num',
+                    CASE z.platform WHEN 'PA' THEN z.call_len END  'pa_call_len',
+                    CASE z.platform WHEN 'ZJ' THEN z.call_len END  'zj_call_len',
+                    CASE z.platform WHEN 'PA' THEN z.called_num END  'pa_called_num',
+                    CASE z.platform WHEN 'ZJ' THEN z.called_num END  'zj_called_num',
+                    z.total_called_num,
+                    z.total_call_len,
+                    z.total_call_num,
+                    z.user_group,
+                    z.login_name,
+                    z.user_name
+                from (
+                    SELECT
+                        t1.user_group,
+                        t1.login_name,
+                        t1.user_name,
+                        t1.platform,
+                        t1.call_num,
+                        t1.create_by,
+                        t1.called_num,
+                        t1.call_len,
+                        t1.total_call_num,
+                        t1.total_call_len,
+                        t1.total_called_num
+                    FROM
+                        (
+                            SELECT
+                                su.user_group,
+                                su.login_name,
+                                su.user_name,
+                                COUNT(1) AS call_num,
+                                re.platform,
+                                re.create_by,
+                                (SELECT COUNT(1) as qbbdcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 14:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 14:59:59') and r.create_by = re.create_by GROUP BY r.create_by ) total_call_num,
+                                (SELECT COUNT(1) as thcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 14:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 14:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
+                                (SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 14:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 14:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len,
+                                (SELECT sum(r.call_len) / 1000 / 60 as qbthsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 14:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 14:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_call_len,
+                                (SELECT COUNT(1) as qbthcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 14:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 14:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_called_num
+                            FROM
+                                t_lc_call_record re,sys_user su
+                            WHERE
+                                re.create_by = su.user_id and re.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 14:00:00') AND re.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 14:59:59')
+                            GROUP BY
+                                re.platform,re.create_by
+                        ) t1
+                ) z
+            ) zz GROUP BY zz.login_name
+            UNION ALL
+            select
+                (SELECT date_sub(curdate(), INTERVAL #{day} DAY)) AS report_data,zz.user_group,zz.login_name,zz.user_name,'15-16' as time_period,
+                MAX(zz.pa_called_num) as pa_called_num,MAX(zz.pa_call_len) as pa_call_len,MAX(zz.pa_call_num) as pa_call_num,
+                MAX(zz.zj_called_num) as zj_called_num,MAX(zz.zj_call_len) as zj_call_len,MAX(zz.zj_call_num) as zj_call_num,
+                MAX(zz.total_called_num) as total_called_num,MAX(zz.total_call_len) as total_call_len,MAX(zz.total_call_num) as total_call_num
+            from(
+                SELECT
+                    CASE z.platform WHEN 'PA' THEN z.call_num END  'pa_call_num' ,
+                    CASE z.platform WHEN 'ZJ' THEN z.call_num END  'zj_call_num',
+                    CASE z.platform WHEN 'PA' THEN z.call_len END  'pa_call_len',
+                    CASE z.platform WHEN 'ZJ' THEN z.call_len END  'zj_call_len',
+                    CASE z.platform WHEN 'PA' THEN z.called_num END  'pa_called_num',
+                    CASE z.platform WHEN 'ZJ' THEN z.called_num END  'zj_called_num',
+                    z.total_called_num,
+                    z.total_call_len,
+                    z.total_call_num,
+                    z.user_group,
+                    z.login_name,
+                    z.user_name
+                from (
+                    SELECT
+                        t1.user_group,
+                        t1.login_name,
+                        t1.user_name,
+                        t1.platform,
+                        t1.call_num,
+                        t1.create_by,
+                        t1.called_num,
+                        t1.call_len,
+                        t1.total_call_num,
+                        t1.total_call_len,
+                        t1.total_called_num
+                    FROM
+                        (
+                            SELECT
+                                su.user_group,
+                                su.login_name,
+                                su.user_name,
+                                COUNT(1) AS call_num,
+                                re.platform,
+                                re.create_by,
+                                (SELECT COUNT(1) as qbbdcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 15:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 15:59:59') and r.create_by = re.create_by GROUP BY r.create_by ) total_call_num,
+                                (SELECT COUNT(1) as thcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 15:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 15:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
+                                (SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 15:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 15:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len,
+                                (SELECT sum(r.call_len) / 1000 / 60 as qbthsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 15:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 15:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_call_len,
+                                (SELECT COUNT(1) as qbthcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 15:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 15:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_called_num
+                            FROM
+                                t_lc_call_record re,sys_user su
+                            WHERE
+                                re.create_by = su.user_id and re.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 15:00:00') AND re.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 15:59:59')
+                            GROUP BY
+                                re.platform,re.create_by
+                        ) t1
+                ) z
+            ) zz GROUP BY zz.login_name
+            UNION ALL
+            select
+                (SELECT date_sub(curdate(), INTERVAL #{day} DAY)) AS report_data,zz.user_group,zz.login_name,zz.user_name,'16-17' as time_period,
+                MAX(zz.pa_called_num) as pa_called_num,MAX(zz.pa_call_len) as pa_call_len,MAX(zz.pa_call_num) as pa_call_num,
+                MAX(zz.zj_called_num) as zj_called_num,MAX(zz.zj_call_len) as zj_call_len,MAX(zz.zj_call_num) as zj_call_num,
+                MAX(zz.total_called_num) as total_called_num,MAX(zz.total_call_len) as total_call_len,MAX(zz.total_call_num) as total_call_num
+            from(
+                SELECT
+                    CASE z.platform WHEN 'PA' THEN z.call_num END  'pa_call_num' ,
+                    CASE z.platform WHEN 'ZJ' THEN z.call_num END  'zj_call_num',
+                    CASE z.platform WHEN 'PA' THEN z.call_len END  'pa_call_len',
+                    CASE z.platform WHEN 'ZJ' THEN z.call_len END  'zj_call_len',
+                    CASE z.platform WHEN 'PA' THEN z.called_num END  'pa_called_num',
+                    CASE z.platform WHEN 'ZJ' THEN z.called_num END  'zj_called_num',
+                    z.total_called_num,
+                    z.total_call_len,
+                    z.total_call_num,
+                    z.user_group,
+                    z.login_name,
+                    z.user_name
+                from (
+                    SELECT
+                        t1.user_group,
+                        t1.login_name,
+                        t1.user_name,
+                        t1.platform,
+                        t1.call_num,
+                        t1.create_by,
+                        t1.called_num,
+                        t1.call_len,
+                        t1.total_call_num,
+                        t1.total_call_len,
+                        t1.total_called_num
+                    FROM
+                        (
+                            SELECT
+                                su.user_group,
+                                su.login_name,
+                                su.user_name,
+                                COUNT(1) AS call_num,
+                                re.platform,
+                                re.create_by,
+                                (SELECT COUNT(1) as qbbdcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 16:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 16:59:59') and r.create_by = re.create_by GROUP BY r.create_by ) total_call_num,
+                                (SELECT COUNT(1) as thcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 16:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 16:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
+                                (SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 16:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 16:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len,
+                                (SELECT sum(r.call_len) / 1000 / 60 as qbthsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 16:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 16:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_call_len,
+                                (SELECT COUNT(1) as qbthcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 16:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 16:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_called_num
+                            FROM
+                                t_lc_call_record re,sys_user su
+                            WHERE
+                                re.create_by = su.user_id and re.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 16:00:00') AND re.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 16:59:59')
+                            GROUP BY
+                                re.platform,re.create_by
+                        ) t1
+                ) z
+            ) zz GROUP BY zz.login_name
+            UNION ALL
+            select
+                (SELECT date_sub(curdate(), INTERVAL #{day} DAY)) AS report_data,zz.user_group,zz.login_name,zz.user_name,'17-18' as time_period,
+                MAX(zz.pa_called_num) as pa_called_num,MAX(zz.pa_call_len) as pa_call_len,MAX(zz.pa_call_num) as pa_call_num,
+                MAX(zz.zj_called_num) as zj_called_num,MAX(zz.zj_call_len) as zj_call_len,MAX(zz.zj_call_num) as zj_call_num,
+                MAX(zz.total_called_num) as total_called_num,MAX(zz.total_call_len) as total_call_len,MAX(zz.total_call_num) as total_call_num
+            from(
+                SELECT
+                    CASE z.platform WHEN 'PA' THEN z.call_num END  'pa_call_num' ,
+                    CASE z.platform WHEN 'ZJ' THEN z.call_num END  'zj_call_num',
+                    CASE z.platform WHEN 'PA' THEN z.call_len END  'pa_call_len',
+                    CASE z.platform WHEN 'ZJ' THEN z.call_len END  'zj_call_len',
+                    CASE z.platform WHEN 'PA' THEN z.called_num END  'pa_called_num',
+                    CASE z.platform WHEN 'ZJ' THEN z.called_num END  'zj_called_num',
+                    z.total_called_num,
+                    z.total_call_len,
+                    z.total_call_num,
+                    z.user_group,
+                    z.login_name,
+                    z.user_name
+                from (
+                    SELECT
+                        t1.user_group,
+                        t1.login_name,
+                        t1.user_name,
+                        t1.platform,
+                        t1.call_num,
+                        t1.create_by,
+                        t1.called_num,
+                        t1.call_len,
+                        t1.total_call_num,
+                        t1.total_call_len,
+                        t1.total_called_num
+                    FROM
+                        (
+                            SELECT
+                                su.user_group,
+                                su.login_name,
+                                su.user_name,
+                                COUNT(1) AS call_num,
+                                re.platform,
+                                re.create_by,
+                                (SELECT COUNT(1) as qbbdcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 17:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 17:59:59') and r.create_by = re.create_by GROUP BY r.create_by ) total_call_num,
+                                (SELECT COUNT(1) as thcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 17:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 17:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
+                                (SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 17:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 17:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len,
+                                (SELECT sum(r.call_len) / 1000 / 60 as qbthsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 17:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 17:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_call_len,
+                                (SELECT COUNT(1) as qbthcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 17:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 17:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_called_num
+                            FROM
+                                t_lc_call_record re,sys_user su
+                            WHERE
+                                re.create_by = su.user_id and re.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 17:00:00') AND re.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 17:59:59')
+                            GROUP BY
+                                re.platform,re.create_by
+                        ) t1
+                ) z
+            ) zz GROUP BY zz.login_name
+            UNION ALL
+            select
+                (SELECT date_sub(curdate(), INTERVAL #{day} DAY)) AS report_data,zz.user_group,zz.login_name,zz.user_name,'18-19' as time_period,
+                MAX(zz.pa_called_num) as pa_called_num,MAX(zz.pa_call_len) as pa_call_len,MAX(zz.pa_call_num) as pa_call_num,
+                MAX(zz.zj_called_num) as zj_called_num,MAX(zz.zj_call_len) as zj_call_len,MAX(zz.zj_call_num) as zj_call_num,
+                MAX(zz.total_called_num) as total_called_num,MAX(zz.total_call_len) as total_call_len,MAX(zz.total_call_num) as total_call_num
+            from(
+                SELECT
+                    CASE z.platform WHEN 'PA' THEN z.call_num END  'pa_call_num' ,
+                    CASE z.platform WHEN 'ZJ' THEN z.call_num END  'zj_call_num',
+                    CASE z.platform WHEN 'PA' THEN z.call_len END  'pa_call_len',
+                    CASE z.platform WHEN 'ZJ' THEN z.call_len END  'zj_call_len',
+                    CASE z.platform WHEN 'PA' THEN z.called_num END  'pa_called_num',
+                    CASE z.platform WHEN 'ZJ' THEN z.called_num END  'zj_called_num',
+                    z.total_called_num,
+                    z.total_call_len,
+                    z.total_call_num,
+                    z.user_group,
+                    z.login_name,
+                    z.user_name
+                from (
+                    SELECT
+                        t1.user_group,
+                        t1.login_name,
+                        t1.user_name,
+                        t1.platform,
+                        t1.call_num,
+                        t1.create_by,
+                        t1.called_num,
+                        t1.call_len,
+                        t1.total_call_num,
+                        t1.total_call_len,
+                        t1.total_called_num
+                    FROM
+                        (
+                            SELECT
+                                su.user_group,
+                                su.login_name,
+                                su.user_name,
+                                COUNT(1) AS call_num,
+                                re.platform,
+                                re.create_by,
+                                (SELECT COUNT(1) as qbbdcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 18:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 18:59:59') and r.create_by = re.create_by GROUP BY r.create_by ) total_call_num,
+                                (SELECT COUNT(1) as thcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 18:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 18:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
+                                (SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 18:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 18:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len,
+                                (SELECT sum(r.call_len) / 1000 / 60 as qbthsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 18:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 18:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_call_len,
+                                (SELECT COUNT(1) as qbthcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 18:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 18:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_called_num
+                            FROM
+                                t_lc_call_record re,sys_user su
+                            WHERE
+                                re.create_by = su.user_id and re.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 18:00:00') AND re.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 18:59:59')
+                            GROUP BY
+                                re.platform,re.create_by
+                        ) t1
+                ) z
+            ) zz GROUP BY zz.login_name
+            UNION ALL
+            select
+                (SELECT date_sub(curdate(), INTERVAL #{day} DAY)) AS report_data,zz.user_group,zz.login_name,zz.user_name,'19-20' as time_period,
+                MAX(zz.pa_called_num) as pa_called_num,MAX(zz.pa_call_len) as pa_call_len,MAX(zz.pa_call_num) as pa_call_num,
+                MAX(zz.zj_called_num) as zj_called_num,MAX(zz.zj_call_len) as zj_call_len,MAX(zz.zj_call_num) as zj_call_num,
+                MAX(zz.total_called_num) as total_called_num,MAX(zz.total_call_len) as total_call_len,MAX(zz.total_call_num) as total_call_num
+            from(
+                SELECT
+                    CASE z.platform WHEN 'PA' THEN z.call_num END  'pa_call_num' ,
+                    CASE z.platform WHEN 'ZJ' THEN z.call_num END  'zj_call_num',
+                    CASE z.platform WHEN 'PA' THEN z.call_len END  'pa_call_len',
+                    CASE z.platform WHEN 'ZJ' THEN z.call_len END  'zj_call_len',
+                    CASE z.platform WHEN 'PA' THEN z.called_num END  'pa_called_num',
+                    CASE z.platform WHEN 'ZJ' THEN z.called_num END  'zj_called_num',
+                    z.total_called_num,
+                    z.total_call_len,
+                    z.total_call_num,
+                    z.user_group,
+                    z.login_name,
+                    z.user_name
+                from (
+                    SELECT
+                        t1.user_group,
+                        t1.login_name,
+                        t1.user_name,
+                        t1.platform,
+                        t1.call_num,
+                        t1.create_by,
+                        t1.called_num,
+                        t1.call_len,
+                        t1.total_call_num,
+                        t1.total_call_len,
+                        t1.total_called_num
+                    FROM
+                        (
+                            SELECT
+                                su.user_group,
+                                su.login_name,
+                                su.user_name,
+                                COUNT(1) AS call_num,
+                                re.platform,
+                                re.create_by,
+                                (SELECT COUNT(1) as qbbdcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 19:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 19:59:59') and r.create_by = re.create_by GROUP BY r.create_by ) total_call_num,
+                                (SELECT COUNT(1) as thcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 19:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 19:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
+                                (SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 19:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 19:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len,
+                                (SELECT sum(r.call_len) / 1000 / 60 as qbthsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 19:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 19:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_call_len,
+                                (SELECT COUNT(1) as qbthcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 19:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 19:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_called_num
+                            FROM
+                                t_lc_call_record re,sys_user su
+                            WHERE
+                                re.create_by = su.user_id and
+                                re.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 19:00:00')
+                            AND re.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 19:59:59')
+                            GROUP BY
+                                re.platform,re.create_by
+                        ) t1
+                ) z
+            ) zz GROUP BY zz.login_name
+            UNION ALL
+            select
+                (SELECT date_sub(curdate(), INTERVAL #{day} DAY)) AS report_data,zz.user_group,zz.login_name,zz.user_name,'20-24' as time_period,
+                MAX(zz.pa_called_num) as pa_called_num,MAX(zz.pa_call_len) as pa_call_len,MAX(zz.pa_call_num) as pa_call_num,
+                MAX(zz.zj_called_num) as zj_called_num,MAX(zz.zj_call_len) as zj_call_len,MAX(zz.zj_call_num) as zj_call_num,
+                MAX(zz.total_called_num) as total_called_num,MAX(zz.total_call_len) as total_call_len,MAX(zz.total_call_num) as total_call_num
+            from(
+                SELECT
+                    CASE z.platform WHEN 'PA' THEN z.call_num END  'pa_call_num' ,
+                    CASE z.platform WHEN 'ZJ' THEN z.call_num END  'zj_call_num',
+                    CASE z.platform WHEN 'PA' THEN z.call_len END  'pa_call_len',
+                    CASE z.platform WHEN 'ZJ' THEN z.call_len END  'zj_call_len',
+                    CASE z.platform WHEN 'PA' THEN z.called_num END  'pa_called_num',
+                    CASE z.platform WHEN 'ZJ' THEN z.called_num END  'zj_called_num',
+                    z.total_called_num,
+                    z.total_call_len,
+                    z.total_call_num,
+                    z.user_group,
+                    z.login_name,
+                    z.user_name
+                from (
+                    SELECT
+                        t1.user_group,
+                        t1.login_name,
+                        t1.user_name,
+                        t1.platform,
+                        t1.call_num,
+                        t1.create_by,
+                        t1.called_num,
+                        t1.call_len,
+                        t1.total_call_num,
+                        t1.total_call_len,
+                        t1.total_called_num
+                    FROM
+                        (
+                            SELECT
+                                su.user_group,
+                                su.login_name,
+                                su.user_name,
+                                COUNT(1) AS call_num,
+                                re.platform,
+                                re.create_by,
+                                (SELECT COUNT(1) as qbbdcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 20:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 23:59:59') and r.create_by = re.create_by GROUP BY r.create_by ) total_call_num,
+                                (SELECT COUNT(1) as thcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 20:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 23:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
+                                (SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 20:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 23:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len,
+                                (SELECT sum(r.call_len) / 1000 / 60 as qbthsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 20:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 23:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_call_len,
+                                (SELECT COUNT(1) as qbthcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 20:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 23:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_called_num
+                            FROM
+                                t_lc_call_record re,sys_user su
+                            WHERE
+                                re.create_by = su.user_id and
+                                re.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 20:00:00')
+                            AND re.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 23:59:59')
+                            GROUP BY
+                                re.platform,re.create_by
+                        ) t1
+                ) z
+            ) zz GROUP BY zz.login_name
+            UNION ALL
+            select
+                (SELECT date_sub(curdate(), INTERVAL #{day} DAY)) AS report_data,zz.user_group,zz.login_name,zz.user_name,'合计' as time_period,
+                MAX(zz.pa_called_num) as pa_called_num,MAX(zz.pa_call_len) as pa_call_len,MAX(zz.pa_call_num) as pa_call_num,
+                MAX(zz.zj_called_num) as zj_called_num,MAX(zz.zj_call_len) as zj_call_len,MAX(zz.zj_call_num) as zj_call_num,
+                MAX(zz.total_called_num) as total_called_num,MAX(zz.total_call_len) as total_call_len,MAX(zz.total_call_num) as total_call_num
+            from(
+                SELECT
+                    CASE z.platform WHEN 'PA' THEN z.call_num END  'pa_call_num' ,
+                    CASE z.platform WHEN 'ZJ' THEN z.call_num END  'zj_call_num',
+                    CASE z.platform WHEN 'PA' THEN z.call_len END  'pa_call_len',
+                    CASE z.platform WHEN 'ZJ' THEN z.call_len END  'zj_call_len',
+                    CASE z.platform WHEN 'PA' THEN z.called_num END  'pa_called_num',
+                    CASE z.platform WHEN 'ZJ' THEN z.called_num END  'zj_called_num',
+                    z.total_called_num,
+                    z.total_call_len,
+                    z.total_call_num,
+                    z.user_group,
+                    z.login_name,
+                    z.user_name
+                from (
+                    SELECT
+                        t1.user_group,
+                        t1.login_name,
+                        t1.user_name,
+                        t1.platform,
+                        t1.call_num,
+                        t1.create_by,
+                        t1.called_num,
+                        t1.call_len,
+                        t1.total_call_num,
+                        t1.total_call_len,
+                        t1.total_called_num
+                    FROM
+                        (
+                            SELECT
+                                su.user_group,
+                                su.login_name,
+                                su.user_name,
+                                COUNT(1) AS call_num,
+                                re.platform,
+                                re.create_by,
+                                (SELECT COUNT(1) as qbbdcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 00:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 23:59:59') and r.create_by = re.create_by GROUP BY r.create_by ) total_call_num,
+                                (SELECT COUNT(1) as thcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 00:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 23:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
+                                (SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 00:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 23:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len,
+                                (SELECT sum(r.call_len) / 1000 / 60 as qbthsc FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 00:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 23:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_call_len,
+                                (SELECT COUNT(1) as qbthcs FROM t_lc_call_record r
+                                WHERE r.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 00:00:00') AND r.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 23:59:59') and r.call_len is not null and r.call_len != '' and r.create_by = re.create_by GROUP BY r.create_by) total_called_num
+                            FROM
+                                t_lc_call_record re,sys_user su
+                            WHERE
+                                re.create_by = su.user_id and
+                                re.create_time <![CDATA[>=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 00:00:00')
+                            AND re.create_time <![CDATA[<=]]> CONCAT((SELECT date_sub(curdate(), INTERVAL #{day} DAY)),' 23:59:59')
+                            GROUP BY
+                                re.platform,re.create_by
+                        ) t1
+                ) z
+            ) zz GROUP BY zz.login_name
+            ) tt ORDER BY tt.login_name
+    </select>
+
+    <insert id="insertTLcReportPersonal" parameterType="com.ruoyi.report.domain.TLcReportPersonal">
+        insert into t_lc_report_personal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reportData != null ">report_data,</if>
+            <if test="timePeriod != null  and timePeriod != ''">time_period,</if>
+            <if test="paCalledNum != null ">pa_called_num,</if>
+            <if test="paCallLen != null  and paCallLen != ''">pa_call_len,</if>
+            <if test="paCallNum != null ">pa_call_num,</if>
+            <if test="zjCalledNum != null ">zj_called_num,</if>
+            <if test="zjCallLen != null  and zjCallLen != ''">zj_call_len,</if>
+            <if test="zjCallNum != null ">zj_call_num,</if>
+            <if test="totalCalledNum != null ">total_called_num,</if>
+            <if test="totalCallLen != null  and totalCallLen != ''">total_call_len,</if>
+            <if test="totalCallNum != null ">total_call_num,</if>
+            <if test="userGroup != null  and userGroup != ''">user_group,</if>
+            <if test="loginName != null  and loginName != ''">login_name,</if>
+            <if test="userName != null  and userName != ''">user_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reportData != null ">#{reportData},</if>
+            <if test="timePeriod != null  and timePeriod != ''">#{timePeriod},</if>
+            <if test="paCalledNum != null ">#{paCalledNum},</if>
+            <if test="paCallLen != null  and paCallLen != ''">#{paCallLen},</if>
+            <if test="paCallNum != null ">#{paCallNum},</if>
+            <if test="zjCalledNum != null ">#{zjCalledNum},</if>
+            <if test="zjCallLen != null  and zjCallLen != ''">#{zjCallLen},</if>
+            <if test="zjCallNum != null ">#{zjCallNum},</if>
+            <if test="totalCalledNum != null ">#{totalCalledNum},</if>
+            <if test="totalCallLen != null  and totalCallLen != ''">#{totalCallLen},</if>
+            <if test="totalCallNum != null ">#{totalCallNum},</if>
+            <if test="userGroup != null  and userGroup != ''">#{userGroup},</if>
+            <if test="loginName != null  and loginName != ''">#{loginName},</if>
+            <if test="userName != null  and userName != ''">#{userName},</if>
+         </trim>
+    </insert>
+    
+</mapper>

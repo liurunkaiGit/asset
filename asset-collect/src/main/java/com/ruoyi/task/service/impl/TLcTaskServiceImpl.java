@@ -299,7 +299,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
 
     /**
      * 删除任务信息
-     *
+     *`
      * @param id 任务ID
      * @return 结果
      */
@@ -369,7 +369,9 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         Set<Long> randomTaskSet = getAllocatTaskSet(taskIds, allocatNum);
         List<TLcTask> taskList = randomTaskSet.stream()
                 .map(taskId -> {
-                    TLcTask tLcTask = this.tLcTaskMapper.selectTLcTaskById(taskId);
+//                    TLcTask tLcTask = this.tLcTaskMapper.selectTLcTaskById(taskId);
+                    TLcTask tLcTask = new TLcTask();
+                    tLcTask.setId(taskId);
                     tLcTask.setTaskType(TaskTypeEnum.RE_ALLOCAT.getCode());
                     tLcTask.setTaskStatus(TaskStatusEnum.ALLOCATING.getStatus());
                     tLcTask.setModifyOwnerTime(LocalDateTime.now(ZoneId.systemDefault()));
@@ -458,8 +460,10 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     public void tempAgent(String userId, String taskIds, String orgId, String oldOwnerIds) {
         List<TLcTask> taskList = Arrays.stream(taskIds.split(","))
                 .map(taskId -> {
-                    TLcTask tLcTask = this.tLcTaskMapper.selectTLcTaskById(Long.valueOf(taskId));
-                    tLcTask.setTaskType(TaskTypeEnum.TEMP_AGENT.getCode())
+//                    TLcTask tLcTask = this.tLcTaskMapper.selectTLcTaskById(Long.valueOf(taskId));
+                    TLcTask tLcTask = new TLcTask();
+                    tLcTask.setId(Long.valueOf(taskId))
+                            .setTaskType(TaskTypeEnum.TEMP_AGENT.getCode())
                             .setOldOwnerId(Long.valueOf(tLcTask.getOwnerId()))
                             .setTaskStatus(TaskStatusEnum.ALLOCATING.getStatus())
                             .setOwnerId(Long.valueOf(userId))
@@ -483,8 +487,10 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     public void tempAgentRecycle(String oldOwnerIds, String taskIds) {
         List<TLcTask> taskList = Arrays.stream(taskIds.split(","))
                 .map(taskId -> {
-                    TLcTask tLcTask = this.tLcTaskMapper.selectTLcTaskById(Long.valueOf(taskId));
-                    tLcTask.setTaskType(TaskTypeEnum.TEMP_AGENT_RECYCLE.getCode())
+//                    TLcTask tLcTask = this.tLcTaskMapper.selectTLcTaskById(Long.valueOf(taskId));
+                    TLcTask tLcTask = new TLcTask();
+                    tLcTask.setId(Long.valueOf(taskId))
+                            .setTaskType(TaskTypeEnum.TEMP_AGENT_RECYCLE.getCode())
                             .setOwnerId(tLcTask.getOldOwnerId())
                             .setRecentlyAllotDate(new Date())
                             .setOwnerName(this.sysUserService.selectUserById(Long.valueOf(tLcTask.getOldOwnerId())).getUserName())
