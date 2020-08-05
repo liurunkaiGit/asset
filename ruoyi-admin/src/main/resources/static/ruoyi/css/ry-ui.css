@@ -486,10 +486,10 @@ label.error {
 	box-shadow: rgba(0,0,0,.12) 0 1px 6px,rgba(0,0,0,.12) 0 1px 4px
 }
 .toggle-switch input:checked~span:after {
-	left: -webkit-calc(100% - 20px);
-	left: calc(100% - 20px);
-	background-color: #33cabb
-}
+     left: -webkit-calc(100% - 20px);
+     left: calc(100% - 20px);
+     background-color: #33cabb
+ }
  
 .toggle-switch.switch-solid span  {
     height: 20px;
@@ -1037,7 +1037,7 @@ label {
 
 .collBaseInfoMid{
 	height:55px;
-	width:200px;
+	width:230px;
 	position:absolute;
 	margin:2px 0px 0px 50px;
 }
@@ -1045,7 +1045,7 @@ label {
 	height:55px;
 	width:455px;
 	position:absolute;
-	margin:6px 0px 0px 250px;
+	margin:6px 0px 0px 280px;
 }
 
 .collBaseInfodiv{
