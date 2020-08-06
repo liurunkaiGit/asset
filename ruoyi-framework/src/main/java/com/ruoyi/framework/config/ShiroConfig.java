@@ -255,6 +255,7 @@ public class ShiroConfig
         filterChainDefinitionMap.put("/callback/**", "anon");
         filterChainDefinitionMap.put("/assetspackage/remote/**", "anon");
         filterChainDefinitionMap.put("/import/assets/**", "anon");
+        filterChainDefinitionMap.put("/remote/luckElephant/**", "anon");
         filterChainDefinitionMap.put("/findPermission/**", "anon");
         filterChainDefinitionMap.put("/findPlatform/**", "anon");
         filterChainDefinitionMap.put("/captcha/captchaImage**", "anon");
