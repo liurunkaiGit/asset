@@ -128,7 +128,7 @@ public class ReportSchedule {
             // 查询通时通次-平台汇总报表数据
             Map<String, Object> param = new HashMap<>();
 //            param.put("day", 1);
-            param.put("date", LocalDate.now().plusDays(-2));
+            param.put("date", LocalDate.now().plusDays(-1));
             List<TLcReportPlatform> platformList = this.platformMapper.selectReportPlatformList(param);
             platformList.stream().forEach(platform -> this.platformMapper.insertTLcReportPlatform(platform));
             log.info("生成通时通次-平台汇总报表成功,{}", DateUtils.getNowDate());
