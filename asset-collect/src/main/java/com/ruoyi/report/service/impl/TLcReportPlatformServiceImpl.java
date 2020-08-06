@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -35,7 +36,8 @@ public class TLcReportPlatformServiceImpl implements ITLcReportPlatformService {
         List<TLcReportPlatform> list;
         if (tLcReportPlatform.getReportData() == null || org.apache.commons.lang3.time.DateUtils.isSameDay(tLcReportPlatform.getReportData(), new Date())) {
             Map<String, Object> param = new HashMap<>();
-            param.put("day", 0);
+//            param.put("day", 0);
+            param.put("date", LocalDate.now());
             list = selectReportPlatformList(param);
         } else {
             list = this.tLcReportPlatformMapper.selectTLcReportPlatformList(tLcReportPlatform);

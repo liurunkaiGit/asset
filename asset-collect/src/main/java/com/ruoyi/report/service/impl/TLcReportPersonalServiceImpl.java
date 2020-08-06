@@ -7,6 +7,7 @@ import com.ruoyi.report.service.ITLcReportPersonalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +35,8 @@ public class TLcReportPersonalServiceImpl implements ITLcReportPersonalService {
         List<TLcReportPersonal> list;
         if (tLcReportPersonal.getReportData() == null || org.apache.commons.lang3.time.DateUtils.isSameDay(tLcReportPersonal.getReportData(), new Date())) {
             Map<String, Object> param = new HashMap<>();
-            param.put("day", 0);
+//            param.put("day", 0);
+            param.put("date", LocalDate.now());
             list = selectReportPersonalList(param);
         } else {
             list = this.tLcReportPersonalMapper.selectTLcReportPersonalList(tLcReportPersonal);

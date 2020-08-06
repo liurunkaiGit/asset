@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -126,7 +127,8 @@ public class ReportSchedule {
             log.info("开始定时生成通时通次-平台汇总报表任务");
             // 查询通时通次-平台汇总报表数据
             Map<String, Object> param = new HashMap<>();
-            param.put("day", 1);
+//            param.put("day", 1);
+            param.put("date", LocalDate.now().plusDays(-2));
             List<TLcReportPlatform> platformList = this.platformMapper.selectReportPlatformList(param);
             platformList.stream().forEach(platform -> this.platformMapper.insertTLcReportPlatform(platform));
             log.info("生成通时通次-平台汇总报表成功,{}", DateUtils.getNowDate());
@@ -143,7 +145,8 @@ public class ReportSchedule {
             log.info("开始定时生成通时通次-个人明细汇总报表任务");
             // 查询通时通次-平台汇总报表数据
             Map<String, Object> param = new HashMap<>();
-            param.put("day", 1);
+//            param.put("day", 1);
+            param.put("date", LocalDate.now().plusDays(-1));
             List<TLcReportPersonal> personalList = this.personalMapper.selectReportPersonalList(param);
             personalList.stream().forEach(personal -> this.personalMapper.insertTLcReportPersonal(personal));
             log.info("生成通时通次-个人明细汇总报表成功,{}", DateUtils.getNowDate());
