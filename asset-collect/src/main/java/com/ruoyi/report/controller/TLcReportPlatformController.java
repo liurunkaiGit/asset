@@ -32,7 +32,7 @@ public class TLcReportPlatformController extends BaseController {
     @Autowired
     private ITLcReportPlatformService tLcReportPlatformService;
 
-    @RequiresPermissions("ruoyi:platform:view")
+    @RequiresPermissions("report:platform:view")
     @GetMapping()
     public String platform() {
         return prefix + "/platform";

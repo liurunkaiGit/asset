@@ -254,6 +254,8 @@
         t.task_type,
         t.recently_allot_date,
         t.recently_follow_up_date,
+        t.owner_id,
+        t.old_owner_id,
         t.owner_name,
         t.call_sign,
         t.call_sign_value,

@@ -375,7 +375,7 @@
                         <td style='display: none'><input id="finalId" type='radio' name='radioChoose'/></td>
                         <td style='padding-left: 5px;'><input id='freeCall' type='text' name='freeCall' style='width:120px;'/>&nbsp;&nbsp;<a data-toggle='modal' title="新增电话" class="btn btn-primary" style="height: 25px;padding: 3px;font-size: 12px;" onclick='addPhone();' >新增电话</a></td>
                         <td class='disclass' style="width: 30px;"><a href='javascript:void(0)' onclick='freeCall()'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a></td>
-                        <td  style="width: 30px;"><a href='javascript:void(0)' onclick='hangUp()'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a></td>
+                        <td  style="width: 30px;" name='gd'></td>
                     </tr>
                     </tbody>
                 </table>
@@ -1061,14 +1061,14 @@
                             if (n.phone != null && n.phone.length >4) {
                                 tp.append("<tr onclick='changeColor(this);'>" +
                                     "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose'/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+n.phone+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
-                                    "<td class='disclass'  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='call("+JSON.stringify(n.contactName)+","+n.id+","+n.relation+","+n.phone+")'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>"+"</td>" +
-                                    "<td  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='hangUp("+n.phone+")'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>"+"</td></tr>");
+                                    "<td class='disclass'  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='call("+JSON.stringify(n.contactName)+","+n.id+","+n.relation+","+n.phone+",this)'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>"+"</td>" +
+                                    "<td  style='width: 30px;' name='gd'></td></tr>");
                             }
                             if (n.tel != null && n.tel.length > 4) {
                                 tp.append("<tr onclick='changeColor(this);'>" +
                                     "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose'/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+n.tel+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
-                                    "<td class='disclass'  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='call("+JSON.stringify(n.contactName)+","+n.id+","+n.relation+","+n.tel+")'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>"+"</td>" +
-                                    "<td  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='hangUp("+n.tel+")'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>"+"</td></tr>");
+                                    "<td class='disclass'  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='call("+JSON.stringify(n.contactName)+","+n.id+","+n.relation+","+n.tel+",this)'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>"+"</td>" +
+                                    "<td  style='width: 30px;' name='gd'></td></tr>");
                             }
                         }
                     });
@@ -1824,6 +1824,8 @@
             }
             // if(type == "EVENT_HUNGUP_SUCCESS" || type == "EVENT_HUNGUP" || type == "EVENT_OUTBOUND_AGNET_HANGUP" || type == "EVENT_OUTBOUND_CUSTOMER_HANGUP" || type == "EVENT_OUTBOUND_FORECAST_AGNET_HANGUP" || type == "EVENT_OUTBOUND_FORECAST_CUSTOMER_HANGUP"){
             if(type == "EVENT_HUNGUP"){
+                var val = $('input[name="radioChoose"]:checked').parents("tr");
+                val.find("[name='gd']").html("");
                 console.log('hangup' + type,JSON.stringify(data));
                 console.log("自建录音返回信息RecordingFile="+data[0].RecordingFile+",recordTime="+",currentCaseNo="+currentCaseNo);
                 resetTiming();
@@ -2017,9 +2019,13 @@
             agentIsCalling = false;
             console.log("通话结束，agentIsCalling=false");
             printEvent('onReleased', event);
+            var val = $('input[name="radioChoose"]:checked').parents("tr");
+            val.find("[name='gd']").html("");
         };
 
         agentClient.onRecordEnd = function(event) {
+            var val = $('input[name="radioChoose"]:checked').parents("tr");
+            val.find("[name='gd']").html("");
             agentIsCalling = false;
             console.log("通话结束，agentIsCalling=false");
             resetTiming();
@@ -2138,7 +2144,10 @@
      * @param pnumber:被叫号码
      */
     var temp_phone = null;
-    function call(contactName,id,contactRelation,phone) {
+    function call(contactName,id,contactRelation,phone,obj) {
+        var tr1 = obj.parentNode.parentNode;
+        // alert(tr1.cells[7].innerHTML="<span class='text-success'>已授权</span>")
+        tr1.cells[7].innerHTML="<a href='javascript:void(0)' onclick='hangUp()'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
         agentIsCalling = true;
         console.log("坐席开始打电话，agentIsCalling=true");
         var callStartTime = $("#callStartTime").val();
@@ -2179,7 +2188,6 @@
             $(".disclass").css('pointer-events','');
             $(".disclass").css('background','');
         },10000);
-        var val = $('input[name="radioChoose"]:checked').parents("tr");
         var callStartTime = $("#callStartTime").val();
         var callEndTime = $("#callEndTime").val();
         var callLen = $("#callLen").val();
@@ -2234,7 +2242,6 @@
                 }
             }
         );
-
     }
 
     /**
@@ -2249,6 +2256,8 @@
         } else if (platform == 'ZJ') {
             uKeFuSoftPhone.HangupCall();
         }
+        var val = $('input[name="radioChoose"]:checked').parents("tr");
+        val.find("[name='gd']").html("");
         resetTiming();
     }
 
@@ -2586,6 +2595,9 @@
 
 
     function freeCall(){
+        var tr1 = obj.parentNode.parentNode;
+        // alert(tr1.cells[7].innerHTML="<span class='text-success'>已授权</span>")
+        tr1.cells[7].innerHTML="<a href='javascript:void(0)' onclick='hangUp()'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
         agentIsCalling = true;
         console.log("坐席开始打电话，agentIsCalling=true");
         // $("#freeCallFlag").val("freeCall");

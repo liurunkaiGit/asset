@@ -622,12 +622,13 @@ public class TLcTaskController extends BaseController {
      * @return
      */
     @GetMapping("/toReAllocat")
-    public String toFindReAllocatUser(String taskIds, ModelMap modelMap) {
+    public String toFindReAllocatUser(String taskIds, String caseNos, ModelMap modelMap) {
 //        SysUser sysUser = new SysUser();
 //        sysUser.setDeptId(Long.valueOf(orgId));
 //        modelMap.put("user", sysUser);
         modelMap.put("orgId", ShiroUtils.getSysUser().getOrgId());
         modelMap.put("taskIds", taskIds);
+        modelMap.put("caseNos", caseNos);
         return prefix + "/reAllocat";
     }
 
@@ -769,8 +770,8 @@ public class TLcTaskController extends BaseController {
      */
     @ResponseBody
     @PostMapping("/reAllocat")
-    public AjaxResult reAllocat(String userId, String taskIds, String orgId, Integer allocatNum, Integer allocatRule) {
-        return this.tLcTaskService.reAllocat(userId, taskIds, orgId, allocatNum, allocatRule);
+    public AjaxResult reAllocat(String userId, String taskIds, String orgId, Integer allocatNum, Integer allocatRule, String caseNos) {
+        return this.tLcTaskService.reAllocat(userId, taskIds, orgId, allocatNum, allocatRule, caseNos);
     }
 
     /**
@@ -825,10 +826,11 @@ public class TLcTaskController extends BaseController {
      * @return
      */
     @GetMapping("/toTempAgent")
-    public String toTempAgent(String taskIds, String ownerIds, ModelMap modelMap) {
+    public String toTempAgent(String taskIds, String ownerIds, ModelMap modelMap, String caseNos) {
         modelMap.put("orgId", ShiroUtils.getSysUser().getOrgId());
         modelMap.put("taskIds", taskIds);
         modelMap.put("ownerIds", ownerIds);
+        modelMap.put("caseNos", caseNos);
         return prefix + "/tempAgent";
     }
 
@@ -841,8 +843,8 @@ public class TLcTaskController extends BaseController {
      */
     @ResponseBody
     @PostMapping("/tempAgent")
-    public AjaxResult tempAgent(String userId, String taskIds, String orgId, String oldOwnerIds) {
-        this.tLcTaskService.tempAgent(userId, taskIds, orgId, oldOwnerIds);
+    public AjaxResult tempAgent(String userId, String taskIds, String orgId, String oldOwnerIds, String caseNos) {
+        this.tLcTaskService.tempAgent(userId, taskIds, orgId, oldOwnerIds, caseNos);
         return AjaxResult.success();
     }
 
@@ -854,8 +856,8 @@ public class TLcTaskController extends BaseController {
      */
     @ResponseBody
     @PostMapping("/tempAgentRecycle")
-    public AjaxResult tempAgentRecycle(String oldOwnerIds, String taskIds) {
-        this.tLcTaskService.tempAgentRecycle(oldOwnerIds, taskIds);
+    public AjaxResult tempAgentRecycle(String oldOwnerIds, String taskIds, String caseNos) {
+        this.tLcTaskService.tempAgentRecycle(oldOwnerIds, taskIds, caseNos);
         return AjaxResult.success();
     }
 

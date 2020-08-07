@@ -364,14 +364,12 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
      * @param allocatRule
      */
     @Override
-    public AjaxResult reAllocat(String userIds, String taskIds, String orgId, Integer allocatNum, Integer allocatRule) {
+    public AjaxResult reAllocat(String userIds, String taskIds, String orgId, Integer allocatNum, Integer allocatRule, String caseNos) {
         // 判断需要分配全部任务还是随机分配指定数量的任务
-        Set<Long> randomTaskSet = getAllocatTaskSet(taskIds, allocatNum);
+        Set<TLcTask> randomTaskSet = getAllocatTaskSet(taskIds, allocatNum, caseNos);
         List<TLcTask> taskList = randomTaskSet.stream()
-                .map(taskId -> {
+                .map(tLcTask -> {
 //                    TLcTask tLcTask = this.tLcTaskMapper.selectTLcTaskById(taskId);
-                    TLcTask tLcTask = new TLcTask();
-                    tLcTask.setId(taskId);
                     tLcTask.setTaskType(TaskTypeEnum.RE_ALLOCAT.getCode());
                     tLcTask.setTaskStatus(TaskStatusEnum.ALLOCATING.getStatus());
                     tLcTask.setModifyOwnerTime(LocalDateTime.now(ZoneId.systemDefault()));
@@ -457,11 +455,11 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
      * @param oldOwnerIds
      */
     @Override
-    public void tempAgent(String userId, String taskIds, String orgId, String oldOwnerIds) {
+    public void tempAgent(String userId, String taskIds, String orgId, String oldOwnerIds, String caseNos) {
         List<TLcTask> taskList = Arrays.stream(taskIds.split(","))
                 .map(taskId -> {
-//                    TLcTask tLcTask = this.tLcTaskMapper.selectTLcTaskById(Long.valueOf(taskId));
-                    TLcTask tLcTask = new TLcTask();
+                    TLcTask tLcTask = this.tLcTaskMapper.selectTLcTaskById(Long.valueOf(taskId));
+//                    TLcTask tLcTask = new TLcTask();
                     tLcTask.setId(Long.valueOf(taskId))
                             .setTaskType(TaskTypeEnum.TEMP_AGENT.getCode())
                             .setOldOwnerId(Long.valueOf(tLcTask.getOwnerId()))
@@ -471,6 +469,22 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                             .setOwnerName(this.sysUserService.selectUserById(Long.valueOf(userId)).getUserName());
                     return tLcTask;
                 }).collect(Collectors.toList());
+//        String[] taskIdStr = taskIds.split(",");
+//        String[] oldOwnerIdStr = oldOwnerIds.split(",");
+//        String[] caseNoStr = caseNos.split(",");
+//        List<TLcTask> taskList = new ArrayList<>();
+//        for (int i = 0; i < taskIdStr.length; i++) {
+//            TLcTask tLcTask = new TLcTask();
+//            tLcTask.setId(Long.valueOf(taskIdStr[i]))
+//                    .setCaseNo(caseNoStr[i])
+//                    .setTaskType(TaskTypeEnum.TEMP_AGENT.getCode())
+//                    .setOldOwnerId(Long.valueOf(oldOwnerIdStr[i]))
+//                    .setTaskStatus(TaskStatusEnum.ALLOCATING.getStatus())
+//                    .setOwnerId(Long.valueOf(userId))
+//                    .setRecentlyAllotDate(new Date())
+//                    .setOwnerName(this.sysUserService.selectUserById(Long.valueOf(userId)).getUserName());
+//            taskList.add(tLcTask);
+//        }
         this.tLcTaskMapper.batchUpdateTask(taskList);
 //        updateDuncaseOwner(taskList);
         // 插入案件历史轨迹
@@ -484,11 +498,11 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
      * @param taskIds
      */
     @Override
-    public void tempAgentRecycle(String oldOwnerIds, String taskIds) {
+    public void tempAgentRecycle(String oldOwnerIds, String taskIds, String caseNos) {
         List<TLcTask> taskList = Arrays.stream(taskIds.split(","))
                 .map(taskId -> {
-//                    TLcTask tLcTask = this.tLcTaskMapper.selectTLcTaskById(Long.valueOf(taskId));
-                    TLcTask tLcTask = new TLcTask();
+                    TLcTask tLcTask = this.tLcTaskMapper.selectTLcTaskById(Long.valueOf(taskId));
+//                    TLcTask tLcTask = new TLcTask();
                     tLcTask.setId(Long.valueOf(taskId))
                             .setTaskType(TaskTypeEnum.TEMP_AGENT_RECYCLE.getCode())
                             .setOwnerId(tLcTask.getOldOwnerId())
@@ -497,6 +511,21 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                             .setOldOwnerId(null);
                     return tLcTask;
                 }).collect(Collectors.toList());
+//        String[] taskIdStr = taskIds.split(",");
+//        String[] oldOwnerIdStr = oldOwnerIds.split(",");
+//        String[] caseNoStr = caseNos.split(",");
+//        List<TLcTask> taskList = new ArrayList<>();
+//        for (int i = 0; i < taskIdStr.length; i++) {
+//            TLcTask tLcTask = new TLcTask();
+//            tLcTask.setId(Long.valueOf(taskIdStr[i]))
+//                    .setCaseNo(caseNoStr[i])
+//                    .setTaskType(TaskTypeEnum.TEMP_AGENT_RECYCLE.getCode())
+//                    .setOwnerId(Long.valueOf(oldOwnerIdStr[i]))
+//                    .setRecentlyAllotDate(new Date())
+//                    .setOwnerName(this.sysUserService.selectUserById(Long.valueOf(oldOwnerIdStr[i])).getUserName())
+//                    .setOldOwnerId(null);
+//            taskList.add(tLcTask);
+//        }
         this.tLcTaskMapper.batchUpdateTask(taskList);
 //        updateDuncaseOwner(taskList);
         // 插入案件历史轨迹
@@ -768,6 +797,30 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             }
         } else {
             randomTaskSet = Arrays.stream(taskIds.split(",")).map(taskId -> Long.valueOf(taskId)).collect(Collectors.toSet());
+        }
+        return randomTaskSet;
+    }
+
+    private Set<TLcTask> getAllocatTaskSet(String taskIds, Integer allocatNum, String caseNos) {
+        Set<TLcTask> randomTaskSet = new HashSet<>(allocatNum); // 这里用set，因为随机选择的时候会重复，set可以去重
+
+        if (allocatNum < taskIds.split(",").length) {
+            Random random = new Random();
+            int i = 0; //变量尽量不要循环定义
+            while (randomTaskSet.size() < allocatNum) {
+                TLcTask tLcTask = new TLcTask();
+                i = random.nextInt(taskIds.split(",").length);
+                tLcTask.setId(Long.valueOf(taskIds.split(",")[i]));
+                tLcTask.setCaseNo(caseNos.split(",")[i]);
+                randomTaskSet.add(tLcTask);
+            }
+        } else {
+            for (int i = 0; i < taskIds.split(",").length; i++) {
+                TLcTask tLcTask = new TLcTask();
+                tLcTask.setId(Long.valueOf(taskIds.split(",")[i]));
+                tLcTask.setCaseNo(caseNos.split(",")[i]);
+                randomTaskSet.add(tLcTask);
+            }
         }
         return randomTaskSet;
     }

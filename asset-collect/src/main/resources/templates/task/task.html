@@ -708,8 +708,9 @@
                     $.modal.alertWarning("请至少选择一条记录");
                     return;
                 }
+                var caseNoRows = $.table.selectColumns("caseNo");
                 $.modal.confirm("确认要对选中的" + rows.length + "条数据进行操作吗?", function() {
-                    var toReAllocatUrl = prefix + '/toReAllocat?taskIds='+rows.join();
+                    var toReAllocatUrl = prefix + '/toReAllocat?taskIds='+rows.join()+'&caseNos='+caseNoRows.join();
                     $.modal.open("选择用户", toReAllocatUrl);
                 });
             }
@@ -781,10 +782,11 @@
             }
             // 获取列表中选中数据的指定列的值：业务归属人
             var ownerIdRows = $.table.selectColumns("ownerId"); //返回的是一个数组
+            var caseNoRows = $.table.selectColumns("caseNo"); //返回的是一个数组
             $.modal.confirm("确认要对选中的" + rows.length + "条数据进行临时代理吗?", function() {
                 //$.operate.submit(prefix + "/cancelAll", "post", "json", data);
                 // 查询当前机构下所有用户
-                var toTempAgentUrl = prefix + '/toTempAgent?taskIds='+rows.join()+"&ownerIds="+ownerIdRows;
+                var toTempAgentUrl = prefix + '/toTempAgent?taskIds='+rows.join()+"&ownerIds="+ownerIdRows.join()+"&caseNos="+caseNoRows.join();
                 $.modal.open("选择用户", toTempAgentUrl);
             });
         }
@@ -806,12 +808,13 @@
             // 获取列表中选中数据的指定列的值：任务类型，如果已经是临时代理的任务或者协助催收的任务不能进行临时代理
             // var ownerIdRows = $.table.selectColumns("ownerId"); //返回的是一个数组
             var oldOwnerIdRows = $.table.selectColumns("oldOwnerId"); //返回的是一个数组
+            var caseNoRows = $.table.selectColumns("caseNo"); //返回的是一个数组
             $.modal.confirm("确认要对选中的" + rows.length + "条数据进行临时代理回收吗?", function() {
                 //$.operate.submit(prefix + "/cancelAll", "post", "json", data);
                 // 查询当前机构下所有用户
                 var tempAgentRecycle = prefix + '/tempAgentRecycle';
                 // $.modal.submit(toTempAgentUrl);
-                var data = {"taskIds": rows.join(),oldOwnerIds:oldOwnerIdRows.join()};
+                var data = {"taskIds": rows.join(),oldOwnerIds:oldOwnerIdRows.join(),"caseNos":caseNoRows.join()};
                 $.operate.submit(tempAgentRecycle, "post", "json", data);
             });
         }
