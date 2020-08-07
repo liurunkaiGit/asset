@@ -489,6 +489,12 @@ public class CurAssetsPackage extends BaseEntity {
     private String updateBy;
     private Date updateTime;
 
+    //吉象新增字段
+    private String curNo;//用户编号
+    private String payStatus;//还款状态
+    private Date lastLoanDate;//贷款到期日
+    private BigDecimal lastRepayAmount;//最近还款金额
+
     @Override
     public String getCreateBy() {
         return createBy;
