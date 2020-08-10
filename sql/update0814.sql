@@ -58,4 +58,9 @@ values('个人明细汇总表导出', (SELECT t.menu_id from sys_menu t where t.
 INSERT INTO `sys_job` (`job_name`, `job_group`, `invoke_target`, `cron_expression`, `misfire_policy`, `concurrent`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
 VALUES ('通时通次-个人明细汇总表', 'DEFAULT', 'reportSchedule.createPersonalReport', '0 0 1 * * ?', '1', '1', '0', 'admin', '2020-08-05 09:40:59', '', '2020-08-05 09:41:12', '每天凌晨1点生成前一天的报表数据');
 
+INSERT INTO `sys_config` (`config_name`, `config_key`, `config_value`, `config_type`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES ('jxph', 'jxphSendCallRecordUrl', 'https://jxph.itaiping.com/gateway/v1/credit/universal/hd/record', 'Y', 'admin', '2020-08-10 11:52:10', '', NULL, 'jxph推送电催记录');
+
+INSERT INTO `sys_config` (`config_name`, `config_key`, `config_value`, `config_type`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES ('jxph', 'jxphOrgId', '214', 'Y', 'admin', '2020-08-10 15:07:36', '', NULL, 'jxph机构id');
 

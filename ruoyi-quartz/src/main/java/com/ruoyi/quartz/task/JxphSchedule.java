@@ -54,7 +54,8 @@ public class JxphSchedule {
         Date endDate = DateUtils.getEndOfDay(new Date());
         param.put("startDate", startDate);
         param.put("endDate", endDate);
-        param.put("orgId", 214);
+        String jxphOrgId = this.sysConfigService.selectConfigByKey("jxphOrgId");
+        param.put("orgId", jxphOrgId);
         List<JxphCallRecord> jxphCallRecordList = this.callRecordService.selectJxphCallRecord(param);
         String encrypt = null;
         try {
