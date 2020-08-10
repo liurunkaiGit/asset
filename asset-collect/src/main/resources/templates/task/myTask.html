@@ -228,6 +228,7 @@
                 <button type="button" class="btn btn-success" onclick="signRepay('ALPA')">标记还款</button>
                 <button type="button" class="btn btn-success" onclick="toAutoCall()">自动拨打</button>
                 <button type="button" class="btn btn-success" onclick="sendRobotApply()">机器人外呼</button>
+                <input id="currentPageUrl" name="currentPageUrl" class="form-control" type="hidden">
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <div id="title2">
@@ -606,7 +607,11 @@
             // $('.menuTab[data-panel="' + panelUrl + '"]', topWindow).addClass('active').siblings('.menuTab').removeClass('active');
             // $('.menuTab[data-panel="' + panelUrl + '"]').addClass('active').siblings('.menuTab').removeClass('active');
             // $.modal.closeTabPanel("/collect/task/myTask");
+            if ($("#currentPageUrl").val() != null && $("#currentPageUrl").val() != '') {
+                $.modal.closeTab($("#currentPageUrl").val());
+            }
             $.modal.openTab("作业催收", toCollJobUrl);
+            $("#currentPageUrl").val(toCollJobUrl);
             //toMyTask(firstCaseNo,firstOrgId,firstImportBatchNo)
         }
 
