@@ -607,7 +607,7 @@
             // $('.menuTab[data-panel="' + panelUrl + '"]', topWindow).addClass('active').siblings('.menuTab').removeClass('active');
             // $('.menuTab[data-panel="' + panelUrl + '"]').addClass('active').siblings('.menuTab').removeClass('active');
             // $.modal.closeTabPanel("/collect/task/myTask");
-            if ($("#currentPageUrl").val() != null && $("#currentPageUrl").val() != '') {
+            if ($("#currentPageUrl").val() != null && $("#currentPageUrl").val() != '' && $("#currentPageUrl").val() != toCollJobUrl) {
                 $.modal.closeTab($("#currentPageUrl").val());
             }
             $.modal.openTab("作业催收", toCollJobUrl);
