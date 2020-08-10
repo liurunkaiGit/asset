@@ -24,3 +24,26 @@ INSERT INTO sys_menu ( `menu_name`, `parent_id`, `order_num`, `url`, `target`, `
 INSERT INTO sys_menu ( `menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)VALUES ('导出', (SELECT t.menu_id from sys_menu t where t.menu_name='登录状态'), '2', '#', 'menuItem', 'F', '0', 'system:status:export', '#', 'admin', now(), 'admin', now(), '');
 
 
+
+
+alter TABLE cur_assets_package_temp ADD COLUMN curNo varchar(64) DEFAULT NULL COMMENT '用户编号';
+alter TABLE cur_assets_package_temp ADD COLUMN payStatus varchar(64) DEFAULT NULL COMMENT '还款状态';
+alter TABLE cur_assets_package_temp ADD COLUMN lastLoanDate date DEFAULT NULL COMMENT '贷款到期日';
+alter TABLE cur_assets_package_temp ADD COLUMN lastRepayAmount decimal(20,2) DEFAULT NULL COMMENT '最近还款金额';
+
+alter TABLE cur_assets_package ADD COLUMN curNo varchar(64) DEFAULT NULL COMMENT '用户编号';
+alter TABLE cur_assets_package ADD COLUMN payStatus varchar(64) DEFAULT NULL COMMENT '还款状态';
+alter TABLE cur_assets_package ADD COLUMN lastLoanDate date DEFAULT NULL COMMENT '贷款到期日';
+alter TABLE cur_assets_package ADD COLUMN lastRepayAmount decimal(20,2) DEFAULT NULL COMMENT '最近还款金额';
+
+drop table if exists interface_info;
+CREATE TABLE `interface_info` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(64) DEFAULT NULL COMMENT '接口名称',
+  `code` varchar(32) DEFAULT NULL COMMENT '报错代码',
+  `info` text DEFAULT NULL COMMENT '日志信息',
+  `status` varchar(32) DEFAULT NULL COMMENT '状态',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='文件统计表';
+alter table interface_info comment '接口信息记录表';
