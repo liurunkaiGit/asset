@@ -187,6 +187,32 @@ var closeItem = function(dataId){
 	}
 }
 
+/** 关闭选项卡 */
+var closeItemPanel = function(dataId){
+	var topWindow = $(window.parent.document);
+	$('.menuTab[data-panel="' + panelUrl + '"]', topWindow).addClass('active').siblings('.menuTab').removeClass('active');
+	// var topWindow = $(window.parent.document);
+	// if($.common.isNotEmpty(dataId)){
+	// 	window.parent.$.modal.closeLoading();
+	// 	// 根据dataId关闭指定选项卡
+	// 	$('.menuTab[data-id="' + dataId + '"]', topWindow).remove();
+	// 	// 移除相应tab对应的内容区
+	// 	$('.mainContent .RuoYi_iframe[data-id="' + dataId + '"]', topWindow).remove();
+	// 	return;
+	// }
+	// var panelUrl = window.frameElement.getAttribute('data-panel');
+	// $('.page-tabs-content .active i', topWindow).click();
+	// if($.common.isNotEmpty(panelUrl)){
+	// 	$('.menuTab[data-id="' + panelUrl + '"]', topWindow).addClass('active').siblings('.menuTab').removeClass('active');
+	// 	$('.mainContent .RuoYi_iframe', topWindow).each(function() {
+	// 		if ($(this).data('id') == panelUrl) {
+	// 			$(this).show().siblings('.RuoYi_iframe').hide();
+	// 			return false;
+	// 		}
+	// 	});
+	// }
+}
+
 /** 创建选项卡 */
 function createMenuItem(dataUrl, menuName) {
 	var panelUrl = window.frameElement.getAttribute('data-id');

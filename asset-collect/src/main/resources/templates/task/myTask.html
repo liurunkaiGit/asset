@@ -600,6 +600,12 @@
             if(endOverdueDays!=undefined){
                 toCollJobUrl=toCollJobUrl +'&endOverdueDays='+endOverdueDays
             }
+            // var topWindow = $(window.parent.document);
+            // $('.menuTab[data-panel=/collect/task/myTask]', topWindow).addClass('active').siblings('.menuTab').removeClass('active');
+            // var panelUrl = '/collect/task/myTask';
+            // $('.menuTab[data-panel="' + panelUrl + '"]', topWindow).addClass('active').siblings('.menuTab').removeClass('active');
+            // $('.menuTab[data-panel="' + panelUrl + '"]').addClass('active').siblings('.menuTab').removeClass('active');
+            // $.modal.closeTabPanel("/collect/task/myTask");
             $.modal.openTab("作业催收", toCollJobUrl);
             //toMyTask(firstCaseNo,firstOrgId,firstImportBatchNo)
         }

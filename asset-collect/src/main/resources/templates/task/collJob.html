@@ -2145,9 +2145,6 @@
      */
     var temp_phone = null;
     function call(contactName,id,contactRelation,phone,obj) {
-        var tr1 = obj.parentNode.parentNode;
-        // alert(tr1.cells[7].innerHTML="<span class='text-success'>已授权</span>")
-        tr1.cells[7].innerHTML="<a href='javascript:void(0)' onclick='hangUp()'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
         agentIsCalling = true;
         console.log("坐席开始打电话，agentIsCalling=true");
         var callStartTime = $("#callStartTime").val();
@@ -2178,7 +2175,9 @@
             $.modal.alert("请配置当前机构的话务平台");
             return;
         }
-
+        var tr1 = obj.parentNode.parentNode;
+        // alert(tr1.cells[7].innerHTML="<span class='text-success'>已授权</span>")
+        tr1.cells[7].innerHTML="<a href='javascript:void(0)' onclick='hangUp()'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
         $("#"+id).attr("checked","checked");
         $(".disclass").attr('disabled',true);
         $(".disclass").css('pointer-events','none');
@@ -2595,9 +2594,6 @@
 
 
     function freeCall(){
-        var tr1 = obj.parentNode.parentNode;
-        // alert(tr1.cells[7].innerHTML="<span class='text-success'>已授权</span>")
-        tr1.cells[7].innerHTML="<a href='javascript:void(0)' onclick='hangUp()'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
         agentIsCalling = true;
         console.log("坐席开始打电话，agentIsCalling=true");
         // $("#freeCallFlag").val("freeCall");
@@ -2633,7 +2629,9 @@
                 changeColor(n);
             }
         });*/
-
+        var tr1 = obj.parentNode.parentNode;
+        // alert(tr1.cells[7].innerHTML="<span class='text-success'>已授权</span>")
+        tr1.cells[7].innerHTML="<a href='javascript:void(0)' onclick='hangUp()'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
         $(".disclass").attr('disabled',true);
         $(".disclass").css('pointer-events','none');
         $(".disclass").css('background','rgb(169,169,169)');
