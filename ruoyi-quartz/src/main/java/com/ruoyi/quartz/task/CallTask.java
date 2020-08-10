@@ -96,6 +96,14 @@ public class CallTask
                             }catch (Exception e){
                                 log.error("下载语音文件异常={}",e);
                             }
+                        } else if(tmpTLcCallRecord.getCallRadioLocation().startsWith("http")){//http类型的URL下载
+                            try{
+                                String filePath = callFilePath + File.separator + tmpTLcCallRecord.getOrgName() + File.separator + tmpTLcCallRecord.getPlatform() + File.separator + startDate.substring(0, 10);
+                                log.info("下载语音文件保存目录为，filePath={}",filePath);
+                                DownLoadFromHttpsUtil.downLoadFromUrlHttp(tmpTLcCallRecord.getCallRadioLocation(),filePath,fileName);
+                            }catch (Exception e){
+                                log.error("下载语音文件异常={}",e);
+                            }
                         }
                     }else{
                         log.error("下载语音文件URL异常，语音记录ID={},URL={}",tmpTLcCallRecord.getId(),tmpTLcCallRecord.getCallRadioLocation());
