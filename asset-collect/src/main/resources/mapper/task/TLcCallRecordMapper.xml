@@ -40,6 +40,19 @@
         <result property="recommendVendor" column="recommend_vendor"/>
     </resultMap>
 
+    <resultMap id="JxphCallRecordResult" type="com.ruoyi.task.domain.JxphCallRecord">
+        <result property="name" column="contact_name"/>
+        <result property="mobile" column="phone"/>
+        <result property="relType" column="contact_relation"/>
+        <result property="customerConnectTime" column="call_start_time"/>
+        <result property="duration" column="call_len"/>
+        <result property="teletphoneCode" column="call_result"/>
+        <result property="recordUrl" column="call_radio_location"/>
+        <result property="tsrConnectTime" column="create_time"/>
+        <result property="userId" column="create_by"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
 
     <sql id="selectTLcCallRecordVo">
         select id, case_no,  contact_name, phone, contact_relation, call_start_time, call_end_time, call_len, call_sign, call_result, call_radio_location, call_radio, create_time, create_by, remark, platform, star, type from t_lc_call_record
@@ -402,6 +415,45 @@
     <select id="selectTLcHisCallRecordById" parameterType="Long" resultMap="TLcCallRecordResult">
         <include refid="selectTLcHisCallRecordVo"/>
         where id = #{id}
+    </select>
+
+    <select id="selectJxphCallRecord" parameterType="java.util.Map" resultMap="JxphCallRecordResult">
+        select
+        t.contact_name,
+        t.phone,
+        case t.contact_relation WHEN - 1 THEN "其它"
+            WHEN 1 THEN "本人"
+            WHEN 2 THEN "直系"
+            WHEN 3 THEN "亲戚"
+            WHEN 4 THEN "朋友"
+            WHEN 5 THEN "父母"
+            WHEN 6 THEN "配偶"
+            WHEN 7 THEN "兄弟"
+            WHEN 8 THEN "姐妹"
+            WHEN 9 THEN "哥哥"
+            WHEN 10 THEN "兄长"
+            WHEN 11 THEN "弟弟"
+            WHEN 12 THEN "姐姐"
+            WHEN 13 THEN "妹妹"
+            WHEN 14 THEN "家人"
+            WHEN 15 THEN "老公"
+            WHEN 16 THEN "老婆"
+            WHEN 17 THEN "同事"
+            WHEN 18 THEN "单位"
+        END AS contact_relation,
+        t.contact_relation,
+        t.call_start_time,
+        t.call_len/1000 as call_len,
+        t.call_result,
+        t.call_radio_location,
+        t.remark,
+        t.create_time,
+        t.create_by
+        from t_lc_call_record t,t_lc_task ta
+        where t.case_no = ta.case_no
+        and ta.org_id = #{orgId}
+        and t.create_time <![CDATA[>=]]> #{startDate}
+        and t.create_time <![CDATA[<=]]> #{endDate}
     </select>
 
 </mapper>

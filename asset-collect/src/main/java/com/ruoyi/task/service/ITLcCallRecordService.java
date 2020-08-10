@@ -1,6 +1,7 @@
 package com.ruoyi.task.service;
 
 import com.ruoyi.robot.domain.CallContent;
+import com.ruoyi.task.domain.JxphCallRecord;
 import com.ruoyi.task.domain.TLcCallRecord;
 import com.ruoyi.task.domain.TLcCallRecordForXY;
 
@@ -123,4 +124,6 @@ public interface ITLcCallRecordService {
     TLcCallRecord selectTLcHisCallRecordById(Long valueOf);
 
     void downLoadHisRadio(HttpServletRequest request, HttpServletResponse response, String id);
+
+    List<JxphCallRecord> selectJxphCallRecord(Map<String, Object> param);
 }

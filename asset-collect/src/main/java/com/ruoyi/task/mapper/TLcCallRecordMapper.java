@@ -1,5 +1,6 @@
 package com.ruoyi.task.mapper;
 
+import com.ruoyi.task.domain.JxphCallRecord;
 import com.ruoyi.task.domain.TLcCallRecord;
 import org.apache.ibatis.annotations.Param;
 
@@ -108,4 +109,5 @@ public interface TLcCallRecordMapper {
 
     TLcCallRecord selectTLcHisCallRecordById(@Param("id") Long id);
 
+    List<JxphCallRecord> selectJxphCallRecord(Map<String, Object> param);
 }
