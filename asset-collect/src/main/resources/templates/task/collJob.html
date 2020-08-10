@@ -374,7 +374,7 @@
                     <tr onclick="changeFinalColor(this);">
                         <td style='display: none'><input id="finalId" type='radio' name='radioChoose'/></td>
                         <td style='padding-left: 5px;'><input id='freeCall' type='text' name='freeCall' style='width:120px;'/>&nbsp;&nbsp;<a data-toggle='modal' title="新增电话" class="btn btn-primary" style="height: 25px;padding: 3px;font-size: 12px;" onclick='addPhone();' >新增电话</a></td>
-                        <td class='disclass' style="width: 30px;"><a href='javascript:void(0)' onclick='freeCall()'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a></td>
+                        <td class='disclass' style="width: 30px;"><a href='javascript:void(0)' onclick='freeCall(this)'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a></td>
                         <td  style="width: 30px;" name='gd'></td>
                     </tr>
                     </tbody>
@@ -1824,6 +1824,7 @@
             }
             // if(type == "EVENT_HUNGUP_SUCCESS" || type == "EVENT_HUNGUP" || type == "EVENT_OUTBOUND_AGNET_HANGUP" || type == "EVENT_OUTBOUND_CUSTOMER_HANGUP" || type == "EVENT_OUTBOUND_FORECAST_AGNET_HANGUP" || type == "EVENT_OUTBOUND_FORECAST_CUSTOMER_HANGUP"){
             if(type == "EVENT_HUNGUP"){
+                agentIsCalling = false;
                 var val = $('input[name="radioChoose"]:checked').parents("tr");
                 val.find("[name='gd']").html("");
                 console.log('hangup' + type,JSON.stringify(data));
@@ -2145,8 +2146,10 @@
      */
     var temp_phone = null;
     function call(contactName,id,contactRelation,phone,obj) {
-        agentIsCalling = true;
-        console.log("坐席开始打电话，agentIsCalling=true");
+        if (agentIsCalling) {
+            $.modal.alertError("正在通话中，请先挂断当前通话再拨打");
+            return;
+        }
         var callStartTime = $("#callStartTime").val();
         var callEndTime = $("#callEndTime").val();
         var callLen = $("#callLen").val();
@@ -2175,6 +2178,8 @@
             $.modal.alert("请配置当前机构的话务平台");
             return;
         }
+        agentIsCalling = true;
+        console.log("坐席开始打电话，agentIsCalling=true");
         var tr1 = obj.parentNode.parentNode;
         // alert(tr1.cells[7].innerHTML="<span class='text-success'>已授权</span>")
         tr1.cells[7].innerHTML="<a href='javascript:void(0)' onclick='hangUp()'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
@@ -2593,9 +2598,11 @@
     }
 
 
-    function freeCall(){
-        agentIsCalling = true;
-        console.log("坐席开始打电话，agentIsCalling=true");
+    function freeCall(obj){
+        if (agentIsCalling) {
+            $.modal.alertError("正在通话中，请先挂断当前通话再拨打");
+            return;
+        }
         // $("#freeCallFlag").val("freeCall");
         var callRadioLocation = $("#callRadioLocation").val();
         if(callRadioLocation!=""&&callRadioLocation!=null){
@@ -2622,7 +2629,8 @@
             $.modal.alert("请输入号码");
             return;
         }
-
+        agentIsCalling = true;
+        console.log("坐席开始打电话，agentIsCalling=true");
        /* var trs = $("#custContactTbody")[0].childNodes;
         $.each(trs,function (i,n) {
             if(n.firstChild.lastChild.checked){
@@ -2631,7 +2639,7 @@
         });*/
         var tr1 = obj.parentNode.parentNode;
         // alert(tr1.cells[7].innerHTML="<span class='text-success'>已授权</span>")
-        tr1.cells[7].innerHTML="<a href='javascript:void(0)' onclick='hangUp()'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
+        tr1.cells[3].innerHTML="<a href='javascript:void(0)' onclick='hangUp()'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
         $(".disclass").attr('disabled',true);
         $(".disclass").css('pointer-events','none');
         $(".disclass").css('background','rgb(169,169,169)');
