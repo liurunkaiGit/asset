@@ -18,4 +18,6 @@ public interface ILuckElephantRemoteService {
 
     public LuckElephantRepaymentAssetResponse batchRepaymentAssets(LuckElephantRepaymentAssetRequest param,String curDate)throws Exception;
 
+    public void deleteTempTable(String importBatchNo);
+
 }

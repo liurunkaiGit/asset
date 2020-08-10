@@ -723,4 +723,59 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </insert>
 
+    <select id="selectNotExists" parameterType="String" resultType="java.lang.String">
+        SELECT org_casNo as orgCasno from cur_assets_package_temp t
+        where t.import_batch_no = #{importBatchNo}
+        and t.is_exception = '0'
+        and not EXISTS (
+        SELECT b.org_casNo,b.org_id FROM cur_assets_package b WHERE t.org_casNo=b.org_casNo AND t.org_id = b.org_id AND b.close_case=0
+        )
+    </select>
+
+    <update id="batchUpdate" parameterType="java.util.List">
+        <foreach collection="TempCurAssetsList" item="TempCurAssets" separator=";">
+            update cur_assets_package
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="TempCurAssets.orgCasno != null  and TempCurAssets.orgCasno != ''">org_casNo = #{TempCurAssets.orgCasno},</if>
+                <if test="TempCurAssets.payStatus != null  and TempCurAssets.payStatus != ''">payStatus = #{TempCurAssets.payStatus},</if>
+                <if test="TempCurAssets.firstYqjcDate != null ">first_yqjc_date = #{TempCurAssets.firstYqjcDate},</if>
+                <if test="TempCurAssets.mqhkje != null ">mqhkje = #{TempCurAssets.mqhkje},</if>
+                <if test="TempCurAssets.rmbYhfyzje != null ">rmb_yhfyzje = #{TempCurAssets.rmbYhfyzje},</if>
+                <if test="TempCurAssets.znj != null ">znj = #{TempCurAssets.znj},</if>
+                <if test="TempCurAssets.rmbYe != null ">rmb_ye = #{TempCurAssets.rmbYe},</if>
+                <if test="TempCurAssets.waYe != null ">wa_ye = #{TempCurAssets.waYe},</if>
+                <if test="TempCurAssets.overdueDays != null  and TempCurAssets.overdueDays != ''">overdue_days = #{TempCurAssets.overdueDays},</if>
+                <if test="TempCurAssets.transferType != null  and TempCurAssets.transferType != ''">transferType = #{TempCurAssets.transferType},</if>
+                <if test="TempCurAssets.borrowNo != null  and TempCurAssets.borrowNo != ''">borrow_no = #{TempCurAssets.borrowNo},</if>
+                <if test="TempCurAssets.lastRepayAmount != null  and TempCurAssets.lastRepayAmount != ''">lastRepayAmount = #{TempCurAssets.lastRepayAmount},</if>
+                <if test="TempCurAssets.ykqs != null  and TempCurAssets.ykqs != ''">ykqs = #{TempCurAssets.ykqs},</if>
+                <if test="TempCurAssets.rmbYhbjzje != null ">rmb_yhbjzje = #{TempCurAssets.rmbYhbjzje},</if>
+                <if test="TempCurAssets.rmbYhlizje != null ">rmb_yhlizje = #{TempCurAssets.rmbYhlizje},</if>
+                <if test="TempCurAssets.rmbYhfxzje != null ">rmb_yhfxzje = #{TempCurAssets.rmbYhfxzje},</if>
+                <if test="TempCurAssets.rmbQkzje != null ">rmb_qkzje = #{TempCurAssets.rmbQkzje},</if>
+                <if test="TempCurAssets.ljyhje != null ">ljyhje = #{TempCurAssets.ljyhje},</if>
+                <if test="TempCurAssets.rcr != null ">rcr = #{TempCurAssets.rcr},</if>
+                <if test="TempCurAssets.borrowBlank != null  and TempCurAssets.borrowBlank != ''">borrow_blank = #{TempCurAssets.borrowBlank},</if>
+                <if test="TempCurAssets.zhychkr != null ">zhychkr = #{TempCurAssets.zhychkr},</if>
+                <if test="TempCurAssets.updateBy != null ">update_by = #{TempCurAssets.updateBy},</if>
+                update_time = now()
+            </trim>
+            where org_casNo=#{TempCurAssets.orgCasno} AND close_case=0
+        </foreach>
+    </update>
+
+    <select id="selectRepaymentNotExists" parameterType="String" resultType="java.lang.String">
+        select org_casNo as orgCasno
+        FROM cur_assets_repayment_package_temp t
+        where t.import_batch_no = #{importBatchNo}
+        AND t.is_exception = 0
+        AND NOT EXISTS(
+        SELECT 1 FROM cur_assets_package a WHERE t.org_casNo=a.org_casNo AND t.org_id=a.org_id and a.close_case=0
+        )
+    </select>
+
+    <delete id="deleteTempTable">
+        delete from cur_assets_package_temp WHERE import_batch_no=#{importBatchNo}
+    </delete>
+
 </mapper>

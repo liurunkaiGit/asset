@@ -1197,13 +1197,13 @@ public class CurAssetsPackageServiceImpl extends BaseController implements ICurA
     }
 
 
-    private void updateCollect(List<TempCurAssetsPackage> paramList) throws Exception{
+    public void updateCollect(List<TempCurAssetsPackage> paramList) throws Exception{
         List<Assets2> assets = buildParam(paramList);
         this.tlcDuncaseService.DuncaseUpdate(assets);
     }
 
 
-    private List<Assets2> buildParam(List<TempCurAssetsPackage> paramList)throws Exception{
+    public List<Assets2> buildParam(List<TempCurAssetsPackage> paramList)throws Exception{
         List<Assets2> desList = new ArrayList<>(paramList.size());
         paramList.stream().forEach(tempCurAssets ->{
 //            String importBatchNo = this.curAssetsPackageMapper.selectBatchNo(tempCurAssets);

@@ -2,6 +2,7 @@ package com.ruoyi.assetspackage.mapper;
 
 import com.ruoyi.assetspackage.domain.TempCurAssetsPackage;
 import com.ruoyi.assetspackage.domain.luckElephant.LuckElephantAddAssetRequest;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,5 +18,13 @@ public interface LuckElephantRemoteMapper {
     public List<String> selectUpdateList(String importBatchNo)throws Exception;
 
     public void batchAddAssets(List<TempCurAssetsPackage> paramList)throws Exception;
+
+    public void deleteTempTable(String importBatchNo);
+
+    public List<String> selectNotExists(String importBatchNo)throws Exception;
+
+    public void batchUpdate(@Param(value="TempCurAssetsList")List<TempCurAssetsPackage> TempCurAssetsList)throws Exception;
+
+    public List<String> selectRepaymentNotExists(String importBatchNo)throws Exception;
 
 }

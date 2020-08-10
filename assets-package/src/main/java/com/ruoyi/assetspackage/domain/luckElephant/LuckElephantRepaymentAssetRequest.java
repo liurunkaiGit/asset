@@ -38,6 +38,7 @@ public class LuckElephantRepaymentAssetRequest {
         private String rmbQkzje;//贷款余额
         private String ljyhje;//总已还金额
         private String lastRepayDate;//最近还款时间
+        private String payStatus;//还款状态
     }
 
 }

@@ -15,7 +15,7 @@ import javax.crypto.spec.SecretKeySpec;
  */
 
 public class AesUtils {
-     private static final String TOKEN = "JV7evvhcvxTRqYHa";//我们的token
+     private static final String TOKEN = "JV7evvhcvxTRqYHa";
 
      /**
      * 加密
@@ -138,14 +138,14 @@ public class AesUtils {
     public static void main(String[] args) throws Exception {
         String content = "春天到了，桃花绽开了美丽的笑脸，杜鹃花也向我们展示着它最艳丽的花儿，不过花中皇后要数茉莉花了，它们开着一朵朵小喇叭似的花朵，有紫的、淡紫的、白的……五彩缤纷。美丽的茉莉花在春风里频频点头为我们送来阵阵清香……";
         //生成16位随机字符串
-        String token= RandomStringUtils.randomAlphanumeric(16);
-        System.out.println(token);
-        System.out.println(token.length());
+//        String token= RandomStringUtils.randomAlphanumeric(16);
+//        System.out.println(token);
+//        System.out.println(token.length());
         //加密
-        String encrypt = AesUtils.encrypt(content, token);
+        String encrypt = AesUtils.encrypt(content, TOKEN);
         System.out.println(encrypt);
         //解密
-        String decrypt = AesUtils.decrypt(encrypt, token);
+        String decrypt = AesUtils.decrypt(encrypt, TOKEN);
         System.out.println(decrypt);
 
     }

@@ -1,9 +1,7 @@
 package com.ruoyi.assetspackage.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.ruoyi.assetspackage.domain.OrgPackage;
-import com.ruoyi.assetspackage.domain.TLcImportFlow;
-import com.ruoyi.assetspackage.domain.TempCurAssetsPackage;
+import com.ruoyi.assetspackage.domain.*;
 import com.ruoyi.assetspackage.domain.luckElephant.*;
 import com.ruoyi.assetspackage.domain.score.TLcScore;
 import com.ruoyi.assetspackage.enums.ImportTypeEnum;
@@ -12,6 +10,7 @@ import com.ruoyi.assetspackage.service.ILuckElephantRemoteService;
 import com.ruoyi.assetspackage.service.IOrgPackageService;
 import com.ruoyi.assetspackage.service.ITLcImportFlowService;
 import com.ruoyi.assetspackage.service.ITLcScoreService;
+import com.ruoyi.common.domain.CloseCase;
 import com.ruoyi.framework.util.ShiroUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +44,20 @@ public class LuckElephantRemoteServiceImpl implements ILuckElephantRemoteService
     @Autowired
     private IOrgPackageService orgPackageService;
 
+    @Autowired
+    private CurAssetsPackageServiceImpl curAssetsPackageServiceImpl;
 
+    @Autowired
+    private CurAssetsRepaymentPackageServiceImpl curAssetsRepaymentPackageServiceImpl;
+
+
+    /**
+     * 添加service
+     * @param param
+     * @param curDate
+     * @return
+     * @throws Exception
+     */
     @Override
     @Transactional
     public LuckElephantAddAssetResponse batchAddAssets(LuckElephantAddAssetRequest param,String curDate) throws Exception {
@@ -124,6 +136,7 @@ public class LuckElephantRemoteServiceImpl implements ILuckElephantRemoteService
             tempAsset.setOrgId(orgId);
             tempAsset.setOrg(orgName);
             tempAsset.setCreateBy("0000");
+            tempAsset.setCreateTime(new Date());
             tempAsset.setOrgCasno(data.getOrgCasno());
             tempAsset.setCurName(data.getCurName());
             tempAsset.setCurSex(data.getSex());
@@ -194,13 +207,15 @@ public class LuckElephantRemoteServiceImpl implements ILuckElephantRemoteService
         String sysCode = param.getSysCode();//数据来源
         String frontTransTime = param.getFrontTransTime();//交易时间
         response = checkNull(batchNo, curDate, "批次号","add") != null ? (LuckElephantAddAssetResponse)checkNull(batchNo, curDate, "批次号","add") : null;
+        if(response!=null){ return response;}
         response = checkNull(orgId, curDate, "机构编号","add") != null ? (LuckElephantAddAssetResponse)checkNull(orgId, curDate, "机构编号","add") : null;
+        if(response!=null){ return response;}
         response = checkNull(orgName, curDate, "机构名称","add") != null ? (LuckElephantAddAssetResponse)checkNull(orgName, curDate, "机构名称","add") : null;
+        if(response!=null){ return response;}
         response = checkNull(sysCode, curDate, "数据来源","add") != null ? (LuckElephantAddAssetResponse)checkNull(sysCode, curDate, "数据来源","add") : null;
+        if(response!=null){ return response;}
         response = checkNull(frontTransTime, curDate, "交易时间","add") != null ? (LuckElephantAddAssetResponse)checkNull(frontTransTime, curDate, "交易时间","add") : null;
-        if(response!=null){
-            return response;
-        }
+        if(response!=null){ return response;}
         //数据校验
         List<LuckElephantAddAssetRequest.AddAssetEntity> facts = param.getFacts();
         if(facts.size() > 0){
@@ -238,60 +253,416 @@ public class LuckElephantRemoteServiceImpl implements ILuckElephantRemoteService
                 String customerMobile = data.getCustomerMobile();//本人手机号
                 //非空校验
                 response = checkNull(orgCasno, curDate, "机构案件号","add") != null ? (LuckElephantAddAssetResponse)checkNull(orgCasno, curDate, "机构案件号","add") : null;
+                if(response!=null){ return response;}
                 response = checkNull(curName, curDate, "客户姓名","add") != null ? (LuckElephantAddAssetResponse)checkNull(curName, curDate, "客户姓名","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(sex, curDate, "性别","add") != null ? (LuckElephantAddAssetResponse)checkNull(sex, curDate, "性别","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(workName, curDate, "单位名称","add") != null ? (LuckElephantAddAssetResponse)checkNull(workName, curDate, "单位名称","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(education, curDate, "教育水平","add") != null ? (LuckElephantAddAssetResponse)checkNull(education, curDate, "教育水平","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(curNo, curDate, "用户编号","add") != null ? (LuckElephantAddAssetResponse)checkNull(curNo, curDate, "用户编号","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(cardCode, curDate, "证件号码","add") != null ? (LuckElephantAddAssetResponse)checkNull(cardCode, curDate, "证件号码","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(workAddr, curDate, "单位地址","add") != null ? (LuckElephantAddAssetResponse)checkNull(workAddr, curDate, "单位地址","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(marriage, curDate, "婚姻状况","add") != null ? (LuckElephantAddAssetResponse)checkNull(marriage, curDate, "婚姻状况","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(dealDays, curDate, "委案周期","add") != null ? (LuckElephantAddAssetResponse)checkNull(dealDays, curDate, "委案周期","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(loanTime, curDate, "借款时间","add") != null ? (LuckElephantAddAssetResponse)checkNull(loanTime, curDate, "借款时间","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(payStatus, curDate, "还款状态","add") != null ? (LuckElephantAddAssetResponse)checkNull(payStatus, curDate, "还款状态","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(yhkDate, curDate, "最近应还日","add") != null ? (LuckElephantAddAssetResponse)checkNull(yhkDate, curDate, "最近应还日","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(lastLoanDate, curDate, "贷款到期日","add") != null ? (LuckElephantAddAssetResponse)checkNull(lastLoanDate, curDate, "贷款到期日","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(rmbYhbjzje, curDate, "本期应还本金","add") != null ? (LuckElephantAddAssetResponse)checkNull(rmbYhbjzje, curDate, "本期应还本金","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(rmbQkzje, curDate, "贷款余额","add") != null ? (LuckElephantAddAssetResponse)checkNull(rmbQkzje, curDate, "贷款余额","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(waYe, curDate, "逾期待还金额","add") != null ? (LuckElephantAddAssetResponse)checkNull(waYe, curDate, "逾期待还金额","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(overdueDays, curDate, "逾期天数","add") != null ? (LuckElephantAddAssetResponse)checkNull(overdueDays, curDate, "逾期天数","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(transfertype, curDate, "逾期阶段","add") != null ? (LuckElephantAddAssetResponse)checkNull(transfertype, curDate, "逾期阶段","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(borrowNo, curDate, "还款卡账号","add") != null ? (LuckElephantAddAssetResponse)checkNull(borrowNo, curDate, "还款卡账号","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(lastRepayAmount, curDate, "最近还款金额","add") != null ? (LuckElephantAddAssetResponse)checkNull(lastRepayAmount, curDate, "最近还款金额","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(borrowBlank, curDate, "还款卡银行","add") != null ? (LuckElephantAddAssetResponse)checkNull(borrowBlank, curDate, "还款卡银行","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(loanAmount, curDate, "借款金额","add") != null ? (LuckElephantAddAssetResponse)checkNull(loanAmount, curDate, "借款金额","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(stagesNum, curDate, "借款期次","add") != null ? (LuckElephantAddAssetResponse)checkNull(stagesNum, curDate, "借款期次","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(payStages, curDate, "已还清期数","add") != null ? (LuckElephantAddAssetResponse)checkNull(payStages, curDate, "已还清期数","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(rmbYhfxzje, curDate, "逾期利息","add") != null ? (LuckElephantAddAssetResponse)checkNull(rmbYhfxzje, curDate, "逾期利息","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(znj, curDate, "担保违约金","add") != null ? (LuckElephantAddAssetResponse)checkNull(znj, curDate, "担保违约金","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(ljyhje, curDate, "总已还金额","add") != null ? (LuckElephantAddAssetResponse)checkNull(ljyhje, curDate, "总已还金额","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(rcr, curDate, "入催日期","add") != null ? (LuckElephantAddAssetResponse)checkNull(rcr, curDate, "入催日期","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(lastRepayDate, curDate, "最近还款时间","add") != null ? (LuckElephantAddAssetResponse)checkNull(lastRepayDate, curDate, "最近还款时间","add") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
                 response = checkNull(customerMobile, curDate, "本人手机号","add") != null ? (LuckElephantAddAssetResponse)checkNull(customerMobile, curDate, "本人手机号","add") : null;
-                if(response != null){
-                    String retMsg = response.getRetMsg();
-                    retMsg = retMsg + "案件编号："+orgCasno;
-                    response.setRetMsg(retMsg);
-                    return response;
-                }
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
             }
         }
         return response;
     }
 
 
-
+    /**
+     * 更新service
+     * @param param
+     * @param curDate
+     * @return
+     * @throws Exception
+     */
     @Override
+    @Transactional
     public LuckElephantUpdateAssetResponse batchUpdateAssets(LuckElephantUpdateAssetRequest param,String curDate) throws Exception {
-        return null;
+        //必输项校验
+        LuckElephantUpdateAssetResponse response = this.checkUpdateData(param,curDate);
+        if(response != null){
+            return response;
+        }
+        String batchNo = param.getBatchNo();
+        String orgId = param.getOrgId();
+        String orgName = param.getOrgName();
+        //参数构建
+        List<TempCurAssetsPackage> tempCurAssetList = buildUpdateAssetParam(param);
+        //插入临时表
+        this.luckElephantRemoteMapper.batchAddTemp(tempCurAssetList);
+        //查询不存在的案件
+        List<String> caseNoList = this.luckElephantRemoteMapper.selectNotExists(batchNo);
+        if(caseNoList.size() > 0){
+            response = new LuckElephantUpdateAssetResponse();
+            response.setRetTime(curDate);
+            response.setRetCode(LuckElephantCodeEnum.error.getCode());
+            response.setRetMsg("案件不存在："+JSON.toJSONString(caseNoList));
+            return response;
+        }else{
+            //更新
+            this.luckElephantRemoteMapper.batchUpdate(tempCurAssetList);
+            /**更新案件、表任务表*/
+            curAssetsPackageServiceImpl.updateCollect(tempCurAssetList);
+        }
+        response = new LuckElephantUpdateAssetResponse();
+        response.setRetTime(curDate);
+        response.setRetCode(LuckElephantCodeEnum.success.getCode());
+        response.setRetMsg("成功");
+        return response;
     }
 
+    private List<TempCurAssetsPackage> buildUpdateAssetParam(LuckElephantUpdateAssetRequest param){
+        //参数获取
+        String batchNo = param.getBatchNo();
+        String orgId = param.getOrgId();
+        String orgName = param.getOrgName();
+        List<LuckElephantUpdateAssetRequest.UpdateAssetEntity> facts = param.getFacts();
+        //参数转换
+        List<TempCurAssetsPackage> desList = new ArrayList<>(facts.size());
+        facts.stream().forEach(data ->{
+            TempCurAssetsPackage tempAsset = new TempCurAssetsPackage();
+            String uuid = UUID.randomUUID().toString().replace("-", "");
+            tempAsset.setId(uuid);
+//            tempAsset.setImportBatchNo(batchNo);
+//            tempAsset.setOrgId(orgId);
+//            tempAsset.setOrg(orgName);
+            tempAsset.setUpdateBy("0000");
+            tempAsset.setCreateTime(new Date());
+            tempAsset.setOrgCasno(data.getOrgCasno());
+            tempAsset.setPayStatus(data.getPayStatus());
+            tempAsset.setFirstYqjcDate(data.getYhkDate());
+            tempAsset.setMqhkje(data.getRepayAmount());
+            tempAsset.setRmbYhfyzje(data.getRmbYhfyzje());
+            tempAsset.setZnj(data.getZnj());
+            tempAsset.setRmbYe(data.getWaYe());//委案金额
+            tempAsset.setWaYe(data.getWaYe());//结案应还金额
+            tempAsset.setOverdueDays(data.getOverdueDays());
+            tempAsset.setTransfertype(data.getTransfertype());
+            tempAsset.setBorrowNo(data.getBorrowNo());
+            tempAsset.setLastRepayAmount(data.getLastRepayAmount());
+            tempAsset.setYkqs(data.getPayStages());
+            tempAsset.setRmbYhbjzje(data.getRmbYhbjzje());
+            tempAsset.setRmbYhlizje(data.getRmbYhlizje());
+            tempAsset.setRmbYhfxzje(data.getRmbYhfxzje());
+            tempAsset.setRmbQkzje(data.getRmbQkzje());
+            tempAsset.setLjyhje(data.getLjyhje());
+            tempAsset.setRcr(data.getRcr());
+            tempAsset.setBorrowBlank(data.getBorrowBlank());
+            tempAsset.setZhychkr(data.getLastRepayDate());
+            desList.add(tempAsset);
+        });
+
+        return desList;
+    }
+
+    private LuckElephantUpdateAssetResponse checkUpdateData(LuckElephantUpdateAssetRequest param,String curDate){
+        LuckElephantUpdateAssetResponse response = null;
+        //参数获取
+        String batchNo = param.getBatchNo();//批次号
+        String orgId = param.getOrgId();//机构编号
+        String orgName = param.getOrgName();//机构名称
+        String sysCode = param.getSysCode();//数据来源
+        String frontTransTime = param.getFrontTransTime();//交易时间
+        response = checkNull(batchNo, curDate, "批次号","update") != null ? (LuckElephantUpdateAssetResponse)checkNull(batchNo, curDate, "批次号","update") : null;
+        if(response!=null){ return response;}
+        response = checkNull(orgId, curDate, "机构编号","update") != null ? (LuckElephantUpdateAssetResponse)checkNull(orgId, curDate, "机构编号","update") : null;
+        if(response!=null){ return response;}
+        response = checkNull(orgName, curDate, "机构名称","update") != null ? (LuckElephantUpdateAssetResponse)checkNull(orgName, curDate, "机构名称","update") : null;
+        if(response!=null){ return response;}
+        response = checkNull(sysCode, curDate, "数据来源","update") != null ? (LuckElephantUpdateAssetResponse)checkNull(sysCode, curDate, "数据来源","update") : null;
+        if(response!=null){ return response;}
+        response = checkNull(frontTransTime, curDate, "交易时间","update") != null ? (LuckElephantUpdateAssetResponse)checkNull(frontTransTime, curDate, "交易时间","update") : null;
+        if(response!=null){ return response;}
+        //数据校验
+        List<LuckElephantUpdateAssetRequest.UpdateAssetEntity> facts = param.getFacts();
+        if(facts.size() > 0){
+            for (LuckElephantUpdateAssetRequest.UpdateAssetEntity data : facts) {
+                String orgCasno = data.getOrgCasno();//机构案件号
+                String yhkDate = data.getYhkDate();//最近应还日
+                String znj = data.getZnj();//担保违约金
+                String waYe = data.getWaYe();//逾期待还金额
+                String overdueDays = data.getOverdueDays();//逾期天数
+                String transfertype = data.getTransfertype();//逾期阶段
+                String borrowNo = data.getBorrowNo();//还款卡账号
+                String lastRepayAmount = data.getLastRepayAmount();//最近还款金额
+                String payStages = data.getPayStages();//已还清期数
+                String rmbYhfxzje = data.getRmbYhfxzje();//逾期利息
+                String rmbQkzje = data.getRmbQkzje();//贷款余额
+                String ljyhje = data.getLjyhje();//总已还金额
+                String rcr = data.getRcr();//入催日期
+                String borrowBlank = data.getBorrowBlank();//还款卡银行
+                String lastRepayDate = data.getLastRepayDate();//最近还款时间
+                String payStatus = data.getPayStatus();//还款状态
+
+                response = checkNull(orgCasno, curDate, "机构案件号","update") != null ? (LuckElephantUpdateAssetResponse)checkNull(orgCasno, curDate, "机构案件号","update") : null;
+                if(response!=null){ return response;}
+                response = checkNull(yhkDate, curDate, "最近应还日","update") != null ? (LuckElephantUpdateAssetResponse)checkNull(yhkDate, curDate, "最近应还日","update") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(znj, curDate, "担保违约金","update") != null ? (LuckElephantUpdateAssetResponse)checkNull(znj, curDate, "担保违约金","update") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(waYe, curDate, "逾期待还金额","update") != null ? (LuckElephantUpdateAssetResponse)checkNull(waYe, curDate, "逾期待还金额","update") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(overdueDays, curDate, "逾期天数","update") != null ? (LuckElephantUpdateAssetResponse)checkNull(overdueDays, curDate, "逾期天数","update") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(transfertype, curDate, "逾期阶段","update") != null ? (LuckElephantUpdateAssetResponse)checkNull(transfertype, curDate, "逾期阶段","update") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(borrowNo, curDate, "还款卡账号","update") != null ? (LuckElephantUpdateAssetResponse)checkNull(borrowNo, curDate, "还款卡账号","update") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(lastRepayAmount, curDate, "最近还款金额","update") != null ? (LuckElephantUpdateAssetResponse)checkNull(lastRepayAmount, curDate, "最近还款金额","update") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(payStages, curDate, "已还清期数","update") != null ? (LuckElephantUpdateAssetResponse)checkNull(payStages, curDate, "已还清期数","update") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(rmbYhfxzje, curDate, "逾期利息","update") != null ? (LuckElephantUpdateAssetResponse)checkNull(rmbYhfxzje, curDate, "逾期利息","update") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(rmbQkzje, curDate, "贷款余额","update") != null ? (LuckElephantUpdateAssetResponse)checkNull(rmbQkzje, curDate, "贷款余额","update") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(ljyhje, curDate, "总已还金额","update") != null ? (LuckElephantUpdateAssetResponse)checkNull(ljyhje, curDate, "总已还金额","update") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(rcr, curDate, "入催日期","update") != null ? (LuckElephantUpdateAssetResponse)checkNull(rcr, curDate, "入催日期","update") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(borrowBlank, curDate, "还款卡银行","update") != null ? (LuckElephantUpdateAssetResponse)checkNull(borrowBlank, curDate, "还款卡银行","update") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(lastRepayDate, curDate, "最近还款时间","update") != null ? (LuckElephantUpdateAssetResponse)checkNull(lastRepayDate, curDate, "最近还款时间","update") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(payStatus, curDate, "还款状态","update") != null ? (LuckElephantUpdateAssetResponse)checkNull(payStatus, curDate, "还款状态","update") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+            }
+        }
+
+        return response;
+    }
+
+
+    /**
+     * 还款service
+     * @param param
+     * @param curDate
+     * @return
+     * @throws Exception
+     */
     @Override
+    @Transactional
     public LuckElephantRepaymentAssetResponse batchRepaymentAssets(LuckElephantRepaymentAssetRequest param,String curDate) throws Exception {
-        return null;
+        //必输项校验
+        LuckElephantRepaymentAssetResponse response = this.checkRepaymentData(param,curDate);
+        if(response != null){
+            return response;
+        }
+        String batchNo = param.getBatchNo();
+        String orgId = param.getOrgId();
+        String orgName = param.getOrgName();
+        List<TempCurAssetsPackage> closeCaseList = new ArrayList<>();
+        //参数构建
+        List<TempCurAssetsRepaymentPackage> tempRepaymentList = buildRepaymentAssetParam(param);
+        //插入临时表
+        curAssetsRepaymentPackageServiceImpl.batchAddTemp(tempRepaymentList);
+        //查询不存在的案件
+        List<String> caseNoList = this.luckElephantRemoteMapper.selectRepaymentNotExists(batchNo);
+        if(caseNoList.size() > 0){
+            response = new LuckElephantRepaymentAssetResponse();
+            response.setRetTime(curDate);
+            response.setRetCode(LuckElephantCodeEnum.error.getCode());
+            response.setRetMsg("案件不存在"+JSON.toJSONString(caseNoList));
+        }else{
+            //插入还款主表
+            curAssetsRepaymentPackageServiceImpl.batchAddRepaymentTable(batchNo);
+            // 插入流水表
+            TLcImportFlow tLcImportFlow = new TLcImportFlow();
+            tLcImportFlow.setImportBatchNo(batchNo)
+                    .setImportType(ImportTypeEnum.REPAYMENT_TEMPLETE.getCode())
+                    .setOrgId(orgId)
+                    .setOrgName(orgName)
+                    .setTotalNum(tempRepaymentList.size())
+                    .setCreateBy("0000");
+            this.tlcImportFlowService.insertTLcImportFlow(tLcImportFlow);
+            //结案操作
+            List<CurAssetsRepaymentPackage> curAssetsRepaymentList = convertParam(tempRepaymentList);
+            curAssetsRepaymentPackageServiceImpl.callRemote2(curAssetsRepaymentList,batchNo);
+
+        }
+
+        response = new LuckElephantRepaymentAssetResponse();
+        response.setRetTime(curDate);
+        response.setRetCode(LuckElephantCodeEnum.success.getCode());
+        response.setRetMsg("成功");
+        return response;
+
+    }
+
+    private List<TempCurAssetsRepaymentPackage> buildRepaymentAssetParam(LuckElephantRepaymentAssetRequest param){
+        //参数获取
+        String batchNo = param.getBatchNo();
+        String orgId = param.getOrgId();
+        String orgName = param.getOrgName();
+        List<LuckElephantRepaymentAssetRequest.RepaymentAssetEntity> facts = param.getFacts();
+        //参数转换
+        List<TempCurAssetsRepaymentPackage> desList = new ArrayList<>(facts.size());
+        facts.stream().forEach(data ->{
+            TempCurAssetsRepaymentPackage tempRepayment = new TempCurAssetsRepaymentPackage();
+            String uuid = UUID.randomUUID().toString().replace("-", "");
+            tempRepayment.setId(uuid);
+            tempRepayment.setImportBatchNo(batchNo);
+            tempRepayment.setOrgId(orgId);
+            tempRepayment.setOrgName(orgName);
+            tempRepayment.setCreateBy("0000");
+            tempRepayment.setCreateTime(new Date());
+            tempRepayment.setOrgCasno(data.getOrgCasno());
+            tempRepayment.setHkje(data.getLastRepayAmount());
+            tempRepayment.setHkrq(data.getLastRepayDate());
+            String payStatus = data.getPayStatus();
+            if("已还款".equals(payStatus)){
+                tempRepayment.setIsExitCollect("1");
+                tempRepayment.setAjhsrq(data.getLastRepayDate());
+            }
+            desList.add(tempRepayment);
+        });
+
+        return desList;
+    }
+
+    private LuckElephantRepaymentAssetResponse checkRepaymentData(LuckElephantRepaymentAssetRequest param,String curDate){
+        LuckElephantRepaymentAssetResponse response = null;
+        //参数获取
+        String batchNo = param.getBatchNo();//批次号
+        String orgId = param.getOrgId();//机构编号
+        String orgName = param.getOrgName();//机构名称
+        String sysCode = param.getSysCode();//数据来源
+        String frontTransTime = param.getFrontTransTime();//交易时间
+        response = checkNull(batchNo, curDate, "批次号","repayment") != null ? (LuckElephantRepaymentAssetResponse)checkNull(batchNo, curDate, "批次号","repayment") : null;
+        if(response!=null){ return response;}
+        response = checkNull(orgId, curDate, "机构编号","repayment") != null ? (LuckElephantRepaymentAssetResponse)checkNull(orgId, curDate, "机构编号","repayment") : null;
+        if(response!=null){ return response;}
+        response = checkNull(orgName, curDate, "机构名称","repayment") != null ? (LuckElephantRepaymentAssetResponse)checkNull(orgName, curDate, "机构名称","repayment") : null;
+        if(response!=null){ return response;}
+        response = checkNull(sysCode, curDate, "数据来源","repayment") != null ? (LuckElephantRepaymentAssetResponse)checkNull(sysCode, curDate, "数据来源","repayment") : null;
+        if(response!=null){ return response;}
+        response = checkNull(frontTransTime, curDate, "交易时间","repayment") != null ? (LuckElephantRepaymentAssetResponse)checkNull(frontTransTime, curDate, "交易时间","repayment") : null;
+        if(response!=null){ return response;}
+        //数据校验
+        List<LuckElephantRepaymentAssetRequest.RepaymentAssetEntity> facts = param.getFacts();
+        if(facts.size() > 0){
+            for (LuckElephantRepaymentAssetRequest.RepaymentAssetEntity data : facts) {
+                String orgCasno = data.getOrgCasno();//机构案件号
+                String waYe = data.getWaYe();//逾期待还金额
+                String overdueDays = data.getOverdueDays();//逾期天数
+                String transfertype = data.getTransfertype();//逾期阶段
+                String lastRepayAmount = data.getLastRepayAmount();//最近还款金额
+                String payStages = data.getPayStages();//已还清期数
+                String rmbQkzje = data.getRmbQkzje();//贷款余额
+                String ljyhje = data.getLjyhje();//总已还金额
+                String lastRepayDate = data.getLastRepayDate();//最近还款时间
+                String payStatus = data.getPayStatus();//还款状态
+
+                response = checkNull(orgCasno, curDate, "机构案件号","repayment") != null ? (LuckElephantRepaymentAssetResponse)checkNull(orgCasno, curDate, "机构案件号","repayment") : null;
+                if(response!=null){ return response;}
+                response = checkNull(waYe, curDate, "逾期待还金额","repayment") != null ? (LuckElephantRepaymentAssetResponse)checkNull(waYe, curDate, "逾期待还金额","repayment") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(overdueDays, curDate, "逾期天数","repayment") != null ? (LuckElephantRepaymentAssetResponse)checkNull(overdueDays, curDate, "逾期天数","repayment") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(transfertype, curDate, "逾期阶段","repayment") != null ? (LuckElephantRepaymentAssetResponse)checkNull(transfertype, curDate, "逾期阶段","repayment") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(lastRepayAmount, curDate, "最近还款金额","repayment") != null ? (LuckElephantRepaymentAssetResponse)checkNull(lastRepayAmount, curDate, "最近还款金额","repayment") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(payStages, curDate, "已还清期数","repayment") != null ? (LuckElephantRepaymentAssetResponse)checkNull(payStages, curDate, "已还清期数","repayment") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(rmbQkzje, curDate, "贷款余额","repayment") != null ? (LuckElephantRepaymentAssetResponse)checkNull(rmbQkzje, curDate, "贷款余额","repayment") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(ljyhje, curDate, "总已还金额","repayment") != null ? (LuckElephantRepaymentAssetResponse)checkNull(ljyhje, curDate, "总已还金额","repayment") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(lastRepayDate, curDate, "最近还款时间","repayment") != null ? (LuckElephantRepaymentAssetResponse)checkNull(lastRepayDate, curDate, "最近还款时间","repayment") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+                response = checkNull(payStatus, curDate, "还款状态","repayment") != null ? (LuckElephantRepaymentAssetResponse)checkNull(payStatus, curDate, "还款状态","repayment") : null;
+                if(response != null){ String retMsg = response.getRetMsg();retMsg = retMsg + "案件编号："+orgCasno;response.setRetMsg(retMsg);return response; }
+            }
+        }
+
+        return response;
+    }
+
+    private List<CurAssetsRepaymentPackage> convertParam(List<TempCurAssetsRepaymentPackage> list) throws Exception{
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        List<CurAssetsRepaymentPackage> retList = new ArrayList<CurAssetsRepaymentPackage>();
+        for (TempCurAssetsRepaymentPackage tempData : list) {
+            CurAssetsRepaymentPackage retDto = new CurAssetsRepaymentPackage();
+            retDto.setId(tempData.getId());
+            retDto.setImportBatchNo(tempData.getImportBatchNo());
+            retDto.setOrgId(tempData.getOrgId());
+            retDto.setOrgName(tempData.getOrgName());
+            retDto.setCreateBy(tempData.getCreateBy());
+            retDto.setCreateTime(tempData.getCreateTime());
+            retDto.setOrgCasno(tempData.getOrgCasno());
+            retDto.setHkje(new BigDecimal(tempData.getHkje()));
+            retDto.setHkrq(sdf.parse(tempData.getHkrq()));
+            retDto.setIsExitCollect(tempData.getIsExitCollect());
+            retDto.setAjhsrq(sdf.parse(tempData.getAjhsrq()));
+            retList.add(retDto);
+        }
+        return retList;
     }
 
 
+
+
+    /**
+     * 清空临时表
+     * @param importBatchNo
+     */
+    @Override
+    public void deleteTempTable(String importBatchNo) {
+        this.luckElephantRemoteMapper.deleteTempTable(importBatchNo);
+    }
 
 
     private Object checkNull(String tarParam,String curDate,String remark,String requestFlag){
