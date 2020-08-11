@@ -1,5 +1,6 @@
 package com.ruoyi.report.service.impl;
 
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.report.domain.TLcReportPersonal;
 import com.ruoyi.report.domain.TLcReportPlatform;
 import com.ruoyi.report.mapper.TLcReportPersonalMapper;
@@ -37,6 +38,9 @@ public class TLcReportPersonalServiceImpl implements ITLcReportPersonalService {
             Map<String, Object> param = new HashMap<>();
 //            param.put("day", 0);
             param.put("date", LocalDate.now());
+            if (StringUtils.isNotBlank(tLcReportPersonal.getUserName())) {
+                param.put("agentName", tLcReportPersonal.getUserName());
+            }
             list = selectReportPersonalList(param);
         } else {
             list = this.tLcReportPersonalMapper.selectTLcReportPersonalList(tLcReportPersonal);

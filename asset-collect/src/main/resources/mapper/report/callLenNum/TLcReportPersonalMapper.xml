@@ -84,7 +84,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
-	) t,sys_user su where t.create_by = su.user_id GROUP BY t.create_by
+	) t,sys_user su where t.create_by = su.user_id
+	<if test="agentName != null  and agentName != ''"> and su.user_name = #{agentName}</if>
+	 GROUP BY t.create_by
 	UNION ALL
 	select
 		#{date} AS report_data,
@@ -123,7 +125,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
-	) t,sys_user su where t.create_by = su.user_id GROUP BY t.create_by
+	) t,sys_user su where t.create_by = su.user_id
+		<if test="agentName != null  and agentName != ''"> and su.user_name = #{agentName}</if>
+		GROUP BY t.create_by
 	UNION ALL
 	select
 		#{date} AS report_data,
@@ -162,7 +166,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
-	) t,sys_user su where t.create_by = su.user_id GROUP BY t.create_by
+	) t,sys_user su where t.create_by = su.user_id
+		<if test="agentName != null  and agentName != ''"> and su.user_name = #{agentName}</if>
+		GROUP BY t.create_by
 	UNION ALL
 	select
 		#{date} AS report_data,
@@ -201,7 +207,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
-	) t,sys_user su where t.create_by = su.user_id GROUP BY t.create_by
+	) t,sys_user su where t.create_by = su.user_id
+		<if test="agentName != null  and agentName != ''"> and su.user_name = #{agentName}</if>
+		GROUP BY t.create_by
 	UNION ALL
 	select
 		#{date} AS report_data,
@@ -240,7 +248,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
-	) t,sys_user su where t.create_by = su.user_id GROUP BY t.create_by
+	) t,sys_user su where t.create_by = su.user_id
+		<if test="agentName != null  and agentName != ''"> and su.user_name = #{agentName}</if>
+		GROUP BY t.create_by
 	UNION ALL
 	select
 		#{date} AS report_data,
@@ -279,7 +289,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
-	) t,sys_user su where t.create_by = su.user_id GROUP BY t.create_by
+	) t,sys_user su where t.create_by = su.user_id
+		<if test="agentName != null  and agentName != ''"> and su.user_name = #{agentName}</if>
+		GROUP BY t.create_by
 	UNION ALL
 	select
 		#{date} AS report_data,
@@ -318,7 +330,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
-	) t,sys_user su where t.create_by = su.user_id GROUP BY t.create_by
+	) t,sys_user su where t.create_by = su.user_id
+		<if test="agentName != null  and agentName != ''"> and su.user_name = #{agentName}</if>
+		GROUP BY t.create_by
 	UNION ALL
 	select
 		#{date} AS report_data,
@@ -357,7 +371,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
-	) t,sys_user su where t.create_by = su.user_id GROUP BY t.create_by
+	) t,sys_user su where t.create_by = su.user_id
+		<if test="agentName != null  and agentName != ''"> and su.user_name = #{agentName}</if>
+		GROUP BY t.create_by
 	UNION ALL
 	select
 		#{date} AS report_data,
@@ -396,7 +412,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
-	) t,sys_user su where t.create_by = su.user_id GROUP BY t.create_by
+	) t,sys_user su where t.create_by = su.user_id
+		<if test="agentName != null  and agentName != ''"> and su.user_name = #{agentName}</if>
+		GROUP BY t.create_by
 	UNION ALL
 	select
 		#{date} AS report_data,
@@ -435,7 +453,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
-	) t,sys_user su where t.create_by = su.user_id GROUP BY t.create_by
+	) t,sys_user su where t.create_by = su.user_id
+		<if test="agentName != null  and agentName != ''"> and su.user_name = #{agentName}</if>
+		GROUP BY t.create_by
 	UNION ALL
 	select
 		#{date} AS report_data,
@@ -474,7 +494,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
-	) t,sys_user su where t.create_by = su.user_id GROUP BY t.create_by
+	) t,sys_user su where t.create_by = su.user_id
+		<if test="agentName != null  and agentName != ''"> and su.user_name = #{agentName}</if>
+		GROUP BY t.create_by
 	UNION ALL
 	select
 		#{date} AS report_data,
@@ -513,7 +535,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
-	) t,sys_user su where t.create_by = su.user_id GROUP BY t.create_by
+	) t,sys_user su where t.create_by = su.user_id
+		<if test="agentName != null  and agentName != ''"> and su.user_name = #{agentName}</if>
+		GROUP BY t.create_by
 	UNION ALL
 	select
 		#{date} AS report_data,
@@ -552,7 +576,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
-	) t,sys_user su where t.create_by = su.user_id GROUP BY t.create_by
+	) t,sys_user su where t.create_by = su.user_id
+		<if test="agentName != null  and agentName != ''"> and su.user_name = #{agentName}</if>
+		GROUP BY t.create_by
 	UNION ALL
 	select
 		#{date} AS report_data,
@@ -591,7 +617,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
-	) t,sys_user su where t.create_by = su.user_id GROUP BY t.create_by
+	) t,sys_user su where t.create_by = su.user_id
+		<if test="agentName != null  and agentName != ''"> and su.user_name = #{agentName}</if>
+		GROUP BY t.create_by
 ) t ORDER BY t.login_name,t.time_period
     </select>
 
