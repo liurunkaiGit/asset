@@ -12,7 +12,7 @@
                         <ul>
                             <li class="select-time">
                                 <p>报表日期：</p>
-                                <input type="text" class="time-input" id="reportData" placeholder="开始时间" name="reportData"/>
+                                <input type="text" class="time-input" th:value="${#dates.format(reportDate, 'yyyy-MM-dd')}" id="reportData" placeholder="报表日期" name="reportData"/>
                             </li>
                             <li>
                                 <p>坐席姓名：</p>
