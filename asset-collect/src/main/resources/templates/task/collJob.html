@@ -1399,6 +1399,10 @@
             $.modal.alert("请选择联系人");
             return;
         }
+        if (agentIsCalling) {
+            $.modal.alertError("正在通话中，请先挂断当前通话再保存电话码");
+            return;
+        }
         if (sign == null || sign == '' || sign == 'undefined') {
             // alert($("#callRecordSelect").val())
             sign = $("#callCode").val();
