@@ -45,7 +45,7 @@ public class TLcReportPlatformController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(TLcReportPlatform tLcReportPlatform) {
-        startPage();
+//        startPage();
         List<TLcReportPlatform> list = tLcReportPlatformService.selectTLcReportPlatformList(tLcReportPlatform);
         return getDataTable(list);
     }
