@@ -194,6 +194,7 @@
         <if test="caseNo != null and case_no != '' ">
             AND re.case_no = #{caseNo}
         </if>
+        order by re.create_time desc
     </select>
 
     <select id="selectTLcCallRecordById" parameterType="Long" resultMap="TLcCallRecordResult">

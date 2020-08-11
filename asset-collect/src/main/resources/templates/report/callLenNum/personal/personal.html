@@ -54,19 +54,47 @@
                 },
                 {
                     field : 'reportData', 
-                    title : '报表日期'
+                    title : '报表日期',
+                    formatter: function (value, row, index) {
+                        if (row.timePeriod == '合计') {
+                            return value;
+                        } else {
+                            return '-';
+                        }
+                    }
                 },
                     {
                         field : 'userGroup',
-                        title : '组别'
+                        title : '组别',
+                        formatter: function (value, row, index) {
+                            if (row.timePeriod == '合计') {
+                                return value;
+                            } else {
+                                return '-';
+                            }
+                        }
                     },
                     {
                         field : 'loginName',
-                        title : '坐席编码'
+                        title : '坐席编码',
+                        formatter: function (value, row, index) {
+                            if (row.timePeriod == '合计') {
+                                return value;
+                            } else {
+                                return '-';
+                            }
+                        }
                     },
                     {
                         field : 'userName',
-                        title : '坐席姓名'
+                        title : '坐席姓名',
+                        formatter: function (value, row, index) {
+                            if (row.timePeriod == '合计') {
+                                return value;
+                            } else {
+                                return '-';
+                            }
+                        }
                     },
                 {
                     field : 'timePeriod', 
