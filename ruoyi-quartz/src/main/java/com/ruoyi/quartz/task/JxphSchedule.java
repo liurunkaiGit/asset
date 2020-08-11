@@ -59,7 +59,8 @@ public class JxphSchedule {
         List<JxphCallRecord> jxphCallRecordList = this.callRecordService.selectJxphCallRecord(param);
         String encrypt = null;
         try {
-            encrypt = AesUtils.encrypt(JSON.toJSONString(jxphCallRecordList, SerializerFeature.WriteMapNullValue), TOKEN);
+            String jxphToken = this.sysConfigService.selectConfigByKey("jxphToken");
+            encrypt = AesUtils.encrypt(JSON.toJSONString(jxphCallRecordList, SerializerFeature.WriteMapNullValue), jxphToken);
             log.info("加密成功，加密后的字符串为：{}",encrypt);
         } catch (Exception e) {
             log.error("加密异常：{}", e);
@@ -71,7 +72,7 @@ public class JxphSchedule {
         ResponseEntity<Map> responseEntity = restTemplateUtil.getRestTemplate().postForEntity(jxphSendCallRecordUrl, jxphCallRecordRequest, Map.class);
         if (responseEntity != null && responseEntity.getBody() != null) {
             Map map = responseEntity.getBody();
-            if (map != null && HttpStatus.OK.value() == Integer.valueOf(map.get("code").toString())) {
+            if (map != null && "000000".equals(map.get("code").toString())) {
                 log.info("调用jxph接口:推送电催记录成功");
             } else {
                 log.error("调用接口异常：{}", map.get("message"));
