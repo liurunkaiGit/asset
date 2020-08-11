@@ -113,4 +113,51 @@ public class CallTask
             }
         }
     }
+
+    /**
+     * 下载自建语音通话文件
+     */
+    public void downloadZJCallFile(){
+        if(!isEnableTimer){
+            log.info("下载录音定时任务已经再执行了");
+            return;
+        }
+        TLcCallRecord tLcCallRecord = new TLcCallRecord();
+        tLcCallRecord.setPlatform("ZJ");
+
+        List<TLcCallRecord> list = tLcCallRecordService.findZjCallRecordListByDate(tLcCallRecord);
+        String callFilePath = sysConfigService.selectConfigByKey("file.callFilePath");
+        if(list != null && list.size() > 0){
+            for(int i = 0; i < list.size(); i ++){
+                TLcCallRecord tmpTLcCallRecord = list.get(i);
+                if(StringUtils.isNotEmpty(tmpTLcCallRecord.getCallRadioLocation())){//存在下载地址
+                    String[] str = tmpTLcCallRecord.getCallRadioLocation().split("/");
+                    String fileName = "";
+                    if(str.length > 1){
+                        fileName = str[str.length - 1];
+                        if(tmpTLcCallRecord.getCallRadioLocation().startsWith("https")){//https类型的URL下载
+                            try{
+                                String filePath = callFilePath + File.separator + tmpTLcCallRecord.getOrgName() + File.separator + tmpTLcCallRecord.getPlatform() + File.separator + DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD, new Date());
+                                log.info("下载语音文件保存目录为，filePath={}",filePath);
+                                DownLoadFromHttpsUtil.downloadFileForHttps(tmpTLcCallRecord.getCallRadioLocation(),filePath,fileName);
+                            }catch (Exception e){
+                                log.error("下载语音文件异常={}",e);
+                            }
+                        } else if(tmpTLcCallRecord.getCallRadioLocation().startsWith("http")){//http类型的URL下载
+                            try{
+                                String filePath = callFilePath + File.separator + tmpTLcCallRecord.getOrgName() + File.separator + tmpTLcCallRecord.getPlatform() + File.separator + DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD, new Date());
+                                log.info("下载语音文件保存目录为，filePath={}",filePath);
+                                DownLoadFromHttpsUtil.downLoadFromUrlHttp(tmpTLcCallRecord.getCallRadioLocation(),filePath,fileName);
+                            }catch (Exception e){
+                                log.error("下载语音文件异常={}",e);
+                            }
+                        }
+                    }else{
+                        log.error("下载语音文件URL异常，语音记录ID={},URL={}",tmpTLcCallRecord.getId(),tmpTLcCallRecord.getCallRadioLocation());
+                        continue;
+                    }
+                }
+            }
+        }
+    }
 }

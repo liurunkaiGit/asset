@@ -110,4 +110,6 @@ public interface TLcCallRecordMapper {
     TLcCallRecord selectTLcHisCallRecordById(@Param("id") Long id);
 
     List<JxphCallRecord> selectJxphCallRecord(Map<String, Object> param);
+
+    List<TLcCallRecord> findZjCallRecordListByDate(TLcCallRecord tLcCallRecord);
 }

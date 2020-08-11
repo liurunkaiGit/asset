@@ -17,7 +17,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class JxphCallRecord implements Serializable {
-
+    private String caseId;
     private String name;
     private String mobile;
     private String relType;

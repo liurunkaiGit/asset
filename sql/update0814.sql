@@ -64,3 +64,7 @@ VALUES ('jxph', 'jxphSendCallRecordUrl', 'https://jxph.itaiping.com/gateway/v1/c
 INSERT INTO `sys_config` (`config_name`, `config_key`, `config_value`, `config_type`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
 VALUES ('jxph', 'jxphOrgId', '214', 'Y', 'admin', '2020-08-10 15:07:36', '', NULL, 'jxph机构id');
 
+INSERT INTO `sys_job` (`job_name`, `job_group`, `invoke_target`, `cron_expression`, `misfire_policy`, `concurrent`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES ('自建录音下载', 'DEFAULT', 'callTask.downloadZJCallFile', '0 0 3 * * ?', '1', '1', '1', 'admin', '2020-08-11 09:54:18', '', NULL, '只执行一次，因为之前的自建录音没有下载');
+
+

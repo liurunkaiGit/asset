@@ -400,6 +400,11 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
         return this.tLcCallRecordMapper.selectJxphCallRecord(param);
     }
 
+    @Override
+    public List<TLcCallRecord> findZjCallRecordListByDate(TLcCallRecord tLcCallRecord) {
+        return this.tLcCallRecordMapper.findZjCallRecordListByDate(tLcCallRecord);
+    }
+
 
     private String getRelateion(Integer contactRelation){
         String relateion = "";

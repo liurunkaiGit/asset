@@ -41,6 +41,7 @@
     </resultMap>
 
     <resultMap id="JxphCallRecordResult" type="com.ruoyi.task.domain.JxphCallRecord">
+        <result property="caseId" column="case_no"/>
         <result property="name" column="contact_name"/>
         <result property="mobile" column="phone"/>
         <result property="relType" column="contact_relation"/>
@@ -419,6 +420,7 @@
 
     <select id="selectJxphCallRecord" parameterType="java.util.Map" resultMap="JxphCallRecordResult">
         select
+        t.case_no,
         t.contact_name,
         t.phone,
         case t.contact_relation WHEN - 1 THEN "其它"
@@ -456,4 +458,8 @@
         and t.create_time <![CDATA[<=]]> #{endDate}
     </select>
 
+    <select id="findZjCallRecordListByDate" parameterType="com.ruoyi.task.domain.TLcCallRecord" resultMap="TLcCallRecordResult">
+        SELECT r.id,r.case_no,r.platform,r.call_radio_location,t.org_id,t.org_name FROM t_lc_call_record r,t_lc_task t WHERE r.case_no = t.case_no
+        AND r.call_radio_location is NOT NULL AND r.call_radio_location != '' AND r.platform = 'ZJ'
+    </select>
 </mapper>

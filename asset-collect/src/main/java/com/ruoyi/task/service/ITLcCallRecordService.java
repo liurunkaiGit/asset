@@ -126,4 +126,6 @@ public interface ITLcCallRecordService {
     void downLoadHisRadio(HttpServletRequest request, HttpServletResponse response, String id);
 
     List<JxphCallRecord> selectJxphCallRecord(Map<String, Object> param);
+
+    List<TLcCallRecord> findZjCallRecordListByDate(TLcCallRecord tLcCallRecord);
 }
