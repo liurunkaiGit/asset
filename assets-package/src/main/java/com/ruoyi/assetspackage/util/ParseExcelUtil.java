@@ -91,12 +91,12 @@ public class ParseExcelUtil {
                     if (HSSFDateUtil.isCellDateFormatted(cell)) {
                         Date dateCellValue = cell.getDateCellValue();
                         try {
-                            cellValue = DateFormatUtils.format(dateCellValue, "yyyy/MM/dd");
+                            cellValue = DateFormatUtils.format(dateCellValue, "yyyy/MM/dd HH:mm:ss");
                         } catch (Exception e) {
                             try {
-                                cellValue = DateFormatUtils.format(dateCellValue, "yyyy-MM-dd");
+                                cellValue = DateFormatUtils.format(dateCellValue, "yyyy-MM-dd HH:mm:ss");
                             } catch (Exception ex) {
-                                cellValue = DateFormatUtils.format(dateCellValue, "yyyyMMdd");
+                                cellValue = DateFormatUtils.format(dateCellValue, "yyyyMMdd HH:mm:ss");
                             }
                         }
                     } else {
