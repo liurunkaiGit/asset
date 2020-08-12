@@ -162,8 +162,7 @@ public class DownLoadFromHttpsUtil implements X509TrustManager {
      * @param savePath
      * @throws IOException
      */
-    public static void downLoadFromUrlHttp(String urlStr, String fileName,
-                                           String savePath) throws IOException {
+    public static void downLoadFromUrlHttp(String urlStr, String savePath, String fileName) throws IOException {
         URL url = new URL(urlStr);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         // 设置超时间为3秒

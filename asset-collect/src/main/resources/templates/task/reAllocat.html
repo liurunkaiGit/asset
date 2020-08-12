@@ -20,6 +20,7 @@
 							<!--<input type="hidden" name="orgId" th:value="${user.deptId}">-->
 							<input type="hidden" name="orgId" id="orgId" th:value="${orgId}">
 							<input type="hidden" name="taskIds" id="taskIds" th:value="${taskIds}">
+							<input type="hidden" name="taskIds" id="caseNos" th:value="${caseNos}">
 							<li>
 								登录名称：<input type="text" name="loginName"/>
 							</li>
@@ -211,6 +212,7 @@
 					{
 						userId:rows.join(),
 						taskIds: $("#taskIds").val(),
+						caseNos: $("#caseNos").val(),
 						orgId: $("#orgId").val(),
 						allocatNum: allocatNum,
 						allocatRule: $("#allocatRule").val()

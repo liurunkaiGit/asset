@@ -120,7 +120,7 @@ public interface ITLcTaskService {
      * @param allocatNum
      * @param allocatRule
      */
-    AjaxResult reAllocat(String userId, String taskIds, String orgId, Integer allocatNum, Integer allocatRule);
+    AjaxResult reAllocat(String userId, String taskIds, String orgId, Integer allocatNum, Integer allocatRule, String caseNos);
 
     /**
      * 临时代理
@@ -130,7 +130,7 @@ public interface ITLcTaskService {
      * @param orgId
      * @param oldOwnerIds
      */
-    void tempAgent(String userId, String taskIds, String orgId, String oldOwnerIds);
+    void tempAgent(String userId, String taskIds, String orgId, String oldOwnerIds, String caseNos);
 
     /**
      * 临时代理任务回收
@@ -138,7 +138,7 @@ public interface ITLcTaskService {
      * @param oldOwnerIds
      * @param taskIds
      */
-    void tempAgentRecycle(String oldOwnerIds, String taskIds);
+    void tempAgentRecycle(String oldOwnerIds, String taskIds, String caseNos);
 
     /**
      * 协助催收申请

@@ -478,6 +478,12 @@ public class TempCurAssetsPackage extends BaseEntity {
      */
     private Set<Long> deptIds;
 
+    //吉象新增字段
+    private String curNo;//用户编号
+    private String payStatus;//还款状态
+    private String lastLoanDate;//贷款到期日
+    private String lastRepayAmount;//最近还款金额
+
     @Override
     public String getCreateBy() {
         return createBy;

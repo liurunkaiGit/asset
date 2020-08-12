@@ -1,0 +1,785 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.LuckElephantRemoteMapper">
+
+    <resultMap type="com.ruoyi.assetspackage.domain.CurAssetsPackage" id="CurAssetsPackageResult">
+        <result property="id"    column="id"    />
+        <result property="orgCasno"    column="org_casNo"    />
+        <result property="org"    column="org"    />
+        <result property="transfertype"    column="transferType"    />
+        <result property="rmbYe"    column="rmb_ye"    />
+        <result property="rmbYhfxzje"    column="rmb_yhfxzje"    />
+        <result property="rmbYhlizje"    column="rmb_yhlizje"    />
+        <result property="rmbYhbjzje"    column="rmb_yhbjzje"    />
+        <result property="rmbYhfyzje"    column="rmb_yhfyzje"    />
+        <result property="rmbZdyhje"    column="rmb_zdyhje"    />
+        <result property="rmbQkzje"    column="rmb_qkzje"    />
+        <result property="borrowNo"    column="borrow_no"    />
+        <result property="borrowBlank"    column="borrow_blank"    />
+        <result property="borrowEd"    column="borrow_ed"    />
+        <result property="rcr"    column="rcr"    />
+        <result property="fz"    column="fz"    />
+        <result property="areaCenter"    column="area_center"    />
+        <result property="maxYqtsHis"    column="max_yqts_his"    />
+        <result property="sumYqtsHis"    column="sum_yqts_his"    />
+        <result property="sumYqcsHis"    column="sum_yqcs_his"    />
+        <result property="wwCityName"    column="ww_city_name"    />
+        <result property="waYe"    column="wa_ye"    />
+        <result property="billAddress"    column="bill_address"    />
+        <result property="yearRates"    column="year_rates"    />
+        <result property="tjFirm"    column="tj_firm"    />
+        <result property="tjWd"    column="tj_wd"    />
+        <result property="dayRates"    column="day_rates"    />
+        <result property="accountDate"    column="account_date"    />
+        <result property="overdueDays"    column="overdue_days"    />
+        <result property="firstYqDate"    column="first_yq_date"    />
+        <result property="firstYqjcDate"    column="first_yqjc_date"    />
+        <result property="firstYqFlag"    column="first_yq_flag"    />
+        <result property="curName"    column="cur_name"    />
+        <result property="curSex"    column="cur_sex"    />
+        <result property="certificateNo"    column="certificate_no"    />
+        <result property="certificateAddress"    column="certificate_address"    />
+        <result property="registAddress"    column="regist_address"    />
+        <result property="email"    column="email"    />
+        <result property="marriage"    column="marriage"    />
+        <result property="education"    column="education"    />
+        <result property="customerMobile"    column="customer_mobile"    />
+        <result property="customerHomeTel"    column="customer_home_tel"    />
+        <result property="customerHomeAddress"    column="customer_home_address"    />
+        <result property="workName"    column="work_name"    />
+        <result property="workAddress"    column="work_address"    />
+        <result property="workTel"    column="work_tel"    />
+        <result property="firstLiaisonName"    column="first_liaison_name"    />
+        <result property="firstLiaisonRelation"    column="first_liaison_relation"    />
+        <result property="firstLiaisonMobile"    column="first_liaison_mobile"    />
+        <result property="firstLiaisonTel"    column="first_liaison_tel"    />
+        <result property="secondLiaisonName"    column="second_liaison_name"    />
+        <result property="secondLiaisonRelation"    column="second_liaison_relation"    />
+        <result property="secondLiaisonMobile"    column="second_liaison_mobile"    />
+        <result property="secondLiaisonTel"    column="second_liaison_tel"    />
+        <result property="threeLiaisonName"    column="three_liaison_name"    />
+        <result property="threeLiaisonRelation"    column="three_liaison_relation"    />
+        <result property="threeLiaisonMobile"    column="three_liaison_mobile"    />
+        <result property="threeLiaisonTel"    column="three_liaison_tel"    />
+        <result property="cpmc"    column="cpmc"    />
+        <result property="hkType"    column="hk_type"    />
+        <result property="znj"    column="znj"    />
+        <result property="ajhssj"    column="ajhssj"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="packageFlag"    column="package_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="closeCase"    column="close_case"    />
+        <result property="isExitCollect"    column="is_exit_collect"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="closeCaseDate"    column="close_case_date"    />
+        <result property="packageId"    column="package_id"    />
+        <result property="accountAge"    column="account_age"    />
+        <result property="laFlag"    column="la_flag"    />
+        <result property="fxFlag"    column="fx_flag"    />
+        <result property="htlx"    column="htlx"    />
+        <result property="jmbq"    column="jmbq"    />
+        <result property="fcbq"    column="fcbq"    />
+        <result property="fxsfbh"    column="fxsfbh"    />
+        <result property="remark"    column="remark"    />
+        <result property="tar"    column="tar"    />
+        <result property="jkrq"    column="jkrq"    />
+        <result property="zhychkr"    column="zhychkr"    />
+        <result property="mqhkje"    column="mqhkje"    />
+        <result property="dqqkje"    column="dqqkje"    />
+        <result property="ljyhje"    column="ljyhje"    />
+        <result property="sfje"    column="sfje"    />
+        <result property="zdhkzh1"    column="zdhkzh1"    />
+        <result property="zdhkzh2"    column="zdhkzh2"    />
+        <result property="zdhkzhhm1"    column="zdhkzhhm1"    />
+        <result property="zdhkzhhm2"    column="zdhkzhhm2"    />
+        <result property="zdhkqd1"    column="zdhkqd1"    />
+        <result property="zdhkqd2"    column="zdhkqd2"    />
+        <result property="khmb"    column="khmb"    />
+        <result property="spjg"    column="spjg"    />
+        <result property="dklx"    column="dklx"    />
+        <result property="jkbs"    column="jkbs"    />
+        <result property="spxx"    column="spxx"    />
+        <result property="wacs"    column="wacs"    />
+        <result property="ykqs"    column="ykqs"    />
+        <result property="workDept"    column="work_dept"    />
+        <result property="customerMobile2"    column="customer_mobile2"    />
+        <result property="customerMobile3"    column="customer_mobile3"    />
+        <result property="customerMobile4"    column="customer_mobile4"    />
+        <result property="fourthLiaisonName"    column="fourth_liaison_name"    />
+        <result property="fourthLiaisonRelation"    column="fourth_liaison_relation"    />
+        <result property="fourthLiaisonMobile"    column="fourth_liaison_mobile"    />
+        <result property="fifthLiaisonName"    column="fifth_liaison_name"    />
+        <result property="fifthLiaisonRelation"    column="fifth_liaison_relation"    />
+        <result property="fifthLiaisonMobile"    column="fifth_liaison_mobile"    />
+        <result property="dqyhje"    column="dqyhje"    />
+        <!--<result property="freeImport"    column="free_import"    />-->
+    </resultMap>
+
+    <resultMap type="com.ruoyi.assetspackage.domain.TempCurAssetsPackage" id="TempCurAssetsPackageResult">
+        <result property="id"    column="id"    />
+        <result property="orgCasno"    column="org_casNo"    />
+        <result property="org"    column="org"    />
+        <result property="transfertype"    column="transferType"    />
+        <result property="rmbYe"    column="rmb_ye"    />
+        <result property="rmbYhfxzje"    column="rmb_yhfxzje"    />
+        <result property="rmbYhlizje"    column="rmb_yhlizje"    />
+        <result property="rmbYhbjzje"    column="rmb_yhbjzje"    />
+        <result property="rmbYhfyzje"    column="rmb_yhfyzje"    />
+        <result property="rmbZdyhje"    column="rmb_zdyhje"    />
+        <result property="rmbQkzje"    column="rmb_qkzje"    />
+        <result property="borrowNo"    column="borrow_no"    />
+        <result property="borrowBlank"    column="borrow_blank"    />
+        <result property="borrowEd"    column="borrow_ed"    />
+        <result property="rcr"    column="rcr"    />
+        <result property="fz"    column="fz"    />
+        <result property="areaCenter"    column="area_center"    />
+        <result property="maxYqtsHis"    column="max_yqts_his"    />
+        <result property="sumYqtsHis"    column="sum_yqts_his"    />
+        <result property="sumYqcsHis"    column="sum_yqcs_his"    />
+        <result property="wwCityName"    column="ww_city_name"    />
+        <result property="waYe"    column="wa_ye"    />
+        <result property="billAddress"    column="bill_address"    />
+        <result property="yearRates"    column="year_rates"    />
+        <result property="tjFirm"    column="tj_firm"    />
+        <result property="tjWd"    column="tj_wd"    />
+        <result property="dayRates"    column="day_rates"    />
+        <result property="accountDate"    column="account_date"    />
+        <result property="overdueDays"    column="overdue_days"    />
+        <result property="firstYqDate"    column="first_yq_date"    />
+        <result property="firstYqjcDate"    column="first_yqjc_date"    />
+        <result property="firstYqFlag"    column="first_yq_flag"    />
+        <result property="curName"    column="cur_name"    />
+        <result property="curSex"    column="cur_sex"    />
+        <result property="certificateNo"    column="certificate_no"    />
+        <result property="certificateAddress"    column="certificate_address"    />
+        <result property="registAddress"    column="regist_address"    />
+        <result property="email"    column="email"    />
+        <result property="marriage"    column="marriage"    />
+        <result property="education"    column="education"    />
+        <result property="customerMobile"    column="customer_mobile"    />
+        <result property="customerHomeTel"    column="customer_home_tel"    />
+        <result property="customerHomeAddress"    column="customer_home_address"    />
+        <result property="workName"    column="work_name"    />
+        <result property="workAddress"    column="work_address"    />
+        <result property="workTel"    column="work_tel"    />
+        <result property="firstLiaisonName"    column="first_liaison_name"    />
+        <result property="firstLiaisonRelation"    column="first_liaison_relation"    />
+        <result property="firstLiaisonMobile"    column="first_liaison_mobile"    />
+        <result property="firstLiaisonTel"    column="first_liaison_tel"    />
+        <result property="secondLiaisonName"    column="second_liaison_name"    />
+        <result property="secondLiaisonRelation"    column="second_liaison_relation"    />
+        <result property="secondLiaisonMobile"    column="second_liaison_mobile"    />
+        <result property="secondLiaisonTel"    column="second_liaison_tel"    />
+        <result property="threeLiaisonName"    column="three_liaison_name"    />
+        <result property="threeLiaisonRelation"    column="three_liaison_relation"    />
+        <result property="threeLiaisonMobile"    column="three_liaison_mobile"    />
+        <result property="threeLiaisonTel"    column="three_liaison_tel"    />
+        <result property="cpmc"    column="cpmc"    />
+        <result property="hkType"    column="hk_type"    />
+        <result property="znj"    column="znj"    />
+        <result property="ajhssj"    column="ajhssj"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="packageFlag"    column="package_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="closeCase"    column="close_case"    />
+        <result property="isExitCollect"    column="is_exit_collect"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="closeCaseDate"    column="close_case_date"    />
+        <result property="isException"    column="is_exception"    />
+        <result property="accountAge"    column="account_age"    />
+        <result property="laFlag"    column="la_flag"    />
+        <result property="fxFlag"    column="fx_flag"    />
+        <result property="htlx"    column="htlx"    />
+        <result property="jmbq"    column="jmbq"    />
+        <result property="fcbq"    column="fcbq"    />
+        <result property="fxsfbh"    column="fxsfbh"    />
+        <result property="remark"    column="remark"    />
+        <result property="tar"    column="tar"    />
+        <result property="jkrq"    column="jkrq"    />
+        <result property="zhychkr"    column="zhychkr"    />
+        <result property="mqhkje"    column="mqhkje"    />
+        <result property="dqqkje"    column="dqqkje"    />
+        <result property="ljyhje"    column="ljyhje"    />
+        <result property="sfje"    column="sfje"    />
+        <result property="zdhkzh1"    column="zdhkzh1"    />
+        <result property="zdhkzh2"    column="zdhkzh2"    />
+        <result property="zdhkzhhm1"    column="zdhkzhhm1"    />
+        <result property="zdhkzhhm2"    column="zdhkzhhm2"    />
+        <result property="zdhkqd1"    column="zdhkqd1"    />
+        <result property="zdhkqd2"    column="zdhkqd2"    />
+        <result property="khmb"    column="khmb"    />
+        <result property="spjg"    column="spjg"    />
+        <result property="dklx"    column="dklx"    />
+        <result property="jkbs"    column="jkbs"    />
+        <result property="spxx"    column="spxx"    />
+        <result property="wacs"    column="wacs"    />
+        <result property="ykqs"    column="ykqs"    />
+        <result property="workDept"    column="work_dept"    />
+        <result property="customerMobile2"    column="customer_mobile2"    />
+        <result property="customerMobile3"    column="customer_mobile3"    />
+        <result property="customerMobile4"    column="customer_mobile4"    />
+        <result property="fourthLiaisonName"    column="fourth_liaison_name"    />
+        <result property="fourthLiaisonRelation"    column="fourth_liaison_relation"    />
+        <result property="fourthLiaisonMobile"    column="fourth_liaison_mobile"    />
+        <result property="fifthLiaisonName"    column="fifth_liaison_name"    />
+        <result property="fifthLiaisonRelation"    column="fifth_liaison_relation"    />
+        <result property="fifthLiaisonMobile"    column="fifth_liaison_mobile"    />
+        <result property="freeImport"    column="free_import"    />
+    </resultMap>
+
+    <sql id="selectCurAssetsPackageVo">
+        select id, org_casNo, org, transferType, rmb_ye, rmb_yhfxzje, rmb_yhlizje, rmb_yhbjzje, rmb_yhfyzje, rmb_zdyhje, rmb_qkzje, borrow_no, borrow_blank, borrow_ed, rcr, fz, area_center, max_yqts_his, sum_yqts_his, sum_yqcs_his, ww_city_name, wa_ye, bill_address, year_rates, tj_firm, tj_wd, day_rates, account_date, overdue_days, first_yq_date, first_yqjc_date, first_yq_flag, cur_name, cur_sex, certificate_no, certificate_address, regist_address, email, marriage, education, customer_mobile, customer_home_tel, customer_home_address, work_name, work_address, work_tel, first_liaison_name, first_liaison_relation, first_liaison_mobile, first_liaison_tel, second_liaison_name, second_liaison_relation, second_liaison_mobile, second_liaison_tel, three_liaison_name, three_liaison_relation, three_liaison_mobile, three_liaison_tel, cpmc, hk_type, znj, ajhssj, org_id, package_flag, create_by, create_time, close_case, is_exit_collect, import_batch_no, close_case_date, package_id, account_age, la_flag, fx_flag, htlx, jmbq, fcbq, fxsfbh, remark, tar, jkrq, zhychkr, mqhkje, dqqkje, ljyhje, sfje, zdhkzh1, zdhkzh2, zdhkzhhm1, zdhkzhhm2, zdhkqd1, zdhkqd2, khmb, spjg, dklx, jkbs, spxx, wacs, ykqs, work_dept, customer_mobile2, customer_mobile3, customer_mobile4, fourth_liaison_name, fourth_liaison_relation, fourth_liaison_mobile, fifth_liaison_name, fifth_liaison_relation, fifth_liaison_mobile, dqyhje from cur_assets_package
+    </sql>
+
+    <sql id="selectTempCurAssetsPackageVo">
+        select id, org_casNo, org, transferType, rmb_ye, rmb_yhfxzje, rmb_yhlizje, rmb_yhbjzje, rmb_yhfyzje, rmb_zdyhje, rmb_qkzje, borrow_no, borrow_blank, borrow_ed, rcr, fz, area_center, max_yqts_his, sum_yqts_his, sum_yqcs_his, ww_city_name, wa_ye, bill_address, year_rates, tj_firm, tj_wd, day_rates, account_date, overdue_days, first_yq_date, first_yqjc_date, first_yq_flag, cur_name, cur_sex, certificate_no, certificate_address, regist_address, email, marriage, education, customer_mobile, customer_home_tel, customer_home_address, work_name, work_address, work_tel, first_liaison_name, first_liaison_relation, first_liaison_mobile, first_liaison_tel, second_liaison_name, second_liaison_relation, second_liaison_mobile, second_liaison_tel, three_liaison_name, three_liaison_relation, three_liaison_mobile, three_liaison_tel, cpmc, hk_type, znj, ajhssj, org_id, package_flag, create_by, create_time, close_case, is_exit_collect, import_batch_no, close_case_date, is_exception, account_age, la_flag, fx_flag, htlx, jmbq, fcbq, fxsfbh, remark, tar, jkrq, zhychkr, mqhkje, dqqkje, ljyhje, sfje, zdhkzh1, zdhkzh2, zdhkzhhm1, zdhkzhhm2, zdhkqd1, zdhkqd2, khmb, spjg, dklx, jkbs, spxx, wacs, ykqs, work_dept, customer_mobile2, customer_mobile3, customer_mobile4, fourth_liaison_name, fourth_liaison_relation, fourth_liaison_mobile, fifth_liaison_name, fifth_liaison_relation, fifth_liaison_mobile,free_import from cur_assets_package_temp
+    </sql>
+
+
+
+    <insert id="batchAddTemp" parameterType="java.util.List">
+        insert into cur_assets_package_temp
+        (id,
+        org_casNo,
+        org,
+        transferType,
+        rmb_ye,
+        rmb_yhfxzje,
+        rmb_yhlizje,
+        rmb_yhbjzje,
+        rmb_yhfyzje,
+        rmb_zdyhje,
+        rmb_qkzje,
+        borrow_no,
+        borrow_blank,
+        borrow_ed,
+        rcr,
+        fz,
+        area_center,
+        max_yqts_his,
+        sum_yqts_his,
+        sum_yqcs_his,
+        ww_city_name,
+        wa_ye,
+        bill_address,
+        year_rates,
+        tj_firm,
+        tj_wd,
+        day_rates,
+        account_date,
+        overdue_days,
+        first_yq_date,
+        first_yqjc_date,
+        first_yq_flag,
+        cur_name,
+        cur_sex,
+        certificate_no,
+        certificate_address,
+        regist_address,
+        email,
+        marriage,
+        education,
+        customer_mobile,
+        customer_home_tel,
+        customer_home_address,
+        work_name,
+        work_address,
+        work_tel,
+        first_liaison_name,
+        first_liaison_relation,
+        first_liaison_mobile,
+        first_liaison_tel,
+        second_liaison_name,
+        second_liaison_relation,
+        second_liaison_mobile,
+        second_liaison_tel,
+        three_liaison_name,
+        three_liaison_relation,
+        three_liaison_mobile,
+        three_liaison_tel,
+        cpmc,
+        hk_type,
+        znj,
+        ajhssj,
+        account_age,
+        la_flag,
+        fx_flag,
+        htlx,
+        jmbq,
+        fcbq,
+        fxsfbh,
+        remark,
+        tar,
+        jkrq,
+        zhychkr,
+        mqhkje,
+        dqqkje,
+        ljyhje,
+        sfje,
+        zdhkzh1,
+        zdhkzh2,
+        zdhkzhhm1,
+        zdhkzhhm2,
+        zdhkqd1,
+        zdhkqd2,
+        khmb,
+        spjg,
+        dklx,
+        jkbs,
+        spxx,
+        wacs,
+        ykqs,
+        work_dept,
+        customer_mobile2,
+        customer_mobile3,
+        customer_mobile4,
+        fourth_liaison_name,
+        fourth_liaison_relation,
+        fourth_liaison_mobile,
+        fifth_liaison_name,
+        fifth_liaison_relation,
+        fifth_liaison_mobile,
+        free_import,
+        org_id,
+        package_flag,
+        create_by,
+        create_time,
+        close_case,
+        is_exit_collect,
+        import_batch_no,
+        close_case_date,
+        curNo,
+        payStatus,
+        lastLoanDate,
+        lastRepayAmount,
+        is_exception
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id},
+            #{item.orgCasno},
+            #{item.org},
+            #{item.transfertype},
+            #{item.rmbYe},
+            #{item.rmbYhfxzje},
+            #{item.rmbYhlizje},
+            #{item.rmbYhbjzje},
+            #{item.rmbYhfyzje},
+            #{item.rmbZdyhje},
+            #{item.rmbQkzje},
+            #{item.borrowNo},
+            #{item.borrowBlank},
+            #{item.borrowEd},
+            #{item.rcr},
+            #{item.fz},
+            #{item.areaCenter},
+            #{item.maxYqtsHis},
+            #{item.sumYqtsHis},
+            #{item.sumYqcsHis},
+            #{item.wwCityName},
+            #{item.waYe},
+            #{item.billAddress},
+            #{item.yearRates},
+            #{item.tjFirm},
+            #{item.tjWd},
+            #{item.dayRates},
+            #{item.accountDate},
+            #{item.overdueDays},
+            #{item.firstYqDate},
+            #{item.firstYqjcDate},
+            #{item.firstYqFlag},
+            #{item.curName},
+            #{item.curSex},
+            #{item.certificateNo},
+            #{item.certificateAddress},
+            #{item.registAddress},
+            #{item.email},
+            #{item.marriage},
+            #{item.education},
+            #{item.customerMobile},
+            #{item.customerHomeTel},
+            #{item.customerHomeAddress},
+            #{item.workName},
+            #{item.workAddress},
+            #{item.workTel},
+            #{item.firstLiaisonName},
+            #{item.firstLiaisonRelation},
+            #{item.firstLiaisonMobile},
+            #{item.firstLiaisonTel},
+            #{item.secondLiaisonName},
+            #{item.secondLiaisonRelation},
+            #{item.secondLiaisonMobile},
+            #{item.secondLiaisonTel},
+            #{item.threeLiaisonName},
+            #{item.threeLiaisonRelation},
+            #{item.threeLiaisonMobile},
+            #{item.threeLiaisonTel},
+            #{item.cpmc},
+            #{item.hkType},
+            #{item.znj},
+            #{item.ajhssj},
+            #{item.accountAge},
+            #{item.laFlag},
+            #{item.fxFlag},
+            #{item.htlx},
+            #{item.jmbq},
+            #{item.fcbq},
+            #{item.fxsfbh},
+            #{item.remark},
+            #{item.tar},
+            #{item.jkrq},
+            #{item.zhychkr},
+            #{item.mqhkje},
+            #{item.dqqkje},
+            #{item.ljyhje},
+            #{item.sfje},
+            #{item.zdhkzh1},
+            #{item.zdhkzh2},
+            #{item.zdhkzhhm1},
+            #{item.zdhkzhhm2},
+            #{item.zdhkqd1},
+            #{item.zdhkqd2},
+            #{item.khmb},
+            #{item.spjg},
+            #{item.dklx},
+            #{item.jkbs},
+            #{item.spxx},
+            #{item.wacs},
+            #{item.ykqs},
+            #{item.workDept},
+            #{item.customerMobile2},
+            #{item.customerMobile3},
+            #{item.customerMobile4},
+            #{item.fourthLiaisonName},
+            #{item.fourthLiaisonRelation},
+            #{item.fourthLiaisonMobile},
+            #{item.fifthLiaisonName},
+            #{item.fifthLiaisonRelation},
+            #{item.fifthLiaisonMobile},
+            #{item.freeImport},
+            #{item.orgId},
+            #{item.packageFlag},
+            #{item.createBy},
+            #{item.createTime},
+            #{item.closeCase},
+            #{item.isExitCollect},
+            #{item.importBatchNo},
+            #{item.closeCaseDate},
+            #{item.curNo},
+            #{item.payStatus},
+            #{item.lastLoanDate},
+            #{item.lastRepayAmount},
+            0)
+        </foreach>
+    </insert>
+
+    <select id="selectUpdateList" parameterType="String" resultType="java.lang.String">
+        SELECT org_casNo as orgCasno from cur_assets_package_temp t
+        where t.import_batch_no = #{importBatchNo}
+        and t.is_exception = '0'
+        and EXISTS (
+        SELECT b.org_casNo,b.org_id FROM cur_assets_package b WHERE t.org_casNo=b.org_casNo AND t.org_id = b.org_id AND b.close_case=0
+        )
+    </select>
+
+    <insert id="batchAddAssets" parameterType="java.util.List">
+        insert into cur_assets_package
+        (
+        id,
+        org_casNo,
+        org,
+        transferType,
+        rmb_ye,
+        rmb_yhfxzje,
+        rmb_yhlizje,
+        rmb_yhbjzje,
+        rmb_yhfyzje,
+        rmb_zdyhje,
+        rmb_qkzje,
+        borrow_no,
+        borrow_blank,
+        borrow_ed,
+        rcr,
+        fz,
+        area_center,
+        max_yqts_his,
+        sum_yqts_his,
+        sum_yqcs_his,
+        ww_city_name,
+        wa_ye,
+        bill_address,
+        year_rates,
+        tj_firm,
+        tj_wd,
+        day_rates,
+        account_date,
+        overdue_days,
+        first_yq_date,
+        first_yqjc_date,
+        first_yq_flag,
+        cur_name,
+        cur_sex,
+        certificate_no,
+        certificate_address,
+        regist_address,
+        email,
+        marriage,
+        education,
+        customer_mobile,
+        customer_home_tel,
+        customer_home_address,
+        work_name,
+        work_address,
+        work_tel,
+        first_liaison_name,
+        first_liaison_relation,
+        first_liaison_mobile,
+        first_liaison_tel,
+        second_liaison_name,
+        second_liaison_relation,
+        second_liaison_mobile,
+        second_liaison_tel,
+        three_liaison_name,
+        three_liaison_relation,
+        three_liaison_mobile,
+        three_liaison_tel,
+        cpmc,
+        hk_type,
+        znj,
+        ajhssj,
+        account_age,
+        la_flag,
+        fx_flag,
+        htlx,
+        jmbq,
+        fcbq,
+        fxsfbh,
+        remark,
+        tar,
+        jkrq,
+        zhychkr,
+        mqhkje,
+        dqqkje,
+        ljyhje,
+        sfje,
+        zdhkzh1,
+        zdhkzh2,
+        zdhkzhhm1,
+        zdhkzhhm2,
+        zdhkqd1,
+        zdhkqd2,
+        khmb,
+        spjg,
+        dklx,
+        jkbs,
+        spxx,
+        wacs,
+        ykqs,
+        work_dept,
+        customer_mobile2,
+        customer_mobile3,
+        customer_mobile4,
+        fourth_liaison_name,
+        fourth_liaison_relation,
+        fourth_liaison_mobile,
+        fifth_liaison_name,
+        fifth_liaison_relation,
+        fifth_liaison_mobile,
+        org_id,
+        package_flag,
+        create_by,
+        create_time,
+        close_case,
+        is_exit_collect,
+        import_batch_no,
+        close_case_date,
+        curNo,
+        payStatus,
+        lastLoanDate,
+        lastRepayAmount,
+        package_id
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.orgCasno},
+            #{item.org},
+            #{item.transfertype},
+            #{item.rmbYe},
+            #{item.rmbYhfxzje},
+            #{item.rmbYhlizje},
+            #{item.rmbYhbjzje},
+            #{item.rmbYhfyzje},
+            #{item.rmbZdyhje},
+            #{item.rmbQkzje},
+            #{item.borrowNo},
+            #{item.borrowBlank},
+            #{item.borrowEd},
+            #{item.rcr},
+            #{item.fz},
+            #{item.areaCenter},
+            #{item.maxYqtsHis},
+            #{item.sumYqtsHis},
+            #{item.sumYqcsHis},
+            #{item.wwCityName},
+            #{item.waYe},
+            #{item.billAddress},
+            #{item.yearRates},
+            #{item.tjFirm},
+            #{item.tjWd},
+            #{item.dayRates},
+            #{item.accountDate},
+            #{item.overdueDays},
+            #{item.firstYqDate},
+            #{item.firstYqjcDate},
+            #{item.firstYqFlag},
+            #{item.curName},
+            #{item.curSex},
+            #{item.certificateNo},
+            #{item.certificateAddress},
+            #{item.registAddress},
+            #{item.email},
+            #{item.marriage},
+            #{item.education},
+            #{item.customerMobile},
+            #{item.customerHomeTel},
+            #{item.customerHomeAddress},
+            #{item.workName},
+            #{item.workAddress},
+            #{item.workTel},
+            #{item.firstLiaisonName},
+            #{item.firstLiaisonRelation},
+            #{item.firstLiaisonMobile},
+            #{item.firstLiaisonTel},
+            #{item.secondLiaisonName},
+            #{item.secondLiaisonRelation},
+            #{item.secondLiaisonMobile},
+            #{item.secondLiaisonTel},
+            #{item.threeLiaisonName},
+            #{item.threeLiaisonRelation},
+            #{item.threeLiaisonMobile},
+            #{item.threeLiaisonTel},
+            #{item.cpmc},
+            #{item.hkType},
+            #{item.znj},
+            #{item.ajhssj},
+            #{item.accountAge},
+            #{item.laFlag},
+            #{item.fxFlag},
+            #{item.htlx},
+            #{item.jmbq},
+            #{item.fcbq},
+            #{item.fxsfbh},
+            #{item.remark},
+            #{item.tar},
+            #{item.jkrq},
+            #{item.zhychkr},
+            #{item.mqhkje},
+            #{item.dqqkje},
+            #{item.ljyhje},
+            #{item.sfje},
+            #{item.zdhkzh1},
+            #{item.zdhkzh2},
+            #{item.zdhkzhhm1},
+            #{item.zdhkzhhm2},
+            #{item.zdhkqd1},
+            #{item.zdhkqd2},
+            #{item.khmb},
+            #{item.spjg},
+            #{item.dklx},
+            #{item.jkbs},
+            #{item.spxx},
+            #{item.wacs},
+            #{item.ykqs},
+            #{item.workDept},
+            #{item.customerMobile2},
+            #{item.customerMobile3},
+            #{item.customerMobile4},
+            #{item.fourthLiaisonName},
+            #{item.fourthLiaisonRelation},
+            #{item.fourthLiaisonMobile},
+            #{item.fifthLiaisonName},
+            #{item.fifthLiaisonRelation},
+            #{item.fifthLiaisonMobile},
+            #{item.orgId},
+            #{item.packageFlag},
+            #{item.createBy},
+            #{item.createTime},
+            #{item.closeCase},
+            #{item.isExitCollect},
+            #{item.importBatchNo},
+            #{item.closeCaseDate},
+            #{item.curNo},
+            #{item.payStatus},
+            #{item.lastLoanDate},
+            #{item.lastRepayAmount},
+            #{item.packageId}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectNotExists" parameterType="String" resultType="java.lang.String">
+        SELECT org_casNo as orgCasno from cur_assets_package_temp t
+        where t.import_batch_no = #{importBatchNo}
+        and t.is_exception = '0'
+        and not EXISTS (
+        SELECT b.org_casNo,b.org_id FROM cur_assets_package b WHERE t.org_casNo=b.org_casNo AND t.org_id = b.org_id AND b.close_case=0
+        )
+    </select>
+
+    <update id="batchUpdate" parameterType="java.util.List">
+        <foreach collection="TempCurAssetsList" item="TempCurAssets" separator=";">
+            update cur_assets_package
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="TempCurAssets.orgCasno != null  and TempCurAssets.orgCasno != ''">org_casNo = #{TempCurAssets.orgCasno},</if>
+                <if test="TempCurAssets.payStatus != null  and TempCurAssets.payStatus != ''">payStatus = #{TempCurAssets.payStatus},</if>
+                <if test="TempCurAssets.firstYqjcDate != null ">first_yqjc_date = #{TempCurAssets.firstYqjcDate},</if>
+                <if test="TempCurAssets.mqhkje != null ">mqhkje = #{TempCurAssets.mqhkje},</if>
+                <if test="TempCurAssets.rmbYhfyzje != null ">rmb_yhfyzje = #{TempCurAssets.rmbYhfyzje},</if>
+                <if test="TempCurAssets.znj != null ">znj = #{TempCurAssets.znj},</if>
+                <if test="TempCurAssets.rmbYe != null ">rmb_ye = #{TempCurAssets.rmbYe},</if>
+                <if test="TempCurAssets.waYe != null ">wa_ye = #{TempCurAssets.waYe},</if>
+                <if test="TempCurAssets.overdueDays != null  and TempCurAssets.overdueDays != ''">overdue_days = #{TempCurAssets.overdueDays},</if>
+                <if test="TempCurAssets.transfertype != null  and TempCurAssets.transfertype != ''">transferType = #{TempCurAssets.transfertype},</if>
+                <if test="TempCurAssets.borrowNo != null  and TempCurAssets.borrowNo != ''">borrow_no = #{TempCurAssets.borrowNo},</if>
+                <if test="TempCurAssets.lastRepayAmount != null  and TempCurAssets.lastRepayAmount != ''">lastRepayAmount = #{TempCurAssets.lastRepayAmount},</if>
+                <if test="TempCurAssets.ykqs != null  and TempCurAssets.ykqs != ''">ykqs = #{TempCurAssets.ykqs},</if>
+                <if test="TempCurAssets.rmbYhbjzje != null ">rmb_yhbjzje = #{TempCurAssets.rmbYhbjzje},</if>
+                <if test="TempCurAssets.rmbYhlizje != null ">rmb_yhlizje = #{TempCurAssets.rmbYhlizje},</if>
+                <if test="TempCurAssets.rmbYhfxzje != null ">rmb_yhfxzje = #{TempCurAssets.rmbYhfxzje},</if>
+                <if test="TempCurAssets.rmbQkzje != null ">rmb_qkzje = #{TempCurAssets.rmbQkzje},</if>
+                <if test="TempCurAssets.ljyhje != null ">ljyhje = #{TempCurAssets.ljyhje},</if>
+                <if test="TempCurAssets.rcr != null ">rcr = #{TempCurAssets.rcr},</if>
+                <if test="TempCurAssets.borrowBlank != null  and TempCurAssets.borrowBlank != ''">borrow_blank = #{TempCurAssets.borrowBlank},</if>
+                <if test="TempCurAssets.zhychkr != null ">zhychkr = #{TempCurAssets.zhychkr},</if>
+                <if test="TempCurAssets.updateBy != null ">update_by = #{TempCurAssets.updateBy},</if>
+                update_time = now()
+            </trim>
+            where org_casNo=#{TempCurAssets.orgCasno} AND close_case=0
+        </foreach>
+    </update>
+
+    <select id="selectRepaymentNotExists" parameterType="String" resultType="java.lang.String">
+        select org_casNo as orgCasno
+        FROM cur_assets_repayment_package_temp t
+        where t.import_batch_no = #{importBatchNo}
+        AND t.is_exception = 0
+        AND NOT EXISTS(
+        SELECT 1 FROM cur_assets_package a WHERE t.org_casNo=a.org_casNo AND t.org_id=a.org_id and a.close_case=0
+        )
+    </select>
+
+    <delete id="deleteTempTable">
+        delete from cur_assets_package_temp WHERE import_batch_no=#{importBatchNo}
+    </delete>
+
+    <delete id="deleteRepaymentTempTable">
+        delete from cur_assets_repayment_package_temp
+    </delete>
+
+</mapper>

@@ -18,6 +18,7 @@ import com.ruoyi.radioQc.service.ITLcSendRadioQcRecordService;
 import com.ruoyi.robot.domain.CallContent;
 import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysUserService;
+import com.ruoyi.task.domain.JxphCallRecord;
 import com.ruoyi.task.domain.TLcCallRecord;
 import com.ruoyi.task.domain.TLcCallRecordForXY;
 import com.ruoyi.task.mapper.TLcCallRecordMapper;
@@ -392,6 +393,16 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
             log.error("下载录音异常，exception is {}", e);
             throw new RuntimeException("下载录音异常");
         }
+    }
+
+    @Override
+    public List<JxphCallRecord> selectJxphCallRecord(Map<String, Object> param) {
+        return this.tLcCallRecordMapper.selectJxphCallRecord(param);
+    }
+
+    @Override
+    public List<TLcCallRecord> findZjCallRecordListByDate(TLcCallRecord tLcCallRecord) {
+        return this.tLcCallRecordMapper.findZjCallRecordListByDate(tLcCallRecord);
     }
 
 

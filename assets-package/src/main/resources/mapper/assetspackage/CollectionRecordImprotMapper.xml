@@ -434,9 +434,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE t.import_batch_no = #{importBatchNo} and t.is_exception ='0' AND EXISTS(
         SELECT a.case_no from t_lc_task a
         WHERE a.case_no=t.org_caseNo and a.org_id=t.org_id
-        and IFNULL(a.recently_follow_up_date,'0000-00-00 00:00:00') <![CDATA[ <= ]]> t.call_start_time)
+        and IFNULL(a.recently_follow_up_date,'0000-00-00 00:00:00') <![CDATA[ <= ]]> t.make_call_time)
         )tt) n
-        SET m.call_sign = n.call_sign, m.call_sign_value = n.call_status, m.recently_follow_up_date = n.call_start_time
+        SET m.call_sign = n.call_sign, m.call_sign_value = n.call_status, m.recently_follow_up_date = n.make_call_time
         WHERE m.org_id = n.org_id and m.case_no = n.org_caseNo
     </update>
 

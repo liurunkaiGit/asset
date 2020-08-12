@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Deque;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.session.SessionException;
@@ -59,7 +61,11 @@ public class LogoutFilter extends org.apache.shiro.web.filter.authc.LogoutFilter
                 {
                     String loginName = user.getLoginName();
                     // 记录用户退出日志
-                    //AsyncManager.me().execute(AsyncFactory.recordLogininfor(loginName, Constants.LOGOUT, MessageUtils.message("user.logout.success")));
+//                    AsyncManager.me().execute(AsyncFactory.recordLogininfor(loginName, Constants.LOGOUT, MessageUtils.message("user.logout.success")));
+                    HttpServletRequest req = (HttpServletRequest) request;
+                    Object obj = req.getSession().getAttribute("loginStatusId");
+                    String loginStatusId = (obj != null && obj instanceof String) ? (String) obj : "";
+                    AsyncManager.me().execute(AsyncFactory.logoutStatus(loginStatusId,loginName));
                     // 清理缓存
                     cache.remove(loginName);
                 }

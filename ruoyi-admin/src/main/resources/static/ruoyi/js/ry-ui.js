@@ -821,6 +821,10 @@ var table = {
             closeTab: function (dataId) {
             	closeItem(dataId);
             },
+			// 关闭选项卡
+			closeTabPanel: function (dataPanel) {
+				closeItemPanel(dataPanel);
+			},
             // 禁用按钮
             disable: function() {
             	var doc = window.top == window.parent ? window.document : window.parent.document;

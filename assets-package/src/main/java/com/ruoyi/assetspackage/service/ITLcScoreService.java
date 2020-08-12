@@ -62,6 +62,7 @@ public interface ITLcScoreService
     public int deleteTLcScoreById(Long id);
 
     public List<TLcScore> buildParam(List<TempCurAssetsPackage> paramList);
+    public List<TLcScore> buildParam2(List<TempCurAssetsPackage> paramList);
 
     public void batchInsert(List<TLcScore> paramList);
 

@@ -131,6 +131,26 @@ public class TLcScoreServiceImpl implements ITLcScoreService
         return list;
     }
 
+    @Override
+    public List<TLcScore> buildParam2(List<TempCurAssetsPackage> paramList) {
+        OrgPackage orgPackage = orgPackageMapper.selectOrgPackageByDeptId(paramList.get(0).getOrgId());
+        String isAutoScore = orgPackage.getIsAutoScore();
+        List<TLcScore> list = new ArrayList<>();
+        for (TempCurAssetsPackage temp : paramList) {
+            TLcScore tlcScore = new TLcScore();
+            tlcScore.setOrgCasno(temp.getOrgCasno());
+            tlcScore.setOrgId(temp.getOrgId());
+            tlcScore.setOrgName(temp.getOrg());
+            tlcScore.setImportBatchNo(temp.getImportBatchNo());
+            tlcScore.setIsAutoScore(isAutoScore);
+            tlcScore.setCreateBy("0000");//吉象接口创建人
+            tlcScore.setCreateTime(new Date());
+            tlcScore.setSendflag("0");
+            list.add(tlcScore);
+        }
+        return list;
+    }
+
 
     @Override
     public void batchInsert(List<TLcScore> paramList) {

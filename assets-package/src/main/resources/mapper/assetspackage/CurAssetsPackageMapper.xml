@@ -1431,7 +1431,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		    where a.import_batch_no = #{importBatchNo}
 		    and a.is_exception=0
 		    and not EXISTS (
-		      SELECT 1 from cur_assets_package b WHERE a.org_casNo = b.org_casNO and b.is_exit_collect = 2 and b.close_case = 0
+		      SELECT 1 from cur_assets_package b WHERE a.org_casNo = b.org_casNO  and b.close_case = 0
 		    )
 	      )tt where t.id = tt.id
         )

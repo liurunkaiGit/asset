@@ -817,7 +817,12 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
                     if (closeCase.getDqyhje() != null) {
                         tLcTask.setDqyhje(closeCase.getDqyhje());
                     }
-                    tLcTask.setModifyBy(ShiroUtils.getSysUser().getUserId());
+                    SysUser sysUser = ShiroUtils.getSysUser();
+                    Long userId = 1L;
+                    if(sysUser != null){
+                        userId = sysUser.getUserId();
+                    }
+                    tLcTask.setModifyBy(userId);
                     if (closeCase.getIsClose() != null && TaskStatusEnum.CLOSE.getStatus().equals(closeCase.getIsClose())) {
                         tLcTask.setTaskStatus(TaskStatusEnum.CLOSE.getStatus());
                         tLcTask.setTaskType(TaskTypeEnum.CLOSE_CASE_TRANSFER.getCode());
@@ -889,17 +894,23 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
     public void insertDuncaseAssign(List<Task> taskList, SysUser sysUser) {
         List<DuncaseAssign> duncaseAssignList = taskList.stream()
                 .map(task -> {
+                    Long userId = -1L;
+                    String userName = "admin";
+                    if(sysUser != null){
+                        userId = sysUser.getUserId();
+                        userName = sysUser.getUserName();
+                    }
                     DuncaseAssign tLcDuncaseAssign = DuncaseAssign.builder()
                             .ownerId(task.getOwnerId())
                             .ownerName(task.getOwnerName())
                             .taskId(task.getId().toString())
-                            .operationId(sysUser.getUserId())
+                            .operationId(userId)
                             .customName(task.getCustomName())
                             .collectTeamName(task.getCollectTeamName())
                             .collectTeamId(task.getCollectTeamId())
                             .certificateNo(task.getCertificateNo())
                             .caseNo(task.getCaseNo())
-                            .operationName(sysUser.getUserName())
+                            .operationName(userName)
                             .transferType(task.getTaskType())
                             .orgId(task.getOrgId())
                             .orgName(task.getOrgName())

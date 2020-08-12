@@ -1,6 +1,12 @@
 package com.ruoyi.framework.manager.factory;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.TimerTask;
+
+import com.ruoyi.common.enums.LoginStatusEnum;
+import com.ruoyi.system.domain.SysLoginStatus;
+import com.ruoyi.system.service.ISysLoginStatusService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.ruoyi.common.constant.Constants;
@@ -17,6 +23,11 @@ import com.ruoyi.system.service.ISysOperLogService;
 import com.ruoyi.system.service.ISysUserOnlineService;
 import com.ruoyi.system.service.impl.SysLogininforServiceImpl;
 import eu.bitwalker.useragentutils.UserAgent;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 异步工厂（产生任务用）
@@ -132,4 +143,33 @@ public class AsyncFactory
             }
         };
     }
+
+    /**
+     * 记录登出信息
+     */
+    public static TimerTask logoutStatus(final String loginStatusId,final String loginName)
+    {
+        return new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                SysLoginStatus sysLoginStatus = SpringUtils.getBean(ISysLoginStatusService.class).selectSysLoginStatusById(loginStatusId);
+                Date startTime = sysLoginStatus.getStartTime();
+                Date endTime = new Date();
+                BigDecimal startDcm = new BigDecimal(startTime.getTime());
+                BigDecimal endDcm = new BigDecimal(endTime.getTime());
+                BigDecimal subtract = endDcm.subtract(startDcm);
+                String length = subtract.divide(new BigDecimal(1000 * 60), 2, BigDecimal.ROUND_HALF_UP).toString();
+                sysLoginStatus.setEndTime(endTime);
+                sysLoginStatus.setOnlineLen(length);
+                sysLoginStatus.setStatus(LoginStatusEnum.off.getCode());
+                sysLoginStatus.setUpdateBy(loginName);
+                sysLoginStatus.setUpdateTime(endTime);
+                SpringUtils.getBean(ISysLoginStatusService.class).updateSysLoginStatus(sysLoginStatus);
+            }
+        };
+    }
+
+
 }

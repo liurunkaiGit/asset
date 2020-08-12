@@ -338,59 +338,57 @@
                         updateStatus(currentCall.id,4,"客户未接通，已完成","","");//已完成
                     }
                 }
-                // if(type == "EVENT_HUNGUP_SUCCESS" || type == "EVENT_HUNGUP" || type == "EVENT_OUTBOUND_AGNET_HANGUP" || type == "EVENT_OUTBOUND_CUSTOMER_HANGUP" || type == "EVENT_OUTBOUND_FORECAST_AGNET_HANGUP" || type == "EVENT_OUTBOUND_FORECAST_CUSTOMER_HANGUP"){
                 if(type == "EVENT_HUNGUP"){//接通之后挂掉电话
                     console.log('hangup' + type,JSON.stringify(data));
-                    // console.log("自建录音返回信息RecordingFile="+data[0].RecordingFile+",recordTime="+",currentCaseNo="+currentCaseNo);
                     if(childObj != null && childObj != undefined){
                         childObj.resetTiming();
-                    }
-                    // 直接保存点催记录
-                    var val = $('input[name="radioChoose"]:checked').parents("tr");
-                    console.log("通话记录id：" + callRecordId + "，通话开始时间：" + data[0].BAnswerStamp + "，通话结束时间：" + data[0].BEndStamp + "，通话录音：" + data[0].RecordingFile);
-                    var callSign = 'R02';
-                    var callResult = '无法接通';
-                    if (data[0].BAnswerStamp != null && data[0].BAnswerStamp != '') {
-                        callSign = 'R01';
-                        callResult = '已接听';
-                    }
-                    $.post(
-                        collectPrefix + "/addCallRecord",
-                        {
-                            id:callRecordId,
-                            // certificateNo:val.find("[name='hideCerNo']").html(),
-                            contactName:currentCall.contactName,
-                            phone:currentCall.phone,
-                            contactRelation:currentCall.contactRelation,
-                            callSign:callSign,
-                            callResult:callResult,
-                            callStartTime:data[0].BAnswerStamp,
-                            callEndTime:data[0].BEndStamp,
-                            callLen:data[0].Mduration,
-                            callRadioLocation:data[0].RecordingFile,
-                            caseNo:currentCall.caseNo,
-                            remark:callResult,
-                            importBatchNo:currentCall.importBatchNo,
-                            orgId:currentCall.orgId,
-                            // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
-                            sendRadioCheck:1,
-                            platform: "ZJ"
-                        },
-                        function(data) {
-                            // alert(JSON.stringify(data));
-                            if (data.status == 200) {//请求成功
-                                // $.modal.alertSuccess("保存成功");
-                                //collJobDetail(data.result);
-                                $("#callStartTime").val("");
-                                $("#callEndTime").val("");
-                                $("#callLen").val("");
-                                $("#callRadioLocation").val("");
-                                $("#callCode").val("");
-                                $("#callRemarkAdd").val("");
-                                callRecordId = data.result;
-                            }
+                        // 直接保存点催记录
+                        console.log("通话记录id：" + callRecordId + "，通话开始时间：" + data[0].BAnswerStamp + "，通话结束时间：" + data[0].BEndStamp + "，通话录音：" + data[0].RecordingFile);
+                        var callSign = 'R02';
+                        var callResult = '无法接通';
+                        if (data[0].BAnswerStamp != null && data[0].BAnswerStamp != '') {
+                            callSign = 'R01';
+                            callResult = '已接听';
                         }
-                    );
+                        $.post(
+                            collectPrefix + "/addCallRecord",
+                            {
+                                id:callRecordId,
+                                // certificateNo:val.find("[name='hideCerNo']").html(),
+                                contactName:currentCall.contactName,
+                                phone:currentCall.phone,
+                                contactRelation:currentCall.contactRelation,
+                                callSign:callSign,
+                                callResult:callResult,
+                                callStartTime:data[0].BAnswerStamp,
+                                callEndTime:data[0].BEndStamp,
+                                callLen:data[0].Mduration,
+                                callRadioLocation:data[0].RecordingFile,
+                                caseNo:currentCall.caseNo,
+                                remark:callResult,
+                                importBatchNo:currentCall.importBatchNo,
+                                orgId:currentCall.orgId,
+                                // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
+                                sendRadioCheck:1,
+                                platform: "ZJ"
+                            },
+                            function(data) {
+                                // alert(JSON.stringify(data));
+                                if (data.status == 200) {//请求成功
+                                    // $.modal.alertSuccess("保存成功");
+                                    //collJobDetail(data.result);
+                                    $("#callStartTime").val("");
+                                    $("#callEndTime").val("");
+                                    $("#callLen").val("");
+                                    $("#callRadioLocation").val("");
+                                    $("#callCode").val("");
+                                    $("#callRemarkAdd").val("");
+                                    callRecordId = data.result;
+                                }
+                            }
+                        );
+                    }
+
                 }
             }};
 
@@ -545,9 +543,6 @@
                 startTime = event.recordTime;
                 endTime = event.startTime;
                 recordDuration = String(event.recordDuration);
-                // console.log("平安录音返回信息recordFile="+event.recordFile+",recordTime="+event.recordTime+",startTime="+event.startTime+",recordDuration="+event.recordDuration+",currentCaseNo="+currentCall.caseNo);
-                // 直接保存点催记录
-                // var val = $('input[name="radioChoose"]:checked').parents("tr");
                 $.post(
                     collectPrefix + "/addCallRecord",
                     {
@@ -653,6 +648,7 @@
                 return;
             }
 
+            callRecordId= "";//每次拨打之前清空电催记录id
             var destDesc = "0"+phone;
             if(callPlatform == 'PA') {
                 if (destDesc) {
