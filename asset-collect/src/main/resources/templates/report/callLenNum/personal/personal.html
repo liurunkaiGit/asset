@@ -57,7 +57,7 @@
                     title : '报表日期',
                     formatter: function (value, row, index) {
                         if (row.timePeriod == '合计') {
-                            return value;
+                            return '<b>' + value + '</b>';
                         } else {
                             return '-';
                         }
@@ -68,7 +68,7 @@
                         title : '组别',
                         formatter: function (value, row, index) {
                             if (row.timePeriod == '合计') {
-                                return value;
+                                return '<b>' + value + '</b>';
                             } else {
                                 return '-';
                             }
@@ -79,7 +79,7 @@
                         title : '坐席编码',
                         formatter: function (value, row, index) {
                             if (row.timePeriod == '合计') {
-                                return value;
+                                return '<b>' + value + '</b>';
                             } else {
                                 return '-';
                             }
@@ -90,7 +90,7 @@
                         title : '坐席姓名',
                         formatter: function (value, row, index) {
                             if (row.timePeriod == '合计') {
-                                return value;
+                                return '<b>' + value + '</b>';
                             } else {
                                 return '-';
                             }
@@ -98,52 +98,134 @@
                     },
                 {
                     field : 'timePeriod', 
-                    title : '时间段'
+                    title : '时间段',
+                    formatter: function (value, row, index) {
+                        if (row.timePeriod == '合计') {
+                            return '<b>' + value + '</b>';
+                        } else {
+                            return value;
+                        }
+                    }
                 },
                 {
                     field : 'paCalledNum', 
-                    title : '平安通话次数'
+                    title : '平安通话次数',
+                    formatter: function (value, row, index) {
+                        if (row.timePeriod == '合计') {
+                            if (value != null && value != '') {
+                                return '<b>' + value + '</b>';
+                            }
+                        } else {
+                            return value;
+                        }
+                    }
                 },
                 {
                     field : 'paCallLen', 
                     title : '平安通话时长(分)',
-                    formatter: function (value) {
-                        return callLenFix(value);
+                    formatter: function (value, row, index) {
+                        // return callLenFix(value);
+                        if (row.timePeriod == '合计') {
+                            if (value != null && value != '') {
+                                return '<b>' + callLenFix(value) + '</b>';
+                            }
+                        } else {
+                            return callLenFix(value);
+                        }
                     }
                 },
                 {
                     field : 'paCallNum', 
-                    title : '平安拨打次数'
+                    title : '平安拨打次数',
+                    formatter: function (value, row, index) {
+                        if (row.timePeriod == '合计') {
+                            if (value != null && value != '') {
+                                return '<b>' + value + '</b>';
+                            }
+                        } else {
+                            return value;
+                        }
+                    }
                 },
                 {
                     field : 'zjCalledNum', 
-                    title : '自建通话次数'
+                    title : '自建通话次数',
+                    formatter: function (value, row, index) {
+                        if (row.timePeriod == '合计') {
+                            if (value != null && value != '') {
+                                return '<b>' + value + '</b>';
+                            }
+                        } else {
+                            return value;
+                        }
+                    }
                 },
                 {
                     field : 'zjCallLen', 
                     title : '自建通话时长(分)',
-                    formatter: function (value) {
-                        return callLenFix(value);
+                    formatter: function (value, row, index) {
+                        // return callLenFix(value);
+                        if (row.timePeriod == '合计') {
+                            if (value != null && value != '') {
+                                return '<b>' + callLenFix(value) + '</b>';
+                            }
+                        } else {
+                            return callLenFix(value);
+                        }
                     }
                 },
                 {
                     field : 'zjCallNum', 
-                    title : '自建拨打次数'
+                    title : '自建拨打次数',
+                    formatter: function (value, row, index) {
+                        if (row.timePeriod == '合计') {
+                            if (value != null && value != '') {
+                                return '<b>' + value + '</b>';
+                            }
+                        } else {
+                            return value;
+                        }
+                    }
                 },
                 {
                     field : 'totalCalledNum', 
-                    title : '全部通话次数'
+                    title : '全部通话次数',
+                    formatter: function (value, row, index) {
+                        if (row.timePeriod == '合计') {
+                            if (value != null && value != '') {
+                                return '<b>' + value + '</b>';
+                            }
+                        } else {
+                            return value;
+                        }
+                    }
                 },
                 {
                     field : 'totalCallLen', 
                     title : '全部通话时长(分)',
-                    formatter: function (value) {
-                        return callLenFix(value);
+                    formatter: function (value, row, index) {
+                        // return callLenFix(value);
+                        if (row.timePeriod == '合计') {
+                            if (value != null && value != '') {
+                                return '<b>' + callLenFix(value) + '</b>';
+                            }
+                        } else {
+                            return callLenFix(value);
+                        }
                     }
                 },
                 {
                     field : 'totalCallNum', 
-                    title : '全部拨打次数'
+                    title : '全部拨打次数',
+                    formatter: function (value, row, index) {
+                        if (row.timePeriod == '合计') {
+                            if (value != null && value != '') {
+                                return '<b>' + value + '</b>';
+                            }
+                        } else {
+                            return value;
+                        }
+                    }
                 }]
             };
             $.table.init(options);
