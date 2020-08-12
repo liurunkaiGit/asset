@@ -91,11 +91,13 @@ public class AssetsRepaymentFromXYServiceImpl implements IAssetsRepaymenFromXYSe
         //匹配当天之前的最后一个(结案的为空，未结案的展示)
         if("".equals(ownerName)){
             Map<String, Object> resultMap = this.assetsRepaymentFromXYMapper.findOwnerNameByAssign2(param);
-            Integer taskType = (Integer)resultMap.get("taskType");
-            if(taskType != 7){
-                String name = (String)resultMap.get("ownerName");
-                if(name != null && !"".equals(name)){
-                    ownerName = ownerName + ","+name;
+            if(resultMap != null){
+                Integer taskType = (Integer)resultMap.get("taskType");
+                if(taskType != 7){
+                    String name = (String)resultMap.get("ownerName");
+                    if(name != null && !"".equals(name)){
+                        ownerName = ownerName + ","+name;
+                    }
                 }
             }
         }
