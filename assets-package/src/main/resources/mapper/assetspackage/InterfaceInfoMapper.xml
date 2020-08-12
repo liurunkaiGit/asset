@@ -25,8 +25,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="code != null  and code != ''"> and code = #{code}</if>
             <if test="info != null  and info != ''"> and info = #{info}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="startDate != null"> and create_time <![CDATA[>=]]> #{startDate}</if>
+            <if test="endDate != null"> and create_time <![CDATA[<=]]> #{endDate}</if>
         </where>
+        order by create_time desc
     </select>
     
     <select id="selectInterfaceInfoById" parameterType="Long" resultMap="InterfaceInfoResult">

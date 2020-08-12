@@ -42,8 +42,13 @@ CREATE TABLE `interface_info` (
   `name` varchar(64) DEFAULT NULL COMMENT '接口名称',
   `code` varchar(32) DEFAULT NULL COMMENT '报错代码',
   `info` text DEFAULT NULL COMMENT '日志信息',
-  `status` varchar(32) DEFAULT NULL COMMENT '状态',
+  `status` char(1) DEFAULT NULL COMMENT '状态(0成功，1失败)',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='文件统计表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 alter table interface_info comment '接口信息记录表';
+
+INSERT INTO sys_menu ( `menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)VALUES ('接口任务', (SELECT t.menu_id from sys_menu t where t.menu_name='系统监控'), '5', '/interface/info', 'menuItem', 'C', '0', 'interface:info:view', '#', 'admin', now(), 'admin', now(), '');
+INSERT INTO sys_menu ( `menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)VALUES ('查询', (SELECT t.menu_id from sys_menu t where t.menu_name='接口任务'), '1', '#', 'menuItem', 'F', '0', 'interface:info:list', '#', 'admin', now(), 'admin', now(), '');
+INSERT INTO sys_menu ( `menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)VALUES ('导出', (SELECT t.menu_id from sys_menu t where t.menu_name='接口任务'), '2', '#', 'menuItem', 'F', '0', 'interface:info:export', '#', 'admin', now(), 'admin', now(), '');
+INSERT INTO sys_menu ( `menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)VALUES ('删除', (SELECT t.menu_id from sys_menu t where t.menu_name='接口任务'), '3', '#', 'menuItem', 'F', '0', 'interface:info:remove', '#', 'admin', now(), 'admin', now(), '');

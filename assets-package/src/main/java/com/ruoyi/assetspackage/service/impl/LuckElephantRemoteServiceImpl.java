@@ -101,7 +101,7 @@ public class LuckElephantRemoteServiceImpl implements ILuckElephantRemoteService
                         .setOrgName(orgName)
                         .setTotalNum(tLcImportFlowList.size())
                         .setTotalMoney(totalMoney)
-                        .setCreateBy("0000");
+                        .setCreateBy("1");
                 this.tlcImportFlowService.insertTLcImportFlow(tLcImportFlow);
             }
             OrgPackage orgPackage = orgPackageService.selectOrgPackageByOrgId(orgId);
@@ -135,7 +135,10 @@ public class LuckElephantRemoteServiceImpl implements ILuckElephantRemoteService
             tempAsset.setImportBatchNo(batchNo);
             tempAsset.setOrgId(orgId);
             tempAsset.setOrg(orgName);
-            tempAsset.setCreateBy("0000");
+            tempAsset.setCreateBy("admin");
+            tempAsset.setCloseCase("0");
+            tempAsset.setIsExitCollect("2");
+            tempAsset.setPackageFlag("0");
             tempAsset.setCreateTime(new Date());
             tempAsset.setOrgCasno(data.getOrgCasno());
             tempAsset.setCurName(data.getCurName());
@@ -376,9 +379,9 @@ public class LuckElephantRemoteServiceImpl implements ILuckElephantRemoteService
             String uuid = UUID.randomUUID().toString().replace("-", "");
             tempAsset.setId(uuid);
 //            tempAsset.setImportBatchNo(batchNo);
-//            tempAsset.setOrgId(orgId);
-//            tempAsset.setOrg(orgName);
-            tempAsset.setUpdateBy("0000");
+            tempAsset.setOrgId(orgId);
+            tempAsset.setOrg(orgName);
+            tempAsset.setUpdateBy("admin");
             tempAsset.setCreateTime(new Date());
             tempAsset.setOrgCasno(data.getOrgCasno());
             tempAsset.setPayStatus(data.getPayStatus());
@@ -515,6 +518,7 @@ public class LuckElephantRemoteServiceImpl implements ILuckElephantRemoteService
             response.setRetTime(curDate);
             response.setRetCode(LuckElephantCodeEnum.error.getCode());
             response.setRetMsg("案件不存在"+JSON.toJSONString(caseNoList));
+            return response;
         }else{
             //插入还款主表
             curAssetsRepaymentPackageServiceImpl.batchAddRepaymentTable(batchNo);
@@ -525,7 +529,7 @@ public class LuckElephantRemoteServiceImpl implements ILuckElephantRemoteService
                     .setOrgId(orgId)
                     .setOrgName(orgName)
                     .setTotalNum(tempRepaymentList.size())
-                    .setCreateBy("0000");
+                    .setCreateBy("1");
             this.tlcImportFlowService.insertTLcImportFlow(tLcImportFlow);
             //结案操作
             List<CurAssetsRepaymentPackage> curAssetsRepaymentList = convertParam(tempRepaymentList);
@@ -556,7 +560,7 @@ public class LuckElephantRemoteServiceImpl implements ILuckElephantRemoteService
             tempRepayment.setImportBatchNo(batchNo);
             tempRepayment.setOrgId(orgId);
             tempRepayment.setOrgName(orgName);
-            tempRepayment.setCreateBy("0000");
+            tempRepayment.setCreateBy("admin");
             tempRepayment.setCreateTime(new Date());
             tempRepayment.setOrgCasno(data.getOrgCasno());
             tempRepayment.setHkje(data.getLastRepayAmount());
@@ -575,13 +579,13 @@ public class LuckElephantRemoteServiceImpl implements ILuckElephantRemoteService
     private LuckElephantRepaymentAssetResponse checkRepaymentData(LuckElephantRepaymentAssetRequest param,String curDate){
         LuckElephantRepaymentAssetResponse response = null;
         //参数获取
-        String batchNo = param.getBatchNo();//批次号
+//        String batchNo = param.getBatchNo();//批次号
         String orgId = param.getOrgId();//机构编号
         String orgName = param.getOrgName();//机构名称
         String sysCode = param.getSysCode();//数据来源
         String frontTransTime = param.getFrontTransTime();//交易时间
-        response = checkNull(batchNo, curDate, "批次号","repayment") != null ? (LuckElephantRepaymentAssetResponse)checkNull(batchNo, curDate, "批次号","repayment") : null;
-        if(response!=null){ return response;}
+//        response = checkNull(batchNo, curDate, "批次号","repayment") != null ? (LuckElephantRepaymentAssetResponse)checkNull(batchNo, curDate, "批次号","repayment") : null;
+//        if(response!=null){ return response;}
         response = checkNull(orgId, curDate, "机构编号","repayment") != null ? (LuckElephantRepaymentAssetResponse)checkNull(orgId, curDate, "机构编号","repayment") : null;
         if(response!=null){ return response;}
         response = checkNull(orgName, curDate, "机构名称","repayment") != null ? (LuckElephantRepaymentAssetResponse)checkNull(orgName, curDate, "机构名称","repayment") : null;
@@ -662,6 +666,15 @@ public class LuckElephantRemoteServiceImpl implements ILuckElephantRemoteService
     @Override
     public void deleteTempTable(String importBatchNo) {
         this.luckElephantRemoteMapper.deleteTempTable(importBatchNo);
+    }
+
+    /**
+     * 清空临时表
+     * @param
+     */
+    @Override
+    public void deleteRepaymentTempTable() {
+        this.luckElephantRemoteMapper.deleteRepaymentTempTable();
     }
 
 

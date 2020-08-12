@@ -745,7 +745,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 <if test="TempCurAssets.rmbYe != null ">rmb_ye = #{TempCurAssets.rmbYe},</if>
                 <if test="TempCurAssets.waYe != null ">wa_ye = #{TempCurAssets.waYe},</if>
                 <if test="TempCurAssets.overdueDays != null  and TempCurAssets.overdueDays != ''">overdue_days = #{TempCurAssets.overdueDays},</if>
-                <if test="TempCurAssets.transferType != null  and TempCurAssets.transferType != ''">transferType = #{TempCurAssets.transferType},</if>
+                <if test="TempCurAssets.transfertype != null  and TempCurAssets.transfertype != ''">transferType = #{TempCurAssets.transfertype},</if>
                 <if test="TempCurAssets.borrowNo != null  and TempCurAssets.borrowNo != ''">borrow_no = #{TempCurAssets.borrowNo},</if>
                 <if test="TempCurAssets.lastRepayAmount != null  and TempCurAssets.lastRepayAmount != ''">lastRepayAmount = #{TempCurAssets.lastRepayAmount},</if>
                 <if test="TempCurAssets.ykqs != null  and TempCurAssets.ykqs != ''">ykqs = #{TempCurAssets.ykqs},</if>
@@ -776,6 +776,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <delete id="deleteTempTable">
         delete from cur_assets_package_temp WHERE import_batch_no=#{importBatchNo}
+    </delete>
+
+    <delete id="deleteRepaymentTempTable">
+        delete from cur_assets_repayment_package_temp
     </delete>
 
 </mapper>

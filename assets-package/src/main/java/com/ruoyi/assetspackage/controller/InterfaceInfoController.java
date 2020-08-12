@@ -28,15 +28,15 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @date 2020-08-07
  */
 @Controller
-@RequestMapping("/ruoyi/info")
+@RequestMapping("/interface/info")
 public class InterfaceInfoController extends BaseController
 {
-    private String prefix = "ruoyi/info";
+    private String prefix = "assetspackage/interfaceinfo";
 
     @Autowired
     private IInterfaceInfoService interfaceInfoService;
 
-    @RequiresPermissions("ruoyi:info:view")
+    @RequiresPermissions("interface:info:view")
     @GetMapping()
     public String info()
     {
@@ -46,7 +46,7 @@ public class InterfaceInfoController extends BaseController
     /**
      * 查询接口信息记录列表
      */
-    @RequiresPermissions("ruoyi:info:list")
+    @RequiresPermissions("interface:info:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(InterfaceInfo interfaceInfo)
@@ -59,7 +59,7 @@ public class InterfaceInfoController extends BaseController
     /**
      * 导出接口信息记录列表
      */
-    @RequiresPermissions("ruoyi:info:export")
+    @RequiresPermissions("interface:info:export")
     @Log(title = "接口信息记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -82,7 +82,7 @@ public class InterfaceInfoController extends BaseController
     /**
      * 新增保存接口信息记录
      */
-    @RequiresPermissions("ruoyi:info:add")
+    @RequiresPermissions("interface:info:add")
     @Log(title = "接口信息记录", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -105,7 +105,7 @@ public class InterfaceInfoController extends BaseController
     /**
      * 修改保存接口信息记录
      */
-    @RequiresPermissions("ruoyi:info:edit")
+    @RequiresPermissions("interface:info:edit")
     @Log(title = "接口信息记录", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -117,7 +117,7 @@ public class InterfaceInfoController extends BaseController
     /**
      * 删除接口信息记录
      */
-    @RequiresPermissions("ruoyi:info:remove")
+    @RequiresPermissions("interface:info:remove")
     @Log(title = "接口信息记录", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

@@ -1,9 +1,12 @@
 package com.ruoyi.assetspackage.domain.luckElephant;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+
+import java.util.Date;
 
 /**
  * 接口信息记录对象 interface_info
@@ -16,7 +19,7 @@ public class InterfaceInfo extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
-    @Excel(name = "主键")
+//    @Excel(name = "主键")
     private Long id;
 
     /** 接口名称 */
@@ -32,8 +35,15 @@ public class InterfaceInfo extends BaseEntity
     private String info;
 
     /** 状态 */
-    @Excel(name = "状态")
+    @Excel(name = "状态",readConverterExp="0=成功,1=失败")
     private String status;
+
+    @Excel(name="创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+
+    private Date startDate;
+    private Date endDate;
 
     public void setId(Long id) 
     {
@@ -79,6 +89,32 @@ public class InterfaceInfo extends BaseEntity
     public String getStatus() 
     {
         return status;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    @Override
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    @Override
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     @Override

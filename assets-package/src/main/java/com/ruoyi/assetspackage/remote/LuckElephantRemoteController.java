@@ -180,10 +180,7 @@ public class LuckElephantRemoteController {
             return JSON.toJSONString(response);
         }finally {
             if(request != null){
-                String batchNo = request.getBatchNo();
-                if(batchNo != null && !"".equals(batchNo)){
-                    this.luckElephantRemoteService.deleteTempTable(batchNo);
-                }
+                this.luckElephantRemoteService.deleteRepaymentTempTable();
             }
         }
     }
@@ -199,11 +196,11 @@ public class LuckElephantRemoteController {
             //插入日志记录表
             InterfaceInfo info = new InterfaceInfo();
             try {
-                info.setName("addAssets");
+                info.setName("新案下发接口");
                 info.setCode(response.getRetCode());
                 info.setInfo(response.getRetMsg());
                 info.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(response.getRetTime()));
-                String status = "0000".equals(response.getRetCode())?"成功":"失败";
+                String status = "0000".equals(response.getRetCode())?"0":"1";
                 info.setStatus(status);
             } catch (ParseException e1) {
                 e1.printStackTrace();
@@ -214,11 +211,11 @@ public class LuckElephantRemoteController {
             //插入日志记录表
             InterfaceInfo info = new InterfaceInfo();
             try {
-                info.setName("updateAssets");
+                info.setName("案件更新接口");
                 info.setCode(response.getRetCode());
                 info.setInfo(response.getRetMsg());
                 info.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(response.getRetTime()));
-                String status = "0000".equals(response.getRetCode())?"成功":"失败";
+                String status = "0000".equals(response.getRetCode())?"0":"1";
                 info.setStatus(status);
             } catch (ParseException e1) {
                 e1.printStackTrace();
@@ -229,11 +226,11 @@ public class LuckElephantRemoteController {
             //插入日志记录表
             InterfaceInfo info = new InterfaceInfo();
             try {
-                info.setName("repaymentAssets");
+                info.setName("还款更新接口");
                 info.setCode(response.getRetCode());
                 info.setInfo(response.getRetMsg());
                 info.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(response.getRetTime()));
-                String status = "0000".equals(response.getRetCode())?"成功":"失败";
+                String status = "0000".equals(response.getRetCode())?"0":"1";
                 info.setStatus(status);
             } catch (ParseException e1) {
                 e1.printStackTrace();

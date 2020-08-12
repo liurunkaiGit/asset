@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('接口信息记录列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>执行状态：</p>
+                                <select name="status">
+                                    <option value="">请选择</option>
+                                    <option value="0">成功</option>
+                                    <option value="1">失败</option>
+                                </select>
+                            </li>
+                            <li class="select-time">
+                                <p>执行时间：</p>
+                                <input type="text" class="time-input" id="startDate" placeholder="开始时间" name="startDate"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endDate" placeholder="结束时间" name="endDate"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="interface:info:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="interface:info:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "interface/info";
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "接口信息记录",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '主键',
+                    visible: false
+                },
+                {
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                {
+                    field : 'name', 
+                    title : '接口名称'
+                },
+                {
+                    field : 'code', 
+                    title : '报错代码'
+                },
+                {
+                    field : 'info', 
+                    title : '日志信息'
+                },
+                {
+                    field : 'status', 
+                    title : '状态',
+                    formatter: function (value, row, index) {
+                       if(value==0){
+                           value="成功";
+                       }else{
+                           value = "失败";
+                       }
+                       return value;
+                    }
+                },
+                {
+                    field : 'createTime', 
+                    title : '创建时间'
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>
