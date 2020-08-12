@@ -42,15 +42,15 @@ public class AsyncFactory
             public void run()
             {
 //                SysUserOnline online = new SysUserOnline();
-//                online.setSessionId(String.valueOf(session.getId()));
-//                online.setDeptName(session.getDeptName());
-//                online.setLoginName(session.getLoginName());
-//                online.setStartTimestamp(session.getStartTimestamp());
-//                online.setLastAccessTime(session.getLastAccessTime());
-//                online.setExpireTime(session.getTimeout());
-//                online.setIpaddr(session.getHost());
-//                online.setLoginLocation(AddressUtils.getRealAddressByIP(session.getHost()));
-//                online.setBrowser(session.getBrowser());
+////                online.setSessionId(String.valueOf(session.getId()));
+////                online.setDeptName(session.getDeptName());
+////                online.setLoginName(session.getLoginName());
+////                online.setStartTimestamp(session.getStartTimestamp());
+////                online.setLastAccessTime(session.getLastAccessTime());
+////                online.setExpireTime(session.getTimeout());
+////                online.setIpaddr(session.getHost());
+////                online.setLoginLocation(AddressUtils.getRealAddressByIP(session.getHost()));
+////                online.setBrowser(session.getBrowser());
 //                online.setOs(session.getOs());
 //                online.setStatus(session.getStatus());
 //                SpringUtils.getBean(ISysUserOnlineService.class).saveOnline(online);
