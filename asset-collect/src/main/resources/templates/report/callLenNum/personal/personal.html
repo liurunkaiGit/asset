@@ -194,6 +194,8 @@
                         if (row.timePeriod == '合计') {
                             if (value != null && value != '') {
                                 return '<b>' + value + '</b>';
+                            } else {
+                                return '<b>' + '0' + '</b>';
                             }
                         } else {
                             return value;
@@ -221,6 +223,8 @@
                         if (row.timePeriod == '合计') {
                             if (value != null && value != '') {
                                 return '<b>' + value + '</b>';
+                            } else {
+                                return '0';
                             }
                         } else {
                             return value;
