@@ -410,7 +410,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <update id="updateTaskTable" parameterType="String">
         UPDATE t_lc_task m,
-        (SELECT tt.call_status, tt.call_sign, tt.call_start_time,tt.org_caseNo,tt.org_id from
+        (SELECT tt.call_status, tt.call_sign, tt.make_call_time, tt.call_start_time,tt.org_caseNo,tt.org_id from
         (SELECT t.call_status,
         (CASE t.call_status
         WHEN '已接听' THEN 'R01'
@@ -429,7 +429,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ELSE t.call_status END) as call_sign,
         t.call_start_time,
         t.org_caseNo,
-        t.org_id
+        t.org_id,
+        t.make_call_time
         from t_lc_collectionrecordimprot_temp t
         WHERE t.import_batch_no = #{importBatchNo} and t.is_exception ='0' AND EXISTS(
         SELECT a.case_no from t_lc_task a
