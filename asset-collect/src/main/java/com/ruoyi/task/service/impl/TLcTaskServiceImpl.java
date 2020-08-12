@@ -660,6 +660,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                             .taskStatus(task.getTaskStatus())
                             .validateStatus(IsNoEnum.IS.getCode())
                             .build();
+                    tLcDuncaseAssign.setCreateBy(String.valueOf(ShiroUtils.getSysUser().getUserId()));
                     return tLcDuncaseAssign;
                 }).collect(Collectors.toList());
         // 将该任务添加到案件历史轨迹表
@@ -803,7 +804,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
 
     private Set<TLcTask> getAllocatTaskSet(String taskIds, Integer allocatNum, String caseNos) {
         Set<TLcTask> randomTaskSet = new HashSet<>(allocatNum); // 这里用set，因为随机选择的时候会重复，set可以去重
-
+//        this.orgPackageService.selectOrgPackageByOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
         if (allocatNum < taskIds.split(",").length) {
             Random random = new Random();
             int i = 0; //变量尽量不要循环定义
@@ -812,6 +813,8 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 i = random.nextInt(taskIds.split(",").length);
                 tLcTask.setId(Long.valueOf(taskIds.split(",")[i]));
                 tLcTask.setCaseNo(caseNos.split(",")[i]);
+                tLcTask.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
+                tLcTask.setOrgName(ShiroUtils.getSysUser().getOrgName());
                 randomTaskSet.add(tLcTask);
             }
         } else {
@@ -819,6 +822,8 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 TLcTask tLcTask = new TLcTask();
                 tLcTask.setId(Long.valueOf(taskIds.split(",")[i]));
                 tLcTask.setCaseNo(caseNos.split(",")[i]);
+                tLcTask.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
+                tLcTask.setOrgName(ShiroUtils.getSysUser().getOrgName());
                 randomTaskSet.add(tLcTask);
             }
         }

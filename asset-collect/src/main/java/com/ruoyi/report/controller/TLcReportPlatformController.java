@@ -9,6 +9,7 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.report.domain.TLcReportPlatform;
 import com.ruoyi.report.service.ITLcReportPlatformService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
@@ -64,6 +67,20 @@ public class TLcReportPlatformController extends BaseController {
     @ResponseBody
     public AjaxResult export(TLcReportPlatform tLcReportPlatform) {
         List<TLcReportPlatform> list = tLcReportPlatformService.selectTLcReportPlatformList(tLcReportPlatform);
+        list.stream().forEach(platform -> {
+            if (StringUtils.isNoneBlank(platform.getZjCallLen())) {
+                BigDecimal bigDecimal = new BigDecimal(platform.getZjCallLen());
+                platform.setZjCallLen(String.valueOf(bigDecimal.setScale(2, RoundingMode.HALF_UP)));
+            }
+            if (StringUtils.isNoneBlank(platform.getPaCallLen())) {
+                BigDecimal bigDecimal = new BigDecimal(platform.getPaCallLen());
+                platform.setPaCallLen(String.valueOf(bigDecimal.setScale(2, RoundingMode.HALF_UP)));
+            }
+            if (StringUtils.isNoneBlank(platform.getTotalCallLen())) {
+                BigDecimal bigDecimal = new BigDecimal(platform.getTotalCallLen());
+                platform.setTotalCallLen(String.valueOf(bigDecimal.setScale(2, RoundingMode.HALF_UP)));
+            }
+        });
         ExcelUtil<TLcReportPlatform> util = new ExcelUtil<TLcReportPlatform>(TLcReportPlatform.class);
         return util.exportExcel(list, "platform");
     }

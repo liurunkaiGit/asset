@@ -27,6 +27,24 @@ public class TLcReportPersonal extends BaseEntity {
     private Date reportData;
 
     /**
+     * 组别
+     */
+    @Excel(name = "组别")
+    private String userGroup;
+
+    /**
+     * 坐席编码
+     */
+    @Excel(name = "坐席编码")
+    private String loginName;
+
+    /**
+     * 坐席姓名
+     */
+    @Excel(name = "坐席姓名")
+    private String userName;
+
+    /**
      * 时间段
      */
     @Excel(name = "时间段")
@@ -85,23 +103,5 @@ public class TLcReportPersonal extends BaseEntity {
      */
     @Excel(name = "全部拨打次数")
     private Integer totalCallNum;
-
-    /**
-     * 组别
-     */
-    @Excel(name = "组别")
-    private String userGroup;
-
-    /**
-     * 坐席编码
-     */
-    @Excel(name = "坐席编码")
-    private String loginName;
-
-    /**
-     * 坐席姓名
-     */
-    @Excel(name = "坐席姓名")
-    private String userName;
 
 }

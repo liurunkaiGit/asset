@@ -9,6 +9,7 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.report.domain.TLcReportPersonal;
 import com.ruoyi.report.service.ITLcReportPersonalService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
@@ -64,6 +67,26 @@ public class TLcReportPersonalController extends BaseController {
     @ResponseBody
     public AjaxResult export(TLcReportPersonal tLcReportPersonal) {
         List<TLcReportPersonal> list = tLcReportPersonalService.selectTLcReportPersonalList(tLcReportPersonal);
+        list.stream().forEach(personal -> {
+            if (!personal.getTimePeriod().equals("合计")) {
+                personal.setReportData(null);
+                personal.setUserGroup(null);
+                personal.setLoginName(null);
+                personal.setUserName(null);
+            }
+            if (StringUtils.isNoneBlank(personal.getZjCallLen())) {
+                BigDecimal bigDecimal = new BigDecimal(personal.getZjCallLen());
+                personal.setZjCallLen(String.valueOf(bigDecimal.setScale(2, RoundingMode.HALF_UP)));
+            }
+            if (StringUtils.isNoneBlank(personal.getPaCallLen())) {
+                BigDecimal bigDecimal = new BigDecimal(personal.getPaCallLen());
+                personal.setPaCallLen(String.valueOf(bigDecimal.setScale(2, RoundingMode.HALF_UP)));
+            }
+            if (StringUtils.isNoneBlank(personal.getTotalCallLen())) {
+                BigDecimal bigDecimal = new BigDecimal(personal.getTotalCallLen());
+                personal.setTotalCallLen(String.valueOf(bigDecimal.setScale(2, RoundingMode.HALF_UP)));
+            }
+        });
         ExcelUtil<TLcReportPersonal> util = new ExcelUtil<TLcReportPersonal>(TLcReportPersonal.class);
         return util.exportExcel(list, "personal");
     }
