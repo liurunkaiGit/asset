@@ -79,22 +79,23 @@ public class AssetsRepaymentFromXYServiceImpl implements IAssetsRepaymenFromXYSe
     @Override
     public String findOwnerName(Map<String, String> param) {
         String ownerName = "";
+        //匹配当天的
         List<String> ownerNameByAssign = this.assetsRepaymentFromXYMapper.findOwnerNameByAssign(param);
         if(ownerNameByAssign.size() > 0){
-            for (String ownerAssign : ownerNameByAssign) {
-                if(ownerAssign != null && !"".equals(ownerAssign)){
-                    ownerName = ownerName + ","+ownerAssign;
+            for (String name : ownerNameByAssign) {
+                if(name != null && !"".equals(name)){
+                    ownerName = ownerName + ","+name;
                 }
             }
         }
-        //轨迹表数据为空，则查任务表
+        //匹配当天之前的最后一个(结案的为空，未结案的展示)
         if("".equals(ownerName)){
-            List<String> ownerNameByTask = this.assetsRepaymentFromXYMapper.findOwnerNameByTask(param);
-            if(ownerNameByTask.size() > 0){
-                for (String ownerTask : ownerNameByTask) {
-                    if(ownerTask != null && !"".equals(ownerTask)){
-                        ownerName = ownerName + ","+ownerTask;
-                    }
+            Map<String, Object> resultMap = this.assetsRepaymentFromXYMapper.findOwnerNameByAssign2(param);
+            Integer taskType = (Integer)resultMap.get("taskType");
+            if(taskType != 7){
+                String name = (String)resultMap.get("ownerName");
+                if(name != null && !"".equals(name)){
+                    ownerName = ownerName + ","+name;
                 }
             }
         }

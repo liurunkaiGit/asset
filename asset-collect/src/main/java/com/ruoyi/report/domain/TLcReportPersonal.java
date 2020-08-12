@@ -59,7 +59,7 @@ public class TLcReportPersonal extends BaseEntity {
     /**
      * 平安通话时长
      */
-    @Excel(name = "平安通话时长")
+    @Excel(name = "平安通话时长(分)")
     private String paCallLen;
 
     /**
@@ -77,7 +77,7 @@ public class TLcReportPersonal extends BaseEntity {
     /**
      * 自建通话时长
      */
-    @Excel(name = "自建通话时长")
+    @Excel(name = "自建通话时长(分)")
     private String zjCallLen;
 
     /**
@@ -95,7 +95,7 @@ public class TLcReportPersonal extends BaseEntity {
     /**
      * 全部通话时长
      */
-    @Excel(name = "全部通话时长")
+    @Excel(name = "全部通话时长(分)")
     private String totalCallLen;
 
     /**

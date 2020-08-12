@@ -53,6 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		su.login_name,
 		su.user_name,
 		'0-9' as time_period,
+        t.create_by,
 		MAX(t.pa_called_num) as pa_called_num,
 		MAX(t.pa_call_len) as pa_call_len,
 		MAX(t.pa_call_num) as pa_call_num,
@@ -80,7 +81,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				(SELECT COUNT(1) as thcs FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 00:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 08:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
 				(SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 00:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 08:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len
 			FROM
-				t_lc_call_record re WHERE re.create_time <![CDATA[>=]]> CONCAT(#{date},' 00:00:00') and re.create_time <![CDATA[<=]]> CONCAT(#{date},' 08:59:59')
+				t_lc_call_record re
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
@@ -94,6 +95,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		su.login_name,
 		su.user_name,
 		'09-10' as time_period,
+        t.create_by,
 		MAX(t.pa_called_num) as pa_called_num,
 		MAX(t.pa_call_len) as pa_call_len,
 		MAX(t.pa_call_num) as pa_call_num,
@@ -121,7 +123,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				(SELECT COUNT(1) as thcs FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 09:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 09:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
 				(SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 09:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 09:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len
 			FROM
-				t_lc_call_record re WHERE re.create_time <![CDATA[>=]]> CONCAT(#{date},' 09:00:00') and re.create_time <![CDATA[<=]]> CONCAT(#{date},' 09:59:59')
+				t_lc_call_record re
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
@@ -135,6 +137,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		su.login_name,
 		su.user_name,
 		'10-11' as time_period,
+        t.create_by,
 		MAX(t.pa_called_num) as pa_called_num,
 		MAX(t.pa_call_len) as pa_call_len,
 		MAX(t.pa_call_num) as pa_call_num,
@@ -162,7 +165,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				(SELECT COUNT(1) as thcs FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 10:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 10:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
 				(SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 10:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 10:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len
 			FROM
-				t_lc_call_record re WHERE re.create_time <![CDATA[>=]]> CONCAT(#{date},' 10:00:00') and re.create_time <![CDATA[<=]]> CONCAT(#{date},' 10:59:59')
+				t_lc_call_record re
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
@@ -176,6 +179,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		su.login_name,
 		su.user_name,
 		'11-12' as time_period,
+        t.create_by,
 		MAX(t.pa_called_num) as pa_called_num,
 		MAX(t.pa_call_len) as pa_call_len,
 		MAX(t.pa_call_num) as pa_call_num,
@@ -203,7 +207,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				(SELECT COUNT(1) as thcs FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 11:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 11:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
 				(SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 11:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 11:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len
 			FROM
-				t_lc_call_record re WHERE re.create_time <![CDATA[>=]]> CONCAT(#{date},' 11:00:00') and re.create_time <![CDATA[<=]]> CONCAT(#{date},' 11:59:59')
+				t_lc_call_record re
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
@@ -217,6 +221,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		su.login_name,
 		su.user_name,
 		'12-13' as time_period,
+        t.create_by,
 		MAX(t.pa_called_num) as pa_called_num,
 		MAX(t.pa_call_len) as pa_call_len,
 		MAX(t.pa_call_num) as pa_call_num,
@@ -244,7 +249,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				(SELECT COUNT(1) as thcs FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 12:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 12:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
 				(SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 12:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 12:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len
 			FROM
-				t_lc_call_record re WHERE re.create_time <![CDATA[>=]]> CONCAT(#{date},' 12:00:00') and re.create_time <![CDATA[<=]]> CONCAT(#{date},' 12:59:59')
+				t_lc_call_record re
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
@@ -258,6 +263,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		su.login_name,
 		su.user_name,
 		'13-14' as time_period,
+        t.create_by,
 		MAX(t.pa_called_num) as pa_called_num,
 		MAX(t.pa_call_len) as pa_call_len,
 		MAX(t.pa_call_num) as pa_call_num,
@@ -285,7 +291,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				(SELECT COUNT(1) as thcs FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 13:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 13:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
 				(SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 13:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 13:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len
 			FROM
-				t_lc_call_record re WHERE re.create_time <![CDATA[>=]]> CONCAT(#{date},' 13:00:00') and re.create_time <![CDATA[<=]]> CONCAT(#{date},' 13:59:59')
+				t_lc_call_record re
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
@@ -299,6 +305,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		su.login_name,
 		su.user_name,
 		'14-15' as time_period,
+        t.create_by,
 		MAX(t.pa_called_num) as pa_called_num,
 		MAX(t.pa_call_len) as pa_call_len,
 		MAX(t.pa_call_num) as pa_call_num,
@@ -326,7 +333,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				(SELECT COUNT(1) as thcs FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 14:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 14:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
 				(SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 14:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 14:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len
 			FROM
-				t_lc_call_record re WHERE re.create_time <![CDATA[>=]]> CONCAT(#{date},' 14:00:00') and re.create_time <![CDATA[<=]]> CONCAT(#{date},' 14:59:59')
+				t_lc_call_record re
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
@@ -340,6 +347,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		su.login_name,
 		su.user_name,
 		'15-16' as time_period,
+        t.create_by,
 		MAX(t.pa_called_num) as pa_called_num,
 		MAX(t.pa_call_len) as pa_call_len,
 		MAX(t.pa_call_num) as pa_call_num,
@@ -367,7 +375,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				(SELECT COUNT(1) as thcs FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 15:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 15:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
 				(SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 15:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 15:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len
 			FROM
-				t_lc_call_record re WHERE re.create_time <![CDATA[>=]]> CONCAT(#{date},' 15:00:00') and re.create_time <![CDATA[<=]]> CONCAT(#{date},' 15:59:59')
+				t_lc_call_record re
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
@@ -381,6 +389,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		su.login_name,
 		su.user_name,
 		'16-17' as time_period,
+        t.create_by,
 		MAX(t.pa_called_num) as pa_called_num,
 		MAX(t.pa_call_len) as pa_call_len,
 		MAX(t.pa_call_num) as pa_call_num,
@@ -408,7 +417,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				(SELECT COUNT(1) as thcs FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 16:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 16:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
 				(SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 16:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 16:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len
 			FROM
-				t_lc_call_record re WHERE re.create_time <![CDATA[>=]]> CONCAT(#{date},' 16:00:00') and re.create_time <![CDATA[<=]]> CONCAT(#{date},' 16:59:59')
+				t_lc_call_record re
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
@@ -422,6 +431,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		su.login_name,
 		su.user_name,
 		'17-18' as time_period,
+        t.create_by,
 		MAX(t.pa_called_num) as pa_called_num,
 		MAX(t.pa_call_len) as pa_call_len,
 		MAX(t.pa_call_num) as pa_call_num,
@@ -449,7 +459,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				(SELECT COUNT(1) as thcs FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 17:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 17:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
 				(SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 17:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 17:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len
 			FROM
-				t_lc_call_record re WHERE re.create_time <![CDATA[>=]]> CONCAT(#{date},' 17:00:00') and re.create_time <![CDATA[<=]]> CONCAT(#{date},' 17:59:59')
+				t_lc_call_record re
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
@@ -463,6 +473,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		su.login_name,
 		su.user_name,
 		'18-19' as time_period,
+        t.create_by,
 		MAX(t.pa_called_num) as pa_called_num,
 		MAX(t.pa_call_len) as pa_call_len,
 		MAX(t.pa_call_num) as pa_call_num,
@@ -490,7 +501,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				(SELECT COUNT(1) as thcs FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 18:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 18:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
 				(SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 18:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 18:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len
 			FROM
-				t_lc_call_record re WHERE re.create_time <![CDATA[>=]]> CONCAT(#{date},' 18:00:00') and re.create_time <![CDATA[<=]]> CONCAT(#{date},' 18:59:59')
+				t_lc_call_record re
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
@@ -504,6 +515,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		su.login_name,
 		su.user_name,
 		'19-20' as time_period,
+        t.create_by,
 		MAX(t.pa_called_num) as pa_called_num,
 		MAX(t.pa_call_len) as pa_call_len,
 		MAX(t.pa_call_num) as pa_call_num,
@@ -531,7 +543,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				(SELECT COUNT(1) as thcs FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 19:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 19:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
 				(SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 19:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 19:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len
 			FROM
-				t_lc_call_record re WHERE re.create_time <![CDATA[>=]]> CONCAT(#{date},' 19:00:00') and re.create_time <![CDATA[<=]]> CONCAT(#{date},' 19:59:59')
+				t_lc_call_record re
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
@@ -545,6 +557,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		su.login_name,
 		su.user_name,
 		'20-24' as time_period,
+        t.create_by,
 		MAX(t.pa_called_num) as pa_called_num,
 		MAX(t.pa_call_len) as pa_call_len,
 		MAX(t.pa_call_num) as pa_call_num,
@@ -572,7 +585,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				(SELECT COUNT(1) as thcs FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 20:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 23:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
 				(SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 20:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 23:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len
 			FROM
-				t_lc_call_record re WHERE re.create_time <![CDATA[>=]]> CONCAT(#{date},' 20:00:00') and re.create_time <![CDATA[<=]]> CONCAT(#{date},' 23:59:59')
+				t_lc_call_record re
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
@@ -586,6 +599,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		su.login_name,
 		su.user_name,
 		'合计' as time_period,
+        t.create_by,
 		MAX(t.pa_called_num) as pa_called_num,
 		MAX(t.pa_call_len) as pa_call_len,
 		MAX(t.pa_call_num) as pa_call_num,
@@ -613,14 +627,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				(SELECT COUNT(1) as thcs FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 00:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 23:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
 				(SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 00:00:00') AND r.create_time <![CDATA[<=]]> CONCAT(#{date},' 23:59:59') and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len
 			FROM
-				t_lc_call_record re WHERE re.create_time <![CDATA[>=]]> CONCAT(#{date},' 00:00:00') and re.create_time <![CDATA[<=]]> CONCAT(#{date},' 23:59:59')
+				t_lc_call_record re
 			GROUP BY
 				re.platform,re.create_by
 		) t GROUP BY t.create_by,t.platform
 	) t,sys_user su where t.create_by = su.user_id and t.create_by != 1
 		<if test="agentName != null  and agentName != ''"> and su.user_name = #{agentName}</if>
 		GROUP BY t.create_by
-) t ORDER BY t.login_name,t.time_period
+) t where EXISTS (select tt.create_by from t_lc_call_record tt where tt.create_time <![CDATA[>=]]> CONCAT(#{date},' 00:00:00') and tt.create_time <![CDATA[<=]]> CONCAT(#{date},' 23:59:59' )  and tt.create_by = t.create_by ) ORDER BY t.login_name,t.time_period
     </select>
 
     <insert id="insertTLcReportPersonal" parameterType="com.ruoyi.report.domain.TLcReportPersonal">
