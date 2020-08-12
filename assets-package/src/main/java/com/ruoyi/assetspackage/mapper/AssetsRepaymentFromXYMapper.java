@@ -30,7 +30,7 @@ public interface AssetsRepaymentFromXYMapper
      *
      */
     public List<String> findOwnerNameByAssign(Map<String,String> param);
-    public List<String> findOwnerNameByTask(Map<String,String> param);
+    public Map<String,Object> findOwnerNameByAssign2(Map<String,String> param);
 
     /**
      * 查询还款明细

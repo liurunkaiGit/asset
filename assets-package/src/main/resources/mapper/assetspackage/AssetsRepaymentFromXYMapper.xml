@@ -219,6 +219,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
        group by owner_name
     </select>
 
+    <select id="findOwnerNameByAssign2" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT owner_name as ownerName,transfer_type as taskType
+        from t_lc_duncase_assign
+        where org_id=#{orgId} and case_no=#{orgCasNo}
+        and (date_format(create_time, '%Y-%m-%d') <![CDATA[<]]> #{hkrq} or date_format(create_time, '%Y/%m/%d') <![CDATA[<]]> #{hkrq})
+        and owner_name is not null
+        order by create_time desc
+        limit 1
+    </select>
+
     <select id="findOwnerNameByTask" parameterType="java.util.Map" resultType="java.lang.String">
       SELECT DISTINCT owner_name as ownerName
       from t_lc_task  where org_id=#{orgId} and case_no=#{orgCasNo}
