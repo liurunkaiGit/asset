@@ -719,7 +719,6 @@
     var startTime = null;
     var endTime = null;
     var recordDuration = null;
-
     $(function () {
         var panehHidden = false;
         if ($(this).width() < 769) {
@@ -1064,6 +1063,10 @@
     }
 
     function collJobDetail(caseNo,orgId,importBatchNo) {
+        // if (parent.agentIsCalling) {
+        //     $.modal.alertError("正在通话中不能切换用户");
+        //     return;
+        // }
         currentCaseNo = caseNo;
         currentImportBatchNo = importBatchNo;
         currentOrgId = orgId;
@@ -1228,6 +1231,10 @@
 
         if (isRadio == null || isRadio == 'undefined' || isRadio == '') {
             $.modal.alert("请选择联系人");
+            return;
+        }
+        if (parent.agentIsCalling) {
+            $.modal.alertError("正在通话中，请先挂断当前通话再保存电话码");
             return;
         }
         if (sign == null || sign == '' || sign == 'undefined') {
@@ -1567,6 +1574,10 @@
      * @param pnumber:被叫号码
      */
     function call(contactName,id,contactRelation,phone) {
+        if (parent.agentIsCalling) {
+            $.modal.alertError("正在通话中，请先挂断当前通话再拨打");
+            return;
+        }
         var callStartTime = $("#callStartTime").val();
         var callEndTime = $("#callEndTime").val();
         var callLen = $("#callLen").val();
@@ -1595,7 +1606,8 @@
             $.modal.alert("请配置当前机构的话务平台");
             return;
         }
-
+        parent.agentIsCalling = true;
+        console.log("坐席开始打电话，agentIsCalling=true");
         $("#"+id).attr("checked","checked");
         $(".disclass").attr('disabled',true);
         $(".disclass").css('pointer-events','none');
@@ -1668,6 +1680,8 @@
      * HangupCall(挂机):座席在释放当前通话
      */
     function hangUp() {
+        parent.agentIsCalling = false;
+        console.log("通话结束，agentIsCalling=false");
         var platform = $("#callPlatform").val();
         if (platform == 'PA') {
             agentClient.hangupCall();
@@ -2005,6 +2019,10 @@
 
 
     function freeCall(){
+        if (parent.agentIsCalling) {
+            $.modal.alertError("正在通话中，请先挂断当前通话再拨打");
+            return;
+        }
         // $("#freeCallFlag").val("freeCall");
         var callRadioLocation = $("#callRadioLocation").val();
         if(callRadioLocation!=""&&callRadioLocation!=null){
@@ -2026,7 +2044,8 @@
             $.modal.alert("请选择话务平台");
             return;
         }
-
+        parent.agentIsCalling = true;
+        console.log("坐席开始打电话，agentIsCalling=true");
         /* var trs = $("#custContactTbody")[0].childNodes;
          $.each(trs,function (i,n) {
              if(n.firstChild.lastChild.checked){

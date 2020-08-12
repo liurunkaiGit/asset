@@ -198,7 +198,7 @@
 
         var tbcc = [[${tLcBatchCallConfig}]];//批量外呼配置信息
         var childObj ;//子页面对象，再子页面成功打开之后，赋值，然后，电话挂断的监听事件会用到
-
+        var agentIsCalling;
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -339,6 +339,7 @@
                     }
                 }
                 if(type == "EVENT_HUNGUP"){//接通之后挂掉电话
+                    agentIsCalling = false;
                     console.log('hangup' + type,JSON.stringify(data));
                     if(childObj != null && childObj != undefined){
                         childObj.resetTiming();
@@ -529,6 +530,8 @@
             };
 
             agentClient.onReleased = function(event) {//电话未接通
+                agentIsCalling = false;
+                console.log("通话结束，agentIsCalling=false");
                 printEvent('onReleased', event);
                 if(isWjt == ""){
                     updateStatus(currentCall.id,4,"客户未接通，已完成","","");//已完成
@@ -536,6 +539,8 @@
             };
 
             agentClient.onRecordEnd = function(event) {
+                agentIsCalling = false;
+                console.log("通话结束，agentIsCalling=false");
                 childObj.resetTiming();//调用子页面的方法
                 // resetTiming();
                 printEvent('onRecordEnd', event);
@@ -647,7 +652,7 @@
                 $.modal.alert("请配置当前机构的话务平台");
                 return;
             }
-
+            agentIsCalling = true;
             callRecordId= "";//每次拨打之前清空电催记录id
             var destDesc = "0"+phone;
             if(callPlatform == 'PA') {
