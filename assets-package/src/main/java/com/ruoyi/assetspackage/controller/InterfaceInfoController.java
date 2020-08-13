@@ -31,7 +31,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 @RequestMapping("/interface/info")
 public class InterfaceInfoController extends BaseController
 {
-    private String prefix = "assetspackage/interfaceinfo";
+    private String prefix = "assetspackage/interfaceInfo";
 
     @Autowired
     private IInterfaceInfoService interfaceInfoService;
