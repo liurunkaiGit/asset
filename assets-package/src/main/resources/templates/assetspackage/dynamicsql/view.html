@@ -155,8 +155,11 @@
 
     function toApply() {
         var sql = $("#sql").val();
-        if(sql.indexOf("insert")>=0 || sql.indexOf("INSERT")>=0 || sql.indexOf("update")>=0 || sql.indexOf("UPDATE")>=0 || sql.indexOf("delete")>=0 || sql.indexOf("DELETE")>=0
-            || sql.indexOf("alter")>=0 || sql.indexOf("ALTER")>=0 || sql.indexOf("create")>=0 || sql.indexOf("CREATE")>=0 ){
+        var temp = sql.substring(0,6);
+        if(temp=="select" || temp=="SELECT" ||temp.indexOf("show")>=0 || temp.indexOf("SHOW")>=0 ){
+            window.location.href=prefix + "/apply2"+"?sql="+sql;
+            $('#myModal').modal('hide');
+        }else{
             $.ajax({
                 url: prefix + "/apply",
                 type: 'post',
@@ -176,9 +179,6 @@
                     console.log(XMLHttpRequest.readyState + XMLHttpRequest.status + XMLHttpRequest.responseText);
                 }
             });
-        }else{
-            window.location.href=prefix + "/apply2"+"?sql="+sql;
-            $('#myModal').modal('hide');
         }
     }
 </script>

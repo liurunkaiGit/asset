@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('上报查询逾期划扣')" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="type-form">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <label>报表日期： </label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+                        </li>
+                        <li>
+                            合同号：<input type="text" name="caseNo"/>
+                        </li>
+                        <li>
+                            客户姓名：<input type="text" name="customName"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-danger" onclick="rejectFun()" shiro:hasPermission="system:dict:export">
+                <i class="fa fa-remove"></i> 驳回
+            </a>
+            <a class="btn btn-success" onclick="$.table.exportExcel()" shiro:hasPermission="system:dict:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var prefix = ctx + "inforeporting/buckle";
+    $(document).ready(function(){
+        var options = {
+            url: prefix + "/listexpData",
+            exportUrl: prefix + "/export",
+            clickToSelect:true,
+            sortName: "createTime",
+            sortOrder: "desc",
+            modalName: "类型",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: '编号'
+                },
+                {
+                    field: 'productName',
+                    title: '产品'
+                },
+                {
+                    field: 'caseNo',
+                    title: '合同号'
+                },
+                {
+                    field: 'customName',
+                    title: '客户姓名'
+                },
+                {
+                    field: 'overdueDays',
+                    title: '逾期天数'
+                },
+                {
+                    field: 'reductionTypeName',
+                    title: '减免方式'
+                }]
+        };
+        $.table.init(options);
+
+    })
+  function rejectFun(){
+      var taskIdRows = $.table.selectFirstColumns();
+      if (taskIdRows.length == 0) {
+          $.modal.alertWarning("请至少选择一条记录");
+          return;
+      }
+      $.modal.confirm("确认要驳回选中的" + taskIdRows.length + "条数据吗?", function() {
+          $.operate.saveModal(prefix + "/reject", {"ids":taskIdRows.join()},function (result) {
+              $.operate.ajaxSuccess(result);
+          });
+      });
+  }
+</script>
+</body>
+</html>

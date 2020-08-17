@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('字典类型列表')" />
+</head>
+<body class="gray-bg">
+
+
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="type-form">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <label>报表日期： </label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+                        </li>
+                        <li>
+                            合同号：<input type="text"  name="caseNo"/>
+                        </li>
+                        <li>
+                            客户姓名：<input type="text" name="customName"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()">
+                <i class="fa fa-plus"></i> 新增
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:dict:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:dict:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+
+
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var prefix = ctx + "inforeporting/set";
+    $(document).ready(function(){
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            clickToSelect: true,
+            sortName: "createTime",
+            sortOrder: "desc",
+            modalName: "类型",
+            id:"bootstrap-table",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: '编号'
+                },
+                {
+                    field: 'orgName',
+                    title: '机构'
+                },
+                {
+                    field: 'reportingTypeName',
+                    title: '上报类型'
+                },
+                {
+                    field: 'fromColumn',
+                    title: '原字段',
+                },
+                {
+                    field: 'fromColumnName',
+                    title: '字段名称',
+                },
+                {
+                    field: 'customSorts',
+                    title: '排序',
+                },
+                {
+                    field: 'editStatus',
+                    title: '是否编辑',
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    }
+                },
+                {
+                    field: 'showStatus',
+                    title: '是否显示',
+                    formatter: function (value, row, index) {
+                        return statusTools1(row);
+                    }
+                }]
+        };
+
+        function statusTools(row) {
+            if (row.editStatus == 1) {
+                return '是';
+            } else {
+                return '否';
+            }
+        }
+        function statusTools1(row) {
+            if (row.showStatus == 1) {
+                return '是';
+            } else {
+                return '否';
+            }
+        }
+        $.table.init(options);
+    })
+
+</script>
+</body>
+</html>

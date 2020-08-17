@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.inforeporting.mapper.TLcInforeportingCompanyMapper">
+    
+    <resultMap type="com.ruoyi.inforeporting.domain.TLcInforeportingCompany" id="TLcInforeportingCompanyResult">
+        <result property="id"    column="id"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="caseNo"    column="case_no"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="customName"    column="custom_name"    />
+        <result property="productName"    column="product_name"    />
+        <result property="overdueDays"    column="overdue_days"    />
+        <result property="reductionTypeCode"    column="reduction_type_code"    />
+        <result property="reductionTypeName"    column="reduction_type_name"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="certificateNo"    column="certificate_no"    />
+        <result property="arrearsTotal"    column="arrears_total"    />
+        <result property="draweeName"    column="drawee_name"    />
+        <result property="relationship"    column="relationship"    />
+        <result property="topFourCards"    column="top_four_cards"    />
+        <result property="lastFourCards"    column="last_four_cards"    />
+        <result property="payingBank"    column="paying_bank"    />
+        <result property="depositAmount"    column="deposit_amount"    />
+        <result property="amountOfDeduction"    column="amount_of_deduction"    />
+        <result property="reasons"    column="reasons"    />
+        <result property="applicationTime"    column="application_time"    />
+        <result property="remarks"    column="remarks"    />
+    </resultMap>
+
+    <insert id="insertTLcInforeportingCompany" parameterType="com.ruoyi.inforeporting.domain.TLcInforeportingCompany" useGeneratedKeys="true" keyProperty="id">
+       INSERT INTO t_lc_inforeporting_company
+       (
+            org_id,
+            org_name,
+            import_batch_no,
+            case_no,
+            custom_name,
+            product_name,
+            overdue_days,
+            reduction_type_code,
+            reduction_type_name,
+            create_by,
+            create_time,
+            update_by,
+            update_time,
+            certificate_no,
+            arrears_total,
+            drawee_name,
+            relationship,
+            top_four_cards,
+            last_four_cards,
+            paying_bank,
+            deposit_amount,
+            amount_of_deduction,
+            reasons,
+            application_time,
+            remarks
+        )
+        VALUES
+        (
+            #{orgId},
+            #{orgName},
+            #{importBatchNo},
+            #{caseNo},
+            #{customName},
+            #{productName},
+            #{overdueDays},
+            #{reductionTypeCode},
+            #{reductionTypeName},
+            #{createBy},
+            now(),
+            #{createBy},
+            now(),
+            #{certificateNo},
+            #{arrearsTotal},
+            #{draweeName},
+            #{relationship},
+            #{topFourCards},
+            #{lastFourCards},
+            #{payingBank},
+            #{depositAmount},
+            #{amountOfDeduction},
+            #{reasons},
+            #{applicationTime},
+            #{remarks}
+        )
+    </insert>
+
+    <sql id="selectTLcInforeportingCompanyVo">
+        SELECT
+        id,
+        org_id,
+        org_name,
+        case_no,
+        import_batch_no,
+        custom_name,
+        overdue_days,
+        reduction_type_code,
+        reduction_type_name,
+        product_name,
+        create_by,
+        create_time,
+        update_by,
+        update_time,
+        certificate_no,
+        arrears_total,
+        drawee_name,
+        relationship,
+        top_four_cards,
+        last_four_cards,
+        paying_bank,
+        deposit_amount,
+        amount_of_deduction,
+        reasons,
+        application_time,
+        remarks
+        FROM
+        t_lc_inforeporting_company
+    </sql>
+
+    <select id="selectTLcInforeportingCompanyList" parameterType="com.ruoyi.inforeporting.domain.TLcInforeportingCompany" resultMap="TLcInforeportingCompanyResult">
+        <include refid="selectTLcInforeportingCompanyVo"/>
+        <where>
+            del_flag=0
+            <if test="createBy != null and createBy != ''">
+                AND create_by=#{createBy}
+            </if>
+            <if test="orgId != null and orgId != ''">
+                AND org_id=#{orgId}
+            </if>
+            <if test="caseNo != null and caseNo != ''">
+                AND case_no like concat('%', #{caseNo}, '%')
+            </if>
+            <if test="customName != null and customName != ''">
+                AND custom_name like concat('%', #{customName}, '%')
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+    </select>
+
+
+    <update id="rejectTLcInforeportingCompanyByIds" parameterType="Long">
+        update t_lc_inforeporting_company set del_flag=1 where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+</mapper>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增上报信息设置')" />
+    <th:block th:include="include :: select2-css" />
+</head>
+<body>
+<div class="main-content">
+    <form id="form-reprotingType" class="form-horizontal" th:object="${inforeportingSet}">
+        <input id="id" name="id"  type="hidden" th:field="*{id}" />
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>归属部门：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <input name="orgName" th:field="*{orgName}"  id="treeName" type="text" placeholder="请选择归属部门" class="form-control" required>
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">上报类型：</label>
+                    <div class="col-sm-8">
+                        <select onchange="reportingTypeFun(this)" id="reportingType" name="reportingType" class="form-control m-b" >
+                            <option value="1" th:selected="*{reportingType == 1}">减免</option>
+                            <option value="2" th:selected="*{reportingType == 2}">划扣</option>
+                            <option value="3" th:selected="*{reportingType == 3}">对公入账</option>
+                        </select>
+                        <input type="hidden" name="reportingTypeName" id="reportingTypeName" th:field="*{reportingTypeName}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">列名：</label>
+                    <div class="col-sm-8">
+                        <select  class="form-control m-b" name="fromColumn" id="fromColumn" >
+                            <option value="productName" th:selected="*{fromColumn == 'productName'}">产品</option>
+                            <option value="caseNo" th:selected="*{fromColumn == 'caseNo'}">合同号</option>
+                            <option value="customName" th:selected="*{fromColumn == 'customName'}">客户姓名</option>
+                            <option value="overdueDays" th:selected="*{fromColumn == 'overdueDays'}">逾期天数</option>
+                            <option value="overdueAging" th:selected="*{fromColumn == 'overdueAging'}">逾期账龄</option>
+                            <option value="certificateNo" th:selected="*{fromColumn == 'certificateNo'}">证件号</option>
+                            <option value="arrearsTotal" th:selected="*{fromColumn == 'arrearsTotal'}">委案金额</option>
+                            <option value="ownerName" th:selected="*{fromColumn == 'ownerName'}">业务归属人</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">显示名称：</label>
+                    <div class="col-sm-8">
+                        <input  name="fromColumnName" id="fromColumnName" th:field="*{fromColumnName}" class="form-control" type="text" maxlength="30" >
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">是否编辑：</label>
+                    <div class="col-sm-8">
+                        <select  class="form-control m-b" name="editStatus">
+                            <option value="1" th:selected="*{editStatus == 1}">是</option>
+                            <option value="0" th:selected="*{editStatus == 0}">否</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">是否显示：</label>
+                    <div class="col-sm-8">
+                        <select  class="form-control m-b" name="showStatus">
+                            <option value="1" th:selected="*{showStatus == 1}">是</option>
+                            <option value="0" th:selected="*{showStatus == 0}">否</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">序号：</label>
+                    <div class="col-sm-8">
+                        <input  name="customSorts" id="customSorts"  class="form-control" th:field="*{customSorts}" type="text" maxlength="2" >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: select2-js" />
+<script type="text/javascript">
+    var prefix = ctx + "inforeporting/set";
+    $(document).ready(function(){
+        $("#form-reprotingType").validate({
+            rules:{
+                customSorts:{
+                    digits:true
+                },
+            },
+            focusCleanup: true
+        });
+        /*用户管理-新增-选择部门树*/
+        $("#treeName").on("click",function(){
+            var treeId = $("#treeId").val();
+            var deptId = $.common.isEmpty(treeId) ? "100" : $("#treeId").val();
+            var url = ctx + "system/dept/selectDeptTree/" + deptId;
+            var options = {
+                title: '选择部门',
+                width: "380",
+                url: url,
+                callBack: function (index, layero) {
+                    var tree = layero.find("iframe")[0].contentWindow.$._tree;
+                    if ($.tree.notAllowParents(tree)) {
+                        var body = layer.getChildFrame('body', index);
+                        $("#treeId").val(body.find('#treeId').val());
+                        $("#treeName").val(body.find('#treeName').val());
+                        layer.close(index);
+                    }
+                }
+            };
+            $.modal.openOptions(options);
+        });
+        $("#fromColumn").on("change",function(){
+            var fromColumnName = $(this).children('option:selected').text();
+            $("#fromColumnName").val(fromColumnName);
+        });
+    });
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-reprotingType').serialize());
+        }
+    }
+</script>
+</body>
+</html>
