@@ -22,6 +22,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -697,5 +698,16 @@ public class Test {
             newList = taskList;
         }
         return newList;
+    }
+
+    @org.junit.Test
+    public void testCreateTime() {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime startTime = LocalDateTime.now().minusDays(1).toLocalDate().atTime(10,0,0);
+        LocalDateTime endTime = LocalDateTime.now().minusDays(1).toLocalDate().atTime(18,59,59);
+        String startTimeStr = df.format(startTime);
+        String endTimeStr = df.format(endTime);
+        System.out.println(startTimeStr);
+        System.out.println(endTimeStr);
     }
 }

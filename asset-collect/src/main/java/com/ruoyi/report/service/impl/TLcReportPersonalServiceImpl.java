@@ -33,18 +33,19 @@ public class TLcReportPersonalServiceImpl implements ITLcReportPersonalService {
      */
     @Override
     public List<TLcReportPersonal> selectTLcReportPersonalList(TLcReportPersonal tLcReportPersonal) {
-        List<TLcReportPersonal> list;
-        if (tLcReportPersonal.getReportData() == null || org.apache.commons.lang3.time.DateUtils.isSameDay(tLcReportPersonal.getReportData(), new Date())) {
-            Map<String, Object> param = new HashMap<>();
-//            param.put("day", 0);
-            param.put("date", LocalDate.now());
-            if (StringUtils.isNotBlank(tLcReportPersonal.getUserName())) {
-                param.put("agentName", tLcReportPersonal.getUserName());
-            }
-            list = selectReportPersonalList(param);
-        } else {
-            list = this.tLcReportPersonalMapper.selectTLcReportPersonalList(tLcReportPersonal);
-        }
+//        List<TLcReportPersonal> list;
+//        if (tLcReportPersonal.getReportData() == null || org.apache.commons.lang3.time.DateUtils.isSameDay(tLcReportPersonal.getReportData(), new Date())) {
+//            Map<String, Object> param = new HashMap<>();
+////            param.put("day", 0);
+//            param.put("date", LocalDate.now());
+//            if (StringUtils.isNotBlank(tLcReportPersonal.getUserName())) {
+//                param.put("agentName", tLcReportPersonal.getUserName());
+//            }
+//            list = selectReportPersonalList(param);
+//        } else {
+//            list = this.tLcReportPersonalMapper.selectTLcReportPersonalList(tLcReportPersonal);
+//        }
+        List<TLcReportPersonal> list = this.tLcReportPersonalMapper.selectTLcReportPersonalList(tLcReportPersonal);
         return list;
     }
 

@@ -92,6 +92,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="autoAllocatTask != null ">auto_allocat_task,</if>
             <if test="allocatTaskStartegy != null ">allocat_task_startegy,</if>
             <if test="isAutoScore != null and isAutoScore != ''">is_auto_score,</if>
+            <if test="isAutoSendSms != null ">is_auto_send_sms,</if>
+            <if test="smsTemplateId != null  and smsTemplateId != ''">sms_template_id,</if>
+            <if test="smsTemplateName != null  and smsTemplateName != ''">sms_template_name,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null  and id != ''">#{id},</if>
@@ -114,6 +117,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="autoAllocatTask != null ">#{autoAllocatTask},</if>
             <if test="allocatTaskStartegy != null ">#{allocatTaskStartegy},</if>
             <if test="isAutoScore != null and isAutoScore != ''">#{isAutoScore},</if>
+            <if test="isAutoSendSms != null ">#{isAutoSendSms},</if>
+            <if test="smsTemplateId != null  and smsTemplateId != ''">#{smsTemplateId},</if>
+            <if test="smsTemplateName != null  and smsTemplateName != ''">#{smsTemplateName},</if>
         </trim>
     </insert>
 
@@ -139,6 +145,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="autoAllocatTask != null ">auto_allocat_task = #{autoAllocatTask},</if>
             <if test="allocatTaskStartegy != null ">allocat_task_startegy = #{allocatTaskStartegy},</if>
             <if test="isAutoScore != null and isAutoScore != ''">is_auto_score = #{isAutoScore},</if>
+            <if test="isAutoSendSms != null ">is_auto_send_sms = #{isAutoSendSms},</if>
+            <if test="smsTemplateId != null  and smsTemplateId != ''">sms_template_id = #{smsTemplateId},</if>
+            <if test="smsTemplateName != null  and smsTemplateName != ''">sms_template_name = #{smsTemplateName},</if>
         </trim>
         where id = #{id}
     </update>

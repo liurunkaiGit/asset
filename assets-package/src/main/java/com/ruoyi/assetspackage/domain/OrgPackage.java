@@ -137,4 +137,22 @@ public class OrgPackage extends BaseEntity {
      */
     private String isAutoScore;
 
+    /**
+     * 是否自动发送短信，1：是吗，2：否
+     */
+    @Excel(name = "是否自动发送短信，1：是吗，2：否")
+    private Integer isAutoSendSms;
+
+    /**
+     * 短信模板id
+     */
+    @Excel(name = "短信模板id")
+    private String smsTemplateId;
+
+    /**
+     * 短信模板名称
+     */
+    @Excel(name = "短信模板名称")
+    private String smsTemplateName;
+
 }
