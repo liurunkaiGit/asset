@@ -25,12 +25,8 @@
             <div class="form-group" id="noCompany">
                 <label class="col-sm-3 control-label">减免方式：</label>
                 <div class="col-sm-8">
-                    <select name="reductionTypeCode" id="reductionTypeCode" class="form-control m-b">
-                        <option value="1">部份划扣</option>
-                        <option value="2">一次性结清</option>
-                        <option value="3">减免金额</option>
-                    </select>
-                    <input type="hidden" name="reductionTypeName" id="reductionTypeName" value="部份划扣">
+                    <input type="text" name="reductionTypeName" id="reductionTypeName" class="form-control">
+                    <input type="hidden" name="reductionTypeCode" value="1">
                 </div>
             </div>
         </form>
@@ -40,21 +36,21 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">产品：</label>
                     <div class="col-sm-8">
-                        <span class="form-control" style="border: 0" th:text="${tk.productName}"></span>
+                        [[${tk.productName}]]
                         <input type="hidden" name="productName"  th:value="${tk.productName}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">合同号：</label>
                     <div class="col-sm-8" >
-                        <span class="form-control" style="border: 0" th:text="${tk.caseNo}"></span>
+                        [[${tk.caseNo}]]
                         <input type="hidden" name="caseNo" th:value="${tk.caseNo}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">客户姓名：</label>
-                    <div class="col-sm-8">
-                        <span class="form-control" style="border: 0" th:text="${tk.customName}"></span>
+                    <div class="col-sm-8 ">
+                        [[${tk.customName}]]
                         <input type="hidden" name="customName" th:value="${tk.customName}">
                     </div>
                 </div>
@@ -72,28 +68,28 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">产品：</label>
                     <div class="col-sm-8">
-                        <span class="form-control" style="border: 0" th:text="${tk.productName}"></span>
+                        [[${tk.productName}]]
                         <input type="hidden" name="productName" th:value="${tk.productName}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">合同号：</label>
                     <div class="col-sm-8" >
-                        <span class="form-control" style="border: 0" th:text="${tk.caseNo}"></span>
+                        [[${tk.caseNo}]]
                         <input type="hidden" name="caseNo" th:value="${tk.caseNo}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">客户姓名：</label>
                     <div class="col-sm-8">
-                        <span class="form-control" style="border: 0" th:text="${tk.customName}"></span>
+                        [[${tk.customName}]]
                         <input type="hidden" name="customName" th:value="${tk.customName}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">逾期天数：</label>
                     <div class="col-sm-8">
-                        <span class="form-control" style="border: 0" th:text="${tk.overdueDays}"></span>
+                        [[${tk.overdueDays}]]
                         <input type="hidden" name="overdueDays" th:value="${tk.overdueDays}">
                     </div>
                 </div>
@@ -105,21 +101,21 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">产品：</label>
                 <div class="col-sm-8">
-                    <span class="form-control" style="border: 0" th:text="${tk.productName}"></span>
+                    [[${tk.productName}]]
                     <input type="hidden" name="productName" th:value="${tk.productName}">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">合同号：</label>
                 <div class="col-sm-8" >
-                    <span class="form-control" style="border: 0" th:text="${tk.caseNo}"></span>
+                    [[${tk.caseNo}]]
                     <input type="hidden" name="caseNo" th:value="${tk.caseNo}">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">客户姓名：</label>
                 <div class="col-sm-8">
-                    <span class="form-control" style="border: 0" th:text="${tk.customName}"></span>
+                    [[${tk.customName}]]
                     <input type="hidden" name="customName" th:value="${tk.customName}">
                 </div>
             </div>
@@ -255,7 +251,7 @@
                                     if(value.editStatus == 1){
                                         htm+="<input type=\"text\"  class=\"form-control\" name=\""+value.fromColumn+"\" value=\""+al+"\">";
                                     }else{
-                                        htm+="<span class=\"form-control\" style=\"border: 0\" >"+al+"</span>";
+                                        htm+=""+al+"";
                                         htm+="<input type='hidden' name='"+value.fromColumn+"' value=\""+al+"\">";
                                     }
                                     htm+="</div>";

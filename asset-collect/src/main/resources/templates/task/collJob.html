@@ -1124,7 +1124,6 @@
             type: "POST",   //请求方式
             success: function(data) {
                 //请求成功时处理
-                debugger;
                 $("#inforeportingTbody").html("");
                 var htm = "";
                 $.each(data, function (i, n) {
@@ -1404,6 +1403,7 @@
                     $('#repay').val('0');
                     $('#add').val('0');
                     $('#find').val('0');
+                    $('#inforeporting').val('0');
                     $("a[aria-expanded='true']").click();
 
                 }

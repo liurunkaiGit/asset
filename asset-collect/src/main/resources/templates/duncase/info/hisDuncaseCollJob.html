@@ -69,6 +69,7 @@
                         <li class=""><a data-toggle="tab" href="#tab-6" aria-expanded="false" onclick="viewTabDetail('cust')">联系人</a><input type="hidden" id="cust" value="0"></li>
                         <li class=""><a data-toggle="tab" href="#tab-7" aria-expanded="false" onclick="viewTabDetail('add')">补充信息</a><input type="hidden" id="add" value="0"></li>
                         <li class=""><a data-toggle="tab" href="#tab-8" aria-expanded="false" onclick="viewTabDetail('find')">查找记录</a><input type="hidden" id="find" value="0"></li>
+                        <li class=""><a data-toggle="tab" href="#tab-9" aria-expanded="false" onclick="viewTabDetail('inforeporting')">信息上报</a><input type="hidden" id="inforeporting" value="0"></li>
                     </ul>
                     <div id="tabDiv" class="tab-content tabDiv">
                         <div id="tab-5" class="tab-pane active">
@@ -241,6 +242,19 @@
                                     <th>创建时间</th>
                                 </tr>
                                 <tbody id="selectRecordTrNew"></tbody>
+                            </table>
+                        </div>
+                        <div id="tab-9" class="tab-pane">
+                            <table id="inforeportingTable">
+                                <tr>
+                                    <th style="text-align: left">编号</th>
+                                    <th style="text-align: left">上报类型</th>
+                                    <th style="text-align: left">申请金额</th>
+                                    <th style="text-align: left">申请日期</th>
+                                    <th style="text-align: left">申请原因</th>
+                                    <th style="text-align: left">操作员</th>
+                                </tr>
+                                <tbody id="inforeportingTbody"></tbody>
                             </table>
                         </div>
                     </div>
@@ -570,10 +584,68 @@
         }else if(tab == 'cust' && $('#cust').val()=='0'){//联系人
             $('#cust').val('1');
             custContactList(currentCaseNo,orgId,importBatchNo);//获取联系人信息
+        }else if(tab == 'inforeporting' && $('#inforeporting').val()=='0'){//上报信息查找记录
+            $('#inforeporting').val('1');
+            selectInforeportingList();//获取查找记录
         }
 
     }
 
+    function  selectInforeportingList() {//获取上报信息记录
+        var caseNo = $("#firstEnterCaseNo").val();
+        var orgId = $("#firstOrgId").val();
+        var importBatchNo = $("#firstImportBatchNo").val();
+        $.ajax({
+            url: ctx+'inforeporting/reduction/listAll',    //请求的url地址
+            dataType: "json",   //返回格式为json
+            async: false, //请求是否异步，默认为异步，这也是ajax重要特性
+            data:
+                {
+                    "caseNo": caseNo,
+                    "orgId": orgId,
+                    "importBatchNo": importBatchNo
+                },    //参数值
+            type: "POST",   //请求方式
+            success: function(data) {
+                //请求成功时处理
+                $("#inforeportingTbody").html("");
+                var htm = "";
+                $.each(data, function (i, n) {
+                    htm+="<tr>";
+                    htm+="<td >";
+                    htm+=n.id;
+                    htm+="</td>";
+                    htm+="<td>";
+                    if(n.types==1){
+                        htm+="减免";
+                    }else if(n.types==2){
+                        htm+="划扣";
+                    }else{
+                        htm+="对公入账";
+                    }
+
+                    htm+="</td>";
+                    htm+="<td>";
+                    htm+=parseFloat(n.arrearsTotal).toFixed(2);
+                    htm+="</td>";
+                    htm+="<td>";
+                    htm+=n.createTime;
+                    htm+="</td>";
+                    htm+="<td>";
+                    htm+=n.remark;
+                    htm+="</td>"
+                    htm+="<td>";
+                    htm+=n.createBy;
+                    htm+="</td>";
+                    htm+="</tr>";
+                });
+                $("#inforeportingTbody").html(htm);
+            },
+            error: function(e) {
+                //请求出错处理
+            }
+        });
+    }
 
     function getDestType(destDesc) {
         var destType = 3;
