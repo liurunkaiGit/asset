@@ -65,6 +65,7 @@ public class TLcCallStrategyConfigController extends BaseController {
      * 查询呼叫配置列表
      */
     @PostMapping("/list")
+    @RequiresPermissions("call:config:list")
     @ResponseBody
     public TableDataInfo list(TLcCallStrategyConfig tLcCallStrategyConfig) {
         startPage();

@@ -348,6 +348,9 @@
                     <a onclick="disableCall(0)" title="取消停拨" class="btn btn-primary" style="height: 25px;padding: 3px;">取消停拨</a>
                     <input id="callRecordId" name="callRecordId" class="form-control" type="hidden">
                 </div>
+                <div class="btn-group-sm">
+                    <button class="btn btn-danger" style="height: 25px;" onclick="letterApply()">信函申请</button>
+                </div>
             </div>
             <div class="tab-pane" style="height: 222px;overflow: auto">
                 <table id="custContactTable">
@@ -646,6 +649,65 @@
                 <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
                 <button type="button" class="btn btn-primary" onclick="addContact()">保存</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal inmodal" id="letterApplyModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header" style="padding: 5px">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
+            </div>
+            <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+                <form class="form-horizontal m" id="form-letterApply-add">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">信函类型：</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" name="letterType" id="letterType">
+                                <!--<option value="" selected>请选择</option>-->
+                                <option value="1">催缴函</option>
+                                <option value="2">律师函</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">客户姓名：</label>
+                        <div class="col-sm-8">
+                            <input name="letterApplyContactName" id="letterApplyContactName" class="form-control" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">委案金额：</label>
+                        <div class="col-sm-8">
+                            <input name="letterApplyArrearsMoney" id="letterApplyArrearsMoney" class="form-control" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">结案应还金额：</label>
+                        <div class="col-sm-8">
+                            <input name="letterApplyCloseCaseYhje" id="letterApplyCloseCaseYhje" class="form-control" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">借款时间：</label>
+                        <div class="col-sm-8">
+                            <input name="letterApplyLoanTime" id="letterApplyLoanTime" class="form-control" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">住宅地址：</label>
+                        <div class="col-sm-8">
+                            <input name="letterApplyHomeAddress" id="letterApplyHomeAddress" class="form-control" type="text" readonly>
+                        </div>
+                    </div>
+                </form>
+                <button type="button" class="btn btn-primary" align="center" onclick="addLetterApply()">提交申请</button>
+            </div>
+            <!--<div class="modal-footer">
+                &lt;!&ndash;<button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>&ndash;&gt;
+                <button type="button" class="btn btn-primary" onclick="addLetterApply()">提交申请</button>
+            </div>-->
         </div>
     </div>
 </div>
@@ -2875,6 +2937,25 @@
         clearInterval(int);
         millisecond=hour=minute=second=0;
         $("#timing").text('00:00:00');
+    }
+
+    /**
+     * 信函申请
+     */
+    function letterApply() {
+        $("#letterApplyContactName").val($("#customName").text());
+        $("#letterApplyArrearsMoney").val($("#arrearsTotal").text());
+        $("#letterApplyCloseCaseYhje").val($("#closeCaseYhje").text());
+        $("#letterApplyLoanTime").val($("#jkrq").text());
+        $("#letterApplyHomeAddress").val($("#customerHomeAddress").text());
+        $("#letterApplyModal").modal('show');
+    }
+
+    /**
+     * 信函申请提交
+     */
+    function addLetterApply() {
+
     }
 </script>
 </body>
