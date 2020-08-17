@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.inforeporting.mapper.TLcInforeportingReductionMapper">
+    
+    <resultMap type="com.ruoyi.inforeporting.domain.TLcInforeportingReduction" id="TLcInforeportingReductionResult">
+        <result property="id"    column="id"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="caseNo"    column="case_no"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="customName"    column="custom_name"    />
+        <result property="productName"    column="product_name"    />
+        <result property="deductionAmount"    column="deduction_amount"    />
+        <result property="reductionTypeCode"    column="reduction_type_code"    />
+        <result property="reductionTypeName"    column="reduction_type_name"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="overdueDays"    column="overdue_days"    />
+        <result property="certificateNo"    column="certificate_no"    />
+        <result property="arrearsTotal"    column="arrears_total"    />
+    </resultMap>
+    <resultMap type="com.ruoyi.inforeporting.domain.TLcInforeportingTemplate" id="TLcInforeportingTemplateResult">
+        <result property="id"    column="id"    />
+        <result property="types"    column="types"    />
+        <result property="arrearsTotal"    column="arrears_total"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+
+    <resultMap id="TLcTaskResult" type="com.ruoyi.task.domain.TLcTask">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="certificateNo" column="certificate_no" jdbcType="VARCHAR"/>
+        <result property="caseNo" column="case_no" jdbcType="VARCHAR"/>
+        <result property="certificateType" column="certificate_type" jdbcType="INTEGER"/>
+        <result property="customCode" column="custom_code" jdbcType="VARCHAR"/>
+        <result property="customName" column="custom_name" jdbcType="VARCHAR"/>
+        <result property="productName" column="product_name" jdbcType="VARCHAR"/>
+        <result property="arrearsTotal" column="arrears_total" jdbcType="DECIMAL"/>
+        <result property="taskStatus" column="task_status" jdbcType="INTEGER"/>
+        <result property="overdueDays" column="overdue_days" jdbcType="BIGINT"/>
+        <result property="overdueAging" column="overdue_aging" jdbcType="VARCHAR"/>
+        <result property="ownerId" column="owner_id" jdbcType="INTEGER"/>
+        <result property="ownerName" column="owner_name" jdbcType="VARCHAR"/>
+        <result property="orgId" column="org_id" jdbcType="VARCHAR"/>
+        <result property="closeDate" column="close_date" jdbcType="TIMESTAMP"/>
+        <result property="oldOwnerId" column="old_owner_id" jdbcType="BIGINT"/>
+        <result property="oldOwnerName" column="old_owner_name" jdbcType="VARCHAR"/>
+        <result property="taskType" column="task_type" jdbcType="INTEGER"/>
+        <result property="allotType" column="allot_type" jdbcType="INTEGER"/>
+        <result property="robotTaskId" column="robot_task_id" jdbcType="BIGINT"/>
+        <result property="robotCallStrategyId" column="robot_call_strategy_id" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="modifyBy" column="modify_by" jdbcType="BIGINT"/>
+        <result property="orgName" column="org_name" jdbcType="VARCHAR"/>
+        <result property="transferType" column="transfer_type" jdbcType="VARCHAR"/>
+        <result property="enterCollDate" column="enter_coll_date" jdbcType="DATE"/>
+        <result property="closeCaseYhje" column="close_case_yhje" jdbcType="DECIMAL"/>
+        <result property="recentlyAllotDate" column="recently_allot_date" jdbcType="TIMESTAMP"/>
+        <result property="recentlyFollowUpDate" column="recently_follow_up_date" jdbcType="TIMESTAMP"/>
+        <result property="hitRule" column="hit_rule" jdbcType="VARCHAR"/>
+        <result property="hitRuleDesc" column="hit_rule_desc" jdbcType="VARCHAR"/>
+        <result property="distributionStrategy" column="distribution_strategy" jdbcType="VARCHAR"/>
+        <result property="importBatchNo" column="import_batch_no" jdbcType="VARCHAR"/>
+        <result property="actionCode" column="action_code" jdbcType="VARCHAR"/>
+        <result property="actionCodeValue" column="action_code_value" jdbcType="VARCHAR"/>
+        <result property="callSign" column="call_sign" jdbcType="VARCHAR"/>
+        <result property="callSignValue" column="call_sign_value" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="dqyhje" column="dqyhje" jdbcType="DECIMAL"/>
+        <result property="ljyhje" column="ljyhje" jdbcType="DECIMAL"/>
+        <result property="score" column="score" jdbcType="INTEGER"/>
+        <result property="sendRobotBatchNo" column="send_robot_batch_no" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <insert id="insertTLcInforeportingReduction" parameterType="com.ruoyi.inforeporting.domain.TLcInforeportingReduction" useGeneratedKeys="true" keyProperty="id">
+       INSERT INTO t_lc_inforeporting_reduction
+       (
+            org_id,
+            org_name,
+            import_batch_no,
+            case_no,
+            custom_name,
+            product_name,
+            deduction_amount,
+            reduction_type_code,
+            reduction_type_name,
+            create_by,
+            create_time,
+            update_by,
+            update_time,
+            overdue_days,
+            certificate_no,
+            arrears_total
+        )
+        VALUES
+        (
+            #{orgId},
+            #{orgName},
+            #{importBatchNo},
+            #{caseNo},
+            #{customName},
+            #{productName},
+            #{deductionAmount},
+            #{reductionTypeCode},
+            #{reductionTypeName},
+            #{createBy},
+            now(),
+            #{createBy},
+            now(),
+            #{overdueDays},
+            #{certificateNo},
+            #{arrearsTotal}
+        )
+    </insert>
+
+    <sql id="selectTLcInforeportingReductionVo">
+        SELECT
+        id,
+        org_id,
+        org_name,
+        case_no,
+        import_batch_no,
+        custom_name,
+        deduction_amount,
+        reduction_type_code,
+        reduction_type_name,
+        product_name,
+        create_by,
+        create_time,
+        update_by,
+        update_time,
+        overdue_days,
+        certificate_no,
+        arrears_total
+        FROM
+        t_lc_inforeporting_reduction
+    </sql>
+
+    <select id="selectTLcInforeportingReductionList" parameterType="com.ruoyi.inforeporting.domain.TLcInforeportingReduction" resultMap="TLcInforeportingReductionResult">
+        <include refid="selectTLcInforeportingReductionVo"/>
+        <where>
+            del_flag=0
+            <if test="createBy != null and createBy != ''">
+                AND create_by=#{createBy}
+            </if>
+            <if test="orgId != null and orgId != ''">
+                AND org_id=#{orgId}
+            </if>
+            <if test="caseNo != null and caseNo != ''">
+                AND case_no like concat('%', #{caseNo}, '%')
+            </if>
+            <if test="customName != null and customName != ''">
+                AND custom_name like concat('%', #{customName}, '%')
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            ORDER BY create_by desc
+        </where>
+    </select>
+
+
+    <select id="selectTLcInforeportingAllList" parameterType="com.ruoyi.inforeporting.domain.TLcInforeportingTemplate" resultMap="TLcInforeportingTemplateResult">
+        SELECT
+        id,
+        types,
+        arrears_total,
+        remark,
+        create_time,
+        create_by
+        from
+        (SELECT id,'1'as types,deduction_amount as arrears_total,''as remark,create_time,create_by
+        from t_lc_inforeporting_reduction
+        <where>
+            del_flag=0
+            <if test="createBy != null and createBy != ''">
+                AND create_by=#{createBy}
+            </if>
+        </where>
+        UNION
+        SELECT  id,'3'as types,amount_of_deduction as arrears_total,reasons as remark,application_time as create_time,create_by
+        from t_lc_inforeporting_company
+        <where>
+            del_flag=0
+            <if test="createBy != null and createBy != ''">
+                AND create_by=#{createBy}
+            </if>
+        </where>
+        UNION
+        SELECT  id,'2'as types,'' as arrears_total,''as remark,create_time,create_by
+        from t_lc_inforeporting_buckle
+        <where>
+            del_flag=0
+            <if test="createBy != null and createBy != ''">
+                AND create_by=#{createBy}
+            </if>
+        </where>)ab ORDER BY ab.create_time desc
+    </select>
+
+    <select id="selectTLcTaskByCaseNo" resultMap="TLcTaskResult">
+        SELECT
+        t.id,
+        t.case_no,
+        t.certificate_no,
+        t.certificate_type,
+        t.custom_code,
+        t.custom_name,
+        t.arrears_total,
+        t.task_status,
+        t.overdue_days,
+        t.overdue_aging,
+        t.owner_id,
+        t.owner_name,
+        t.org_id,
+        t.org_name,
+        t.close_date,
+        t.old_owner_id,
+        t.old_owner_name,
+        t.task_type,
+        t.allot_type,
+        t.create_time,
+        t.modify_time,
+        t.create_by,
+        t.modify_by,
+        t.robot_task_id,
+        t.robot_call_strategy_id,
+        t.transfer_type,
+        t.enter_coll_date,
+        t.close_case_yhje,
+        t.recently_allot_date,
+        t.recently_follow_up_date,
+        t.hit_rule,
+        t.hit_rule_desc,
+        t.distribution_strategy,
+        t.import_batch_no,
+        t.action_code,
+        t.action_code_value,
+        t.call_sign,
+        t.call_sign_value,
+        t.phone,
+        t.dqyhje,
+        t.send_robot_batch_no,
+        d.product_name
+        FROM   t_lc_task t,t_lc_duncase d
+        WHERE  t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no
+        and t.case_no = #{caseNo} AND t.org_id = #{orgId} AND t.import_batch_no = #{importBatchNo}
+    </select>
+
+    <update id="rejectTLcInforeportingReductionByIds" parameterType="Long">
+        update t_lc_inforeporting_reduction set del_flag=1 where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

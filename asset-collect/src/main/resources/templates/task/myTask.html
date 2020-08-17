@@ -228,6 +228,7 @@
                 <button type="button" class="btn btn-success" onclick="signRepay('ALPA')">标记还款</button>
                 <button type="button" class="btn btn-success" onclick="toAutoCall()">自动拨打</button>
                 <button type="button" class="btn btn-success" onclick="sendRobotApply()">机器人外呼</button>
+                <button type="button" class="btn btn-success" onclick="infoReporting()">信息上报</button>
                 <input id="currentPageUrl" name="currentPageUrl" class="form-control" type="hidden">
             </div>
             <div class="col-sm-12 select-table table-striped">
@@ -801,7 +802,18 @@
                 );
             })
         }
-
+        //信息上报
+        function infoReporting(){
+            var taskIdRows = $.table.selectFirstColumns();
+            if (taskIdRows.length == 0 ) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            var caseNo = $.table.selectColumns("caseNo")[0];
+            var orgId = $.table.selectColumns("orgId")[0];
+            var importBatchNo = $.table.selectColumns("importBatchNo")[0];
+            $.modal.open("添加", ctx+"inforeporting/reduction/add?caseNo="+caseNo+"&orgId="+orgId+"&importBatchNo="+importBatchNo);
+        }
         /**
          * 批量呼叫保存
          */

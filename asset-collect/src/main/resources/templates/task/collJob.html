@@ -146,6 +146,7 @@
                         <li class=""><a data-toggle="tab" href="#tab-4" aria-expanded="false" onclick="viewTabDetail('repay')">还款历史</a><input type="hidden" id="repay" value="0"></li>
                         <li class=""><a data-toggle="tab" href="#tab-7" aria-expanded="false" onclick="viewTabDetail('add')">补充信息</a><input type="hidden" id="add" value="0"></li>
                         <li class=""><a data-toggle="tab" href="#tab-6" aria-expanded="false" onclick="viewTabDetail('find')">查找记录</a><input type="hidden" id="find" value="0"></li>
+                        <li class=""><a data-toggle="tab" href="#tab-8" aria-expanded="false" onclick="viewTabDetail('inforeporting')">信息上报</a><input type="hidden" id="inforeporting" value="0"></li>
 
                     </ul>
                     <div id="tabDiv" class="tab-content tabDiv">
@@ -311,6 +312,19 @@
                                 <tbody id="selectRecordTrNew"></tbody>
                             </table>
                         </div>
+                        <div id="tab-8" class="tab-pane">
+                            <table id="inforeportingTable">
+                                <tr>
+                                    <th style="text-align: left">编号</th>
+                                    <th style="text-align: left">上报类型</th>
+                                    <th style="text-align: left">申请金额</th>
+                                    <th style="text-align: left">申请日期</th>
+                                    <th style="text-align: left">申请原因</th>
+                                    <th style="text-align: left">操作员</th>
+                                </tr>
+                                <tbody id="inforeportingTbody"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -346,6 +360,7 @@
                 <a onclick="stopCollApply();" title="停催申请" class="btn btn-primary" style="height: 25px;padding: 3px;">停催</a>
                     <a onclick="disableCall(1);" title="停止拨号" class="btn btn-danger" style="height: 25px;padding: 3px;">停拨</a>
                     <a onclick="disableCall(0)" title="取消停拨" class="btn btn-primary" style="height: 25px;padding: 3px;">取消停拨</a>
+                    <a onclick="infoReportingSub()" title="信息上报" class="btn btn-primary" style="height: 25px;padding: 3px;">信息上报</a>
                     <input id="callRecordId" name="callRecordId" class="form-control" type="hidden">
                 </div>
             </div>
@@ -1095,6 +1110,60 @@
         );
     }
 
+    function  selectInforeportingList() {//获取查找记录
+        $.ajax({
+            url: ctx+'inforeporting/reduction/listAll',    //请求的url地址
+            dataType: "json",   //返回格式为json
+            async: false, //请求是否异步，默认为异步，这也是ajax重要特性
+            data:
+                {
+                    "caseNo": currentCaseNo,
+                    "orgId": currentOrgId,
+                    "importBatchNo": currentImportBatchNo
+                },    //参数值
+            type: "POST",   //请求方式
+            success: function(data) {
+                //请求成功时处理
+                debugger;
+                $("#inforeportingTbody").html("");
+                var htm = "";
+                $.each(data, function (i, n) {
+                    htm+="<tr>";
+                    htm+="<td >";
+                    htm+=n.id;
+                    htm+="</td>";
+                    htm+="<td>";
+                    if(n.types==1){
+                        htm+="减免";
+                    }else if(n.types==2){
+                        htm+="划扣";
+                    }else{
+                        htm+="对公入账";
+                    }
+
+                    htm+="</td>";
+                    htm+="<td>";
+                    htm+=parseFloat(n.arrearsTotal).toFixed(2);
+                    htm+="</td>";
+                    htm+="<td>";
+                    htm+=n.createTime;
+                    htm+="</td>";
+                    htm+="<td>";
+                    htm+=n.remark;
+                    htm+="</td>"
+                    htm+="<td>";
+                    htm+=n.createBy;
+                    htm+="</td>";
+                    htm+="</tr>";
+                });
+                $("#inforeportingTbody").html(htm);
+            },
+            error: function(e) {
+                //请求出错处理
+            }
+        });
+    }
+
     function  selectRecordList(caseNo){//获取查找记录
         $.post(
             prefix + "/selectRecordList",     // 请求路径url
@@ -1375,6 +1444,9 @@
         }else if(tab == 'find' && $('#find').val()=='0'){//查找记录
             $('#find').val('1');
             selectRecordList(currentCaseNo);//获取查找记录
+        }else if(tab == 'inforeporting' && $('#inforeporting').val()=='0'){//查找记录
+            $('#inforeporting').val('1');
+            selectInforeportingList();//获取查找记录
         }
 
     }
@@ -2791,7 +2863,9 @@
 
 
 
-
+    function infoReportingSub(){
+        $.modal.open("添加", ctx+"inforeporting/reduction/add?caseNo="+currentCaseNo+"&orgId="+currentOrgId+"&importBatchNo="+currentImportBatchNo);
+    }
 
 
     function disableCall(str){

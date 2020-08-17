@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增任务')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-reprotingType" >
+            <input type="hidden" name="orgId" th:value="${tk.orgId}">
+            <input type="hidden" name="orgName" th:value="${tk.orgName}">
+            <input type="hidden" name="importBatchNo" th:value="${tk.importBatchNo}">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">上报类型：</label>
+                <div class="col-sm-8">
+                    <select  id="reportingType"  class="form-control m-b" >
+                        <option value="1" >减免</option>
+                        <option value="2">划扣</option>
+                        <option value="3">对公入账</option>
+                    </select>
+                </div>
+            </div>
+            <div id="content">
+            </div>
+            <div class="form-group" id="noCompany">
+                <label class="col-sm-3 control-label">减免方式：</label>
+                <div class="col-sm-8">
+                    <select name="reductionTypeCode" id="reductionTypeCode" class="form-control m-b">
+                        <option value="1">部份划扣</option>
+                        <option value="2">一次性结清</option>
+                        <option value="3">减免金额</option>
+                    </select>
+                    <input type="hidden" name="reductionTypeName" id="reductionTypeName" value="部份划扣">
+                </div>
+            </div>
+        </form>
+
+        <div id="form1" style="display: none">
+            <div id="content1">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">产品：</label>
+                    <div class="col-sm-8">
+                        <span class="form-control" style="border: 0" th:text="${tk.productName}"></span>
+                        <input type="hidden" name="productName"  th:value="${tk.productName}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">合同号：</label>
+                    <div class="col-sm-8" >
+                        <span class="form-control" style="border: 0" th:text="${tk.caseNo}"></span>
+                        <input type="hidden" name="caseNo" th:value="${tk.caseNo}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">客户姓名：</label>
+                    <div class="col-sm-8">
+                        <span class="form-control" style="border: 0" th:text="${tk.customName}"></span>
+                        <input type="hidden" name="customName" th:value="${tk.customName}">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">划扣金额：</label>
+                <div class="col-sm-8">
+                    <input name="deductionAmount"  class="form-control" type="text" >
+                </div>
+            </div>
+        </div>
+
+        <div id="form2" style="display: none">
+            <div id="content2">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">产品：</label>
+                    <div class="col-sm-8">
+                        <span class="form-control" style="border: 0" th:text="${tk.productName}"></span>
+                        <input type="hidden" name="productName" th:value="${tk.productName}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">合同号：</label>
+                    <div class="col-sm-8" >
+                        <span class="form-control" style="border: 0" th:text="${tk.caseNo}"></span>
+                        <input type="hidden" name="caseNo" th:value="${tk.caseNo}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">客户姓名：</label>
+                    <div class="col-sm-8">
+                        <span class="form-control" style="border: 0" th:text="${tk.customName}"></span>
+                        <input type="hidden" name="customName" th:value="${tk.customName}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">逾期天数：</label>
+                    <div class="col-sm-8">
+                        <span class="form-control" style="border: 0" th:text="${tk.overdueDays}"></span>
+                        <input type="hidden" name="overdueDays" th:value="${tk.overdueDays}">
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <div id="form3" style="display: none">
+        <div id="content3">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">产品：</label>
+                <div class="col-sm-8">
+                    <span class="form-control" style="border: 0" th:text="${tk.productName}"></span>
+                    <input type="hidden" name="productName" th:value="${tk.productName}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">合同号：</label>
+                <div class="col-sm-8" >
+                    <span class="form-control" style="border: 0" th:text="${tk.caseNo}"></span>
+                    <input type="hidden" name="caseNo" th:value="${tk.caseNo}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">客户姓名：</label>
+                <div class="col-sm-8">
+                    <span class="form-control" style="border: 0" th:text="${tk.customName}"></span>
+                    <input type="hidden" name="customName" th:value="${tk.customName}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">付款人姓名：</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control"  name="draweeName" maxlength="30">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">付款人与客户关系：</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control"  name="relationship" maxlength="30">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">付款卡前四位：</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control"  name="topFourCards" maxlength="4">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">付款卡后四位：</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control"  name="lastFourCards" maxlength="4">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">付款银行：</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control"  name="payingBank" maxlength="50">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">存入金额：</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control"  name="depositAmount" maxlength="20">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">扣款金额：</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" name="amountOfDeduction" maxlength="20">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">非本人对公还款原因：</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control"   name="reasons" >
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">申请时间：</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control"  placeholder="申请时间"   name="applicationTime" id="applicationTime"/>
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">备注：</label>
+            <div class="col-sm-8">
+                <textarea  class="form-control"  name="remarks" maxlength="100"></textarea>
+            </div>
+        </div>
+    </div>
+
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var acObj = {};
+        acObj.form1 = ctx + "inforeporting/reduction/";
+        acObj.form2 = ctx + "inforeporting/buckle/";
+        acObj.form3 = ctx + "inforeporting/company/";
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(acObj['form'+$("#reportingType option:selected").val()] + "/add", $('#form-reprotingType').serialize());
+            }
+        }
+        $(document).ready(function(){
+            ///获取任务详细数据
+            var obj = {};
+            $.ajax({
+                url: ctx + "inforeporting/reduction/loadTLcTask",    //请求的url地址
+                dataType: "json",   //返回格式为json
+                async: false, //请求是否异步，默认为异步，这也是ajax重要特性
+                data:
+                    {
+                        "caseNo": "[[${tk.caseNo}]]",
+                        "orgId": "[[${tk.orgId}]]",
+                        "importBatchNo": "[[${tk.importBatchNo}]]"
+                    },    //参数值
+                type: "POST",   //请求方式
+                success: function(req) {
+                    obj = req;
+                },
+                error: function(e) {
+                    //请求出错处理
+                }
+            });
+
+            function selChange(reductionTypeVal,reductionTypeName){
+                $("#reportingTypeName").val(reductionTypeName)
+                if(3 == reductionTypeVal){
+                    $("#noCompany").hide();
+                }else{
+                    $("#noCompany").show();
+                }
+                $.ajax({
+                    url: ctx + "inforeporting/set/listOrg",    //请求的url地址
+                    dataType: "json",   //返回格式为json
+                    async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+                    data:
+                        {
+                            "orgId": "[[${tk.orgId}]]",
+                            "reportingType": reductionTypeVal
+                        },    //参数值
+                    type: "POST",   //请求方式
+                    success: function(req) {
+                        //请求成功时处理
+                        if(req.length>0){
+                            var htm = "";
+                            $.each(req,function(index,value){
+                                if(value.showStatus == 1){
+                                    htm+="<div class=\"form-group\">";
+                                    htm+="<label class=\"col-sm-3 control-label\">"+value.fromColumnName+"：</label>";
+                                    htm+="<div class=\"col-sm-8\" >";
+                                    var al = "";
+                                    if(obj.hasOwnProperty(value.fromColumn) && obj[value.fromColumn] != null && obj[value.fromColumn] != 'null'){
+                                        al = obj[value.fromColumn];
+                                    }
+                                    if(value.editStatus == 1){
+                                        htm+="<input type=\"text\"  class=\"form-control\" name=\""+value.fromColumn+"\" value=\""+al+"\">";
+                                    }else{
+                                        htm+="<span class=\"form-control\" style=\"border: 0\" >"+al+"</span>";
+                                        htm+="<input type='hidden' name='"+value.fromColumn+"' value=\""+al+"\">";
+                                    }
+                                    htm+="</div>";
+                                    htm+="</div>";
+                                }
+                            });
+                            $("#content"+reductionTypeVal).empty();
+                            $("#content"+reductionTypeVal).html(htm);
+                        }
+                        $("#content").html($("#form"+reductionTypeVal).html());
+                        if(reductionTypeVal==3){
+                            layui.use('laydate', function() {
+                                var laydate = layui.laydate;
+                                laydate.render({
+                                    elem: '#content #applicationTime'
+                                    ,trigger: 'click'
+                                });
+                            });
+                        }
+                    },
+                    error: function(e) {
+                        //后台出错默认值
+                    }
+                });
+            }
+
+            //初始执行查询减免上报配置信息
+            selChange(1,'减免');
+
+            $.validator.addMethod(
+                "isMoney",//自定义校验规则的名称
+                function(value,element,params){//自定义校验规则的实现
+                    return this.optional(element) || /^([1-9]{1}[0-9]{0,3}(\,[0-9]{3,4})*(\.[0-9]{0,2})?|[1-9]{1}\d*(\.[0-9]{0,2})?|0(\.[0-9]{0,2})?|(\.[0-9]{1,2})?)$/.test(value);
+                },"只允许两位小数"
+            );
+            var prefix = ctx + "ruoyi/inforeportingReduction/";
+            $("#form-reprotingType").validate({
+                rules:{
+                    "deductionAmount":{
+                        "required" : true,
+                        "isMoney":true,
+                    },
+                    "depositAmount":{
+                        "required" : true,
+                        "isMoney":true,
+                    },
+                    "amountOfDeduction":{
+                        "required" : true,
+                        "isMoney":true,
+                    }
+                },
+                focusCleanup: true
+            });
+
+            $("#reportingType").on("change",function(){
+                var reductionTypeName = $(this).children('option:selected').text();//这就是selected的值
+                var reductionTypeVal = $(this).children('option:selected').val();
+                selChange(reductionTypeVal,reductionTypeName);
+            });
+            $("#reductionTypeCode").on("change",function(){
+                var reductionTypeName = $(this).children('option:selected').text();
+                $("#reductionTypeName").val(reductionTypeName);
+            });
+        })
+    </script>
+</body>
+</html>

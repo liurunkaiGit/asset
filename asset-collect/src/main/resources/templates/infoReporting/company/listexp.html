@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('上报查询对公入账导出')" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="type-form">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <label>报表日期： </label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+                        </li>
+                        <li>
+                            合同号：<input type="text" name="caseNo"/>
+                        </li>
+                        <li>
+                            客户姓名：<input type="text" name="customName"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-danger" onclick="rejectFun()" >
+                <i class="fa fa-remove"></i> 驳回
+            </a>
+            <a class="btn btn-success" onclick="$.table.exportExcel()" >
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var prefix = ctx + "inforeporting/company";
+    $(document).ready(function(){
+        var options = {
+            url: prefix + "/listexpData",
+            exportUrl: prefix + "/export",
+            clickToSelect:true,
+            sortName: "createTime",
+            sortOrder: "desc",
+            modalName: "类型",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: '编号'
+                },
+                {
+                    field: 'productName',
+                    title: '产品'
+                },
+                {
+                    field: 'caseNo',
+                    title: '合同号',
+                    sortable: true
+                },
+                {
+                    field: 'customName',
+                    title: '客户姓名',
+                    sortable: true
+                },
+                {
+                    field: 'draweeName',
+                    title: '付款人姓名',
+                    align: 'center'
+                },
+                {
+                    field: 'relationship',
+                    title: '付款人与客户关系'
+                },
+                {
+                    field: 'topFourCards',
+                    title: '付款卡前四位'
+                },
+                {
+                    field: 'lastFourCards',
+                    title: '付款卡后四位'
+                },
+                {
+                    field: 'payingBank',
+                    title: '付款银行'
+                },
+                {
+                    field: 'depositAmount',
+                    title: '存入金额',
+                    formatter:function (value, row, index) {
+                        if(null == value || value=="")return"-";
+                        var sumBalance = parseFloat(value);
+                        return  sumBalance.toFixed(2) ;
+                    }
+                },
+                {
+                    field: 'amountOfDeduction',
+                    title: '扣款金额',
+                    formatter:function (value, row, index) {
+                        if(null == value || value=="")return"-";
+                        var sumBalance = parseFloat(value);
+                        return  sumBalance.toFixed(2) ;
+                    }
+                },
+                {
+                    field: 'reasons',
+                    title: '非本人对公还款原因'
+                },
+                {
+                    field: 'applicationTime',
+                    title: '申请时间'
+                },
+                {
+                    field: 'remarks',
+                    title: '备注'
+                }]
+        };
+        $.table.init(options);
+
+    })
+  function rejectFun(){
+      var taskIdRows = $.table.selectFirstColumns();
+      if (taskIdRows.length == 0) {
+          $.modal.alertWarning("请至少选择一条记录");
+          return;
+      }
+      $.modal.confirm("确认要驳回选中的" + taskIdRows.length + "条数据吗?", function() {
+          $.operate.saveModal(prefix + "/reject", {"ids":taskIdRows.join()},function (result) {
+              $.operate.ajaxSuccess(result);
+          });
+      });
+  }
+</script>
+</body>
+</html>
