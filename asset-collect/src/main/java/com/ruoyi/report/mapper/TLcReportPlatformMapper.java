@@ -30,7 +30,7 @@ public interface TLcReportPlatformMapper {
      */
     public int insertTLcReportPlatform(TLcReportPlatform tLcReportPlatform);
 
-    List<TLcReportPlatform> selectReportPlatformList(Map<String, Object> param);
+//    List<TLcReportPlatform> selectReportPlatformList(Map<String, Object> param);
 
     /**
      * 查询指定时间段数据

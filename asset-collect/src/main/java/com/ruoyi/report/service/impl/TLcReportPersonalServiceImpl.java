@@ -49,9 +49,9 @@ public class TLcReportPersonalServiceImpl implements ITLcReportPersonalService {
         return list;
     }
 
-    private List<TLcReportPersonal> selectReportPersonalList(Map<String, Object> param) {
-        return this.tLcReportPersonalMapper.selectReportPersonalList(param);
-    }
+//    private List<TLcReportPersonal> selectReportPersonalList(Map<String, Object> param) {
+//        return this.tLcReportPersonalMapper.selectReportPersonalList(param);
+//    }
 
     /**
      * 新增通时通次个人明细汇总报

@@ -30,7 +30,7 @@ public interface TLcReportPersonalMapper {
      */
     public int insertTLcReportPersonal(TLcReportPersonal tLcReportPersonal);
 
-    List<TLcReportPersonal> selectReportPersonalList(Map<String, Object> param);
+//    List<TLcReportPersonal> selectReportPersonalList(Map<String, Object> param);
 
     List<TLcReportPersonal> selectReportPersonalListByTimePeriod(Map<String, Object> param);
 }

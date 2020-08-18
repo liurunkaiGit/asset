@@ -46,9 +46,9 @@ public class TLcReportPlatformServiceImpl implements ITLcReportPlatformService {
         return list;
     }
 
-    private List<TLcReportPlatform> selectReportPlatformList(Map<String, Object> param) {
-        return this.tLcReportPlatformMapper.selectReportPlatformList(param);
-    }
+//    private List<TLcReportPlatform> selectReportPlatformList(Map<String, Object> param) {
+//        return this.tLcReportPlatformMapper.selectReportPlatformList(param);
+//    }
 
     /**
      * 新增【请填写功能名称】
