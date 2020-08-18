@@ -356,6 +356,24 @@ var table = {
 	    			});
     			});
     		},
+			// 导出数据
+			exportExcel2: function(json) {
+				table.set();
+				$.modal.confirm("确定导出所有" + table.options.modalName + "吗？", function() {
+					// var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+					$.modal.loading("正在导出数据，请稍后...");
+					$.post(table.options.exportUrl, json, function(result) {
+						if (result.code == web_status.SUCCESS) {
+							window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+						} else if (result.code == web_status.WARNING) {
+							$.modal.alertWarning(result.msg)
+						} else {
+							$.modal.alertError(result.msg);
+						}
+						$.modal.closeLoading();
+					});
+				});
+			},
     		// 下载模板
     		importTemplate: function() {
     			table.set();

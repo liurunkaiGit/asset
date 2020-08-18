@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -196,5 +197,20 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault());
         LocalDateTime endOfDay = localDateTime.with(LocalTime.MIN);
         return Date.from(endOfDay.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    /**
+     * 生成指定的时间
+     * @param days
+     * @param hour
+     * @param minute
+     * @param second
+     * @return
+     */
+    public static String getTimePeriod(long days,int hour, int minute, int second) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS);
+        LocalDateTime time = LocalDateTime.now().minusDays(days).toLocalDate().atTime(hour,minute,second);
+        String timeStr = dateTimeFormatter.format(time);
+        return timeStr;
     }
 }

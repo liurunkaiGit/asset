@@ -132,6 +132,25 @@
                     </select>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>是否自动发送短信</label>
+                <div class="col-sm-8">
+                    <select class="form-control" name="isAutoSendSms" id="isAutoSendSms" required>
+                        <option value="">--请选择--</option>
+                        <option value="1">是</option>
+                        <option value="2">否</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">自动发送短信模板：</label>
+                <div class="col-sm-8">
+                    <!--<input class="form-control" name="deptName" id="deptName" type="hidden">-->
+                    <select class="form-control" name="smsTemplateName" id="smsTemplateName">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
             <!--<div class="form-group">
                 <label class="col-sm-3 control-label">项目名称：</label>
                 <div class="col-sm-8">
@@ -159,8 +178,16 @@
                     });
                 }
             });
-
-
+            $.ajax({
+                url: prefix+"/selectSmsTemplate",
+                dataType: "json",
+                type: "post",
+                success:function(data){
+                    $.each(data.data,function(index,obj){
+                        $("#smsTemplateName").append("<option value='"+obj.dictValue+","+obj.dictLabel+"'>"+obj.dictLabel+"</option>");
+                    });
+                }
+            });
         });
         
         $("#form-assetspackage-add").validate({
@@ -174,7 +201,14 @@
             $("#deptName").val(deptName);
             var startDate = $("#startDate").val();
 
-
+            var isAutoSendSms = $("#isAutoSendSms").val();
+            if (isAutoSendSms == 1) {
+                var smsTemplateName = $("#smsTemplateName").val();
+                if (smsTemplateName == null || smsTemplateName == '') {
+                    $.modal.alert("请选择短信模板");
+                    return;
+                }
+            }
 
             if ($.validate.form()) {
                 $.operate.save(prefix + "/add", $('#form-assetspackage-add').serialize());

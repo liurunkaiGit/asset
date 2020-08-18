@@ -9,7 +9,6 @@ import com.ruoyi.report.mapper.TLcReportPersonalMapper;
 import com.ruoyi.report.mapper.TLcReportPlatformMapper;
 import com.ruoyi.report.service.ITLcReportCaseContactService;
 import com.ruoyi.report.service.ITLcReportDayProcessService;
-import com.ruoyi.report.service.ITLcReportPlatformService;
 import com.ruoyi.report.service.ITLcReportRecoveryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Description:
@@ -127,15 +123,46 @@ public class ReportSchedule {
         } else {
             log.info("开始定时生成通时通次-平台汇总报表任务");
             // 查询通时通次-平台汇总报表数据
+            List<TLcReportPlatform> platformList = new ArrayList<>();
             Map<String, Object> param = new HashMap<>();
-//            param.put("day", 1);
+            long days = 1;
             if (StringUtils.isNotBlank(date)) {
                 param.put("date", date);
+                LocalDate localDate = LocalDate.parse(date);
+                LocalDate now = LocalDate.now();
+                days = now.toEpochDay() - localDate.toEpochDay();
             } else {
-                param.put("date", LocalDate.now().plusDays(-1));
+                param.put("date", LocalDate.now().minusDays(1));
             }
-            List<TLcReportPlatform> platformList = this.platformMapper.selectReportPlatformList(param);
-            platformList.stream().forEach(platform -> this.platformMapper.insertTLcReportPlatform(platform));
+            for (int i = 8; i <= 20; i++) {
+                if (i == 8) {
+                    param.put("timePeriod", "0-9");
+                    param.put("startTimePeriod", DateUtils.getTimePeriod(days, 0, 0, 0));
+                    param.put("endTimePeriod", DateUtils.getTimePeriod(days, 8, 59, 59));
+                } else if (i == 20) {
+                    param.put("timePeriod", "20-24");
+                    param.put("startTimePeriod", DateUtils.getTimePeriod(days, 20, 0, 0));
+                    param.put("endTimePeriod", DateUtils.getTimePeriod(days, 23, 59, 59));
+                } else {
+                    if (i == 9) {
+                        param.put("timePeriod", "09-10");
+                    } else {
+                        param.put("timePeriod", i + "-" + (i + 1));
+                    }
+                    param.put("startTimePeriod", DateUtils.getTimePeriod(days, i, 0, 0));
+                    param.put("endTimePeriod", DateUtils.getTimePeriod(days, i, 59, 59));
+                }
+                TLcReportPlatform platform = this.platformMapper.selectReportPlatform(param);
+                platformList.add(platform);
+            }
+            param.put("timePeriod", "合计");
+            param.put("startTimePeriod", DateUtils.getTimePeriod(days, 0, 0, 0));
+            param.put("endTimePeriod", DateUtils.getTimePeriod(days, 23, 59, 59));
+            TLcReportPlatform platform = this.platformMapper.selectReportPlatform(param);
+            platformList.add(platform);
+            platformList.stream().forEach(reportPlatform -> this.platformMapper.insertTLcReportPlatform(reportPlatform));
+//            List<TLcReportPlatform> platformList = this.platformMapper.selectReportPlatformList(param);
+//            platformList.stream().forEach(platform -> this.platformMapper.insertTLcReportPlatform(platform));
             log.info("生成通时通次-平台汇总报表成功,{}", DateUtils.getNowDate());
         }
     }
@@ -149,15 +176,46 @@ public class ReportSchedule {
         } else {
             log.info("开始定时生成通时通次-个人明细汇总报表任务");
             // 查询通时通次-平台汇总报表数据
+            List<TLcReportPersonal> personalList = new ArrayList<>();
             Map<String, Object> param = new HashMap<>();
-//            param.put("day", 1);
+            long days = 1;
             if (StringUtils.isNotBlank(date)) {
                 param.put("date", date);
+                LocalDate localDate = LocalDate.parse(date);
+                LocalDate now = LocalDate.now();
+                days = now.toEpochDay() - localDate.toEpochDay();
             } else {
                 param.put("date", LocalDate.now().plusDays(-1));
             }
-            List<TLcReportPersonal> personalList = this.personalMapper.selectReportPersonalList(param);
+            for (int i = 8; i <= 20; i++) {
+                if (i == 8) {
+                    param.put("timePeriod", "0-9");
+                    param.put("startTimePeriod", DateUtils.getTimePeriod(days, 0, 0, 0));
+                    param.put("endTimePeriod", DateUtils.getTimePeriod(days, 8, 59, 59));
+                } else if (i == 20) {
+                    param.put("timePeriod", "20-24");
+                    param.put("startTimePeriod", DateUtils.getTimePeriod(days, 20, 0, 0));
+                    param.put("endTimePeriod", DateUtils.getTimePeriod(days, 23, 59, 59));
+                } else {
+                    if (i == 9) {
+                        param.put("timePeriod", "09-10");
+                    } else {
+                        param.put("timePeriod", i + "-" + (i + 1));
+                    }
+                    param.put("startTimePeriod", DateUtils.getTimePeriod(days, i, 0, 0));
+                    param.put("endTimePeriod", DateUtils.getTimePeriod(days, i, 59, 59));
+                }
+                List<TLcReportPersonal> reportPersonalList = this.personalMapper.selectReportPersonalListByTimePeriod(param);
+                reportPersonalList.stream().forEach(personal -> personalList.add(personal));
+            }
+            param.put("timePeriod", "合计");
+            param.put("startTimePeriod", DateUtils.getTimePeriod(days, 0, 0, 0));
+            param.put("endTimePeriod", DateUtils.getTimePeriod(days, 23, 59, 59));
+            List<TLcReportPersonal> reportPersonalList = this.personalMapper.selectReportPersonalListByTimePeriod(param);
+            reportPersonalList.stream().forEach(personal -> personalList.add(personal));
             personalList.stream().forEach(personal -> this.personalMapper.insertTLcReportPersonal(personal));
+//            List<TLcReportPersonal> personalList = this.personalMapper.selectReportPersonalList(param);
+//            personalList.stream().forEach(personal -> this.personalMapper.insertTLcReportPersonal(personal));
             log.info("生成通时通次-个人明细汇总报表成功,{}", DateUtils.getNowDate());
         }
     }

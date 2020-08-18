@@ -15,8 +15,10 @@ import com.ruoyi.assetspackage.enums.IsNoEnum;
 import com.ruoyi.assetspackage.service.IFileAccessoriesPackageService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysDept;
+import com.ruoyi.system.domain.SysDictData;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysDeptService;
+import com.ruoyi.system.service.ISysDictDataService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -54,7 +56,8 @@ public class OrgPackageController extends BaseController {
 
     @Autowired
     private ISysDeptService sysDeptService;
-
+    @Autowired
+    private ISysDictDataService dictDataService;
     @Autowired
     private IFileAccessoriesPackageService fileAccessoriesPackageService;
 
@@ -144,12 +147,12 @@ public class OrgPackageController extends BaseController {
     @Log(title = "机构", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(OrgPackage orgPackage,HttpServletRequest request) {
+    public AjaxResult editSave(OrgPackage orgPackage, HttpServletRequest request) {
         String allocatTaskStartegy = request.getParameter("allocatTaskStartegy");
         orgPackage.setUpdateBy(ShiroUtils.getLoginName());
         orgPackage.setUpdateDate(new Date());
         orgPackageService.updateOrgPackage(orgPackage);
-        return AjaxResult.success(AjaxResult.Type.SUCCESS,"修改成功",null);
+        return AjaxResult.success(AjaxResult.Type.SUCCESS, "修改成功", null);
     }
 
     /**
@@ -215,6 +218,18 @@ public class OrgPackageController extends BaseController {
         List<SysDept> sysDepts = sysDeptService.selectDeptList(new SysDept());
         String result = JSON.toJSONString(sysDepts);
         return AjaxResult.success(result);
+    }
+
+    /**
+     * 获取字典类型
+     *
+     * @return
+     */
+    @PostMapping("/selectSmsTemplate")
+    @ResponseBody
+    public AjaxResult selectSmsTemplate() {
+        List<SysDictData> smsTemplateList = this.dictDataService.selectDictDataByType("sms_template");
+        return AjaxResult.success(smsTemplateList);
     }
 
     /**

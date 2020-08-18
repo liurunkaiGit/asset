@@ -33,15 +33,16 @@ public class TLcReportPlatformServiceImpl implements ITLcReportPlatformService {
      */
     @Override
     public List<TLcReportPlatform> selectTLcReportPlatformList(TLcReportPlatform tLcReportPlatform) {
-        List<TLcReportPlatform> list;
-        if (tLcReportPlatform.getReportData() == null || org.apache.commons.lang3.time.DateUtils.isSameDay(tLcReportPlatform.getReportData(), new Date())) {
-            Map<String, Object> param = new HashMap<>();
-//            param.put("day", 0);
-            param.put("date", LocalDate.now());
-            list = selectReportPlatformList(param);
-        } else {
-            list = this.tLcReportPlatformMapper.selectTLcReportPlatformList(tLcReportPlatform);
-        }
+//        List<TLcReportPlatform> list;
+//        if (tLcReportPlatform.getReportData() == null || org.apache.commons.lang3.time.DateUtils.isSameDay(tLcReportPlatform.getReportData(), new Date())) {
+//            Map<String, Object> param = new HashMap<>();
+////            param.put("day", 0);
+//            param.put("date", LocalDate.now());
+//            list = selectReportPlatformList(param);
+//        } else {
+//            list = this.tLcReportPlatformMapper.selectTLcReportPlatformList(tLcReportPlatform);
+//        }
+        List<TLcReportPlatform> list = this.tLcReportPlatformMapper.selectTLcReportPlatformList(tLcReportPlatform);
         return list;
     }
 

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import com.ruoyi.assetspackage.util.PackageDataPermissionUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.assetspackage.mapper.OrgPackageMapper;
@@ -62,6 +63,10 @@ public class OrgPackageServiceImpl implements IOrgPackageService {
      */
     @Override
     public int insertOrgPackage(OrgPackage orgPackage) {
+        if (StringUtils.isNotBlank(orgPackage.getSmsTemplateName())) {
+            orgPackage.setSmsTemplateId(orgPackage.getSmsTemplateName().split(",")[0]);
+            orgPackage.setSmsTemplateName(orgPackage.getSmsTemplateName().split(",")[1]);
+        }
         return orgPackageMapper.insertOrgPackage(orgPackage);
     }
 
@@ -73,6 +78,10 @@ public class OrgPackageServiceImpl implements IOrgPackageService {
      */
     @Override
     public int updateOrgPackage(OrgPackage orgPackage) {
+        if (StringUtils.isNotBlank(orgPackage.getSmsTemplateName())) {
+            orgPackage.setSmsTemplateId(orgPackage.getSmsTemplateName().split(",")[0]);
+            orgPackage.setSmsTemplateName(orgPackage.getSmsTemplateName().split(",")[1]);
+        }
         return orgPackageMapper.updateOrgPackage(orgPackage);
     }
 

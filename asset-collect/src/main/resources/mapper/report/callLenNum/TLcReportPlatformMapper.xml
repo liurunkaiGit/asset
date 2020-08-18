@@ -37,199 +37,83 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="totalCallLen != null  and totalCallLen != ''"> and total_call_len = #{totalCallLen}</if>
             <if test="totalCallNum != null "> and total_call_num = #{totalCallNum}</if>
         </where>
+        order by time_period
     </select>
 
     <select id="selectReportPlatformList" parameterType="java.util.Map" resultMap="TLcReportPlatformResult">
-        select
-            #{date} AS report_data,
-            '0-9' as time_period,
-            MAX(t.pa_called_num) as pa_called_num,
-            MAX(t.pa_call_len) as pa_call_len,
-            MAX(t.pa_call_num) as pa_call_num,
-            MAX(t.zj_called_num) as zj_called_num,
-            MAX(t.zj_call_len) as zj_call_len,
-            MAX(t.zj_call_num) as zj_call_num,
-            IFNULL(MAX(t.pa_called_num),0) + IFNULL(MAX(t.zj_called_num),0) as total_called_num,
-            IFNULL(MAX(t.pa_call_len),0) + IFNULL(MAX(t.zj_call_len),0) as total_call_len,
-            IFNULL(MAX(t.pa_call_num),0) + IFNULL(MAX(t.zj_call_num),0) as total_call_num
-        from(
-            select
-                CASE t.platform WHEN 'PA' THEN t.called_num END  'pa_called_num',
-                CASE t.platform WHEN 'PA' THEN t.call_len END  'pa_call_len',
-                CASE t.platform WHEN 'PA' THEN t.call_num END  'pa_call_num',
-                CASE t.platform WHEN 'ZJ' THEN t.called_num END  'zj_called_num',
-                CASE t.platform WHEN 'ZJ' THEN t.call_len END  'zj_call_len',
-                CASE t.platform WHEN 'ZJ' THEN t.call_num END  'zj_call_num'
-            from(
-                SELECT
-                    re.platform,
-                    (SELECT COUNT(1) as call_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 00:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 08:59:59')  and r.platform = re.platform GROUP BY r.platform) call_num,
-                    (SELECT sum(r.call_len)/1000/60 as call_len FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 00:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 08:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) call_len,
-                    (SELECT COUNT(1) as called_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 00:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 08:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) called_num
-                FROM
-                    t_lc_call_record re GROUP BY re.platform
-            ) t
-        ) t
-        UNION ALL
-        select
-            #{date} AS report_data,
-            '9-10' as time_period,
-            MAX(t.pa_called_num) as pa_called_num,
-            MAX(t.pa_call_len) as pa_call_len,
-            MAX(t.pa_call_num) as pa_call_num,
-            MAX(t.zj_called_num) as zj_called_num,
-            MAX(t.zj_call_len) as zj_call_len,
-            MAX(t.zj_call_num) as zj_call_num,
-            IFNULL(MAX(t.pa_called_num),0) + IFNULL(MAX(t.zj_called_num),0) as total_called_num,
-            IFNULL(MAX(t.pa_call_len),0) + IFNULL(MAX(t.zj_call_len),0) as total_call_len,
-            IFNULL(MAX(t.pa_call_num),0) + IFNULL(MAX(t.zj_call_num),0) as total_call_num
-        from(
-            select
-                CASE t.platform WHEN 'PA' THEN t.called_num END  'pa_called_num',
-                CASE t.platform WHEN 'PA' THEN t.call_len END  'pa_call_len',
-                CASE t.platform WHEN 'PA' THEN t.call_num END  'pa_call_num',
-                CASE t.platform WHEN 'ZJ' THEN t.called_num END  'zj_called_num',
-                CASE t.platform WHEN 'ZJ' THEN t.call_len END  'zj_call_len',
-                CASE t.platform WHEN 'ZJ' THEN t.call_num END  'zj_call_num'
-            from(
-                SELECT
-                    re.platform,
-                    (SELECT COUNT(1) as call_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 09:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 09:59:59')  and r.platform = re.platform GROUP BY r.platform) call_num,
-                    (SELECT sum(r.call_len)/1000/60 as call_len FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 09:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 09:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) call_len,
-                    (SELECT COUNT(1) as called_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 09:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 09:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) called_num
-                FROM
-                    t_lc_call_record re GROUP BY re.platform
-            ) t
-        ) t
-        UNION ALL
-        select
-            #{date} AS report_data,
-            '10-11' as time_period,
-            MAX(t.pa_called_num) as pa_called_num,
-            MAX(t.pa_call_len) as pa_call_len,
-            MAX(t.pa_call_num) as pa_call_num,
-            MAX(t.zj_called_num) as zj_called_num,
-            MAX(t.zj_call_len) as zj_call_len,
-            MAX(t.zj_call_num) as zj_call_num,
-            IFNULL(MAX(t.pa_called_num),0) + IFNULL(MAX(t.zj_called_num),0) as total_called_num,
-            IFNULL(MAX(t.pa_call_len),0) + IFNULL(MAX(t.zj_call_len),0) as total_call_len,
-            IFNULL(MAX(t.pa_call_num),0) + IFNULL(MAX(t.zj_call_num),0) as total_call_num
-        from(
-            select
-                CASE t.platform WHEN 'PA' THEN t.called_num END  'pa_called_num',
-                CASE t.platform WHEN 'PA' THEN t.call_len END  'pa_call_len',
-                CASE t.platform WHEN 'PA' THEN t.call_num END  'pa_call_num',
-                CASE t.platform WHEN 'ZJ' THEN t.called_num END  'zj_called_num',
-                CASE t.platform WHEN 'ZJ' THEN t.call_len END  'zj_call_len',
-                CASE t.platform WHEN 'ZJ' THEN t.call_num END  'zj_call_num'
-            from(
-                SELECT
-                    re.platform,
-                    (SELECT COUNT(1) as call_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 10:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 10:59:59')  and r.platform = re.platform GROUP BY r.platform) call_num,
-                    (SELECT sum(r.call_len)/1000/60 as call_len FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 10:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 10:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) call_len,
-                    (SELECT COUNT(1) as called_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 10:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 10:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) called_num
-                FROM
-                    t_lc_call_record re GROUP BY re.platform
-            ) t
-        ) t
-        UNION ALL
-        select
-            #{date} AS report_data,
-            '11-12' as time_period,
-            MAX(t.pa_called_num) as pa_called_num,
-            MAX(t.pa_call_len) as pa_call_len,
-            MAX(t.pa_call_num) as pa_call_num,
-            MAX(t.zj_called_num) as zj_called_num,
-            MAX(t.zj_call_len) as zj_call_len,
-            MAX(t.zj_call_num) as zj_call_num,
-            IFNULL(MAX(t.pa_called_num),0) + IFNULL(MAX(t.zj_called_num),0) as total_called_num,
-            IFNULL(MAX(t.pa_call_len),0) + IFNULL(MAX(t.zj_call_len),0) as total_call_len,
-            IFNULL(MAX(t.pa_call_num),0) + IFNULL(MAX(t.zj_call_num),0) as total_call_num
-        from(
-            select
-                CASE t.platform WHEN 'PA' THEN t.called_num END  'pa_called_num',
-                CASE t.platform WHEN 'PA' THEN t.call_len END  'pa_call_len',
-                CASE t.platform WHEN 'PA' THEN t.call_num END  'pa_call_num',
-                CASE t.platform WHEN 'ZJ' THEN t.called_num END  'zj_called_num',
-                CASE t.platform WHEN 'ZJ' THEN t.call_len END  'zj_call_len',
-                CASE t.platform WHEN 'ZJ' THEN t.call_num END  'zj_call_num'
-            from(
-                SELECT
-                    re.platform,
-                    (SELECT COUNT(1) as call_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 11:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 11:59:59')  and r.platform = re.platform GROUP BY r.platform) call_num,
-                    (SELECT sum(r.call_len)/1000/60 as call_len FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 11:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 11:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) call_len,
-                    (SELECT COUNT(1) as called_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 11:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 11:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) called_num
-                FROM
-                    t_lc_call_record re GROUP BY re.platform
-            ) t
-        ) t
-        UNION ALL
-        select
-            #{date} AS report_data,
-            '12-13' as time_period,
-            MAX(t.pa_called_num) as pa_called_num,
-            MAX(t.pa_call_len) as pa_call_len,
-            MAX(t.pa_call_num) as pa_call_num,
-            MAX(t.zj_called_num) as zj_called_num,
-            MAX(t.zj_call_len) as zj_call_len,
-            MAX(t.zj_call_num) as zj_call_num,
-            IFNULL(MAX(t.pa_called_num),0) + IFNULL(MAX(t.zj_called_num),0) as total_called_num,
-            IFNULL(MAX(t.pa_call_len),0) + IFNULL(MAX(t.zj_call_len),0) as total_call_len,
-            IFNULL(MAX(t.pa_call_num),0) + IFNULL(MAX(t.zj_call_num),0) as total_call_num
-        from(
-            select
-                CASE t.platform WHEN 'PA' THEN t.called_num END  'pa_called_num',
-                CASE t.platform WHEN 'PA' THEN t.call_len END  'pa_call_len',
-                CASE t.platform WHEN 'PA' THEN t.call_num END  'pa_call_num',
-                CASE t.platform WHEN 'ZJ' THEN t.called_num END  'zj_called_num',
-                CASE t.platform WHEN 'ZJ' THEN t.call_len END  'zj_call_len',
-                CASE t.platform WHEN 'ZJ' THEN t.call_num END  'zj_call_num'
-            from(
-                SELECT
-                    re.platform,
-                    (SELECT COUNT(1) as call_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 12:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 12:59:59')  and r.platform = re.platform GROUP BY r.platform) call_num,
-                    (SELECT sum(r.call_len)/1000/60 as call_len FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 12:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 12:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) call_len,
-                    (SELECT COUNT(1) as called_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 12:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 12:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) called_num
-                FROM
-                    t_lc_call_record re GROUP BY re.platform
-            ) t
-        ) t
-        UNION ALL
-        select
-            #{date} AS report_data,
-            '13-14' as time_period,
-            MAX(t.pa_called_num) as pa_called_num,
-            MAX(t.pa_call_len) as pa_call_len,
-            MAX(t.pa_call_num) as pa_call_num,
-            MAX(t.zj_called_num) as zj_called_num,
-            MAX(t.zj_call_len) as zj_call_len,
-            MAX(t.zj_call_num) as zj_call_num,
-            IFNULL(MAX(t.pa_called_num),0) + IFNULL(MAX(t.zj_called_num),0) as total_called_num,
-            IFNULL(MAX(t.pa_call_len),0) + IFNULL(MAX(t.zj_call_len),0) as total_call_len,
-            IFNULL(MAX(t.pa_call_num),0) + IFNULL(MAX(t.zj_call_num),0) as total_call_num
-        from(
-            select
-                CASE t.platform WHEN 'PA' THEN t.called_num END  'pa_called_num',
-                CASE t.platform WHEN 'PA' THEN t.call_len END  'pa_call_len',
-                CASE t.platform WHEN 'PA' THEN t.call_num END  'pa_call_num',
-                CASE t.platform WHEN 'ZJ' THEN t.called_num END  'zj_called_num',
-                CASE t.platform WHEN 'ZJ' THEN t.call_len END  'zj_call_len',
-                CASE t.platform WHEN 'ZJ' THEN t.call_num END  'zj_call_num'
-            from(
-                SELECT
-                    re.platform,
-                    (SELECT COUNT(1) as call_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 13:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 13:59:59')  and r.platform = re.platform GROUP BY r.platform) call_num,
-                    (SELECT sum(r.call_len)/1000/60 as call_len FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 13:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 13:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) call_len,
-                    (SELECT COUNT(1) as called_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 13:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 13:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) called_num
-                FROM
-                    t_lc_call_record re GROUP BY re.platform
-            ) t
-        ) t
+        select a.time as time_period,b.*
+            from (
+                    select '0-9'   as time from dual union all
+                    select '09-10' as time from dual union all
+                    select '10-11' as time from dual union all
+                    select '11-12' as time from dual union all
+                    select '12-13' as time from dual union all
+                    select '13-14' as time from dual union all
+                    select '14-15' as time from dual union all
+                    select '15-16' as time from dual union all
+                    select '16-17' as time from dual union all
+                    select '17-18' as time from dual union all
+                    select '18-19' as time from dual union all
+                    select '19-20' as time from dual union all
+                    select '20-24' as time from dual
+            ) a LEFT JOIN (
+                select
+                    #{date} AS report_data,
+                    t.time_period as time_period,
+                    MAX(t.pa_called_num) as pa_called_num,
+                    MAX(t.pa_call_len) as pa_call_len,
+                    MAX(t.pa_call_num) as pa_call_num,
+                    MAX(t.zj_called_num) as zj_called_num,
+                    MAX(t.zj_call_len) as zj_call_len,
+                    MAX(t.zj_call_num) as zj_call_num,
+                    IFNULL(MAX(t.pa_called_num),0) + IFNULL(MAX(t.zj_called_num),0) as total_called_num,
+                    IFNULL(MAX(t.pa_call_len),0) + IFNULL(MAX(t.zj_call_len),0) as total_call_len,
+                    IFNULL(MAX(t.pa_call_num),0) + IFNULL(MAX(t.zj_call_num),0) as total_call_num
+                from(
+                    select
+                            t.time_period,
+                            CASE t.platform WHEN 'PA' THEN t.called_num END  'pa_called_num',
+                            CASE t.platform WHEN 'PA' THEN t.call_len END  'pa_call_len',
+                            CASE t.platform WHEN 'PA' THEN t.call_num END  'pa_call_num',
+                            CASE t.platform WHEN 'ZJ' THEN t.called_num END  'zj_called_num',
+                            CASE t.platform WHEN 'ZJ' THEN t.call_len END  'zj_call_len',
+                            CASE t.platform WHEN 'ZJ' THEN t.call_num END  'zj_call_num'
+                        from(
+                            select a.call_num,a.time_period,b.call_len,b.called_num,a.platform from (
+                            SELECT
+                                case when DATE_FORMAT(create_time, '%H' ) in (0,1,2,3,4,5,6,7,8) then '0-9'
+                                when DATE_FORMAT(create_time, '%H' ) in (9) then '09-10'
+                                when DATE_FORMAT(create_time, '%H' ) in (20,21,22,23) then '20-24'
+                                else CONCAT(DATE_FORMAT(create_time, '%H' ) + 0,'-',DATE_FORMAT(create_time, '%H' ) + 1) end as time_period,
+                                COUNT(1) as call_num,
+                                platform
+                            FROM
+                                t_lc_call_record
+                            where create_time BETWEEN CONCAT(#{date},' 00:00:00') AND CONCAT(#{date},' 23:59:59')
+                            GROUP BY
+                                time_period ,platform) a LEFT JOIN(
+                            SELECT
+                                case when DATE_FORMAT(create_time, '%H' ) in (0,1,2,3,4,5,6,7,8) then '0-9'
+                                when DATE_FORMAT(create_time, '%H' ) in (9) then '09-10'
+                                when DATE_FORMAT(create_time, '%H' ) in (20,21,22,23) then '20-24'
+                                else CONCAT(DATE_FORMAT(create_time, '%H' ) + 0,'-',DATE_FORMAT(create_time, '%H' ) + 1) end as time_period,
+                                COUNT(1) as called_num,
+                                sum(call_len/1000/60) as call_len,
+                                platform
+                            FROM
+                                t_lc_call_record
+                            where create_time BETWEEN CONCAT(#{date},' 00:00:00') AND CONCAT(#{date},' 23:59:59') and call_len is not null and call_len != ''
+                            GROUP BY
+                                time_period ,platform) b on a.time_period = b.time_period and a.platform = b.platform
+                    ) t
+                ) t GROUP BY t.time_period
+            ) b ON a.time = b.time_period
+    </select>
 
-        UNION ALL
+    <select id="selectReportPlatform" parameterType="java.util.Map" resultMap="TLcReportPlatformResult">
         select
             #{date} AS report_data,
-            '14-15' as time_period,
+            #{timePeriod} as time_period,
             MAX(t.pa_called_num) as pa_called_num,
             MAX(t.pa_call_len) as pa_call_len,
             MAX(t.pa_call_num) as pa_call_num,
@@ -250,228 +134,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             from(
                 SELECT
                     re.platform,
-                    (SELECT COUNT(1) as call_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 14:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 14:59:59')  and r.platform = re.platform GROUP BY r.platform) call_num,
-                    (SELECT sum(r.call_len)/1000/60 as call_len FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 14:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 14:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) call_len,
-                    (SELECT COUNT(1) as called_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 14:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 14:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) called_num
+                    COUNT(1) as call_num,
+                    (SELECT sum(r.call_len)/1000/60 as call_len FROM t_lc_call_record r WHERE r.create_time BETWEEN #{startTimePeriod} and #{endTimePeriod} and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) call_len,
+                    (SELECT COUNT(1) as called_num FROM t_lc_call_record r WHERE r.create_time BETWEEN #{startTimePeriod} and #{endTimePeriod} and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) called_num
                 FROM
-                    t_lc_call_record re GROUP BY re.platform
-            ) t
-        ) t
-        UNION ALL
-        select
-            #{date} AS report_data,
-            '15-16' as time_period,
-            MAX(t.pa_called_num) as pa_called_num,
-            MAX(t.pa_call_len) as pa_call_len,
-            MAX(t.pa_call_num) as pa_call_num,
-            MAX(t.zj_called_num) as zj_called_num,
-            MAX(t.zj_call_len) as zj_call_len,
-            MAX(t.zj_call_num) as zj_call_num,
-            IFNULL(MAX(t.pa_called_num),0) + IFNULL(MAX(t.zj_called_num),0) as total_called_num,
-            IFNULL(MAX(t.pa_call_len),0) + IFNULL(MAX(t.zj_call_len),0) as total_call_len,
-            IFNULL(MAX(t.pa_call_num),0) + IFNULL(MAX(t.zj_call_num),0) as total_call_num
-        from(
-            select
-                CASE t.platform WHEN 'PA' THEN t.called_num END  'pa_called_num',
-                CASE t.platform WHEN 'PA' THEN t.call_len END  'pa_call_len',
-                CASE t.platform WHEN 'PA' THEN t.call_num END  'pa_call_num',
-                CASE t.platform WHEN 'ZJ' THEN t.called_num END  'zj_called_num',
-                CASE t.platform WHEN 'ZJ' THEN t.call_len END  'zj_call_len',
-                CASE t.platform WHEN 'ZJ' THEN t.call_num END  'zj_call_num'
-            from(
-                SELECT
-                    re.platform,
-                    (SELECT COUNT(1) as call_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 15:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 15:59:59')  and r.platform = re.platform GROUP BY r.platform) call_num,
-                    (SELECT sum(r.call_len)/1000/60 as call_len FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 15:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 15:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) call_len,
-                    (SELECT COUNT(1) as called_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 15:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 15:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) called_num
-                FROM
-                    t_lc_call_record re GROUP BY re.platform
-            ) t
-        ) t
-        UNION ALL
-        select
-            #{date} AS report_data,
-            '16-17' as time_period,
-            MAX(t.pa_called_num) as pa_called_num,
-            MAX(t.pa_call_len) as pa_call_len,
-            MAX(t.pa_call_num) as pa_call_num,
-            MAX(t.zj_called_num) as zj_called_num,
-            MAX(t.zj_call_len) as zj_call_len,
-            MAX(t.zj_call_num) as zj_call_num,
-            IFNULL(MAX(t.pa_called_num),0) + IFNULL(MAX(t.zj_called_num),0) as total_called_num,
-            IFNULL(MAX(t.pa_call_len),0) + IFNULL(MAX(t.zj_call_len),0) as total_call_len,
-            IFNULL(MAX(t.pa_call_num),0) + IFNULL(MAX(t.zj_call_num),0) as total_call_num
-        from(
-            select
-                CASE t.platform WHEN 'PA' THEN t.called_num END  'pa_called_num',
-                CASE t.platform WHEN 'PA' THEN t.call_len END  'pa_call_len',
-                CASE t.platform WHEN 'PA' THEN t.call_num END  'pa_call_num',
-                CASE t.platform WHEN 'ZJ' THEN t.called_num END  'zj_called_num',
-                CASE t.platform WHEN 'ZJ' THEN t.call_len END  'zj_call_len',
-                CASE t.platform WHEN 'ZJ' THEN t.call_num END  'zj_call_num'
-            from(
-                SELECT
-                    re.platform,
-                    (SELECT COUNT(1) as call_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 16:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 16:59:59')  and r.platform = re.platform GROUP BY r.platform) call_num,
-                    (SELECT sum(r.call_len)/1000/60 as call_len FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 16:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 16:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) call_len,
-                    (SELECT COUNT(1) as called_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 16:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 16:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) called_num
-                FROM
-                    t_lc_call_record re GROUP BY re.platform
-            ) t
-        ) t
-        UNION ALL
-        select
-            #{date} AS report_data,
-            '17-18' as time_period,
-            MAX(t.pa_called_num) as pa_called_num,
-            MAX(t.pa_call_len) as pa_call_len,
-            MAX(t.pa_call_num) as pa_call_num,
-            MAX(t.zj_called_num) as zj_called_num,
-            MAX(t.zj_call_len) as zj_call_len,
-            MAX(t.zj_call_num) as zj_call_num,
-            IFNULL(MAX(t.pa_called_num),0) + IFNULL(MAX(t.zj_called_num),0) as total_called_num,
-            IFNULL(MAX(t.pa_call_len),0) + IFNULL(MAX(t.zj_call_len),0) as total_call_len,
-            IFNULL(MAX(t.pa_call_num),0) + IFNULL(MAX(t.zj_call_num),0) as total_call_num
-        from(
-            select
-                CASE t.platform WHEN 'PA' THEN t.called_num END  'pa_called_num',
-                CASE t.platform WHEN 'PA' THEN t.call_len END  'pa_call_len',
-                CASE t.platform WHEN 'PA' THEN t.call_num END  'pa_call_num',
-                CASE t.platform WHEN 'ZJ' THEN t.called_num END  'zj_called_num',
-                CASE t.platform WHEN 'ZJ' THEN t.call_len END  'zj_call_len',
-                CASE t.platform WHEN 'ZJ' THEN t.call_num END  'zj_call_num'
-            from(
-                SELECT
-                    re.platform,
-                    (SELECT COUNT(1) as call_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 17:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 17:59:59')  and r.platform = re.platform GROUP BY r.platform) call_num,
-                    (SELECT sum(r.call_len)/1000/60 as call_len FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 17:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 17:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) call_len,
-                    (SELECT COUNT(1) as called_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 17:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 17:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) called_num
-                FROM
-                    t_lc_call_record re GROUP BY re.platform
-            ) t
-        ) t
-        UNION ALL
-        select
-            #{date} AS report_data,
-            '18-19' as time_period,
-            MAX(t.pa_called_num) as pa_called_num,
-            MAX(t.pa_call_len) as pa_call_len,
-            MAX(t.pa_call_num) as pa_call_num,
-            MAX(t.zj_called_num) as zj_called_num,
-            MAX(t.zj_call_len) as zj_call_len,
-            MAX(t.zj_call_num) as zj_call_num,
-            IFNULL(MAX(t.pa_called_num),0) + IFNULL(MAX(t.zj_called_num),0) as total_called_num,
-            IFNULL(MAX(t.pa_call_len),0) + IFNULL(MAX(t.zj_call_len),0) as total_call_len,
-            IFNULL(MAX(t.pa_call_num),0) + IFNULL(MAX(t.zj_call_num),0) as total_call_num
-        from(
-            select
-                CASE t.platform WHEN 'PA' THEN t.called_num END  'pa_called_num',
-                CASE t.platform WHEN 'PA' THEN t.call_len END  'pa_call_len',
-                CASE t.platform WHEN 'PA' THEN t.call_num END  'pa_call_num',
-                CASE t.platform WHEN 'ZJ' THEN t.called_num END  'zj_called_num',
-                CASE t.platform WHEN 'ZJ' THEN t.call_len END  'zj_call_len',
-                CASE t.platform WHEN 'ZJ' THEN t.call_num END  'zj_call_num'
-            from(
-                SELECT
-                    re.platform,
-                    (SELECT COUNT(1) as call_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 18:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 18:59:59')  and r.platform = re.platform GROUP BY r.platform) call_num,
-                    (SELECT sum(r.call_len)/1000/60 as call_len FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 18:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 18:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) call_len,
-                    (SELECT COUNT(1) as called_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 18:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 18:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) called_num
-                FROM
-                    t_lc_call_record re GROUP BY re.platform
-            ) t
-        ) t
-        UNION ALL
-        select
-            #{date} AS report_data,
-            '19-20' as time_period,
-            MAX(t.pa_called_num) as pa_called_num,
-            MAX(t.pa_call_len) as pa_call_len,
-            MAX(t.pa_call_num) as pa_call_num,
-            MAX(t.zj_called_num) as zj_called_num,
-            MAX(t.zj_call_len) as zj_call_len,
-            MAX(t.zj_call_num) as zj_call_num,
-            IFNULL(MAX(t.pa_called_num),0) + IFNULL(MAX(t.zj_called_num),0) as total_called_num,
-            IFNULL(MAX(t.pa_call_len),0) + IFNULL(MAX(t.zj_call_len),0) as total_call_len,
-            IFNULL(MAX(t.pa_call_num),0) + IFNULL(MAX(t.zj_call_num),0) as total_call_num
-        from(
-            select
-                CASE t.platform WHEN 'PA' THEN t.called_num END  'pa_called_num',
-                CASE t.platform WHEN 'PA' THEN t.call_len END  'pa_call_len',
-                CASE t.platform WHEN 'PA' THEN t.call_num END  'pa_call_num',
-                CASE t.platform WHEN 'ZJ' THEN t.called_num END  'zj_called_num',
-                CASE t.platform WHEN 'ZJ' THEN t.call_len END  'zj_call_len',
-                CASE t.platform WHEN 'ZJ' THEN t.call_num END  'zj_call_num'
-            from(
-                SELECT
-                    re.platform,
-                    (SELECT COUNT(1) as call_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 19:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 19:59:59')  and r.platform = re.platform GROUP BY r.platform) call_num,
-                    (SELECT sum(r.call_len)/1000/60 as call_len FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 19:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 19:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) call_len,
-                    (SELECT COUNT(1) as called_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 19:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 19:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) called_num
-                FROM
-                    t_lc_call_record re GROUP BY re.platform
-            ) t
-        ) t
-        UNION ALL
-        select
-            #{date} AS report_data,
-            '20-24' as time_period,
-            MAX(t.pa_called_num) as pa_called_num,
-            MAX(t.pa_call_len) as pa_call_len,
-            MAX(t.pa_call_num) as pa_call_num,
-            MAX(t.zj_called_num) as zj_called_num,
-            MAX(t.zj_call_len) as zj_call_len,
-            MAX(t.zj_call_num) as zj_call_num,
-            IFNULL(MAX(t.pa_called_num),0) + IFNULL(MAX(t.zj_called_num),0) as total_called_num,
-            IFNULL(MAX(t.pa_call_len),0) + IFNULL(MAX(t.zj_call_len),0) as total_call_len,
-            IFNULL(MAX(t.pa_call_num),0) + IFNULL(MAX(t.zj_call_num),0) as total_call_num
-        from(
-            select
-                CASE t.platform WHEN 'PA' THEN t.called_num END  'pa_called_num',
-                CASE t.platform WHEN 'PA' THEN t.call_len END  'pa_call_len',
-                CASE t.platform WHEN 'PA' THEN t.call_num END  'pa_call_num',
-                CASE t.platform WHEN 'ZJ' THEN t.called_num END  'zj_called_num',
-                CASE t.platform WHEN 'ZJ' THEN t.call_len END  'zj_call_len',
-                CASE t.platform WHEN 'ZJ' THEN t.call_num END  'zj_call_num'
-            from(
-                SELECT
-                    re.platform,
-                    (SELECT COUNT(1) as call_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 20:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 23:59:59')  and r.platform = re.platform GROUP BY r.platform) call_num,
-                    (SELECT sum(r.call_len)/1000/60 as call_len FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 20:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 23:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) call_len,
-                    (SELECT COUNT(1) as called_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 20:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 23:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) called_num
-                FROM
-                    t_lc_call_record re GROUP BY re.platform
-            ) t
-        ) t
-        UNION ALL
-        select
-            #{date} AS report_data,
-            '合计' as time_period,
-            MAX(t.pa_called_num) as pa_called_num,
-            MAX(t.pa_call_len) as pa_call_len,
-            MAX(t.pa_call_num) as pa_call_num,
-            MAX(t.zj_called_num) as zj_called_num,
-            MAX(t.zj_call_len) as zj_call_len,
-            MAX(t.zj_call_num) as zj_call_num,
-            IFNULL(MAX(t.pa_called_num),0) + IFNULL(MAX(t.zj_called_num),0) as total_called_num,
-            IFNULL(MAX(t.pa_call_len),0) + IFNULL(MAX(t.zj_call_len),0) as total_call_len,
-            IFNULL(MAX(t.pa_call_num),0) + IFNULL(MAX(t.zj_call_num),0) as total_call_num
-        from(
-            select
-                CASE t.platform WHEN 'PA' THEN t.called_num END  'pa_called_num',
-                CASE t.platform WHEN 'PA' THEN t.call_len END  'pa_call_len',
-                CASE t.platform WHEN 'PA' THEN t.call_num END  'pa_call_num',
-                CASE t.platform WHEN 'ZJ' THEN t.called_num END  'zj_called_num',
-                CASE t.platform WHEN 'ZJ' THEN t.call_len END  'zj_call_len',
-                CASE t.platform WHEN 'ZJ' THEN t.call_num END  'zj_call_num'
-            from(
-                SELECT
-                    re.platform,
-                    (SELECT COUNT(1) as call_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 00:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 23:59:59')  and r.platform = re.platform GROUP BY r.platform) call_num,
-                    (SELECT sum(r.call_len)/1000/60 as call_len FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 00:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 23:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) call_len,
-                    (SELECT COUNT(1) as called_num FROM t_lc_call_record r WHERE r.create_time <![CDATA[>=]]> CONCAT(#{date},' 00:00:00') and r.create_time <![CDATA[<=]]> CONCAT(#{date},' 23:59:59') and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) called_num
-                FROM
-                    t_lc_call_record re GROUP BY re.platform
+                    t_lc_call_record re WHERE re.create_time BETWEEN #{startTimePeriod} and #{endTimePeriod} GROUP BY re.platform
             ) t
         ) t
     </select>
