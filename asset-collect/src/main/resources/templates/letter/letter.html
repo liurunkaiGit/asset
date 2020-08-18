@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('【请填写功能名称】列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>机构案件号：</p>
+                                <input type="text" name="caseNo"/>
+                            </li>
+                            <li>
+                                <p>业务归属人：</p>
+                                <input type="text" name="ownerName"/>
+                            </li>
+                            <li>
+                                <p>信函类型：</p>
+                                <select name="letterType" id="letterType">
+                                    <option value="">所有</option>
+                                    <option value="1">催缴函</option>
+                                    <option value="2">律师函</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>审批状态：</p>
+                                <select name="applyStatus">
+                                    <option value="">请选择</option>
+                                    <option value="1">待审批</option>
+                                    <option value="2">审批通过</option>
+                                    <option value="3">审批拒绝</option>
+                                </select>
+                            </li>
+                            <li class="select-time">
+                                <p>创建时间：</p>
+                                <input type="text" class="time-input" id="startCreateTime" placeholder="开始时间" name="startCreateTime"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endCreateTime" placeholder="结束时间" name="endCreateTime"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="select()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="apply(2)" shiro:hasPermission="coll:letter:apply">
+                    <i class="fa fa-plus"></i> 审批通过
+                </a>
+                <a class="btn btn-success" onclick="apply(3)" shiro:hasPermission="coll:letter:apply">
+                    <i class="fa fa-edit"></i> 审批拒绝
+                </a>
+                <a class="btn btn-warning" onclick="exportExcel()" shiro:hasPermission="coll:letter:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('ruoyi:letter:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('ruoyi:letter:remove')}]];
+        var prefix = ctx + "coll/letter";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "信函管理",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '主键id',
+                    visible: false
+                },
+                {
+                    field : 'caseNo', 
+                    title : '机构案件号'
+                },
+                {
+                    field : 'customName', 
+                    title : '客户姓名'
+                },
+                {
+                    field : 'ownerName', 
+                    title : '业务归属人'
+                },
+                {
+                    field : 'transferType', 
+                    title : '手别'
+                },
+                {
+                    field : 'arrearsTotal', 
+                    title : '委案金额'
+                },
+                {
+                    field : 'closeCaseYhje', 
+                    title : '结案应还金额'
+                },
+                {
+                    field : 'loanDate', 
+                    title : '借款日期'
+                },
+                {
+                    field : 'letterType', 
+                    title : '信函类型',
+                    formatter: function (value, row, index) {
+                        if (value == 1) {
+                            return '催缴函';
+                        } else if (value == 2) {
+                            return '律师函';
+                        }
+                    }
+                },
+                {
+                    field : 'applyStatus', 
+                    title : '审批状态',
+                    formatter: function (value, row, index) {
+                        if (value == 1) {
+                            return '待审批';
+                        } else if (value == 2) {
+                            return '审批通过';
+                        } else if (value == 3) {
+                            return '审批拒绝';
+                        }
+                    }
+                },
+                    {
+                        field : 'createTime',
+                        title : '创建时间'
+                    }]
+            };
+            $.table.init(options);
+        });
+
+        function select() {
+            var endCreateTime = $("#endCreateTime").val();
+            if (endCreateTime != null && endCreateTime != '') {
+                endCreateTime = endCreateTime + " 23:59:59";
+                $("#endCreateTime").val(endCreateTime);
+            }
+            $.table.search();
+        }
+
+        function apply(status) {
+            var letterIds = $.table.selectFirstColumns();
+            if (letterIds.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            var applyStatusRows = $.table.selectColumns("applyStatus");
+            for (var i = 0; i < applyStatusRows.length; i++) {
+                if(applyStatusRows[i] == 2 || applyStatusRows[i] == 3) {
+                    $.modal.alertWarning("已审批的不能再次审批，请选择待审批的数据进行操作");
+                    return;
+                }
+            }
+            $.modal.confirm("确认要要执行此操作吗?", function() {
+                var letterApplyUrl = prefix + '/letterApply?letterIds='+letterIds.join()+"&status="+status;
+                $.operate.submit(letterApplyUrl);
+            });
+        }
+
+        function exportExcel() {
+            var letterIds = $.table.selectFirstColumns();
+            var serializeArray = $("#formId").serializeArray();
+            var arr  =
+                {
+                    "name" : "letterIds",
+                    "value" : letterIds.join()
+                }
+            serializeArray.push(arr);
+            $.table.exportExcel2(serializeArray);
+            // $.modal.confirm("确定导出所有" + table.options.modalName + "吗？", function() {
+            //     $.modal.loading("正在导出数据，请稍后...");
+            //     $.post(table.options.exportUrl, serializeArray, function(result) {
+            //         if (result.code == web_status.SUCCESS) {
+            //             window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+            //         } else if (result.code == web_status.WARNING) {
+            //             $.modal.alertWarning(result.msg)
+            //         } else {
+            //             $.modal.alertError(result.msg);
+            //         }
+            //         $.modal.closeLoading();
+            //     });
+            // });
+        }
+    </script>
+</body>
+</html>

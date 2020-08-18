@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.letter.mapper.TLcLetterMapper">
+    
+    <resultMap type="com.ruoyi.letter.domain.TLcLetter" id="TLcLetterResult">
+        <result property="id"    column="id"    />
+        <result property="caseNo"    column="case_no"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="tastId"    column="tast_id"    />
+        <result property="customName"    column="custom_name"    />
+        <result property="ownerId"    column="owner_id"    />
+        <result property="ownerName"    column="owner_name"    />
+        <result property="transferType"    column="transfer_type"    />
+        <result property="arrearsTotal"    column="arrears_total"    />
+        <result property="closeCaseYhje"    column="close_case_yhje"    />
+        <result property="loanDate"    column="loan_date"    />
+        <result property="letterType"    column="letter_type"    />
+        <result property="applyStatus"    column="apply_status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+    </resultMap>
+
+    <sql id="selectTLcLetterVo">
+        select id, case_no, import_batch_no, org_id, org_name, tast_id, custom_name, owner_id, owner_name, transfer_type, arrears_total, close_case_yhje, loan_date, letter_type, apply_status, create_time, create_by, update_time, update_by from t_lc_letter
+    </sql>
+
+    <select id="selectTLcLetterList" parameterType="com.ruoyi.letter.domain.TLcLetter" resultMap="TLcLetterResult">
+        <include refid="selectTLcLetterVo"/>
+        <where>  
+            <if test="caseNo != null  and caseNo != ''"> and case_no = #{caseNo}</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+            <if test="orgId != null "> and org_id = #{orgId}</if>
+            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+            <if test="tastId != null "> and tast_id = #{tastId}</if>
+            <if test="customName != null  and customName != ''"> and custom_name like concat('%', #{customName}, '%')</if>
+            <if test="ownerId != null "> and owner_id = #{ownerId}</if>
+            <if test="ownerName != null  and ownerName != ''"> and owner_name like concat('%', #{ownerName}, '%')</if>
+            <if test="transferType != null  and transferType != ''"> and transfer_type = #{transferType}</if>
+            <if test="arrearsTotal != null "> and arrears_total = #{arrearsTotal}</if>
+            <if test="closeCaseYhje != null "> and close_case_yhje = #{closeCaseYhje}</if>
+            <if test="loanDate != null "> and loan_date = #{loanDate}</if>
+            <if test="letterType != null "> and letter_type = #{letterType}</if>
+            <if test="applyStatus != null "> and apply_status = #{applyStatus}</if>
+            <if test="startCreateTime != null">
+                and create_time <![CDATA[>=]]> #{startCreateTime}
+            </if>
+            <if test="endCreateTime != null">
+                and create_time <![CDATA[<=]]> #{endCreateTime}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectTLcLetterById" parameterType="Integer" resultMap="TLcLetterResult">
+        <include refid="selectTLcLetterVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectLetterListByIds" resultMap="TLcLetterResult">
+        <include refid="selectTLcLetterVo"/>
+         where id in
+        <foreach item="id" collection="letterIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="selectTLcLetter" parameterType="com.ruoyi.letter.domain.TLcLetter" resultMap="TLcLetterResult">
+        <include refid="selectTLcLetterVo"/>
+        where case_no = #{caseNo} and org_id = #{orgId} and import_batch_no = #{importBatchNo}
+    </select>
+
+    <insert id="insertTLcLetter" parameterType="com.ruoyi.letter.domain.TLcLetter">
+        insert into t_lc_letter
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="caseNo != null  and caseNo != ''">case_no,</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no,</if>
+            <if test="orgId != null ">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="tastId != null ">tast_id,</if>
+            <if test="customName != null  and customName != ''">custom_name,</if>
+            <if test="ownerId != null ">owner_id,</if>
+            <if test="ownerName != null  and ownerName != ''">owner_name,</if>
+            <if test="transferType != null  and transferType != ''">transfer_type,</if>
+            <if test="arrearsTotal != null ">arrears_total,</if>
+            <if test="closeCaseYhje != null ">close_case_yhje,</if>
+            <if test="loanDate != null ">loan_date,</if>
+            <if test="letterType != null ">letter_type,</if>
+            <if test="applyStatus != null ">apply_status,</if>
+            create_time,
+            <if test="createBy != null ">create_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="caseNo != null  and caseNo != ''">#{caseNo},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">#{importBatchNo},</if>
+            <if test="orgId != null ">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="tastId != null ">#{tastId},</if>
+            <if test="customName != null  and customName != ''">#{customName},</if>
+            <if test="ownerId != null ">#{ownerId},</if>
+            <if test="ownerName != null  and ownerName != ''">#{ownerName},</if>
+            <if test="transferType != null  and transferType != ''">#{transferType},</if>
+            <if test="arrearsTotal != null ">#{arrearsTotal},</if>
+            <if test="closeCaseYhje != null ">#{closeCaseYhje},</if>
+            <if test="loanDate != null ">#{loanDate},</if>
+            <if test="letterType != null ">#{letterType},</if>
+            <if test="applyStatus != null ">#{applyStatus},</if>
+            NOW(),
+            <if test="createBy != null ">#{createBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLcLetter" parameterType="com.ruoyi.letter.domain.TLcLetter">
+        update t_lc_letter
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="caseNo != null  and caseNo != ''">case_no = #{caseNo},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no = #{importBatchNo},</if>
+            <if test="orgId != null ">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="tastId != null ">tast_id = #{tastId},</if>
+            <if test="customName != null  and customName != ''">custom_name = #{customName},</if>
+            <if test="ownerId != null ">owner_id = #{ownerId},</if>
+            <if test="ownerName != null  and ownerName != ''">owner_name = #{ownerName},</if>
+            <if test="transferType != null  and transferType != ''">transfer_type = #{transferType},</if>
+            <if test="arrearsTotal != null ">arrears_total = #{arrearsTotal},</if>
+            <if test="closeCaseYhje != null ">close_case_yhje = #{closeCaseYhje},</if>
+            <if test="loanDate != null ">loan_date = #{loanDate},</if>
+            <if test="letterType != null ">letter_type = #{letterType},</if>
+            <if test="applyStatus != null ">apply_status = #{applyStatus},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="createBy != null ">create_by = #{createBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateBy != null ">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="apply">
+        update t_lc_letter set apply_status = #{applyStatus},update_by=#{updateBy},update_time = now()
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <delete id="deleteTLcLetterById" parameterType="Integer">
+        delete from t_lc_letter where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcLetterByIds" parameterType="String">
+        delete from t_lc_letter where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
