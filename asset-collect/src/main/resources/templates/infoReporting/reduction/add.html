@@ -196,6 +196,27 @@
                 $.operate.save(acObj['form'+$("#reportingType option:selected").val()] + "/add", $('#form-reprotingType').serialize());
             }
         }
+        function submitHandlerCh(callBk){
+            if ($.validate.form()) {
+                $.operate.saveModal(
+                    acObj['form'+$("#reportingType option:selected").val()] + "/add",
+                    $('#form-reprotingType').serialize(),
+                    function(result){
+                        callBk(result);
+                        if (result.code == web_status.SUCCESS) {
+                            $.modal.alertSuccess(result.msg)
+                        } else if (result.code == web_status.WARNING) {
+                            $.modal.alertWarning(result.msg)
+                        } else {
+                            $.modal.alertError(result.msg);
+                        }
+                        $.modal.closeLoading();
+                        $.modal.close();
+                    }
+                );
+            }
+        }
+
         $(document).ready(function(){
             ///获取任务详细数据
             var obj = {};

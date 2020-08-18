@@ -2864,7 +2864,13 @@
 
 
     function infoReportingSub(){
-        $.modal.open("添加", ctx+"inforeporting/reduction/add?caseNo="+currentCaseNo+"&orgId="+currentOrgId+"&importBatchNo="+currentImportBatchNo);
+        $.modal.open("添加", ctx+"inforeporting/reduction/add?caseNo="+currentCaseNo+"&orgId="+currentOrgId+"&importBatchNo="+currentImportBatchNo,'','',function(index,layero){
+            var iframeWin = layero.find('iframe')[0];
+            iframeWin.contentWindow.submitHandlerCh(function(result){
+                $('#inforeporting').val('0');
+                viewTabDetail('inforeporting');
+            });
+        });
     }
 
 
