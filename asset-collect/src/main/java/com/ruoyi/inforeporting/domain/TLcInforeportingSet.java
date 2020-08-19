@@ -50,4 +50,9 @@ public class TLcInforeportingSet extends BaseEntity {
      * 排序字段
      */
     private Integer customSorts;
+    /**
+     * 字段长度限制0没有限制
+     */
+    private Integer columnLength;
+
 }

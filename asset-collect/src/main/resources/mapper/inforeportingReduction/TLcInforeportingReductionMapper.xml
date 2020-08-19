@@ -196,7 +196,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
         </where>
         UNION
-        SELECT  id,'3'as types,amount_of_deduction as arrears_total,reasons as remark,application_time as create_time,create_by
+        SELECT  id,'3'as types,amount_of_deduction as arrears_total,reasons as remark,create_time,create_by
         from t_lc_inforeporting_company
         <where>
             del_flag=0

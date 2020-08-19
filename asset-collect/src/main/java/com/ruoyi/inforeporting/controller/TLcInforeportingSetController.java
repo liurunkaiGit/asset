@@ -82,6 +82,7 @@ public class TLcInforeportingSetController extends BaseController {
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             return error("数据重复,请重试");
         }
 

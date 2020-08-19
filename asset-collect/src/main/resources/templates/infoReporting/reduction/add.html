@@ -25,7 +25,7 @@
             <div class="form-group" id="noCompany">
                 <label class="col-sm-3 control-label">减免方式：</label>
                 <div class="col-sm-8">
-                    <input type="text" name="reductionTypeName" id="reductionTypeName" class="form-control">
+                    <input type="text" name="reductionTypeName" id="reductionTypeName" class="form-control" maxlength="64">
                     <input type="hidden" name="reductionTypeCode" value="1">
                 </div>
             </div>
@@ -165,7 +165,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">非本人对公还款原因：</label>
             <div class="col-sm-8">
-                <input type="text" class="form-control"   name="reasons" >
+                <input type="text" class="form-control"   name="reasons" maxlength="256">
             </div>
         </div>
         <div class="form-group">
@@ -178,7 +178,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">备注：</label>
             <div class="col-sm-8">
-                <textarea  class="form-control"  name="remarks" maxlength="100"></textarea>
+                <textarea  class="form-control"  name="remarks" maxlength="256"></textarea>
             </div>
         </div>
     </div>
@@ -270,7 +270,12 @@
                                         al = obj[value.fromColumn];
                                     }
                                     if(value.editStatus == 1){
-                                        htm+="<input type=\"text\"  class=\"form-control\" name=\""+value.fromColumn+"\" value=\""+al+"\">";
+                                        if(value.columnLength > 0){
+                                            htm+="<input type=\"text\"  class=\"form-control\" name=\""+value.fromColumn+"\" value=\""+al+"\" maxlength='"+value.columnLength+"'>";
+                                        }else{
+                                            htm+="<input type=\"text\"  class=\"form-control\" name=\""+value.fromColumn+"\" value=\""+al+"\">";
+                                        }
+
                                     }else{
                                         htm+=""+al+"";
                                         htm+="<input type='hidden' name='"+value.fromColumn+"' value=\""+al+"\">";
@@ -308,20 +313,33 @@
                     return this.optional(element) || /^([1-9]{1}[0-9]{0,3}(\,[0-9]{3,4})*(\.[0-9]{0,2})?|[1-9]{1}\d*(\.[0-9]{0,2})?|0(\.[0-9]{0,2})?|(\.[0-9]{1,2})?)$/.test(value);
                 },"只允许两位小数"
             );
+            jQuery.validator.addMethod("positiveinteger", function(value, element) {
+                var Val = parseInt(value);
+                return Val > 0 && (Val + "") == value;
+            }, "请输入正整数");
+
             var prefix = ctx + "ruoyi/inforeportingReduction/";
             $("#form-reprotingType").validate({
                 rules:{
                     "deductionAmount":{
                         "required" : true,
-                        "isMoney":true,
+                        "isMoney":true
                     },
                     "depositAmount":{
                         "required" : true,
-                        "isMoney":true,
+                        "isMoney":true
                     },
                     "amountOfDeduction":{
                         "required" : true,
-                        "isMoney":true,
+                        "isMoney":true
+                    },
+                    "topFourCards":{
+                        "required" : true,
+                        digits:true
+                    },
+                    "lastFourCards":{
+                        "required" : true,
+                        digits:true
                     }
                 },
                 focusCleanup: true
