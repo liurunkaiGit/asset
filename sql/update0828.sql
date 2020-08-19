@@ -49,3 +49,16 @@ values('审批拒绝', (SELECT t.menu_id from sys_menu t where t.menu_name='信�
 
 insert into sys_menu  (menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
 values('导出', (SELECT t.menu_id from sys_menu t where t.menu_name='信函管理'), '5',  '#',  'F', '0', 'coll:letter:export',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+
+INSERT INTO `sys_menu` (`menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES ('手动回调', (SELECT t.menu_id from sys_menu t where t.menu_name='呼叫明细管理'), '4', '#', 'menuItem', 'F', '0', 'collect:hand:callback', '#', 'admin', '2020-08-19 14:33:50', '', NULL, '');
+INSERT INTO `sys_menu` (`menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES ('拉回', (SELECT t.menu_id from sys_menu t where t.menu_name='呼叫任务管理'), '3', '#', 'menuItem', 'F', '0', 'robot:pandect:pullback', '#', 'admin', '2020-08-19 14:34:24', '', NULL, '');
+INSERT INTO `sys_menu` (`menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES ('启动', (SELECT t.menu_id from sys_menu t where t.menu_name='呼叫任务管理'), '4', '#', 'menuItem', 'F', '0', 'robot:pandect:start', '#', 'admin', '2020-08-19 14:35:32', '', NULL, '');
+INSERT INTO `sys_menu` (`menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES ('暂停', (SELECT t.menu_id from sys_menu t where t.menu_name='呼叫任务管理'), '5', '#', 'menuItem', 'F', '0', 'robot:pandect:pause', '#', 'admin', '2020-08-19 14:36:01', '', NULL, '');
+
+ALTER table org_package add is_auto_send_sms tinyint(1) DEFAULT NULL COMMENT '是否自动发送短信，1：是吗，2：否';
+ALTER table org_package add sms_template_id varchar(50) DEFAULT NULL COMMENT '短信模板id';
+ALTER table org_package add sms_template_name varchar(100) DEFAULT NULL COMMENT '短信模板名称';
