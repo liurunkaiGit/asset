@@ -132,9 +132,7 @@ public class TLcInforeportingReductionController extends BaseController {
     @ResponseBody
     public AjaxResult export(TLcInforeportingReduction tLcInforeportingReduction, HttpServletResponse response) {
         tLcInforeportingReduction.setOrgId(ShiroUtils.getSysUser().getOrgId());
-        List<TLcInforeportingReduction> list = inforeportingReductionService.selectTLcInforeportingReductionList(tLcInforeportingReduction);
-        ExcelUtil<TLcInforeportingReduction> util = new ExcelUtil<>(TLcInforeportingReduction.class);
-        return util.exportExcel(list, "减免");
+        return inforeportingReductionService.exportExcel(tLcInforeportingReduction);
     }
 
     @Log(title = "上报信息减免驳回", businessType = BusinessType.FORCE)

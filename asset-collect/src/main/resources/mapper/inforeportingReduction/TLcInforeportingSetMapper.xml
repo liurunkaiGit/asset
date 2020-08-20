@@ -12,10 +12,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="reportingTypeName"    column="reporting_type_name"    />
         <result property="fromColumn"    column="from_column"    />
         <result property="fromColumnName"    column="from_column_name"    />
+        <result property="toColumn"    column="to_column"    />
         <result property="showStatus"    column="show_status"    />
         <result property="editStatus"    column="edit_status"    />
         <result property="customSorts"    column="custom_sorts"    />
         <result property="columnLength"    column="column_length"    />
+        <result property="requiredStatus"    column="required_status"    />
+        <result property="rules"    column="rules"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
@@ -33,10 +36,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             reporting_type_name,
             from_column,
             from_column_name,
+            to_column,
             show_status,
             edit_status,
             custom_sorts,
             column_length,
+            required_status,
+            rules,
             create_by,
             create_time,
             update_by,
@@ -50,10 +56,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{reportingTypeName},
             #{fromColumn},
             #{fromColumnName},
+            #{toColumn},
             #{showStatus},
             #{editStatus},
             #{customSorts},
             #{columnLength},
+            #{requiredStatus},
+            #{rules},
             #{createBy},
             now(),
             #{createBy},
@@ -70,10 +79,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         reporting_type_name,
         from_column,
         from_column_name,
+        to_column,
         show_status,
         edit_status,
         custom_sorts,
         column_length,
+        required_status,
+        rules,
         create_by,
         update_by
         FROM
@@ -82,6 +94,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectTLcInforeportingSetList" parameterType="com.ruoyi.inforeporting.domain.TLcInforeportingSet" resultMap="TLcInforeportingSetResult">
         <include refid="selectTLcInforeportingSetVo"/>
+        <where>
+            <if test="orgName != null and orgName != ''">
+                AND org_name=#{orgName}
+            </if>
+            <if test="reportingType != null and reportingType != ''">
+                AND reporting_type=#{reportingType}
+            </if>
+        </where>
     </select>
 
 
@@ -113,10 +133,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             reporting_type_name = #{reportingTypeName},
             from_column = #{fromColumn},
             from_column_name = #{fromColumnName},
+            to_column = #{toColumn},
             show_status = #{showStatus},
             edit_status = #{editStatus},
             custom_sorts = #{customSorts},
             column_length = #{columnLength},
+            required_status = #{requiredStatus},
+            rules = #{rules},
             update_by = #{updateBy},
             update_time = sysdate()
         </set>

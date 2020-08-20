@@ -5,12 +5,13 @@ import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.Data;
 
 /**
- * @Description: 上报信息 模板
+ * @Description: 上报信息-减免
  * @author: gaohg
  * @Date: 2020/8/12
  */
 @Data
-public class TLcInforeportingTemplate extends BaseEntity {
+public class TLcInforeportingReductionXing extends BaseEntity {
+    private static final long serialVersionUID = 1646626261616L;
     /**
      * 主键
      */
@@ -31,7 +32,7 @@ public class TLcInforeportingTemplate extends BaseEntity {
      * 序号
      */
     @Excel(name = "序号")
-    protected int xh;
+    private int xh;
     /**
      * 产品
      */
@@ -40,28 +41,35 @@ public class TLcInforeportingTemplate extends BaseEntity {
     /**
      * 合同号
      */
-    @Excel(name = "合同号")
+    @Excel(name = "借据号")
     protected String caseNo;
     /**
-     * 批次号
+     * 逾期天数
      */
-    protected String importBatchNo;
+    @Excel(name = "逾期天数")
+    private String overdueDays;
+    /**
+     * 划扣金额
+     */
+    private Double deductionAmount;
     /**
      * 客户姓名
      */
     @Excel(name = "客户姓名")
     protected String customName;
+
     /**
-     * 逾期天数
+     * 批次号
      */
-    protected String overdueDays;
+    protected String importBatchNo;
     /**
-     * 减免方式code
+     * 减免方式编码
      */
     protected Integer reductionTypeCode;
     /**
      * 减免方式
      */
+    @Excel(name = "部份划扣/一次性结清/减免金额")
     protected String reductionTypeName;
     /**
      * 件号

@@ -1,5 +1,6 @@
 package com.ruoyi.inforeporting.service;
 
+import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.inforeporting.domain.TLcInforeportingReduction;
 import com.ruoyi.inforeporting.domain.TLcInforeportingTemplate;
 import com.ruoyi.task.domain.TLcTask;
@@ -44,4 +45,10 @@ public interface TLcInforeportingReductionService {
      * @return 是否成功 成功>0 失败<0
      */
     public int rejectTLcInforeportingReductionByIds(String ids);
+
+    /**
+     * @param inforeportingReduction 导出
+     * @return 是否成功 成功>0 失败<0
+     */
+    public AjaxResult exportExcel(TLcInforeportingReduction inforeportingReduction);
 }

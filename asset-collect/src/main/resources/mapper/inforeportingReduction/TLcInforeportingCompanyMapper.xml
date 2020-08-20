@@ -3,7 +3,6 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.inforeporting.mapper.TLcInforeportingCompanyMapper">
-    
     <resultMap type="com.ruoyi.inforeporting.domain.TLcInforeportingCompany" id="TLcInforeportingCompanyResult">
         <result property="id"    column="id"    />
         <result property="orgId"    column="org_id"    />
@@ -31,36 +30,52 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="reasons"    column="reasons"    />
         <result property="applicationTime"    column="application_time"    />
         <result property="remarks"    column="remarks"    />
+        <result property="area"    column="area"    />
+        <result property="transferType"    column="transfer_type"    />
+        <result property="dzhxrq"    column="dzhxrq"    />
+        <result property="reductionAfterAmount"    column="reduction_after_amount"    />
+        <result property="repaymentRatio"    column="repayment_ratio"    />
+        <result property="telephone"    column="telephone"    />
+        <result property="expirationDate"    column="expiration_date"    />
     </resultMap>
-
+    <sql id="base">
+        org_id,
+        org_name,
+        import_batch_no,
+        case_no,
+        custom_name,
+        product_name,
+        overdue_days,
+        reduction_type_code,
+        reduction_type_name,
+        create_by,
+        create_time,
+        update_by,
+        update_time,
+        certificate_no,
+        arrears_total,
+        drawee_name,
+        relationship,
+        top_four_cards,
+        last_four_cards,
+        paying_bank,
+        deposit_amount,
+        amount_of_deduction,
+        reasons,
+        application_time,
+        remarks,
+        area,
+        transfer_type,
+        dzhxrq,
+        reduction_after_amount,
+        repayment_ratio,
+        telephone,
+        expiration_date
+    </sql>
     <insert id="insertTLcInforeportingCompany" parameterType="com.ruoyi.inforeporting.domain.TLcInforeportingCompany" useGeneratedKeys="true" keyProperty="id">
        INSERT INTO t_lc_inforeporting_company
-       (
-            org_id,
-            org_name,
-            import_batch_no,
-            case_no,
-            custom_name,
-            product_name,
-            overdue_days,
-            reduction_type_code,
-            reduction_type_name,
-            create_by,
-            create_time,
-            update_by,
-            update_time,
-            certificate_no,
-            arrears_total,
-            drawee_name,
-            relationship,
-            top_four_cards,
-            last_four_cards,
-            paying_bank,
-            deposit_amount,
-            amount_of_deduction,
-            reasons,
-            application_time,
-            remarks
+        (
+          <include refid="base"></include>
         )
         VALUES
         (
@@ -88,42 +103,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{amountOfDeduction},
             #{reasons},
             #{applicationTime},
-            #{remarks}
+            #{remarks},
+            #{area},
+            #{transferType},
+            #{dzhxrq},
+            #{reductionAfterAmount},
+            #{repaymentRatio},
+            #{telephone},
+            #{expirationDate}
         )
     </insert>
-
     <sql id="selectTLcInforeportingCompanyVo">
         SELECT
         id,
-        org_id,
-        org_name,
-        case_no,
-        import_batch_no,
-        custom_name,
-        overdue_days,
-        reduction_type_code,
-        reduction_type_name,
-        product_name,
-        create_by,
-        create_time,
-        update_by,
-        update_time,
-        certificate_no,
-        arrears_total,
-        drawee_name,
-        relationship,
-        top_four_cards,
-        last_four_cards,
-        paying_bank,
-        deposit_amount,
-        amount_of_deduction,
-        reasons,
-        application_time,
-        remarks
+        <include refid="base"></include>
         FROM
         t_lc_inforeporting_company
     </sql>
-
     <select id="selectTLcInforeportingCompanyList" parameterType="com.ruoyi.inforeporting.domain.TLcInforeportingCompany" resultMap="TLcInforeportingCompanyResult">
         <include refid="selectTLcInforeportingCompanyVo"/>
         <where>
@@ -148,8 +144,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
         </where>
     </select>
-
-
     <update id="rejectTLcInforeportingCompanyByIds" parameterType="Long">
         update t_lc_inforeporting_company set del_flag=1 where id in
         <foreach collection="array" item="id" open="(" separator="," close=")">

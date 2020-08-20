@@ -39,6 +39,10 @@ public class TLcInforeportingSet extends BaseEntity {
      */
     private String fromColumnName;
     /**
+     * 接收列
+     */
+    private String toColumn;
+    /**
      * 是否显示 1=是 0=否
      */
     private Integer showStatus;
@@ -54,5 +58,12 @@ public class TLcInforeportingSet extends BaseEntity {
      * 字段长度限制0没有限制
      */
     private Integer columnLength;
-
+    /**
+     * 是否可编辑 1=是 0=否
+     */
+    private Integer requiredStatus;
+    /**
+     * 验证规则
+     */
+    private String rules;
 }

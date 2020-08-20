@@ -1,5 +1,7 @@
 package com.ruoyi.inforeporting.service;
 
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.inforeporting.domain.TLcInforeportingBuckle;
 
 import java.util.List;
@@ -27,4 +29,10 @@ public interface TLcInforeportingBuckleService {
      * @return 是否成功 成功>0 失败<0
      */
     public int rejectTLcInforeportingBuckleByIds(String ids);
+
+    /**
+     * @param inforeportingBuckle 传递参数
+     * @return 是否成功 成功>0 失败<0
+     */
+    public AjaxResult exportExcel(TLcInforeportingBuckle inforeportingBuckle);
 }

@@ -69,6 +69,36 @@ public class TLcInforeportingCompany extends TLcInforeportingTemplate implements
      */
     private Integer delFlag;
 
+    /**
+     * 地区
+     */
+    private String area;
+    /**
+     * 手别
+     */
+    private String transferType;
+    /**
+     * 呆账核销日期
+     */
+    private String dzhxrq;
+    /**
+     * 呆账核销日期
+     */
+    private Double reductionAfterAmount;
+    /**
+     * 还款比例
+     */
+    private String repaymentRatio;
+    /**
+     * 联系方式
+     */
+    private String telephone;
+    /**
+     * 减免失效日
+     */
+    private Date expirationDate;
+
+
     @Override
     public TLcInforeportingCompanyExp clone() {
         TLcInforeportingCompanyExp cep = new TLcInforeportingCompanyExp();
@@ -90,6 +120,7 @@ public class TLcInforeportingCompany extends TLcInforeportingTemplate implements
         cep.setCompany(company.toString().replaceAll("\n", String.valueOf((char)10)));
         cep.setRemarks(getRemarks());
         cep.setApplicationTime(this.getApplicationTime());
+        cep.setCreateTime(this.getCreateTime());
         return cep;
     }
 }

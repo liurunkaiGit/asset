@@ -99,30 +99,10 @@ public class TLcInforeportingCompanyController extends BaseController {
     @ResponseBody
     public AjaxResult export(TLcInforeportingCompany tLcInforeportingCompany, HttpServletResponse response) {
         tLcInforeportingCompany.setOrgId(ShiroUtils.getSysUser().getOrgId());
-        List<TLcInforeportingCompany> list = inforeportingCompanyService.selectTLcInforeportingCompanyList(tLcInforeportingCompany);
-//        list.stream().forEach(recovery -> {
-//            if (StringUtils.isNoneBlank(recovery.getCaseRecovery())) {
-//                recovery.setCaseRecovery(df.format(new BigDecimal(recovery.getCaseRecovery())));
-//            }
-//            if (StringUtils.isNoneBlank(recovery.getMoneyRecovery())) {
-//                recovery.setMoneyRecovery(df.format(new BigDecimal(recovery.getMoneyRecovery())));
-//            }
-//        });
-
-        ExcelUtil<TLcInforeportingCompanyExp> util = new ExcelUtil<>(TLcInforeportingCompanyExp.class);
-        return util.exportExcel(transformationCompany(list), "对公入账");
+        return inforeportingCompanyService.exportExcel(tLcInforeportingCompany);
     }
 
-    /**
-     * 将对象信息封装导出对象中
-     */
-    private  List<TLcInforeportingCompanyExp> transformationCompany(List<TLcInforeportingCompany> list){
-        List<TLcInforeportingCompanyExp> listExp = new ArrayList<TLcInforeportingCompanyExp>();
-        for(TLcInforeportingCompany cy:list){
-            listExp.add(cy.clone());
-        }
-        return listExp;
-    }
+
 
     /**
      * 新增【逾期划扣】

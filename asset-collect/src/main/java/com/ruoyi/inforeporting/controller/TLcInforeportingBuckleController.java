@@ -100,9 +100,7 @@ public class TLcInforeportingBuckleController extends BaseController {
     @ResponseBody
     public AjaxResult export(TLcInforeportingBuckle tLcInforeportingBuckle, HttpServletResponse response) {
         tLcInforeportingBuckle.setOrgId(ShiroUtils.getSysUser().getOrgId());
-        List<TLcInforeportingBuckle> list = inforeportingBuckleService.selectTLcInforeportingBuckleList(tLcInforeportingBuckle);
-        ExcelUtil<TLcInforeportingBuckle> util = new ExcelUtil<>(TLcInforeportingBuckle.class);
-        return util.exportExcel(list, "逾期划扣");
+        return inforeportingBuckleService.exportExcel(tLcInforeportingBuckle);
     }
 
     /**

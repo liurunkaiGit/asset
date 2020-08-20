@@ -1,8 +1,6 @@
 package com.ruoyi.inforeporting.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.annotation.Excel;
-import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.Data;
 
 import java.util.Date;
@@ -13,7 +11,7 @@ import java.util.Date;
  * @Date: 2020/8/12
  */
 @Data
-public class TLcInforeportingCompanyExp {
+public class TLcInforeportingCompanyExpXing {
     private static final long serialVersionUID = 164665551616L;
     @Excel(name = "序号")
     private int xh;
@@ -22,7 +20,7 @@ public class TLcInforeportingCompanyExp {
     /**
      * 合同号
      */
-    @Excel(name = "合同号")
+    @Excel(name = "借据号")
     private String caseNo;
     /**
      * 客户姓名
@@ -32,8 +30,13 @@ public class TLcInforeportingCompanyExp {
     /**
      * 付款人姓名
      */
-    @Excel(name = "对公入账")
+    @Excel(name = "对公入账",height = 100)
     private String company;
+    /**
+     * 备注
+     */
+    @Excel(name = "备注")
+    private String remarks;
     /**
      * 申请时间
      */
@@ -41,11 +44,6 @@ public class TLcInforeportingCompanyExp {
     /**
      * 创建时间
      */
-    @Excel(name = "创建时间",dateFormat = "yyyy-MM-dd")
+    @Excel(name = "申请时间",dateFormat = "yyyy-MM-dd")
     private Date createTime;
-    /**
-     * 备注
-     */
-    @Excel(name = "备注")
-    private String remarks;
 }

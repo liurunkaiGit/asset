@@ -1,5 +1,6 @@
 package com.ruoyi.inforeporting.service;
 
+import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.inforeporting.domain.TLcInforeportingCompany;
 
 import java.util.List;
@@ -27,4 +28,10 @@ public interface TLcInforeportingCompanyService {
      * @return 是否成功 成功>0 失败<0
      */
     public int rejectTLcInforeportingCompanyByIds(String ids);
+
+    /**
+     * @param inforeportingCompany 对公入账 导出
+     * @return 是否成功 成功>0 失败<0
+     */
+    public AjaxResult exportExcel(TLcInforeportingCompany inforeportingCompany);
 }

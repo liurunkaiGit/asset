@@ -1,6 +1,8 @@
 package com.ruoyi.inforeporting.mapper;
 
 import com.ruoyi.inforeporting.domain.TLcInforeportingReduction;
+import com.ruoyi.inforeporting.domain.TLcInforeportingReductionJiexin;
+import com.ruoyi.inforeporting.domain.TLcInforeportingReductionXing;
 import com.ruoyi.inforeporting.domain.TLcInforeportingTemplate;
 import com.ruoyi.task.domain.TLcTask;
 import org.apache.ibatis.annotations.Mapper;
@@ -33,6 +35,16 @@ public interface TLcInforeportingReductionMapper {
      * @return 上报信息减免实体集合数据
      */
     public List<TLcInforeportingReduction> selectTLcInforeportingReductionList(TLcInforeportingReduction inforeportingReduction);
+    /**
+     * @param inforeportingReduction 上报信息减免实体 参数
+     * @return 上报信息减免实体集合数据  导出
+     */
+    public List<TLcInforeportingReduction> selectTLcInforeportingReductionListExp(TLcInforeportingReduction inforeportingReduction);
+    /**
+     * @param inforeportingReduction  上报信息减免实体 参数
+     * @return 上报信息减免实体集合数据 兴业消费金融
+     */
+    public List<TLcInforeportingReductionXing> selectTLcInforeportingReductionXingList(TLcInforeportingReduction inforeportingReduction);
 
     /**
      * @param tLcInforeportingTemplate 所有业务类型上报信息 模板参数

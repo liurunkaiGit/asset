@@ -3,8 +3,8 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.inforeporting.mapper.TLcInforeportingBuckleMapper">
-    
     <resultMap type="com.ruoyi.inforeporting.domain.TLcInforeportingBuckle" id="TLcInforeportingBuckleResult">
+        <result property="xh"    column="xh"    />
         <result property="id"    column="id"    />
         <result property="orgId"    column="org_id"    />
         <result property="orgName"    column="org_name"    />
@@ -12,6 +12,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="importBatchNo"    column="import_batch_no"    />
         <result property="customName"    column="custom_name"    />
         <result property="productName"    column="product_name"    />
+        <result property="deductionAmount"    column="deduction_amount"    />
+        <result property="overdueDays"    column="overdue_days"    />
+        <result property="reductionTypeCode"    column="reduction_type_code"    />
+        <result property="reductionTypeName"    column="reduction_type_name"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="certificateNo"    column="certificate_no"    />
+        <result property="arrearsTotal"    column="arrears_total"    />
+        <result property="area"    column="area"    />
+        <result property="transferType"    column="transfer_type"    />
+        <result property="dzhxrq"    column="dzhxrq"    />
+        <result property="reductionAfterAmount"    column="reduction_after_amount"    />
+        <result property="repaymentRatio"    column="repayment_ratio"    />
+        <result property="telephone"    column="telephone"    />
+        <result property="expirationDate"    column="expiration_date"    />
+        <result property="remarks"    column="remarks"    />
+    </resultMap>
+    <resultMap type="com.ruoyi.inforeporting.domain.TLcInforeportingBuckleXing" id="TLcInforeportingBuckleXingResult">
+        <result property="id"    column="id"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="caseNo"    column="case_no"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="customName"    column="custom_name"    />
+        <result property="productName"    column="product_name"    />
+        <result property="deductionAmount"    column="deduction_amount"    />
         <result property="overdueDays"    column="overdue_days"    />
         <result property="reductionTypeCode"    column="reduction_type_code"    />
         <result property="reductionTypeName"    column="reduction_type_name"    />
@@ -22,25 +50,36 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="certificateNo"    column="certificate_no"    />
         <result property="arrearsTotal"    column="arrears_total"    />
     </resultMap>
-
+    <sql id="base">
+        org_id,
+        org_name,
+        import_batch_no,
+        case_no,
+        custom_name,
+        product_name,
+        deduction_amount,
+        overdue_days,
+        reduction_type_code,
+        reduction_type_name,
+        create_by,
+        create_time,
+        update_by,
+        update_time,
+        certificate_no,
+        arrears_total,
+        area,
+        transfer_type,
+        dzhxrq,
+        reduction_after_amount,
+        repayment_ratio,
+        telephone,
+        expiration_date,
+        remarks
+    </sql>
     <insert id="insertTLcInforeportingBuckle" parameterType="com.ruoyi.inforeporting.domain.TLcInforeportingBuckle" useGeneratedKeys="true" keyProperty="id">
        INSERT INTO t_lc_inforeporting_buckle
-       (
-            org_id,
-            org_name,
-            import_batch_no,
-            case_no,
-            custom_name,
-            product_name,
-            overdue_days,
-            reduction_type_code,
-            reduction_type_name,
-            create_by,
-            create_time,
-            update_by,
-            update_time,
-            certificate_no,
-            arrears_total
+        (
+         <include refid="base"></include>
         )
         VALUES
         (
@@ -50,6 +89,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{caseNo},
             #{customName},
             #{productName},
+            #{deductionAmount},
             #{overdueDays},
             #{reductionTypeCode},
             #{reductionTypeName},
@@ -58,34 +98,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{createBy},
             now(),
             #{certificateNo},
-            #{arrearsTotal}
+            #{arrearsTotal},
+            #{area},
+            #{transferType},
+            #{dzhxrq},
+            #{reductionAfterAmount},
+            #{repaymentRatio},
+            #{telephone},
+            #{expirationDate},
+            #{remarks}
         )
     </insert>
-
     <sql id="selectTLcInforeportingBuckleVo">
         SELECT
         id,
-        org_id,
-        org_name,
-        case_no,
-        import_batch_no,
-        custom_name,
-        overdue_days,
-        reduction_type_code,
-        reduction_type_name,
-        product_name,
-        create_by,
-        create_time,
-        update_by,
-        update_time,
-        certificate_no,
-        arrears_total
+        <include refid="base"></include>
         FROM
         t_lc_inforeporting_buckle
     </sql>
 
-    <select id="selectTLcInforeportingBuckleList" parameterType="com.ruoyi.inforeporting.domain.TLcInforeportingBuckle" resultMap="TLcInforeportingBuckleResult">
-        <include refid="selectTLcInforeportingBuckleVo"/>
+    <sql id="selectTLcInforeportingBuckleXHVo">
+        SELECT
+        (@i:=@i+1)xh,
+        id,
+        <include refid="base"></include>
+        FROM
+        t_lc_inforeporting_buckle s,(select @i:=0)t
+    </sql>
+
+    <sql id="wheresql">
         <where>
             del_flag=0
             <if test="createBy != null and createBy != ''">
@@ -107,9 +148,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
             </if>
         </where>
+    </sql>
+    
+    <select id="selectTLcInforeportingBuckleList" parameterType="com.ruoyi.inforeporting.domain.TLcInforeportingBuckle" resultMap="TLcInforeportingBuckleResult">
+        <include refid="selectTLcInforeportingBuckleVo"/>
+        <include refid="wheresql"></include>
     </select>
 
+    <select id="selectTLcInforeportingBuckleListExp" parameterType="com.ruoyi.inforeporting.domain.TLcInforeportingBuckle" resultMap="TLcInforeportingBuckleResult">
+        <include refid="selectTLcInforeportingBuckleXHVo"/>
+        <include refid="wheresql"></include>
+    </select>
 
+    <select id="selectTLcInforeportingBuckleXingList" parameterType="com.ruoyi.inforeporting.domain.TLcInforeportingBuckle" resultMap="TLcInforeportingBuckleXingResult">
+        <include refid="selectTLcInforeportingBuckleXHVo"/>
+        <include refid="wheresql"></include>
+    </select>
     <update id="rejectTLcInforeportingBuckleByIds" parameterType="Long">
         update t_lc_inforeporting_buckle set del_flag=1 where id in
         <foreach collection="array" item="id" open="(" separator="," close=")">

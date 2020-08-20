@@ -1,6 +1,7 @@
 package com.ruoyi.inforeporting.mapper;
 
 import com.ruoyi.inforeporting.domain.TLcInforeportingBuckle;
+import com.ruoyi.inforeporting.domain.TLcInforeportingBuckleXing;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -23,6 +24,16 @@ public interface TLcInforeportingBuckleMapper {
      */
     public List<TLcInforeportingBuckle> selectTLcInforeportingBuckleList(TLcInforeportingBuckle inforeportingBuckle);
 
+    /**
+     * @param inforeportingBuckle 查询上报信息 逾期划扣
+     * @return 上报信息 逾期划扣集合 导出
+     */
+    public List<TLcInforeportingBuckle> selectTLcInforeportingBuckleListExp(TLcInforeportingBuckle inforeportingBuckle);
+    /**
+     * @param inforeportingBuckle 查询上报信息 逾期划扣 兴业消费金融
+     * @return 上报信息 逾期划扣集合
+     */
+    public List<TLcInforeportingBuckleXing> selectTLcInforeportingBuckleXingList(TLcInforeportingBuckle inforeportingBuckle);
     /**
      * @param id 批量驳回上报信息 逾期划扣
      * @return 是否成功 成功>0 失败<0

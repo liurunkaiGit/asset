@@ -1,7 +1,10 @@
 package com.ruoyi.inforeporting.service.impl;
 
+import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.inforeporting.domain.TLcInforeportingBuckle;
+import com.ruoyi.inforeporting.domain.TLcInforeportingBuckleXing;
 import com.ruoyi.inforeporting.mapper.TLcInforeportingBuckleMapper;
 import com.ruoyi.inforeporting.service.TLcInforeportingBuckleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,4 +37,16 @@ public class TLcInforeportingBuckleServiceImpl implements TLcInforeportingBuckle
     public int rejectTLcInforeportingBuckleByIds(String ids) {
         return ibm.rejectTLcInforeportingBuckleByIds(Convert.toLongArray(ids));
     }
+
+    @Override
+    public AjaxResult exportExcel(TLcInforeportingBuckle inforeportingBuckle) {
+        if(null != inforeportingBuckle.getOrgId() && 207 == inforeportingBuckle.getOrgId().longValue()){
+            //兴业消费金融
+            List<TLcInforeportingBuckleXing> list = ibm.selectTLcInforeportingBuckleXingList(inforeportingBuckle);
+            return new ExcelUtil<TLcInforeportingBuckleXing>(TLcInforeportingBuckleXing.class).exportExcel(list,"逾期划扣");
+        }
+        List<TLcInforeportingBuckle> list = ibm.selectTLcInforeportingBuckleListExp(inforeportingBuckle);
+        return new ExcelUtil<TLcInforeportingBuckle>(TLcInforeportingBuckle.class).exportExcel(list,"逾期划扣");
+    }
+
 }

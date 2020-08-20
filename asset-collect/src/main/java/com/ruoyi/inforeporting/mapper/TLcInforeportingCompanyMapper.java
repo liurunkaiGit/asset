@@ -2,6 +2,7 @@ package com.ruoyi.inforeporting.mapper;
 
 import com.ruoyi.inforeporting.domain.TLcInforeportingBuckle;
 import com.ruoyi.inforeporting.domain.TLcInforeportingCompany;
+import com.ruoyi.inforeporting.domain.TLcInforeportingCompanyExp;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -23,7 +24,6 @@ public interface TLcInforeportingCompanyMapper {
      * @return 上报信息 对公入账 集合数据
      */
     public List<TLcInforeportingCompany> selectTLcInforeportingCompanyList(TLcInforeportingCompany inforeportingCompany);
-
     /**
      * @param id 驳回上报信息 对公入账
      * @return 是否成功 成功>0 失败<0
