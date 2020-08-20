@@ -2954,6 +2954,10 @@
 
 
     function infoReportingSub(){
+        if(currentCaseNo=='' || currentOrgId=='' || currentImportBatchNo==''){
+            $.modal.alertWarning("数据不存在请稍后重试");
+            return;
+        }
         $.modal.open("添加", ctx+"inforeporting/reduction/add?caseNo="+currentCaseNo+"&orgId="+currentOrgId+"&importBatchNo="+currentImportBatchNo,'','',function(index,layero){
             var iframeWin = layero.find('iframe')[0];
             iframeWin.contentWindow.submitHandlerCh(function(result){

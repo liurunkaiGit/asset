@@ -247,7 +247,6 @@
                         <div id="tab-9" class="tab-pane">
                             <table id="inforeportingTable">
                                 <tr>
-                                    <th style="text-align: left">编号</th>
                                     <th style="text-align: left">上报类型</th>
                                     <th style="text-align: left">申请金额</th>
                                     <th style="text-align: left">创建时间</th>
@@ -612,9 +611,6 @@
                 var htm = "";
                 $.each(data, function (i, n) {
                     htm+="<tr>";
-                    htm+="<td >";
-                    htm+=n.id;
-                    htm+="</td>";
                     htm+="<td>";
                     if(n.types==1){
                         htm+="减免";
