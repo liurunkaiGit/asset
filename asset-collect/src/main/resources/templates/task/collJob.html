@@ -45,7 +45,7 @@
     <input type="hidden" id="certificateNo" name="certificateNo" th:value="${certificateNo}">
     <input type="hidden" id="firstEnterCaseNo" name="firstEnterCaseNo" th:value="${currentCaseNo}">
     <input type="hidden" id="firstImportBatchNo" name="firstImportBatchNo" th:value="${currentImportBatchNo}">
-    <input type="hidden" id="callPlatform" name="callPlatform" th:value="${callPlatform}">
+    <!--<input type="hidden" id="callPlatform" name="callPlatform" th:value="${callPlatform}">-->
     <!--查询条件-->
     <input type="hidden" id="caseNoSearch" name="caseNoSearch" th:value="${tLcTask.caseNo}">
     <input type="hidden" id="customNameSearch" name="customNameSearch" th:value="${tLcTask.customName}">
@@ -76,7 +76,7 @@
     <input type="hidden" id="endOverdueDaysSearch" name="endOverdueDaysSearch" th:value="${tLcTask.endOverdueDays}">
     <input type="hidden" id="totalCaseNum" name="totalCaseNum" th:value="${totalCaseNum}">
     <input type="hidden" id="totalArrears" name="totalArrears" th:value="${totalArrears}">
-    <input type="hidden" id="extNum" name="extNum" th:value="${extNumList}">
+   <!-- <input type="hidden" id="extNum" name="extNum" th:value="${extNumList}">-->
     <input type="hidden" id="startNum" name="startNum" value="1">
 
     <div class="box box-main">
@@ -338,9 +338,9 @@
             <div class="btn-group-sm" role="group" align="center">
             </div>
             <div class="btn-group-sm" role="group" align="center">
-                <div style="margin-bottom: 2px;">
+                <!--<div style="margin-bottom: 2px;">
                     <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)">分机号码：</span>
-                    <!--<select id="agentId" onchange="initial1();" style="width: 120px;height: 22px;"></select>-->
+                    &lt;!&ndash;<select id="agentId" onchange="initial1();" style="width: 120px;height: 22px;"></select>&ndash;&gt;
                     <input id="agentId" th:value="${extPhone.agentid}" style="width: 120px;height: 22px;"></input>
                     <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)" id="timing">00:00:00</span>
@@ -349,7 +349,7 @@
                     <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)">外显号码：</span>
                     <select id="exonNum" onchange="initial1();" style="width: 120px;height: 22px;" ></select>
                     <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)" id="platformName"></span>
-                </div>
+                </div>-->
                 <div class="btn-group-sm">
                 <a onclick="prevOrNext(1)"><img src="/img/pre.png" class="imgso" width="30px" title="上一条"/></a>
                 <a onclick="prevOrNext(2)"><img src="/img/next.png" class="imgso" width="30px" title="下一条"/></a>
@@ -909,12 +909,14 @@
             format: "yyyy-mm-dd hh:ii:ss",
             autoclose: true
         });
-        var platform = $("#callPlatform").val();
+        /*var platform = $("#callPlatform").val();
         if (platform == 'ZJ') {
             $("#platformName").text("自建话务平台");
         } else if (platform == 'PA') {
             $("#platformName").text("平安话务平台");
-        }
+        }*/
+
+        initial1();
     });
 
 
@@ -1539,7 +1541,7 @@
 
     // 添加通话结果-通过按钮
     function addCallRecordByButton(sign) {
-        var callPlatform = $("#callPlatform").val();
+        var callPlatform = window.parent.parent.$("#callPlatform").val();
         if (callPlatform == null || callPlatform == '') {
             $.modal.alert("请选择话务平台");
             return;
@@ -1615,7 +1617,7 @@
                 importBatchNo:currentImportBatchNo,
                 orgId:currentOrgId,
                 type:2,
-                platform: $("#callPlatform").val()
+                platform: window.parent.parent.$("#callPlatform").val()
             },
             function(data) {
                 // alert(JSON.stringify(data));
@@ -1924,8 +1926,8 @@
 
     }
 
-    $(function () {
-       /* $("#agentId").text(111);
+   /* $(function () {
+       /!* $("#agentId").text(111);
         $.ajax({
             url: prefix + "/selectExtPhoneList",
             dataType: "json",
@@ -1939,7 +1941,7 @@
                 });
             }
 
-        });*/
+        });*!/
         // $.post(
         //     prefix + "/selectExtNumBySeat",
         //     {
@@ -1966,7 +1968,7 @@
                 $("#exonNum").append("<option value='"+agentId+"'>"+agentId+"</option>");
             });
         }
-    });
+    });*/
 
 
    var reset = new Reset(window);
@@ -1981,11 +1983,15 @@
             if(type == "EVNET_INITIAL_SUCCESS"){
                 console.log('初使化成功' + type,JSON.stringify(data))
             }
+            if(type == "EVENT_OUTBOUND_CUSTOMER_ANSWERED"){//电话接通
+                window.parent.parent.$("#callstatus").html("<img style='width:30px;height: 30px;' src='/yijietong.png'/>");
+            }
             if(type == "EVENT_CALLOUT_FAIL"){
                 console.log('callout' + type,JSON.stringify(data))
             }
             // if(type == "EVENT_HUNGUP_SUCCESS" || type == "EVENT_HUNGUP" || type == "EVENT_OUTBOUND_AGNET_HANGUP" || type == "EVENT_OUTBOUND_CUSTOMER_HANGUP" || type == "EVENT_OUTBOUND_FORECAST_AGNET_HANGUP" || type == "EVENT_OUTBOUND_FORECAST_CUSTOMER_HANGUP"){
             if(type == "EVENT_HUNGUP"){
+                window.parent.parent.$("#callstatus").html("<img style='width:30px;height: 30px;' src='/weijietong.png'/>");
                 agentIsCalling = false;
                 var val = $('input[name="radioChoose"]:checked').parents("tr");
                 val.find("[name='gd']").html("");
@@ -2045,13 +2051,13 @@
         }};
 
     function initial1() {
-        var agentId = $("#agentId").val();
+        var agentId = window.parent.parent.$("#agentId").val();
         if(agentId==null || agentId==''){
             $.modal.msgWarning("请选择分机");
             return;
         }
-        var extPhone = [[${extPhone}]];
-        var platform = $("#callPlatform").val();
+        var extPhone = window.parent.parent.extPhone;
+        var platform = window.parent.parent.$("#callPlatform").val();
         if (platform == 'PA') {
             /*$.ajax({
                 url: prefix + "/selectExtPhone",
@@ -2078,7 +2084,7 @@
             // var proxyUrl = $("#proxyUrl").val();
             var skillDesc = extPhone.skilldesc;
             var dialPrefix = extPhone.dialprefix;
-            var dialCaller = $("#exonNum").val();
+            var dialCaller = window.parent.parent.$("#exonNum").val();
             var proxyUrl = extPhone.proxyUrl;
             initial2(agentId,skillDesc,dialPrefix,dialCaller,proxyUrl);
         } else if (platform == 'ZJ') {
@@ -2115,10 +2121,10 @@
             // });
 
 
-                var agent = $("#agentId").val(); //坐席工号
+                var agent = window.parent.parent.$("#agentId").val(); //坐席工号
                 // var pwd = "1234"; //登录密码
                 var pwd = extPhone.password;
-                var extno = $("#agentId").val(); //登录分机号
+                var extno = window.parent.parent.$("#agentId").val(); //登录分机号
                 // var domain = 'huadao'; //企业编号或域名
                 var domain = extPhone.domain; //企业编号或域名
                 var host = extPhone.proxyUrl.split(":")[0];
@@ -2176,9 +2182,11 @@
 
         agentClient.onConnected = function(event) {
             printEvent('onConnected', event);
+            window.parent.parent.$("#callstatus").html("<img style='width:30px;height: 30px;' src='/yijietong.png'/>");
         };
 
         agentClient.onReleased = function(event) {
+            window.parent.parent.$("#callstatus").html("<img style='width:30px;height: 30px;' src='/weijietong.png'/>");
             agentIsCalling = false;
             console.log("通话结束，agentIsCalling=false");
             printEvent('onReleased', event);
@@ -2325,17 +2333,17 @@
             $.modal.alert("请保存通话记录再拨打电话");
             return;
         }
-        var agentId = $("#agentId").val();
+        var agentId = window.parent.parent.$("#agentId").val();
         if (agentId == null || agentId == '') {
             $.modal.alert("分机号码为空，请先绑定坐席");
             return;
         }
-        var exonNum = $("#exonNum").val();
+        var exonNum = window.parent.parent.$("#exonNum").val();
         if (exonNum == null || exonNum == '') {
             $.modal.alert("请选择外显号码");
             return;
         }
-        var callPlatform = $("#callPlatform").val();
+        var callPlatform = window.parent.parent.$("#callPlatform").val();
         if (callPlatform == null || callPlatform == '') {
             $.modal.alert("请配置当前机构的话务平台");
             return;
@@ -2400,7 +2408,7 @@
                         }
                     } else if(callPlatform == 'ZJ') {
                         // 第一个参数是呼叫号码，第二个参数是外显号码
-                        uKeFuSoftPhone.CallOut(phone,$('#exonNum').val());
+                        uKeFuSoftPhone.CallOut(phone,window.parent.parent.$('#exonNum').val());
                     }
                 }else if (data.code == 1) {
                     window.location.href="/login";
@@ -2416,7 +2424,7 @@
     function hangUp(phone) {
         agentIsCalling = false;
         console.log("通话结束，agentIsCalling=false");
-        var platform = $("#callPlatform").val();
+        var platform = window.parent.parent.$("#callPlatform").val();
         if (platform == 'PA') {
             agentClient.hangupCall();
         } else if (platform == 'ZJ') {
@@ -2771,17 +2779,17 @@
             $.modal.alert("请保存通话记录再拨打电话");
             return;
         }
-        var agentId = $("#agentId").val();
+        var agentId = window.parent.parent.$("#agentId").val();
         if (agentId == null || agentId == '') {
             $.modal.alert("分机号码为空，请先绑定坐席");
             return;
         }
-        var exonNum = $("#exonNum").val();
+        var exonNum = window.parent.parent.$("#exonNum").val();
         if (exonNum == null || exonNum == '') {
             $.modal.alert("请选择外显号码");
             return;
         }
-        var callPlatform = $("#callPlatform").val();
+        var callPlatform = window.parent.parent.$("#callPlatform").val();
         if (callPlatform == null || callPlatform == '') {
             $.modal.alert("请选择话务平台");
             return;
@@ -2851,7 +2859,7 @@
                         }
                     } else if(callPlatform == 'ZJ') {
                         // 第一个参数是呼叫号码，第二个参数是外显号码
-                        uKeFuSoftPhone.CallOut($("#freeCall").val(),$('#exonNum').val());
+                        uKeFuSoftPhone.CallOut($("#freeCall").val(),window.parent.parent.$('#exonNum').val());
                     }
                 }else if (data.code == 1) {
                     window.location.href="/login";
@@ -3033,14 +3041,14 @@
         if ((second+"").length == 1) {
             second = "0"+second;
         }
-        $("#timing").text(hour+':'+minute+':'+second);
+        window.parent.parent.$("#timing").text(hour+' : '+minute+' : '+second);
     }
 
     function resetTiming()//重置
     {
         clearInterval(int);
         millisecond=hour=minute=second=0;
-        $("#timing").text('00:00:00');
+        window.parent.parent.$("#timing").text('00 : 00 : 00');
     }
 
     /**

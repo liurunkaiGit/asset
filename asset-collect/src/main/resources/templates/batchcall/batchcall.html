@@ -324,6 +324,7 @@
                     console.log('callout' + type,JSON.stringify(data))
                 }
                 if(type == "EVENT_OUTBOUND_CUSTOMER_ANSWERED"){//电话接通
+                    window.parent.parent.$("#callstatus").html("<img style='width:30px;height: 30px;' src='/yijietong.png'/>");
                     console.log('EVENT_OUTBOUND_CUSTOMER_ANSWERED' + type,JSON.stringify(data))
                     isWjt = "1";//赋值为 1 ，方便挂断时候判断用
                     var caseNo = currentCall.caseNo;
@@ -339,6 +340,7 @@
                     }
                 }
                 if(type == "EVENT_HUNGUP"){//接通之后挂掉电话
+                    window.parent.parent.$("#callstatus").html("<img style='width:30px;height: 30px;' src='/weijietong.png'/>");
                     agentIsCalling = false;
                     console.log('hangup' + type,JSON.stringify(data));
                     if(childObj != null && childObj != undefined){
@@ -519,6 +521,7 @@
             };
 
             agentClient.onConnected = function(event) {//电话接通
+                window.parent.parent.$("#callstatus").html("<img style='width:30px;height: 30px;' src='/yijietong.png'/>");
                 printEvent('onConnected', event);
                 isWjt = "1";//赋值为 1 ，方便挂断时候判断用
                 var caseNo = currentCall.caseNo;
@@ -530,6 +533,7 @@
             };
 
             agentClient.onReleased = function(event) {//电话未接通
+                window.parent.parent.$("#callstatus").html("<img style='width:30px;height: 30px;' src='/weijietong.png'/>");
                 agentIsCalling = false;
                 console.log("通话结束，agentIsCalling=false");
                 printEvent('onReleased', event);

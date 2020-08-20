@@ -258,9 +258,9 @@
             <div class="btn-group-sm" role="group" align="center">
             </div>
             <div class="btn-group-sm" role="group" align="center">
-                <div style="margin-bottom: 2px;">
+                <!--<div style="margin-bottom: 2px;">
                     <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)">分机号码：</span>
-                    <!--<select id="agentId" onchange="initial1();" style="width: 120px;height: 22px;"></select>-->
+                    &lt;!&ndash;<select id="agentId" onchange="initial1();" style="width: 120px;height: 22px;"></select>&ndash;&gt;
                     <input id="agentId" th:value="${extPhone.agentid}" style="width: 120px;height: 22px;"></input>
                     <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)" id="timing">00:00:00</span>
@@ -269,7 +269,7 @@
                     <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)">外显号码：</span>
                     <input type="text" id="exonNum" th:value="${exonNum}" readonly>
                     <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)" id="platformName"></span>
-                </div>
+                </div>-->
                 <div class="btn-group-sm">
                     <!-- <a data-toggle="modal" data-target="#myModal"><img src="/img/addContact.png" class="imgso" width="30px" title="新增联系人"/></a>&nbsp;&nbsp;-->
                     <!--<a onclick="helpCollApply()"><img src="/img/xiecui.png" class="imgso" width="25px" height="25px" title="协催申请"/></a>&nbsp;&nbsp;
@@ -752,7 +752,9 @@
         } else if (platform == 'PA') {
             $("#platformName").text("平安话务平台");
         }
-
+        var exonNum = [[${exonNum}]];
+        window.parent.parent.$("#exonNum").empty();
+        window.parent.parent.$("#exonNum").append("<option value='"+exonNum+"'>"+exonNum+"</option>");
         // initial2();
         start();//启动计时
     });
@@ -2259,14 +2261,14 @@
         if ((second+"").length == 1) {
             second = "0"+second;
         }
-        $("#timing").text(hour+':'+minute+':'+second);
+        window.parent.parent.$("#timing").text(hour+':'+minute+':'+second);
     }
 
     function resetTiming()//重置
     {
         clearInterval(int);
         millisecond=hour=minute=second=0;
-        $("#timing").text('00:00:00');
+        window.parent.parent.$("#timing").text('00:00:00');
     }
 
 </script>

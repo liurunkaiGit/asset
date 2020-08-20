@@ -7,6 +7,11 @@ layer.config({
     skin: 'layer-ext-moon'
 });
 
+function initial() {
+    var ifram = $('iframe[src*="toCollJob"]')[0] != undefined?$('iframe[src*="toCollJob"]')[0].contentWindow:null;
+    if(ifram != null){ifram.initial1();}
+}
+
 $(function() {
     // MetsiMenu
     $('#side-menu').metisMenu();

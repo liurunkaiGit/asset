@@ -24,13 +24,14 @@ import java.util.List;
 @SpringBootTest
 public class LuckElephantTest {
 
-    private static final String URL = "http://localhost:8080/remote/luckElephant/addAssets";
+    private static final String URL = "http://139.224.189.191:8080/remote/luckElephant/updateAssets";
 
     @Autowired
     private RestTemplateUtil restTemplateUtil;
 
     @Test
     public void testAddAsset() throws Exception{
+        String URL = "http://139.224.189.191:8080/remote/luckElephant/addAssets";
         List<LuckElephantAddAssetRequest.AddAssetEntity> dataList = new ArrayList<>();
         LuckElephantAddAssetRequest request = new LuckElephantAddAssetRequest();
         request.setSysCode("JXPH");
@@ -116,6 +117,7 @@ public class LuckElephantTest {
 
     @Test
     public void testUpdateAsset() throws Exception{
+        String URL = "http://139.224.189.191:8080/remote/luckElephant/updateAssets";
         List<LuckElephantUpdateAssetRequest.UpdateAssetEntity> dataList = new ArrayList<>();
         LuckElephantUpdateAssetRequest request = new LuckElephantUpdateAssetRequest();
         request.setSysCode("JXPH");
@@ -161,6 +163,7 @@ public class LuckElephantTest {
 
     @Test
     public void testRepaymentAsset() throws Exception{
+        String URL = "http://localhost:8080/remote/luckElephant/repaymentAssets";
         List<LuckElephantRepaymentAssetRequest.RepaymentAssetEntity> dataList = new ArrayList<>();
         LuckElephantRepaymentAssetRequest request = new LuckElephantRepaymentAssetRequest();
         request.setSysCode("JXPH");
@@ -184,9 +187,9 @@ public class LuckElephantTest {
         dataList.add(param);
 
         request.setFacts(dataList);
-        String requestStr = JSON.toJSONString(request);
+        String requestaaa = JSON.toJSONString(request);
 
-        String str = AesUtils.encrypt(requestStr, "1234567890abcDEF");
+        String str = AesUtils.encrypt(requestaaa, "1234567890abcDEF");
 
         ResponseEntity<LuckElephantRepaymentAssetResponse> response = restTemplateUtil.getRestTemplate().postForEntity(URL, str, LuckElephantRepaymentAssetResponse.class);
         LuckElephantRepaymentAssetResponse body = response.getBody();

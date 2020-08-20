@@ -224,7 +224,7 @@ public class TLcTaskController extends BaseController {
         modelMap.put("currentImportBatchNo", currentImportBatchNo);
         modelMap.put("callCodeHistoryListStr", callCodeHistoryListStr);
 
-        ExtPhone extPhone = new ExtPhone();
+       /* ExtPhone extPhone = new ExtPhone();
         extPhone.setIsused("0");
         extPhone.setSeatId(Integer.valueOf(String.valueOf(tLcTask.getOwnerId())));
         //暂时写平安，后续从session里面取
@@ -246,7 +246,7 @@ public class TLcTaskController extends BaseController {
             modelMap.put("extPhone", extPhone);
             modelMap.put("extNumList",StringUtils.join(extNumList,","));
         }
-        modelMap.put("callPlatform", ShiroUtils.getSysUser().getPlatform());
+        modelMap.put("callPlatform", ShiroUtils.getSysUser().getPlatform());*/
         // 查询总的金额及总的件数
         Map<String, BigDecimal> resultMap = this.tLcTaskService.selectTotalCountMoney(tLcTask);
         modelMap.put("totalCaseNum", resultMap.get("totalCaseNum"));
