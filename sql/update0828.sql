@@ -13,7 +13,7 @@ CREATE INDEX create_time_index ON t_lc_call_record (create_time);
 
 DROP TABLE IF EXISTS `t_lc_letter`;
 CREATE TABLE `t_lc_letter` (
-  `id` bigint(20) NOT NULL COMMENT '主键id',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `case_no` varchar(100) DEFAULT NULL COMMENT '机构案件号',
   `import_batch_no` varchar(100) DEFAULT NULL COMMENT '导入批次号',
   `org_id` int(5) DEFAULT NULL COMMENT '机构id',
@@ -62,3 +62,5 @@ VALUES ('暂停', (SELECT t.menu_id from sys_menu t where t.menu_name='呼叫任
 ALTER table org_package add is_auto_send_sms tinyint(1) DEFAULT NULL COMMENT '是否自动发送短信，1：是吗，2：否';
 ALTER table org_package add sms_template_id varchar(50) DEFAULT NULL COMMENT '短信模板id';
 ALTER table org_package add sms_template_name varchar(100) DEFAULT NULL COMMENT '短信模板名称';
+
+ALTER table org_package add is_same_case_deal  tinyint(1) DEFAULT NULL COMMENT '是否共案处理，1：是吗，2：否';

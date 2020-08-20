@@ -268,7 +268,8 @@
         t.overdue_days,
         d.ljyhje,
         d.product_name AS productName,
-        d.score
+        d.score,
+        CONCAT(t.id,'@',t.case_no,'@',t.certificate_no) as certificate_no
         FROM t_lc_task t,t_lc_duncase d
         WHERE t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no
         AND t.allot_type = 1 AND t.task_status != 3
@@ -1350,5 +1351,13 @@
             ${freeSQL}
         </if>
         )
+    </select>
+
+    <select id="selectSameCaseTaskList" resultMap="TLcTaskResult">
+        select
+        <include refid="SELECT_T_LC_TASK"/>
+        from t_lc_task t
+        where t.certificate_no = #{certificateNo} and t.org_id = #{orgId}
+        order by t.owner_id desc
     </select>
 </mapper>

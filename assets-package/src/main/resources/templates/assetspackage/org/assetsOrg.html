@@ -217,7 +217,7 @@
                             }
                         }
                     },
-                    {
+                    /*{
                         field : 'isAutoSendSms',
                         title : '是否自动发送短信',
                         formatter: function (value, row, index) {
@@ -232,6 +232,18 @@
                     {
                         field : 'smsTemplateName',
                         title : '自动发送短信模板'
+                    },*/
+                    {
+                        field : 'isSameCaseDeal',
+                        title : '是否共案处理',
+                        formatter: function (value, row, index) {
+                            if (value == 1) {
+                                return '是';
+                            }
+                            if (value == 2) {
+                                return '否';
+                            }
+                        }
                     }/*,
                 {
                     field : 'sendRuleEngine',

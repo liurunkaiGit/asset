@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.assetspackage.domain.CurAssetsPackage;
 import com.ruoyi.assetspackage.domain.CurAssetsRepaymentPackage;
+import com.ruoyi.assetspackage.domain.OrgPackage;
 import com.ruoyi.assetspackage.domain.RemoteConfigure;
 import com.ruoyi.assetspackage.service.ICurAssetsPackageService;
 import com.ruoyi.assetspackage.service.ICurAssetsRepaymentPackageService;
@@ -16,7 +17,6 @@ import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.domain.CloseCase;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.common.utils.RestTemplateUtil;
 import com.ruoyi.duncase.domain.Assets;
 import com.ruoyi.duncase.domain.AssetsRepayment;
 import com.ruoyi.duncase.domain.TLcDuncase;
@@ -54,18 +54,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import org.springframework.web.client.RestClientException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -124,6 +118,8 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     private ITLcSendRobotApplyService sendRobotApplyService;
     @Autowired
     private AsyncTaskService asyncTaskService;
+    @Autowired
+    private AllocatRuleUtil allocatRuleUtil;
 
     /**
      * 查询任务
@@ -299,7 +295,8 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
 
     /**
      * 删除任务信息
-     *`
+     * `
+     *
      * @param id 任务ID
      * @return 结果
      */
@@ -364,28 +361,24 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
      * @param allocatRule
      */
     @Override
-    public AjaxResult reAllocat(String userIds, String taskIds, String orgId, Integer allocatNum, Integer allocatRule, String caseNos) {
-        // 判断需要分配全部任务还是随机分配指定数量的任务
-        Set<TLcTask> randomTaskSet = getAllocatTaskSet(taskIds, allocatNum, caseNos);
-        List<TLcTask> taskList = randomTaskSet.stream()
-                .map(tLcTask -> {
-//                    TLcTask tLcTask = this.tLcTaskMapper.selectTLcTaskById(taskId);
-                    tLcTask.setTaskType(TaskTypeEnum.RE_ALLOCAT.getCode());
-                    tLcTask.setTaskStatus(TaskStatusEnum.ALLOCATING.getStatus());
-                    tLcTask.setModifyOwnerTime(LocalDateTime.now(ZoneId.systemDefault()));
-                    tLcTask.setRecentlyAllotDate(new Date());
-                    return tLcTask;
-                }).collect(Collectors.toList());
+    @Transactional
+    public AjaxResult reAllocat(String userIds, String taskIds, String orgId, Integer allocatNum, Integer allocatRule, String caseNos, String certificateNos) {
+        // 判断需要分配全部任务还是随机分配指定数量的任务,并返回需要分配的任务集合
+        Set<TLcTask> randomTaskSet = getAllocatTaskSet(taskIds, allocatNum, caseNos, certificateNos);
         List<SysUser> userList = Arrays.stream(userIds.split(","))
                 .map(userId -> this.sysUserService.selectUserById(Long.valueOf(userId)))
                 .collect(Collectors.toList());
+        List<TLcTask> taskList = new ArrayList<>(randomTaskSet);
+        // 查询是否需要共案处理
+        OrgPackage orgPackage = this.orgPackageService.selectOrgPackageByOrgId(orgId);
         // 分配任务
-        taskList = allocatTask(allocatRule, taskList, userList);
+        if (orgPackage.getIsSameCaseDeal().equals(IsNoEnum.IS.getCode())) {
+            taskList = allocatTaskSameDeal(allocatRule, taskList, userList, orgId);
+        } else {
+            taskList = allocatTask(allocatRule, taskList, userList);
+        }
         this.tLcTaskMapper.batchUpdateTask(taskList);
-//        this.asyncITLcDuncaseService.updateDuncase(taskList,TaskTypeEnum.RE_ALLOCAT.getCode(),TaskStatusEnum.ALLOCATING.getStatus());
-//        // 修改案件表
-//        updateDuncase(taskList,TaskTypeEnum.RE_ALLOCAT.getCode(),TaskStatusEnum.ALLOCATING.getStatus());
-//        // 添加到案件轨迹表中
+        // 添加到案件轨迹表中
         insertDuncaseAssign(taskList, ShiroUtils.getSysUser());
         return AjaxResult.success();
     }
@@ -403,8 +396,14 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         List<SysUser> userList = Arrays.stream(userIds.split(","))
                 .map(userId -> this.sysUserService.selectUserById(Long.valueOf(userId)))
                 .collect(Collectors.toList());
+        // 查询是否需要共案处理
+        OrgPackage orgPackage = this.orgPackageService.selectOrgPackageByOrgId(ShiroUtils.getSysUser().getOrgId().toString());
         // 分配任务
-        taskList = allocatTask(allocatRule, taskList, userList);
+        if (orgPackage.getIsSameCaseDeal().equals(IsNoEnum.IS.getCode())) {
+            taskList = allocatTaskSameDeal(allocatRule, taskList, userList, ShiroUtils.getSysUser().getOrgId().toString());
+        } else {
+            taskList = allocatTask(allocatRule, taskList, userList);
+        }
         if (taskList != null && taskList.size() > 0) {
             this.tLcTaskMapper.batchUpdateTask(taskList);
             // 添加到案件轨迹表中
@@ -729,6 +728,11 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         return this.tLcTaskMapper.searchAllTaskTotalMoney(tLcTask);
     }
 
+    @Override
+    public List<TLcTask> selectSameCaseTaskList(String certificateNo, String orgId) {
+        return this.tLcTaskMapper.selectSameCaseTaskList(certificateNo, orgId);
+    }
+
     /**
      * 查询我的任务列表
      *
@@ -781,6 +785,29 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     }
 
     /**
+     * 根据不同的分配规则分配任务-共案处理分派
+     *
+     * @param allocatRule
+     * @param taskList
+     * @param userList
+     * @return
+     */
+    private List<TLcTask> allocatTaskSameDeal(Integer allocatRule, List<TLcTask> taskList, List<SysUser> userList, String orgId) {
+        // 根据不同的分配策略进行不同的任务分配
+        if (allocatRule.equals(AllocatRuleEnum.DUNCASE_NUM_AVERAGE.getCode())) {
+            // 案件数量平均分配
+            taskList = this.allocatRuleUtil.averageAllocatTaskByNumSameDeal(taskList, userList, orgId);
+        } else if (allocatRule.equals(AllocatRuleEnum.DUNCASE_MONEY_AVERAGE.getCode())) {
+            // 案件金额平均分配
+            taskList = this.allocatRuleUtil.averageAllocatTaskByMoneySameDeal(taskList, userList, orgId);
+        } else if (allocatRule.equals(AllocatRuleEnum.DUNCASE_MONEY_NUM_AVERAGE.getCode())) {
+            // 案件金额和数量平均分配
+            taskList = this.allocatRuleUtil.averageAllocatTaskByMoneyNumSameDeal(taskList, userList, orgId);
+        }
+        return taskList;
+    }
+
+    /**
      * 将待分配的任务id存放到set里面
      *
      * @param taskIds
@@ -802,7 +829,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         return randomTaskSet;
     }
 
-    private Set<TLcTask> getAllocatTaskSet(String taskIds, Integer allocatNum, String caseNos) {
+    private Set<TLcTask> getAllocatTaskSet(String taskIds, Integer allocatNum, String caseNos, String certificateNos) {
         Set<TLcTask> randomTaskSet = new HashSet<>(allocatNum); // 这里用set，因为随机选择的时候会重复，set可以去重
 //        this.orgPackageService.selectOrgPackageByOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
         if (allocatNum < taskIds.split(",").length) {
@@ -815,6 +842,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 tLcTask.setCaseNo(caseNos.split(",")[i]);
                 tLcTask.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
                 tLcTask.setOrgName(ShiroUtils.getSysUser().getOrgName());
+                tLcTask.setCertificateNo(certificateNos.split(",")[i].split("@")[2]);
                 randomTaskSet.add(tLcTask);
             }
         } else {
@@ -824,6 +852,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 tLcTask.setCaseNo(caseNos.split(",")[i]);
                 tLcTask.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
                 tLcTask.setOrgName(ShiroUtils.getSysUser().getOrgName());
+                tLcTask.setCertificateNo(certificateNos.split(",")[i].split("@")[2]);
                 randomTaskSet.add(tLcTask);
             }
         }
@@ -1313,13 +1342,13 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     @Override
     public List<Map<String, Object>> selectTaskByTime(Date createTime, Date modifyTime, int pageNum, int pageSize) {
 
-        return tLcTaskMapper.selectTaskByTime(createTime, modifyTime,pageNum, pageSize);
+        return tLcTaskMapper.selectTaskByTime(createTime, modifyTime, pageNum, pageSize);
     }
 
     @Override
     public Integer selectTaskCount(Date createTime, Date modifyTime) {
 
-        return tLcTaskMapper.selectTaskCount(createTime,modifyTime);
+        return tLcTaskMapper.selectTaskCount(createTime, modifyTime);
     }
 
     @Override

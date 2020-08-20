@@ -138,9 +138,9 @@ public class OrgPackage extends BaseEntity {
     private String isAutoScore;
 
     /**
-     * 是否自动发送短信，1：是吗，2：否
+     * 是否自动发送短信，1：是，2：否
      */
-    @Excel(name = "是否自动发送短信，1：是吗，2：否")
+    @Excel(name = "是否自动发送短信，1：是，2：否")
     private Integer isAutoSendSms;
 
     /**
@@ -154,5 +154,11 @@ public class OrgPackage extends BaseEntity {
      */
     @Excel(name = "短信模板名称")
     private String smsTemplateName;
+
+    /**
+     * 是否共案处理，1：是，2：否
+     */
+    @Excel(name = "是否共案处理，1：是，2：否")
+    private Integer isSameCaseDeal;
 
 }

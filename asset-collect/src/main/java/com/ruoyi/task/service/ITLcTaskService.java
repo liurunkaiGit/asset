@@ -120,7 +120,7 @@ public interface ITLcTaskService {
      * @param allocatNum
      * @param allocatRule
      */
-    AjaxResult reAllocat(String userId, String taskIds, String orgId, Integer allocatNum, Integer allocatRule, String caseNos);
+    AjaxResult reAllocat(String userId, String taskIds, String orgId, Integer allocatNum, Integer allocatRule, String caseNos, String certificateNos);
 
     /**
      * 临时代理
@@ -320,4 +320,6 @@ public interface ITLcTaskService {
     void insertDuncaseAssign(Integer robotTaskId);
 
     Map<String, BigDecimal> searchAllTaskTotalMoney(TLcTask tLcTask);
+
+    List<TLcTask> selectSameCaseTaskList(String certificateNo, String orgId);
 }

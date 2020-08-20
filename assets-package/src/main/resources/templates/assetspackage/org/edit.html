@@ -89,7 +89,7 @@
                     </select>
                 </div>
             </div>
-            <div class="form-group">
+            <!--<div class="form-group">
                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>是否自动发送短信</label>
                 <div class="col-sm-8">
                     <select name="isAutoSendSms" class="form-control" id="isAutoSendSms" onfocus="statusChange3();" required>
@@ -102,8 +102,16 @@
                 <div class="col-sm-8">
                     <input class="form-control" name="smsTemplateId" id="smsTemplateId" th:field="*{smsTemplateId}" type="hidden">
                     <select class="form-control" name="smsTemplateName" id="smsTemplateName" required>
-                        <!--<option th:value="${orgPackage.smsTemplateId}"th:text="${orgPackage.smsTemplateName}" selected></option>-->
+                        &lt;!&ndash;<option th:value="${orgPackage.smsTemplateId}"th:text="${orgPackage.smsTemplateName}" selected></option>&ndash;&gt;
                         <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>-->
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>是否共案处理</label>
+                <div class="col-sm-8">
+                    <input id="isSameCaseDealValue" th:field="*{isSameCaseDeal}" class="form-control" type="hidden">
+                    <select name="isSameCaseDeal" class="form-control" id="isSameCaseDeal" required>
                     </select>
                 </div>
             </div>
@@ -208,14 +216,14 @@
             // if ($.validate.form()) {
             //     $.operate.save(prefix + "/edit", $('#form-assetspackage-edit').serialize());
             // }
-            var isAutoSendSms = $("#isAutoSendSms").val();
+            /*var isAutoSendSms = $("#isAutoSendSms").val();
             if (isAutoSendSms == 1) {
                 var smsTemplateName = $("#smsTemplateName").val();
                 if (smsTemplateName == null || smsTemplateName == '') {
                     $.modal.alert("请选择短信模板");
                     return;
                 }
-            }
+            }*/
             $.post(
                 prefix + "/edit",
                 {
@@ -232,8 +240,9 @@
                     // autoAllocatTask:autoAllocatTask,
                     sendRadioQc:sendRadioQc,
                     isAutoScore:$("#isAutoScore").val(),
-                    isAutoSendSms:isAutoSendSms,
-                    smsTemplateName:$("#smsTemplateName").val()
+                    // isAutoSendSms:isAutoSendSms,
+                    // smsTemplateName:$("#smsTemplateName").val(),
+                    isSameCaseDeal:$("#isSameCaseDeal").val()
                     // allocatTaskStartegy:allocatTaskStartegy
                 },
                 function(data) {
@@ -311,6 +320,7 @@
                         var autoStartRobotTaskValue = $("#autoStartRobotTaskValue").val();
                         var sendRadioQcValue = $("#sendRadioQcValue").val();
                         var autoAllocatTaskValue = $("#autoAllocatTaskValue").val();
+                        var isSameCaseDealValue = $("#isSameCaseDealValue").val();
                         for (var i = 0; i < data.rows.length; i++) {
                             /*if(sendRobotValue == data.rows[i].code) {
                                 var opt = "<option value='"+data.rows[i].code+"' selected>"+data.rows[i].message+"</option>";
@@ -342,6 +352,12 @@
                                 var opt = "<option value='"+data.rows[i].code+"'>"+data.rows[i].message+"</option>";
                             }
                             $("#autoAllocatTask").append(opt);
+                            if(isSameCaseDealValue == data.rows[i].code) {
+                                var opt = "<option value='"+data.rows[i].code+"' selected>"+data.rows[i].message+"</option>";
+                            } else {
+                                var opt = "<option value='"+data.rows[i].code+"'>"+data.rows[i].message+"</option>";
+                            }
+                            $("#isSameCaseDeal").append(opt);
                         }
                     }
                 }

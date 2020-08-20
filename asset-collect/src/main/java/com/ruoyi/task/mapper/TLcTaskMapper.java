@@ -215,4 +215,6 @@ public interface TLcTaskMapper {
     void updateTaskTypeAllocatType(@Param("robotTaskId") Integer robotTaskId);
 
     Map<String, BigDecimal> searchAllTaskTotalMoney(TLcTask tLcTask);
+
+    List<TLcTask> selectSameCaseTaskList(@Param("certificateNo") String certificateNo, @Param("orgId") String orgId);
 }
