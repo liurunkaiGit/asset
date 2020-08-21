@@ -10,6 +10,7 @@ import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +41,6 @@ public class CollectionRecordImprotServiceImpl implements IcollectionRecordImpro
 
     @Autowired
     private IcollectionRecordImprotAsyncService collectionRecordImprotAsyncService;
-
-    @Autowired
-    private RecordImportDataMapping recordImportDataMapping;
 
     @Autowired
     private ITemplatesPackageService templatesPackageService;
@@ -196,6 +194,7 @@ public class CollectionRecordImprotServiceImpl implements IcollectionRecordImpro
             bos.close();
             stream.close();
             orgId=String.valueOf(ShiroUtils.getSysUser().getOrgId());
+            RecordImportDataMapping recordImportDataMapping = SpringUtils.getBean(RecordImportDataMapping.class);
             recordImportDataMapping = this.voluation(recordImportDataMapping, templateId);
             int headNum = Integer.valueOf(recordImportDataMapping.getHeadRowNum());
             int dataNum = Integer.valueOf(recordImportDataMapping.getDataRowNum());

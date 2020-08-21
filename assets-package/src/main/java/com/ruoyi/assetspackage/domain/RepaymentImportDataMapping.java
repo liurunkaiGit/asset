@@ -1,5 +1,6 @@
 package com.ruoyi.assetspackage.domain;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
  * @create 2019-12-26
  */
 @Component
+@Scope("prototype")
 public class RepaymentImportDataMapping {
 
     private String orgCasNo; //机构案件号

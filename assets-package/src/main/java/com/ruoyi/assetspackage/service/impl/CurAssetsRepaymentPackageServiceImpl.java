@@ -18,6 +18,7 @@ import com.ruoyi.common.domain.CloseCase;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.RestTemplateUtil;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
 import org.slf4j.Logger;
@@ -50,8 +51,6 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
     protected final Logger logger = LoggerFactory.getLogger(CurAssetsRepaymentPackageServiceImpl.class);
     @Autowired
     private CurAssetsRepaymentPackageMapper curAssetsRepaymentPackageMapper;
-    @Autowired
-    private RepaymentImportDataMapping repaymentImportDataMapping;
     @Autowired
     private RemoteConfigure remoteConfigure;
     @Autowired
@@ -343,6 +342,7 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
             bos.close();
             stream.close();
             orgId=String.valueOf(ShiroUtils.getSysUser().getOrgId());
+            RepaymentImportDataMapping repaymentImportDataMapping = SpringUtils.getBean(RepaymentImportDataMapping.class);
             repaymentImportDataMapping = this.voluation(repaymentImportDataMapping, templateId);
             int headNum = Integer.valueOf(repaymentImportDataMapping.getHeadRowNum());
             int dataNum = Integer.valueOf(repaymentImportDataMapping.getDataRowNum());

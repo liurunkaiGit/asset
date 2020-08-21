@@ -1,6 +1,7 @@
 package com.ruoyi.assetspackage.domain;
 
 import lombok.Data;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Component
+@Scope("prototype")
 public class RecordImportDataMapping {
     private String orgCaseNo; //机构案件号
     private String certificateNo;
