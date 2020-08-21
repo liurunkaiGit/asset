@@ -7,6 +7,7 @@ import com.ruoyi.assetspackage.service.IOrgPackageService;
 import com.ruoyi.assetspackage.service.ITemplateRelationPackageService;
 import com.ruoyi.assetspackage.service.ITemplatesPackageService;
 import com.ruoyi.assetspackage.util.FastDFSUtil;
+import com.ruoyi.assetspackage.util.PackageDataPermissionUtil;
 import com.ruoyi.assetspackage.util.ParseExcelUtil;
 import com.ruoyi.assetspackage.util.dataHeadMappingUtil;
 import com.ruoyi.common.annotation.Log;
@@ -30,6 +31,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 模板管理Controller
@@ -60,6 +62,9 @@ public class TemplatesPackageController extends BaseController {
 
     @Autowired
     private RecordSystemHeadMapping recordSystemHeadMapping;
+
+    @Autowired
+    private PackageDataPermissionUtil dataPermissionUtil;
 
 
     @RequiresPermissions("assetspackage:template:view")
@@ -106,7 +111,7 @@ public class TemplatesPackageController extends BaseController {
     @PostMapping("/findOrgInfo")
     @ResponseBody
     public AjaxResult findOrgInfo(HttpServletRequest request) {
-        List<Map<String, Long>> orgInfo = null;
+        /*List<Map<String, Long>> orgInfo = null;
         Long UserId = ShiroUtils.getUserId();
         String dataScope = orgPackageService.selectDataScopeByUserId(UserId);
         if ("1".equals(dataScope)) {
@@ -117,8 +122,20 @@ public class TemplatesPackageController extends BaseController {
             orgInfo = orgPackageService.selectOrgInfoByUserId4(UserId);
         } else {
             orgInfo = orgPackageService.selectOrgInfoByUserId3(UserId);
-        }
-        String result = JSON.toJSONString(orgInfo);
+        }*/
+
+        OrgPackage orgPackage = new OrgPackage();
+        Set<Long> deptIds = dataPermissionUtil.selectDataPer();
+        orgPackage.setDeptIds(deptIds);
+        List<OrgPackage> orgPackages = orgPackageService.selectOrgPackageList(orgPackage);
+        List<Map<String, Object>> collect = orgPackages.stream()
+                .map(orgPackage1 -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("orgId",orgPackage1.getDeptId());
+                    map.put("orgName",orgPackage1.getOrgName());
+                    return map;
+                }).collect(Collectors.toList());
+        String result = JSON.toJSONString(collect);
         return AjaxResult.success(result);
     }
 

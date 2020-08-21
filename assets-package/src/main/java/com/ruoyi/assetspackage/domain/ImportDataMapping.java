@@ -2,6 +2,7 @@ package com.ruoyi.assetspackage.domain;
 
 import lombok.Data;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Component
+@Scope("prototype")
 public class ImportDataMapping {
     private String orgCasNo;//机构案件号
     private String org;//所属机构
@@ -111,6 +113,7 @@ public class ImportDataMapping {
     private String fifthLiaisonName;//联系人5姓名
     private String fifthLiaisonRelation;//联系人5关系
     private String fifthLiaisonMobile;//联系人5电话
+    private String dzhxrq;//呆账核销日期
 
     private String headRowNum; //表头行
     private String dataRowNum; //数据起始行

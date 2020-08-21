@@ -449,6 +449,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         is_exit_collect,
         import_batch_no,
         close_case_date,
+        dzhxrq,
         package_id
         )
         VALUES
@@ -562,6 +563,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{item.isExitCollect},
             #{item.importBatchNo},
             #{item.closeCaseDate},
+            #{item.dzhxrq},
             #{item.packageId}
             )
         </foreach>

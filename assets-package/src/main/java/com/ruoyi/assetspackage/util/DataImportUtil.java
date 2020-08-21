@@ -446,7 +446,10 @@ public class DataImportUtil {
                 if (key.equals(fifthLiaisonMobile)) {
                     map.put("联系人5电话", value);
                 }
-
+                String dzhxrq = bean.getDzhxrq();
+                if (key.equals(dzhxrq)) {
+                    map.put("呆账核销日期", value);
+                }
             }
 
             result.add(map);
@@ -860,6 +863,10 @@ public class DataImportUtil {
                     String fifthLiaisonMobile = bean.getFifthLiaisonMobile();//联系人5电话
                     if (key.equals(fifthLiaisonMobile)) {
                         map.put("联系人5电话", value);
+                    }
+                    String dzhxrq = bean.getDzhxrq();
+                    if (key.equals(dzhxrq)) {
+                        map.put("呆账核销日期", value);
                     }
                     if(freeRelations.size()>0){
                         for (String freeRelation : freeRelations) {//客户模板头
@@ -2845,6 +2852,12 @@ public class DataImportUtil {
                 if ("联系人5电话".equals(entry.getKey())) {
                     if (entry.getValue() != null && !"".equals(entry.getValue())) {
                         dto.setFifthLiaisonMobile(entry.getValue());
+                    }
+                    continue;
+                }
+                if ("呆账核销日期".equals(entry.getKey())) {
+                    if (entry.getValue() != null && !"".equals(entry.getValue())) {
+                        dto.setDzhxrq(entry.getValue());
                     }
                     continue;
                 }

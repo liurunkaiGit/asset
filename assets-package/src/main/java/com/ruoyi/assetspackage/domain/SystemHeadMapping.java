@@ -208,6 +208,8 @@ public class SystemHeadMapping {
     private String fifth_liaison_relation;
     @Value("${fifth_liaison_mobile}")
     private String fifth_liaison_mobile;
+    @Value("${dzhxrq}")
+    private String dzhxrq;
 
 
 

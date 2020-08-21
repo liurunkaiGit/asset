@@ -484,6 +484,9 @@ public class TempCurAssetsPackage extends BaseEntity {
     private String lastLoanDate;//贷款到期日
     private String lastRepayAmount;//最近还款金额
 
+    //中银新增
+    private String dzhxrq;//呆账核销日期
+
     @Override
     public String getCreateBy() {
         return createBy;

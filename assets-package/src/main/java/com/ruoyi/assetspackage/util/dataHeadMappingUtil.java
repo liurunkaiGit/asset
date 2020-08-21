@@ -116,6 +116,7 @@ public class dataHeadMappingUtil {
         String fifth_liaison_name = dataHeadMapping.getFifth_liaison_name();
         String fifth_liaison_relation = dataHeadMapping.getFifth_liaison_relation();
         String fifth_liaison_mobile = dataHeadMapping.getFifth_liaison_mobile();
+        String dzhxrq = dataHeadMapping.getDzhxrq();
 
 
 
@@ -413,6 +414,7 @@ public class dataHeadMappingUtil {
         list.add(fifth_liaison_name);
         list.add(fifth_liaison_relation);
         list.add(fifth_liaison_mobile);
+        list.add(dzhxrq);
 
 //        list.add(org);
 

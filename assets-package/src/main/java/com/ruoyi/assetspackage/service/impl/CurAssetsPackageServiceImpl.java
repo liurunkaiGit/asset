@@ -21,6 +21,7 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.RestTemplateUtil;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.bean.BeanUtils;
+import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +52,6 @@ public class CurAssetsPackageServiceImpl extends BaseController implements ICurA
 
     @Autowired
     private CurAssetsPackageMapper curAssetsPackageMapper;
-    @Autowired
-    ImportDataMapping importDataMapping;
     @Autowired
     RemoteConfigure remoteConfigure;
     @Autowired
@@ -778,6 +777,7 @@ public class CurAssetsPackageServiceImpl extends BaseController implements ICurA
             bos.close();
             stream.close();
             orgId = String.valueOf(ShiroUtils.getSysUser().getOrgId());
+            ImportDataMapping importDataMapping = SpringUtils.getBean(ImportDataMapping.class);
             importDataMapping = this.voluation(importDataMapping, templateId);
             int headNum = Integer.valueOf(importDataMapping.getHeadRowNum());
             int dataNum = Integer.valueOf(importDataMapping.getDataRowNum());
@@ -1191,6 +1191,9 @@ public class CurAssetsPackageServiceImpl extends BaseController implements ICurA
                 continue;}
             if ("联系人5电话".equals(systemTemplateName)) {
                 bean.setFifthLiaisonMobile(customerTemplateName);
+                continue;}
+            if ("呆账核销日期".equals(systemTemplateName)) {
+                bean.setDzhxrq(customerTemplateName);
                 continue;}
         }
         return bean;
