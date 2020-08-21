@@ -22,13 +22,6 @@
             </div>
             <div id="content">
             </div>
-            <div class="form-group" id="noCompany">
-                <label class="col-sm-3 control-label">减免方式：</label>
-                <div class="col-sm-8">
-                    <input type="text" name="reductionTypeName" id="reductionTypeName" class="form-control" maxlength="64">
-                    <input type="hidden" name="reductionTypeCode" value="1">
-                </div>
-            </div>
         </form>
 
         <div id="form1" style="display: none">
@@ -58,6 +51,13 @@
                     <label class="col-sm-3 control-label">划扣金额：</label>
                     <div class="col-sm-8">
                         <input name="deductionAmount"  class="form-control" type="text" required ismoney="true">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">减免方式：</label>
+                    <div class="col-sm-8">
+                        <input type="text" name="reductionTypeName" class="form-control" maxlength="64">
+                        <input type="hidden" name="reductionTypeCode" value="1">
                     </div>
                 </div>
             </div>
@@ -97,6 +97,13 @@
                     <div class="col-sm-8">
                         [[${tk.overdueDays}]]
                         <input type="hidden" name="overdueDays" th:value="${tk.overdueDays}">
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <label class="col-sm-3 control-label">减免方式：</label>
+                    <div class="col-sm-8">
+                        <input type="text" name="reductionTypeName" class="form-control" maxlength="64">
+                        <input type="hidden" name="reductionTypeCode" value="1">
                     </div>
                 </div>
             </div>
@@ -246,11 +253,11 @@
             });
             function selChange(reductionTypeVal,reductionTypeName){
                 $("#reportingTypeName").val(reductionTypeName)
-                if(3 == reductionTypeVal){
-                    $("#noCompany").hide();
-                }else{
-                    $("#noCompany").show();
-                }
+                // if(3 == reductionTypeVal){
+                //     $("#noCompany").hide();
+                // }else{
+                //     $("#noCompany").show();
+                // }
                 $.ajax({
                     url: ctx + "inforeporting/set/listOrg",    //请求的url地址
                     dataType: "json",   //返回格式为json
