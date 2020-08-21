@@ -57,49 +57,82 @@
             sortOrder: "desc",
             modalName: "类型",
             id:"bootstrap-table",
-            columns: [{
-                checkbox: true
-            },
-                {
-                    field: 'id',
-                    title: '编号',
-                    visible:false
-                },
-                {
-                    field: 'productName',
-                    title: '产品'
-                },
-                {
-                    field: 'caseNo',
-                    title: '合同号',
-                    sortable: true
-                },
-                {
-                    field: 'customName',
-                    title: '客户姓名',
-                    sortable: true
-                },
-                {
-                    field: 'deductionAmount',
-                    title: '划扣金额',
-                    align: 'center',
-                    formatter:function (value, row, index) {
-                        if(null == value || value=="")return"-";
-                        return  parseFloat(value).toFixed(2) ;
+            columns:
+                [
+                    {
+                      checkbox: true
+                    },
+                    {
+                        field: 'id',
+                        title: '编号1',
+                        visible: false
+                    },
+                    {
+                        field: 'productName',
+                        title: '产品'
+                    },
+                    {
+                        field: 'caseNo',
+                        title: '合同号'
+                    },
+                    {
+                        field: 'customName',
+                        title: '客户姓名'
+                    },
+                    {
+                        field: 'overdueDays',
+                        title: '逾期天数'
+                    },
+                    {
+                        field: 'dzhxrq',
+                        title: '呆账核销日期'
+                    },
+                    {
+                        field: 'reductionTypeName',
+                        title: '减免方式'
+                    },
+                    {
+                        field: 'remarks',
+                        title: '申请原因'
+                    },
+                    {
+                        field: 'arrearsTotal',
+                        title: '委案金额'
+                    },
+                    {
+                        field: 'deductionAmount',
+                        title: '减免金额',
+                        align: 'center',
+                        formatter:function (value, row, index) {
+                            if(null == value || value=="")return"-";
+                            var sumBalance = parseFloat(value);
+                            return  sumBalance.toFixed(2) ;
+                        }
+                    },
+                    {
+                        field: 'area',
+                        title: '地区'
+                    },
+                    {
+                        field: 'telephone',
+                        title: '减免联系方式'
+                    },
+                    {
+                        field: 'relationship',
+                        title: '与本人关系'
+                    },
+                    {
+                        field: 'expirationDate',
+                        title: '减免失效日'
+                    },
+                    {
+                        field: 'createTime',
+                        title: '创建时间'
+                    },
+                    {
+                        field: 'createBy',
+                        title: '操作员'
                     }
-                },
-                {
-                    field: 'reductionTypeName',
-                    title: '减免方式'
-                },
-                {
-                    field: 'createTime',
-                    title: '创建时间'
-                },
-                {
-                    field: 'createBy',
-                    title: '操作员'
-                }
                 ]
         };
         $.table.init(options);

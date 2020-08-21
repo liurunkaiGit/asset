@@ -53,5 +53,5 @@ public class TLcInforeportingReduction extends TLcInforeportingTemplate {
     /**
      * 减免失效日
      */
-    private Date expirationDate;
+    private String expirationDate;
 }

@@ -13,27 +13,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="customName"    column="custom_name"    />
         <result property="productName"    column="product_name"    />
         <result property="deductionAmount"    column="deduction_amount"    />
+        <result property="overdueDays"    column="overdue_days"    />
         <result property="reductionTypeCode"    column="reduction_type_code"    />
         <result property="reductionTypeName"    column="reduction_type_name"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="overdueDays"    column="overdue_days"    />
         <result property="certificateNo"    column="certificate_no"    />
         <result property="arrearsTotal"    column="arrears_total"    />
         <result property="area"    column="area"    />
+        <result property="remarks"    column="remarks"    />
         <result property="transferType"    column="transfer_type"    />
         <result property="dzhxrq"    column="dzhxrq"    />
         <result property="reductionAfterAmount"    column="reduction_after_amount"    />
         <result property="repaymentRatio"    column="repayment_ratio"    />
         <result property="telephone"    column="telephone"    />
+        <result property="relationship"    column="relationship"    />
         <result property="expirationDate"    column="expiration_date"    />
-        <result property="remarks"    column="remarks"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
     </resultMap>
     <resultMap type="com.ruoyi.inforeporting.domain.TLcInforeportingReductionXing" id="TLcInforeportingReductionXingResult">
-        <result property="id"    column="id"    />
         <result property="xh"    column="xh"    />
+        <result property="id"    column="id"    />
         <result property="orgId"    column="org_id"    />
         <result property="orgName"    column="org_name"    />
         <result property="caseNo"    column="case_no"    />
@@ -41,15 +42,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="customName"    column="custom_name"    />
         <result property="productName"    column="product_name"    />
         <result property="deductionAmount"    column="deduction_amount"    />
+        <result property="overdueDays"    column="overdue_days"    />
         <result property="reductionTypeCode"    column="reduction_type_code"    />
         <result property="reductionTypeName"    column="reduction_type_name"    />
+        <result property="certificateNo"    column="certificate_no"    />
+        <result property="arrearsTotal"    column="arrears_total"    />
+        <result property="area"    column="area"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="transferType"    column="transfer_type"    />
+        <result property="dzhxrq"    column="dzhxrq"    />
+        <result property="reductionAfterAmount"    column="reduction_after_amount"    />
+        <result property="repaymentRatio"    column="repayment_ratio"    />
+        <result property="telephone"    column="telephone"    />
+        <result property="relationship"    column="relationship"    />
+        <result property="expirationDate"    column="expiration_date"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
-        <result property="overdueDays"    column="overdue_days"    />
-        <result property="certificateNo"    column="certificate_no"    />
-        <result property="arrearsTotal"    column="arrears_total"    />
     </resultMap>
     <resultMap type="com.ruoyi.inforeporting.domain.TLcInforeportingTemplate" id="TLcInforeportingTemplateResult">
         <result property="id"    column="id"    />
@@ -116,23 +126,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         custom_name,
         product_name,
         deduction_amount,
+        overdue_days,
         reduction_type_code,
         reduction_type_name,
-        create_by,
-        create_time,
-        update_by,
-        update_time,
-        overdue_days,
         certificate_no,
         arrears_total,
         area,
+        remarks,
         transfer_type,
         dzhxrq,
         reduction_after_amount,
         repayment_ratio,
         telephone,
+        relationship,
         expiration_date,
-        remarks
+        create_by,
+        create_time,
+        update_by,
+        update_time
     </sql>
     <insert id="insertTLcInforeportingReduction" parameterType="com.ruoyi.inforeporting.domain.TLcInforeportingReduction" useGeneratedKeys="true" keyProperty="id">
        INSERT INTO t_lc_inforeporting_reduction
@@ -148,23 +159,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         #{customName},
         #{productName},
         #{deductionAmount},
+        #{overdueDays},
         #{reductionTypeCode},
         #{reductionTypeName},
-        #{createBy},
-        now(),
-        #{updateBy},
-        now(),
-        #{overdueDays},
         #{certificateNo},
         #{arrearsTotal},
         #{area},
+        #{remarks},
         #{transferType},
         #{dzhxrq},
         #{reductionAfterAmount},
         #{repaymentRatio},
         #{telephone},
+        #{relationship},
         #{expirationDate},
-        #{remarks}
+        #{createBy},
+        now(),
+        #{updateBy},
+        now()
         )
     </insert>
 

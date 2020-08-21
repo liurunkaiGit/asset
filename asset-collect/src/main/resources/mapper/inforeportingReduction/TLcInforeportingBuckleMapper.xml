@@ -16,22 +16,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="overdueDays"    column="overdue_days"    />
         <result property="reductionTypeCode"    column="reduction_type_code"    />
         <result property="reductionTypeName"    column="reduction_type_name"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
         <result property="certificateNo"    column="certificate_no"    />
         <result property="arrearsTotal"    column="arrears_total"    />
         <result property="area"    column="area"    />
+        <result property="remarks"    column="remarks"    />
         <result property="transferType"    column="transfer_type"    />
         <result property="dzhxrq"    column="dzhxrq"    />
         <result property="reductionAfterAmount"    column="reduction_after_amount"    />
         <result property="repaymentRatio"    column="repayment_ratio"    />
         <result property="telephone"    column="telephone"    />
+        <result property="relationship"    column="relationship"    />
         <result property="expirationDate"    column="expiration_date"    />
-        <result property="remarks"    column="remarks"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
     </resultMap>
     <resultMap type="com.ruoyi.inforeporting.domain.TLcInforeportingBuckleXing" id="TLcInforeportingBuckleXingResult">
+        <result property="xh"    column="xh"    />
         <result property="id"    column="id"    />
         <result property="orgId"    column="org_id"    />
         <result property="orgName"    column="org_name"    />
@@ -43,12 +45,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="overdueDays"    column="overdue_days"    />
         <result property="reductionTypeCode"    column="reduction_type_code"    />
         <result property="reductionTypeName"    column="reduction_type_name"    />
+        <result property="certificateNo"    column="certificate_no"    />
+        <result property="arrearsTotal"    column="arrears_total"    />
+        <result property="area"    column="area"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="transferType"    column="transfer_type"    />
+        <result property="dzhxrq"    column="dzhxrq"    />
+        <result property="reductionAfterAmount"    column="reduction_after_amount"    />
+        <result property="repaymentRatio"    column="repayment_ratio"    />
+        <result property="telephone"    column="telephone"    />
+        <result property="relationship"    column="relationship"    />
+        <result property="expirationDate"    column="expiration_date"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
-        <result property="certificateNo"    column="certificate_no"    />
-        <result property="arrearsTotal"    column="arrears_total"    />
     </resultMap>
     <sql id="base">
         org_id,
@@ -74,6 +85,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         repayment_ratio,
         telephone,
         expiration_date,
+        relationship,
         remarks
     </sql>
     <insert id="insertTLcInforeportingBuckle" parameterType="com.ruoyi.inforeporting.domain.TLcInforeportingBuckle" useGeneratedKeys="true" keyProperty="id">
@@ -106,6 +118,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{repaymentRatio},
             #{telephone},
             #{expirationDate},
+            #{relationship},
             #{remarks}
         )
     </insert>
