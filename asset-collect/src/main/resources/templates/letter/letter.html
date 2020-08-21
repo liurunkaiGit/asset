@@ -71,7 +71,7 @@
         var editFlag = [[${@permission.hasPermi('ruoyi:letter:edit')}]];
         var removeFlag = [[${@permission.hasPermi('ruoyi:letter:remove')}]];
         var prefix = ctx + "coll/letter";
-
+        var taskPrefix = ctx + "collect/task";
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -90,7 +90,10 @@
                 },
                 {
                     field : 'caseNo', 
-                    title : '机构案件号'
+                    title : '机构案件号',
+                    formatter: function(value, row, index) {
+                        return "<a href='javascript:void(0)' onclick='collHis(\""+value + "\",\""+row.orgId + "\",\""+row.importBatchNo+ "\")'>"+value+"</a>";
+                    }
                 },
                 {
                     field : 'customName', 
@@ -199,6 +202,17 @@
             //         $.modal.closeLoading();
             //     });
             // });
+        }
+
+        /*催收历史*/
+        function collHis(caseNo,orgId,importBatchNo) {
+            var collHisUrl;
+            if (importBatchNo == 'null') {
+                collHisUrl = taskPrefix + "/collJobHis?caseNo="+caseNo+"&orgId="+orgId;
+            } else {
+                collHisUrl = taskPrefix + "/collJobHis?caseNo="+caseNo+"&orgId="+orgId+"&importBatchNo="+importBatchNo;
+            }
+            $.modal.openFull("催收记录 | " + caseNo, collHisUrl);
         }
     </script>
 </body>

@@ -129,11 +129,11 @@
                     <span id="education" style="font-size: 18px;"></span>
                 </div>
                 <div class="collBaseInfoRight" style="width:500px;">
-                    <span id="customCertificateNo"   style="font-size: 18px;"></span>
-                    &nbsp;&nbsp;<span style="font-size: 18px;">信函状态:</span>
-                    &nbsp;&nbsp;<span id="letterStatus"  style="font-size: 18px;"></span>
-                    &nbsp;&nbsp;<span style="font-size: 18px;">是否共案:</span>
-                    &nbsp;&nbsp;<span id="isSameCase"  style="font-size: 18px;"></span><br/>
+                    <span id="customCertificateNo"   style="font-size: 16px;"></span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 16px;">信函:</span>
+                    <span id="letterStatus"  style="font-size: 16px;"></span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 16px;">共案:</span>
+                    <span id="isSameCase"  style="color: red;font-size: 16px;"></span><br/>
                     <b><span style="font-size: 18px;">委案金额:</span></b>
                     <b><span id="arrearsTotal" style="color: red;font-size: 18px"></span>元</b>&nbsp;&nbsp;&nbsp;&nbsp;
                     <b><span style="font-size: 18px;">结案应还金额:</span></b>
@@ -721,7 +721,9 @@
                         </div>
                     </div>
                 </form>
-                <button type="button" class="btn btn-primary" align="center" onclick="addLetterApply()">提交申请</button>
+                <div style="text-align: center">
+                    <button type="button" class="btn btn-primary" align="center" onclick="addLetterApply()">提交申请</button>
+                </div>
             </div>
             <!--<div class="modal-footer">
                 &lt;!&ndash;<button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>&ndash;&gt;
@@ -1207,7 +1209,9 @@
                         }
                     } else {
                         $("#letterStatus").text("");
+
                     }
+                    $("#isSameCase").html("是");
                 }
             }
         );
