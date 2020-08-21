@@ -363,12 +363,6 @@ public class Assets extends BaseEntity {
     private String acceptWdCode;
 
     /**
-     * 呆账核销日期
-     */
-    @Excel(name = "呆账核销日期", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date dzhxrq;
-
-    /**
      * 外币账户应还罚息总额
      */
     @Excel(name = "外币账户应还罚息总额")
@@ -1460,10 +1454,19 @@ public class Assets extends BaseEntity {
     @Excel(name = "联系人5电话")
     private String fifthLiaisonMobile;
 
+    /**
+     * 呆账核销日期
+     */
+    @Excel(name = "呆账核销日期", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date dzhxrq;
+
     private String freeImport;
 
 
-
-
+    //吉象新增字段
+    private String curNo;//用户编号
+    private String payStatus;//还款状态
+    private Date lastLoanDate;//贷款到期日
+    private BigDecimal lastRepayAmount;//最近还款金额
 
 }
