@@ -99,8 +99,10 @@ public class AssetsRepaymentFromXYController extends BaseController {
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(CurAssetsRepaymentPackage curAssetsRepaymentPackage) {
-        Set<Long> deptIds = dataPermissionUtils.selectDataPer();
-        curAssetsRepaymentPackage.setDeptIds(deptIds);
+        /*Set<Long> deptIds = dataPermissionUtils.selectDataPer();
+        curAssetsRepaymentPackage.setDeptIds(deptIds);*/
+        Long orgId = ShiroUtils.getSysUser().getOrgId();
+        curAssetsRepaymentPackage.setOrgId(String.valueOf(orgId));
         List<CurAssetsRepaymentPackage> list = assetsRepaymenFromXYService.findCurAssetsRepaymentList(curAssetsRepaymentPackage);
         ExcelUtil<CurAssetsRepaymentPackage> util = new ExcelUtil<CurAssetsRepaymentPackage>(CurAssetsRepaymentPackage.class);
         return util.exportExcel(list, "repayment");
