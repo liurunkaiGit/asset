@@ -127,7 +127,6 @@ public class AssetsInfoController extends BaseController {
     /**
      * 查询客户资产还款列表
      */
-    @RequiresPermissions("assetspackage:info:list")
     @PostMapping("/repaymentList")
     @ResponseBody
     public TableDataInfo repaymentList(String orgCasno) {

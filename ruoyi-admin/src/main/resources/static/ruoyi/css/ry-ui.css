@@ -1064,6 +1064,15 @@ label {
     font-size: 12px;
 }
 
+.sameCaseLeftInfo{
+	height:200px;
+	width:70%;
+	/*border-style:solid;*/
+	/*position:absolute;*/
+	margin:5px 0px 5px 0px;
+	font-size: 12px;
+}
+
 .collRightInfo{
 	height:320px;
 	width:28%;
@@ -1095,6 +1104,14 @@ label {
 	margin:5px 0px 5px 0px;
 }
 
+.sameCaseOne{
+	height:155px;
+	width:50%;
+	/*border-style:solid;*/
+	position:absolute;
+	margin:5px 0px 5px 0px;
+}
+
 .collInfoTwo{
 	height:155px;
 	width:35%;
@@ -1102,9 +1119,25 @@ label {
 	position:absolute;
 	margin:5px 30px 5px 30%;
 }
+
+.sameCaseTwo{
+	height:155px;
+	width:50%;
+	/*border-style:solid;*/
+	position:absolute;
+	margin:5px 30px 5px 30%;
+}
 .collInfoThree{
 	height:155px;
 	width:35%;
+	/*border-style:solid;*/
+	position:absolute;
+	margin:5px 30px 5px 65%;
+}
+
+.sameCaseThree{
+	height:155px;
+	width:50%;
 	/*border-style:solid;*/
 	position:absolute;
 	margin:5px 30px 5px 65%;

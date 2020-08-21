@@ -466,5 +466,23 @@ public class TLcTask extends BaseEntity {
 
     private Integer closeType;
 
+    // 共案信息
+    private String accountDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date jkrq;
+    private Date firstYqjcDate;
+    private BigDecimal rmbQkzje;
+    private Date zhychkr;
+    private BigDecimal rmbYhbjzje;
+    private String ykqs;
+    private BigDecimal rmbYhfyzje;
+    private BigDecimal rmbYhlizje;
+    private BigDecimal rmbYhfxzje;
+    private BigDecimal znj;
+    private BigDecimal mqhkje;
+    private BigDecimal dqqkje;
+    private BigDecimal borrowEd;
+    private String borrowNo;
+    private String borrowBlank;
 
 }
