@@ -1097,7 +1097,7 @@ label {
 	width:70px;
 }
 .collInfoOne{
-	height:155px;
+	height:175px;
 	width:30%;
 	/*border-style:solid;*/
 	position:absolute;
@@ -1106,14 +1106,14 @@ label {
 
 .sameCaseOne{
 	height:155px;
-	width:50%;
+	width:40%;
 	/*border-style:solid;*/
 	position:absolute;
 	margin:5px 0px 5px 0px;
 }
 
 .collInfoTwo{
-	height:155px;
+	height:175px;
 	width:35%;
 	/*border-style:solid;*/
 	position:absolute;
@@ -1122,13 +1122,13 @@ label {
 
 .sameCaseTwo{
 	height:155px;
-	width:50%;
+	width:30%;
 	/*border-style:solid;*/
 	position:absolute;
-	margin:5px 30px 5px 30%;
+	margin:5px 30px 5px 40%;
 }
 .collInfoThree{
-	height:155px;
+	height:175px;
 	width:35%;
 	/*border-style:solid;*/
 	position:absolute;
@@ -1137,17 +1137,17 @@ label {
 
 .sameCaseThree{
 	height:155px;
-	width:50%;
+	width:30%;
 	/*border-style:solid;*/
 	position:absolute;
-	margin:5px 30px 5px 65%;
+	margin:5px 30px 5px 70%;
 }
 .collInfoFour{
 	height:75px;
 	width:50%;
 	/*border-style:solid;*/
 	position:absolute;
-	margin:160px 0px 5px 0px;
+	margin:180px 0px 5px 0px;
 }
 
 .collInfoFive{
@@ -1155,14 +1155,14 @@ label {
 	width:50%;
 	/*border-style:solid;*/
 	position:absolute;
-	margin:160px 30px 5px 50%;
+	margin:180px 30px 5px 50%;
 }
 .collInfoSix{
 	height:120px;
 	width:100%;
 	/*border-style:solid;*/
 	position:absolute;
-	margin:230px 0px 5px 0px;
+	margin:250px 0px 5px 0px;
 }
 
 .collInfoServer{
@@ -1170,7 +1170,7 @@ label {
 	width:65%;
 	/*border-style:solid;*/
 	position:absolute;
-	margin:365px 0px 5px 0px;
+	margin:385px 0px 5px 0px;
 }
 
 .collInfoEight{
@@ -1178,14 +1178,14 @@ label {
 	width:35%;
 	/*border-style:solid;*/
 	position:absolute;
-	margin:365px 30px 5px 65%;
+	margin:385px 30px 5px 65%;
 }
 .collInfoNine{
 	height:120px;
 	width:100%;
 	/*border-style:solid;*/
 	position:absolute;
-	margin:410px 0px 5px 0px;
+	margin:430px 0px 5px 0px;
 }
 
 .tab-pane table{

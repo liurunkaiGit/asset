@@ -350,7 +350,7 @@
                                 <b><span style="font-size: 18px;">结案应还金额合计:</span></b>
                                 <b><span id="sameCaseCloseCaseYhjeTotal"  style="color: red;font-size: 18px"></span><span style="font-size: 18px">元</span></b>
                             </div>
-                            <div></div>
+                            <hr style="margin-top: 0;margin-bottom: 0;"/>
                             <div id="sameCaseInfoDetail"></div>
                         </div>
                     </div>
@@ -1253,15 +1253,6 @@
                         var borrowEd = data.result[i].borrowEd != null ? data.result[i].borrowEd : "";
                         var borrowNo = data.result[i].borrowNo != null ? data.result[i].borrowNo : "";
                         var borrowBlank = data.result[i].borrowBlank != null ? data.result[i].borrowBlank : "";
-                        // tp.append("<div class='sameCaseInfoDetail'><b><span style='font-size: 18px;'>机构案件号：</span></b><a href='javascript:void(0)' onclick='collJobDetail(\""+caseNo + "\",\""+orgId + "\",\""+importBatchNo+ "\")'><b><span style='font-size: 18px;color: #1c84c6'>"+caseNo+"</span></b></a><b><span style='font-size: 18px;'>委案金额：</span></b><b><span style='font-size: 18px;'>"+arrearsTotal+"</span></b><b><span style='font-size: 18px;'>结案应还金额：</span></b><b><span style='font-size: 18px;'>"+closeCaseYhje+"</span></b></div>" +
-                        //     "<div class='sameCaseInfoDetail'><span>入催日：</span><span class='sameCaseValue'>"+enterCollDate+"</span><span>账单日：</span><span class='sameCaseValue'>"+accountDate+"</span><span>逾期天数：</span><span>"+overdueDays+"</span></div>" +
-                        //     "<div class='sameCaseInfoDetail'><span>借款日期：</span><span class='sameCaseValue'>"+jkrq+"</span><span>退案日：</span><span class='sameCaseValue'>"+backCaseDate+"</span><span>应还日期：</span><span>"+firstYqjcDate+"</span></div>" +
-                        //     "<div class='sameCaseInfoDetail'><span>欠款总金额：</span><span style='color: red'>"+rmbQkzje+"</span><span>最近一次还款日：</span><span class='sameCaseValue'>"+zhychkr+"</span><span>逾期起始日：</span><span>"+firstOverdueTime+"</span></div>" +
-                        //     "<div class='sameCaseInfoDetail'><span>每期还款金额：</span><span class='sameCaseValue'>"+mqhkje+"</span><span>最低应还金额：</span><span class='sameCaseValue'>"+lowestPaymentRmb+"</span><span>当期欠款金额：</span><span>"+dqqkje+"</span></div>" +
-                        //     "<div class='sameCaseInfoDetail'><span>应还本金：</span><span class='sameCaseValue'>"+rmbYhbjzje+"</span><span>累计已还金额：</span><span class='sameCaseValue'>"+ljyhje+"</span><span>已还期数：</span><span>"+ykqs+"</span></div>" +
-                        //     "<div class='sameCaseInfoDetail'><span>应还费用：</span><span class='sameCaseValue'>"+rmbYhfyzje+"</span><span>应还利息：</span><span class='sameCaseValue'>"+rmbYhlizje+"</span><span>应还罚息：</span><span>"+rmbYhfxzje+"</span></div>" +
-                        //     "<div class='sameCaseInfoDetail'><span>滞纳金：</span><span class='sameCaseValue'>"+znj+"</span><span>放款金额：</span><span>"+borrowEd+"</span></div>" +
-                        //     "<div class='sameCaseInfoDetail'><span>借款卡号：</span><span class='sameCaseValue'>"+borrowNo+"</span><span>借款卡银行：</span><span>"+borrowBlank+"</span></div>");
                         tp.append("<div class=\"sameCaseLeftInfo\">\n" +
                             "                                <div class=\"sameCaseOne\">\n" +
                             "                                    <label style='font-size: 14px;'><b>机构案件号：</b></label><b><label ><a href='javascript:void(0)' onclick='collJobDetail(\""+caseNo + "\",\""+orgId + "\",\""+importBatchNo+ "\")'><b><span style='font-size: 14px;color: #1c84c6'>"+caseNo+"</a></label></b><br/>\n" +
