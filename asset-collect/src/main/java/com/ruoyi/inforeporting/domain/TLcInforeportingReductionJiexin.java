@@ -15,6 +15,11 @@ import java.util.Date;
 public class TLcInforeportingReductionJiexin extends BaseEntity {
     private static final long serialVersionUID = 1646626261616L;
     /**
+     * 序号
+     */
+    @Excel(name = "序号")
+    private int xh;
+    /**
      * 合同号
      */
     @Excel(name = "合同号")
@@ -77,5 +82,5 @@ public class TLcInforeportingReductionJiexin extends BaseEntity {
      * 减免失效日
      */
     @Excel(name = "减免失效日")
-    private Date expirationDate;
+    private String expirationDate;
 }

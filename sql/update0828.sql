@@ -63,4 +63,4 @@ ALTER table org_package add is_auto_send_sms tinyint(1) DEFAULT NULL COMMENT '�
 ALTER table org_package add sms_template_id varchar(50) DEFAULT NULL COMMENT '短信模板id';
 ALTER table org_package add sms_template_name varchar(100) DEFAULT NULL COMMENT '短信模板名称';
 
-ALTER table org_package add is_same_case_deal  tinyint(1) DEFAULT NULL COMMENT '是否共案处理，1：是吗，2：否';
+ALTER table org_package add is_same_case_deal  tinyint(1) DEFAULT NULL COMMENT '是否共案处理，1：是，2：否';

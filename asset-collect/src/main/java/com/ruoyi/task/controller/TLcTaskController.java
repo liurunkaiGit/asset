@@ -3,6 +3,7 @@ package com.ruoyi.task.controller;
 import com.alibaba.fastjson.JSON;
 import com.ruoyi.agent.domain.ExtPhone;
 import com.ruoyi.agent.service.IExtPhoneService;
+import com.ruoyi.assetspackage.domain.CurAssetsRepaymentPackage;
 import com.ruoyi.assetspackage.domain.OrgPackage;
 import com.ruoyi.assetspackage.domain.RemoteConfigure;
 import com.ruoyi.assetspackage.service.IOrgPackageService;
@@ -1389,6 +1390,16 @@ public class TLcTaskController extends BaseController {
         }
         int i = tLcCustContactService.updateTLcCustContact(tLcCustContact);
         return toAjax(i);
+    }
+
+    /**
+     * 查询客户资产还款列表
+     */
+    @PostMapping("/selectSameCaseInfo")
+    @ResponseBody
+    public Response selectSameCaseInfo(String certificateNo, String orgId) {
+        List<TLcTask> list = this.tLcTaskService.selectSameCaseTaskList(certificateNo, orgId);
+        return Response.success(list);
     }
 
     @GetMapping(value = "/selfBuild")

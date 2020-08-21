@@ -111,7 +111,7 @@ public class TLcInforeportingBuckle extends BaseEntity {
     /**
      * 减免失效日
      */
-    private Date expirationDate;
+    private String expirationDate;
 
 
 }

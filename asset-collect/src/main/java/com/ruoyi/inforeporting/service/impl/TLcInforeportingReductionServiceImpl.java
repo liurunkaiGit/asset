@@ -75,8 +75,10 @@ public class TLcInforeportingReductionServiceImpl implements TLcInforeportingRed
      */
     private List<TLcInforeportingReductionJiexin> transformationTLcInforeportingReductionJiexin(List<TLcInforeportingReduction> list ){
         List<TLcInforeportingReductionJiexin> listxin = new ArrayList<TLcInforeportingReductionJiexin>();
+        int i=0;
         for(TLcInforeportingReduction tn:list){
             TLcInforeportingReductionJiexin jx = new TLcInforeportingReductionJiexin();
+            jx.setXh(++i);
             jx.setCaseNo(tn.getCaseNo());
             jx.setCustomName(tn.getCustomName());
             jx.setArrearsTotal(tn.getArrearsTotal());
