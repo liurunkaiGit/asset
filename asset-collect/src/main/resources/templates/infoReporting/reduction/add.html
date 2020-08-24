@@ -251,6 +251,55 @@
                     //请求出错处理
                 }
             });
+            //时间控件渲染
+            function timeFn(){
+                if ($(".time-input").length > 0) {
+                    layui.use('laydate', function () {
+                        var com = layui.laydate;
+                        $(".time-input").each(function (index, item) {
+                            var time = $(item);
+                            // 控制控件外观
+                            var type = time.attr("data-type") || 'date';
+                            // 控制回显格式
+                            var format = time.attr("data-format") || 'yyyy-MM-dd';
+                            // 控制日期控件按钮
+                            var buttons = time.attr("data-btn") || 'clear|now|confirm', newBtnArr = [];
+                            // 日期控件选择完成后回调处理
+                            var callback = time.attr("data-callback") || {};
+                            if (buttons) {
+                                if (buttons.indexOf("|") > 0) {
+                                    var btnArr = buttons.split("|"), btnLen = btnArr.length;
+                                    for (var j = 0; j < btnLen; j++) {
+                                        if ("clear" === btnArr[j] || "now" === btnArr[j] || "confirm" === btnArr[j]) {
+                                            newBtnArr.push(btnArr[j]);
+                                        }
+                                    }
+                                } else {
+                                    if ("clear" === buttons || "now" === buttons || "confirm" === buttons) {
+                                        newBtnArr.push(buttons);
+                                    }
+                                }
+                            } else {
+                                newBtnArr = ['clear', 'now', 'confirm'];
+                            }
+                            com.render({
+                                elem: item,
+                                theme: 'molv',
+                                trigger: 'click',
+                                type: type,
+                                format: format,
+                                btns: newBtnArr,
+                                done: function (value, data) {
+                                    if (typeof window[callback] != 'undefined'
+                                        && window[callback] instanceof Function) {
+                                        window[callback](value, data);
+                                    }
+                                }
+                            });
+                        });
+                    });
+                }
+            }
             function selChange(reductionTypeVal,reductionTypeName){
                 $("#reportingTypeName").val(reductionTypeName)
                 // if(3 == reductionTypeVal){
@@ -287,9 +336,9 @@
                                     }
                                     if(value.editStatus == 1){
                                         if(value.columnLength > 0){
-                                            htm+="<input type=\"text\"  class=\"form-control\" name=\""+value.toColumn+"\" value=\""+al+"\" maxlength='"+value.columnLength+"' "+value.rules+"  "+vlHtm+">";
+                                            htm+="<input type=\"text\"  name=\""+value.toColumn+"\" value=\""+al+"\" maxlength='"+value.columnLength+"' "+value.rules+"  "+vlHtm+">";
                                         }else{
-                                            htm+="<input type=\"text\"  class=\"form-control\" name=\""+value.toColumn+"\" value=\""+al+"\" "+value.rules+" "+vlHtm+">";
+                                            htm+="<input type=\"text\"  name=\""+value.toColumn+"\" value=\""+al+"\" "+value.rules+" "+vlHtm+">";
                                         }
 
                                     }else{
@@ -313,6 +362,8 @@
                                 });
                             });
                         }
+                        //时间控件渲染
+                        timeFn();
                     },
                     error: function(e) {
                         //后台出错默认值
