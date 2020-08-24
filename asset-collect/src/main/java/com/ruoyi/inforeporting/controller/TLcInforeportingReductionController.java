@@ -57,6 +57,7 @@ public class TLcInforeportingReductionController extends BaseController {
     {
         startPage();
         inforeportingReduction.setCreateBy(ShiroUtils.getLoginName());
+        inforeportingReduction.setOrgId(ShiroUtils.getSysUser().getOrgId());
         List<TLcInforeportingReduction> list = inforeportingReductionService.selectTLcInforeportingReductionList(inforeportingReduction);
         return getDataTable(list);
     }

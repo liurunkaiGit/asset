@@ -65,6 +65,7 @@ public class TLcInforeportingBuckleController extends BaseController {
     {
         startPage();
         inforeportingBuckle.setCreateBy(ShiroUtils.getLoginName());
+        inforeportingBuckle.setOrgId(ShiroUtils.getSysUser().getOrgId());
         List<TLcInforeportingBuckle> list = inforeportingBuckleService.selectTLcInforeportingBuckleList(inforeportingBuckle);
         return getDataTable(list);
     }
