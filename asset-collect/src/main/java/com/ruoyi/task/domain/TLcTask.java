@@ -485,4 +485,7 @@ public class TLcTask extends BaseEntity {
     private String borrowNo;
     private String borrowBlank;
 
+    //省市信息
+    private String province;
+    private String city;
 }

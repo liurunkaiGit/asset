@@ -349,6 +349,12 @@
         <if test="taskType != null ">
             and t.task_type = #{taskType}
         </if>
+        <if test="province != null and province != ''">
+            and left(t.certificate_no, 2) = #{province}
+        </if>
+        <if test="city != null and city != ''">
+            and left(t.certificate_no, 4) = #{city}
+        </if>
         <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
             and EXISTS(SELECT r.call_sign FROM t_lc_call_record r WHERE r.case_no = t.case_no and r.call_sign IN
             <foreach collection="callCodeHistoryList" item="cl" open="(" close=")" separator=",">
@@ -1054,6 +1060,12 @@
         <if test="taskType != null ">
             and t.task_type = #{taskType}
         </if>
+        <if test="province != null ">
+            and left(t.certificate_no, 2) = #{province}
+        </if>
+        <if test="city != null ">
+            and left(t.certificate_no, 4) = #{city}
+        </if>
         <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
             and EXISTS(SELECT r.call_sign FROM t_lc_call_record r WHERE r.case_no = t.case_no and r.call_sign IN
             <foreach collection="callCodeHistoryList" item="cl" open="(" close=")" separator=",">
@@ -1142,6 +1154,12 @@
         <if test="taskType != null ">
             and t.task_type = #{taskType}
         </if>
+        <if test="province != null ">
+            and left(t.certificate_no, 2) = #{province}
+        </if>
+        <if test="city != null ">
+            and left(t.certificate_no, 4) = #{city}
+        </if>
         <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
             and EXISTS(SELECT r.call_sign FROM t_lc_call_record r WHERE r.case_no = t.case_no and r.call_sign IN
             <foreach collection="callCodeHistoryList" item="cl" open="(" close=")" separator=",">
@@ -1178,6 +1196,12 @@
         </if>
         <if test="taskType != null ">
             and t.task_type = #{taskType}
+        </if>
+        <if test="province != null ">
+            and left(t.certificate_no, 2) = #{province}
+        </if>
+        <if test="city != null ">
+            and left(t.certificate_no, 4) = #{city}
         </if>
         <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
             and EXISTS(SELECT r.call_sign FROM t_lc_call_record r WHERE r.case_no = t.case_no and r.call_sign IN

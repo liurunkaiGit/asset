@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.CertificateConfigMapper">
+    
+    <resultMap type="com.ruoyi.assetspackage.domain.CertificateConfig" id="CertificateConfigResult">
+        <result property="id"    column="id"    />
+        <result property="cid"    column="cid"    />
+        <result property="name"    column="name"    />
+        <result property="pid"    column="pid"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCertificateConfigVo">
+        select id, cid, name, pid, create_by, create_time, update_by, update_time from certificate_config
+    </sql>
+
+    <select id="selectCertificateConfigList" parameterType="CertificateConfig" resultMap="CertificateConfigResult">
+        <include refid="selectCertificateConfigVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="cid != null "> and cid = #{cid}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="pid != null "> and pid = #{pid}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by = #{updateBy}</if>
+            <if test="updateTime != null "> and update_time = #{updateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectCertificateConfigById" parameterType="Long" resultMap="CertificateConfigResult">
+        <include refid="selectCertificateConfigVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCertificateConfig" parameterType="CertificateConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into certificate_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cid != null ">cid,</if>
+            <if test="name != null  and name != ''">name,</if>
+            <if test="pid != null ">pid,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cid != null ">#{cid},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="pid != null ">#{pid},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCertificateConfig" parameterType="CertificateConfig">
+        update certificate_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cid != null ">cid = #{cid},</if>
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="pid != null ">pid = #{pid},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCertificateConfigById" parameterType="Long">
+        delete from certificate_config where id = #{id}
+    </delete>
+
+    <delete id="deleteCertificateConfigByIds" parameterType="String">
+        delete from certificate_config where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+
+
+    
+</mapper>

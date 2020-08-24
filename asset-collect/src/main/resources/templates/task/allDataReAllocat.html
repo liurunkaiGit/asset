@@ -21,6 +21,8 @@
 							<input name="taskStatus" id="taskStatus" th:field="*{taskStatus}" class="form-control" type="hidden">
 							<input name="callCodeHistoryListStr" id="callCodeHistoryListStr" th:value="${callCodeHistoryListStr}" class="form-control" type="hidden">
 							<input name="freeSQL" id="freeSQL" th:field="*{freeSQL}" class="form-control" type="hidden">
+							<input name="freeSQL" id="province" th:field="*{province}" class="form-control" type="hidden">
+							<input name="freeSQL" id="city" th:field="*{city}" class="form-control" type="hidden">
 
 							<li>
 								登录名称：<input type="text" name="loginName"/>
@@ -159,7 +161,9 @@
 					callCodeHistoryListStr: $("#callCodeHistoryListStr").val(),
 					freeSQL:$("#freeSQL").val(),
 					allocatRule:$("#allocatRule").val(),
-					allocatNum: allocatNum
+					allocatNum: allocatNum,
+                    province:$("#province").val(),
+                    city: $("#city").val()
 				},
 				function(data) {
 					window.$.modal.closeLoading();

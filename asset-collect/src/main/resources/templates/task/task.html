@@ -94,6 +94,18 @@
                                     <option value="R08">R08(线路盲区)</option>
                                 </select>
                             </li>
+                            <li>
+                                <p>省份：</p>
+                                <select name="province" id="province" onchange="getCityList()">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>市区：</p>
+                                <select name="city" id="city">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
                             <!--自由查询开始-->
                             <input type="hidden" id="freeSQL" name="freeSQL" />
                             <li>
@@ -432,7 +444,9 @@
                     } ]
             };
             $.table.init(options);
+            getProvinceList();
         });
+
 
         function viewOption(column,oper,option) {
             var selectColumn = $("#"+column).val();
@@ -701,11 +715,13 @@
                     var orgId = $("#orgId").val();
                     var customName = $("#customName").val();
                     var taskStatus = $("#taskStatus").val();
+                    var province = $("#province").val();
+                    var city = $("#city").val();
                     var callCodeHistoryListStr = $('#callCodeHistoryListStr').selectpicker('val');
                     var freeSQL = $("#freeSQL").val();
                     // alert(freeSQL);
                     freeSQL = encodeURIComponent(freeSQL);
-                    var toReAllocatUrl = prefix + '/allDataToReAllocat?orgId='+orgId +'&caseNo='+caseNo+'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr+'&freeSQL='+freeSQL;
+                    var toReAllocatUrl = prefix + '/allDataToReAllocat?orgId='+orgId +'&caseNo='+caseNo+'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr+'&freeSQL='+freeSQL+'&province='+province+'&city='+city;
                     $.modal.open("选择用户", toReAllocatUrl);
                 });
                 return;
@@ -858,8 +874,10 @@
                     var taskStatus = $("#taskStatus").val();
                     var callCodeHistoryListStr = $('#callCodeHistoryListStr').selectpicker('val');
                     var freeSQL = $("#freeSQL").val();
+                    var province = $("#province").val();
+                    var city = $("#city").val();
                     freeSQL = encodeURIComponent(freeSQL);
-                    var closeCaseUrl = prefix + '/closeAllCase?orgId='+orgId +'&caseNo='+caseNo+'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr+'&freeSQL='+freeSQL;
+                    var closeCaseUrl = prefix + '/closeAllCase?orgId='+orgId +'&caseNo='+caseNo+'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr+'&freeSQL='+freeSQL+'&province='+province+'&city='+city;
                     $("#closeCaseUrl").val(closeCaseUrl);
                     $("#myModal").modal('show');
                     return;
@@ -1000,8 +1018,10 @@
                     var taskStatus = $("#taskStatus").val();
                     var callCodeHistoryListStr = $('#callCodeHistoryListStr').selectpicker('val');
                     var freeSQL = $("#freeSQL").val();
+                    var province = $("#province").val();
+                    var city = $("#city").val();
                     freeSQL = encodeURIComponent(freeSQL);
-                    var toSendRobotUrl = prefix + '/allDataToSendRobot?orgId='+orgId +'&caseNo='+caseNo+'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr+'&freeSQL='+freeSQL;
+                    var toSendRobotUrl = prefix + '/allDataToSendRobot?orgId='+orgId +'&caseNo='+caseNo+'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr+'&freeSQL='+freeSQL+'&province='+province+'&city='+city;
                     $.modal.open("选择话术", toSendRobotUrl);
                 });
                 return;
@@ -1179,6 +1199,51 @@
                 }
             );
         }
+
+
+
+        function getProvinceList(){
+            $.ajax({
+                url: ctx + "certificate/config/getList",
+                dataType: "json",
+                type: "post",
+                data: {
+                    "pid": "0"
+                },
+                success:function(data){
+                    var result = eval(data);
+                    $.each(result,function (i,n) {
+                        $("#province").append("<option value='"+n.cid+"'>"+n.name+"</option>");
+                    })
+                }
+            });
+        }
+
+        function getCityList(){
+            var province = $("#province").val();
+            $("#city").empty();
+            if(province==""){
+                $("#city").append("<option value=''>所有</option>");
+                return;
+            }
+            $.ajax({
+                url: ctx + "certificate/config/getList",
+                dataType: "json",
+                type: "post",
+                data: {
+                    "pid": province
+                },
+                success:function(data){
+                    var result = eval(data);
+                    $("#city").append("<option value=''>所有</option>");
+                    $.each(result,function (i,n) {
+                        $("#city").append("<option value='"+n.cid+"'>"+n.name+"("+n.cid+")"+"</option>");
+                    })
+                }
+            });
+        }
+
+
     </script>
 </body>
 </html>

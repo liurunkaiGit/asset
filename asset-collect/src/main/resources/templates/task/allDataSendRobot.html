@@ -18,6 +18,8 @@
 							<input name="taskStatus" id="taskStatus" th:field="*{taskStatus}" class="form-control" type="hidden">
 							<input name="callCodeHistoryListStr" id="callCodeHistoryListStr" th:value="${callCodeHistoryListStr}" class="form-control" type="hidden">
 							<input name="freeSQL" id="freeSQL" th:field="*{freeSQL}" class="form-control" type="hidden">
+							<input name="freeSQL" id="province" th:field="*{province}" class="form-control" type="hidden">
+							<input name="freeSQL" id="city" th:field="*{city}" class="form-control" type="hidden">
 
 							<li>
 								选择话术：<select name="speechcraftIdAndSceneDefId" id="speechcraftId">
@@ -85,7 +87,9 @@
 						callCodeHistoryListStr: $("#callCodeHistoryListStr").val(),
 						freeSQL:$("#freeSQL").val(),
 						speechcraftIdAndSceneDefId:speechcraftId,
-						callLineId:callLineId
+						callLineId:callLineId,
+                        province: $("#province").val(),
+                        city: $("#city").val()
 					},
 					function(data) {
 						window.$.modal.closeLoading();

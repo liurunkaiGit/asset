@@ -159,7 +159,10 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     @Override
     public List<TLcTask> selectTLcTaskByPage(TLcTask tLcTask) {
 //        setCustomSql(tLcTask, request);
-
+        String city = tLcTask.getCity();
+        if(city != null && !"".equals(city)){
+            tLcTask.setProvince(null);
+        }
         return tLcTaskMapper.selectTLcTaskByPage(tLcTask);
     }
 
@@ -386,6 +389,10 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     @Override
     public AjaxResult allDataReAllocat(String userIds, TLcTask tLcTask, Integer allocatNum, Integer allocatRule) {
         // 查询所有的任务
+        String city = tLcTask.getCity();
+        if(city != null && !"".equals(city)){
+            tLcTask.setProvince(null);
+        }
         List<TLcTask> taskList = this.tLcTaskMapper.selectTaskList(tLcTask);
         if (allocatNum != null) {
             // 随机获取要分配 allocatNum 个的任务
@@ -593,6 +600,10 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     @Transactional
     public void closeAllCase(TLcTask param, String closeCaseType) {
         ArrayList<CloseCase> closeCaseList = new ArrayList<>();
+        String city = param.getCity();
+        if(city != null && !"".equals(city)){
+            param.setProvince(null);
+        }
         List<TLcTask> tLcTaskList = this.tLcTaskMapper.selectTaskList(param);
         List<String> caseNoList = tLcTaskList.stream().map(tlcTask -> {
             tlcTask.setTaskStatus(TaskStatusEnum.CLOSE.getStatus());
