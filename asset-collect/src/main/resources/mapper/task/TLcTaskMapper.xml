@@ -1060,10 +1060,10 @@
         <if test="taskType != null ">
             and t.task_type = #{taskType}
         </if>
-        <if test="province != null ">
+        <if test="province != null  and province != ''">
             and left(t.certificate_no, 2) = #{province}
         </if>
-        <if test="city != null ">
+        <if test="city != null  and city != ''">
             and left(t.certificate_no, 4) = #{city}
         </if>
         <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
@@ -1154,10 +1154,10 @@
         <if test="taskType != null ">
             and t.task_type = #{taskType}
         </if>
-        <if test="province != null ">
+        <if test="province != null  and province != ''">
             and left(t.certificate_no, 2) = #{province}
         </if>
-        <if test="city != null ">
+        <if test="city != null  and city != ''">
             and left(t.certificate_no, 4) = #{city}
         </if>
         <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
