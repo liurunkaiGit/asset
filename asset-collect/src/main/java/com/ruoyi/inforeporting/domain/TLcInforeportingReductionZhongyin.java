@@ -42,7 +42,7 @@ public class TLcInforeportingReductionZhongyin {
     /**
      * 逾期天数
      */
-    @Excel(name = "逾期天数")
+    @Excel(name = "逾期天数（M+）")
     private String overdueDays;
     /**
      * 呆账核销日期
