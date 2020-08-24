@@ -66,5 +66,5 @@ public interface ITLcSendRadioQcRecordService {
      *
      * @param tLcCallRecord
      */
-    void sendRadioToQualityCheck(TLcCallRecord tLcCallRecord);
+    void sendRadioToQualityCheck(TLcCallRecord tLcCallRecord, String jobNo,String loginName);
 }

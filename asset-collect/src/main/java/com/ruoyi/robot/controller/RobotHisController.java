@@ -76,7 +76,6 @@ public class RobotHisController extends BaseController {
     /**
      * 导出机器人任务列表
      */
-    @RequiresPermissions("collect:robot:export")
     @Log(title = "任务", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody

@@ -128,12 +128,12 @@ public class TLcSendRadioQcRecordServiceImpl implements ITLcSendRadioQcRecordSer
 
     @Override
     @Async
-    public void sendRadioToQualityCheck(TLcCallRecord tLcCallRecord) {
+    public void sendRadioToQualityCheck(TLcCallRecord tLcCallRecord, String jobNo, String loginName) {
         if (!"-1".equals(tLcCallRecord.getCreateBy()) && StringUtils.isNotBlank(tLcCallRecord.getCallRadioLocation()) && tLcCallRecord.getSendRadioCheck() != null && tLcCallRecord.getSendRadioCheck() == 1) {
             OrgPackage orgPackage = this.orgPackageService.selectOrgPackageByOrgId(tLcCallRecord.getOrgId());
             // 通话录音地址不为空并且通话录音是否推送到质检系统
             if (orgPackage != null && orgPackage.getSendRadioQc().equals(IsNoEnum.IS.getCode())) {
-                RadioQualityCheck radioQualityCheck = createRadioQualityCheck(tLcCallRecord, orgPackage);
+                RadioQualityCheck radioQualityCheck = createRadioQualityCheck(tLcCallRecord, orgPackage, jobNo, loginName);
                 ResponseEntity<QualityCheckResponse> qualityCheckResponse = restTemplateUtil.getRestTemplate().postForEntity(sendRadioQualityCheck, radioQualityCheck, QualityCheckResponse.class);
                 log.info("推送语音质检返回的结果数据：{}", JSON.toJSONString(qualityCheckResponse));
                 if (qualityCheckResponse.getStatusCodeValue() == HttpStatus.OK.value() && qualityCheckResponse.getBody().getCode() == 0) {
@@ -163,7 +163,7 @@ public class TLcSendRadioQcRecordServiceImpl implements ITLcSendRadioQcRecordSer
      * @param orgPackage
      * @return
      */
-    private RadioQualityCheck createRadioQualityCheck(TLcCallRecord tLcCallRecord, OrgPackage orgPackage) {
+    private RadioQualityCheck createRadioQualityCheck(TLcCallRecord tLcCallRecord, OrgPackage orgPackage, String jobNo, String loginName) {
         //查询联系人信息
         TLcCustContact findParam = new TLcCustContact();
         findParam.setContactName(tLcCallRecord.getContactName());
@@ -177,23 +177,21 @@ public class TLcSendRadioQcRecordServiceImpl implements ITLcSendRadioQcRecordSer
         RadioQualityCheck.Customer customer = radioQualityCheck.new Customer();
         ArrayList<RadioQualityCheck.RequestData> requestDataList = new ArrayList<>();
 //        staff.setId(ShiroUtils.getUserId().toString()).setName(ShiroUtils.getSysUser().getLoginName());
-        staff.setId(ShiroUtils.getSysUser().getJobNo()).setName(ShiroUtils.getSysUser().getLoginName());
+//        staff.setId(ShiroUtils.getSysUser().getJobNo()).setName(ShiroUtils.getSysUser().getLoginName());
+        staff.setId(jobNo).setName(loginName);
 //        customer.setId(String.valueOf(ShiroUtils.getUserId())).setName(tLcCallRecord.getContactName()).setPhone(tLcCallRecord.getPhone());
-        if(tLcCustContacts.size()>0){
+        if (tLcCustContacts.size() > 0) {
             String id = String.valueOf(tLcCustContacts.get(0).getId());
             customer.setId(id).setName(tLcCallRecord.getContactName()).setPhone(tLcCallRecord.getPhone());
-        }else {
+        } else {
             String uuid = UUID.randomUUID().toString().replace("-", "");
             customer.setId(uuid).setName(tLcCallRecord.getContactName()).setPhone(tLcCallRecord.getPhone());
         }
-        requestData.setSource_id(tLcCallRecord.getId().toString()).setUrl(tLcCallRecord.getCallRadioLocation()).setTimestamp(tLcCallRecord.getCallStartTime().getTime()/1000).setCategory("").setCustomer(customer).setStaff(staff);
+        requestData.setSource_id(tLcCallRecord.getId().toString()).setUrl(tLcCallRecord.getCallRadioLocation()).setTimestamp(tLcCallRecord.getCallStartTime().getTime() / 1000).setCategory("").setCustomer(customer).setStaff(staff);
         requestDataList.add(requestData);
         radioQualityCheck.setData(requestDataList).setProjectName(orgPackage.getOrgCode());
         return radioQualityCheck;
     }
-
-
-
 
 
 }

@@ -149,12 +149,16 @@
                     title : '已完成'
                 },
                     {
+                        field : 'taskEndTime',
+                        title : '完成时间'
+                    },
+                    {
                         title : '已完成百分比',
                         formatter: function (value, row, index) {
                             if (row.robotTaskStatus == 2) {
                                 return "100.00%";
                             }
-                            if (row.callDoneCount == 0 || row.callDoneCount == null || row.callDoneCount == '') {
+                            if (row.callDoneCount == 0 || row.callDoneCount == null || row.callDoneCount == '' || row.phoneNum == 0 || row.phoneNum == null || row.phoneNum == '') {
                                 return "0.00%";
                             }
                             return ((row.callDoneCount / row.phoneNum) * 100).toFixed(2) + "%";

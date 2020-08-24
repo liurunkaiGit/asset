@@ -52,10 +52,10 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <!--<a class="btn btn-success" onclick="$.table.exportExcel()" shiro:hasPermission="robot:pandect:export">
+                <a class="btn btn-success" onclick="$.table.exportExcel()" shiro:hasPermission="robot:pandect:export">
                     <i class="fa fa-download"></i> 导出
                  </a>
-                <a class="btn btn-success" onclick="pullback()" shiro:hasPermission="robot:pandect:pullback">
+                <!--<a class="btn btn-success" onclick="pullback()" shiro:hasPermission="robot:pandect:pullback">
                     <i class="fa fa-download"></i> 拉回
                 </a>
                 <a class="btn btn-success" onclick="start()" shiro:hasPermission="robot:pandect:start">
@@ -89,7 +89,7 @@
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
                 clickToSelect: true,
-                modalName: "【请填写功能名称】",
+                modalName: "呼叫任务查询",
                 columns: [{
                     checkbox: true
                 },
@@ -151,6 +151,10 @@
                     field : 'callDoneCount', 
                     title : '已完成'
                 },
+                    {
+                        field : 'taskEndTime',
+                        title : '完成时间'
+                    },
                     {
                         title : '已完成百分比',
                         formatter: function (value, row, index) {

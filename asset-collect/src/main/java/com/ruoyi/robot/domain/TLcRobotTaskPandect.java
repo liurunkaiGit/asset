@@ -1,5 +1,6 @@
 package com.ruoyi.robot.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.Data;
@@ -120,13 +121,14 @@ public class TLcRobotTaskPandect extends BaseEntity {
     /**
      * 任务开始时间
      */
-    @Excel(name = "任务开始时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "任务开始时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date taskStartTime;
 
     /**
      * 任务结束时间
      */
-    @Excel(name = "任务结束时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "任务结束时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date taskEndTime;
 
     /**

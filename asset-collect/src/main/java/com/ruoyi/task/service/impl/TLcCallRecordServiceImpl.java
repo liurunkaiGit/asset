@@ -208,7 +208,7 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
     @Override
     public int updateTLcCallRecord(TLcCallRecord tLcCallRecord) {
         // 异步将录音文件推送到录音质检系统
-        this.sendRadioQcRecordService.sendRadioToQualityCheck(tLcCallRecord);
+        this.sendRadioQcRecordService.sendRadioToQualityCheck(tLcCallRecord, ShiroUtils.getSysUser().getJobNo(), ShiroUtils.getSysUser().getLoginName());
         return tLcCallRecordMapper.updateTLcCallRecord(tLcCallRecord);
     }
 
