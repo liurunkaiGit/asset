@@ -59,7 +59,7 @@ public class CertificateConfigController extends BaseController
     /**
      * 查询list不分页
      */
-    @RequiresPermissions("certificate:config:getList")
+//    @RequiresPermissions("certificate:config:getList")
     @PostMapping("/getList")
     @ResponseBody
     public List<CertificateConfig> getList(CertificateConfig certificateConfig)
