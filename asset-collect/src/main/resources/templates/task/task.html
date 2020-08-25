@@ -31,6 +31,18 @@
                                 <p>姓名：</p>
                                 <input type="text" name="customName" id="customName"/>
                             </li>
+                            <li>
+                                <p>省份：</p>
+                                <select name="province" id="province" onchange="getCityList()">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>市区：</p>
+                                <select name="city" id="city">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
                            <!-- <li>
                                 <p>任务状态：</p>
                                 &lt;!&ndash; 1：未分配 2：催收中 3: 已结案&ndash;&gt;
@@ -92,18 +104,6 @@
                                     <option value="R06">R06(呼损)</option>
                                     <option value="R07">R07(黑名单)</option>
                                     <option value="R08">R08(线路盲区)</option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>省份：</p>
-                                <select name="province" id="province" onchange="getCityList()">
-                                    <option value="">所有</option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>市区：</p>
-                                <select name="city" id="city">
-                                    <option value="">所有</option>
                                 </select>
                             </li>
                             <!--自由查询开始-->
