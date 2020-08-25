@@ -767,7 +767,9 @@
             <div class="wrapper wrapper-content animated fadeInRight ibox-content">
                 <form class="form-horizontal m" id="updateCallSignModalForm">
                     <input type="hidden" id="updateCallRecordId"/>
-                    <select class="form-control" name="updateCallCode" id="updateCallCode" style="width: 180px; height: 32px" >
+                    <input type="hidden" class="form-control" name="updateCallRemarkAdd" id="updateCallRemarkAdd" style="width: 180px; height: 30px" />
+                    <input type="hidden" class="form-control" name="updateCallResult" id="updateCallResult" style="width: 180px; height: 30px" />
+                    <select class="form-control" name="updateCallCode" id="updateCallCode" style="width: 180px; height: 32px" onchange ="updateCallCodeChange()">
                         <label class="labelInfo">电话码：</label>
                         <option value="" selected>请选择</option>
                         <option value="PTP">PTP(承诺还款)</option>
@@ -2723,6 +2725,8 @@
                 callSign:callSign,
                 caseNo:currentCaseNo,
                 importBatchNo:currentImportBatchNo,
+                callResult:$('#updateCallResult').val(),
+                remark:$('#updateCallRemarkAdd').val(),
                 orgId:currentOrgId
             },
             function(data) {
@@ -2923,6 +2927,10 @@
     }
 
     function showModal(id) {
+        if (agentIsCalling) {
+            $.modal.alertError("正在通话中，请先挂断当前通话再保存电话码");
+            return;
+        }
         $("#updateCallSignModal").modal('show');
         $("#updateCallRecordId").val(id);
     }
@@ -3088,6 +3096,20 @@
         }else{
             $('#callRemarkAdd').val("");
             $('#callResult').val("");
+        }
+    }
+
+    function updateCallCodeChange(){
+        var updateCallCode = $('#updateCallCode').val();
+        if(updateCallCode != null && updateCallCode != ''){
+            var selectId = document.getElementById("updateCallCode");
+            var value = selectId.options[selectId.selectedIndex].text;
+            var text = value.substring(value.indexOf("(")+1,value.indexOf(")"));
+            $('#updateCallRemarkAdd').val(text);
+            $('#updateCallResult').val(text);
+        }else{
+            $('#updateCallRemarkAdd').val("");
+            $('#updateCallResult').val("");
         }
     }
 

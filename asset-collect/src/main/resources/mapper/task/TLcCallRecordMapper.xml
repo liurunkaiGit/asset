@@ -172,6 +172,7 @@
         t_lc_duncase du,(SELECT @a := 0) t1
         WHERE
         re.case_no = ta.case_no and re.case_no = du.case_no
+        and ta.task_status != 3 and ta.import_batch_no = du.import_batch_no
         AND ta.org_id = #{orgId}
         <if test="startCreateTime != null">
             AND re.create_time <![CDATA[>=]]> #{startCreateTime}
