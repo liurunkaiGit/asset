@@ -30,6 +30,18 @@
                             <p>姓名：</p>
                             <input type="text" name="customName" id="customName"/>
                         </li>
+                        <li>
+                            <p>省份：</p>
+                            <select name="provinceId" id="provinceId" onchange="getCityList()">
+                                <option value="">所有</option>
+                            </select>
+                        </li>
+                        <li>
+                            <p>市区：</p>
+                            <select name="cityId" id="cityId">
+                                <option value="">所有</option>
+                            </select>
+                        </li>
                        <!-- <li>
                             <p>任务状态：</p>
                             &lt;!&ndash; 1：未分配 2：催收中 3: 已结案&ndash;&gt;
@@ -356,6 +368,7 @@
         };
         $.table.init(options);
         initColumnQuery();
+        getProvinceList();
     });
 
     function reset() {
@@ -679,6 +692,48 @@
         }));
 
     }
+
+    function getProvinceList(){
+        $.ajax({
+            url: ctx + "certificate/config/getList",
+            dataType: "json",
+            type: "post",
+            data: {
+                "pid": "0"
+            },
+            success:function(data){
+                var result = eval(data);
+                $.each(result,function (i,n) {
+                    $("#provinceId").append("<option value='"+n.cid+"'>"+n.name+"</option>");
+                })
+            }
+        });
+    }
+
+    function getCityList(){
+        var provinceId = $("#provinceId").val();
+        $("#cityId").empty();
+        if(provinceId==""){
+            $("#cityId").append("<option value=''>所有</option>");
+            return;
+        }
+        $.ajax({
+            url: ctx + "certificate/config/getList",
+            dataType: "json",
+            type: "post",
+            data: {
+                "pid": provinceId
+            },
+            success:function(data){
+                var result = eval(data);
+                $("#cityId").append("<option value=''>所有</option>");
+                $.each(result,function (i,n) {
+                    $("#cityId").append("<option value='"+n.cid+"'>"+n.name+"("+n.cid+")"+"</option>");
+                })
+            }
+        });
+    }
+
 </script>
 </body>
 </html>

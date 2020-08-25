@@ -11,7 +11,7 @@ import java.util.List;
  * @author guozeqi
  * @date 2020-08-24
  */
-public interface CertificateConfigMapper 
+public interface CertificateConfigMapper
 {
     /**
      * 查询证件号码配置

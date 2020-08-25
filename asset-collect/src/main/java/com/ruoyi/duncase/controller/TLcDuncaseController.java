@@ -102,6 +102,10 @@ public class TLcDuncaseController extends BaseController {
         if(StringUtils.isNotEmpty(callCodeHistoryListStr)){
             tLcDuncase.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
         }
+        String cityId = tLcDuncase.getCityId();
+        if(cityId != null && !"".equals(cityId)){
+            tLcDuncase.setProvinceId(null);
+        }
         List<TLcDuncase> list = tLcDuncaseService.selectTLcDuncaseByPage(tLcDuncase);
         return getDataTable(list);
     }
@@ -155,6 +159,10 @@ public class TLcDuncaseController extends BaseController {
         String callCodeHistoryListStr = request.getParameter("callCodeHistoryListStr");//历史电话码
         if(StringUtils.isNotEmpty(callCodeHistoryListStr)){
             tLcDuncase.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
+        }
+        String cityId = tLcDuncase.getCityId();
+        if(cityId != null && !"".equals(cityId)){
+            tLcDuncase.setProvinceId(null);
         }
         List<TLcDuncase> list = tLcDuncaseService.selectTLcDuncaseByPage(tLcDuncase);
         ExcelUtil<TLcDuncase> util = new ExcelUtil<TLcDuncase>(TLcDuncase.class);

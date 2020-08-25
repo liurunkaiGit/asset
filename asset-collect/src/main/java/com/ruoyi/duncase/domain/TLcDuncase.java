@@ -745,6 +745,9 @@ public class TLcDuncase extends BaseEntity {
      */
     private String freeSQL2;
 
+    //省市信息
+    private String provinceId;
+    private String cityId;
 
     // 动态查询条件使用
 //    private BigDecimal start_arrears_total;
