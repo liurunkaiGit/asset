@@ -628,7 +628,7 @@
                     htm+=n.createTime;
                     htm+="</td>";
                     htm+="<td>";
-                    htm+=n.remark;
+                    htm+=n.remark==null ? '' : n.remark;
                     htm+="</td>"
                     htm+="<td>";
                     htm+=n.createBy;

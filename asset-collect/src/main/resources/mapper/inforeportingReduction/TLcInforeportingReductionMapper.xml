@@ -266,7 +266,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         create_time,
         create_by
         from
-        (SELECT id,'1'as types,deduction_amount as arrears_total,''as remark,create_time,create_by
+        (SELECT id,'1'as types,deduction_amount as arrears_total,remarks as remark,create_time,create_by
         from t_lc_inforeporting_reduction
         <include refid="wheresqlAll"/>
         UNION
@@ -274,7 +274,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from t_lc_inforeporting_company
         <include refid="wheresqlAll"/>
         UNION
-        SELECT  id,'2'as types,'' as arrears_total,''as remark,create_time,create_by
+        SELECT  id,'2'as types,'' as arrears_total,remarks as remark,create_time,create_by
         from t_lc_inforeporting_buckle
         <include refid="wheresqlAll"/>)ab ORDER BY ab.create_time desc
     </select>
