@@ -45,9 +45,15 @@ public class TLcRobotTask extends BaseEntity {
     private String caseNo;
 
     /**
+     * 客户名称
+     */
+    @Excel(name = "客户姓名")
+    private String curName;
+
+    /**
      * 任务名称
      */
-    @Excel(name = "任务名称")
+    @Excel(name = "会话名称")
     private String taskName;
 
     /**
@@ -90,7 +96,7 @@ public class TLcRobotTask extends BaseEntity {
     /**
      * 机器人任务状态
      */
-    @Excel(name = "机器人任务状态", readConverterExp = "1=外呼中,2=已完成,4=暂停,6=停止,50=拉回")
+//    @Excel(name = "机器人任务状态", readConverterExp = "1=外呼中,2=已完成,4=暂停,6=停止,50=拉回")
     private Integer robotTaskStatus;
 
     /**
@@ -132,7 +138,7 @@ public class TLcRobotTask extends BaseEntity {
     /**
      * 通话录音
      */
-//    @Excel(name = "通话录音")
+    @Excel(name = "通话录音")
     private String callRadio;
 
     /**
@@ -140,12 +146,6 @@ public class TLcRobotTask extends BaseEntity {
      */
 //    @Excel(name = "拨打开始时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date callStartDate;
-
-    /**
-     * 客户名称
-     */
-//    @Excel(name = "客户名称")
-    private String curName;
 
     /**
      * 客户手机号
@@ -213,31 +213,31 @@ public class TLcRobotTask extends BaseEntity {
     /**
      * 电话码键值
      */
-    @Excel(name = "电话码键值")
+//    @Excel(name = "电话码键值")
     private String callSign;
 
     /**
      * 电话码中文
      */
-    @Excel(name = "电话码中文")
+//    @Excel(name = "电话码中文")
     private String callSignValue;
 
     /**
      * 修改人
      */
-    @Excel(name = "修改人")
+//    @Excel(name = "修改人")
     private Long modifyBy;
 
     /**
      * 修改时间
      */
-    @Excel(name = "修改时间", width = 30, dateFormat = "yyyy-MM-dd")
+//    @Excel(name = "修改时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date modifyTime;
 
     /**
      * 呼入回调时间
      */
-    @Excel(name = "呼入回调时间", width = 30, dateFormat = "yyyy-MM-dd")
+//    @Excel(name = "呼入回调时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date callBackTime;
 
 

@@ -817,7 +817,7 @@ public class RobotMethodUtil {
         tLcRobotTaskPandect.setCallTotalCount(taskList.size());
         tLcRobotTaskPandect.setRobot(robot);
         tLcRobotTaskPandect.setRobotTaskStatus(LocalRobotTaskStatus.RUNNING.getCode());
-//        tLcRobotTaskPandect.setTaskStartTime(new Date());
+        tLcRobotTaskPandect.setTaskStartTime(new Date());
         return tLcRobotTaskPandect;
     }
 

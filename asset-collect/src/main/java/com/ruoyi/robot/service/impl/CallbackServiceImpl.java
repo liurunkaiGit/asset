@@ -422,7 +422,8 @@ public class CallbackServiceImpl implements CallbackService {
         TLcRobotTaskPandect robotTaskPandect = new TLcRobotTaskPandect();
         robotTaskPandect.setRobotTaskId(data.getCallJobId());
         robotTaskPandect.setRobotTaskStatus(LocalRobotTaskStatus.FINISHED.getCode());
-        robotTaskPandect.setTaskEndTime(DateUtils.dateTime(DateUtils.YYYY_MM_DD, data.getEndDate()));
+//        robotTaskPandect.setTaskEndTime(DateUtils.dateTime(DateUtils.YYYY_MM_DD, data.getEndDate()));
+        robotTaskPandect.setTaskEndTime(new Date());
         robotTaskPandect.setPhoneNum(taskDetail.getTotalCount());
         robotTaskPandect.setCallDoneCount(taskDetail.getDoneCount());
         robotTaskPandect.setCallCalledCount(taskDetail.getCalledCount());
