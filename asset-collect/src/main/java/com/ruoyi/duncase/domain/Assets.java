@@ -1466,6 +1466,7 @@ public class Assets extends BaseEntity {
     //吉象新增字段
     private String curNo;//用户编号
     private String payStatus;//还款状态
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date lastLoanDate;//贷款到期日
     private BigDecimal lastRepayAmount;//最近还款金额
 
