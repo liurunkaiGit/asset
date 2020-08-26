@@ -739,7 +739,7 @@
                         return;
                     }
                 }
-                var certificateNoRows = $.table.selectColumns("certificateNo");
+                var certificateNoRows = $.table.selectColumns("idCaseNoCertificateNo");
                 var caseNoRows = $.table.selectColumns("caseNo");
                 $.modal.confirm("确认要对选中的" + rows.length + "条数据进行操作吗?", function() {
                     var toReAllocatUrl = prefix + '/toReAllocat?taskIds='+rows.join()+'&caseNos='+caseNoRows.join()+'&certificateNos='+certificateNoRows.join();
