@@ -42,7 +42,6 @@ public class TLcRobotTaskPandectHisController extends BaseController {
     /**
      * 查询【请填写功能名称】列表
      */
-    @RequiresPermissions("robot:pandect:his:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(TLcRobotTaskPandect tLcRobotTaskPandect) {
@@ -54,7 +53,6 @@ public class TLcRobotTaskPandectHisController extends BaseController {
     /**
      * 导出【请填写功能名称】列表
      */
-    @RequiresPermissions("robot:pandect:export")
     @Log(title = "【请填写功能名称】", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody

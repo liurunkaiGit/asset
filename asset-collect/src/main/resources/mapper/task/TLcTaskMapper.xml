@@ -329,7 +329,8 @@
         d.ljyhje,
         d.product_name AS productName,
         d.score,
-        CONCAT(t.id,'@',t.case_no,'@',t.certificate_no) as certificate_no
+        t.certificate_no,
+        CONCAT(t.id,'@',t.case_no,'@',t.certificate_no) as idCaseNoCertificateNo
         FROM t_lc_task t,t_lc_duncase d
         WHERE t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no
         AND t.allot_type = 1 AND t.task_status != 3
@@ -1441,7 +1442,8 @@
         select
         <include refid="SELECT_SAME_TASK"/>
         from t_lc_task t,cur_assets_package a
-        where t.case_no = a.org_casNo and t.org_id = a.org_id and t.import_batch_no and a.import_batch_no and t.certificate_no = #{certificateNo} and t.org_id = #{orgId}
+        where t.case_no = a.org_casNo and t.org_id = a.org_id and t.import_batch_no = a.import_batch_no and t.certificate_no = #{certificateNo} and t.org_id = #{orgId}
+        and t.task_status != 3
         order by t.owner_id desc
     </select>
 </mapper>

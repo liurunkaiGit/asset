@@ -64,7 +64,6 @@ public class RobotHisController extends BaseController {
     /**
      * 查询机器人任务列表
      */
-    @RequiresPermissions("robot:his:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(TLcRobotTask tLcRobotTask, HttpServletRequest request) {

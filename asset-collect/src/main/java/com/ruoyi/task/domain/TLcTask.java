@@ -488,4 +488,6 @@ public class TLcTask extends BaseEntity {
     //省市信息
     private String province;
     private String city;
+
+    private String idCaseNoCertificateNo;
 }

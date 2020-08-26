@@ -113,7 +113,8 @@
             ta.close_type,
             ta.close_date,
             ta.dqyhje,
-            t.score
+            t.score,
+            ta.certificate_no
             FROM t_lc_duncase t, t_lc_task ta
             WHERE t.case_no = ta.case_no AND t.import_batch_no = ta.import_batch_no
             <if test="orgId != null  and orgId != ''">

@@ -106,4 +106,5 @@ public class TLcLetter extends BaseEntity {
     private Date endCreateTime;
 
     private String letterIds;
+    private String certificateNo;
 }

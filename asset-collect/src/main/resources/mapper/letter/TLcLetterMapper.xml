@@ -30,31 +30,53 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, case_no, import_batch_no, org_id, org_name, tast_id, custom_name, owner_id, owner_name, transfer_type, arrears_total, close_case_yhje, loan_date, letter_type, apply_status, create_time, create_by, update_time, update_by from t_lc_letter
     </sql>
 
+    <sql id="selectColumnTLcLetterVo">
+        t.id,
+        t.case_no,
+        t.import_batch_no,
+        t.org_id,
+        t.org_name,
+        t.tast_id,
+        t.custom_name,
+        t.owner_id,
+        t.owner_name,
+        t.transfer_type,
+        t.arrears_total,
+        t.close_case_yhje,
+        t.loan_date,
+        t.letter_type,
+        t.apply_status,
+        t.create_time,
+        t.create_by,
+        t.update_time,
+        t.update_by
+    </sql>
+
     <select id="selectTLcLetterList" parameterType="com.ruoyi.letter.domain.TLcLetter" resultMap="TLcLetterResult">
-        <include refid="selectTLcLetterVo"/>
-        <where>  
-            <if test="caseNo != null  and caseNo != ''"> and case_no = #{caseNo}</if>
-            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
-            <if test="orgId != null "> and org_id = #{orgId}</if>
-            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
-            <if test="tastId != null "> and tast_id = #{tastId}</if>
-            <if test="customName != null  and customName != ''"> and custom_name like concat('%', #{customName}, '%')</if>
-            <if test="ownerId != null "> and owner_id = #{ownerId}</if>
-            <if test="ownerName != null  and ownerName != ''"> and owner_name like concat('%', #{ownerName}, '%')</if>
-            <if test="transferType != null  and transferType != ''"> and transfer_type = #{transferType}</if>
-            <if test="arrearsTotal != null "> and arrears_total = #{arrearsTotal}</if>
-            <if test="closeCaseYhje != null "> and close_case_yhje = #{closeCaseYhje}</if>
-            <if test="loanDate != null "> and loan_date = #{loanDate}</if>
-            <if test="letterType != null "> and letter_type = #{letterType}</if>
-            <if test="applyStatus != null "> and apply_status = #{applyStatus}</if>
-            <if test="startCreateTime != null">
-                and create_time <![CDATA[>=]]> #{startCreateTime}
-            </if>
-            <if test="endCreateTime != null">
-                and create_time <![CDATA[<=]]> #{endCreateTime}
-            </if>
-        </where>
-        order by create_time desc
+        select ta.certificate_no as certificateNo,
+        <include refid="selectColumnTLcLetterVo"/>
+        from t_lc_letter t,t_lc_task ta where t.case_no = ta.case_no and t.org_id = ta.org_id and t.import_batch_no = ta.import_batch_no
+        <if test="caseNo != null  and caseNo != ''"> and t.case_no = #{caseNo}</if>
+        <if test="importBatchNo != null  and importBatchNo != ''"> and t.import_batch_no = #{importBatchNo}</if>
+        <if test="orgId != null "> and t.org_id = #{orgId}</if>
+        <if test="orgName != null  and orgName != ''"> and t.org_name like concat('%', #{orgName}, '%')</if>
+        <if test="tastId != null "> and t.tast_id = #{tastId}</if>
+        <if test="customName != null  and customName != ''"> and t.custom_name like concat('%', #{customName}, '%')</if>
+        <if test="ownerId != null "> and t.owner_id = #{ownerId}</if>
+        <if test="ownerName != null  and ownerName != ''"> and t.owner_name like concat('%', #{ownerName}, '%')</if>
+        <if test="transferType != null  and transferType != ''"> and t.transfer_type = #{transferType}</if>
+        <if test="arrearsTotal != null "> and t.arrears_total = #{arrearsTotal}</if>
+        <if test="closeCaseYhje != null "> and t.close_case_yhje = #{closeCaseYhje}</if>
+        <if test="loanDate != null "> and t.loan_date = #{loanDate}</if>
+        <if test="letterType != null "> and t.letter_type = #{letterType}</if>
+        <if test="applyStatus != null "> and t.apply_status = #{applyStatus}</if>
+        <if test="startCreateTime != null">
+            and t.create_time <![CDATA[>=]]> #{startCreateTime}
+        </if>
+        <if test="endCreateTime != null">
+            and t.create_time <![CDATA[<=]]> #{endCreateTime}
+        </if>
+        order by t.create_time desc
     </select>
     
     <select id="selectTLcLetterById" parameterType="Integer" resultMap="TLcLetterResult">

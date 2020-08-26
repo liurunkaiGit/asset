@@ -92,7 +92,7 @@
                     field : 'caseNo', 
                     title : '机构案件号',
                     formatter: function(value, row, index) {
-                        return "<a href='javascript:void(0)' onclick='collHis(\""+value + "\",\""+row.orgId + "\",\""+row.importBatchNo+ "\")'>"+value+"</a>";
+                        return "<a href='javascript:void(0)' onclick='collHis(\""+value + "\",\""+row.orgId + "\",\""+row.importBatchNo+ "\",\""+row.certificateNo+ "\")'>"+value+"</a>";
                     }
                 },
                 {
@@ -205,14 +205,14 @@
         }
 
         /*催收历史*/
-        function collHis(caseNo,orgId,importBatchNo) {
+        function collHis(caseNo,orgId,importBatchNo,certificateNo) {
             var collHisUrl;
             if (importBatchNo == 'null') {
-                collHisUrl = taskPrefix + "/collJobHis?caseNo="+caseNo+"&orgId="+orgId;
+                collHisUrl = taskPrefix + "/collJobHis?caseNo="+caseNo+"&orgId="+orgId+"&certificateNo="+certificateNo;
             } else {
-                collHisUrl = taskPrefix + "/collJobHis?caseNo="+caseNo+"&orgId="+orgId+"&importBatchNo="+importBatchNo;
+                collHisUrl = taskPrefix + "/collJobHis?caseNo="+caseNo+"&orgId="+orgId+"&importBatchNo="+importBatchNo+"&certificateNo="+certificateNo;
             }
-            $.modal.openFull("催收记录 | " + caseNo, collHisUrl);
+            $.modal.openFull("催收记录", collHisUrl);
         }
     </script>
 </body>

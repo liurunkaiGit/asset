@@ -153,7 +153,7 @@
             <div class="col-sm-12 search-collapse" id="detailInfoDiv"  style="height: calc(100% - 110px);overflow: auto">
                 <div class="tabs-container" >
                     <ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#tab-5" aria-expanded="true" onclick="viewTabDetail('info')">详细信息</a><input type="hidden" id="info" value="1"></li>
+                        <li class="active" id="infoLi"><a data-toggle="tab" href="#tab-5" aria-expanded="true" onclick="viewTabDetail('info')">详细信息</a><input type="hidden" id="info" value="1"></li>
                         <li class=""><a data-toggle="tab" href="#tab-1" aria-expanded="false" onclick="viewTabDetail('locus')">案件历史轨迹</a><input type="hidden" id="locus" value="0"></li>
                         <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false" onclick="viewTabDetail('call')">电催记录</a><input type="hidden" id="call" value="0"></li>
                         <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false" onclick="viewTabDetail('action')">行动历史</a><input type="hidden" id="action" value="0"></li>
@@ -161,7 +161,7 @@
                         <li class=""><a data-toggle="tab" href="#tab-7" aria-expanded="false" onclick="viewTabDetail('add')">补充信息</a><input type="hidden" id="add" value="0"></li>
                         <li class=""><a data-toggle="tab" href="#tab-6" aria-expanded="false" onclick="viewTabDetail('find')">查找记录</a><input type="hidden" id="find" value="0"></li>
                         <li class=""><a data-toggle="tab" href="#tab-8" aria-expanded="false" onclick="viewTabDetail('inforeporting')">信息上报</a><input type="hidden" id="inforeporting" value="0"></li>
-                        <li class=""><a data-toggle="tab" href="#tab-9" aria-expanded="false" onclick="viewTabDetail('sameCaseInfo')">共案信息</a><input type="hidden" id="sameCaseInfo" value="0"></li>
+                        <li class="" id="sameCaseLi" ><a data-toggle="tab" href="#tab-9" aria-expanded="false" onclick="viewTabDetail('sameCaseInfo')">共案信息</a><input type="hidden" id="sameCaseInfo" value="0"></li>
 
                     </ul>
                     <div id="tabDiv" class="tab-content tabDiv">
@@ -1221,6 +1221,7 @@
                 orgId:orgId
             }, // 请求参数
             function(data) {
+                $("#sameCaseInfoDetail").html("");
                 if(data != null){
                     var tp = $("#sameCaseInfoDetail");
                     var sameCaseArrearsTotal = 0.00;
@@ -1255,7 +1256,7 @@
                         var borrowEd = data.result[i].borrowEd != null ? data.result[i].borrowEd : "";
                         var borrowNo = data.result[i].borrowNo != null ? data.result[i].borrowNo : "";
                         var borrowBlank = data.result[i].borrowBlank != null ? data.result[i].borrowBlank : "";
-                        tp.append("<div class=\"sameCaseLeftInfo\">\n" +
+                        tp.append("<hr style=\"margin-top: 0;margin-bottom: 0;\"/><div class=\"sameCaseLeftInfo\">\n" +
                             "                                <div class=\"sameCaseOne\">\n" +
                             "                                    <label style='font-size: 14px;'><b>机构案件号：</b></label><b><label ><a href='javascript:void(0)' onclick='collJobDetail(\""+caseNo + "\",\""+orgId + "\",\""+importBatchNo+ "\")'><b><span style='font-size: 14px;color: #1c84c6'>"+caseNo+"</a></label></b><br/>\n" +
                             "                                    <label >入催日：</label><label  >"+enterCollDate+"</label><br/>\n" +
@@ -1288,8 +1289,10 @@
                             "                                    <label >应还罚息：</label><label  >"+rmbYhfxzje+"</label>\n" +
                             "                                </div></div>");
                     }
-                    $("#sameCaseArrearsTotal").text(sameCaseArrearsTotal);
-                    $("#sameCaseCloseCaseYhjeTotal").text(sameCaseCloseCaseYhjeTotal);
+                    // $("#sameCaseArrearsTotal").text(sameCaseArrearsTotal);
+                    $("#sameCaseArrearsTotal").text(parseFloat(sameCaseArrearsTotal).toFixed(2));
+                    // $("#sameCaseCloseCaseYhjeTotal").text(sameCaseCloseCaseYhjeTotal);
+                    $("#sameCaseCloseCaseYhjeTotal").text(parseFloat(sameCaseCloseCaseYhjeTotal).toFixed(2));
                 }
             }
         );
@@ -1346,10 +1349,24 @@
                 if(data.status == 200){
                     if (data.result.length > 1) {
                         $("#isSameCase").text("是");
+                        // document.getElementById("tab-9").style.display = "block";
+                        // document.getElementById("sameCaseLi").style.display = "block";
+                        // $("#sameCaseLi").removeClass('active');
+                        // $("#tab-9").removeClass("active");
+                        // $("#infoLi").addClass("active");
+                        // $("#tab-9").removeClass("active");
+                        // $("#tab-5").addClass("active");
                     } else {
                         $("#isSameCase").text("否");
+                        document.getElementById("tab-9").style.display = "none";
+                        // document.getElementById("sameCaseLi").style.display = "none";
+                        // document.getElementById("tab-9").style.display = "none";
+                        // $("#infoLi").addClass("active");
+                        // // $("#tab-9").removeClass("active");
+                        // $("#tab-5").addClass("active");
                     }
                 }
+                $("a[aria-expanded='true']").click();
             }
         );
     }
@@ -1649,10 +1666,16 @@
                     $('#add').val('0');
                     $('#find').val('0');
                     $('#inforeporting').val('0');
-                    $("a[aria-expanded='true']").click();
+                    $('#sameCaseInfo').val('0');
                     document.getElementById("letterApply").disabled=false;
                     disabledLetterApply(currentCaseNo,currentOrgId,currentImportBatchNo);
                     isSameCase(currentCertificateNo,currentOrgId);
+                    // $("a[aria-expanded='true']").click();
+                    // $("#sameCaseLi").removeClass('active');
+                    // $("#infoLi").addClass("active");
+                    // $("#tab-9").removeClass("active");
+                    // $("#tab-5").addClass("active");
+                    // viewTabDetail("sameCaseInfo");
                 }
             }
         );
@@ -1671,6 +1694,14 @@
     }
 
     function viewTabDetail(tab){
+        if (tab != 'sameCaseInfo') {
+            document.getElementById("tab-9").style.display = "none";
+        } else {
+            var isSameCase = $("#isSameCase").text();
+            if (isSameCase != null && isSameCase != '' && isSameCase == '是') {
+                document.getElementById("tab-9").style.display = "block";
+            }
+        }
         if(tab == 'info'){//详细信息
 
         }else if(tab == 'locus' && $('#locus').val()=='0'){//案件历史轨迹

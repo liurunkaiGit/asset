@@ -30,6 +30,7 @@ import com.ruoyi.duncase.domain.TLcDuncaseAssign;
 import com.ruoyi.duncase.service.ITLcDuncaseActionRecordService;
 import com.ruoyi.duncase.service.ITLcDuncaseAssignService;
 import com.ruoyi.enums.AllocatRuleEnum;
+import com.ruoyi.enums.IsNoEnum;
 import com.ruoyi.enums.TaskTypeEnum;
 import com.ruoyi.exonNum.domain.TLcExonNum;
 import com.ruoyi.exonNum.service.ITLcExonNumService;
@@ -198,6 +199,7 @@ public class TLcTaskController extends BaseController {
         modelMap.put("caseNo", tLcTask.getCaseNo());
         modelMap.put("orgId", tLcTask.getOrgId());
         modelMap.put("importBatchNo", tLcTask.getImportBatchNo());
+        modelMap.put("certificateNo", tLcTask.getCertificateNo());
         return prefix + "/collJobHis";
     }
 
@@ -1402,7 +1404,11 @@ public class TLcTaskController extends BaseController {
     @PostMapping("/selectSameCaseInfo")
     @ResponseBody
     public Response selectSameCaseInfo(String certificateNo, String orgId) {
-        List<TLcTask> list = this.tLcTaskService.selectSameCaseTaskList(certificateNo, orgId);
+        List<TLcTask> list = new ArrayList<>();
+        OrgPackage orgPackage = this.orgPackageService.selectOrgPackageByOrgId(orgId);
+        if (orgPackage.getIsSameCaseDeal().equals(IsNoEnum.IS.getCode())) {
+            list = this.tLcTaskService.selectSameCaseTaskList(certificateNo, orgId);
+        }
         return Response.success(list);
     }
 
