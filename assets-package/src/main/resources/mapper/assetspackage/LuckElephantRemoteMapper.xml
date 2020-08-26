@@ -779,7 +779,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteRepaymentTempTable">
-        delete from cur_assets_repayment_package_temp
+        delete from cur_assets_repayment_package_temp where org_id=#{orgId}
     </delete>
 
 </mapper>

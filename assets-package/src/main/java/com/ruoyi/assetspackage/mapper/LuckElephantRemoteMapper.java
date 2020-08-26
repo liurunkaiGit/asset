@@ -20,7 +20,7 @@ public interface LuckElephantRemoteMapper {
     public void batchAddAssets(List<TempCurAssetsPackage> paramList)throws Exception;
 
     public void deleteTempTable(String importBatchNo);
-    public void deleteRepaymentTempTable();
+    public void deleteRepaymentTempTable(String orgId);
 
     public List<String> selectNotExists(String importBatchNo)throws Exception;
 

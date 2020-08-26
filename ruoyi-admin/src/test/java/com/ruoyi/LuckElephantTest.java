@@ -24,7 +24,7 @@ import java.util.List;
 @SpringBootTest
 public class LuckElephantTest {
 
-    private static final String URL = "http://139.224.189.191:8080/remote/luckElephant/updateAssets";
+//    private static final String URL = "http://139.224.189.191:8080/remote/luckElephant/updateAssets";
 
     @Autowired
     private RestTemplateUtil restTemplateUtil;

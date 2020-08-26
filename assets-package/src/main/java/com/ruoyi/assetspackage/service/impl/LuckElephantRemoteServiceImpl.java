@@ -676,8 +676,8 @@ public class LuckElephantRemoteServiceImpl implements ILuckElephantRemoteService
      * @param
      */
     @Override
-    public void deleteRepaymentTempTable() {
-        this.luckElephantRemoteMapper.deleteRepaymentTempTable();
+    public void deleteRepaymentTempTable(String orgId) {
+        this.luckElephantRemoteMapper.deleteRepaymentTempTable(orgId);
     }
 
 

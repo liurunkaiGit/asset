@@ -180,7 +180,10 @@ public class LuckElephantRemoteController {
             return JSON.toJSONString(response);
         }finally {
             if(request != null){
-                this.luckElephantRemoteService.deleteRepaymentTempTable();
+                String orgId = request.getOrgId();
+                if(orgId != null && !"".equals(orgId)) {
+                    this.luckElephantRemoteService.deleteRepaymentTempTable(orgId);
+                }
             }
         }
     }

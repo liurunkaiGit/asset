@@ -20,6 +20,6 @@ public interface ILuckElephantRemoteService {
 
     public void deleteTempTable(String importBatchNo);
 
-    public void deleteRepaymentTempTable();
+    public void deleteRepaymentTempTable(String orgId);
 
 }
