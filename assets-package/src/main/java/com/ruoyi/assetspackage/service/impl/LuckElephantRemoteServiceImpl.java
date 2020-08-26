@@ -10,8 +10,7 @@ import com.ruoyi.assetspackage.service.ILuckElephantRemoteService;
 import com.ruoyi.assetspackage.service.IOrgPackageService;
 import com.ruoyi.assetspackage.service.ITLcImportFlowService;
 import com.ruoyi.assetspackage.service.ITLcScoreService;
-import com.ruoyi.common.domain.CloseCase;
-import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.common.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -378,7 +377,7 @@ public class LuckElephantRemoteServiceImpl implements ILuckElephantRemoteService
             TempCurAssetsPackage tempAsset = new TempCurAssetsPackage();
             String uuid = UUID.randomUUID().toString().replace("-", "");
             tempAsset.setId(uuid);
-//            tempAsset.setImportBatchNo(batchNo);
+            tempAsset.setImportBatchNo(batchNo);
             tempAsset.setOrgId(orgId);
             tempAsset.setOrg(orgName);
             tempAsset.setUpdateBy("admin");
@@ -506,6 +505,10 @@ public class LuckElephantRemoteServiceImpl implements ILuckElephantRemoteService
         String batchNo = param.getBatchNo();
         String orgId = param.getOrgId();
         String orgName = param.getOrgName();
+        if(batchNo==null||"".equals(batchNo)){
+            batchNo =  DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS, new Date());
+            param.setBatchNo(batchNo);
+        }
         List<TempCurAssetsPackage> closeCaseList = new ArrayList<>();
         //参数构建
         List<TempCurAssetsRepaymentPackage> tempRepaymentList = buildRepaymentAssetParam(param);
