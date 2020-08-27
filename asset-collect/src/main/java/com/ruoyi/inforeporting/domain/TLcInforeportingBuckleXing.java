@@ -76,4 +76,45 @@ public class TLcInforeportingBuckleXing extends BaseEntity {
      * 委案金额
      */
     protected Double arrearsTotal;
+
+    /**
+     * 地区
+     */
+    private String area;
+    /**
+     * 地区
+     */
+    private String remarks;
+
+    /**
+     * 手别
+     */
+    private String transferType;
+    /**
+     * 呆账核销日期
+     */
+    private String dzhxrq;
+    /**
+     * 呆账核销日期
+     */
+    private Double reductionAfterAmount;
+    /**
+     * 还款比例
+     */
+    private String repaymentRatio;
+    /**
+     * 联系方式
+     */
+    private String telephone;
+    /**
+     * 与本人关系
+     */
+    private String relationship;
+    /**
+     * 减免失效日
+     */
+    private String expirationDate;
+
+
+
 }
