@@ -48,7 +48,7 @@ public class TLcInforeportingCompanyServiceImpl implements TLcInforeportingCompa
             //兴业消费金融
             return new ExcelUtil<TLcInforeportingCompanyExpXing>(TLcInforeportingCompanyExpXing.class).exportExcel(transformationCompanyXing(list),"对公入账");
         }
-        return new ExcelUtil<TLcInforeportingCompanyExp>(TLcInforeportingCompanyExp.class).exportExcel(transformationCompany(list),"逾期划扣");
+        return new ExcelUtil<TLcInforeportingCompanyExp>(TLcInforeportingCompanyExp.class).exportExcel(transformationCompany(list),"对公入账");
     }
 
     /**
