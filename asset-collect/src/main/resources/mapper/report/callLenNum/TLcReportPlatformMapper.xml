@@ -49,10 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             MAX(t.pa_call_num) as pa_call_num,
             MAX(t.zj_called_num) as zj_called_num,
             MAX(t.zj_call_len) as zj_call_len,
-            MAX(t.zj_call_num) as zj_call_num,
-            IFNULL(MAX(t.pa_called_num),0) + IFNULL(MAX(t.zj_called_num),0) as total_called_num,
-            IFNULL(MAX(t.pa_call_len),0) + IFNULL(MAX(t.zj_call_len),0) as total_call_len,
-            IFNULL(MAX(t.pa_call_num),0) + IFNULL(MAX(t.zj_call_num),0) as total_call_num
+            MAX(t.zj_call_num) as zj_call_num
         from(
             select
                 CASE t.platform WHEN 'PA' THEN t.called_num END  'pa_called_num',

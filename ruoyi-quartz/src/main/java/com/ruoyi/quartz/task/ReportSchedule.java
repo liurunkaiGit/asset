@@ -155,14 +155,7 @@ public class ReportSchedule {
                 TLcReportPlatform platform = this.platformMapper.selectReportPlatform(param);
                 platformList.add(platform);
             }
-            param.put("timePeriod", "合计");
-            param.put("startTimePeriod", DateUtils.getTimePeriod(days, 0, 0, 0));
-            param.put("endTimePeriod", DateUtils.getTimePeriod(days, 23, 59, 59));
-            TLcReportPlatform platform = this.platformMapper.selectReportPlatform(param);
-            platformList.add(platform);
             platformList.stream().forEach(reportPlatform -> this.platformMapper.insertTLcReportPlatform(reportPlatform));
-//            List<TLcReportPlatform> platformList = this.platformMapper.selectReportPlatformList(param);
-//            platformList.stream().forEach(platform -> this.platformMapper.insertTLcReportPlatform(platform));
             log.info("生成通时通次-平台汇总报表成功,{}", DateUtils.getNowDate());
         }
     }
