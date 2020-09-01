@@ -405,6 +405,11 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
         return this.tLcCallRecordMapper.findZjCallRecordListByDate(tLcCallRecord);
     }
 
+    @Override
+    public Long selectCountByTimePeriod(Map<String, Object> param) {
+        return this.tLcCallRecordMapper.selectCountByTimePeriod(param);
+    }
+
 
     private String getRelateion(Integer contactRelation){
         String relateion = "";

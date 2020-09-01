@@ -464,4 +464,8 @@
         SELECT r.id,r.case_no,r.platform,r.call_radio_location,t.org_id,t.org_name FROM t_lc_call_record r,t_lc_task t WHERE r.case_no = t.case_no
         AND r.call_radio_location is NOT NULL AND r.call_radio_location != '' AND r.platform = 'ZJ'
     </select>
+
+    <select id="selectCountByTimePeriod" resultType="java.lang.Long">
+        select count(1) from t_lc_call_record where create_time between #{startTimePeriod} and #{endTimePeriod}
+    </select>
 </mapper>

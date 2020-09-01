@@ -10,6 +10,7 @@ import com.ruoyi.report.mapper.TLcReportPlatformMapper;
 import com.ruoyi.report.service.ITLcReportCaseContactService;
 import com.ruoyi.report.service.ITLcReportDayProcessService;
 import com.ruoyi.report.service.ITLcReportRecoveryService;
+import com.ruoyi.task.service.impl.TLcCallRecordServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,6 +42,8 @@ public class ReportSchedule {
     private TLcReportPlatformMapper platformMapper;
     @Autowired
     private TLcReportPersonalMapper personalMapper;
+    @Autowired
+    private TLcCallRecordServiceImpl tLcCallRecordService;
 
     /**
      * 每日过程指标
@@ -143,6 +146,11 @@ public class ReportSchedule {
                     param.put("timePeriod", "20-24");
                     param.put("startTimePeriod", DateUtils.getTimePeriod(days, 20, 0, 0));
                     param.put("endTimePeriod", DateUtils.getTimePeriod(days, 23, 59, 59));
+                    // 查询当前时间段是否有数据
+                    Long count = this.tLcCallRecordService.selectCountByTimePeriod(param);
+                    if (count == 0) {
+                        continue;
+                    }
                 } else {
                     if (i == 9) {
                         param.put("timePeriod", "09-10");
@@ -189,6 +197,11 @@ public class ReportSchedule {
                     param.put("timePeriod", "20-24");
                     param.put("startTimePeriod", DateUtils.getTimePeriod(days, 20, 0, 0));
                     param.put("endTimePeriod", DateUtils.getTimePeriod(days, 23, 59, 59));
+                    // 查询当前时间段是否有数据
+                    Long count = this.tLcCallRecordService.selectCountByTimePeriod(param);
+                    if (count == 0) {
+                        continue;
+                    }
                 } else {
                     if (i == 9) {
                         param.put("timePeriod", "09-10");

@@ -78,7 +78,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					(SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r WHERE r.create_time BETWEEN #{startTimePeriod} AND #{endTimePeriod} and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) call_len
 				FROM t_lc_call_record re WHERE re.create_time BETWEEN #{startTimePeriod} AND #{endTimePeriod} GROUP BY re.platform,re.create_by
 			) t GROUP BY t.create_by,t.platform
-		)  t,sys_user su where t.create_by = su.user_id  and t.create_by != 1
+		)  t,sys_user su where t.create_by = su.user_id  and t.create_by >= 2
 		GROUP BY t.create_by order by t.create_by
 	</select>
 
