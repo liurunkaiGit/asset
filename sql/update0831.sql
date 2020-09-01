@@ -1,4 +1,10 @@
 alter table t_lc_cust_contact add phone_status varchar(16) DEFAULT NULL  COMMENT '手机号码状态';
+alter table t_lc_cust_contact_his add phone_status varchar(16) DEFAULT NULL  COMMENT '手机号码状态';
+alter table cur_assets_package_his add COLUMN dzhxrq date DEFAULT NULL COMMENT '呆账核销日期';
+alter TABLE cur_assets_package_his ADD COLUMN curNo varchar(64) DEFAULT NULL COMMENT '用户编号';
+alter TABLE cur_assets_package_his ADD COLUMN payStatus varchar(64) DEFAULT NULL COMMENT '还款状态';
+alter TABLE cur_assets_package_his ADD COLUMN lastLoanDate date DEFAULT NULL COMMENT '贷款到期日';
+alter TABLE cur_assets_package_his ADD COLUMN lastRepayAmount decimal(20,2) DEFAULT NULL COMMENT '最近还款金额';
 
 CREATE TABLE `phone_status` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
