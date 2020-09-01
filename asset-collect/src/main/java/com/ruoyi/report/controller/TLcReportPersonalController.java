@@ -3,10 +3,13 @@ package com.ruoyi.report.controller;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.PageDomain;
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.core.page.TableSupport;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.duncase.domain.AssetsRepayment;
 import com.ruoyi.report.domain.TLcReportPersonal;
 import com.ruoyi.report.service.ITLcReportPersonalService;
 import org.apache.commons.lang3.StringUtils;
@@ -54,8 +57,23 @@ public class TLcReportPersonalController extends BaseController {
     @ResponseBody
     public TableDataInfo list(TLcReportPersonal tLcReportPersonal) {
         startPage();
+        TableDataInfo rspData = new TableDataInfo();
         List<TLcReportPersonal> list = tLcReportPersonalService.selectTLcReportPersonalList(tLcReportPersonal);
-        return getDataTable(list);
+        PageDomain pageDomain = TableSupport.buildPageRequest();
+        if (null == pageDomain.getPageNum() || null == pageDomain.getPageSize()) {
+            rspData.setRows(list);
+            rspData.setTotal(list.size());
+            return rspData;
+        }
+        Integer pageNum = (pageDomain.getPageNum() - 1) * pageDomain.getPageSize();
+        Integer pageSize = pageDomain.getPageNum() * pageDomain.getPageSize();
+        if (pageSize > list.size()) {
+            pageSize = list.size();
+        }
+        rspData.setRows(list.subList(pageNum, pageSize));
+        rspData.setTotal(list.size());
+        return rspData;
+//        return getDataTable(list);
     }
 
     /**

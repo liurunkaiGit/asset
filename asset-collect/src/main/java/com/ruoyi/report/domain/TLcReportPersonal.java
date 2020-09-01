@@ -3,7 +3,11 @@ package com.ruoyi.report.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -16,6 +20,10 @@ import java.util.Date;
  * @date 2020-08-05
  */
 @Data
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@Accessors(chain = true)
 public class TLcReportPersonal extends BaseEntity {
     private static final long serialVersionUID = 1L;
 

@@ -201,14 +201,7 @@ public class ReportSchedule {
                 List<TLcReportPersonal> reportPersonalList = this.personalMapper.selectReportPersonalListByTimePeriod(param);
                 reportPersonalList.stream().forEach(personal -> personalList.add(personal));
             }
-            param.put("timePeriod", "合计");
-            param.put("startTimePeriod", DateUtils.getTimePeriod(days, 0, 0, 0));
-            param.put("endTimePeriod", DateUtils.getTimePeriod(days, 23, 59, 59));
-            List<TLcReportPersonal> reportPersonalList = this.personalMapper.selectReportPersonalListByTimePeriod(param);
-            reportPersonalList.stream().forEach(personal -> personalList.add(personal));
             personalList.stream().forEach(personal -> this.personalMapper.insertTLcReportPersonal(personal));
-//            List<TLcReportPersonal> personalList = this.personalMapper.selectReportPersonalList(param);
-//            personalList.stream().forEach(personal -> this.personalMapper.insertTLcReportPersonal(personal));
             log.info("生成通时通次-个人明细汇总报表成功,{}", DateUtils.getNowDate());
         }
     }

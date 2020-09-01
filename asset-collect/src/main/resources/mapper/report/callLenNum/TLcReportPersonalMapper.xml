@@ -52,16 +52,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			su.user_group,
 			su.login_name,
 			su.user_name,
-			t.time_period as time_period,
+			#{timePeriod} as time_period,
 			MAX(t.pa_called_num) as pa_called_num,
 			MAX(t.pa_call_len) as pa_call_len,
 			MAX(t.pa_call_num) as pa_call_num,
 			MAX(t.zj_called_num) as zj_called_num,
 			MAX(t.zj_call_len) as zj_call_len,
-			MAX(t.zj_call_num) as zj_call_num,
-			IFNULL(MAX(t.pa_called_num),0) + IFNULL(MAX(t.zj_called_num),0) as total_called_num,
-			IFNULL(MAX(t.pa_call_len),0) + IFNULL(MAX(t.zj_call_len),0) as total_call_len,
-			IFNULL(MAX(t.pa_call_num),0) + IFNULL(MAX(t.zj_call_num),0) as total_call_num
+			MAX(t.zj_call_num) as zj_call_num
 		from(
 			select
 				CASE t.platform WHEN 'PA' THEN t.called_num END  'pa_called_num',
@@ -71,20 +68,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				CASE t.platform WHEN 'ZJ' THEN t.call_len END  'zj_call_len',
 				CASE t.platform WHEN 'ZJ' THEN t.call_num END  'zj_call_num',
 				t.create_by,
-				t.platform,
-				t.time_period
+				t.platform
 			from(
 				SELECT
-					#{timePeriod} as time_period,
 					re.platform,
 					re.create_by,
-					(SELECT COUNT(1) as call_num FROM t_lc_call_record r WHERE r.create_time BETWEEN #{startTimePeriod} AND #{endTimePeriod} and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by) call_num,
+					COUNT(1) as call_num,
 					(SELECT COUNT(1) as thcs FROM t_lc_call_record r WHERE r.create_time BETWEEN #{startTimePeriod} AND #{endTimePeriod} and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
-					(SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r WHERE r.create_time BETWEEN #{startTimePeriod} AND #{endTimePeriod} and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by )	call_len
-				FROM t_lc_call_record re WHERE re.create_time BETWEEN CONCAT(#{date},' 00:00:00')  AND CONCAT(#{date},' 23:59:59') GROUP BY re.platform,re.create_by
-			) t GROUP BY t.create_by,t.platform,t.time_period
+					(SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r WHERE r.create_time BETWEEN #{startTimePeriod} AND #{endTimePeriod} and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) call_len
+				FROM t_lc_call_record re WHERE re.create_time BETWEEN #{startTimePeriod} AND #{endTimePeriod} GROUP BY re.platform,re.create_by
+			) t GROUP BY t.create_by,t.platform
 		)  t,sys_user su where t.create_by = su.user_id  and t.create_by != 1
-		GROUP BY t.create_by,t.time_period order by t.create_by,t.time_period
+		GROUP BY t.create_by order by t.create_by
 	</select>
 
     <insert id="insertTLcReportPersonal" parameterType="com.ruoyi.report.domain.TLcReportPersonal">
