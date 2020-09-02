@@ -99,4 +99,10 @@ public interface TLcCustContactMapper {
      * @return
      */
     Integer selectCustContactCount(@Param("createTime") Date createTime, @Param("modifyTime")Date modifyTime);
+
+    public List<TLcCustContact> findCustContactList(TLcCustContact tLcCustContact);
+
+    public int updatePhoneStatus(TLcCustContact tLcCustContact);
+
+
 }

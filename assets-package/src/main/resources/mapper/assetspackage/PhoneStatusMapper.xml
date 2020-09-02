@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.PhoneStatusMapper">
+    
+    <resultMap type="com.ruoyi.assetspackage.domain.phoneStatus.PhoneStatus" id="PhoneStatusResult">
+        <result property="id"    column="id"    />
+        <result property="caseNo"    column="case_no"    />
+        <result property="waje"    column="waje"    />
+        <result property="jayhje"    column="jayhje"    />
+        <result property="phone"    column="phone"    />
+        <result property="relation"    column="relation"    />
+        <result property="phonestatus"    column="phoneStatus"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectPhoneStatusVo">
+        select id, case_no, waje, jayhje, phone, relation, phoneStatus, create_by, create_time, update_by, update_time from phone_status
+    </sql>
+
+    <select id="selectPhoneStatusList" parameterType="PhoneStatus" resultMap="PhoneStatusResult">
+        <include refid="selectPhoneStatusVo"/>
+        <where>  
+            <if test="caseNo != null  and caseNo != ''"> and case_no = #{caseNo}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="startCreateTime != null"> and create_time <![CDATA[>=]]> #{startCreateTime}</if>
+            <if test="endCreateTime != null"> and create_time <![CDATA[<=]]> #{endCreateTime}</if>
+            <if test="phoneStatusList != null and phoneStatusList.size() > 0">
+                and phoneStatus in
+                <foreach collection="phoneStatusList" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectPhoneStatusById" parameterType="Long" resultMap="PhoneStatusResult">
+        <include refid="selectPhoneStatusVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPhoneStatus" parameterType="PhoneStatus" useGeneratedKeys="true" keyProperty="id">
+        insert into phone_status
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="caseNo != null  and caseNo != ''">case_no,</if>
+            <if test="waje != null ">waje,</if>
+            <if test="jayhje != null ">jayhje,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="relation != null  and relation != ''">relation,</if>
+            <if test="phonestatus != null  and phonestatus != ''">phoneStatus,</if>
+            <if test="orgId != null  and orgId != ''">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null ">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="caseNo != null  and caseNo != ''">#{caseNo},</if>
+            <if test="waje != null ">#{waje},</if>
+            <if test="jayhje != null ">#{jayhje},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="relation != null  and relation != ''">#{relation},</if>
+            <if test="phonestatus != null  and phonestatus != ''">#{phonestatus},</if>
+            <if test="orgId != null  and orgId != ''">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null ">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePhoneStatus" parameterType="PhoneStatus">
+        update phone_status
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="caseNo != null  and caseNo != ''">case_no = #{caseNo},</if>
+            <if test="waje != null ">waje = #{waje},</if>
+            <if test="jayhje != null ">jayhje = #{jayhje},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="relation != null  and relation != ''">relation = #{relation},</if>
+            <if test="phonestatus != null  and phonestatus != ''">phoneStatus = #{phonestatus},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null ">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePhoneStatusById" parameterType="Long">
+        delete from phone_status where id = #{id}
+    </delete>
+
+    <delete id="deletePhoneStatusByIds" parameterType="String">
+        delete from phone_status where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

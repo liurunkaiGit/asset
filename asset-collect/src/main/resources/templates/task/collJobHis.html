@@ -37,6 +37,9 @@
         .sameCaseValue {
             margin-right: 100px;
         }
+        #custContactTbody tr td{
+            text-align: center;
+        }
     </style>
 
 </head>
@@ -242,6 +245,7 @@
                                     <th>座机电话</th>
                                     <th>证件号码</th>
                                     <th>关系</th>
+                                    <th>号码状态</th>
                                 </tr>
                                 <tbody id="custContactTbody"></tbody>
                             </table>
@@ -547,7 +551,7 @@
                     var tp = $("#custContactTbody");
                     $.each(data, function (i, n) {
                         if(n.phone != null && n.phone != ""){
-                            tp.append("<tr><td>"+n.contactName+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+tellToMd5(n.tel)+"</td><td>"+cardToMd5(n.certificateNo)+"</td><td>"+getRelaByCode(n.relation)+"</td></tr>");
+                            tp.append("<tr><td>"+n.contactName+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+tellToMd5(n.tel)+"</td><td>"+cardToMd5(n.certificateNo)+"</td><td>"+getRelaByCode(n.relation)+"</td><td>"+convertStatus(n.phoneStatus)+"</td></tr>");
                         }
                         // if (n.tel != null && n.tel != ''){
                         //     tp.append("<tr><td>"+n.contactName+"</td><td>"+tellToMd5(n.tel)+"</td><td>"+cardToMd5(n.certificateNo)+"</td><td>"+getRelaByCode(n.relation)+"</td></tr>");
@@ -1130,6 +1134,27 @@
         value = Math.round(value);
         return value;
     }
+
+    function convertStatus(obj){
+        var result = '';
+        if(obj=="2"||obj=="32"||obj=="33"){
+            return result = "可联";
+        }else if(obj=="31"){
+            return result = "关机";
+        }else if(obj=="4"){
+            return result = "空号";
+        }else if(obj=="5"){
+            return result = "停机";
+        }else if(obj=="11"){
+            return result = "识别失败";
+        }else if(obj=="91"){
+            return result = "识别失败";
+        }else if(obj =="-1"){
+            result = "查询失败";
+        }
+        return result;
+    }
+
 </script>
 </body>
 </html>

@@ -300,6 +300,11 @@ public class ExcelUtil<T>
         return exportExcel();
     }
 
+    public AjaxResult exportExcel(List<T> list, String sheetName,String fileName)
+    {
+        this.init(list, sheetName, Type.EXPORT);
+        return exportExcel(fileName);
+    }
     /**
      * 对list数据源将其里面的数据导入到excel表单
      * 
@@ -346,6 +351,68 @@ public class ExcelUtil<T>
             out = new FileOutputStream(getAbsoluteFile(filename));
             wb.write(out);
             return AjaxResult.success(filename);
+        }
+        catch (Exception e)
+        {
+            log.error("导出Excel异常{}", e.getMessage());
+            throw new BusinessException("导出Excel失败，请联系网站管理员！");
+        }
+        finally
+        {
+            if (wb != null)
+            {
+                try
+                {
+                    wb.close();
+                }
+                catch (IOException e1)
+                {
+                    e1.printStackTrace();
+                }
+            }
+            if (out != null)
+            {
+                try
+                {
+                    out.close();
+                }
+                catch (IOException e1)
+                {
+                    e1.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public AjaxResult exportExcel(String fileName)
+    {
+        OutputStream out = null;
+        try
+        {
+            // 取出一共有多少个sheet.
+            double sheetNo = Math.ceil(list.size() / sheetSize);
+            for (int index = 0; index <= sheetNo; index++)
+            {
+                createSheet(sheetNo, index);
+
+                // 产生一行
+                Row row = sheet.createRow(0);
+                int column = 0;
+                // 写入各个字段的列头名称
+                for (Object[] os : fields)
+                {
+                    Excel excel = (Excel) os[1];
+                    this.createCell(excel, row, column++);
+                }
+                if (Type.EXPORT.equals(type))
+                {
+                    fillExcelData(index, row);
+                }
+            }
+            fileName = fileName + ".xlsx";
+            out = new FileOutputStream(getAbsoluteFile(fileName));
+            wb.write(out);
+            return AjaxResult.success(fileName);
         }
         catch (Exception e)
         {

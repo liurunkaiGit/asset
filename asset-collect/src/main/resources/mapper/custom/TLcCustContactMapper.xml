@@ -23,6 +23,9 @@
         <result property="orgName"    column="org_name"    />
         <result property="importBatchNo"    column="import_batch_no"    />
         <result property="isClose"    column="is_close"    />
+        <result property="phoneStatus"    column="phone_status"    />
+        <result property="arrearsTotal"    column="arrears_total"    />
+        <result property="closeCaseYhje"    column="close_case_yhje"    />
     </resultMap>
 
     <sql id="selectTLcCustContactVo">
@@ -259,7 +262,8 @@
         t.org_id,
         t.org_name,
         t.import_batch_no,
-        t.is_close
+        t.is_close,
+        t.phone_status
         FROM t_lc_cust_contact t
         WHERE
         t.case_no = #{caseNo}
@@ -290,7 +294,8 @@
         t.org_id,
         t.org_name,
         t.import_batch_no,
-        t.is_close
+        t.is_close,
+        t.phone_status
         FROM t_lc_cust_contact_his t
         WHERE
         t.case_no = #{caseNo}
@@ -342,4 +347,33 @@
             AND (create_time <![CDATA[>=]]> #{createTime} AND create_time <![CDATA[<]]> #{modifyTime}) OR (modify_time <![CDATA[>=]]> #{createTime} AND modify_time <![CDATA[<]]> #{modifyTime})
         </if>
     </select>
+    
+    <select id="findCustContactList" parameterType="com.ruoyi.custom.domain.TLcCustContact" resultMap="TLcCustContactResult">
+        select DISTINCT t.phone,t.certificate_no,t.contact_name,t.id,t.relation,t.case_no,tt.arrears_total,tt.close_case_yhje
+        from t_lc_cust_contact t,t_lc_task tt
+        where t.case_no = tt.case_no and tt.task_status != 3
+        and Not EXISTS(select 1 from t_lc_robot_black a where t.case_no = a.case_no)
+        and t.phone is not null
+        <if test="orgId != null and orgId != ''">
+            AND t.org_id = #{orgId}
+        </if>
+        <if test="caseNoList != null and caseNoList.size() > 0">
+            and t.case_no in
+            <foreach collection="caseNoList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="relation != null">
+            AND t.relation = #{relation}
+        </if>
+    </select>
+
+    <update id="updatePhoneStatus" parameterType="com.ruoyi.custom.domain.TLcCustContact">
+        update t_lc_cust_contact SET phone_status=#{phoneStatus}
+        <where>
+            <if test="phone != null and phone != ''">
+                AND phone = #{phone}
+            </if>
+        </where>
+    </update>
 </mapper>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('号码状态列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>机构案件号：</p>
+                                <input type="text" name="caseNo"/>
+                            </li>
+                            <li>
+                                <p>电话号码：</p>
+                                <input type="text" name="phone"/>
+                            </li>
+                            <li>
+                                <p>号码状态：</p>
+                                <select name="phonestatus">
+                                    <option value="">所有</option>
+                                    <option value="2,32,33">可联</option>
+                                    <option value="31">关机</option>
+                                    <option value="4">空号</option>
+                                    <option value="5">停机</option>
+                                    <option value="11,91">识别失败</option>
+                                    <option value="-1">查询失败</option>
+                                </select>
+                            </li>
+                            <li class="select-time">
+                                <p>查询时间：</p>
+                                <input type="text" class="time-input" id="startCreateTime" placeholder="开始时间" name="startCreateTime"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endCreateTime" placeholder="结束时间" name="endCreateTime"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+               <!-- <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="phone:status:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="phone:status:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="phone:status:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>-->
+                <a class="btn btn-warning" onclick="$.table.exportExcelByName()" shiro:hasPermission="phone:status:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('ruoyi:status:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('ruoyi:status:remove')}]];
+        var prefix = ctx + "phone/status";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "号码状态",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id',
+                    title : '主键',
+                    visible: false
+                },
+                {
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                {
+                    field : 'caseNo',
+                    title : '案件编号'
+                },
+                {
+                    field : 'waje', 
+                    title : '委案金额'
+                },
+                {
+                    field : 'jayhje', 
+                    title : '结案应还金额'
+                },
+                {
+                    field : 'phone', 
+                    title : '电话号码'
+                },
+                {
+                    field : 'relation', 
+                    title : '与本人关系',
+                    formatter: function (value, row, index) {
+                        return getRelaByCode(value);
+                    }
+                },
+                {
+                    field : 'createTime',
+                    title : '查询时间'
+                },
+                {
+                    field : 'phonestatus', 
+                    title : '号码状态'
+                }]
+            };
+            $.table.init(options);
+        });
+
+
+        function getRelaByCode(relaCode,otherRemark) {
+            var rela;
+            if(relaCode == 1){
+                rela = '本人';
+            } else if(relaCode == 2){
+                rela = '直系';
+            } else if(relaCode == 3){
+                rela = '亲戚';
+            }else if(relaCode == 4){
+                rela = '朋友';
+            } else if(relaCode == 5){
+                rela = '父母 ';
+            } else if(relaCode == 6){
+                rela = '配偶';
+            }else if(relaCode == 7){
+                rela = '兄弟';
+            } else if(relaCode == 8){
+                rela = '姐妹';
+            } else if(relaCode == 9){
+                rela = '哥哥';
+            }else if(relaCode == 10){
+                rela = '兄长';
+            } else if(relaCode == 11){
+                rela = '弟弟 ';
+            } else if(relaCode == 12){
+                rela = '姐姐';
+            }else if(relaCode == 13){
+                rela = '妹妹';
+            }else if(relaCode == 14){
+                rela = '家人';
+            } else if(relaCode == 15){
+                rela = '老公';
+            } else if(relaCode == 16){
+                rela = '老婆';
+            } else if(relaCode == 17){
+                rela = '同事';
+            }else if(relaCode == 18){
+                rela = '单位';
+            } else if(relaCode == -1){
+                if(otherRemark != null){
+                    rela = '其它'  + '(' + otherRemark + ')';
+                }else{
+                    rela = '其它';
+                }
+            }else {
+                rela = '-';
+            }
+            return rela;
+        }
+
+
+        function convertStatus(obj){
+            var result = '';
+            if(obj=="2"||obj=="32"||obj=="33"){
+                return result = "可联";
+            }else if(obj=="31"){
+                return result = "关机";
+            }else if(obj=="4"){
+                return result = "空号";
+            }else if(obj=="5"){
+                return result = "停机";
+            }else if(obj=="11"){
+                return result = "识别失败";
+            }else if(obj=="91"){
+                return result = "识别失败";
+            }else if(obj == "-1"){
+                return result = "查询失败";
+            }
+            return result;
+        }
+
+    </script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 package com.ruoyi.custom.domain;
 
+import com.ruoyi.assetspackage.domain.phoneStatus.PhoneStatusResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -125,5 +127,22 @@ public class TLcCustContact extends BaseEntity {
     private List<String> caseNoList;
 
     private List<String> importBatchNoList;
+
+    /**
+     * 手机号码状态
+     */
+    private String phoneStatus;
+
+    /**
+     * 委案金额
+     */
+    private BigDecimal arrearsTotal;
+
+    /**
+     *结案应还金额
+     */
+    private BigDecimal closeCaseYhje;
+
+
 
 }

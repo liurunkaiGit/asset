@@ -1425,6 +1425,27 @@ public class TLcTaskController extends BaseController {
     public String selfBuild() {
         return prefix + "/demo";
     }
+
+
+    /**
+     * 号码状态查询
+     */
+    @PostMapping("/selectPhoneStatus")
+    @ResponseBody
+    public AjaxResult selectPhoneStatus(String caseNo, String phoneStatus) {
+        try {
+            Map<String, Integer> map = this.tLcTaskService.selectPhoneStatus(caseNo, phoneStatus);
+            String result = JSON.toJSONString(map);
+            return AjaxResult.success("成功",result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("获取号码状态异常{}",e);
+            return AjaxResult.error("失败");
+        }
+    }
+
+
+
 }
 
 

@@ -219,6 +219,7 @@
                 <button type="button" class="btn btn-success" onclick="sendRobot()">推送到机器人</button>
                 <button type="button" class="btn btn-success" onclick="signRepay('ALPA')">标记还款</button>
                 <button type="button" class="btn btn-success" onclick="signRepay('QXBJ')">取消标记还款</button>
+                <button type="button" class="btn btn-success" onclick="showPhoneStatus()">号码状态查询</button>
                 选择全部&nbsp;&nbsp;<input id="selectAll" type="checkbox" onclick="chackAll()">
             </div>
             <div class="col-sm-12 select-table table-striped">
@@ -258,6 +259,30 @@
              </div>
          </div>
 
+         <div class="col-sm-12">
+             <div class="modal" id="myModal1" tabindex="-1" role="dialog" aria-hidden="true">
+                 <div class="modal-dialog">
+                     <div class="modal-content animated bounceInRight">
+                         <div class="modal-header">
+                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
+                             </button>
+                         </div>
+                         <div class="modal-body" style="height: 100px;">
+                             <div class="form-group">
+                                 <input type="hidden" id="case_no">
+                                 <span style="font-size: 15px;color:black;">&nbsp;&nbsp;查询号码：</span>
+                                 <input type="radio" name="phoneStatus" value="1">本人手机
+                                 <input type="radio" name="phoneStatus" value="2">本人+三方手机
+                             </div>
+                         </div>
+                         <div class="modal-footer">
+                             <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                             <button type="button" class="btn btn-primary" onclick="savePhoneStatus();">保存</button>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
     </div>
 
 
@@ -1243,7 +1268,45 @@
             });
         }
 
+        function showPhoneStatus() {
+            var caseNo = $.table.selectColumns('caseNo');
+            if (caseNo.length == 0) {
+                $.modal.alertSuccess("请至少选择一条记录");
+                return;
+            }
+            $("#case_no").val(caseNo.join());
+            $("#myModal1").modal('show');
+        }
+        function savePhoneStatus(){
+            var phoneStatus = $("input[name='phoneStatus']:checked").val();
+            if(phoneStatus == null || phoneStatus==undefined){
+                $.modal.alertSuccess("请选择本人手机或者本人+三方手机");
+                return;
+            }
+            var caseNo = $("#case_no").val();
+             $.ajax({
+                url:  prefix + "/selectPhoneStatus",
+                dataType: "json",
+                type: "post",
+                data: {
+                    "phoneStatus": phoneStatus,
+                    "caseNo": caseNo
+                },
+                success:function(data){
+                    var msg = data.msg;
+                    $('input:radio[name="phoneStatus"]').prop('checked',false);
+                    $("#myModal1").modal('hide');
+                    if(msg=="成功"){
+                        var errorFlag = JSON.parse(data.data).errorFlag;
+                        var successFlag = JSON.parse(data.data).successFlag;
+                        $.modal.alertSuccess("操作成功，成功"+successFlag+"条"+"，失败"+errorFlag+"条");
+                    }else{
+                        $.modal.alertSuccess("号码状态查询失败");
+                    }
 
+                }
+            });
+        }
     </script>
 </body>
 </html>

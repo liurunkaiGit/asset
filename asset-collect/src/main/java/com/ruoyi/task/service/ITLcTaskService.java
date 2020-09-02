@@ -324,4 +324,6 @@ public interface ITLcTaskService {
     List<TLcTask> selectSameCaseTaskList(String certificateNo, String orgId);
 
     Response updateNotebook(TLcTask tLcTask);
+
+    public Map<String,Integer> selectPhoneStatus(String caseNo, String phoneStatus);
 }

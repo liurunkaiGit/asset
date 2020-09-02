@@ -29,6 +29,11 @@
 
     <th:block th:include="include :: datetimepicker-css" />
 
+    <style type="text/css">
+        #custContactTbody tr td{
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body class="gray-bg">
@@ -81,7 +86,8 @@
                                     <label>欠款总金额：</label><label id="rmbQkzje" style="color: red"></label><br/>
                                     <label>每期还款金额：</label><label id="mqhkje"></label><br/>
                                     <label>应还本金：</label><label id="rmbYhbjzje"></label><br/>
-                                    <label>应还费用：</label><label id="rmbYhfyzje"></label>
+                                    <label>应还费用：</label><label id="rmbYhfyzje"></label><br/>
+                                    <label>还款状态：</label><label id="payStatus"></label>
                                 </div>
                                 <div class="collInfoTwo">
                                     <label>账单日：</label><label id="accountDate"></label><br/>
@@ -90,7 +96,8 @@
                                     <label>最低应还金额：</label><label id="rmbZdyhje" style="color: red"></label><br/>
                                     <label>累计已还金额：</label><label id="ljyhje" ></label><br/>
                                     <label>应还利息：</label><label id="rmbYhlizje"></label><br/>
-                                    <label>放款金额：</label><label id="borrowEd"></label>
+                                    <label>放款金额：</label><label id="borrowEd"></label><br/>
+                                    <label>货款到期日：</label><label id="lastLoanDate"></label>
                                 </div>
                                 <div class="collInfoThree">
                                     <label>逾期天数：</label><label id="overdueDays"></label><br/>
@@ -99,7 +106,8 @@
                                     <label>当期欠款金额：</label><label id="dqqkje"></label><br/>
                                     <label>已还期数：</label><label id="ykqs"></label><br/>
                                     <label>应还罚息：</label><label id="rmbYhfxzje"></label><br/>
-                                    <label>滞纳金：</label><label id="znj"></label>
+                                    <label>滞纳金：</label><label id="znj"></label><br/>
+                                    <label>最近还款金额：</label><label id="lastRepayAmount"></label>
                                 </div>
                                 <div class="collInfoFour">
                                     <label>借款卡号：</label><label id="borrowNo"></label><br/>
@@ -161,7 +169,8 @@
                                 <label>减免标签：</label><span id="jmbq" style="text-align: left;"></span><br/>
                                 <label>法催标签：</label><span id="fcbq" style="text-align: left;"></span><br/>
                                 <label>留案标签：</label><span id="laFlag" style="text-align: left;"></span><br/>
-                                <label>账龄：</label><span id="accountAge" style="text-align: left;"></span>
+                                <label>账龄：</label><span id="accountAge" style="text-align: left;"></span><br/>
+                                <label>呆账核销日期：</label><span id="dzhxrq" style="text-align: left;"></span>
                             </div>
                         </div>
                         <div id="tab-1" class="tab-pane">
@@ -221,6 +230,7 @@
                                     <th>座机电话</th>
                                     <th>证件号码</th>
                                     <th>关系</th>
+                                    <th>号码状态</th>
                                 </tr>
                                 <tbody id="custContactTbody"></tbody>
                             </table>
@@ -388,7 +398,7 @@
                     var tp = $("#custContactTbody");
                     $.each(data, function (i, n) {
                         if(n.phone != null && n.phone != ""){
-                            tp.append("<tr><td>"+n.contactName+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+tellToMd5(n.tel)+"</td><td>"+cardToMd5(n.certificateNo)+"</td><td>"+getRelaByCode(n.relation)+"</td></tr>");
+                            tp.append("<tr><td>"+n.contactName+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+tellToMd5(n.tel)+"</td><td>"+cardToMd5(n.certificateNo)+"</td><td>"+getRelaByCode(n.relation)+"</td><td>"+convertStatus(n.phoneStatus)+"</td></tr>");
                         }
                         // if (n.tel != null && n.tel != ''){
                         //     tp.append("<tr><td>"+n.contactName+"</td><td>"+tellToMd5(n.tel)+"</td><td>"+cardToMd5(n.certificateNo)+"</td><td>"+getRelaByCode(n.relation)+"</td></tr>");
@@ -550,6 +560,10 @@
                         $("#fcbq").text(data.assets.fcbq);//法催标签
                         $("#laFlag").text(data.assets.laFlag);//留案标签
                         $("#accountAge").html(data.assets.accountAge);//账龄
+                        $("#payStatus").text(data.assets.payStatus);//还款状态
+                        $("#lastLoanDate").text(data.assets.lastLoanDate);//贷款到期日
+                        $("#lastRepayAmount").text(data.assets.lastRepayAmount);//最近还款金额
+                        $("#dzhxrq").text(data.assets.dzhxrq);//呆账核销日期
                     }
                 }
             }
@@ -927,6 +941,26 @@
         }
         value = Math.round(value);
         return value;
+    }
+
+    function convertStatus(obj){
+        var result = '';
+        if(obj=="2"||obj=="32"||obj=="33"){
+            return result = "可联";
+        }else if(obj=="31"){
+            return result = "关机";
+        }else if(obj=="4"){
+            return result = "空号";
+        }else if(obj=="5"){
+            return result = "停机";
+        }else if(obj=="11"){
+            return result = "识别失败";
+        }else if(obj=="91"){
+            return result = "识别失败";
+        }else if(obj =="-1"){
+            result = "查询失败";
+        }
+        return result;
     }
 </script>
 </body>

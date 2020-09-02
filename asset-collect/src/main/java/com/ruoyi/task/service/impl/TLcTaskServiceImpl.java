@@ -6,9 +6,14 @@ import com.ruoyi.assetspackage.domain.CurAssetsPackage;
 import com.ruoyi.assetspackage.domain.CurAssetsRepaymentPackage;
 import com.ruoyi.assetspackage.domain.OrgPackage;
 import com.ruoyi.assetspackage.domain.RemoteConfigure;
+import com.ruoyi.assetspackage.domain.phoneStatus.PhoneStatus;
+import com.ruoyi.assetspackage.domain.phoneStatus.PhoneStatusRequestData;
+import com.ruoyi.assetspackage.domain.phoneStatus.PhoneStatusResponse;
+import com.ruoyi.assetspackage.mapper.PhoneStatusMapper;
 import com.ruoyi.assetspackage.service.ICurAssetsPackageService;
 import com.ruoyi.assetspackage.service.ICurAssetsRepaymentPackageService;
 import com.ruoyi.assetspackage.service.IOrgPackageService;
+import com.ruoyi.assetspackage.util.PhoneStatusUtil;
 import com.ruoyi.callConfig.domain.TLcCallStrategyConfig;
 import com.ruoyi.caseConfig.domain.TLcAllocatCaseConfig;
 import com.ruoyi.caseConfig.service.ITLcAllocatCaseConfigService;
@@ -17,6 +22,8 @@ import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.domain.CloseCase;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.custom.domain.TLcCustContact;
+import com.ruoyi.custom.mapper.TLcCustContactMapper;
 import com.ruoyi.duncase.domain.Assets;
 import com.ruoyi.duncase.domain.AssetsRepayment;
 import com.ruoyi.duncase.domain.TLcDuncase;
@@ -120,6 +127,10 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     private AsyncTaskService asyncTaskService;
     @Autowired
     private AllocatRuleUtil allocatRuleUtil;
+    @Autowired
+    private TLcCustContactMapper tLcCustContactMapper;
+    @Autowired
+    private PhoneStatusMapper phoneStatusMapper;
 
     /**
      * 查询任务
@@ -749,6 +760,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         this.tLcTaskMapper.updateNotebook(tLcTask);
         return Response.success(null);
     }
+
 
     /**
      * 查询我的任务列表
@@ -1424,6 +1436,101 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 .setCreateBy(ShiroUtils.getSysUser().getUserId().toString());
         this.sendRobotApplyService.insertTLcSendRobotApply(sendRobotApply);
     }
+
+    /**
+     * 号码状态查询
+     * @param caseNos
+     * @param phoneStatus
+     * @return
+     */
+    @Override
+    @Transactional
+    public Map<String,Integer> selectPhoneStatus(String caseNos, String phoneStatus) {
+        Map<String,Integer> result = new HashMap<String,Integer>();
+        int successFlag = 0;
+        int errorFlag = 0;
+        //根据条件查询联系人信息
+        TLcCustContact tLcCustContact = new TLcCustContact();
+        tLcCustContact.setCaseNoList(Arrays.asList(caseNos.split(",")));
+        tLcCustContact.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
+        if("1".equals(phoneStatus)){
+            tLcCustContact.setRelation(Integer.valueOf(phoneStatus));//本人
+        }
+        List<TLcCustContact> custContactList = tLcCustContactMapper.findCustContactList(tLcCustContact);
+        //获取号码状态
+        if(custContactList.size() > 0){
+            for (TLcCustContact custContact : custContactList) {
+                PhoneStatusRequestData reqData = new PhoneStatusRequestData();
+                String certificateNo = custContact.getCertificateNo();
+                String contactName = custContact.getContactName();
+                String phone = custContact.getPhone();
+
+                reqData.setId(certificateNo);
+                reqData.setName(contactName);
+                reqData.setCell(phone);
+                PhoneStatusResponse response = PhoneStatusUtil.getPhoneStatus(reqData);
+                Map<String, Integer> map = this.responseHandler(response, custContact, successFlag, errorFlag);
+                successFlag = map.get("successFlag");
+                errorFlag = map.get("errorFlag");
+            }
+        }
+        result.put("successFlag",successFlag);
+        result.put("errorFlag",errorFlag);
+        return result;
+
+    }
+
+    private Map<String,Integer> responseHandler(PhoneStatusResponse response , TLcCustContact custContact, int successFlag, int errorFlag){
+        Date curDate = new Date();
+        Map<String,Integer> map = new HashMap<>();
+        String phoneStaus = null;
+        if("00".equals(response.getCode()) && "600000".equals(response.getCodeDetail().getPhoneStatus())){
+            phoneStaus = response.getPhoneStatus().getResult();
+        }
+        if(phoneStaus != null){
+            TLcCustContact updateParam = new TLcCustContact();
+            updateParam.setPhone(custContact.getPhone());
+            updateParam.setPhoneStatus(phoneStaus);
+            this.tLcCustContactMapper.updatePhoneStatus(updateParam);
+            //插入号码状态表
+            PhoneStatus insertParam = new PhoneStatus();
+            insertParam.setCaseNo(custContact.getCaseNo());
+            insertParam.setWaje(custContact.getArrearsTotal());
+            insertParam.setJayhje(custContact.getCloseCaseYhje());
+            insertParam.setPhone(custContact.getPhone());
+            insertParam.setRelation(custContact.getRelation());
+            insertParam.setPhonestatus(phoneStaus);
+            insertParam.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
+            insertParam.setOrgName(ShiroUtils.getSysUser().getOrgName());
+            insertParam.setCreateBy(ShiroUtils.getLoginName());
+            insertParam.setCreateTime(curDate);
+            this.phoneStatusMapper.insertPhoneStatus(insertParam);
+            successFlag = successFlag + 1;
+        }else{
+            TLcCustContact updateParam = new TLcCustContact();
+            updateParam.setPhone(custContact.getPhone());
+            updateParam.setPhoneStatus("-1");//失败
+            this.tLcCustContactMapper.updatePhoneStatus(updateParam);
+            //插入号码状态表
+            PhoneStatus insertParam = new PhoneStatus();
+            insertParam.setCaseNo(custContact.getCaseNo());
+            insertParam.setWaje(custContact.getArrearsTotal());
+            insertParam.setJayhje(custContact.getCloseCaseYhje());
+            insertParam.setPhone(custContact.getPhone());
+            insertParam.setRelation(custContact.getRelation());
+            insertParam.setPhonestatus("-1");//失败
+            insertParam.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
+            insertParam.setOrgName(ShiroUtils.getSysUser().getOrgName());
+            insertParam.setCreateBy(ShiroUtils.getLoginName());
+            insertParam.setCreateTime(curDate);
+            this.phoneStatusMapper.insertPhoneStatus(insertParam);
+            errorFlag = errorFlag + 1;
+        }
+        map.put("successFlag",successFlag);
+        map.put("errorFlag",errorFlag);
+        return map;
+    }
+
 
 }
 

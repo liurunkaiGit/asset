@@ -65,6 +65,34 @@ public class CommonController
         }
     }
 
+    @GetMapping("common/downloadByName")
+    public void fileDownloadByName(String fileName, Boolean delete, HttpServletResponse response, HttpServletRequest request)
+    {
+        try
+        {
+            if (!FileUtils.isValidFilename(fileName))
+            {
+                throw new Exception(StringUtils.format("文件名称({})非法，不允许下载。 ", fileName));
+            }
+            String realFileName =fileName;
+            String filePath = Global.getDownloadPath() + fileName;
+
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("multipart/form-data");
+            response.setHeader("Content-Disposition",
+                    "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, realFileName));
+            FileUtils.writeBytes(filePath, response.getOutputStream());
+            if (delete)
+            {
+                FileUtils.deleteFile(filePath);
+            }
+        }
+        catch (Exception e)
+        {
+            log.error("下载文件失败", e);
+        }
+    }
+
     /**
      * 通用上传请求
      */
