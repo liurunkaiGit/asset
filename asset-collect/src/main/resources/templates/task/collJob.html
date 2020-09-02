@@ -383,20 +383,14 @@
                     <select id="exonNum" onchange="initial1();" style="width: 120px;height: 22px;" ></select>
                     <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)" id="platformName"></span>
                 </div>-->
-                <!--<div>
-                    <div>
-                        <span style="margin-right: 70%;"><b>记事本</b></span><span></span ><a onclick="editNotebook()"><img src="/img/editNotebook.png" class="imgso" width="20px" height="23px" title="编辑"/></a></span>
-                    </div>
-                    <textarea rows="3" id="notebook" class="textarea-inherit" readonly></textarea>
-                </div>-->
                 <div class="row" style="width: 98%">
-                    <div class="col-sm-12">
+                    <div class="col-sm-12" style="height: 100px;">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title" style="height: 18px;">
                                 <h5>记事本</h5>
                                 <a onclick="editNotebook()" style="float: right"><img src="/img/editNotebook.png" class="imgso" width="18px" height="20px" title="编辑"/></a>
                             </div>
-                            <div class="ibox-content" id="eg">
+                            <div class="ibox-content" id="eg" style="height: 25px;">
 
                                 <div class="click2edit wrapper" id="notebook">
 
@@ -424,7 +418,7 @@
                     <button class="btn btn-danger" style="height: 25px;padding: 3px;" id="letterApply" onclick="letterApply()">信函申请</button>
                 </div>
             </div>
-            <div class="tab-pane" style="height: 222px;overflow: auto">
+            <div class="tab-pane" style="height: 150px;overflow: auto">
                 <table id="custContactTable">
                     <tr>
                         <th>联系人</th>
@@ -3384,6 +3378,10 @@
      * 保存记事本
      */
     function saveNotebook() {
+        if ($("#editNotebook").val().length >= 100) {
+            $.modal.alertError("长度超出范围");
+            return false;
+        }
         $.post(
             prefix + "/saveNotebook",
             {
@@ -3409,7 +3407,7 @@
     function subNotebook(value, length) {
         // value = $.table.tooltip(value);
         // return value;
-        var _length = $.common.isEmpty(length) ? 20 : length;
+        var _length = $.common.isEmpty(length) ? 35 : length;
         var _text = "";
         var _value = $.common.nullToStr(value);
         // var _target = $.common.isEmpty(target) ? 'copy' : target;
