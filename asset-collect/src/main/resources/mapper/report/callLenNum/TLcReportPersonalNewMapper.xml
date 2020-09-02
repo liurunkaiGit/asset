@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.report.mapper.TLcReportPersonalNewMapper">
+    
+    <resultMap type="com.ruoyi.report.domain.TLcReportPersonalNew" id="TLcReportPersonalNewResult">
+        <result property="reportData"    column="report_data"    />
+        <result property="timePeriod"    column="time_period"    />
+        <result property="platform"    column="platform"    />
+        <result property="callLen"    column="call_len"    />
+        <result property="callNum"    column="call_num"    />
+        <result property="calledNum"    column="called_num"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectTLcReportPersonalNewVo">
+        select report_data, time_period, platform, call_len, call_num, called_num, user_id from t_lc_report_personal_new
+    </sql>
+
+    <select id="selectTLcReportPersonalNewList" parameterType="TLcReportPersonalNew" resultMap="TLcReportPersonalNewResult">
+        <include refid="selectTLcReportPersonalNewVo"/>
+        <where>  
+            <if test="reportData != null "> and report_data = #{reportData}</if>
+            <if test="timePeriod != null  and timePeriod != ''"> and time_period = #{timePeriod}</if>
+            <if test="platform != null  and platform != ''"> and platform = #{platform}</if>
+            <if test="callLen != null "> and call_len = #{callLen}</if>
+            <if test="callNum != null "> and call_num = #{callNum}</if>
+            <if test="calledNum != null "> and called_num = #{calledNum}</if>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+        </where>
+    </select>
+    
+    <select id="selectTLcReportPersonalNewById" parameterType="Date" resultMap="TLcReportPersonalNewResult">
+        <include refid="selectTLcReportPersonalNewVo"/>
+        where report_data = #{reportData}
+    </select>
+
+    <select id="selectReportPersonalListByTimePeriod" resultMap="TLcReportPersonalNewResult">
+        SELECT
+            #{date} AS report_data,
+            #{timePeriod} as time_period,
+            re.platform,
+            re.create_by as user_id,
+            COUNT(1) as call_num,
+            (SELECT COUNT(1) as thcs FROM t_lc_call_record r WHERE r.create_time BETWEEN #{startTimePeriod} AND #{endTimePeriod} and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) called_num,
+            (SELECT sum(r.call_len) / 1000 / 60 as thsc FROM t_lc_call_record r WHERE r.create_time BETWEEN #{startTimePeriod} AND #{endTimePeriod} and r.call_len is not null and r.call_len != '' and r.platform = re.platform and r.create_by = re.create_by GROUP BY r.platform,r.create_by ) call_len
+        FROM t_lc_call_record re WHERE re.create_time BETWEEN #{startTimePeriod} AND #{endTimePeriod} GROUP BY re.platform,re.create_by
+    </select>
+
+    <insert id="insertTLcReportPersonalNew" parameterType="TLcReportPersonalNew">
+        insert into t_lc_report_personal_new
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reportData != null ">report_data,</if>
+            <if test="timePeriod != null  and timePeriod != ''">time_period,</if>
+            <if test="platform != null  and platform != ''">platform,</if>
+            <if test="callLen != null ">call_len,</if>
+            <if test="callNum != null ">call_num,</if>
+            <if test="calledNum != null ">called_num,</if>
+            <if test="userId != null  and userId != ''">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reportData != null ">#{reportData},</if>
+            <if test="timePeriod != null  and timePeriod != ''">#{timePeriod},</if>
+            <if test="platform != null  and platform != ''">#{platform},</if>
+            <if test="callLen != null ">#{callLen},</if>
+            <if test="callNum != null ">#{callNum},</if>
+            <if test="calledNum != null ">#{calledNum},</if>
+            <if test="userId != null  and userId != ''">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLcReportPersonalNew" parameterType="TLcReportPersonalNew">
+        update t_lc_report_personal_new
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="timePeriod != null  and timePeriod != ''">time_period = #{timePeriod},</if>
+            <if test="platform != null  and platform != ''">platform = #{platform},</if>
+            <if test="callLen != null ">call_len = #{callLen},</if>
+            <if test="callNum != null ">call_num = #{callNum},</if>
+            <if test="calledNum != null ">called_num = #{calledNum},</if>
+            <if test="userId != null  and userId != ''">user_id = #{userId},</if>
+        </trim>
+        where report_data = #{reportData}
+    </update>
+
+    <delete id="deleteTLcReportPersonalNewById" parameterType="Date">
+        delete from t_lc_report_personal_new where report_data = #{reportData}
+    </delete>
+
+    <delete id="deleteTLcReportPersonalNewByIds" parameterType="String">
+        delete from t_lc_report_personal_new where report_data in 
+        <foreach item="reportData" collection="array" open="(" separator="," close=")">
+            #{reportData}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -32,137 +32,127 @@ public class TLcReportPersonalServiceImpl implements ITLcReportPersonalService {
      */
     @Override
     public List<TLcReportPersonal> selectTLcReportPersonalList(TLcReportPersonal tLcReportPersonal) {
-//        List<TLcReportPersonal> list;
-//        if (tLcReportPersonal.getReportData() == null || org.apache.commons.lang3.time.DateUtils.isSameDay(tLcReportPersonal.getReportData(), new Date())) {
-//            Map<String, Object> param = new HashMap<>();
-////            param.put("day", 0);
-//            param.put("date", LocalDate.now());
-//            if (StringUtils.isNotBlank(tLcReportPersonal.getUserName())) {
-//                param.put("agentName", tLcReportPersonal.getUserName());
-//            }
-//            list = selectReportPersonalList(param);
-//        } else {
-//            list = this.tLcReportPersonalMapper.selectTLcReportPersonalList(tLcReportPersonal);
-//        }
-        List<TLcReportPersonal> list = this.tLcReportPersonalMapper.selectTLcReportPersonalList(tLcReportPersonal);
-        Map<String, List<TLcReportPersonal>> map = list.stream().collect(Collectors.groupingBy(TLcReportPersonal::getLoginName));
-        for (Map.Entry<String, List<TLcReportPersonal>> personalMap : map.entrySet()) {
-            Integer paCalledNum = 0;
-            Integer paCallNum = 0;
-            BigDecimal paCalledLen = new BigDecimal(0.00);
-            Integer zjCalledNum = 0;
-            Integer zjCallNum = 0;
-            BigDecimal zjCalledLen = new BigDecimal(0.00);
-            Integer totalCalledNum = 0;
-            Integer totalCallNum = 0;
-            BigDecimal totalCalledLen = new BigDecimal(0.00);
-            TLcReportPersonal reportPersonal = personalMap.getValue().get(0);
-            List<String> timePeriodList = new ArrayList<>();
-            for (TLcReportPersonal personal : personalMap.getValue()) {
-                timePeriodList.add(personal.getTimePeriod());
-                // 计算每一行的合计值
-                Integer rowTotalCalledNum = (personal.getPaCalledNum() == null ? 0 : personal.getPaCalledNum()) + (personal.getZjCalledNum() == null ? 0 : personal.getZjCalledNum());
-                Integer rowTotalCallNum = (personal.getPaCallNum() == null ? 0 : personal.getPaCallNum()) + (personal.getZjCallNum() == null ? 0 : personal.getZjCallNum());
-                String rowTotalCallLen = String.valueOf(org.apache.commons.lang3.StringUtils.isEmpty(personal.getPaCallLen()) ? new BigDecimal(0.00) : new BigDecimal(personal.getPaCallLen()).add(StringUtils.isEmpty(personal.getZjCallLen()) ? new BigDecimal(0.00) : new BigDecimal(personal.getZjCallLen())));
-                // 设置每一行的合计值
-                personal.setTotalCalledNum(rowTotalCalledNum);
-                personal.setTotalCallNum(rowTotalCallNum);
-                personal.setTotalCallLen(rowTotalCallLen);
-                // 计算合计行的合计值
-                paCalledNum += personal.getPaCalledNum() == null ? 0 : personal.getPaCalledNum();
-                paCallNum += personal.getPaCallNum() == null ? 0 : personal.getPaCallNum();
-                paCalledLen = paCalledLen.add(StringUtils.isEmpty(personal.getPaCallLen()) ? new BigDecimal(0.00) : new BigDecimal(personal.getPaCallLen()));
-                zjCalledNum += personal.getZjCalledNum() == null ? 0 : personal.getZjCalledNum();
-                zjCallNum += personal.getZjCallNum() == null ? 0 : personal.getZjCallNum();
-                zjCalledLen = zjCalledLen.add(StringUtils.isEmpty(personal.getZjCallLen()) ? new BigDecimal(0.00) : new BigDecimal(personal.getZjCallLen()));
-                totalCalledNum += personal.getTotalCalledNum();
-                totalCallNum += personal.getTotalCallNum();
-                totalCalledLen = totalCalledLen.add(new BigDecimal(personal.getTotalCallLen()));
+        List<TLcReportPersonal> list = this.tLcReportPersonalMapper.selectReportPersonalList(tLcReportPersonal);
+        if (list != null && list.size() > 0) {
+            Map<String, List<TLcReportPersonal>> map = list.stream().collect(Collectors.groupingBy(TLcReportPersonal::getLoginName));
+            for (Map.Entry<String, List<TLcReportPersonal>> personalMap : map.entrySet()) {
+                Integer paCalledNum = 0;
+                Integer paCallNum = 0;
+                BigDecimal paCalledLen = new BigDecimal(0.00);
+                Integer zjCalledNum = 0;
+                Integer zjCallNum = 0;
+                BigDecimal zjCalledLen = new BigDecimal(0.00);
+                Integer totalCalledNum = 0;
+                Integer totalCallNum = 0;
+                BigDecimal totalCalledLen = new BigDecimal(0.00);
+                TLcReportPersonal reportPersonal = personalMap.getValue().get(0);
+                List<String> timePeriodList = new ArrayList<>();
+                for (TLcReportPersonal personal : personalMap.getValue()) {
+                    timePeriodList.add(personal.getTimePeriod());
+                    // 计算每一行的合计值
+                    Integer rowTotalCalledNum = (personal.getPaCalledNum() == null ? 0 : personal.getPaCalledNum()) + (personal.getZjCalledNum() == null ? 0 : personal.getZjCalledNum());
+                    Integer rowTotalCallNum = (personal.getPaCallNum() == null ? 0 : personal.getPaCallNum()) + (personal.getZjCallNum() == null ? 0 : personal.getZjCallNum());
+                    String rowTotalCallLen = String.valueOf(org.apache.commons.lang3.StringUtils.isEmpty(personal.getPaCallLen()) ? new BigDecimal(0.00) : new BigDecimal(personal.getPaCallLen()).add(StringUtils.isEmpty(personal.getZjCallLen()) ? new BigDecimal(0.00) : new BigDecimal(personal.getZjCallLen())));
+                    // 设置每一行的合计值
+                    personal.setTotalCalledNum(rowTotalCalledNum);
+                    personal.setTotalCallNum(rowTotalCallNum);
+                    personal.setTotalCallLen(rowTotalCallLen);
+                    // 计算合计行的合计值
+                    paCalledNum += personal.getPaCalledNum() == null ? 0 : personal.getPaCalledNum();
+                    paCallNum += personal.getPaCallNum() == null ? 0 : personal.getPaCallNum();
+                    paCalledLen = paCalledLen.add(StringUtils.isEmpty(personal.getPaCallLen()) ? new BigDecimal(0.00) : new BigDecimal(personal.getPaCallLen()));
+                    zjCalledNum += personal.getZjCalledNum() == null ? 0 : personal.getZjCalledNum();
+                    zjCallNum += personal.getZjCallNum() == null ? 0 : personal.getZjCallNum();
+                    zjCalledLen = zjCalledLen.add(StringUtils.isEmpty(personal.getZjCallLen()) ? new BigDecimal(0.00) : new BigDecimal(personal.getZjCallLen()));
+                    totalCalledNum += personal.getTotalCalledNum();
+                    totalCallNum += personal.getTotalCallNum();
+                    totalCalledLen = totalCalledLen.add(new BigDecimal(personal.getTotalCallLen()));
+                }
+                if (!timePeriodList.contains("0-9")) {
+                    TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
+                    personal = personal.setTimePeriod("0-9");
+                    list.add(personal);
+                }
+                if (!timePeriodList.contains("09-10")) {
+                    TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
+                    personal = personal.setTimePeriod("09-10");
+                    list.add(personal);
+                }
+                if (!timePeriodList.contains("10-11")) {
+                    TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
+                    personal = personal.setTimePeriod("10-11");
+                    list.add(personal);
+                }
+                if (!timePeriodList.contains("11-12")) {
+                    TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
+                    personal = personal.setTimePeriod("11-12");
+                    list.add(personal);
+                }
+                if (!timePeriodList.contains("12-13")) {
+                    TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
+                    personal = personal.setTimePeriod("12-13");
+                    list.add(personal);
+                }
+                if (!timePeriodList.contains("13-14")) {
+                    TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
+                    personal = personal.setTimePeriod("13-14");
+                    list.add(personal);
+                }
+                if (!timePeriodList.contains("14-15")) {
+                    TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
+                    personal = personal.setTimePeriod("14-15");
+                    list.add(personal);
+                }
+                if (!timePeriodList.contains("15-16")) {
+                    TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
+                    personal = personal.setTimePeriod("15-16");
+                    list.add(personal);
+                }
+                if (!timePeriodList.contains("16-17")) {
+                    TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
+                    personal = personal.setTimePeriod("16-17");
+                    list.add(personal);
+                }
+                if (!timePeriodList.contains("17-18")) {
+                    TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
+                    personal = personal.setTimePeriod("17-18");
+                    list.add(personal);
+                }
+                if (!timePeriodList.contains("18-19")) {
+                    TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
+                    personal = personal.setTimePeriod("18-19");
+                    list.add(personal);
+                }
+                if (!timePeriodList.contains("19-20")) {
+                    TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
+                    personal = personal.setTimePeriod("19-20");
+                    list.add(personal);
+                }
+                if (!timePeriodList.contains("20-24")) {
+                    TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
+                    personal = personal.setTimePeriod("20-24");
+                    list.add(personal);
+                }
+                TLcReportPersonal totalPersonal = TLcReportPersonal.builder()
+                        .reportData(tLcReportPersonal.getReportData())
+                        .timePeriod("合计")
+                        .paCalledNum(paCalledNum)
+                        .paCallNum(paCallNum)
+                        .paCallLen(String.valueOf(paCalledLen))
+                        .zjCalledNum(zjCalledNum)
+                        .zjCallNum(zjCallNum)
+                        .zjCallLen(String.valueOf(zjCalledLen))
+                        .totalCalledNum(totalCalledNum)
+                        .totalCallNum(totalCallNum)
+                        .totalCallLen(String.valueOf(totalCalledLen))
+                        .userGroup(reportPersonal.getUserGroup())
+                        .loginName(reportPersonal.getLoginName())
+                        .userName(reportPersonal.getUserName())
+                        .build();
+                list.add(totalPersonal);
             }
-            if (!timePeriodList.contains("0-9")) {
-                TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
-                personal = personal.setTimePeriod("0-9");
-                list.add(personal);
-            }
-            if (!timePeriodList.contains("09-10")) {
-                TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
-                personal = personal.setTimePeriod("09-10");
-                list.add(personal);
-            }
-            if (!timePeriodList.contains("10-11")) {
-                TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
-                personal = personal.setTimePeriod("10-11");
-                list.add(personal);
-            }
-            if (!timePeriodList.contains("11-12")) {
-                TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
-                personal = personal.setTimePeriod("11-12");
-                list.add(personal);
-            }
-            if (!timePeriodList.contains("12-13")) {
-                TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
-                personal = personal.setTimePeriod("12-13");
-                list.add(personal);
-            }
-            if (!timePeriodList.contains("13-14")) {
-                TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
-                personal = personal.setTimePeriod("13-14");
-                list.add(personal);
-            }
-            if (!timePeriodList.contains("14-15")) {
-                TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
-                personal = personal.setTimePeriod("14-15");
-                list.add(personal);
-            }
-            if (!timePeriodList.contains("15-16")) {
-                TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
-                personal = personal.setTimePeriod("15-16");
-                list.add(personal);
-            }
-            if (!timePeriodList.contains("16-17")) {
-                TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
-                personal = personal.setTimePeriod("16-17");
-                list.add(personal);
-            }
-            if (!timePeriodList.contains("17-18")) {
-                TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
-                personal = personal.setTimePeriod("17-18");
-                list.add(personal);
-            }
-            if (!timePeriodList.contains("18-19")) {
-                TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
-                personal = personal.setTimePeriod("18-19");
-                list.add(personal);
-            }
-            if (!timePeriodList.contains("19-20")) {
-                TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
-                personal = personal.setTimePeriod("19-20");
-                list.add(personal);
-            }
-            if (!timePeriodList.contains("20-24")) {
-                TLcReportPersonal personal = buildReportPersonal(tLcReportPersonal, reportPersonal);
-                personal = personal.setTimePeriod("20-24");
-                list.add(personal);
-            }
-            TLcReportPersonal totalPersonal = TLcReportPersonal.builder()
-                    .reportData(tLcReportPersonal.getReportData())
-                    .timePeriod("合计")
-                    .paCalledNum(paCalledNum)
-                    .paCallNum(paCallNum)
-                    .paCallLen(String.valueOf(paCalledLen))
-                    .zjCalledNum(zjCalledNum)
-                    .zjCallNum(zjCallNum)
-                    .zjCallLen(String.valueOf(zjCalledLen))
-                    .totalCalledNum(totalCalledNum)
-                    .totalCallNum(totalCallNum)
-                    .totalCallLen(String.valueOf(totalCalledLen))
-                    .userGroup(reportPersonal.getUserGroup())
-                    .loginName(reportPersonal.getLoginName())
-                    .userName(reportPersonal.getUserName())
-                    .build();
-            list.add(totalPersonal);
+            list = list.stream().sorted(Comparator.comparing(TLcReportPersonal::getLoginName).thenComparing(TLcReportPersonal::getTimePeriod)).collect(Collectors.toList());
         }
-        list = list.stream().sorted(Comparator.comparing(TLcReportPersonal::getLoginName).thenComparing(TLcReportPersonal::getTimePeriod)).collect(Collectors.toList());
         return list;
     }
 

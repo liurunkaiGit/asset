@@ -82,6 +82,44 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		GROUP BY t.create_by order by t.create_by
 	</select>
 
+    <select id="selectReportPersonalList" resultMap="TLcReportPersonalResult">
+        select
+            t.report_data AS report_data,
+            t.user_group,
+            t.login_name,
+            t.user_name,
+            t.time_period as time_period,
+            MAX(t.pa_called_num) as pa_called_num,
+            MAX(t.pa_call_len) as pa_call_len,
+            MAX(t.pa_call_num) as pa_call_num,
+            MAX(t.zj_called_num) as zj_called_num,
+            MAX(t.zj_call_len) as zj_call_len,
+            MAX(t.zj_call_num) as zj_call_num
+        from(
+            select
+                CASE t.platform WHEN 'PA' THEN t.called_num END  'pa_called_num',
+                CASE t.platform WHEN 'PA' THEN t.call_len END  'pa_call_len',
+                CASE t.platform WHEN 'PA' THEN t.call_num END  'pa_call_num',
+                CASE t.platform WHEN 'ZJ' THEN t.called_num END  'zj_called_num',
+                CASE t.platform WHEN 'ZJ' THEN t.call_len END  'zj_call_len',
+                CASE t.platform WHEN 'ZJ' THEN t.call_num END  'zj_call_num',
+                t.user_id,
+                t.platform,
+                t.time_period,
+                t.report_data,
+                t.user_group,
+                t.login_name,
+                t.user_name
+            from(
+                select t.*,su.user_group,su.login_name,su.user_name from t_lc_report_personal_new t,sys_user su
+                where t.user_id = su.user_id and t.user_id != 1 and t.report_data = #{reportData}
+                <if test="userName != null and userName != ''">
+                    and su.user_name = #{userName}
+                </if>
+            )t GROUP BY t.user_id,t.platform,t.time_period
+        ) t GROUP BY t.user_id,t.time_period order by t.user_id
+    </select>
+
     <insert id="insertTLcReportPersonal" parameterType="com.ruoyi.report.domain.TLcReportPersonal">
         insert into t_lc_report_personal
         <trim prefix="(" suffix=")" suffixOverrides=",">

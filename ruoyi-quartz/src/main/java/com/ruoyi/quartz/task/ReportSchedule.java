@@ -6,6 +6,7 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.report.domain.*;
 import com.ruoyi.report.mapper.TLcReportPersonalMapper;
+import com.ruoyi.report.mapper.TLcReportPersonalNewMapper;
 import com.ruoyi.report.mapper.TLcReportPlatformMapper;
 import com.ruoyi.report.service.ITLcReportCaseContactService;
 import com.ruoyi.report.service.ITLcReportDayProcessService;
@@ -42,6 +43,8 @@ public class ReportSchedule {
     private TLcReportPlatformMapper platformMapper;
     @Autowired
     private TLcReportPersonalMapper personalMapper;
+    @Autowired
+    private TLcReportPersonalNewMapper personalNewMapper;
     @Autowired
     private TLcCallRecordServiceImpl tLcCallRecordService;
 
@@ -177,7 +180,7 @@ public class ReportSchedule {
         } else {
             log.info("开始定时生成通时通次-个人明细汇总报表任务");
             // 查询通时通次-平台汇总报表数据
-            List<TLcReportPersonal> personalList = new ArrayList<>();
+            List<TLcReportPersonalNew> personalList = new ArrayList<>();
             Map<String, Object> param = new HashMap<>();
             long days = 1;
             if (StringUtils.isNotBlank(date)) {
@@ -211,10 +214,12 @@ public class ReportSchedule {
                     param.put("startTimePeriod", DateUtils.getTimePeriod(days, i, 0, 0));
                     param.put("endTimePeriod", DateUtils.getTimePeriod(days, i, 59, 59));
                 }
-                List<TLcReportPersonal> reportPersonalList = this.personalMapper.selectReportPersonalListByTimePeriod(param);
+//                List<TLcReportPersonal> reportPersonalList = this.personalMapper.selectReportPersonalListByTimePeriod(param);
+//                reportPersonalList.stream().forEach(personal -> personalList.add(personal));
+                List<TLcReportPersonalNew> reportPersonalList = this.personalNewMapper.selectReportPersonalListByTimePeriod(param);
                 reportPersonalList.stream().forEach(personal -> personalList.add(personal));
             }
-            personalList.stream().forEach(personal -> this.personalMapper.insertTLcReportPersonal(personal));
+            personalList.stream().forEach(personal -> this.personalNewMapper.insertTLcReportPersonalNew(personal));
             log.info("生成通时通次-个人明细汇总报表成功,{}", DateUtils.getNowDate());
         }
     }
