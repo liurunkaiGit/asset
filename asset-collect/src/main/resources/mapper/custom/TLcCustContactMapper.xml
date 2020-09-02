@@ -349,7 +349,7 @@
     </select>
     
     <select id="findCustContactList" parameterType="com.ruoyi.custom.domain.TLcCustContact" resultMap="TLcCustContactResult">
-        select DISTINCT t.phone,t.certificate_no,t.contact_name,t.id,t.relation,t.case_no,tt.arrears_total,tt.close_case_yhje
+        select t.phone,t.certificate_no,t.contact_name,t.id,t.relation,t.case_no,tt.arrears_total,tt.close_case_yhje
         from t_lc_cust_contact t,t_lc_task tt
         where t.case_no = tt.case_no and tt.task_status != 3
         and Not EXISTS(select 1 from t_lc_robot_black a where t.case_no = a.case_no)
@@ -366,6 +366,7 @@
         <if test="relation != null">
             AND t.relation = #{relation}
         </if>
+        group by t.phone
     </select>
 
     <update id="updatePhoneStatus" parameterType="com.ruoyi.custom.domain.TLcCustContact">
