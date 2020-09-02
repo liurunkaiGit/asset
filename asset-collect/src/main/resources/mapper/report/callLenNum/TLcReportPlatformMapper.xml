@@ -40,10 +40,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by time_period
     </select>
 
-    <select id="selectReportPlatform" parameterType="java.util.Map" resultMap="TLcReportPlatformResult">
+    <select id="selectReportPlatformList" resultMap="TLcReportPlatformResult">
         select
-            #{date} AS report_data,
-            #{timePeriod} as time_period,
+            t.report_data AS report_data,
+            t.time_period as time_period,
             MAX(t.pa_called_num) as pa_called_num,
             MAX(t.pa_call_len) as pa_call_len,
             MAX(t.pa_call_num) as pa_call_num,
@@ -53,21 +53,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from(
             select
                 CASE t.platform WHEN 'PA' THEN t.called_num END  'pa_called_num',
-                CASE t.platform WHEN 'PA' THEN t.call_len END  'pa_call_len',
+                CASE t.platform WHEN 'PA' THEN t.call_len/1000/60 END  'pa_call_len',
                 CASE t.platform WHEN 'PA' THEN t.call_num END  'pa_call_num',
                 CASE t.platform WHEN 'ZJ' THEN t.called_num END  'zj_called_num',
-                CASE t.platform WHEN 'ZJ' THEN t.call_len END  'zj_call_len',
-                CASE t.platform WHEN 'ZJ' THEN t.call_num END  'zj_call_num'
-            from(
-                SELECT
-                    re.platform,
-                    COUNT(1) as call_num,
-                    (SELECT sum(r.call_len)/1000/60 as call_len FROM t_lc_call_record r WHERE r.create_time BETWEEN #{startTimePeriod} and #{endTimePeriod} and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) call_len,
-                    (SELECT COUNT(1) as called_num FROM t_lc_call_record r WHERE r.create_time BETWEEN #{startTimePeriod} and #{endTimePeriod} and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) called_num
-                FROM
-                    t_lc_call_record re WHERE re.create_time BETWEEN #{startTimePeriod} and #{endTimePeriod} GROUP BY re.platform
-            ) t
-        ) t
+                CASE t.platform WHEN 'ZJ' THEN t.call_len/1000/60 END  'zj_call_len',
+                CASE t.platform WHEN 'ZJ' THEN t.call_num END  'zj_call_num',
+                t.report_data,
+                t.time_period
+            from t_lc_report_platform_new t where t.report_data = #{reportData}
+        ) t GROUP BY t.time_period
     </select>
 
     <insert id="insertTLcReportPlatform" parameterType="com.ruoyi.report.domain.TLcReportPlatform">

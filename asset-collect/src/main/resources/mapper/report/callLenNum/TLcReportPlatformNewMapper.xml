@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.report.mapper.TLcReportPlatformNewMapper">
+    
+    <resultMap type="com.ruoyi.report.domain.TLcReportPlatformNew" id="TLcReportPlatformNewResult">
+        <result property="reportData"    column="report_data"    />
+        <result property="timePeriod"    column="time_period"    />
+        <result property="calledNum"    column="called_num"    />
+        <result property="callLen"    column="call_len"    />
+        <result property="callNum"    column="call_num"    />
+        <result property="platform"    column="platform"    />
+    </resultMap>
+
+    <sql id="selectTLcReportPlatformNewVo">
+        select report_data, time_period, called_num, call_len, call_num, platform from t_lc_report_platform_new
+    </sql>
+
+    <select id="selectTLcReportPlatformNewList" parameterType="TLcReportPlatformNew" resultMap="TLcReportPlatformNewResult">
+        <include refid="selectTLcReportPlatformNewVo"/>
+        <where>  
+            <if test="reportData != null "> and report_data = #{reportData}</if>
+            <if test="timePeriod != null  and timePeriod != ''"> and time_period = #{timePeriod}</if>
+            <if test="calledNum != null "> and called_num = #{calledNum}</if>
+            <if test="callLen != null "> and call_len = #{callLen}</if>
+            <if test="callNum != null "> and call_num = #{callNum}</if>
+            <if test="platform != null  and platform != ''"> and platform = #{platform}</if>
+        </where>
+    </select>
+    
+    <select id="selectTLcReportPlatformNewById" parameterType="Date" resultMap="TLcReportPlatformNewResult">
+        <include refid="selectTLcReportPlatformNewVo"/>
+        where report_data = #{reportData}
+    </select>
+
+    <select id="selectReportPlatform" parameterType="java.util.Map" resultMap="TLcReportPlatformNewResult">
+        SELECT
+            #{date} AS report_data,
+            #{timePeriod} as time_period,
+            re.platform,
+            COUNT(1) as call_num,
+            (SELECT sum(r.call_len) as call_len FROM t_lc_call_record r WHERE r.create_time BETWEEN #{startTimePeriod} and #{endTimePeriod} and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) call_len,
+            (SELECT COUNT(1) as called_num FROM t_lc_call_record r WHERE r.create_time BETWEEN #{startTimePeriod} and #{endTimePeriod} and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) called_num
+        FROM
+            t_lc_call_record re WHERE re.create_time BETWEEN #{startTimePeriod} and #{endTimePeriod} GROUP BY re.platform
+    </select>
+
+    <insert id="insertTLcReportPlatformNew" parameterType="TLcReportPlatformNew">
+        insert into t_lc_report_platform_new
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reportData != null ">report_data,</if>
+            <if test="timePeriod != null  and timePeriod != ''">time_period,</if>
+            <if test="calledNum != null ">called_num,</if>
+            <if test="callLen != null ">call_len,</if>
+            <if test="callNum != null ">call_num,</if>
+            <if test="platform != null  and platform != ''">platform,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reportData != null ">#{reportData},</if>
+            <if test="timePeriod != null  and timePeriod != ''">#{timePeriod},</if>
+            <if test="calledNum != null ">#{calledNum},</if>
+            <if test="callLen != null ">#{callLen},</if>
+            <if test="callNum != null ">#{callNum},</if>
+            <if test="platform != null  and platform != ''">#{platform},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLcReportPlatformNew" parameterType="TLcReportPlatformNew">
+        update t_lc_report_platform_new
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="timePeriod != null  and timePeriod != ''">time_period = #{timePeriod},</if>
+            <if test="calledNum != null ">called_num = #{calledNum},</if>
+            <if test="callLen != null ">call_len = #{callLen},</if>
+            <if test="callNum != null ">call_num = #{callNum},</if>
+            <if test="platform != null  and platform != ''">platform = #{platform},</if>
+        </trim>
+        where report_data = #{reportData}
+    </update>
+
+    <delete id="deleteTLcReportPlatformNewById" parameterType="Date">
+        delete from t_lc_report_platform_new where report_data = #{reportData}
+    </delete>
+
+    <delete id="deleteTLcReportPlatformNewByIds" parameterType="String">
+        delete from t_lc_report_platform_new where report_data in 
+        <foreach item="reportData" collection="array" open="(" separator="," close=")">
+            #{reportData}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -32,11 +32,5 @@ public interface TLcReportPlatformMapper {
 
 //    List<TLcReportPlatform> selectReportPlatformList(Map<String, Object> param);
 
-    /**
-     * 查询指定时间段数据
-     *
-     * @param param
-     * @return
-     */
-    TLcReportPlatform selectReportPlatform(Map<String, Object> param);
+    List<TLcReportPlatform> selectReportPlatformList(TLcReportPlatform tLcReportPlatform);
 }

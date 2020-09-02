@@ -8,6 +8,7 @@ import com.ruoyi.report.domain.*;
 import com.ruoyi.report.mapper.TLcReportPersonalMapper;
 import com.ruoyi.report.mapper.TLcReportPersonalNewMapper;
 import com.ruoyi.report.mapper.TLcReportPlatformMapper;
+import com.ruoyi.report.mapper.TLcReportPlatformNewMapper;
 import com.ruoyi.report.service.ITLcReportCaseContactService;
 import com.ruoyi.report.service.ITLcReportDayProcessService;
 import com.ruoyi.report.service.ITLcReportRecoveryService;
@@ -41,6 +42,8 @@ public class ReportSchedule {
     private ITLcReportCaseContactService caseContactService;
     @Autowired
     private TLcReportPlatformMapper platformMapper;
+    @Autowired
+    private TLcReportPlatformNewMapper platformNewMapper;
     @Autowired
     private TLcReportPersonalMapper personalMapper;
     @Autowired
@@ -129,7 +132,7 @@ public class ReportSchedule {
         } else {
             log.info("开始定时生成通时通次-平台汇总报表任务");
             // 查询通时通次-平台汇总报表数据
-            List<TLcReportPlatform> platformList = new ArrayList<>();
+            List<TLcReportPlatformNew> platformList = new ArrayList<>();
             Map<String, Object> param = new HashMap<>();
             long days = 1;
             if (StringUtils.isNotBlank(date)) {
@@ -163,10 +166,10 @@ public class ReportSchedule {
                     param.put("startTimePeriod", DateUtils.getTimePeriod(days, i, 0, 0));
                     param.put("endTimePeriod", DateUtils.getTimePeriod(days, i, 59, 59));
                 }
-                TLcReportPlatform platform = this.platformMapper.selectReportPlatform(param);
-                platformList.add(platform);
+                List<TLcReportPlatformNew> platformNewList = this.platformNewMapper.selectReportPlatform(param);
+                platformNewList.stream().forEach(platformNew -> platformList.add(platformNew));
             }
-            platformList.stream().forEach(reportPlatform -> this.platformMapper.insertTLcReportPlatform(reportPlatform));
+            platformList.stream().forEach(reportPlatform -> this.platformNewMapper.insertTLcReportPlatformNew(reportPlatform));
             log.info("生成通时通次-平台汇总报表成功,{}", DateUtils.getNowDate());
         }
     }
@@ -214,8 +217,6 @@ public class ReportSchedule {
                     param.put("startTimePeriod", DateUtils.getTimePeriod(days, i, 0, 0));
                     param.put("endTimePeriod", DateUtils.getTimePeriod(days, i, 59, 59));
                 }
-//                List<TLcReportPersonal> reportPersonalList = this.personalMapper.selectReportPersonalListByTimePeriod(param);
-//                reportPersonalList.stream().forEach(personal -> personalList.add(personal));
                 List<TLcReportPersonalNew> reportPersonalList = this.personalNewMapper.selectReportPersonalListByTimePeriod(param);
                 reportPersonalList.stream().forEach(personal -> personalList.add(personal));
             }

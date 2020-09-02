@@ -32,7 +32,5 @@ public interface TLcReportPersonalMapper {
 
 //    List<TLcReportPersonal> selectReportPersonalList(Map<String, Object> param);
 
-    List<TLcReportPersonal> selectReportPersonalListByTimePeriod(Map<String, Object> param);
-
     List<TLcReportPersonal> selectReportPersonalList(TLcReportPersonal tLcReportPersonal);
 }

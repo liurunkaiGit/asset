@@ -7,13 +7,13 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * 通时通次个人明细汇总报对象 t_lc_report_personal_new
+ * 通时通次平台汇总报对象 t_lc_report_platform_new
  *
  * @author liurunkai
  * @date 2020-09-02
  */
 @Data
-public class TLcReportPersonalNew extends BaseEntity {
+public class TLcReportPlatformNew extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -29,32 +29,27 @@ public class TLcReportPersonalNew extends BaseEntity {
     private String timePeriod;
 
     /**
-     * 平安通话次数
+     * 通话次数
      */
-    @Excel(name = "平安通话次数")
-    private String platform;
-
-    /**
-     * 平安通话时长
-     */
-    @Excel(name = "平安通话时长")
-    private Double callLen;
-
-    /**
-     * 平安拨打次数
-     */
-    @Excel(name = "平安拨打次数")
-    private Integer callNum;
-
-    /**
-     * 自建通话次数
-     */
-    @Excel(name = "自建通话次数")
+    @Excel(name = "通话次数")
     private Integer calledNum;
 
     /**
-     * 自建通话时长
+     * 通话时长
      */
-    @Excel(name = "自建通话时长")
-    private String userId;
+    @Excel(name = "通话时长")
+    private Double callLen;
+
+    /**
+     * 拨打次数
+     */
+    @Excel(name = "拨打次数")
+    private Integer callNum;
+
+    /**
+     * 平台
+     */
+    @Excel(name = "平台")
+    private String platform;
+
 }
