@@ -136,26 +136,26 @@ public class TLcDuncaseController extends BaseController {
     @ResponseBody
     public AjaxResult export(TLcDuncase tLcDuncase, HttpServletRequest request) {
         Map<String, String[]> parameterMap = request.getParameterMap();
-        if (tLcDuncase.getEndRecentlyAllotDate() != null) {
-            tLcDuncase.setEndRecentlyAllotDate(DateUtils.getEndOfDay(tLcDuncase.getEndRecentlyAllotDate()));
-        }
-        if (tLcDuncase.getEndRecentlyFollowUpDate() != null) {
-            tLcDuncase.setEndRecentlyFollowUpDate(DateUtils.getEndOfDay(tLcDuncase.getEndRecentlyFollowUpDate()));
-        }
-        if (tLcDuncase.getEndEnterCollDate() != null) {
-            tLcDuncase.setEndEnterCollDate(DateUtils.getEndOfDay(tLcDuncase.getEndEnterCollDate()));
-        }
-        //行动码 电话码 转多选
-        String callCode = request.getParameter("callSign");//电话码
-        if(StringUtils.isNotEmpty(callCode)){
-            tLcDuncase.setCallCodeList(Arrays.asList(callCode.split(",")));
-            tLcDuncase.setCallSign(null);
-        }
-        String actionCode = request.getParameter("actionCode");//行动码
-        if(StringUtils.isNotEmpty(actionCode)){
-            tLcDuncase.setActionCodeList(Arrays.asList(actionCode.split(",")));
-            tLcDuncase.setActionCode(null);
-        }
+//        if (tLcDuncase.getEndRecentlyAllotDate() != null) {
+//            tLcDuncase.setEndRecentlyAllotDate(DateUtils.getEndOfDay(tLcDuncase.getEndRecentlyAllotDate()));
+//        }
+//        if (tLcDuncase.getEndRecentlyFollowUpDate() != null) {
+//            tLcDuncase.setEndRecentlyFollowUpDate(DateUtils.getEndOfDay(tLcDuncase.getEndRecentlyFollowUpDate()));
+//        }
+//        if (tLcDuncase.getEndEnterCollDate() != null) {
+//            tLcDuncase.setEndEnterCollDate(DateUtils.getEndOfDay(tLcDuncase.getEndEnterCollDate()));
+//        }
+//        //行动码 电话码 转多选
+//        String callCode = request.getParameter("callSign");//电话码
+//        if(StringUtils.isNotEmpty(callCode)){
+//            tLcDuncase.setCallCodeList(Arrays.asList(callCode.split(",")));
+//            tLcDuncase.setCallSign(null);
+//        }
+//        String actionCode = request.getParameter("actionCode");//行动码
+//        if(StringUtils.isNotEmpty(actionCode)){
+//            tLcDuncase.setActionCodeList(Arrays.asList(actionCode.split(",")));
+//            tLcDuncase.setActionCode(null);
+//        }
         String callCodeHistoryListStr = request.getParameter("callCodeHistoryListStr");//历史电话码
         if(StringUtils.isNotEmpty(callCodeHistoryListStr)){
             tLcDuncase.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));

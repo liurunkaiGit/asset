@@ -205,7 +205,7 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="collect:duncase:export">
+            <a class="btn btn-warning" onclick="exportDuncase()" shiro:hasPermission="collect:duncase:export">
                 <i class="fa fa-download"></i> 导出
             </a>
             <a class="btn btn-primary" onclick="findScore()">
@@ -655,6 +655,8 @@
         var caseNo = $("#caseNo").val();
         var customName = $("#customName").val();
         var taskStatus = $("#taskStatus").val();
+        var provinceId = $("#provinceId").val();
+        var cityId = $("#cityId").val();
         var callCodeHistoryListStr = $('#callCodeHistoryListStr').selectpicker('val');
         if (callCodeHistoryListStr != null) {
             callCodeHistoryListStr = callCodeHistoryListStr.join();
@@ -667,6 +669,8 @@
                 caseNo:caseNo,
                 customName:customName,
                 taskStatus:taskStatus,
+                provinceId:provinceId,
+                cityId:cityId,
                 callCodeHistoryList:callCodeHistoryListStr,
                 freeSQL:freeSQL
             },
@@ -757,6 +761,43 @@
         });
     }
 
+    function exportDuncase() {
+        var caseNo = $("#caseNo").val();
+        var customName = $("#customName").val();
+        var taskStatus = $("#taskStatus").val();
+        var provinceId = $("#provinceId").val();
+        var cityId = $("#cityId").val();
+        var callCodeHistoryListStr = $('#callCodeHistoryListStr').selectpicker('val');
+        if (callCodeHistoryListStr != null) {
+            callCodeHistoryListStr = callCodeHistoryListStr.join();
+        }
+        var freeSQL = $("#freeSQL").val();
+        // freeSQL = encodeURIComponent(freeSQL);
+        $.modal.loading("正在导出数据，请稍后...");
+        $.post(
+            prefix + "/export",
+            {
+                caseNo:caseNo,
+                customName:customName,
+                taskStatus:taskStatus,
+                provinceId:provinceId,
+                cityId:cityId,
+                callCodeHistoryListStr:callCodeHistoryListStr,
+                freeSQL:freeSQL
+            },
+            function(result) {
+                // alert(JSON.stringify(data));
+                if (result.code == web_status.SUCCESS) {
+                    window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
+            }
+        );
+    }
 
 </script>
 </body>
