@@ -304,6 +304,25 @@
                 clickToSelect:true,
                 showFooter: true,
                 modalName: "任务",
+                onColumnSwitch: function(field, checked){
+                    var mytaskStr = localStorage.getItem('mytask');
+                    var myJson = mytaskStr==''||null ==mytaskStr?{}:JSON.parse(mytaskStr);
+                    if(checked){
+                        delete myJson[field];
+                    }else{
+                        myJson[field]=false;
+                    }
+                    localStorage.setItem('mytask',JSON.stringify(myJson));
+                },
+                onLoadSuccess: function(data){
+                    var mytaskStr = localStorage.getItem('mytask');
+                    if(mytaskStr!='' && null !=mytaskStr && '{}' !=mytaskStr){
+                        var myJson = JSON.parse(mytaskStr);
+                        for (var val in myJson) {
+                            $('#bootstrap-table').bootstrapTable('hideColumn', val);
+                        }
+                    }
+                },
                 columns: [{
                     checkbox: true
                 },

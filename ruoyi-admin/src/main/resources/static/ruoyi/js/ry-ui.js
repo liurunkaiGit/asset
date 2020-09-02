@@ -111,6 +111,7 @@ var table = {
                     onDblClickCell: options.onDblClickCell,             // 双击某格触发的事件
                     onEditableSave: options.onEditableSave,             // 行内编辑保存的事件
                     onExpandRow: options.onExpandRow,                   // 点击详细视图的事件
+					onColumnSwitch: options.onColumnSwitch,             // 当切换列的显示状态（可见或不可见）时触发
                     rememberSelected: options.rememberSelected,         // 启用翻页记住前面的选择
                     fixedColumns: options.fixedColumns,                 // 是否启用冻结列（左侧）
                     fixedNumber: options.fixedNumber,                   // 列冻结的个数（左侧）
