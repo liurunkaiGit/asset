@@ -490,4 +490,6 @@ public class TLcTask extends BaseEntity {
     private String city;
 
     private String idCaseNoCertificateNo;
+
+    private String notebook;
 }

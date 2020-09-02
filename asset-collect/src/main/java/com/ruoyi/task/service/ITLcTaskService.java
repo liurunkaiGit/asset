@@ -322,4 +322,6 @@ public interface ITLcTaskService {
     Map<String, BigDecimal> searchAllTaskTotalMoney(TLcTask tLcTask);
 
     List<TLcTask> selectSameCaseTaskList(String certificateNo, String orgId);
+
+    Response updateNotebook(TLcTask tLcTask);
 }

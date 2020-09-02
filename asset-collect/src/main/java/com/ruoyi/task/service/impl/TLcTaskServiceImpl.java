@@ -744,6 +744,12 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         return this.tLcTaskMapper.selectSameCaseTaskList(certificateNo, orgId);
     }
 
+    @Override
+    public Response updateNotebook(TLcTask tLcTask) {
+        this.tLcTaskMapper.updateNotebook(tLcTask);
+        return Response.success(null);
+    }
+
     /**
      * 查询我的任务列表
      *

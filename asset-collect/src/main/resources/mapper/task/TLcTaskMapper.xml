@@ -48,6 +48,7 @@
         <result property="ljyhje" column="ljyhje" jdbcType="DECIMAL"/>
         <result property="score" column="score" jdbcType="INTEGER"/>
         <result property="sendRobotBatchNo" column="send_robot_batch_no" jdbcType="VARCHAR"/>
+        <result property="notebook" column="notebook" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="SELECT_T_LC_TASK">
@@ -91,7 +92,8 @@
         t.call_sign_value,
         t.phone,
         t.dqyhje,
-        t.send_robot_batch_no
+        t.send_robot_batch_no,
+        t.notebook
     </sql>
 
     <sql id="SELECT_SAME_TASK">
@@ -136,6 +138,7 @@
         t.phone,
         t.dqyhje,
         t.send_robot_batch_no,
+        t.notebook,
         a.account_date AS accountDate,
         a.jkrq,
         a.first_yqjc_date AS firstYqjcDate,
@@ -330,6 +333,7 @@
         d.product_name AS productName,
         d.score,
         t.certificate_no,
+        t.notebook,
         CONCAT(t.id,'@',t.case_no,'@',t.certificate_no) as idCaseNoCertificateNo
         FROM t_lc_task t,t_lc_duncase d
         WHERE t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no
@@ -1446,4 +1450,8 @@
         and t.task_status != 3
         order by t.owner_id desc
     </select>
+
+    <update id="updateNotebook" parameterType="com.ruoyi.task.domain.TLcTask">
+        UPDATE t_lc_task set notebook = #{notebook} WHERE id = #{id}
+    </update>
 </mapper>

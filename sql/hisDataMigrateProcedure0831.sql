@@ -434,7 +434,7 @@ begin
 -- 删除机器人任务总览表
     DELETE from t_lc_robot_task_pandect t where t.robot_task_status = 2 or t.robot_task_status = 50;
 -- 插入任务历史表
-    INSERT INTO `t_lc_task_his` (`case_no`, `certificate_no`, `certificate_type`, `custom_code`, `custom_name`, `arrears_total`, `task_status`, `overdue_days`, `overdue_aging`, `owner_id`, `owner_name`, `org_id`, `org_name`, `close_date`, `old_owner_id`, `task_type`, `allot_type`, `create_time`, `modify_time`, `create_by`, `modify_by`, `old_owner_name`, `robot_task_id`, `robot_call_strategy_id`, `transfer_type`, `enter_coll_date`, `close_case_yhje`, `recently_allot_date`, `recently_follow_up_date`, `hit_rule`, `hit_rule_desc`, `distribution_strategy`, `import_batch_no`, `action_code`, `action_code_value`, `call_sign`, `call_sign_value`, `phone`, `dqyhje`, `send_robot_batch_no`, `close_type`)
+    INSERT INTO `t_lc_task_his` (`case_no`, `certificate_no`, `certificate_type`, `custom_code`, `custom_name`, `arrears_total`, `task_status`, `overdue_days`, `overdue_aging`, `owner_id`, `owner_name`, `org_id`, `org_name`, `close_date`, `old_owner_id`, `task_type`, `allot_type`, `create_time`, `modify_time`, `create_by`, `modify_by`, `old_owner_name`, `robot_task_id`, `robot_call_strategy_id`, `transfer_type`, `enter_coll_date`, `close_case_yhje`, `recently_allot_date`, `recently_follow_up_date`, `hit_rule`, `hit_rule_desc`, `distribution_strategy`, `import_batch_no`, `action_code`, `action_code_value`, `call_sign`, `call_sign_value`, `phone`, `dqyhje`, `send_robot_batch_no`, `close_type`, `notebook`)
     SELECT
         case_no,
         certificate_no,
@@ -476,7 +476,8 @@ begin
         phone,
         dqyhje,
         send_robot_batch_no,
-        close_type
+        close_type,
+        notebook
     FROM
         t_lc_task
     where task_status = 3 AND NOW() >= (SELECT date_sub(close_date, INTERVAL - days DAY));

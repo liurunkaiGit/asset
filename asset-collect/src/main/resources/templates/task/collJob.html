@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
@@ -43,6 +43,11 @@
         }
         .sameCaseValue {
             margin-right: 100px;
+        }
+        .textarea-inherit {
+            width: 100%;
+            overflow: auto;
+            word-break: break-all; // 解决兼容问题
         }
     </style>
 
@@ -378,6 +383,29 @@
                     <select id="exonNum" onchange="initial1();" style="width: 120px;height: 22px;" ></select>
                     <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)" id="platformName"></span>
                 </div>-->
+                <!--<div>
+                    <div>
+                        <span style="margin-right: 70%;"><b>记事本</b></span><span></span ><a onclick="editNotebook()"><img src="/img/editNotebook.png" class="imgso" width="20px" height="23px" title="编辑"/></a></span>
+                    </div>
+                    <textarea rows="3" id="notebook" class="textarea-inherit" readonly></textarea>
+                </div>-->
+                <div class="row" style="width: 98%">
+                    <div class="col-sm-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title" style="height: 18px;">
+                                <h5>记事本</h5>
+                                <a onclick="editNotebook()" style="float: right"><img src="/img/editNotebook.png" class="imgso" width="18px" height="20px" title="编辑"/></a>
+                            </div>
+                            <div class="ibox-content" id="eg">
+
+                                <div class="click2edit wrapper" id="notebook">
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="btn-group-sm">
                 <a onclick="prevOrNext(1)"><img src="/img/pre.png" class="imgso" width="30px" title="上一条"/></a>
                 <a onclick="prevOrNext(2)"><img src="/img/next.png" class="imgso" width="30px" title="下一条"/></a>
@@ -748,6 +776,34 @@
                 </form>
                 <div style="text-align: center">
                     <button type="button" class="btn btn-primary" align="center" onclick="addLetterApply()">提交申请</button>
+                </div>
+            </div>
+            <!--<div class="modal-footer">
+                &lt;!&ndash;<button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>&ndash;&gt;
+                <button type="button" class="btn btn-primary" onclick="addLetterApply()">提交申请</button>
+            </div>-->
+        </div>
+    </div>
+</div>
+
+<div class="modal inmodal" id="notebookModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header" style="padding: 5px">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
+            </div>
+            <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+                <form class="form-horizontal m" id="form-notebook-add">
+                    <div class="form-group">
+                        <!--<label class="col-sm-3 control-label">记事本：</label>-->
+                        <div class="col-sm-8">
+                            <!--<input name="notebook" id="editNotebook" class="form-control" type="text" readonly>-->
+                            <textarea name="notebook" style="margin: 0px; width: 542px; height: 101px;" id="editNotebook" rows="3" ></textarea>
+                        </div>
+                    </div>
+                </form>
+                <div style="text-align: center">
+                    <button type="button" class="btn btn-primary" align="center" onclick="saveNotebook()">保存</button>
                 </div>
             </div>
             <!--<div class="modal-footer">
@@ -1574,6 +1630,7 @@
                     if(data.tlcTask != null){ //任务信息存在，填充任务信息
                         currentTaskId = data.tlcTask.id;
                         currentDuncaseNo = data.tlcTask.caseNo;
+                        $("#notebook").text(subNotebook(data.tlcTask.notebook));
                     }
                     if(data.assets != null){ //通过接口查询资产信息
                         $("#customName").text(data.assets.curName);//客户姓名
@@ -3311,6 +3368,68 @@
                 }
             }
         );
+    }
+
+    function editNotebook() {
+        var value = $("#notebook").attr("title");
+        if (value == null || value == '') {
+            value = $("#notebook").text();
+        }
+        // $("#editNotebook").val($("#notebook").text());
+        $("#editNotebook").val(value);
+        $("#notebookModal").modal('show');
+    }
+
+    /**
+     * 保存记事本
+     */
+    function saveNotebook() {
+        $.post(
+            prefix + "/saveNotebook",
+            {
+                id: currentTaskId,
+                notebook:$("#editNotebook").val()
+            },
+            function(data) {
+                // alert(JSON.stringify(data));
+                if (data.status == 200) {//请求成功
+                    $.modal.alertSuccess("保存成功");
+                    $("#notebookModal").modal('hide');
+                    // $("#notebook").text($("#editNotebook").val());
+                    // $("#notebook").attr("title",$("#editNotebook").val());
+                    subNotebook($("#editNotebook").val());
+                }else if (data.code == 1) {
+                    window.location.href="/login";
+                    return;
+                }
+            }
+        );
+    }
+
+    function subNotebook(value, length) {
+        // value = $.table.tooltip(value);
+        // return value;
+        var _length = $.common.isEmpty(length) ? 20 : length;
+        var _text = "";
+        var _value = $.common.nullToStr(value);
+        // var _target = $.common.isEmpty(target) ? 'copy' : target;
+        if (_value.length > _length) {
+            $("#notebook").attr("title",value);
+            _text = _value.substr(0, _length) + "...";
+            // _value = _value.replace(/\'/g,"&apos;");
+            // _value = _value.replace(/\"/g,"&quot;");
+            // var actions = [];
+            // actions.push($.common.sprintf('<input id="tooltip-show" style="opacity: 0;position: absolute;z-index:-1" type="text" value="%s"/>', _value));
+            // actions.push($.common.sprintf('<a href="###" class="tooltip-show" data-toggle="tooltip" data-target="%s" title="%s">%s</a>', _target, _value, _text));
+            // return actions.join('');
+            $("#notebook").text(_text);
+            return _text;
+        } else {
+            _text = _value;
+            $("#notebook").text(_text);
+            $("#notebook").attr("title",value);
+            return _text;
+        }
     }
 </script>
 </body>

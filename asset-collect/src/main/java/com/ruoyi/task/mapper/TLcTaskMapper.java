@@ -217,4 +217,7 @@ public interface TLcTaskMapper {
     Map<String, BigDecimal> searchAllTaskTotalMoney(TLcTask tLcTask);
 
     List<TLcTask> selectSameCaseTaskList(@Param("certificateNo") String certificateNo, @Param("orgId") String orgId);
+
+
+    void updateNotebook(TLcTask tLcTask);
 }

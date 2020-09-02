@@ -1412,6 +1412,15 @@ public class TLcTaskController extends BaseController {
         return Response.success(list);
     }
 
+    /**
+     * 保存记事本
+     */
+    @PostMapping("/saveNotebook")
+    @ResponseBody
+    public Response saveNotebook(TLcTask tLcTask) {
+        return this.tLcTaskService.updateNotebook(tLcTask);
+    }
+
     @GetMapping(value = "/selfBuild")
     public String selfBuild() {
         return prefix + "/demo";
