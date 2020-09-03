@@ -186,7 +186,7 @@ public class TLcBatchCallController extends BaseController
     {
 
         String isCallOther= request.getParameter("isCallOther");//是否拨打其他人 0 只拨打本人；1 拨打本人+其他
-        String exonNum = request.getParameter("exonNum");//外显号码
+        String exonNum = request.getParameter("exonNum").trim();//外显号码
         String caseNoStr= request.getParameter("caseNoStr");//案件编号
         String importBatchNoStr = request.getParameter("importBatchNoStr");//批次号
         String callNum = request.getParameter("callNum");//一共有多少电话

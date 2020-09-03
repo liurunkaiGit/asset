@@ -3433,9 +3433,15 @@
     function replacePicture(obj){
         var result = '';
         if(obj=="2" || obj=="32" || obj=="33"){
-            result = "<img style='width: 20px;height: 20px;' src='/xiaolian.png'/>";
-        }else if(obj=="31" || obj=="4" || obj=="5" || obj=="11" || obj=="91"){
-            result = "<img style='width: 20px;height: 20px;' src='/nanguo.png'/>";
+            result = "<img style='width: 20px;height: 20px;' src='/xiaolian.png' title='可联'/>";
+        }else if(obj=="31"){
+            result = "<img style='width: 20px;height: 20px;' src='/nanguo.png' title='关机'/>";
+        }else if(obj=="4"){
+            result = "<img style='width: 20px;height: 20px;' src='/nanguo.png' title='空号'/>";
+        }else if(obj=="5"){
+            result = "<img style='width: 20px;height: 20px;' src='/nanguo.png' title='停机'/>";
+        }else if(obj=="11" || obj=="91"){
+            result = "<img style='width: 20px;height: 20px;' src='/nanguo.png' title='识别失败'/>";
         }
         return result;
     }
