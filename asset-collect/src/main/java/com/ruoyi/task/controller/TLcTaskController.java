@@ -1444,7 +1444,28 @@ public class TLcTaskController extends BaseController {
         }
     }
 
+    /**
+     * 案件回收
+     */
+    @GetMapping("/caseRecyle")
+    @ResponseBody
+    public AjaxResult caseRecyle(String taskIds, String certificateNos, Integer caseRecycleNum) {
+        return this.tLcTaskService.caseRecyle(taskIds, certificateNos, caseRecycleNum);
+    }
 
+    /**
+     * 回收查询到的所有案件
+     */
+    @GetMapping("/allCaseRecyle")
+    @ResponseBody
+    public AjaxResult allCaseRecyle(TLcTask tLcTask, HttpServletRequest request, Integer caseRecycleNum) {
+        String callCodeHistoryListStr = request.getParameter("callCodeHistoryListStr");//历史电话码
+        if(StringUtils.isNotEmpty(callCodeHistoryListStr) && !"null".equals(callCodeHistoryListStr)){
+            tLcTask.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
+        }
+        tLcTask.setOrgId(ShiroUtils.getSysUser().getOrgId().toString());
+        return this.tLcTaskService.allCaseRecyle(tLcTask, caseRecycleNum);
+    }
 
 }
 

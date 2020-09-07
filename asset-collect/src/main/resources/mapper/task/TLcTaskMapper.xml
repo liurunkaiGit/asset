@@ -334,7 +334,7 @@
         d.score,
         t.certificate_no,
         t.notebook,
-        CONCAT(t.id,'@',t.case_no,'@',t.certificate_no) as idCaseNoCertificateNo
+        CONCAT(t.id,'@',t.case_no,'@',t.certificate_no,'@',t.owner_id) as idCaseNoCertificateNo
         FROM t_lc_task t,t_lc_duncase d
         WHERE t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no
         AND t.allot_type = 1 AND t.task_status != 3
@@ -1409,7 +1409,8 @@
     <select id="searchAllTaskTotalMoney" resultType="java.util.Map">
         SELECT
         sum(t.arrears_total) as totalArrears,
-        sum(t.dqyhje) as totalPay
+        sum(t.dqyhje) as totalPay,
+        count(1) as totalCount
         FROM t_lc_task t,t_lc_duncase d
         WHERE t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no
         AND t.allot_type = 1 AND t.task_status != 3
@@ -1453,5 +1454,12 @@
 
     <update id="updateNotebook" parameterType="com.ruoyi.task.domain.TLcTask">
         UPDATE t_lc_task set notebook = #{notebook} WHERE id = #{id}
+    </update>
+
+    <update id="updateCaseRecycle" parameterType="java.util.List">
+        <foreach collection="taskIdList" item="taskId" separator=";">
+            UPDATE t_lc_task set owner_id = null,owner_name = null,task_status = 4,task_type = 21
+            where id = #{taskId}
+        </foreach>
     </update>
 </mapper>

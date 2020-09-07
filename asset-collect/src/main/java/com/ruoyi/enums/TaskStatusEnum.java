@@ -13,7 +13,8 @@ import lombok.Getter;
 public enum TaskStatusEnum {
     NO_ALLOCAT(1, "noAllocat", "未分配"),
     ALLOCATING(2, "allocating", "已分配"),
-    CLOSE(3, "close", "已结案");
+    CLOSE(3, "close", "已结案"),
+    NO_ALLOCAT_RECYCLE(4, "noAllocatRecycle", "未分配-回收");
 
     private Integer status;
     private String message;

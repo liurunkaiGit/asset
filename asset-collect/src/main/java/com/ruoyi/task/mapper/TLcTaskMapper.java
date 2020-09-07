@@ -220,4 +220,6 @@ public interface TLcTaskMapper {
 
 
     void updateNotebook(TLcTask tLcTask);
+
+    void updateCaseRecycle(@Param("taskIdList") List<Long> taskIdList);
 }

@@ -220,6 +220,7 @@
                 <button type="button" class="btn btn-success" onclick="signRepay('ALPA')">标记还款</button>
                 <button type="button" class="btn btn-success" onclick="signRepay('QXBJ')">取消标记还款</button>
                 <button type="button" class="btn btn-success" onclick="showPhoneStatus()">号码状态查询</button>
+                <button type="button" class="btn btn-success" onclick="caseRecycle()">案件回收</button>
                 选择全部&nbsp;&nbsp;<input id="selectAll" type="checkbox" onclick="chackAll()">
             </div>
             <div class="col-sm-12 select-table table-striped">
@@ -278,6 +279,36 @@
                          <div class="modal-footer">
                              <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
                              <button type="button" class="btn btn-primary" onclick="savePhoneStatus();">保存</button>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+
+         <div class="col-sm-12">
+             <div class="modal" id="caseRecycleModal" tabindex="-1" role="dialog" aria-hidden="true">
+                 <div class="modal-dialog">
+                     <div class="modal-content animated bounceInRight">
+                         <div class="modal-header">
+                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
+                             </button>
+                         </div>
+                         <input type="hidden" id="caseRecycleUrl" />
+                         <div class="modal-body" style="height: 200px;">
+                             <div class="form-group">
+                                 <span style="font-size: 15px;color:black;">&nbsp;&nbsp;案件数量共计：<span id="caseRecycleTotal"></span></span>
+                             </div>
+                             <div class="form-group">
+                                 <span style="font-size: 15px;color:black;">&nbsp;&nbsp;回收用户：</span>
+                                 <input type="radio" value="选中所有用户" checked id="caseRecycleAgent"> <span style="font-size: 15px;color:black;">选中所有用户</span>
+                             </div>
+                             <div class="form-group">
+                                 <span style="font-size: 15px;color:black;">&nbsp;&nbsp;每人回收案件数：</span>
+                                 <input type="text" style="font-size: 15px;color:black;" id="caseRecycleNum">
+                             </div>
+                         </div>
+                         <div class="modal-footer" style="text-align: center">
+                             <button type="button" class="btn btn-primary" onclick="caseRecycleSave();">确定</button>
                          </div>
                      </div>
                  </div>
@@ -774,6 +805,72 @@
 
         }
 
+        /*案件回收*/
+        function caseRecycle(){
+            // 是否选择全部
+            var flage = $('#selectAll').is(":checked");
+            if (flage) {
+                $.modal.confirm("确认要对所有数据进行操作吗?", function() {
+                    // 查询当前机构下所有用户
+                    var caseNo = $("#caseNo").val();
+                    var orgId = $("#orgId").val();
+                    var customName = $("#customName").val();
+                    var taskStatus = $("#taskStatus").val();
+                    var province = $("#province").val();
+                    var city = $("#city").val();
+                    var callCodeHistoryListStr = $('#callCodeHistoryListStr').selectpicker('val');
+                    var freeSQL = $("#freeSQL").val();
+                    // alert(freeSQL);
+                    freeSQL = encodeURIComponent(freeSQL);
+                    $.post(
+                        prefix + "/searchAllTaskTotalMoney",
+                        {
+                            caseNo:caseNo,
+                            customName:customName,
+                            taskStatus:taskStatus,
+                            callCodeHistoryList:callCodeHistoryListStr,
+                            province:province,
+                            city:city,
+                            freeSQL:freeSQL
+                        },
+                        function(data) {
+                            $.modal.confirm("确认要对选中的" + data.totalCount + "条数据进行操作吗?", function() {
+                                var allCaseRecyleUrl = prefix + '/allCaseRecyle?orgId='+orgId +'&caseNo='+caseNo+'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr+'&freeSQL='+freeSQL+'&province='+province+'&city='+city;
+                                $("#caseRecycleUrl").val(allCaseRecyleUrl);
+                                $("#caseRecycleNum").val("");
+                                $("#caseRecycleTotal").text(data.totalCount);
+                                $("#caseRecycleModal").modal('show');
+                            });
+                        }
+                    );
+                });
+                return;
+            }else{
+                var rows = $.table.selectFirstColumns();
+                if (rows.length == 0) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                }
+                var taskStatus = $.table.selectColumns("taskStatus");
+                for(i=0;i<taskStatus.length;i++){
+                    if(taskStatus[i] =="已结案" || taskStatus[i] =="3"){
+                        $.modal.alertWarning("已结案案件不能再次回收");
+                        return;
+                    }
+                }
+                var certificateNoRows = $.table.selectColumns("idCaseNoCertificateNo");
+                var caseNoRows = $.table.selectColumns("caseNo");
+                $.modal.confirm("确认要对选中的" + rows.length + "条数据进行操作吗?", function() {
+                    var caseRecyleUrl = prefix + '/caseRecyle?taskIds='+rows.join()+'&caseNos='+caseNoRows.join()+'&certificateNos='+certificateNoRows.join();
+                    $("#caseRecycleUrl").val(caseRecyleUrl);
+                    $("#caseRecycleNum").val("");
+                    $("#caseRecycleTotal").text(rows.length);
+                    $("#caseRecycleModal").modal('show');
+                });
+            }
+
+        }
+
         /*查看还款历史*/
         function viewRepayHis(){
             var caseNoRows = $.table.selectColumns("caseNo"); //返回的是一个数组
@@ -927,6 +1024,21 @@
             $.operate.submit(url);
             resetSelectAll();
             $("#myModal").modal('hide');
+        }
+
+        function caseRecycleSave() {
+            var url = $("#caseRecycleUrl").val();
+            // var caseRecycleTotal = $("#caseRecycleTotal").text();
+            // var caseRecycleAgent = $("#caseRecycleAgent").val();
+            var caseRecycleNum = $("#caseRecycleNum").val();
+            if(!(/(^[1-9]\d*$)/.test(caseRecycleNum))){
+                $.modal.alertWarning("每人回收案件数只能是正整数");
+                return false;
+            }
+            url = url+'&caseRecycleNum='+caseRecycleNum;
+            $.operate.submit(url);
+            resetSelectAll();
+            $("#caseRecycleModal").modal('hide');
         }
 
 

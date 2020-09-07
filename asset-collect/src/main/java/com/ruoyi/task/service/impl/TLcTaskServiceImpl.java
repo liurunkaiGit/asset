@@ -1480,6 +1480,84 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
 
     }
 
+    /**
+     * 案件回收
+     * @param taskIds
+     * @param certificateNos
+     * @return
+     */
+    @Override
+    public AjaxResult caseRecyle(String taskIds, String certificateNos, Integer caseRecycleNum) {
+        // 构建任务集合
+        List<TLcTask> taskList = buildCaseRecyleTaskList(certificateNos);
+        return caseRecycle(caseRecycleNum, taskList);
+    }
+
+    private AjaxResult caseRecycle(Integer caseRecycleNum, List<TLcTask> taskList) {
+        // 业务归属人不为空
+        Map<Long, List<TLcTask>> taskListMap = taskList.stream().filter(task -> task.getOwnerId() != null).collect(Collectors.groupingBy(TLcTask::getOwnerId));
+        List<Integer> taskNumList = new ArrayList<>();
+        for (Map.Entry<Long, List<TLcTask>> map : taskListMap.entrySet()) {
+            taskNumList.add(map.getValue().size());
+        }
+        taskNumList.sort(Integer::compareTo);
+        if (taskNumList.get(0) < caseRecycleNum) {
+            return AjaxResult.error("操作失败，输入每人回收案件数不可超过" + taskNumList.get(0) + "件");
+        }
+        // 案件回收
+        List<TLcTask> caseRecyleTaskList = new ArrayList<>();
+        for (Map.Entry<Long, List<TLcTask>> map : taskListMap.entrySet()) {
+            // 随机获取要回收 caseRecycleNum 个的任务
+            Set<TLcTask> randomTaskSet = getAllocatTaskSet(map.getValue(), caseRecycleNum);
+            // set 转 list
+            List<TLcTask> ownerCaseRecyleTaskList = randomTaskSet.stream().collect(Collectors.toList());
+            ownerCaseRecyleTaskList = buildCaseRecycleTaskList(ownerCaseRecyleTaskList);
+            caseRecyleTaskList.addAll(ownerCaseRecyleTaskList);
+        }
+        // 将业务归属人为空的添加到待回收结案的集合
+        caseRecyleTaskList.addAll(buildCaseRecycleTaskList(taskList.stream().filter(task -> task.getOwnerId() == null).collect(Collectors.toList())));
+        // 修改任务列表为回收结案
+        List<Long> taskIdList = caseRecyleTaskList.stream().map(task -> task.getId()).collect(Collectors.toList());
+        this.tLcTaskMapper.updateCaseRecycle(taskIdList);
+        // 插入案件轨迹表
+        insertDuncaseAssign(caseRecyleTaskList, ShiroUtils.getSysUser());
+        return AjaxResult.success("操作成功");
+    }
+
+    private List<TLcTask> buildCaseRecycleTaskList(List<TLcTask> ownerCaseRecyleTaskList) {
+        ownerCaseRecyleTaskList = ownerCaseRecyleTaskList.stream().map(task -> {
+            task.setOwnerId(null);
+            task.setOwnerName(null);
+            task.setTaskType(TaskTypeEnum.CASE_RECYCLE.getCode());
+            task.setTaskStatus(TaskStatusEnum.NO_ALLOCAT_RECYCLE.getStatus());
+            return task;
+        }).collect(Collectors.toList());
+        return ownerCaseRecyleTaskList;
+    }
+
+    @Override
+    public AjaxResult allCaseRecyle(TLcTask tLcTask, Integer caseRecycleNum) {
+        List<TLcTask> taskList = selectTLcTaskByPage(tLcTask);
+        return caseRecycle(caseRecycleNum, taskList);
+    }
+
+    private List<TLcTask> buildCaseRecyleTaskList(String certificateNos) {
+        List<TLcTask> taskList = Arrays.stream(certificateNos.split(",")).map(certificateNo -> {
+            String[] split = certificateNo.split("@");
+            TLcTask tLcTask = new TLcTask();
+            tLcTask.setId(Long.valueOf(split[0]))
+                    .setCaseNo(split[1])
+                    .setCertificateNo(split[2])
+                    .setOrgId(ShiroUtils.getSysUser().getOrgId().toString())
+                    .setOrgName(ShiroUtils.getSysUser().getOrgName());
+            if (StringUtils.isNotBlank(split[3])) {
+                tLcTask.setOwnerId(Long.valueOf(split[3]));
+            }
+            return tLcTask;
+        }).collect(Collectors.toList());
+        return taskList;
+    }
+
     private Map<String,Integer> responseHandler(PhoneStatusResponse response , TLcCustContact custContact, int successFlag, int errorFlag){
         Date curDate = new Date();
         Map<String,Integer> map = new HashMap<>();
