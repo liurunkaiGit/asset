@@ -74,7 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 su.user_group,
                 su.login_name,
                 su.user_name
-            from t_lc_report_personal_new t,sys_user su where t.user_id = su.user_id and t.user_id != 1 and t.report_data = #{reportData}
+            from t_lc_report_personal_new t,sys_user su where t.user_id = su.user_id and t.user_id != 1 and t.user_id != -1 and t.report_data = #{reportData}
                 <if test="userName != null and userName != ''">
                     and su.user_name = #{userName}
                 </if>

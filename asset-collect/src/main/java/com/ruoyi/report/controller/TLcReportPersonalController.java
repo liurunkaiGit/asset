@@ -56,7 +56,7 @@ public class TLcReportPersonalController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(TLcReportPersonal tLcReportPersonal) {
-        startPage();
+//        startPage();
         TableDataInfo rspData = new TableDataInfo();
         List<TLcReportPersonal> list = tLcReportPersonalService.selectTLcReportPersonalList(tLcReportPersonal);
         PageDomain pageDomain = TableSupport.buildPageRequest();
