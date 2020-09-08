@@ -3,6 +3,7 @@ package com.ruoyi.task.service;
 import com.ruoyi.robot.domain.CallContent;
 import com.ruoyi.task.domain.JxphCallRecord;
 import com.ruoyi.task.domain.TLcCallRecord;
+import com.ruoyi.task.domain.TLcCallRecordForJX;
 import com.ruoyi.task.domain.TLcCallRecordForXY;
 
 import javax.servlet.http.HttpServletRequest;
@@ -130,4 +131,6 @@ public interface ITLcCallRecordService {
     List<TLcCallRecord> findZjCallRecordListByDate(TLcCallRecord tLcCallRecord);
 
     Long selectCountByTimePeriod(Map<String, Object> param);
+
+    List<TLcCallRecordForJX> selectTLcCallRecordListForJX(TLcCallRecord tLcCallRecord);
 }

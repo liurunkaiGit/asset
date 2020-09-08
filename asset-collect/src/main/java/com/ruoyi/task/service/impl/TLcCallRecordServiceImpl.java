@@ -9,7 +9,6 @@ import com.ruoyi.caseConfig.domain.TLcAllocatCaseConfig;
 import com.ruoyi.caseConfig.service.ITLcAllocatCaseConfigService;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.file.FileUtils;
 import com.ruoyi.enums.IsNoEnum;
 import com.ruoyi.framework.util.ShiroUtils;
@@ -20,11 +19,13 @@ import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.task.domain.JxphCallRecord;
 import com.ruoyi.task.domain.TLcCallRecord;
+import com.ruoyi.task.domain.TLcCallRecordForJX;
 import com.ruoyi.task.domain.TLcCallRecordForXY;
 import com.ruoyi.task.mapper.TLcCallRecordMapper;
 import com.ruoyi.task.service.ITLcCallRecordService;
 import com.ruoyi.task.service.ITLcTaskService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,11 +33,13 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 通话结果记录Service业务层处理
@@ -408,6 +411,51 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
     @Override
     public Long selectCountByTimePeriod(Map<String, Object> param) {
         return this.tLcCallRecordMapper.selectCountByTimePeriod(param);
+    }
+
+    @Override
+    public List<TLcCallRecordForJX> selectTLcCallRecordListForJX(TLcCallRecord tLcCallRecord) {
+        if (tLcCallRecord.getEndCreateTime() != null) {
+            tLcCallRecord.setEndCreateTime(DateUtils.getEndOfDay(tLcCallRecord.getEndCreateTime()));
+        }
+        if (tLcCallRecord.getEndCallStartTime() != null) {
+            tLcCallRecord.setEndCallStartTime(DateUtils.getEndOfDay(tLcCallRecord.getEndCallStartTime()));
+        }
+        if (tLcCallRecord.getStartCallLen() != null) {
+            tLcCallRecord.setStartCallLen(tLcCallRecord.getStartCallLen() * 1000);
+        }
+        if (tLcCallRecord.getEndCallLen() != null) {
+            tLcCallRecord.setEndCallLen(tLcCallRecord.getEndCallLen() * 1000);
+        }
+        List<TLcCallRecord> list = tLcCallRecordMapper.selectTLcCallRecordList(tLcCallRecord);
+        List<TLcCallRecordForJX> jxList = this.convertJXList(list,tLcCallRecord);
+        return jxList;
+    }
+
+    private List<TLcCallRecordForJX> convertJXList(List<TLcCallRecord> list, TLcCallRecord tLcCallRecord) {
+        List<TLcCallRecordForJX> jxList = list.stream().map(callRecord -> {
+            TLcCallRecordForJX tLcCallRecordForJX = new TLcCallRecordForJX();
+            String callSign = callRecord.getCallSign();
+            tLcCallRecordForJX.setWeekStartDate(tLcCallRecord.getStartCreateTime())
+                    .setWeekEndDate(tLcCallRecord.getEndCreateTime())
+                    .setCompanyName("huadao")
+                    .setCaseNo(callRecord.getCaseNo())
+                    .setEnterCollDate(callRecord.getEnterCollDate())
+                    .setArrearsTotal(callRecord.getArrearsTotal())
+                    .setCloseCaseYhje(new BigDecimal(callRecord.getCloseCaseYhje()))
+                    .setOverdueDays(StringUtils.isNotBlank(callRecord.getOverdueDays()) ? Integer.valueOf(callRecord.getOverdueDays()) : null)
+                    .setCallTime(callRecord.getCreateTime())
+                    .setCollType("电话催收")
+                    .setPhone(callRecord.getPhone())
+                    .setIsPromisePay((callSign.equalsIgnoreCase("PTP") || callSign.equalsIgnoreCase("CYH")) ? "Y" : "N")
+                    .setIsOutColl("N")
+                    .setCollResult((callSign.equalsIgnoreCase("PTP") || callSign.equalsIgnoreCase("CYH") || callSign.equalsIgnoreCase("TP") || callSign.equalsIgnoreCase("WCY") || callSign.equalsIgnoreCase("HKKN") || callSign.equalsIgnoreCase("ZG") || callSign.equalsIgnoreCase("R01")) ? "可联" : "失联")
+                    .setAgent(callRecord.getAgentName())
+                    .setCallCode(callSign)
+                    .setRemark(callRecord.getRemark());
+            return tLcCallRecordForJX;
+        }).collect(Collectors.toList());
+        return jxList;
     }
 
 

@@ -7,11 +7,13 @@ import com.ruoyi.common.core.page.PageDomain;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.page.TableSupport;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.robot.domain.CallContent;
 import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.task.domain.TLcCallRecord;
+import com.ruoyi.task.domain.TLcCallRecordForJX;
 import com.ruoyi.task.domain.TLcCallRecordForXY;
 import com.ruoyi.task.service.ITLcCallRecordService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -76,15 +79,20 @@ public class TLcCallRecordController extends BaseController {
     @ResponseBody
     public AjaxResult export(TLcCallRecord tLcCallRecord) {
         String configValue = sysConfigService.selectConfigByKey("orgId");
+        String jxOrgId = sysConfigService.selectConfigByKey("jxOrgId");
         String orgId = tLcCallRecord.getOrgId();
         if(configValue.equals(orgId)){//兴业导出
             List<TLcCallRecordForXY> list = tLcCallRecordService.selectTLcCallRecordListForXY(tLcCallRecord);
             ExcelUtil<TLcCallRecordForXY> util = new ExcelUtil<TLcCallRecordForXY>(TLcCallRecordForXY.class);
-            return util.exportExcel(list, "record");
-        }else {
+            return util.exportExcel(list, "record", System.currentTimeMillis() + "record");
+        }else if(jxOrgId.equals(orgId)){//捷信导出
+            List<TLcCallRecordForJX> list = tLcCallRecordService.selectTLcCallRecordListForJX(tLcCallRecord);
+            ExcelUtil<TLcCallRecordForJX> util = new ExcelUtil<>(TLcCallRecordForJX.class);
+            return util.exportExcel(list, "record", "捷信消金华道催记" + DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS, new Date()));
+        } else {
             List<TLcCallRecord> list = tLcCallRecordService.selectTLcCallRecordList(tLcCallRecord);
             ExcelUtil<TLcCallRecord> util = new ExcelUtil<TLcCallRecord>(TLcCallRecord.class);
-            return util.exportExcel(list, "record");
+            return util.exportExcel(list, "record",System.currentTimeMillis() + "record");
         }
     }
 

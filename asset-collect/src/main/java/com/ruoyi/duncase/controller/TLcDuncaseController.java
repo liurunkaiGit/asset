@@ -164,6 +164,7 @@ public class TLcDuncaseController extends BaseController {
         if(cityId != null && !"".equals(cityId)){
             tLcDuncase.setProvinceId(null);
         }
+        tLcDuncase.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
         List<TLcDuncase> list = tLcDuncaseService.selectTLcDuncaseByPage(tLcDuncase);
         ExcelUtil<TLcDuncase> util = new ExcelUtil<TLcDuncase>(TLcDuncase.class);
         return util.exportExcel(list, "duncase");
