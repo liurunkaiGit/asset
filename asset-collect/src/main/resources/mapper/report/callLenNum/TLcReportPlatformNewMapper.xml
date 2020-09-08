@@ -40,10 +40,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{timePeriod} as time_period,
             re.platform,
             COUNT(1) as call_num,
-            (SELECT sum(r.call_len) as call_len FROM t_lc_call_record r WHERE r.create_time BETWEEN #{startTimePeriod} and #{endTimePeriod} and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) call_len,
-            (SELECT COUNT(1) as called_num FROM t_lc_call_record r WHERE r.create_time BETWEEN #{startTimePeriod} and #{endTimePeriod} and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) called_num
+            (SELECT sum(r.call_len) as call_len FROM t_lc_call_record r WHERE r.create_time BETWEEN #{startTimePeriod} and #{endTimePeriod} and r.type = 1 and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) call_len,
+            (SELECT COUNT(1) as called_num FROM t_lc_call_record r WHERE r.create_time BETWEEN #{startTimePeriod} and #{endTimePeriod} and r.type = 1 and r.call_len is not null and r.call_len != ''  and r.platform = re.platform GROUP BY r.platform) called_num
         FROM
-            t_lc_call_record re WHERE re.create_time BETWEEN #{startTimePeriod} and #{endTimePeriod} GROUP BY re.platform
+            t_lc_call_record re WHERE re.create_time BETWEEN #{startTimePeriod} and #{endTimePeriod} and re.type = 1 GROUP BY re.platform
     </select>
 
     <insert id="insertTLcReportPlatformNew" parameterType="TLcReportPlatformNew">
