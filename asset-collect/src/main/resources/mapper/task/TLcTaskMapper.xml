@@ -1002,7 +1002,6 @@
         d.product_name as productName,
         d.first_overdue_time as firstOverdueTime,
         d.lowest_payment_rmb as lowestPaymentRmb,
-        cust.custom_sex as customSex,
         d.ljyhje,
         t.id,
         t.case_no,
@@ -1045,9 +1044,8 @@
         t.phone,
         t.dqyhje,
         d.score
-        FROM t_lc_task t,t_lc_duncase d,t_lc_custinfo cust
-        WHERE t.case_no = d.case_no and t.import_batch_no = d.import_batch_no and t.case_no = cust.case_no and
-        t.import_batch_no = cust.import_batch_no
+        FROM t_lc_task t,t_lc_duncase d
+        WHERE t.case_no = d.case_no and t.import_batch_no = d.import_batch_no
         AND t.allot_type = 1 AND t.task_status != 3
         <if test="orgId != null  and orgId != ''">
             and t.org_id = #{orgId}

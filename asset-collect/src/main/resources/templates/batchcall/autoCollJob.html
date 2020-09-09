@@ -850,7 +850,7 @@
             panehHidden = true;
         }
         $('body').layout({initClosed: panehHidden, west__size: 185});
-        collJobDetail($("#firstEnterCaseNo").val(),$("#orgId").val(),$("#firstImportBatchNo").val());
+        collJobDetail($("#firstEnterCaseNo").val(),$("#orgId").val(),$("#firstImportBatchNo").val(),1);
         // 初始化行动码下拉框
         // initActionCode();
         // initCallRecordCode();
@@ -1203,11 +1203,12 @@
         }
     }
 
-    function collJobDetail(caseNo,orgId,importBatchNo) {
-        // if (parent.agentIsCalling) {
-        //     $.modal.alertError("正在通话中不能切换用户");
-        //     return;
-        // }
+    function collJobDetail(caseNo,orgId,importBatchNo,type) {
+        // type：0表示点击共案跳转案件详情，1表示刚接通跳转案件详情
+        if (type == 0 && parent.agentIsCalling) {
+            $.modal.alertError("正在通话中不能切换用户");
+            return;
+        }
         currentCaseNo = caseNo;
         currentImportBatchNo = importBatchNo;
         currentOrgId = orgId;
@@ -1410,7 +1411,7 @@
                         var borrowBlank = data.result[i].borrowBlank != null ? data.result[i].borrowBlank : "";
                         tp.append("<hr style=\"margin-top: 0;margin-bottom: 0;\"/><div class=\"sameCaseLeftInfo\">\n" +
                             "                                <div class=\"sameCaseOne\">\n" +
-                            "                                    <label style='font-size: 14px;'><b>机构案件号：</b></label><b><label ><a href='javascript:void(0)' onclick='collJobDetail(\""+caseNo + "\",\""+orgId + "\",\""+importBatchNo+ "\")'><b><span style='font-size: 14px;color: #1c84c6'>"+caseNo+"</a></label></b><br/>\n" +
+                            "                                    <label style='font-size: 14px;'><b>机构案件号：</b></label><b><label ><a href='javascript:void(0)' onclick='collJobDetail(\""+caseNo + "\",\""+orgId + "\",\""+importBatchNo+ "\",0)'><b><span style='font-size: 14px;color: #1c84c6'>"+caseNo+"</a></label></b><br/>\n" +
                             "                                    <label >入催日：</label><label  >"+enterCollDate+"</label><br/>\n" +
                             "                                    <label >借款日期：</label><label >"+jkrq+"</label><br/>\n" +
                             "                                    <label >欠款总金额：</label><label style='color: red;'>"+rmbQkzje+"</label><br/>\n" +
