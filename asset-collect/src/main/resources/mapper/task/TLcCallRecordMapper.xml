@@ -152,6 +152,7 @@
         re.contact_relation,
         re.phone,
         (SELECT su.user_name FROM sys_user su WHERE re.create_by = su.user_id) AS agent_name,
+        re.call_sign as callSignEn,
         CONCAT(re.call_sign,'(',re.call_result,')') AS call_sign,
         re.find_date,
         re.remark,

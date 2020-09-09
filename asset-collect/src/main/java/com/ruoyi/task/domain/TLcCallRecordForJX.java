@@ -26,9 +26,9 @@ import java.util.Date;
 public class TLcCallRecordForJX extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
-    @Excel(name = "周开始日期")
+    @Excel(name = "周开始日期",dateFormat = "yyyy-MM-dd")
     private Date weekStartDate;
-    @Excel(name = "周结束日期")
+    @Excel(name = "周结束日期",dateFormat = "yyyy-MM-dd")
     private Date weekEndDate;
     @Excel(name = "公司名称")
     private String companyName = "huadao";
@@ -43,7 +43,7 @@ public class TLcCallRecordForJX extends BaseEntity {
     private BigDecimal closeCaseYhje;
     @Excel(name = "逾期天数")
     private Integer overdueDays;
-    @Excel(name = "拨打时间")
+    @Excel(name = "拨打时间",dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date callTime;
     @Excel(name = "催收方式")
     private String collType = "电话催收";

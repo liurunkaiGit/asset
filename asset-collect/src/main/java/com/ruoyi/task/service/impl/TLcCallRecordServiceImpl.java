@@ -435,7 +435,7 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
     private List<TLcCallRecordForJX> convertJXList(List<TLcCallRecord> list, TLcCallRecord tLcCallRecord) {
         List<TLcCallRecordForJX> jxList = list.stream().map(callRecord -> {
             TLcCallRecordForJX tLcCallRecordForJX = new TLcCallRecordForJX();
-            String callSign = callRecord.getCallSign();
+            String callSign = callRecord.getCallSignEn();
             tLcCallRecordForJX.setWeekStartDate(tLcCallRecord.getStartCreateTime())
                     .setWeekEndDate(tLcCallRecord.getEndCreateTime())
                     .setCompanyName("huadao")
@@ -451,7 +451,7 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
                     .setIsOutColl("N")
                     .setCollResult((callSign.equalsIgnoreCase("PTP") || callSign.equalsIgnoreCase("CYH") || callSign.equalsIgnoreCase("TP") || callSign.equalsIgnoreCase("WCY") || callSign.equalsIgnoreCase("HKKN") || callSign.equalsIgnoreCase("ZG") || callSign.equalsIgnoreCase("R01")) ? "可联" : "失联")
                     .setAgent(callRecord.getAgentName())
-                    .setCallCode(callSign)
+                    .setCallCode(callRecord.getCallSign())
                     .setRemark(callRecord.getRemark());
             return tLcCallRecordForJX;
         }).collect(Collectors.toList());

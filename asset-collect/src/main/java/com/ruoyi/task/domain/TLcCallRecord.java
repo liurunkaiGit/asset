@@ -241,6 +241,8 @@ public class TLcCallRecord extends BaseEntity {
      */
     private List<String> platFormList;
 
+    private String callSignEn;
+
 
     /**
      *兴业导出使用字段

@@ -1550,7 +1550,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                     .setCertificateNo(split[2])
                     .setOrgId(ShiroUtils.getSysUser().getOrgId().toString())
                     .setOrgName(ShiroUtils.getSysUser().getOrgName());
-            if (StringUtils.isNotBlank(split[3])) {
+            if (split.length >= 4) {
                 tLcTask.setOwnerId(Long.valueOf(split[3]));
             }
             return tLcTask;
