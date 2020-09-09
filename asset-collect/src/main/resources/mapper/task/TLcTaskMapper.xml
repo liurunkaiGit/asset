@@ -334,7 +334,7 @@
         d.score,
         t.certificate_no,
         t.notebook,
-        CONCAT(t.id,'@',t.case_no,'@',t.certificate_no,'@',t.owner_id) as idCaseNoCertificateNo
+        CONCAT_WS('@',t.id,t.case_no,t.certificate_no,t.owner_id) AS idCaseNoCertificateNo
         FROM t_lc_task t,t_lc_duncase d
         WHERE t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no
         AND t.allot_type = 1 AND t.task_status != 3

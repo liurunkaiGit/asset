@@ -63,7 +63,11 @@
                     <span id="education" style="font-size: 18px;"></span>
                 </div>
                 <div class="collBaseInfoRight">
-                    <span id="customCertificateNo"   style="font-size: 18px;"></span><br/>
+                    <span id="customCertificateNo"   style="font-size: 18px;"></span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 16px;">信函:</span>
+                    <span id="letterStatus"  style="font-size: 16px;"></span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 16px;">共案:</span>
+                    <span id="isSameCase"  style="color: red;font-size: 16px;"></span><br/>
                     <b><span style="font-size: 18px;">委案金额:</span></b>
                     <b><span id="arrearsTotal" style="color: red;font-size: 18px"></span>元</b>&nbsp;&nbsp;&nbsp;&nbsp;
                     <b><span style="font-size: 18px;">结案应还金额:</span></b>
@@ -80,7 +84,7 @@
                         <li class=""><a data-toggle="tab" href="#tab-4" aria-expanded="false" onclick="viewTabDetail('repay')">还款历史</a><input type="hidden" id="repay" value="0"></li>
                         <li class=""><a data-toggle="tab" href="#tab-7" aria-expanded="false" onclick="viewTabDetail('add')">补充信息</a><input type="hidden" id="add" value="0"></li>
                         <li class=""><a data-toggle="tab" href="#tab-6" aria-expanded="false" onclick="viewTabDetail('find')">查找记录</a><input type="hidden" id="find" value="0"></li>
-
+                        <li class="" id="sameCaseLi" ><a data-toggle="tab" href="#tab-9" aria-expanded="false" onclick="viewTabDetail('sameCaseInfo')">共案信息</a><input type="hidden" id="sameCaseInfo" value="0"></li>
                     </ul>
                     <div id="tabDiv" class="tab-content tabDiv">
                         <div id="tab-5" class="tab-pane active">
@@ -245,6 +249,16 @@
                                 <tbody id="selectRecordTrNew"></tbody>
                             </table>
                         </div>
+                        <div id="tab-9" class="tab-pane">
+                            <div style="margin-top: 10px;">
+                                <b><span style="font-size: 18px;">委案金额合计:</span></b>
+                                <b><span id="sameCaseArrearsTotal" style="color: red;font-size: 18px"></span><span style="font-size: 18px">元</span></b>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <b><span style="font-size: 18px;">结案应还金额合计:</span></b>
+                                <b><span id="sameCaseCloseCaseYhjeTotal"  style="color: red;font-size: 18px"></span><span style="font-size: 18px">元</span></b>
+                            </div>
+                            <hr style="margin-top: 0;margin-bottom: 0;"/>
+                            <div id="sameCaseInfoDetail"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -297,6 +311,9 @@
                     <a onclick="disableCall(0)" title="取消停拨" class="btn btn-primary" style="height: 25px;padding: 3px;">取消停拨</a>
 
                 </div>
+                <!--<div class="btn-group-sm">
+                    <button class="btn btn-danger" style="height: 25px;padding: 3px;" id="letterApply" onclick="letterApply()">信函申请</button>
+                </div>-->
             </div>
             <div class="tab-pane" style="height: 189px;overflow: auto">
                 <table id="custContactTable">
@@ -591,6 +608,67 @@
     </div>
 </div>
 
+<!--<div class="modal inmodal" id="letterApplyModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header" style="padding: 5px">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
+            </div>
+            <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+                <form class="form-horizontal m" id="form-letterApply-add">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">信函类型：</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" name="letterType" id="letterType">
+                                &lt;!&ndash;<option value="" selected>请选择</option>&ndash;&gt;
+                                <option value="1">催缴函</option>
+                                <option value="2">律师函</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">客户姓名：</label>
+                        <div class="col-sm-8">
+                            <input name="letterApplyContactName" id="letterApplyContactName" class="form-control" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">委案金额：</label>
+                        <div class="col-sm-8">
+                            <input name="letterApplyArrearsMoney" id="letterApplyArrearsMoney" class="form-control" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">结案应还金额：</label>
+                        <div class="col-sm-8">
+                            <input name="letterApplyCloseCaseYhje" id="letterApplyCloseCaseYhje" class="form-control" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">借款时间：</label>
+                        <div class="col-sm-8">
+                            <input name="letterApplyLoanTime" id="letterApplyLoanTime" class="form-control" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">住宅地址：</label>
+                        <div class="col-sm-8">
+                            <input name="letterApplyHomeAddress" id="letterApplyHomeAddress" class="form-control" type="text" readonly>
+                        </div>
+                    </div>
+                </form>
+                <div style="text-align: center">
+                    <button type="button" class="btn btn-primary" align="center" onclick="addLetterApply()">提交申请</button>
+                </div>
+            </div>
+            &lt;!&ndash;<div class="modal-footer">
+                &lt;!&ndash;<button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>&ndash;&gt;
+                <button type="button" class="btn btn-primary" onclick="addLetterApply()">提交申请</button>
+            </div>&ndash;&gt;
+        </div>
+    </div>
+</div>-->
+
 <div class="modal inmodal" id="notebookModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content animated bounceInRight">
@@ -759,7 +837,7 @@
     var taskPrefix = ctx + "collect/task";
     var robotPrefix = ctx + "collect/robot";
     var curAssetsPrefix = ctx + "import/assets";
-
+    var letterPrefix = ctx + "coll/letter";
     var agentClient = parent.agentClient;//得到父页面的平安打电话的初始化对象
     var uKeFuSoftPhone = parent.uKeFuSoftPhone;//得到父页面的自建打电话的初始化对象
     var recordFile = null;
@@ -1234,7 +1312,10 @@
                     $('#add').val('0');
                     $('#find').val('0');
                     $("a[aria-expanded='true']").click();
-
+                    $('#sameCaseInfo').val('0');
+                    //document.getElementById("letterApply").disabled=false;
+                    disabledLetterApply(currentCaseNo,currentOrgId,currentImportBatchNo);
+                    isSameCase(currentCertificateNo,currentOrgId);
                 }
             }
         );
@@ -1272,8 +1353,174 @@
         }else if(tab == 'find' && $('#find').val()=='0'){//查找记录
             $('#find').val('1');
             selectRecordList(currentCaseNo);//获取查找记录
+        }else if(tab == 'sameCaseInfo' && $('#sameCaseInfo').val()=='0'){
+            $('#sameCaseInfo').val('1');
+            selectSameCaseInfo(currentCertificateNo,currentOrgId);
         }
 
+    }
+
+    /**
+     * 查询共案信息
+     * @param certificateNo
+     * @param orgId
+     */
+    function  selectSameCaseInfo(certificateNo, orgId){
+        $.post(
+            prefix + "/selectSameCaseInfo",
+            {
+                certificateNo:certificateNo,
+                orgId:orgId
+            }, // 请求参数
+            function(data) {
+                $("#sameCaseInfoDetail").html("");
+                if(data != null){
+                    var tp = $("#sameCaseInfoDetail");
+                    var sameCaseArrearsTotal = 0.00;
+                    var sameCaseCloseCaseYhjeTotal = 0.00;
+                    for (var i = 0; i < data.result.length; i++) {
+                        sameCaseArrearsTotal += data.result[i].arrearsTotal;
+                        sameCaseCloseCaseYhjeTotal += data.result[i].arrearsTotal;
+                        var caseNo = data.result[i].caseNo != null ? data.result[i].caseNo : "";
+                        var importBatchNo = data.result[i].importBatchNo != null ? data.result[i].importBatchNo : "";
+                        var orgId = data.result[i].orgId != null ? data.result[i].orgId : "";
+                        var arrearsTotal = data.result[i].arrearsTotal != null ? data.result[i].arrearsTotal : "";
+                        var closeCaseYhje = data.result[i].closeCaseYhje != null ? data.result[i].closeCaseYhje : "";
+                        var enterCollDate = data.result[i].enterCollDate != null ? data.result[i].enterCollDate : "";
+                        var accountDate = data.result[i].accountDate != null ? data.result[i].accountDate : "";
+                        var overdueDays = data.result[i].overdueDays != null ? data.result[i].overdueDays : "";
+                        var jkrq = data.result[i].jkrq != null ? data.result[i].jkrq : "";
+                        var backCaseDate = data.result[i].backCaseDate != null ? data.result[i].backCaseDate : "";
+                        var firstYqjcDate = data.result[i].firstYqjcDate != null ? data.result[i].firstYqjcDate : "";
+                        var rmbQkzje = data.result[i].rmbQkzje != null ? data.result[i].rmbQkzje : "";
+                        var zhychkr = data.result[i].zhychkr != null ? data.result[i].zhychkr : "";
+                        var firstOverdueTime = data.result[i].firstOverdueTime != null ? data.result[i].firstOverdueTime : "";
+                        var mqhkje = data.result[i].mqhkje != null ? data.result[i].mqhkje : "";
+                        var lowestPaymentRmb = data.result[i].lowestPaymentRmb != null ? data.result[i].lowestPaymentRmb : "";
+                        var dqqkje = data.result[i].dqqkje != null ? data.result[i].dqqkje : "";
+                        var rmbYhbjzje = data.result[i].rmbYhbjzje != null ? data.result[i].rmbYhbjzje : "";
+                        var ljyhje = data.result[i].ljyhje != null ? data.result[i].ljyhje : "";
+                        var ykqs = data.result[i].ykqs != null ? data.result[i].ykqs : "";
+                        var rmbYhfyzje = data.result[i].rmbYhfyzje != null ? data.result[i].rmbYhfyzje : "";
+                        var rmbYhlizje = data.result[i].rmbYhlizje != null ? data.result[i].rmbYhlizje : "";
+                        var rmbYhfxzje = data.result[i].rmbYhfxzje != null ? data.result[i].rmbYhfxzje : "";
+                        var znj = data.result[i].znj != null ? data.result[i].znj : "";
+                        var borrowEd = data.result[i].borrowEd != null ? data.result[i].borrowEd : "";
+                        var borrowNo = data.result[i].borrowNo != null ? data.result[i].borrowNo : "";
+                        var borrowBlank = data.result[i].borrowBlank != null ? data.result[i].borrowBlank : "";
+                        tp.append("<hr style=\"margin-top: 0;margin-bottom: 0;\"/><div class=\"sameCaseLeftInfo\">\n" +
+                            "                                <div class=\"sameCaseOne\">\n" +
+                            "                                    <label style='font-size: 14px;'><b>机构案件号：</b></label><b><label ><a href='javascript:void(0)' onclick='collJobDetail(\""+caseNo + "\",\""+orgId + "\",\""+importBatchNo+ "\")'><b><span style='font-size: 14px;color: #1c84c6'>"+caseNo+"</a></label></b><br/>\n" +
+                            "                                    <label >入催日：</label><label  >"+enterCollDate+"</label><br/>\n" +
+                            "                                    <label >借款日期：</label><label >"+jkrq+"</label><br/>\n" +
+                            "                                    <label >欠款总金额：</label><label style='color: red;'>"+rmbQkzje+"</label><br/>\n" +
+                            "                                    <label >每期还款金额：</label><label  >"+mqhkje+"</label><br/>\n" +
+                            "                                    <label >应还本金：</label><label  >"+rmbYhbjzje+"</label><br/>\n" +
+                            "                                    <label >应还费用：</label><label  >"+rmbYhfyzje+"</label><br/>\n" +
+                            "                                    <label >滞纳金：</label><label  >"+znj+"</label><br/>\n" +
+                            "                                    <label >借款卡号：</label><label  style='font-size: 18px;'>"+borrowNo+"</label>\n" +
+                            "                                </div>\n" +
+                            "                                <div class=\"sameCaseTwo\">\n" +
+                            "                                    <label style='font-size: 14px;'><b>委案金额：</b></label><label  style='font-size: 14px;'><b>"+arrearsTotal+"</b></label><br/>\n" +
+                            "                                    <label >账单日：</label><label  >"+accountDate+"</label><br/>\n" +
+                            "                                    <label >退案日：</label><label  >"+backCaseDate+"</label><br/>\n" +
+                            "                                    <label >最近一次还款日：</label><label >"+zhychkr+"</label><br/>\n" +
+                            "                                    <label >最低应还金额：</label><label  >"+lowestPaymentRmb+"</label><br/>\n" +
+                            "                                    <label >累计已还金额：</label><label  >"+ljyhje+"</label><br/>\n" +
+                            "                                    <label >应还利息：</label><label  >"+rmbYhlizje+"</label><br/>\n" +
+                            "                                    <label >放款金额：</label><label  >"+borrowEd+"</label><br/>\n" +
+                            "                                    <label >借款卡银行：</label><label  >"+borrowBlank+"</label>\n" +
+                            "                                </div>\n" +
+                            "                                <div class=\"sameCaseThree\">\n" +
+                            "                                    <label style='font-size: 14px;'><b>结案应还金额：</b></label><label  style='font-size: 14px;'><b>"+closeCaseYhje+"</b></label><br/>\n" +
+                            "                                    <label >逾期天数：</label><label  >"+overdueDays+"</label><br/>\n" +
+                            "                                    <label >应还日期：</label><label  >"+firstYqjcDate+"</label><br/>\n" +
+                            "                                    <label >逾期起始日：</label><label  >"+firstOverdueTime+"</label><br/>\n" +
+                            "                                    <label >当期欠款金额：</label><label  >"+dqqkje+"</label><br/>\n" +
+                            "                                    <label >已还期数：</label><label  >"+ykqs+"</label><br/>\n" +
+                            "                                    <label >应还罚息：</label><label  >"+rmbYhfxzje+"</label>\n" +
+                            "                                </div></div>");
+                    }
+                    // $("#sameCaseArrearsTotal").text(sameCaseArrearsTotal);
+                    $("#sameCaseArrearsTotal").text(parseFloat(sameCaseArrearsTotal).toFixed(2));
+                    // $("#sameCaseCloseCaseYhjeTotal").text(sameCaseCloseCaseYhjeTotal);
+                    $("#sameCaseCloseCaseYhjeTotal").text(parseFloat(sameCaseCloseCaseYhjeTotal).toFixed(2));
+                }
+            }
+        );
+    }
+
+    function disabledLetterApply(caseNo,orgId,importBatchNo){
+        $.post(
+            letterPrefix + "/letterStatus",
+            {
+                caseNo:caseNo,
+                orgId:orgId,
+                importBatchNo:importBatchNo
+            },
+            function(data) {
+                if(data.status == 200){
+                    // for (var i = 0; i < data.result.length; i++) {
+                    //     if (data.result[i].applyStatus == 1) {
+                    //         document.getElementById("letterApply").disabled=true;
+                    //         $("#letterStatus").text("待审批");
+                    //         break;
+                    //     }
+                    // }
+                    if (data.result.length != 0) {
+                        if (data.result[0].applyStatus == 1) {
+                            // document.getElementById("letterApply").disabled=true;
+                            $("#letterStatus").text("待审批");
+                        } else if (data.result[0].applyStatus == 2) {
+                            $("#letterStatus").text("审批通过");
+                        } else if (data.result[0].applyStatus == 3) {
+                            $("#letterStatus").text("审批拒绝");
+                        }
+                    } else {
+                        $("#letterStatus").text("");
+
+                    }
+                }
+            }
+        );
+    }
+
+    /**
+     * 是否共案
+     * @param certificateNo
+     * @param orgId
+     */
+    function isSameCase(certificateNo,orgId){
+        $.post(
+            prefix + "/selectSameCaseInfo",
+            {
+                certificateNo:certificateNo,
+                orgId:orgId
+            },
+            function(data) {
+                if(data.status == 200){
+                    if (data.result.length > 1) {
+                        $("#isSameCase").text("是");
+                        // document.getElementById("tab-9").style.display = "block";
+                        // document.getElementById("sameCaseLi").style.display = "block";
+                        // $("#sameCaseLi").removeClass('active');
+                        // $("#tab-9").removeClass("active");
+                        // $("#infoLi").addClass("active");
+                        // $("#tab-9").removeClass("active");
+                        // $("#tab-5").addClass("active");
+                    } else {
+                        $("#isSameCase").text("否");
+                        document.getElementById("tab-9").style.display = "none";
+                        // document.getElementById("sameCaseLi").style.display = "none";
+                        // document.getElementById("tab-9").style.display = "none";
+                        // $("#infoLi").addClass("active");
+                        // // $("#tab-9").removeClass("active");
+                        // $("#tab-5").addClass("active");
+                    }
+                }
+                $("a[aria-expanded='true']").click();
+            }
+        );
     }
 
     // 添加通话结果-通过按钮
@@ -1947,6 +2194,14 @@
             transferType = '机器人协催';
         } else if(type == 17){
             transferType = '从机器人拉回';
+        } else if(type == 18){
+            transferType = '申请推送机器人';
+        } else if(type == 19){
+            transferType = '同意推送机器人';
+        } else if(type == 20){
+            transferType = '拒绝推送机器人';
+        } else if(type == 21){
+            transferType = '案件回收';
         }
         return transferType;
     }
@@ -2347,6 +2602,47 @@
         $("#editNotebook").val(value);
         $("#notebookModal").modal('show');
     }
+
+    // 信函申请
+    /*function letterApply() {
+        $("#letterApplyContactName").val($("#customName").text());
+        $("#letterApplyArrearsMoney").val($("#arrearsTotal").text());
+        $("#letterApplyCloseCaseYhje").val($("#closeCaseYhje").text());
+        $("#letterApplyLoanTime").val($("#jkrq").text());
+        $("#letterApplyHomeAddress").val($("#customerHomeAddress").text());
+        $("#letterApplyModal").modal('show');
+    }*/
+
+    // 信函申请提交
+    /*function addLetterApply() {
+        $.post(
+            letterPrefix + "/addLetter",
+            {
+                caseNo:currentCaseNo,
+                importBatchNo:currentImportBatchNo,
+                orgId:currentOrgId,
+                tastId: currentTaskId,
+                transferType: $("#handSeparation").html(),
+                customName:$("#letterApplyContactName").val(),
+                arrearsTotal:$("#letterApplyArrearsMoney").val(),
+                closeCaseYhje:$("#letterApplyCloseCaseYhje").val(),
+                loanDate: $("#letterApplyLoanTime").val(),
+                letterType: $("#letterType").val()
+            },
+            function(data) {
+                // alert(JSON.stringify(data));
+                if (data.status == 200) {//请求成功
+                    $.modal.alertSuccess("保存成功");
+                    $("#letterApplyModal").modal('hide');
+                    document.getElementById("letterApply").disabled=true;
+                    $("#letterStatus").text("待审批");
+                }else if (data.code == 1) {
+                    window.location.href="/login";
+                    return;
+                }
+            }
+        );
+    }*/
 
     /**
      * 保存记事本
