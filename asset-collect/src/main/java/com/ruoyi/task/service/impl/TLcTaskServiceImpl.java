@@ -1496,23 +1496,25 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     private AjaxResult caseRecycle(Integer caseRecycleNum, List<TLcTask> taskList) {
         // 业务归属人不为空
         Map<Long, List<TLcTask>> taskListMap = taskList.stream().filter(task -> task.getOwnerId() != null).collect(Collectors.groupingBy(TLcTask::getOwnerId));
-        List<Integer> taskNumList = new ArrayList<>();
-        for (Map.Entry<Long, List<TLcTask>> map : taskListMap.entrySet()) {
-            taskNumList.add(map.getValue().size());
-        }
-        taskNumList.sort(Integer::compareTo);
-        if (taskNumList.get(0) < caseRecycleNum) {
-            return AjaxResult.error("操作失败，输入每人回收案件数不可超过" + taskNumList.get(0) + "件");
-        }
-        // 案件回收
         List<TLcTask> caseRecyleTaskList = new ArrayList<>();
-        for (Map.Entry<Long, List<TLcTask>> map : taskListMap.entrySet()) {
-            // 随机获取要回收 caseRecycleNum 个的任务
-            Set<TLcTask> randomTaskSet = getAllocatTaskSet(map.getValue(), caseRecycleNum);
-            // set 转 list
-            List<TLcTask> ownerCaseRecyleTaskList = randomTaskSet.stream().collect(Collectors.toList());
-            ownerCaseRecyleTaskList = buildCaseRecycleTaskList(ownerCaseRecyleTaskList);
-            caseRecyleTaskList.addAll(ownerCaseRecyleTaskList);
+        if (!taskListMap.isEmpty()) {
+            List<Integer> taskNumList = new ArrayList<>();
+            for (Map.Entry<Long, List<TLcTask>> map : taskListMap.entrySet()) {
+                taskNumList.add(map.getValue().size());
+            }
+            taskNumList.sort(Integer::compareTo);
+            if (taskNumList.get(0) < caseRecycleNum) {
+                return AjaxResult.error("操作失败，输入每人回收案件数不可超过" + taskNumList.get(0) + "件");
+            }
+            // 案件回收
+            for (Map.Entry<Long, List<TLcTask>> map : taskListMap.entrySet()) {
+                // 随机获取要回收 caseRecycleNum 个的任务
+                Set<TLcTask> randomTaskSet = getAllocatTaskSet(map.getValue(), caseRecycleNum);
+                // set 转 list
+                List<TLcTask> ownerCaseRecyleTaskList = randomTaskSet.stream().collect(Collectors.toList());
+                ownerCaseRecyleTaskList = buildCaseRecycleTaskList(ownerCaseRecyleTaskList);
+                caseRecyleTaskList.addAll(ownerCaseRecyleTaskList);
+            }
         }
         // 将业务归属人为空的添加到待回收结案的集合
         caseRecyleTaskList.addAll(buildCaseRecycleTaskList(taskList.stream().filter(task -> task.getOwnerId() == null).collect(Collectors.toList())));
