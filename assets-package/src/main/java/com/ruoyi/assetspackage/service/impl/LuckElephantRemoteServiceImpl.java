@@ -11,6 +11,7 @@ import com.ruoyi.assetspackage.service.IOrgPackageService;
 import com.ruoyi.assetspackage.service.ITLcImportFlowService;
 import com.ruoyi.assetspackage.service.ITLcScoreService;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.framework.util.ShiroUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -357,6 +358,28 @@ public class LuckElephantRemoteServiceImpl implements ILuckElephantRemoteService
             this.luckElephantRemoteMapper.batchUpdate(tempCurAssetList);
             /**更新案件、表任务表*/
             curAssetsPackageServiceImpl.updateCollect(tempCurAssetList);
+            /**插入流水表*/
+            //导入总金额
+            BigDecimal totalMoney = new BigDecimal(0.00);
+            // 新增流水集合，如果案件是修改的话，不修改批次号
+            List<TempCurAssetsPackage> tLcImportFlowList = new ArrayList<>(tempCurAssetList.size());
+            //参数计算、赋值
+            for (TempCurAssetsPackage tempCurAssetsPackage : tempCurAssetList) {
+                totalMoney = totalMoney.add(tempCurAssetsPackage.getRmbYe() != null ? new BigDecimal(tempCurAssetsPackage.getRmbYe()) : new BigDecimal(0.00));
+                tLcImportFlowList.add(tempCurAssetsPackage);
+            }
+            //插入流水表
+            if (tLcImportFlowList != null && tLcImportFlowList.size() > 0) {
+                TLcImportFlow tLcImportFlow = new TLcImportFlow();
+                tLcImportFlow.setImportBatchNo(batchNo)
+                        .setImportType(ImportTypeEnum.UPDATE_TEMPLETE.getCode())
+                        .setOrgId(orgId)
+                        .setOrgName(orgName)
+                        .setTotalNum(tLcImportFlowList.size())
+                        .setTotalMoney(totalMoney)
+                        .setCreateBy("1");
+                this.tlcImportFlowService.insertTLcImportFlow(tLcImportFlow);
+            }
         }
         response = new LuckElephantUpdateAssetResponse();
         response.setRetTime(curDate);

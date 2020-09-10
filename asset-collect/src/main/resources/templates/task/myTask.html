@@ -12,6 +12,16 @@
             right: 190px;
             top: 20px;
         }
+        .bleft{
+            border-left: 0px solid transparent !important;
+        }
+        .bright{
+            border-right: 0px solid transparent !important;
+        }
+        .blr{
+            border-left: 0px solid transparent !important;
+            border-right: 0px solid transparent !important;
+        }
 </style>
 </head>
 <body class="gray-bg">
@@ -201,6 +211,17 @@
                                     <option value="R08">R08(线路盲区)</option>
                                 </select>
                             </li>
+                            <li>
+                                <p>标记颜色：</p>
+                                <select name="color" >
+                                    <option value="">请选择</option>
+                                    <option value="1" style="background: #FCBF51">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;金</option>
+                                    <option value="2" style="background: #64C790">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;木</option>
+                                    <option value="3" style="background: #81D3F8">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;水</option>
+                                    <option value="4" style="background: #FE6249">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;火</option>
+                                    <option value="5" style="background: #7D409F">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;土</option>
+                                </select>
+                            </li>
                            <!-- <li>
                                 <p > </p>
                                 <select id="columnQuery1" onchange="addQuery('columnQuery1','custom1')">
@@ -231,7 +252,7 @@
                 <button type="button" class="btn btn-success" onclick="infoReporting()">信息上报</button>
                 <input id="currentPageUrl" name="currentPageUrl" class="form-control" type="hidden">
             </div>
-            <div class="col-sm-12 select-table table-striped">
+            <div class="col-sm-12 select-table table-bordered">
                 <div id="title2">
                     <label id="totalArrears"></label>
                     &nbsp;&nbsp;&nbsp;&nbsp;
@@ -273,7 +294,34 @@
                  </div>
              </div>
          </div>
-    </div>
+
+         <div class="col-sm-12">
+             <div class="modal" id="colorWin" tabindex="-1" role="dialog" aria-hidden="true">
+                 <div class="modal-dialog">
+                     <div class="modal-content animated bounceInRight">
+                         <div class="modal-header">
+                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
+                             </button>
+                         </div>
+                         <div class="modal-body" style="height: 100px;">
+                             <div class="form-group">
+                                 <input type="hidden" id="dataId">
+                                 <div>
+                                     <div style="line-height: 60px;width: 30px;background: #FCBF51;color: #FFFFFF;display: inline-block;margin-left: 25%;text-align: center;border-radius: 3px;" onclick="saveColor('1')">金</div>
+                                     <div style="line-height: 60px;width: 30px;background: #64C790;color: #FFFFFF;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor('2')">木</div>
+                                     <div style="line-height: 60px;width: 30px;background: #81D3F8;color: #FFFFFF;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor('3')">水</div>
+                                     <div style="line-height: 60px;width: 30px;background: #FE6249;color: #FFFFFF;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor('4')">火</div>
+                                     <div style="line-height: 60px;width: 30px;background: #7D409F;color: #FFFFFF;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor('5')">土</div>
+                                     <div style="line-height: 60px;width: 52px;border: 1px solid #9E9E9E;background: #FFFFFF;color: #3c3a3a;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor('0')">清空</div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+
+     </div>
 
     <th:block th:include="include :: footer" />
      <script th:src="@{/ajax/libs/bootstrap-select/bootstrap-select.min.js}"></script>
@@ -347,7 +395,22 @@
                 },
                 {
                     field : 'customName',
-                    title : '姓名'
+                    title : '客户姓名',
+                    formatter: function (value, row, index) {
+                        if(row.color=="1"){
+                            return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #FCBF51;border-color: #FCBF51' onclick='openColorWin(\""+row.id + "\")'></a><font color='FCBF51' style='font-weight: 800'>"+value+"</font>";
+                        }else if (row.color=="2"){
+                            return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #64C790;border-color: #64C790' onclick='openColorWin(\""+row.id + "\")'></a><font color='64C790' style='font-weight: 800'>"+value+"</font>";
+                        }else if (row.color=="3"){
+                            return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #81D3F8;border-color: #81D3F8' onclick='openColorWin(\""+row.id + "\")'></a><font color='81D3F8' style='font-weight: 800'>"+value+"</font>";
+                        }else if (row.color=="4"){
+                            return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #FE6249;border-color: #FE6249' onclick='openColorWin(\""+row.id + "\")'></a><font color='FE6249' style='font-weight: 800'>"+value+"</font>";
+                        }else if (row.color=="5"){
+                            return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #7D409F;border-color: #7D409F' onclick='openColorWin(\""+row.id + "\")'></a><font color='7D409F' style='font-weight: 800'>"+value+"</font>";
+                        }else {
+                            return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #FFFFFF;border-color: #9E9E9E' onclick='openColorWin(\""+row.id + "\")'></a>"+value;
+                        }
+                    }
                 },
                 {
                     field : 'arrearsTotal',
@@ -952,6 +1015,32 @@
             toAutoCall(isHasOther);
         });
 
+        function openColorWin(obj) {
+            $("#dataId").val(obj);
+            $("#colorWin").modal('show');
+        }
+
+        function saveColor(obj) {
+            var id = $("#dataId").val();
+            $("#colorWin").modal('hide');
+            $.ajax({
+                url: prefix + "/saveColor",
+                dataType: "json",
+                type: "post",
+                data:{
+                  color:obj,
+                    id:id
+                },
+                success:function(data){
+                   if(data.code==0){
+                       $.table.refresh();
+                   }
+                }
+            });
+        }
+
+
     </script>
+
 </body>
 </html>

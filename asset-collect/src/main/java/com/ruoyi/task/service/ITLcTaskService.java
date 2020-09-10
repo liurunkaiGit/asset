@@ -330,4 +330,6 @@ public interface ITLcTaskService {
     AjaxResult caseRecyle(String taskIds, String certificateNos, Integer caseRecycleNum);
 
     AjaxResult allCaseRecyle(TLcTask tLcTask, Integer caseRecycleNum);
+
+    int updateColor(TLcTask tLcTask);
 }

@@ -391,6 +391,9 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         } else {
             taskList = allocatTask(allocatRule, taskList, userList);
         }
+        for (TLcTask task : taskList) {
+            task.setColor("0");
+        }
         this.tLcTaskMapper.batchUpdateTask(taskList);
         // 添加到案件轨迹表中
         insertDuncaseAssign(taskList, ShiroUtils.getSysUser());
@@ -423,6 +426,9 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             taskList = allocatTask(allocatRule, taskList, userList);
         }
         if (taskList != null && taskList.size() > 0) {
+            for (TLcTask task : taskList) {
+                task.setColor("0");
+            }
             this.tLcTaskMapper.batchUpdateTask(taskList);
             // 添加到案件轨迹表中
             insertDuncaseAssign(taskList, ShiroUtils.getSysUser());
@@ -502,6 +508,9 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
 //                    .setOwnerName(this.sysUserService.selectUserById(Long.valueOf(userId)).getUserName());
 //            taskList.add(tLcTask);
 //        }
+        for (TLcTask task : taskList) {
+            task.setColor("0");
+        }
         this.tLcTaskMapper.batchUpdateTask(taskList);
 //        updateDuncaseOwner(taskList);
         // 插入案件历史轨迹
@@ -543,6 +552,9 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
 //                    .setOldOwnerId(null);
 //            taskList.add(tLcTask);
 //        }
+        for (TLcTask task : taskList) {
+            task.setColor("0");
+        }
         this.tLcTaskMapper.batchUpdateTask(taskList);
 //        updateDuncaseOwner(taskList);
         // 插入案件历史轨迹
@@ -1543,6 +1555,8 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         return caseRecycle(caseRecycleNum, taskList);
     }
 
+
+
     private List<TLcTask> buildCaseRecyleTaskList(String certificateNos) {
         List<TLcTask> taskList = Arrays.stream(certificateNos.split(",")).map(certificateNo -> {
             String[] split = certificateNo.split("@");
@@ -1611,6 +1625,16 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         return map;
     }
 
+
+    /**
+     *更新任务颜色值
+     * @param tLcTask
+     * @return
+     */
+    @Override
+    public int updateColor(TLcTask tLcTask) {
+        return this.tLcTaskMapper.updateColor(tLcTask);
+    }
 
 }
 

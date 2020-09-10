@@ -1467,6 +1467,19 @@ public class TLcTaskController extends BaseController {
         return this.tLcTaskService.allCaseRecyle(tLcTask, caseRecycleNum);
     }
 
+    @PostMapping("/saveColor")
+    @ResponseBody
+    public AjaxResult saveColor(TLcTask tLcTask, HttpServletRequest request){
+        try {
+            this.tLcTaskService.updateColor(tLcTask);
+            return AjaxResult.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("颜色保存失败{}",e);
+            return AjaxResult.error();
+        }
+    }
+
 }
 
 

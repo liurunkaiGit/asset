@@ -49,6 +49,7 @@
         <result property="score" column="score" jdbcType="INTEGER"/>
         <result property="sendRobotBatchNo" column="send_robot_batch_no" jdbcType="VARCHAR"/>
         <result property="notebook" column="notebook" jdbcType="VARCHAR"/>
+        <result property="color" column="color" jdbcType="CHAR"/>
     </resultMap>
 
     <sql id="SELECT_T_LC_TASK">
@@ -482,7 +483,7 @@
 
     <select id="selectMyTaskList" parameterType="com.ruoyi.task.domain.TLcTask" resultMap="TLcTaskResult">
         SELECT
-        d.ljyhje,
+        d.ljyhje,t.color,
         <include refid="SELECT_T_LC_TASK"/>
         FROM t_lc_task t,t_lc_duncase d
         WHERE 1=1
@@ -495,6 +496,9 @@
         </if>
         <if test="endLjyhje != null">
             and d.ljyhje <![CDATA[<=]]> #{endLjyhje}
+        </if>
+        <if test="color != null  and color != ''">
+            and t.color = #{color}
         </if>
         <include refid="SELECT_TASK_WHERE"></include>
         ORDER BY t.task_status ASC,t.create_time DESC,t.recently_allot_date ASC,t.enter_coll_date ASC,t.case_no ASC
@@ -843,6 +847,7 @@
                 <if test="task.phone != null  and task.phone != ''">phone = #{task.phone},</if>
                 <if test="task.sendRobotBatchNo != null  and task.sendRobotBatchNo != ''">send_robot_batch_no = #{task.sendRobotBatchNo},</if>
                 <if test="task.closeType != null">close_type = #{task.closeType},</if>
+                <if test="task.color != null and task.phone != ''">color = #{task.color},</if>
             </trim>
             WHERE id = #{task.id}
         </foreach>
@@ -1456,8 +1461,12 @@
 
     <update id="updateCaseRecycle" parameterType="java.util.List">
         <foreach collection="taskIdList" item="taskId" separator=";">
-            UPDATE t_lc_task set owner_id = null,owner_name = null,task_status = 4,task_type = 21
+            UPDATE t_lc_task set owner_id = null,owner_name = null,task_status = 4,task_type = 21,color='0'
             where id = #{taskId}
         </foreach>
+    </update>
+
+    <update id="updateColor" parameterType="com.ruoyi.task.domain.TLcTask">
+           UPDATE t_lc_task set color = #{color} where id = #{id}
     </update>
 </mapper>

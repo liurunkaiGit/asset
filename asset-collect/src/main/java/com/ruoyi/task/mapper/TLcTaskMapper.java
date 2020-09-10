@@ -1,5 +1,6 @@
 package com.ruoyi.task.mapper;
 
+import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysRoleDept;
 import com.ruoyi.task.domain.TLcTask;
@@ -222,4 +223,6 @@ public interface TLcTaskMapper {
     void updateNotebook(TLcTask tLcTask);
 
     void updateCaseRecycle(@Param("taskIdList") List<Long> taskIdList);
+
+    int updateColor(TLcTask tLcTask);
 }
