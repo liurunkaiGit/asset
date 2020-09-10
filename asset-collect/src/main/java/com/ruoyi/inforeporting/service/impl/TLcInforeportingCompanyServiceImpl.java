@@ -3,10 +3,7 @@ package com.ruoyi.inforeporting.service.impl;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.inforeporting.domain.TLcInforeportingBuckleXing;
-import com.ruoyi.inforeporting.domain.TLcInforeportingCompany;
-import com.ruoyi.inforeporting.domain.TLcInforeportingCompanyExp;
-import com.ruoyi.inforeporting.domain.TLcInforeportingCompanyExpXing;
+import com.ruoyi.inforeporting.domain.*;
 import com.ruoyi.inforeporting.mapper.TLcInforeportingCompanyMapper;
 import com.ruoyi.inforeporting.service.TLcInforeportingCompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +44,9 @@ public class TLcInforeportingCompanyServiceImpl implements TLcInforeportingCompa
         if(null != inforeportingCompany.getOrgId() && 207 == inforeportingCompany.getOrgId().longValue()){
             //兴业消费金融
             return new ExcelUtil<TLcInforeportingCompanyExpXing>(TLcInforeportingCompanyExpXing.class).exportExcel(transformationCompanyXing(list),"对公入账");
+        }else if(null != inforeportingCompany.getOrgId() && 206 == inforeportingCompany.getOrgId().longValue()){
+            //中银
+            return new ExcelUtil<TLcInforeportingCompanyExpZhongyin>(TLcInforeportingCompanyExpZhongyin.class).exportExcel(transformationCompanyZhongyin(list),"对公入账");
         }
         return new ExcelUtil<TLcInforeportingCompanyExp>(TLcInforeportingCompanyExp.class).exportExcel(transformationCompany(list),"对公入账");
     }
@@ -55,7 +55,8 @@ public class TLcInforeportingCompanyServiceImpl implements TLcInforeportingCompa
      * 将对象信息封装导出对象中
      */
     private  List<TLcInforeportingCompanyExp> transformationCompany(List<TLcInforeportingCompany> list){
-        List<TLcInforeportingCompanyExp> listExp = new ArrayList<TLcInforeportingCompanyExp>();
+        if(null == list || list.isEmpty()||list.size()==0)return null;
+        List<TLcInforeportingCompanyExp> listExp = new ArrayList<TLcInforeportingCompanyExp>(list.size());
         int i=0;
         for(TLcInforeportingCompany cy:list){
             TLcInforeportingCompanyExp tp = cy.clone();
@@ -68,7 +69,8 @@ public class TLcInforeportingCompanyServiceImpl implements TLcInforeportingCompa
      * 将对象信息封装导出对象中 兴业消费金融
      */
     private  List<TLcInforeportingCompanyExpXing> transformationCompanyXing(List<TLcInforeportingCompany> list){
-        List<TLcInforeportingCompanyExpXing> listExp = new ArrayList<TLcInforeportingCompanyExpXing>();
+        if(null == list || list.isEmpty()||list.size()==0)return null;
+        List<TLcInforeportingCompanyExpXing> listExp = new ArrayList<TLcInforeportingCompanyExpXing>(list.size());
         int i =0;
         for(TLcInforeportingCompany cy:list){
             TLcInforeportingCompanyExpXing cep = new TLcInforeportingCompanyExpXing();
@@ -98,4 +100,32 @@ public class TLcInforeportingCompanyServiceImpl implements TLcInforeportingCompa
         return listExp;
     }
 
+    /**
+     * 对公入账 -中银转化导出模板
+     * @param list 默认查询结果集
+     * @return 准换后的模板集合
+     */
+    private  List<TLcInforeportingCompanyExpZhongyin> transformationCompanyZhongyin(List<TLcInforeportingCompany> list){
+        if(null == list || list.isEmpty()||list.size()==0)return null;
+        List<TLcInforeportingCompanyExpZhongyin> listExp = new ArrayList<TLcInforeportingCompanyExpZhongyin>(list.size());
+        int i =0;
+        for(TLcInforeportingCompany cy:list){
+            TLcInforeportingCompanyExpZhongyin tn = new TLcInforeportingCompanyExpZhongyin();
+            if("已核销".equals(cy.getTransferType())){
+                tn.setStage("已核销");
+            }else{
+                tn.setStage("未核销");
+            }
+            tn.setXh(++i);
+            tn.setApplicationTime(cy.getApplicationTime());
+            tn.setCaseNo(cy.getCaseNo());
+            tn.setProductName(cy.getProductName());
+            tn.setCustomName(cy.getCustomName());
+            tn.setAmountOfDeduction(cy.getAmountOfDeduction());
+            tn.setCreateTime(cy.getCreateTime());
+            tn.setDraweeName(cy.getDraweeName());
+            listExp.add(tn);
+        }
+        return listExp;
+    }
 }

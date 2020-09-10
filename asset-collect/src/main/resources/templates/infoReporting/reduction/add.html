@@ -301,12 +301,7 @@
                 }
             }
             function selChange(reductionTypeVal,reductionTypeName){
-                $("#reportingTypeName").val(reductionTypeName)
-                // if(3 == reductionTypeVal){
-                //     $("#noCompany").hide();
-                // }else{
-                //     $("#noCompany").show();
-                // }
+                $("#reportingTypeName").val(reductionTypeName);
                 $.ajax({
                     url: ctx + "inforeporting/set/listOrg",    //请求的url地址
                     dataType: "json",   //返回格式为json
@@ -322,14 +317,14 @@
                         if(req.length>0){
                             var htm = "";
                             $.each(req,function(index,value){
+                                var al = "";
+                                if(obj.hasOwnProperty(value.fromColumn) && obj[value.fromColumn] != null && obj[value.fromColumn] != 'null'){
+                                    al = obj[value.fromColumn];
+                                }
                                 if(value.showStatus == 1){
                                     htm+="<div class=\"form-group\">";
                                     htm+="<label class=\"col-sm-3 control-label\">"+value.fromColumnName+"：</label>";
                                     htm+="<div class=\"col-sm-8\" >";
-                                    var al = "";
-                                    if(obj.hasOwnProperty(value.fromColumn) && obj[value.fromColumn] != null && obj[value.fromColumn] != 'null'){
-                                        al = obj[value.fromColumn];
-                                    }
                                     var vlHtm = "";
                                     if(value.requiredStatus == 1){
                                         vlHtm = "required=true";
@@ -347,6 +342,8 @@
                                     }
                                     htm+="</div>";
                                     htm+="</div>";
+                                }else{
+                                    htm+="<input type=\"hidden\"  name=\""+value.toColumn+"\" value=\""+al+"\" >";
                                 }
                             });
                             $("#content"+reductionTypeVal).empty();
