@@ -969,6 +969,7 @@
             var startRecentlyFollowUpDate = $("#startRecentlyFollowUpDate").val();
             var endRecentlyFollowUpDate = $("#endRecentlyFollowUpDate").val();
             var callCodeHistoryListStr = $('#callCodeHistoryListStr').selectpicker('val');
+            var color =  $('#color').val();
             if (callCodeHistoryListStr != null) {
                 callCodeHistoryListStr = callCodeHistoryListStr.join();
             }
@@ -990,7 +991,8 @@
                     endRecentlyAllotDate:endRecentlyAllotDate,
                     startRecentlyFollowUpDate:startRecentlyFollowUpDate,
                     endRecentlyFollowUpDate:endRecentlyFollowUpDate,
-                    callCodeHistoryList:callCodeHistoryListStr
+                    callCodeHistoryList:callCodeHistoryListStr,
+                    color:color
                 },
                 function(data) {
                     // alert(JSON.stringify(data));
