@@ -1101,17 +1101,17 @@
                             style ="background:rgb(169,169,169)";
                         }
                         if(n.color==1){
-                            tp.append("<li id='cust"+n.caseNo+"' style='"+style+"'><a href='javascript:void(0)' style='color:#FCBF51' onclick='collJobDetail(\""+n.caseNo + "\",\""+n.orgId + "\",\""+n.importBatchNo + "\")'</a><b>" + n.customName +"</b><a class= 'btn btn-success' style='padding: 0px;margin-right: 20px;height: 13px;width: 13px;border-radius: 10px;float: right;background: #FCBF51;border-color: #FCBF51' onclick='openColorWin("+n.id + ")'></a>"+ "</li>");
+                            tp.append("<li id='cust"+n.caseNo+"' style='"+style+"'><a id='name"+n.id+"' href='javascript:void(0)' style='color:#FCBF51'  onclick='collJobDetail(\""+n.caseNo + "\",\""+n.orgId + "\",\""+n.importBatchNo + "\")'</a>" + n.customName +"<a id='"+n.id+"' class= 'btn btn-success' style='padding: 0px;margin-top: 3px;margin-right: 20px;height: 13px;width: 13px;border-radius: 10px;float: right;background: #FCBF51;border-color: #FCBF51' onclick='openColorWin("+n.id + ")'></a>"+ "</li>");
                         }else if(n.color==2){
-                            tp.append("<li id='cust"+n.caseNo+"' style='"+style+"'><a href='javascript:void(0)' style='color:#64C790' onclick='collJobDetail(\""+n.caseNo + "\",\""+n.orgId + "\",\""+n.importBatchNo + "\")'</a><b>" + n.customName +"</b><a class= 'btn btn-success' style='padding: 0px;margin-right: 20px;height: 13px;width: 13px;border-radius: 10px;float: right;background: #64C790;border-color: #64C790' onclick='openColorWin("+n.id +")'></a>"+ "</li>");
+                            tp.append("<li id='cust"+n.caseNo+"' style='"+style+"'><a id='name"+n.id+"' href='javascript:void(0)' style='color:#64C790' onclick='collJobDetail(\""+n.caseNo + "\",\""+n.orgId + "\",\""+n.importBatchNo + "\")'</a>" + n.customName +"<a id='"+n.id+"' class= 'btn btn-success' style='padding: 0px;margin-top: 3px;margin-right: 20px;height: 13px;width: 13px;border-radius: 10px;float: right;background: #64C790;border-color: #64C790' onclick='openColorWin("+n.id +")'></a>"+ "</li>");
                         }else if(n.color==3){
-                            tp.append("<li id='cust"+n.caseNo+"' style='"+style+"'><a href='javascript:void(0)' style='color:#81D3F8' onclick='collJobDetail(\""+n.caseNo + "\",\""+n.orgId + "\",\""+n.importBatchNo + "\")'</a><b>" + n.customName +"</b><a class= 'btn btn-success' style='padding: 0px;margin-right: 20px;height: 13px;width: 13px;border-radius: 10px;float: right;background: #81D3F8;border-color: #81D3F8' onclick='openColorWin("+n.id + ")'></a>"+ "</li>");
+                            tp.append("<li id='cust"+n.caseNo+"' style='"+style+"'><a id='name"+n.id+"' href='javascript:void(0)' style='color:#81D3F8'  onclick='collJobDetail(\""+n.caseNo + "\",\""+n.orgId + "\",\""+n.importBatchNo + "\")'</a>" + n.customName +"<a id='"+n.id+"' class= 'btn btn-success' style='padding: 0px;margin-top: 3px;margin-right: 20px;height: 13px;width: 13px;border-radius: 10px;float: right;background: #81D3F8;border-color: #81D3F8' onclick='openColorWin("+n.id + ")'></a>"+ "</li>");
                         }else if(n.color==4){
-                            tp.append("<li id='cust"+n.caseNo+"' style='"+style+"'><a href='javascript:void(0)' style='color:#FE6249' onclick='collJobDetail(\""+n.caseNo + "\",\""+n.orgId + "\",\""+n.importBatchNo + "\")'</a><b>" + n.customName +"</b><a class= 'btn btn-success' style='padding: 0px;margin-right: 20px;height: 13px;width: 13px;border-radius: 10px;float: right;background: #FE6249;border-color: #FE6249' onclick='openColorWin("+n.id + ")'></a>"+ "</li>");
+                            tp.append("<li id='cust"+n.caseNo+"' style='"+style+"'><a id='name"+n.id+"' href='javascript:void(0)' style='color:#FE6249' onclick='collJobDetail(\""+n.caseNo + "\",\""+n.orgId + "\",\""+n.importBatchNo + "\")'</a>" + n.customName +"<a id='"+n.id+"' class= 'btn btn-success' style='padding: 0px;margin-top: 3px;margin-right: 20px;height: 13px;width: 13px;border-radius: 10px;float: right;background: #FE6249;border-color: #FE6249' onclick='openColorWin("+n.id + ")'></a>"+ "</li>");
                         }else if(n.color==5){
-                            tp.append("<li id='cust"+n.caseNo+"' style='"+style+"'><a href='javascript:void(0)' style='color:#7D409F' onclick='collJobDetail(\""+n.caseNo + "\",\""+n.orgId + "\",\""+n.importBatchNo + "\")'</a><b>" + n.customName +"</b><a class= 'btn btn-success' style='padding: 0px;margin-right: 20px;height: 13px;width: 13px;border-radius: 10px;float: right;background: #7D409F;border-color: #7D409F' onclick='openColorWin("+n.id + ")'></a>"+ "</li>");
+                            tp.append("<li id='cust"+n.caseNo+"' style='"+style+"'><a id='name"+n.id+"' href='javascript:void(0)' style='color:#7D409F' onclick='collJobDetail(\""+n.caseNo + "\",\""+n.orgId + "\",\""+n.importBatchNo + "\")'</a>" + n.customName +"<a  id='"+n.id+"' class= 'btn btn-success' style='padding: 0px;margin-top: 3px;margin-right: 20px;height: 13px;width: 13px;border-radius: 10px;float: right;background: #7D409F;border-color: #7D409F' onclick='openColorWin("+n.id + ")'></a>"+ "</li>");
                         }else{
-                            tp.append("<li id='cust"+n.caseNo+"' style='"+style+"'><a href='javascript:void(0)' style='color:#515050' onclick='collJobDetail(\""+n.caseNo + "\",\""+n.orgId + "\",\""+n.importBatchNo + "\")'</a>" + n.customName +"<a class= 'btn btn-success' style='padding: 0px;margin-right: 20px;height: 13px;width: 13px;border-radius: 10px;float: right;background: #FFFFFF;border-color: #9E9E9E' onclick='openColorWin("+n.id + ")'></a>"+ "</li>");
+                            tp.append("<li id='cust"+n.caseNo+"' style='"+style+"'><a id='name"+n.id+"' href='javascript:void(0)' style='color:#515050' onclick='collJobDetail(\""+n.caseNo + "\",\""+n.orgId + "\",\""+n.importBatchNo + "\")'</a>" + n.customName +"<a  id='"+n.id+"' class= 'btn btn-success' style='padding: 0px;margin-top: 3px;margin-right: 20px;height: 13px;width: 13px;border-radius: 10px;float: right;background: #FFFFFF;border-color: #9E9E9E' onclick='openColorWin("+n.id + ")'></a>"+ "</li>");
                         }
                         allCustomTotalDebtAmount += n.arrearsTotal;
                         num++;
@@ -3504,9 +3504,30 @@
             },
             success:function(data){
                 if(data.code==0){
+                    var op = $("#" + id);
+                    var opName = $("#name" + id);
+                    if(obj == 1){
+                        op.attr("style","padding: 0px;margin-top: 3px;margin-right: 20px;height: 13px;width: 13px;border-radius: 10px;float: right;background: #FCBF51;border-color: #FCBF51");
+                        opName.attr("style","color:#FCBF51");
+                    }else if(obj == 2){
+                        op.attr("style","padding: 0px;margin-top: 3px;margin-right: 20px;height: 13px;width: 13px;border-radius: 10px;float: right;background: #64C790;border-color: #64C790");
+                        opName.attr("style","color:#64C790");
+                    }else if(obj == 3){
+                        op.attr("style","padding: 0px;margin-top: 3px;margin-right: 20px;height: 13px;width: 13px;border-radius: 10px;float: right;background: #81D3F8;border-color: #81D3F8");
+                        opName.attr("style","color:#81D3F8");
+                    }else if(obj == 4){
+                        op.attr("style","padding: 0px;margin-top: 3px;margin-right: 20px;height: 13px;width: 13px;border-radius: 10px;float: right;background: #FE6249;border-color: #FE6249");
+                        opName.attr("style","color:#FE6249");
+                    }else if(obj == 5){
+                        op.attr("style","padding: 0px;margin-top: 3px;margin-right: 20px;height: 13px;width: 13px;border-radius: 10px;float: right;background: #7D409F;border-color: #7D409F");
+                        opName.attr("style","color:#7D409F");
+                    }else{
+                        op.attr("style","padding: 0px;margin-top: 3px;margin-right: 20px;height: 13px;width: 13px;border-radius: 10px;float: right;background: #FFFFFF;border-color: #9E9E9E");
+                        opName.attr("style","color:#515050");
+                    }
                     // location.reload();
-                    $("#customNameList").empty();
-                    findTaskByOwner(startNum,pageSize);
+                    //$("#customNameList").empty();
+                    //findTaskByOwner(startNum,pageSize);
                 }
             }
         });
