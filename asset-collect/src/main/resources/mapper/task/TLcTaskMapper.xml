@@ -189,6 +189,9 @@
         <if test="transferType != null and transferType != ''">
             and t.transfer_type = #{transferType}
         </if>
+        <if test="color != null and color != ''">
+            and t.color = #{color}
+        </if>
         <if test="collJob != null and collJob != ''">
             and t.task_status = 2
         </if>
