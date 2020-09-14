@@ -213,7 +213,7 @@
                             </li>
                             <li>
                                 <p>标记颜色：</p>
-                                <select name="color" >
+                                <select id = "color" name="color" >
                                     <option value="">请选择</option>
                                     <option value="1" style="background: #FCBF51">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;金</option>
                                     <option value="2" style="background: #64C790">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;木</option>
@@ -636,6 +636,7 @@
             var startRecentlyFollowUpDate = $("#startRecentlyFollowUpDate").val();
             var endRecentlyFollowUpDate = $("#endRecentlyFollowUpDate").val();
             var callCodeHistoryListStr = $('#callCodeHistoryListStr').selectpicker('val');
+            var color = $("#color").val();
             var toCollJobUrl = prefix + '/toCollJob?orgId='+orgId +'&caseNo='+caseNo +'&customName='+customName
                 +'&ownerId='+ownerId
                 +'&startArrearsTotal='+startArrearsTotal
@@ -653,7 +654,8 @@
                 +'&endRecentlyFollowUpDate='+endRecentlyFollowUpDate
                 +'&currentCaseNo='+currentCaseNo
                 +'&callCodeHistoryListStr='+callCodeHistoryListStr
-                +'&currentImportBatchNo='+currentImportBatchNo;
+                +'&currentImportBatchNo='+currentImportBatchNo
+                +'&color='+color;
             if(taskStatus!=undefined){
                 toCollJobUrl=toCollJobUrl +'&taskStatus='+taskStatus
             }

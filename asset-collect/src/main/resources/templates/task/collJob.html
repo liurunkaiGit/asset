@@ -89,6 +89,7 @@
     <input type="hidden" id="endLjyhjeSearch" name="endLjyhjeSearch" th:value="${tLcTask.endLjyhje}">
     <input type="hidden" id="startOverdueDaysSearch" name="startOverdueDaysSearch" th:value="${tLcTask.startOverdueDays}">
     <input type="hidden" id="endOverdueDaysSearch" name="endOverdueDaysSearch" th:value="${tLcTask.endOverdueDays}">
+    <input type="hidden" id="color" name="color" th:value="${tLcTask.color}">
     <input type="hidden" id="totalCaseNum" name="totalCaseNum" th:value="${totalCaseNum}">
     <input type="hidden" id="totalArrears" name="totalArrears" th:value="${totalArrears}">
    <!-- <input type="hidden" id="extNum" name="extNum" th:value="${extNumList}">-->
@@ -1083,6 +1084,7 @@
                 endLjyhje : endLjyhje,
                 startOverdueDays : startOverdueDays,
                 endOverdueDays : endOverdueDays,
+                color: $("#color").val(),
                 startNum: $("#startNum").val(),
                 endNum: pageSize
             }, // 请求参数
