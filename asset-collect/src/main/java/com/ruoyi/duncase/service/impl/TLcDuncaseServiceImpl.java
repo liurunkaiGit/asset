@@ -850,7 +850,7 @@ public class TLcDuncaseServiceImpl implements ITLcDuncaseService {
                 .setPhone(assetsPackage.getCustomerMobile());
         tLcCustContactList.add(selfContact);
         // 本人家庭电话
-        if (StringUtils.isNotEmpty(assetsPackage.getCustomerHomeTel())) {
+        if (StringUtils.isNotEmpty(assetsPackage.getCustomerHomeTel()) && !assetsPackage.getCustomerHomeTel().equals(assetsPackage.getCustomerMobile())) {
             TLcCustContact telContact = buildContactCommon(assetsPackage);
             telContact = telContact.setContactName(assetsPackage.getCurName())
                     .setRelation(ContactRelaEnum.SELE.getCode())
@@ -862,8 +862,7 @@ public class TLcDuncaseServiceImpl implements ITLcDuncaseService {
             TLcCustContact firstContact = buildContactCommon(assetsPackage);
             firstContact = firstContact.setContactName(assetsPackage.getFirstLiaisonName())
                     .setRelation(StringUtils.isNotEmpty(assetsPackage.getFirstLiaisonRelation()) ? ContactRelaEnum.getCodeByRela(assetsPackage.getFirstLiaisonRelation()) : ContactRelaEnum.UN_MATCH.getCode())
-                    .setPhone(assetsPackage.getFirstLiaisonMobile())
-                    .setTel(assetsPackage.getFirstLiaisonTel());
+                    .setPhone(assetsPackage.getFirstLiaisonMobile());
             tLcCustContactList.add(firstContact);
         }
         // 第二联系人
@@ -871,8 +870,7 @@ public class TLcDuncaseServiceImpl implements ITLcDuncaseService {
             TLcCustContact secondContact = buildContactCommon(assetsPackage);
             secondContact = secondContact.setContactName(assetsPackage.getSecondLiaisonName())
                     .setRelation(StringUtils.isNotEmpty(assetsPackage.getSecondLiaisonRelation()) ? ContactRelaEnum.getCodeByRela(assetsPackage.getSecondLiaisonRelation()) : ContactRelaEnum.UN_MATCH.getCode())
-                    .setPhone(assetsPackage.getSecondLiaisonMobile())
-                    .setTel(assetsPackage.getSecondLiaisonTel());
+                    .setPhone(assetsPackage.getSecondLiaisonMobile());
             tLcCustContactList.add(secondContact);
         }
         // 第三联系人
@@ -880,8 +878,7 @@ public class TLcDuncaseServiceImpl implements ITLcDuncaseService {
             TLcCustContact thirdContact = buildContactCommon(assetsPackage);
             thirdContact = thirdContact.setContactName(assetsPackage.getThreeLiaisonName())
                     .setRelation(StringUtils.isNotEmpty(assetsPackage.getThreeLiaisonRelation()) ? ContactRelaEnum.getCodeByRela(assetsPackage.getThreeLiaisonRelation()) : ContactRelaEnum.UN_MATCH.getCode())
-                    .setPhone(assetsPackage.getThreeLiaisonMobile())
-                    .setTel(assetsPackage.getThreeLiaisonTel());
+                    .setPhone(assetsPackage.getThreeLiaisonMobile());
             tLcCustContactList.add(thirdContact);
         }
         // 第四联系人
