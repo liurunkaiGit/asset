@@ -847,9 +847,16 @@ public class TLcDuncaseServiceImpl implements ITLcDuncaseService {
         TLcCustContact selfContact = buildContactCommon(assetsPackage);
         selfContact = selfContact.setContactName(assetsPackage.getCurName())
                 .setRelation(ContactRelaEnum.SELE.getCode())
-                .setPhone(assetsPackage.getCustomerMobile())
-                .setTel(assetsPackage.getCustomerHomeTel());
+                .setPhone(assetsPackage.getCustomerMobile());
         tLcCustContactList.add(selfContact);
+        // 本人家庭电话
+        if (StringUtils.isNotEmpty(assetsPackage.getCustomerHomeTel())) {
+            TLcCustContact telContact = buildContactCommon(assetsPackage);
+            telContact = telContact.setContactName(assetsPackage.getCurName())
+                    .setRelation(ContactRelaEnum.SELE.getCode())
+                    .setPhone(assetsPackage.getCustomerHomeTel());
+            tLcCustContactList.add(telContact);
+        }
         // 第一联系人手机
         if (StringUtils.isNotEmpty(assetsPackage.getFirstLiaisonName()) && StringUtils.isNotEmpty(assetsPackage.getFirstLiaisonMobile())) {
             TLcCustContact firstContact = buildContactCommon(assetsPackage);
