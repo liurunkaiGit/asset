@@ -3,6 +3,7 @@
 <head>
     <th:block th:include="include :: header('我的任务列表')" />
     <link th:href="@{/ajax/libs/bootstrap-select/bootstrap-select.css}" rel="stylesheet"/>
+    <th:block th:include="include :: bootstrap-editable-css" />
     <style type="text/css">
         .time-input{
             display: inline;
@@ -21,6 +22,9 @@
         .blr{
             border-left: 0px solid transparent !important;
             border-right: 0px solid transparent !important;
+        }
+        thead{
+            color:#868686
         }
 </style>
 </head>
@@ -222,6 +226,14 @@
                                     <option value="5" style="background: #7D409F">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;土</option>
                                 </select>
                             </li>
+                            <li>
+                                <p>案件号码状态：</p>
+                                <select name="phoneStatus" >
+                                    <option value="">请选择</option>
+                                    <option value="1">可联</option>
+                                    <option value="0">不可联</option>
+                                </select>
+                            </li>
                            <!-- <li>
                                 <p > </p>
                                 <select id="columnQuery1" onchange="addQuery('columnQuery1','custom1')">
@@ -296,18 +308,18 @@
          </div>
 
          <div class="col-sm-12">
-             <div class="modal" id="colorWin" tabindex="-1" role="dialog" aria-hidden="true">
-                 <div class="modal-dialog">
-                     <div class="modal-content animated bounceInRight">
-                         <div class="modal-header">
+             <div class="modal" id="colorWin" tabindex="-1" role="dialog" aria-hidden="true" style="top:220px;">
+                 <div class="modal-dialog" style="width: 335px;margin-left: 25%;">
+                     <div class="modal-content animated fadeIn">
+                         <!--<div class="modal-header">
                              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
                              </button>
-                         </div>
+                         </div>-->
                          <div class="modal-body" style="height: 100px;">
                              <div class="form-group">
                                  <input type="hidden" id="dataId">
                                  <div>
-                                     <div style="line-height: 60px;width: 30px;background: #FCBF51;color: #FFFFFF;display: inline-block;margin-left: 25%;text-align: center;border-radius: 3px;" onclick="saveColor('1')">金</div>
+                                     <div style="line-height: 60px;width: 30px;background: #FCBF51;color: #FFFFFF;display: inline-block;text-align: center;border-radius: 3px;" onclick="saveColor('1')">金</div>
                                      <div style="line-height: 60px;width: 30px;background: #64C790;color: #FFFFFF;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor('2')">木</div>
                                      <div style="line-height: 60px;width: 30px;background: #81D3F8;color: #FFFFFF;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor('3')">水</div>
                                      <div style="line-height: 60px;width: 30px;background: #FE6249;color: #FFFFFF;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor('4')">火</div>
@@ -325,6 +337,7 @@
 
     <th:block th:include="include :: footer" />
      <script th:src="@{/ajax/libs/bootstrap-select/bootstrap-select.min.js}"></script>
+     <th:block th:include="include :: bootstrap-table-editable-js" />
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('system:task:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:task:remove')}]];
@@ -397,19 +410,7 @@
                     field : 'customName',
                     title : '客户姓名',
                     formatter: function (value, row, index) {
-                        if(row.color=="1"){
-                            return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #FCBF51;border-color: #FCBF51' onclick='openColorWin(\""+row.id + "\")'></a><font color='FCBF51'>"+value+"</font>";
-                        }else if (row.color=="2"){
-                            return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #64C790;border-color: #64C790' onclick='openColorWin(\""+row.id + "\")'></a><font color='64C790'>"+value+"</font>";
-                        }else if (row.color=="3"){
-                            return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #81D3F8;border-color: #81D3F8' onclick='openColorWin(\""+row.id + "\")'></a><font color='81D3F8'>"+value+"</font>";
-                        }else if (row.color=="4"){
-                            return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #FE6249;border-color: #FE6249' onclick='openColorWin(\""+row.id + "\")'></a><font color='FE6249'>"+value+"</font>";
-                        }else if (row.color=="5"){
-                            return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #7D409F;border-color: #7D409F' onclick='openColorWin(\""+row.id + "\")'></a><font color='7D409F'>"+value+"</font>";
-                        }else {
-                            return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #FFFFFF;border-color: #9E9E9E' onclick='openColorWin(\""+row.id + "\")'></a>"+value;
-                        }
+                        return statusTools(value, row, index);
                     }
                 },
                 {
@@ -1019,6 +1020,24 @@
             toAutoCall(isHasOther);
         });
 
+
+        function statusTools(value, row, index){
+            if(row.color=="1"){
+                return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #FCBF51;border-color: #FCBF51' onclick='openColorWin(\""+row.id + "\")'></a><font color='FCBF51'>"+value+"</font>";
+            }else if (row.color=="2"){
+                return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #64C790;border-color: #64C790' onclick='openColorWin(\""+row.id + "\")'></a><font color='64C790'>"+value+"</font>";
+            }else if (row.color=="3"){
+                return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #81D3F8;border-color: #81D3F8' onclick='openColorWin(\""+row.id + "\")'></a><font color='81D3F8'>"+value+"</font>";
+            }else if (row.color=="4"){
+                return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #FE6249;border-color: #FE6249' onclick='openColorWin(\""+row.id + "\")'></a><font color='FE6249'>"+value+"</font>";
+            }else if (row.color=="5"){
+                return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #7D409F;border-color: #7D409F' onclick='openColorWin(\""+row.id + "\")'></a><font color='7D409F'>"+value+"</font>";
+            }else {
+                return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #FFFFFF;border-color: #9E9E9E' onclick='openColorWin(\""+row.id + "\")'></a>"+value;
+            }
+        }
+
+
         function openColorWin(obj) {
             $("#dataId").val(obj);
             $("#colorWin").modal('show');
@@ -1027,20 +1046,7 @@
         function saveColor(obj) {
             var id = $("#dataId").val();
             $("#colorWin").modal('hide');
-            $.ajax({
-                url: prefix + "/saveColor",
-                dataType: "json",
-                type: "post",
-                data:{
-                  color:obj,
-                    id:id
-                },
-                success:function(data){
-                   if(data.code==0){
-                       $.table.refresh();
-                   }
-                }
-            });
+            $.operate.post(prefix + "/saveColor", { "color": obj, "id": id });
         }
 
 

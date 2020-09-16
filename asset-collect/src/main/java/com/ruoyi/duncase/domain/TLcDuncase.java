@@ -728,6 +728,8 @@ public class TLcDuncase extends BaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date closeDate;
 
+    private String remark;
+
     /**
      * 催收评分
      */
@@ -748,6 +750,10 @@ public class TLcDuncase extends BaseEntity {
     //省市信息
     private String provinceId;
     private String cityId;
+
+
+    //百融号码状态
+    private String phoneStatus;
 
     // 动态查询条件使用
 //    private BigDecimal start_arrears_total;

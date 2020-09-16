@@ -225,4 +225,6 @@ public interface TLcTaskMapper {
     void updateCaseRecycle(@Param("taskIdList") List<Long> taskIdList);
 
     int updateColor(TLcTask tLcTask);
+
+    int updatePhoneStatus(TLcTask tLcTask);
 }

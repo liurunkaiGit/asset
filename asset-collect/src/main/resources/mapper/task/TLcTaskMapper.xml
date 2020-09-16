@@ -364,6 +364,9 @@
         <if test="city != null and city != ''">
             and left(t.certificate_no, 4) = #{city}
         </if>
+        <if test="phoneStatus != null and phoneStatus != ''">
+            and t.phoneStatus = #{phoneStatus}
+        </if>
         <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
             and EXISTS(SELECT r.call_sign FROM t_lc_call_record r WHERE r.case_no = t.case_no and r.call_sign IN
             <foreach collection="callCodeHistoryList" item="cl" open="(" close=")" separator=",">
@@ -502,6 +505,9 @@
         </if>
         <if test="color != null  and color != ''">
             and t.color = #{color}
+        </if>
+        <if test="phoneStatus != null  and phoneStatus != ''">
+            and t.phoneStatus = #{phoneStatus}
         </if>
         <include refid="SELECT_TASK_WHERE"></include>
         ORDER BY t.task_status ASC,t.create_time DESC,t.recently_allot_date ASC,t.enter_coll_date ASC,t.case_no ASC
@@ -1471,5 +1477,9 @@
 
     <update id="updateColor" parameterType="com.ruoyi.task.domain.TLcTask">
            UPDATE t_lc_task set color = #{color} where id = #{id}
+    </update>
+
+    <update id="updatePhoneStatus" parameterType="com.ruoyi.task.domain.TLcTask">
+        UPDATE t_lc_task set phoneStatus = #{phoneStatus} where case_no = #{caseNo} and org_id=#{orgId} and task_status != 3
     </update>
 </mapper>

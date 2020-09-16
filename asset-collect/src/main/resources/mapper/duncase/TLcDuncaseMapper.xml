@@ -136,6 +136,9 @@
             <if test="cityId != null and cityId != ''">
                 and left(ta.certificate_no, 4) = #{cityId}
             </if>
+            <if test="phoneStatus != null and phoneStatus != ''">
+                and ta.phoneStatus = #{phoneStatus}
+            </if>
             <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
                 and EXISTS(SELECT r.call_sign FROM t_lc_call_record r WHERE r.case_no = t.case_no and r.call_sign IN
                 <foreach collection="callCodeHistoryList" item="cl" open="(" close=")" separator=",">
@@ -612,7 +615,8 @@
         contract_type,
         reduction_flag,
         legal_flag,
-        ljyhje
+        ljyhje,
+        remark
         ) VALUES
         <foreach collection="duncaseInsertList" item="duncase" separator=",">
             (
@@ -668,7 +672,8 @@
             #{duncase.contractType},
             #{duncase.reductionFlag},
             #{duncase.legalFlag},
-            #{duncase.ljyhje}
+            #{duncase.ljyhje},
+            #{duncase.remark}
             )
         </foreach>
     </insert>

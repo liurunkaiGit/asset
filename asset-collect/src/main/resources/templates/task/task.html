@@ -203,6 +203,14 @@
                             </li>
                             <!--自由查询结束-->
                             <li>
+                                <p>案件号码状态：</p>
+                                <select name="phoneStatus" >
+                                    <option value="">请选择</option>
+                                    <option value="1">可联</option>
+                                    <option value="0">不可联</option>
+                                </select>
+                            </li>
+                            <li>
                                 <!--<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>-->
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="selectSearch()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -778,11 +786,27 @@
                     var freeSQL = $("#freeSQL").val();
                     // alert(freeSQL);
                     freeSQL = encodeURIComponent(freeSQL);
-                    var toReAllocatUrl = prefix + '/allDataToReAllocat?orgId='+orgId +'&caseNo='+caseNo+'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr+'&freeSQL='+freeSQL+'&province='+province+'&city='+city;
-                    $.modal.open("选择用户", toReAllocatUrl);
+                    $.ajax({
+                        url: prefix + '/getAllocatedCount?orgId='+orgId +'&caseNo='+caseNo+'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr+'&freeSQL='+freeSQL+'&province='+province+'&city='+city,
+                        type: "POST",
+                        dataType: "json",
+                        success: function(data) {
+                            var count = data.data;
+                            if(count>0){
+                                $.modal.confirm("选中案件中存在已分配案件，是否继续操作？", function() {
+                                    var toReAllocatUrl = prefix + '/allDataToReAllocat?orgId='+orgId +'&caseNo='+caseNo+'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr+'&freeSQL='+freeSQL+'&province='+province+'&city='+city;
+                                    $.modal.open("选择用户", toReAllocatUrl);
+                                });
+                            }else{
+                                var toReAllocatUrl = prefix + '/allDataToReAllocat?orgId='+orgId +'&caseNo='+caseNo+'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr+'&freeSQL='+freeSQL+'&province='+province+'&city='+city;
+                                $.modal.open("选择用户", toReAllocatUrl);
+                            }
+                        }
+                    });
                 });
                 return;
             }else{
+                var flag = false;
                 // 获取列表中选中数据的第一列的值
                 var rows = $.table.selectFirstColumns(); // 返回的是一个数组
                 if (rows.length == 0) {
@@ -795,12 +819,23 @@
                         $.modal.alertWarning("已结案案件不能再次分派");
                         return;
                     }
+                    if(taskStatus[i] =="已分配" || taskStatus[i] =="2"){
+                        flag = true;
+                    }
                 }
                 var certificateNoRows = $.table.selectColumns("idCaseNoCertificateNo");
                 var caseNoRows = $.table.selectColumns("caseNo");
                 $.modal.confirm("确认要对选中的" + rows.length + "条数据进行操作吗?", function() {
-                    var toReAllocatUrl = prefix + '/toReAllocat?taskIds='+rows.join()+'&caseNos='+caseNoRows.join()+'&certificateNos='+certificateNoRows.join();
-                    $.modal.open("选择用户", toReAllocatUrl);
+                    if(flag){
+                        $.modal.confirm("选中案件中存在已分配案件，是否继续操作？", function() {
+                            var toReAllocatUrl = prefix + '/toReAllocat?taskIds='+rows.join()+'&caseNos='+caseNoRows.join()+'&certificateNos='+certificateNoRows.join();
+                            $.modal.open("选择用户", toReAllocatUrl);
+                        });
+                    }else{
+                        var toReAllocatUrl = prefix + '/toReAllocat?taskIds='+rows.join()+'&caseNos='+caseNoRows.join()+'&certificateNos='+certificateNoRows.join();
+                        $.modal.open("选择用户", toReAllocatUrl);
+                    }
+
                 });
             }
 

@@ -68,6 +68,8 @@ import org.springframework.util.Assert;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -1476,7 +1478,9 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 String certificateNo = custContact.getCertificateNo();
                 String contactName = custContact.getContactName();
                 String phone = custContact.getPhone();
-
+                if(!checkPhone(phone)){//去除非手机号
+                    continue;
+                }
                 reqData.setId(certificateNo);
                 reqData.setName(contactName);
                 reqData.setCell(phone);
@@ -1582,6 +1586,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             phoneStaus = response.getPhoneStatus().getResult();
         }
         if(phoneStaus != null){
+            //更新联系人号码状态
             TLcCustContact updateParam = new TLcCustContact();
             updateParam.setPhone(custContact.getPhone());
             updateParam.setPhoneStatus(phoneStaus);
@@ -1599,8 +1604,17 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             insertParam.setCreateBy(ShiroUtils.getLoginName());
             insertParam.setCreateTime(curDate);
             this.phoneStatusMapper.insertPhoneStatus(insertParam);
+            //如果可联更新任务表案件状态(案件状态只能由 不可联-->可联)
+            if("2".equals(phoneStaus) || "31".equals(phoneStaus) || "32".equals(phoneStaus) || "33".equals(phoneStaus)){
+                TLcTask param = new TLcTask();
+                param.setCaseNo(custContact.getCaseNo());
+                param.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
+                param.setPhoneStatus("1");//0不可联,1可联
+                this.tLcTaskMapper.updatePhoneStatus(param);
+            }
             successFlag = successFlag + 1;
         }else{
+            //更新联系人号码状态
             TLcCustContact updateParam = new TLcCustContact();
             updateParam.setPhone(custContact.getPhone());
             updateParam.setPhoneStatus("-1");//失败
@@ -1634,6 +1648,24 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     @Override
     public int updateColor(TLcTask tLcTask) {
         return this.tLcTaskMapper.updateColor(tLcTask);
+    }
+
+    @Override
+    public List<TLcTask> selectTaskList(TLcTask tLcTask) {
+        return this.tLcTaskMapper.selectTaskList(tLcTask);
+    }
+
+    public boolean checkPhone(String phone){
+        Pattern p = null;
+        Matcher m = null;
+        boolean b = false;
+        String regex = "^[1](([3|5|8][\\d])|([4][4,5,6,7,8,9])|([6][2,5,6,7])|([7][^9])|([9][1,8,9]))[\\d]{8}$";// 验证手机号
+        if(StringUtils.isNotBlank(phone) && phone.length() == 11){
+            p = Pattern.compile(regex);
+            m = p.matcher(regex);
+            b = m.matches();
+        }
+        return b;
     }
 
 }

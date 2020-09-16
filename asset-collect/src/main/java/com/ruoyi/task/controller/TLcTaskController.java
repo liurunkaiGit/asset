@@ -654,6 +654,35 @@ public class TLcTaskController extends BaseController {
     }
 
     /**
+     * 查询已经分派的数量
+     * @param tLcTask
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/getAllocatedCount")
+    public AjaxResult getAllocatedCount(TLcTask tLcTask, HttpServletRequest request) {
+        List<Long> result = new ArrayList<>();
+        String callCodeHistoryListStr = request.getParameter("callCodeHistoryListStr");//历史电话码
+        if(StringUtils.isNotEmpty(callCodeHistoryListStr) && !"null".equals(callCodeHistoryListStr)){
+            tLcTask.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
+        }
+        // 查询所有的任务
+        String city = tLcTask.getCity();
+        if(city != null && !"".equals(city)){
+            tLcTask.setProvince(null);
+        }
+        List<TLcTask> taskList = this.tLcTaskService.selectTaskList(tLcTask);
+        for (TLcTask task : taskList) {
+            Integer taskStatus = task.getTaskStatus();
+            if(taskStatus==2){
+                result.add(task.getId());
+            }
+        }
+        return AjaxResult.success(result.size());
+    }
+
+    /**
      * 跳转到协助催收页面
      *
      * @param orgId    组织机构id

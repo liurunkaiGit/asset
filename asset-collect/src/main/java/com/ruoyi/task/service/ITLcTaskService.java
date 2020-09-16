@@ -332,4 +332,6 @@ public interface ITLcTaskService {
     AjaxResult allCaseRecyle(TLcTask tLcTask, Integer caseRecycleNum);
 
     int updateColor(TLcTask tLcTask);
+
+    List<TLcTask> selectTaskList(TLcTask tLcTask);
 }

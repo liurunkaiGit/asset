@@ -1059,6 +1059,7 @@ public class TLcDuncaseServiceImpl implements ITLcDuncaseService {
                 .reductionFlag(assetsPackage.getJmbq())
                 .legalFlag(assetsPackage.getFcbq())
                 .ljyhje(assetsPackage.getLjyhje())//累计已还金额
+                .remark(assetsPackage.getRemark())
                 .build();
         tLcDuncase.setCreateBy(notNullToString(assetsPackage.getSendOptId()));
         return tLcDuncase;

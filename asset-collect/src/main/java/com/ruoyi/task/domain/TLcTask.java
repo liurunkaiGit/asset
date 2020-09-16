@@ -494,4 +494,7 @@ public class TLcTask extends BaseEntity {
     private String notebook;
 
     private String color;
+
+    //百融号码状态
+    private String phoneStatus;
 }
