@@ -825,14 +825,15 @@
                 }
                 var certificateNoRows = $.table.selectColumns("idCaseNoCertificateNo");
                 var caseNoRows = $.table.selectColumns("caseNo");
+                var arrearsTotalRows = $.table.selectColumns("arrearsTotal");
                 $.modal.confirm("确认要对选中的" + rows.length + "条数据进行操作吗?", function() {
                     if(flag){
                         $.modal.confirm("选中案件中存在已分配案件，是否继续操作？", function() {
-                            var toReAllocatUrl = prefix + '/toReAllocat?taskIds='+rows.join()+'&caseNos='+caseNoRows.join()+'&certificateNos='+certificateNoRows.join();
+                            var toReAllocatUrl = prefix + '/toReAllocat?taskIds='+rows.join()+'&caseNos='+caseNoRows.join()+'&certificateNos='+certificateNoRows.join()+'&arrearsTotals='+arrearsTotalRows.join();
                             $.modal.open("选择用户", toReAllocatUrl);
                         });
                     }else{
-                        var toReAllocatUrl = prefix + '/toReAllocat?taskIds='+rows.join()+'&caseNos='+caseNoRows.join()+'&certificateNos='+certificateNoRows.join();
+                        var toReAllocatUrl = prefix + '/toReAllocat?taskIds='+rows.join()+'&caseNos='+caseNoRows.join()+'&certificateNos='+certificateNoRows.join()+'&arrearsTotals='+arrearsTotalRows.join();
                         $.modal.open("选择用户", toReAllocatUrl);
                     }
 

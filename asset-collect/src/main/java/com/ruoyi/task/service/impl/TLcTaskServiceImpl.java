@@ -378,9 +378,9 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
      */
     @Override
     @Transactional
-    public AjaxResult reAllocat(String userIds, String taskIds, String orgId, Integer allocatNum, Integer allocatRule, String caseNos, String certificateNos) {
+    public AjaxResult reAllocat(String userIds, String taskIds, String orgId, Integer allocatNum, Integer allocatRule, String caseNos, String certificateNos,String arrearsTotals) {
         // 判断需要分配全部任务还是随机分配指定数量的任务,并返回需要分配的任务集合
-        Set<TLcTask> randomTaskSet = getAllocatTaskSet(taskIds, allocatNum, caseNos, certificateNos);
+        Set<TLcTask> randomTaskSet = getAllocatTaskSet(taskIds, allocatNum, caseNos, certificateNos,arrearsTotals);
         List<SysUser> userList = Arrays.stream(userIds.split(","))
                 .map(userId -> this.sysUserService.selectUserById(Long.valueOf(userId)))
                 .collect(Collectors.toList());
@@ -872,7 +872,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         return randomTaskSet;
     }
 
-    private Set<TLcTask> getAllocatTaskSet(String taskIds, Integer allocatNum, String caseNos, String certificateNos) {
+    private Set<TLcTask> getAllocatTaskSet(String taskIds, Integer allocatNum, String caseNos, String certificateNos,String arrearsTotals) {
         Set<TLcTask> randomTaskSet = new HashSet<>(allocatNum); // 这里用set，因为随机选择的时候会重复，set可以去重
 //        this.orgPackageService.selectOrgPackageByOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
         if (allocatNum < taskIds.split(",").length) {
@@ -883,6 +883,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 i = random.nextInt(taskIds.split(",").length);
                 tLcTask.setId(Long.valueOf(taskIds.split(",")[i]));
                 tLcTask.setCaseNo(caseNos.split(",")[i]);
+                tLcTask.setArrearsTotal(new BigDecimal(arrearsTotals.split(",")[i]));
                 tLcTask.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
                 tLcTask.setOrgName(ShiroUtils.getSysUser().getOrgName());
                 tLcTask.setCertificateNo(certificateNos.split(",")[i].split("@")[2]);
@@ -896,6 +897,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 tLcTask.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
                 tLcTask.setOrgName(ShiroUtils.getSysUser().getOrgName());
                 tLcTask.setCertificateNo(certificateNos.split(",")[i].split("@")[2]);
+                tLcTask.setArrearsTotal(new BigDecimal(arrearsTotals.split(",")[i]));
                 randomTaskSet.add(tLcTask);
             }
         }

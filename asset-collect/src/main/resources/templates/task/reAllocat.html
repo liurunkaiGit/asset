@@ -22,6 +22,7 @@
 							<input type="hidden" name="taskIds" id="taskIds" th:value="${taskIds}">
 							<input type="hidden" name="taskIds" id="caseNos" th:value="${caseNos}">
 							<input type="hidden" name="certificateNos" id="certificateNos" th:value="${certificateNos}">
+							<input type="hidden" name="arrearsTotals" id="arrearsTotals" th:value="${arrearsTotals}">
 							<li>
 								登录名称：<input type="text" name="loginName"/>
 							</li>
@@ -215,6 +216,7 @@
 						taskIds: $("#taskIds").val(),
 						caseNos: $("#caseNos").val(),
 						certificateNos: $("#certificateNos").val(),
+						arrearsTotals: $("#arrearsTotals").val(),
 						orgId: $("#orgId").val(),
 						allocatNum: allocatNum,
 						allocatRule: $("#allocatRule").val()

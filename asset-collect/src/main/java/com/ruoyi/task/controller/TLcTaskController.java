@@ -625,7 +625,7 @@ public class TLcTaskController extends BaseController {
      * @return
      */
     @GetMapping("/toReAllocat")
-    public String toFindReAllocatUser(String taskIds, String caseNos, String certificateNos, ModelMap modelMap) {
+    public String toFindReAllocatUser(String taskIds, String caseNos, String certificateNos,String arrearsTotals, ModelMap modelMap) {
 //        SysUser sysUser = new SysUser();
 //        sysUser.setDeptId(Long.valueOf(orgId));
 //        modelMap.put("user", sysUser);
@@ -633,6 +633,7 @@ public class TLcTaskController extends BaseController {
         modelMap.put("taskIds", taskIds);
         modelMap.put("caseNos", caseNos);
         modelMap.put("certificateNos", certificateNos);
+        modelMap.put("arrearsTotals", arrearsTotals);
         return prefix + "/reAllocat";
     }
 
@@ -803,8 +804,8 @@ public class TLcTaskController extends BaseController {
      */
     @ResponseBody
     @PostMapping("/reAllocat")
-    public AjaxResult reAllocat(String userId, String taskIds, String orgId, Integer allocatNum, Integer allocatRule, String caseNos, String certificateNos) {
-        return this.tLcTaskService.reAllocat(userId, taskIds, orgId, allocatNum, allocatRule, caseNos, certificateNos);
+    public AjaxResult reAllocat(String userId, String taskIds, String orgId, Integer allocatNum, Integer allocatRule, String caseNos, String certificateNos,String arrearsTotals) {
+        return this.tLcTaskService.reAllocat(userId, taskIds, orgId, allocatNum, allocatRule, caseNos, certificateNos,arrearsTotals);
     }
 
     /**

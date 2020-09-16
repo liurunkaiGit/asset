@@ -120,7 +120,7 @@ public interface ITLcTaskService {
      * @param allocatNum
      * @param allocatRule
      */
-    AjaxResult reAllocat(String userId, String taskIds, String orgId, Integer allocatNum, Integer allocatRule, String caseNos, String certificateNos);
+    AjaxResult reAllocat(String userId, String taskIds, String orgId, Integer allocatNum, Integer allocatRule, String caseNos, String certificateNos,String arrearsTotals);
 
     /**
      * 临时代理
