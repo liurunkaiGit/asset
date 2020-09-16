@@ -499,14 +499,7 @@
                     field: 'score',
                     title: '催收评分'
                 },
-                    {
-                        field: 'idCaseNoCertificateNo',
-                        title: '证件号码IT',
-                        visible: false/*,
-                        formatter: function (value, row, index) {
-                            return row.id + "_" + row.caseNo + "_" + row.certificateNo;
-                        }*/
-                    },
+
                     {
                         field : 'overdueDays',
                         title : '逾期天数'
@@ -522,7 +515,15 @@
                     {
                         field : 'remark',
                         title : '备注'
-                    } ]
+                    },
+                    {
+                        field: 'idCaseNoCertificateNo',
+                        title: '证件号码IT',
+                        visible: false/*,
+                        formatter: function (value, row, index) {
+                            return row.id + "_" + row.caseNo + "_" + row.certificateNo;
+                        }*/
+                    }]
             };
             $.table.init(options);
             getProvinceList();
