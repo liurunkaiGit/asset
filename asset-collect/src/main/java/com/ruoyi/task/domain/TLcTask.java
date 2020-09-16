@@ -497,4 +497,5 @@ public class TLcTask extends BaseEntity {
 
     //百融号码状态
     private String phoneStatus;
+
 }

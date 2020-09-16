@@ -3,7 +3,6 @@
 <head>
     <th:block th:include="include :: header('我的任务列表')" />
     <link th:href="@{/ajax/libs/bootstrap-select/bootstrap-select.css}" rel="stylesheet"/>
-    <th:block th:include="include :: bootstrap-editable-css" />
     <style type="text/css">
         .time-input{
             display: inline;
@@ -39,6 +38,7 @@
                             <input type="hidden" id="ownerId" name="ownerId" th:value="${ownerId}">
                             <input type="hidden" id="callPlatform" name="callPlatform" th:value="${callPlatform}">
                             <input type="hidden" id="agentId" name="agentId" th:value="${extPhone}">
+                            <input type="hidden" id="dataId">
                             <li>
                                 <p>机构案件号：</p>
                                 <input type="text" name="caseNo" id="caseNo"/>
@@ -307,37 +307,11 @@
              </div>
          </div>
 
-         <div class="col-sm-12">
-             <div class="modal" id="colorWin" tabindex="-1" role="dialog" aria-hidden="true" style="top:220px;">
-                 <div class="modal-dialog" style="width: 335px;margin-left: 25%;">
-                     <div class="modal-content animated fadeIn">
-                         <!--<div class="modal-header">
-                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
-                             </button>
-                         </div>-->
-                         <div class="modal-body" style="height: 100px;">
-                             <div class="form-group">
-                                 <input type="hidden" id="dataId">
-                                 <div>
-                                     <div style="line-height: 60px;width: 30px;background: #FCBF51;color: #FFFFFF;display: inline-block;text-align: center;border-radius: 3px;" onclick="saveColor('1')">金</div>
-                                     <div style="line-height: 60px;width: 30px;background: #64C790;color: #FFFFFF;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor('2')">木</div>
-                                     <div style="line-height: 60px;width: 30px;background: #81D3F8;color: #FFFFFF;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor('3')">水</div>
-                                     <div style="line-height: 60px;width: 30px;background: #FE6249;color: #FFFFFF;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor('4')">火</div>
-                                     <div style="line-height: 60px;width: 30px;background: #7D409F;color: #FFFFFF;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor('5')">土</div>
-                                     <div style="line-height: 60px;width: 52px;border: 1px solid #9E9E9E;background: #FFFFFF;color: #3c3a3a;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor('0')">清空</div>
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-             </div>
-         </div>
 
      </div>
 
     <th:block th:include="include :: footer" />
      <script th:src="@{/ajax/libs/bootstrap-select/bootstrap-select.min.js}"></script>
-     <th:block th:include="include :: bootstrap-table-editable-js" />
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('system:task:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:task:remove')}]];
@@ -514,6 +488,22 @@
                 {
                     field : 'ownerName',
                     title : '业务归属人'
+                },
+                {
+                    field : 'overdueDays',
+                    title : '逾期天数'
+                },
+                {
+                    field : 'phone',
+                    title : '联系方式'
+                },
+                {
+                    field : 'certificateNo',
+                    title : '证号号码'
+                },
+                {
+                    field : 'remark',
+                    title : '备注'
                 }]
             };
             $.table.init(options);
@@ -1023,29 +1013,58 @@
 
         function statusTools(value, row, index){
             if(row.color=="1"){
-                return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #FCBF51;border-color: #FCBF51' onclick='openColorWin(\""+row.id + "\")'></a><font color='FCBF51'>"+value+"</font>";
+                return "<a class= 'btn btn-success' id='"+row.id+"' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #FCBF51;border-color: #FCBF51' onclick='openColorWin(\""+row.id + "\")'></a><font color='FCBF51'>"+value+"</font>";
             }else if (row.color=="2"){
-                return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #64C790;border-color: #64C790' onclick='openColorWin(\""+row.id + "\")'></a><font color='64C790'>"+value+"</font>";
+                return "<a class= 'btn btn-success' id='"+row.id+"' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #64C790;border-color: #64C790' onclick='openColorWin(\""+row.id + "\")'></a><font color='64C790'>"+value+"</font>";
             }else if (row.color=="3"){
-                return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #81D3F8;border-color: #81D3F8' onclick='openColorWin(\""+row.id + "\")'></a><font color='81D3F8'>"+value+"</font>";
+                return "<a class= 'btn btn-success' id='"+row.id+"' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #81D3F8;border-color: #81D3F8' onclick='openColorWin(\""+row.id + "\")'></a><font color='81D3F8'>"+value+"</font>";
             }else if (row.color=="4"){
-                return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #FE6249;border-color: #FE6249' onclick='openColorWin(\""+row.id + "\")'></a><font color='FE6249'>"+value+"</font>";
+                return "<a class= 'btn btn-success' id='"+row.id+"' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #FE6249;border-color: #FE6249' onclick='openColorWin(\""+row.id + "\")'></a><font color='FE6249'>"+value+"</font>";
             }else if (row.color=="5"){
-                return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #7D409F;border-color: #7D409F' onclick='openColorWin(\""+row.id + "\")'></a><font color='7D409F'>"+value+"</font>";
+                return "<a class= 'btn btn-success' id='"+row.id+"' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #7D409F;border-color: #7D409F' onclick='openColorWin(\""+row.id + "\")'></a><font color='7D409F'>"+value+"</font>";
             }else {
-                return "<a class= 'btn btn-success' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #FFFFFF;border-color: #9E9E9E' onclick='openColorWin(\""+row.id + "\")'></a>"+value;
+                return "<a class= 'btn btn-success' id='"+row.id+"' style='padding: 0px;height: 13px;width: 13px;border-radius: 10px;margin-right: 10px;background: #FFFFFF;border-color: #9E9E9E' onclick='openColorWin(\""+row.id + "\")'></a>"+value;
             }
         }
 
 
-        function openColorWin(obj) {
+        /*function openColorWin(obj) {
             $("#dataId").val(obj);
             $("#colorWin").modal('show');
+        }*/
+
+        function openColorWin(obj) {
+            $("#dataId").val(obj);
+            layer.open({
+                type : 4,
+                closeBtn : 1,
+                content: ['<div class="col-sm-12">\n' +
+                '    <div id="aaa" style="height: 62px;width: 275px;">\n' +
+                '        <div class="form-group">\n' +
+                '            <div>\n' +
+                '                <div style="line-height: 60px;width: 30px;background: #FCBF51;color: #FFFFFF;display: inline-block;text-align: center;border-radius: 3px;" onclick="saveColor(\'1\')">金</div>\n' +
+                '                <div style="line-height: 60px;width: 30px;background: #64C790;color: #FFFFFF;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor(\'2\')">木</div>\n' +
+                '                <div style="line-height: 60px;width: 30px;background: #81D3F8;color: #FFFFFF;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor(\'3\')">水</div>\n' +
+                '                <div style="line-height: 60px;width: 30px;background: #FE6249;color: #FFFFFF;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor(\'4\')">火</div>\n' +
+                '                <div style="line-height: 60px;width: 30px;background: #7D409F;color: #FFFFFF;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor(\'5\')">土</div>\n' +
+                '                <div style="line-height: 60px;width: 52px;border: 1px solid #9E9E9E;background: #FFFFFF;color: #3c3a3a;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor(\'0\')">清空</div>\n' +
+                '            </div>\n' +
+                '        </div>\n' +
+                '    </div>\n' +
+                '</div>', '#'+obj]
+                ,success: function(layero, index){
+                    $("i[class='layui-layer-TipsG layui-layer-TipsR']").remove();
+                    $("div[class='layui-layer-content']").attr('style','height: 79px;background: #fff;');
+                    $(".layui-layer-tips .layui-layer-close").attr('style','top:-10px;right: -10px;');
+                }
+            });
         }
+
 
         function saveColor(obj) {
             var id = $("#dataId").val();
-            $("#colorWin").modal('hide');
+            // $("#colorWin").modal('hide');
+            layer.closeAll('tips');
             $.operate.post(prefix + "/saveColor", { "color": obj, "id": id });
         }
 
@@ -1053,4 +1072,6 @@
     </script>
 
 </body>
+
+
 </html>

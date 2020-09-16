@@ -72,6 +72,8 @@
         <result property="closeType" column="close_type" jdbcType="INTEGER"/>
         <result property="closeDate" column="close_date" />
         <result property="dqyhje" column="dqyhje" jdbcType="DECIMAL"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
     </resultMap>
 
     <select id="selectTLcDuncaseList" parameterType="com.ruoyi.duncase.domain.TLcDuncase" resultMap="TLcDuncaseResult">
@@ -114,7 +116,9 @@
             ta.close_date,
             ta.dqyhje,
             t.score,
-            ta.certificate_no
+            ta.certificate_no,
+            ta.phone,
+            t.remark
             FROM t_lc_duncase t, t_lc_task ta
             WHERE t.case_no = ta.case_no AND t.import_batch_no = ta.import_batch_no
             <if test="orgId != null  and orgId != ''">
