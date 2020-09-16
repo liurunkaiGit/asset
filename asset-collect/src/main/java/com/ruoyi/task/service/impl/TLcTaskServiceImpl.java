@@ -1661,14 +1661,15 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         Pattern p = null;
         Matcher m = null;
         boolean b = false;
-        String regex = "^[1](([3|5|8][\\d])|([4][4,5,6,7,8,9])|([6][2,5,6,7])|([7][^9])|([9][1,8,9]))[\\d]{8}$";// 验证手机号
+        String regex = "^[1](([3|5|8][\\d])|([4][5,6,7,8,9])|([6][5,6])|([7][3,4,5,6,7,8])|([9][8,9]))[\\d]{8}$";// 验证手机号
         if(StringUtils.isNotBlank(phone) && phone.length() == 11){
             p = Pattern.compile(regex);
-            m = p.matcher(regex);
+            m = p.matcher(phone);
             b = m.matches();
         }
         return b;
     }
+
 
 }
 

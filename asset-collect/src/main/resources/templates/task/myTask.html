@@ -23,7 +23,7 @@
             border-right: 0px solid transparent !important;
         }
         thead{
-            color:#868686
+            background:rgb(239,243,248);
         }
 </style>
 </head>
@@ -357,6 +357,7 @@
                             $('#bootstrap-table').bootstrapTable('hideColumn', val);
                         }
                     }
+                    $(".th-inner").attr('style','font-weight:400');
                 },
                 columns: [{
                     checkbox: true
