@@ -479,7 +479,8 @@ var table = {
 	                    });
             		}
             	}
-            	return $.common.uniqueFn(rows);
+            	//return $.common.uniqueFn(rows);
+				return rows;
             },
             // 获取当前页选中或者取消的行ID
             affectedRowIds: function(rows) {
@@ -591,7 +592,8 @@ var table = {
             	var rows = $.map($.bttTable.bootstrapTreeTable('getSelections'), function (row) {
         	        return row[column];
         	    });
-            	return $.common.uniqueFn(rows);
+            	//return $.common.uniqueFn(rows);
+				return rows;
             },
             // 请求获取数据后处理回调函数，校验异常状态提醒
             responseHandler: function(data) {
