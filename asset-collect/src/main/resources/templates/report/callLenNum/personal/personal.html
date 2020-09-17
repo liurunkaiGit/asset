@@ -70,6 +70,7 @@
                         title : '组别',
                         formatter: function (value, row, index) {
                             if (row.timePeriod == '合计') {
+                                if(value == null || 'null' == value)return"-";
                                 return '<b>' + value + '</b>';
                             } else {
                                 return '-';
