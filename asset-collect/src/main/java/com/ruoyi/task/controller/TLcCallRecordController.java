@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -47,7 +48,9 @@ public class TLcCallRecordController extends BaseController {
 
     @RequiresPermissions("call:record:view")
     @GetMapping()
-    public String record() {
+    public String record(ModelMap mmap) {
+        String curDate = DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD, new Date());
+        mmap.put("curDate", DateUtils.parseDate(curDate));
         return prefix + "/record";
     }
 

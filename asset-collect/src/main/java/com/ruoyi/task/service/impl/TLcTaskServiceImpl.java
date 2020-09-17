@@ -1535,7 +1535,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             }
         }
         // 将业务归属人为空的添加到待回收结案的集合
-        caseRecyleTaskList.addAll(buildCaseRecycleTaskList(taskList.stream().filter(task -> task.getOwnerId() == null).collect(Collectors.toList())));
+//        caseRecyleTaskList.addAll(buildCaseRecycleTaskList(taskList.stream().filter(task -> task.getOwnerId() == null).collect(Collectors.toList())));
         // 修改任务列表为回收结案
         List<Long> taskIdList = caseRecyleTaskList.stream().map(task -> task.getId()).collect(Collectors.toList());
         this.tLcTaskMapper.updateCaseRecycle(taskIdList);
