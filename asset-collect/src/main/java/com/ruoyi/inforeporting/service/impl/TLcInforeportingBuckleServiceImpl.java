@@ -40,11 +40,11 @@ public class TLcInforeportingBuckleServiceImpl implements TLcInforeportingBuckle
 
     @Override
     public AjaxResult exportExcel(TLcInforeportingBuckle inforeportingBuckle) {
-        if(null != inforeportingBuckle.getOrgId() && 207 == inforeportingBuckle.getOrgId().longValue()){
+        if(null != inforeportingBuckle.getOrgId() && 213 == inforeportingBuckle.getOrgId().longValue()){
             //兴业消费金融
             List<TLcInforeportingBuckleXing> list = ibm.selectTLcInforeportingBuckleXingList(inforeportingBuckle);
             return new ExcelUtil<TLcInforeportingBuckleXing>(TLcInforeportingBuckleXing.class).exportExcel(list,"逾期划扣");
-        }else if(null != inforeportingBuckle.getOrgId() && 206 == inforeportingBuckle.getOrgId().longValue()){
+        }else if(null != inforeportingBuckle.getOrgId() && 208 == inforeportingBuckle.getOrgId().longValue()){
             //中银
             List<TLcInforeportingBuckle> list = ibm.selectTLcInforeportingBuckleListExp(inforeportingBuckle);
             return new ExcelUtil<TLcInforeportingBuckleZhongyin>(TLcInforeportingBuckleZhongyin.class).exportExcel(transformationBuckleZhongyin(list),"逾期划扣");

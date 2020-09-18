@@ -52,7 +52,7 @@ public class TLcInforeportingReductionServiceImpl implements TLcInforeportingRed
 
     @Override
     public AjaxResult exportExcel(TLcInforeportingReduction inforeportingReduction) {
-        if(null != inforeportingReduction.getOrgId() && 207 == inforeportingReduction.getOrgId().longValue()){
+        if(null != inforeportingReduction.getOrgId() && 213 == inforeportingReduction.getOrgId().longValue()){
             //兴业消费金融
             List<TLcInforeportingReductionXing> list = irm.selectTLcInforeportingReductionXingList(inforeportingReduction);
             return new ExcelUtil<TLcInforeportingReductionXing>(TLcInforeportingReductionXing.class).exportExcel(list,"减免");
@@ -60,7 +60,7 @@ public class TLcInforeportingReductionServiceImpl implements TLcInforeportingRed
             //捷信消金
             List<TLcInforeportingReduction> list = irm.selectTLcInforeportingReductionList(inforeportingReduction);
             return new ExcelUtil<TLcInforeportingReductionJiexin>(TLcInforeportingReductionJiexin.class).exportExcel(transformationTLcInforeportingReductionJiexin(list),"减免");
-        }else if(null != inforeportingReduction.getOrgId() && 206 == inforeportingReduction.getOrgId().longValue()){
+        }else if(null != inforeportingReduction.getOrgId() && 208 == inforeportingReduction.getOrgId().longValue()){
             //中银减免
             List<TLcInforeportingReduction> list = irm.selectTLcInforeportingReductionList(inforeportingReduction);
             return new ExcelUtil<TLcInforeportingReductionZhongyin>(TLcInforeportingReductionZhongyin.class).exportExcel(transformationTLcInforeportingReductionZhongyin(list),"减免");

@@ -41,10 +41,10 @@ public class TLcInforeportingCompanyServiceImpl implements TLcInforeportingCompa
     @Override
     public AjaxResult exportExcel(TLcInforeportingCompany inforeportingCompany) {
         List<TLcInforeportingCompany> list = ibm.selectTLcInforeportingCompanyList(inforeportingCompany);
-        if(null != inforeportingCompany.getOrgId() && 207 == inforeportingCompany.getOrgId().longValue()){
+        if(null != inforeportingCompany.getOrgId() && 213 == inforeportingCompany.getOrgId().longValue()){
             //兴业消费金融
             return new ExcelUtil<TLcInforeportingCompanyExpXing>(TLcInforeportingCompanyExpXing.class).exportExcel(transformationCompanyXing(list),"对公入账");
-        }else if(null != inforeportingCompany.getOrgId() && 206 == inforeportingCompany.getOrgId().longValue()){
+        }else if(null != inforeportingCompany.getOrgId() && 208 == inforeportingCompany.getOrgId().longValue()){
             //中银
             return new ExcelUtil<TLcInforeportingCompanyExpZhongyin>(TLcInforeportingCompanyExpZhongyin.class).exportExcel(transformationCompanyZhongyin(list),"对公入账");
         }
