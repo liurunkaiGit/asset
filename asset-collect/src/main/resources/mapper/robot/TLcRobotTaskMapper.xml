@@ -537,7 +537,7 @@
             remark,
             agent_name
         )
-        select rt.call_radio,rt.cur_name,rt.phone,1,rt.call_start_date,rt.call_end_date,rt.call_len,rt.call_sign,rt.call_sign_value,t.case_no,rt.call_back_time,-1,rt.call_content,"-1"
+        select rt.call_radio,rt.cur_name,rt.phone,1,rt.call_start_date,rt.call_end_date,rt.call_len * 1000,rt.call_sign,rt.call_sign_value,t.case_no,rt.call_back_time,-1,rt.call_content,"-1"
         from t_lc_robot_task rt,t_lc_task t where rt.task_id = t.id and rt.robot_tast_id = #{robotTaskId} and rt.call_status is not null
     </update>
 
