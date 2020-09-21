@@ -341,7 +341,7 @@
                         <td style='display: none'><input id="finalId" type='radio' name='radioChoose'/></td>
                         <td style='padding-left: 5px;'><input id='freeCall' type='text' name='freeCall' style='width:120px;'/>&nbsp;&nbsp;<a data-toggle='modal' title="新增电话" class="btn btn-primary" style="height: 25px;padding: 3px;font-size: 12px;" onclick='addPhone();' >新增电话</a></td>
                         <td class='disclass' style="width: 30px;"><a href='javascript:void(0)' onclick='freeCall()'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a></td>
-                        <td  style="width: 30px;"><a href='javascript:void(0)' onclick='hangUp()'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a></td>
+                        <td  style="width: 30px;"  ><a th:if="${callPlatform} ne 'DY'"  href='javascript:void(0)' onclick='hangUp()'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a></td>
                     </tr>
                     </tbody>
                 </table>
@@ -876,6 +876,8 @@
             $("#platformName").text("自建话务平台");
         } else if (platform == 'PA') {
             $("#platformName").text("平安话务平台");
+        }else if (platform == 'DY') {
+            $("#platformName").text("度言话务平台");
         }
         var exonNum = [[${exonNum}]];
         window.parent.parent.$("#exonNum").empty();
@@ -1017,14 +1019,20 @@
                     $("#custContactTbody").html("");
                     // 添加table数据x
                     var tp = $("#custContactTbody");
+                    var platform = $("#callPlatform").val();
                     $.each(data, function (i, n) {
                         if(n.isClose != null  && n.isClose == '0'){
                             if (n.phone != null && n.phone.length >4) {
                                 if(n.phone == batchCall.phone ){//当前拨打的联系人记录
-                                    tp.append("<tr onclick='changeColor(this);' style='background:rgb(169,169,169)'>" +
+                                    var htm = "<tr onclick='changeColor(this);' style='background:rgb(169,169,169)'>" +
                                         "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose' checked/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+n.phone+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
-                                        "<td class='disclass'  style='width: 30px;'></td>" +
-                                        "<td  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='hangUp("+n.phone+")'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>"+"</td></tr>");
+                                        "<td class='disclass'  style='width: 30px;'></td>";
+                                    htm += "<td  style='width: 30px;'>";
+                                    if('DY' != platform){
+                                        htm += "<a href='javascript:void(0)' onclick='hangUp("+n.phone+")'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
+                                    }
+                                    htm += "</td></tr>";
+                                    tp.append(htm);
                                 }else{
                                     tp.append("<tr >" +
                                         "<td style='display: none'></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+n.phone+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
@@ -1033,10 +1041,15 @@
                             }
                             if (n.tel != null && n.tel.length > 4) {
                                 if(n.tel == batchCall.phone ) {//当前拨打的联系人记录
-                                    tp.append("<tr onclick='changeColor(this);' style='background:rgb(169,169,169)'>" +
+                                    var htm1 = "<tr onclick='changeColor(this);' style='background:rgb(169,169,169)'>" +
                                         "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose' checked/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+n.tel+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
-                                        "<td class='disclass'  style='width: 30px;'></td>" +
-                                        "<td  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='hangUp("+n.tel+")'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>"+"</td></tr>");
+                                        "<td class='disclass'  style='width: 30px;'></td>";
+                                    htm1 += "<td  style='width: 30px;'>";
+                                    if('DY' != platform){
+                                        htm1 += "<a href='javascript:void(0)' onclick='hangUp("+n.tel+")'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
+                                    }
+                                    htm1 += "</td></tr>";
+                                    tp.append(htm1);
                                 }else{
                                     tp.append("<tr >" +
                                         "<td style='display: none'></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+n.phone+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +

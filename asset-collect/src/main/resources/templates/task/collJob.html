@@ -437,6 +437,9 @@
             </div>
         </div>
     </div>
+    <div id="dydv" th:if="${not #strings.isEmpty(dytoken)}" >
+        <script id="dySdkScript" type="text/javascript" ctype="mini" src='https://cti.duyansoft.com/syui/dysdk/dysdk2.min.js' th:url="'https://cti.duyansoft.com/ctibar.html?account_id='+${accountId}+'&token='+${dytoken}" ></script>
+    </div>
     <div id="finalMidDiv" class="box box-main"  style="height: 40px;">
         <div class="box-header">
             <div class="tab-pane"  style="height: 33px;">
@@ -2446,9 +2449,100 @@
                 // uKeFuSoftPhone.AgentLogin(agent, extno, pwd, domain);
                 // console.log("---html登录成功---");
 
+        }else if (platform == 'DY'){
+            DYSDK.ready(function(){
+                duyanSdk.callme = function(tleNumber){
+                    DYSDK.call(tleNumber,function(){
+                    },'呼叫');
+                }
+            });
+            DYSDK.init();
+            // 接通电话的回调函数，返回电话号码等信息
+            DYSDK.callConfirm(function(data){
+                console.log(data)
+                if(!data.uuid){
+                    alert("不存在uuid");
+                }
+            });
+            // 拨打电话失败的回调函数，返回电话号码等信息
+            DYSDK.callFail(function(data){
+                if(!data.uuid){
+                    alert("不存在uuid");
+                }
+                agentIsCalling = false;
+                hangUp();
+            });
+            // 电话结束的回调函数，返回电话号码等信息
+            DYSDK.callEnd(function(data){
+                hangUp();
+                console.log(data)
+                if(!data.uuid){
+                    alert("不存在uuid");
+                }
+                agentIsCalling = false;
+                $.ajax({
+                    url: ctx+"duyan/info/call_log",    //请求的url地址
+                    dataType: "json",   //返回格式为json
+                    async: false, //请求是否异步，默认为异步，这也是ajax重要特性
+                    type: "post",   //请求方式
+                    data:{
+                        uuid:data.uuid
+                    },
+                    success: function(req) {
+                        //请求成功时处理
+                        startTime = getDate(req.data.call_time);
+                        endTime = getDate(req.data.call_time+req.data.duration*1000+1000);
+                        recordDuration = req.data.duration*1000;
+                    },
+                    error: function(e) {
+                        //请求出错处理
+                    }
+                });
+                // 保存点催记录
+                var val = $('input[name="radioChoose"]:checked').parents("tr");
+                var soundRecordingUrl = [[${soundRecordingUrl}]];
+                var apikey = [[${apikey}]];
+                $.post(
+                    prefix + "/addCallRecord",
+                    {
+                        id:$("#callRecordId").val(),
+                        contactName:val.find("[name='contactName']").html(),
+                        phone:val.find("[name='phone']").html(),
+                        contactRelation: val.find("[name='hidRelation']").html(),
+                        callSign:'R01',
+                        callResult:'已接听',
+                        callStartTime:startTime,
+                        callEndTime:endTime,
+                        callLen:recordDuration,
+                        callRadioLocation: soundRecordingUrl+'?apikey='+apikey+'&call_uuid='+data.uuid,
+                        caseNo:currentCaseNo,
+                        remark:'已接听',
+                        importBatchNo:currentImportBatchNo,
+                        orgId:currentOrgId,
+                        // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
+                        sendRadioCheck:1,
+                        platform: 'DY'
+                    },
+                    function(data) {
+                        // alert(JSON.stringify(data));
+                        if (data.status == 200) {//请求成功
+                            $("#callStartTime").val("");
+                            $("#callEndTime").val("");
+                            $("#callLen").val("");
+                            $("#callRadioLocation").val("");
+                            $("#callCode").val("");
+                            $("#callRemarkAdd").val("");
+                            $("#callRecordId").val(data.result);
+                            if($('#call').val() == '1') {
+                                callRecordList(currentCaseNo);
+                            }
+                        }
+                    }
+                );
+            });
         }
     }
-
+    var duyanSdk = {};
     var agentClient = null;
     var recordFile = null;
     var startTime = null;
@@ -2617,6 +2711,26 @@
         return destType;
     }
 
+    function getDate(str) {
+        var oDate = new Date(str),
+            oYear = oDate.getFullYear(),
+            oMonth = oDate.getMonth()+1,
+            oDay = oDate.getDate(),
+            oHour = oDate.getHours(),
+            oMin = oDate.getMinutes(),
+            oSen = oDate.getSeconds(),
+            oTime = oYear +'-'+ addZero(oMonth) +'-'+ addZero(oDay) +' '+ addZero(oHour) +':'+
+                addZero(oMin) +':'+addZero(oSen);
+        return oTime;
+    }
+
+    //补零操作
+    function addZero(num){
+        if(parseInt(num) < 10){
+            num = '0'+num;
+        }
+        return num;
+    }
     /**
      * @description CallOut(外呼):座席主动出局语音呼叫
      * @param pnumber:被叫号码
@@ -2659,7 +2773,9 @@
         console.log("坐席开始打电话，agentIsCalling=true");
         var tr1 = obj.parentNode.parentNode;
         // alert(tr1.cells[7].innerHTML="<span class='text-success'>已授权</span>")
-        tr1.cells[8].innerHTML="<a href='javascript:void(0)' onclick='hangUp()'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
+        if(callPlatform != 'DY') {
+            tr1.cells[8].innerHTML="<a href='javascript:void(0)' onclick='hangUp()'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
+        }
         $("#"+id).attr("checked","checked");
         $(".disclass").attr('disabled',true);
         $(".disclass").css('pointer-events','none');
@@ -2716,6 +2832,10 @@
                     } else if(callPlatform == 'ZJ') {
                         // 第一个参数是呼叫号码，第二个参数是外显号码
                         uKeFuSoftPhone.CallOut(phone,window.parent.parent.$('#exonNum').val());
+                    }else if(callPlatform == 'DY') {
+                        // 度言拨打电话
+                        duyanSdk.callme(phone);
+                        agentIsCalling = false;
                     }
                 }else if (data.code == 1) {
                     window.location.href="/login";

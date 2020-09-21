@@ -1,6 +1,7 @@
 package com.ruoyi.task.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.agent.domain.ExtPhone;
 import com.ruoyi.agent.service.IExtPhoneService;
 import com.ruoyi.assetspackage.domain.CurAssetsRepaymentPackage;
@@ -12,6 +13,7 @@ import com.ruoyi.caseConfig.service.ITLcAllocatCaseConfigService;
 import com.ruoyi.columnQuery.domain.TLcColumnQuery;
 import com.ruoyi.columnQuery.service.ITLcColumnQueryService;
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.config.DuYanConfig;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.PageDomain;
@@ -21,6 +23,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.enums.TableEnum;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.RestTemplateUtil;
+import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.custom.domain.TLcCustContact;
 import com.ruoyi.custom.service.ITLcCustContactService;
@@ -114,6 +117,8 @@ public class TLcTaskController extends BaseController {
     private IOrgPackageService orgPackageService;
     @Autowired
     private ITLcRobotBlackService robotBlackService;
+    @Autowired
+    private DuYanConfig duYanConfig;
 
 
     @RequiresPermissions("collect:task:myTask")
@@ -254,6 +259,38 @@ public class TLcTaskController extends BaseController {
         Map<String, BigDecimal> resultMap = this.tLcTaskService.selectTotalCountMoney(tLcTask);
         modelMap.put("totalCaseNum", resultMap.get("totalCaseNum"));
         modelMap.put("totalArrears", resultMap.get("totalArrears"));
+        if("DY".equals(ShiroUtils.getSysUser().getPlatform())){
+            Long userId;
+            try {
+                userId = ShiroUtils.getUserId();
+            } catch (Exception e) {
+                log.error("获取用户信息失败");
+                throw new RuntimeException("获取用户信息失败");
+            }
+            ExtPhone extPhone = new ExtPhone();
+            extPhone.setIsused("0");
+            extPhone.setSeatId(Integer.valueOf(String.valueOf(userId)));
+            //暂时写平安，后续从session里面取
+            extPhone.setCallPlatform(ShiroUtils.getSysUser().getPlatform());
+            List<ExtPhone> list = extPhoneService.selectExtPhoneList(extPhone);
+            if (list != null && list.size() > 0) {
+                // 分机号码
+                modelMap.put("extPhone", list.get(0).getAgentid());
+                String accountId = list.get(0).getAgentid();
+                String rl = HttpUtils.sendPost(duYanConfig.getTokenUrl(), "account_id="+accountId+"&apikey="+duYanConfig.getApikey());
+                try{
+                    JSONObject ro = JSONObject.parseObject(rl);
+                    JSONObject jt = (JSONObject) ro.get("data");
+                    modelMap.put("dytoken",jt.get("token"));
+                    modelMap.put("accountId",accountId);
+                    modelMap.put("soundRecordingUrl",duYanConfig.getSoundRecordingUrl());
+                    modelMap.put("apikey",duYanConfig.getApikey());
+                }catch (Exception e){
+                    logger.info("度言获取token失败accountId="+accountId);
+                    e.printStackTrace();;
+                }
+            }
+        }
         logger.info("催收作业页面查询数据结束、进入页面sessionId="+sessionId);
         return prefix + "/collJob";
     }
