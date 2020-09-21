@@ -31,6 +31,7 @@ server:
     min-spare-threads: 30
     accept-count: 10000
     max-connections: 10000000
+  max-http-header-size: 204800
 
 # 日志配置
 logging:

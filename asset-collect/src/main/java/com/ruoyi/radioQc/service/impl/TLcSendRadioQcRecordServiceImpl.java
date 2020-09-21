@@ -150,7 +150,7 @@ public class TLcSendRadioQcRecordServiceImpl implements ITLcSendRadioQcRecordSer
 //            this.tLcSendRadioQcRecordMapper.insertTLcSendRadioQcRecord(tLcSendRadioQcRecord);
                     log.info("通话记录id为：{}推送录音到录音质检系统成功", tLcCallRecord.getId());
                 } else {
-                    log.error("通话记录id为：{}推送录音到录音质检系统失败", tLcCallRecord.getId());
+                    log.error("通话记录id为：{}推送录音到录音质检系统失败，失败原因：{}", tLcCallRecord.getId(), qualityCheckResponse.getBody().getMessage() + "============" + qualityCheckResponse.getBody().getData().get(0).getMessage());
                 }
             }
         }
