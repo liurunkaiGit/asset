@@ -3244,7 +3244,9 @@
         });*/
         var tr1 = obj.parentNode.parentNode;
         // alert(tr1.cells[7].innerHTML="<span class='text-success'>已授权</span>")
-        tr1.cells[3].innerHTML="<a href='javascript:void(0)' onclick='hangUp()'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
+        if(callPlatform != 'DY'){
+            tr1.cells[3].innerHTML="<a href='javascript:void(0)' onclick='hangUp()'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
+        }
         $(".disclass").attr('disabled',true);
         $(".disclass").css('pointer-events','none');
         $(".disclass").css('background','rgb(169,169,169)');
@@ -3296,6 +3298,10 @@
                     } else if(callPlatform == 'ZJ') {
                         // 第一个参数是呼叫号码，第二个参数是外显号码
                         uKeFuSoftPhone.CallOut($("#freeCall").val(),window.parent.parent.$('#exonNum').val());
+                    }else if(callPlatform == 'DY') {
+                        // 度言拨打电话
+                        duyanSdk.callme(phone);
+                        agentIsCalling = false;
                     }
                 }else if (data.code == 1) {
                     window.location.href="/login";
