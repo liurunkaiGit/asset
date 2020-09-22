@@ -2,10 +2,12 @@ package com.ruoyi.inforeporting.service.impl;
 
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.inforeporting.domain.*;
 import com.ruoyi.inforeporting.mapper.TLcInforeportingBuckleMapper;
 import com.ruoyi.inforeporting.service.TLcInforeportingBuckleService;
+import com.ruoyi.system.service.ISysDictDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,8 @@ public class TLcInforeportingBuckleServiceImpl implements TLcInforeportingBuckle
 
     @Autowired
     private TLcInforeportingBuckleMapper ibm;
+    @Autowired
+    private ISysDictDataService dictDataService;
 
     @Override
     public int insertTLcInforeportingBuckle(TLcInforeportingBuckle inforeportingBuckle) {
@@ -40,11 +44,13 @@ public class TLcInforeportingBuckleServiceImpl implements TLcInforeportingBuckle
 
     @Override
     public AjaxResult exportExcel(TLcInforeportingBuckle inforeportingBuckle) {
-        if(null != inforeportingBuckle.getOrgId() && 213 == inforeportingBuckle.getOrgId().longValue()){
+        // 字典表查询 机构 配置的模板
+        String template = dictDataService.selectDictLabel("buckle",inforeportingBuckle.getOrgId().toString());
+        if("buckle_xy".equals(template)){
             //兴业消费金融
             List<TLcInforeportingBuckleXing> list = ibm.selectTLcInforeportingBuckleXingList(inforeportingBuckle);
             return new ExcelUtil<TLcInforeportingBuckleXing>(TLcInforeportingBuckleXing.class).exportExcel(list,"逾期划扣");
-        }else if(null != inforeportingBuckle.getOrgId() && 208 == inforeportingBuckle.getOrgId().longValue()){
+        }else if("buckle_zy".equals(template)){
             //中银
             List<TLcInforeportingBuckle> list = ibm.selectTLcInforeportingBuckleListExp(inforeportingBuckle);
             return new ExcelUtil<TLcInforeportingBuckleZhongyin>(TLcInforeportingBuckleZhongyin.class).exportExcel(transformationBuckleZhongyin(list),"逾期划扣");
@@ -67,10 +73,10 @@ public class TLcInforeportingBuckleServiceImpl implements TLcInforeportingBuckle
             tn.setCreateBy(te.getCreateBy());
             tn.setCreateTime(te.getCreateTime());
             tn.setCreateTime2(te.getCreateTime());
-            tn.setCustomName(te.getCustomName());
-            tn.setDeductionAmount(te.getDeductionAmount());
-            tn.setProductName(te.getProductName());
-            tn.setRemarks(te.getRemarks());
+            tn.setCustomName(StringUtils.nvl(te.getCustomName(),"-"));
+            tn.setDeductionAmount(StringUtils.nvl(te.getDeductionAmount(),0D));
+            tn.setProductName(StringUtils.nvl(te.getProductName(),"-"));
+            tn.setRemarks(StringUtils.nvl(te.getRemarks(),"-"));
             if("已核销".equals(te.getTransferType())){
                 tn.setStage("已核销");
             }else{

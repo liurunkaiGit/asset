@@ -3,6 +3,7 @@ package com.ruoyi.inforeporting.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import com.ruoyi.common.utils.StringUtils;
 import lombok.Data;
 
 import java.util.Date;
@@ -107,20 +108,21 @@ public class TLcInforeportingCompany extends TLcInforeportingTemplate implements
         cep.setCustomName(getCustomName());
         ///封装数据
         StringBuilder company = new StringBuilder();
-        company.append("客户姓名:"+getCustomName()+"\r\n");
+        company.append("客户姓名:"+StringUtils.nvl(getCustomName(),"-")+"\r\n");
         company.append("合同号:"+getCaseNo()+"\n");
-        company.append("付款人姓名:"+getDraweeName()+"\n");
-        company.append("付款人与客户关系:"+getRelationship()+"\n");
-        company.append("付款卡前四位:"+getTopFourCards()+"\n");
-        company.append("付款卡后四位:"+getLastFourCards()+"\n");
-        company.append("付款银行:"+getPayingBank()+"\n");
-        company.append("存入金额:"+getDepositAmount()+"\n");
-        company.append("扣款金额:"+getAmountOfDeduction()+"\n");
-        company.append("非本人对公还款原因:"+getReasons());
+        company.append("付款人姓名:"+StringUtils.nvl(getDraweeName(),"-")+"\n");
+        company.append("付款人与客户关系:"+StringUtils.nvl(getRelationship(),"-")+"\n");
+        company.append("付款卡前四位:"+StringUtils.nvl(getTopFourCards(),"-")+"\n");
+        company.append("付款卡后四位:"+ StringUtils.nvl(getLastFourCards(),"-")+"\n");
+        company.append("付款银行:"+StringUtils.nvl(getPayingBank(),"-")+"\n");
+        company.append("存入金额:"+StringUtils.nvl(getDepositAmount(),0.0)+"\n");
+        company.append("扣款金额:"+StringUtils.nvl(getAmountOfDeduction(),0.0)+"\n");
+        company.append("非本人对公还款原因:"+StringUtils.nvl(getReasons(),"-"));
         cep.setCompany(company.toString().replaceAll("\n", String.valueOf((char)10)));
         cep.setRemarks(getRemarks());
         cep.setApplicationTime(this.getApplicationTime());
         cep.setCreateTime(this.getCreateTime());
         return cep;
     }
+
 }
