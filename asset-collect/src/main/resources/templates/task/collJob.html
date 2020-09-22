@@ -438,7 +438,7 @@
         </div>
     </div>
     <div id="dydv" th:if="${not #strings.isEmpty(dytoken)}" >
-        <script id="dySdkScript" type="text/javascript" ctype="mini" src='https://cti.duyansoft.com/syui/dysdk/dysdk2.min.js' th:url="'https://cti.duyansoft.com/ctibar.html?account_id='+${accountId}+'&token='+${dytoken}" ></script>
+        <script id="dySdkScript" type="text/javascript" ctype="mini" src='https://cti.duyansoft.com/syui/dysdk/dysdk2.min.js' th:url="'https://cti.duyansoft.com/ctibar.html?noOpBtn=true&account_id='+${accountId}+'&token='+${dytoken}" ></script>
     </div>
     <div id="finalMidDiv" class="box box-main"  style="height: 40px;">
         <div class="box-header">

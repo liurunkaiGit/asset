@@ -53,6 +53,7 @@ import com.ruoyi.task.service.ITLcSelectRecordService;
 import com.ruoyi.task.service.ITLcTaskService;
 import com.ruoyi.utils.CloseCaseUser;
 import com.ruoyi.utils.DataPermissionUtil;
+import com.ruoyi.utils.DuyanUtil;
 import com.ruoyi.utils.Response;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -277,11 +278,8 @@ public class TLcTaskController extends BaseController {
                 // 分机号码
                 modelMap.put("extPhone", list.get(0).getAgentid());
                 String accountId = list.get(0).getAgentid();
-                String rl = HttpUtils.sendPost(duYanConfig.getTokenUrl(), "account_id="+accountId+"&apikey="+duYanConfig.getApikey());
                 try{
-                    JSONObject ro = JSONObject.parseObject(rl);
-                    JSONObject jt = (JSONObject) ro.get("data");
-                    modelMap.put("dytoken",jt.get("token"));
+                    modelMap.put("dytoken", DuyanUtil.getToken(duYanConfig.getTokenUrl(),accountId,duYanConfig.getApikey()));
                     modelMap.put("accountId",accountId);
                     modelMap.put("soundRecordingUrl",duYanConfig.getSoundRecordingUrl());
                     modelMap.put("apikey",duYanConfig.getApikey());

@@ -6,7 +6,7 @@
 <body>
 <input type="hidden" id="soundRecordingUrl" th:value="${soundRecordingUrl}">
 <input type="hidden" id="apikey"  th:value="${apikey}">
-<script id="dySdkScript" type="text/javascript" ctype="mini" src='https://cti.duyansoft.com/syui/dysdk/dysdk2.min.js' th:url="'https://cti.duyansoft.com/ctibar.html?account_id='+${accountId}+'&token='+${dytoken}" ></script>
+<script id="dySdkScript" type="text/javascript" ctype="mini" src='https://cti.duyansoft.com/syui/dysdk/dysdk2.min.js' th:url="'https://cti.duyansoft.com/ctibar.html?noOpBtn=true&account_id='+${accountId}+'&token='+${dytoken}" ></script>
 <th:block th:include="include :: footer" />
 <script type="text/javascript">
     var duyanSdk = {};

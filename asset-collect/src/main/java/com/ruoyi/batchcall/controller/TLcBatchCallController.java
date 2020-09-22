@@ -17,6 +17,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.utils.DuyanUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -118,11 +119,8 @@ public class TLcBatchCallController extends BaseController
         }
         modelMap.put("callPlatform", ShiroUtils.getSysUser().getPlatform());
         if("DY".equals(ShiroUtils.getSysUser().getPlatform())){
-            String rl = HttpUtils.sendPost(duYanConfig.getTokenUrl(), "account_id="+accountId+"&apikey="+duYanConfig.getApikey());
             try{
-                JSONObject ro = JSONObject.parseObject(rl);
-                JSONObject jt = (JSONObject) ro.get("data");
-                modelMap.put("dytoken",jt.get("token"));
+                modelMap.put("dytoken",DuyanUtil.getToken(duYanConfig.getTokenUrl(),accountId,duYanConfig.getApikey()));
                 modelMap.put("accountId",accountId);
             }catch (Exception e){
                 logger.info("度言获取token失败accountId="+accountId);
