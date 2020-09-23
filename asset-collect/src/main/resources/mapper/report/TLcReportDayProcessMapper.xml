@@ -384,7 +384,7 @@
         FROM
         t_lc_call_record t,t_lc_task t2
         WHERE 1=1 and t2.case_no = t.case_no and t2.org_id = #{orgId}
-        AND t.call_radio_location IS NOT NULL
+        AND t.call_radio_location IS NOT NULL and t.call_len is not null and t.call_len != '' and t.type = 1
         and t2.task_status != 3
         <if test="startDate != null">
             AND t.create_time <![CDATA[>=]]> #{startDate}
