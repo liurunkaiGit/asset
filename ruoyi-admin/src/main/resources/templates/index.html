@@ -96,7 +96,7 @@
                     	<i class="fa fa-bars"></i>
                     </a>
                 </div>
-                <div style="width: 800px;color:#FFF;font-size: 14px;position: absolute;left: 50px;">
+                <div th:if="${callPlatform} ne 'DY'" style="width: 800px;color:#FFF;font-size: 14px;position: absolute;left: 50px;">
                     <span class="minimalize-styl-2" id="fjhm" style="padding-right: 3px;font-size: 13px;margin-right: -5px">分机:
                         <input style="width: 70px;height: 20px;background:#3593e0;border:#3593e0" th:value="${extPhone.agentid}" disabled/>
                     </span>
