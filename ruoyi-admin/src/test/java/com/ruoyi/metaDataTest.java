@@ -35,8 +35,6 @@ public class metaDataTest {
     private TLiTelInfoMapper TLiTelInfoMapper;
 
 
-    @Autowired
-    private TLiCaseInfoXyMapper TLiCaseInfoXyMapper;
     /**
      * 案件表：cust_name 客户姓名、certificate_no 身份证
      */
