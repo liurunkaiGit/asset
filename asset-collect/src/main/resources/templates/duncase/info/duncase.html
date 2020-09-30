@@ -22,6 +22,7 @@
                 <div class="select-list">
                     <ul>
                         <input type="hidden" id="orgId" name="orgId" th:value="${orgId}">
+                        <input id="currentPageUrl" name="currentPageUrl" class="form-control" type="hidden">
                         <li>
                             <p>机构案件号：</p>
                             <input type="text" name="caseNo" id="caseNo"/>
@@ -195,7 +196,7 @@
                         <!--自由查询结束-->
                         <li>
                             <p>案件号码状态：</p>
-                            <select name="phoneStatus" >
+                            <select name="phoneStatus" id="phoneStatus" >
                                 <option value="">请选择</option>
                                 <option value="1">可联</option>
                                 <option value="0">不可联</option>
@@ -584,14 +585,35 @@
 
 
     /*催收历史*/
-    function detail(caseNo,orgId,importBatchNo,certificateNo) {
-        var collHisUrl = ""
+    function detail(currentCaseNo,orgId,currentImportBatchNo,certificateNo) {
+       /* var collHisUrl = ""
         if (importBatchNo == 'null') {
             collHisUrl = taskPrefix + "/collJobHis?caseNo="+caseNo+"&orgId="+orgId+"&certificateNo="+certificateNo;
         } else {
             collHisUrl = taskPrefix + "/collJobHis?caseNo="+caseNo+"&orgId="+orgId+"&importBatchNo="+importBatchNo+"&certificateNo="+certificateNo;
         }
         $.modal.openFull("案件信息", collHisUrl);
+*/
+        var caseNo = $("#caseNo").val();
+        var orgId = $("#orgId").val();
+        var customName = $("#customName").val();
+        var taskStatus = $("#taskStatus").val();
+        var callCodeHistoryListStr = $('#callCodeHistoryListStr').selectpicker('val');
+        var freeSQL = $("#freeSQL").val();
+        var province = $("#provinceId").val();
+        var city = $("#cityId").val();
+        var phoneStatus = $("#phoneStatus").val();
+        freeSQL = encodeURIComponent(freeSQL);
+        var collHisUrl = taskPrefix + '/collJobHis?orgId='+orgId +'&caseNo='+caseNo
+            +'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr
+            +'&freeSQL='+freeSQL+'&province='+province+'&city='+city+'&phoneStatus='+phoneStatus
+            +'&currentCaseNo='+currentCaseNo +'&currentImportBatchNo='+currentImportBatchNo;
+
+        if ($("#currentPageUrl").val() != null && $("#currentPageUrl").val() != '' && $("#currentPageUrl").val() != collHisUrl) {
+            $.modal.closeTab($("#currentPageUrl").val());
+        }
+        $.modal.openTab("案件信息", collHisUrl);
+        $("#currentPageUrl").val(collHisUrl);
     }
 
     function getCallCode(callCode, dictLabel) {

@@ -1200,7 +1200,8 @@
             var collHisUrl = prefix + '/collJobHis?orgId='+orgId +'&caseNo='+caseNo
                 +'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr
                 +'&freeSQL='+freeSQL+'&province='+province+'&city='+city+'&phoneStatus='+phoneStatus
-                +'&currentCaseNo='+currentCaseNo +'&currentImportBatchNo='+currentImportBatchNo;
+                +'&currentCaseNo='+currentCaseNo +'&currentImportBatchNo='+currentImportBatchNo
+                +'&toType='+'1';
 
             if ($("#currentPageUrl").val() != null && $("#currentPageUrl").val() != '' && $("#currentPageUrl").val() != collHisUrl) {
                 $.modal.closeTab($("#currentPageUrl").val());

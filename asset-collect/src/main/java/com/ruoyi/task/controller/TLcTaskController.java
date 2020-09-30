@@ -208,7 +208,7 @@ public class TLcTaskController extends BaseController {
         return prefix + "/collJobHis";
     }*/
     @GetMapping(value = "/collJobHis")
-    public String toCollJobHis(TLcTask tLcTask, String currentImportBatchNo, String currentCaseNo, ModelMap modelMap,String callCodeHistoryListStr) {
+    public String toCollJobHis(TLcTask tLcTask, String currentImportBatchNo, String currentCaseNo, ModelMap modelMap,String callCodeHistoryListStr,String toType) {
         if(StringUtils.isNotEmpty(callCodeHistoryListStr)&& !"null".equals(callCodeHistoryListStr)){
             tLcTask.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
         }
@@ -218,6 +218,10 @@ public class TLcTaskController extends BaseController {
         modelMap.put("callCodeHistoryListStr", callCodeHistoryListStr);
 
         // 查询总的金额及总的件数
+        if("1".equals(toType)){//再催页面
+            tLcTask.setFlag1("1");
+            tLcTask.setFlag2("3");
+        }
         Map<String, BigDecimal> resultMap = this.tLcTaskService.selectTotalCountMoney2(tLcTask);
         modelMap.put("totalCaseNum", resultMap.get("totalCaseNum"));
         modelMap.put("totalArrears", resultMap.get("totalArrears"));

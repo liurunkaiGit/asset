@@ -1443,7 +1443,13 @@
         sum(t.dqyhje) as totalPay
         FROM t_lc_task t,t_lc_duncase d
         WHERE t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no
-        AND t.allot_type = 1 AND t.task_status != 3
+       /* AND t.allot_type = 1 AND t.task_status != 3*/
+        <if test="flag1 != null and flag1 != ''">
+            AND t.allot_type = #{flag1}
+        </if>
+        <if test="flag2 != null and flag2 != ''">
+            AND t.task_status != #{flag2}
+        </if>
         <if test="orgId != null  and orgId != ''">
             and t.org_id = #{orgId}
         </if>
