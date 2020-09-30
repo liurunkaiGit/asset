@@ -793,6 +793,17 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         return this.tLcTaskMapper.selectMyTaskList(tLcTask);
     }
 
+    @Override
+    public List<TLcTask> selectMyTaskList2(TLcTask tLcTask) {
+        if (tLcTask.getEndRecentlyAllotDate() != null) {
+            tLcTask.setEndRecentlyAllotDate(DateUtils.getEndOfDay(tLcTask.getEndRecentlyAllotDate()));
+        }
+        if (tLcTask.getEndRecentlyFollowUpDate() != null) {
+            tLcTask.setEndRecentlyFollowUpDate(DateUtils.getEndOfDay(tLcTask.getEndRecentlyFollowUpDate()));
+        }
+        return this.tLcTaskMapper.selectMyTaskList2(tLcTask);
+    }
+
     /**
      * 查询我的任务列表
      *
@@ -1399,6 +1410,10 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     @Override
     public Map<String, BigDecimal> selectTotalCountMoney(TLcTask tLcTask) {
         return this.tLcTaskMapper.selectTotalCountMoney(tLcTask);
+    }
+    @Override
+    public Map<String, BigDecimal> selectTotalCountMoney2(TLcTask tLcTask) {
+        return this.tLcTaskMapper.selectTotalCountMoney2(tLcTask);
     }
 
     @Override

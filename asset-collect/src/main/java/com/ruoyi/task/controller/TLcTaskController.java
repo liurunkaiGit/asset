@@ -196,8 +196,7 @@ public class TLcTaskController extends BaseController {
      *
      * @return
      */
-//    @RequiresPermissions("collect:task:collJob")
-    @GetMapping(value = "/collJobHis")
+   /* @GetMapping(value = "/collJobHis")
     public String toCollJobHis(TLcTask tLcTask, ModelMap modelMap) {
 //        modelMap.put("ownerId", this.tLcTaskService.selectTaskByCaseNo(tLcTask.getCaseNo()).getOwnerId());
 //        modelMap.put("orgId", this.tLcTaskService.selectTaskByCaseNo(tLcTask.getCaseNo()).getOrgId());
@@ -207,6 +206,22 @@ public class TLcTaskController extends BaseController {
         modelMap.put("importBatchNo", tLcTask.getImportBatchNo());
         modelMap.put("certificateNo", tLcTask.getCertificateNo());
         return prefix + "/collJobHis";
+    }*/
+    @GetMapping(value = "/collJobHis")
+    public String toCollJobHis(TLcTask tLcTask, String currentImportBatchNo, String currentCaseNo, ModelMap modelMap,String callCodeHistoryListStr) {
+        if(StringUtils.isNotEmpty(callCodeHistoryListStr)&& !"null".equals(callCodeHistoryListStr)){
+            tLcTask.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
+        }
+        modelMap.put("tLcTask", tLcTask);
+        modelMap.put("currentCaseNo", currentCaseNo);
+        modelMap.put("currentImportBatchNo", currentImportBatchNo);
+        modelMap.put("callCodeHistoryListStr", callCodeHistoryListStr);
+
+        // 查询总的金额及总的件数
+        Map<String, BigDecimal> resultMap = this.tLcTaskService.selectTotalCountMoney2(tLcTask);
+        modelMap.put("totalCaseNum", resultMap.get("totalCaseNum"));
+        modelMap.put("totalArrears", resultMap.get("totalArrears"));
+        return prefix + "/collJobHis2";
     }
 
     /**
@@ -478,6 +493,22 @@ public class TLcTaskController extends BaseController {
         String isAsc = (String) request.getSession().getAttribute("isAsc");
         startPageCustom(Integer.valueOf(request.getParameter("startNum")), Integer.valueOf(request.getParameter("endNum")), orderByColumn, isAsc);
         List<TLcTask> list = tLcTaskService.selectMyTaskList(tLcTask);
+        logger.info("查询客户列表结束ownerId="+tLcTask.getOwnerId());
+        return list;
+    }
+
+    @PostMapping("/findTaskByOwner2")
+    @ResponseBody
+    public List<TLcTask> findTaskByOwner2(TLcTask tLcTask,HttpServletRequest request) {
+        logger.info("查询客户列表开始ownerId="+tLcTask.getOwnerId());
+        String callCodeHistoryListStr = request.getParameter("callCodeHistoryListStr");//历史电话码
+        if(StringUtils.isNotEmpty(callCodeHistoryListStr) && !"null".equals(callCodeHistoryListStr)){
+            tLcTask.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
+        }
+        String orderByColumn = (String) request.getSession().getAttribute("orderByColumn");
+        String isAsc = (String) request.getSession().getAttribute("isAsc");
+        startPageCustom(Integer.valueOf(request.getParameter("startNum")), Integer.valueOf(request.getParameter("endNum")), orderByColumn, isAsc);
+        List<TLcTask> list = tLcTaskService.selectMyTaskList2(tLcTask);
         logger.info("查询客户列表结束ownerId="+tLcTask.getOwnerId());
         return list;
     }

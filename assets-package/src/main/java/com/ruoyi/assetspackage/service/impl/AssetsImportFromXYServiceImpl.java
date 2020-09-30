@@ -138,6 +138,13 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
 
     }
 
+    /**
+     * 兴业校验与统计
+     * @param request
+     * @param importBatchNo
+     * @return
+     * @throws Exception
+     */
     @Override
     @Transactional
     public Map<String, String> checkData(HttpServletRequest request, String importBatchNo) throws Exception{
