@@ -49,6 +49,7 @@ public class TLcInforeportingCompany extends TLcInforeportingTemplate implements
      */
     @Excel(name = "扣款金额")
     private Double amountOfDeduction;
+
     /**
      * 非本人对公还款原因
      */
