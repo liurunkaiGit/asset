@@ -2,10 +2,13 @@ package com.ruoyi.inforeporting.service.impl;
 
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.inforeporting.domain.*;
 import com.ruoyi.inforeporting.mapper.TLcInforeportingReductionMapper;
 import com.ruoyi.inforeporting.service.TLcInforeportingReductionService;
+import com.ruoyi.system.domain.SysDictData;
+import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.task.domain.TLcTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,8 @@ public class TLcInforeportingReductionServiceImpl implements TLcInforeportingRed
 
     @Autowired
     private TLcInforeportingReductionMapper irm;
+    @Autowired
+    private ISysDictDataService dictDataService;
 
     @Override
     public int insertTLcInforeportingReduction(TLcInforeportingReduction inforeportingReduction) {
@@ -52,15 +57,17 @@ public class TLcInforeportingReductionServiceImpl implements TLcInforeportingRed
 
     @Override
     public AjaxResult exportExcel(TLcInforeportingReduction inforeportingReduction) {
-        if(null != inforeportingReduction.getOrgId() && 213 == inforeportingReduction.getOrgId().longValue()){
+        // 字典表查询 机构 配置的模板
+        String template = dictDataService.selectDictLabel("reduction",inforeportingReduction.getOrgId().toString());
+        if("reduction_xy".equals(template)){
             //兴业消费金融
             List<TLcInforeportingReductionXing> list = irm.selectTLcInforeportingReductionXingList(inforeportingReduction);
             return new ExcelUtil<TLcInforeportingReductionXing>(TLcInforeportingReductionXing.class).exportExcel(list,"减免");
-        }else if(null != inforeportingReduction.getOrgId() && 212 == inforeportingReduction.getOrgId().longValue()){
+        }else if("reduction_jx".equals(template)){
             //捷信消金
             List<TLcInforeportingReduction> list = irm.selectTLcInforeportingReductionList(inforeportingReduction);
             return new ExcelUtil<TLcInforeportingReductionJiexin>(TLcInforeportingReductionJiexin.class).exportExcel(transformationTLcInforeportingReductionJiexin(list),"减免");
-        }else if(null != inforeportingReduction.getOrgId() && 208 == inforeportingReduction.getOrgId().longValue()){
+        }else if("reduction_zy".equals(template)){
             //中银减免
             List<TLcInforeportingReduction> list = irm.selectTLcInforeportingReductionList(inforeportingReduction);
             return new ExcelUtil<TLcInforeportingReductionZhongyin>(TLcInforeportingReductionZhongyin.class).exportExcel(transformationTLcInforeportingReductionZhongyin(list),"减免");
@@ -120,13 +127,13 @@ public class TLcInforeportingReductionServiceImpl implements TLcInforeportingRed
             tr.setId(i);
             tr.setCreateTime(tn.getCreateTime());
             tr.setCompany("华道");
-            tr.setCustomName(tn.getCustomName());
-            tr.setProductName(tn.getProductName());
-            tr.setOverdueDays(tn.getOverdueDays());
-            tr.setDzhxrq(tn.getDzhxrq());
+            tr.setCustomName(StringUtils.nvl(tn.getCustomName(),"-"));
+            tr.setProductName(StringUtils.nvl(tn.getProductName(),"-"));
+            tr.setOverdueDays(StringUtils.nvl(tn.getOverdueDays(),"-"));
+            tr.setDzhxrq(StringUtils.nvl(tn.getDzhxrq(),"-"));
             tr.setCaseNo(tn.getCaseNo());
-            tr.setRemarks(tn.getRemarks());
-            tr.setDeductionAmount(tn.getDeductionAmount());
+            tr.setRemarks(StringUtils.nvl(tn.getRemarks(),"-"));
+            tr.setDeductionAmount(StringUtils.nvl(tn.getDeductionAmount(),0D));
             listzy.add(tr);
         }
         return listzy;

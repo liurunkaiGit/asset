@@ -1,6 +1,7 @@
 package com.ruoyi.batchcall.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.agent.domain.ExtPhone;
 import com.ruoyi.agent.service.IExtPhoneService;
 import com.ruoyi.batchcall.domain.TLcBatchCall;
@@ -8,12 +9,15 @@ import com.ruoyi.batchcall.domain.TLcBatchCallConfig;
 import com.ruoyi.batchcall.service.ITLcBatchCallConfigService;
 import com.ruoyi.batchcall.service.ITLcBatchCallService;
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.config.DuYanConfig;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.utils.DuyanUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,6 +46,8 @@ public class TLcBatchCallController extends BaseController
     private ITLcBatchCallConfigService tLcBatchCallConfigService;
     @Autowired
     private IExtPhoneService extPhoneService;
+    @Autowired
+    private DuYanConfig duYanConfig;
 
     @RequiresPermissions("ruoyi:batchcall:view")
     @GetMapping()
@@ -90,9 +96,11 @@ public class TLcBatchCallController extends BaseController
         extPhone.setSeatId(Integer.valueOf(String.valueOf(ShiroUtils.getSysUser().getUserId())));
         extPhone.setCallPlatform(ShiroUtils.getSysUser().getPlatform());
         List<ExtPhone> list = extPhoneService.selectExtPhoneList(extPhone);
+        String accountId = null;
         if (list != null && list.size() > 0) {
             if (list != null && list.size() > 0) {
                 // 分机号码
+                accountId = list.get(0).getAgentid();
                 modelMap.put("extPhone", list.get(0));
                 // 查询外显号码
             }
@@ -110,7 +118,15 @@ public class TLcBatchCallController extends BaseController
             modelMap.put("batchCall", batchCallList);
         }
         modelMap.put("callPlatform", ShiroUtils.getSysUser().getPlatform());
-
+        if("DY".equals(ShiroUtils.getSysUser().getPlatform())){
+            try{
+                modelMap.put("dytoken",DuyanUtil.getToken(duYanConfig.getTokenUrl(),accountId,duYanConfig.getApikey()));
+                modelMap.put("accountId",accountId);
+            }catch (Exception e){
+                logger.info("度言获取token失败accountId="+accountId);
+                e.printStackTrace();;
+            }
+        }
         return prefix + "/batchcall";
     }
 

@@ -2,10 +2,12 @@ package com.ruoyi.inforeporting.service.impl;
 
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.inforeporting.domain.*;
 import com.ruoyi.inforeporting.mapper.TLcInforeportingCompanyMapper;
 import com.ruoyi.inforeporting.service.TLcInforeportingCompanyService;
+import com.ruoyi.system.service.ISysDictDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,8 @@ public class TLcInforeportingCompanyServiceImpl implements TLcInforeportingCompa
 
     @Autowired
     private TLcInforeportingCompanyMapper ibm;
-
+    @Autowired
+    private ISysDictDataService dictDataService;
     @Override
     public int insertTLcInforeportingCompany(TLcInforeportingCompany inforeportingCompany) {
         return ibm.insertTLcInforeportingCompany(inforeportingCompany);
@@ -40,11 +43,13 @@ public class TLcInforeportingCompanyServiceImpl implements TLcInforeportingCompa
 
     @Override
     public AjaxResult exportExcel(TLcInforeportingCompany inforeportingCompany) {
+        // 字典表查询 机构 配置的模板
+        String template = dictDataService.selectDictLabel("company",inforeportingCompany.getOrgId().toString());
         List<TLcInforeportingCompany> list = ibm.selectTLcInforeportingCompanyList(inforeportingCompany);
-        if(null != inforeportingCompany.getOrgId() && 213 == inforeportingCompany.getOrgId().longValue()){
+        if("company_xy".equals(template)){
             //兴业消费金融
             return new ExcelUtil<TLcInforeportingCompanyExpXing>(TLcInforeportingCompanyExpXing.class).exportExcel(transformationCompanyXing(list),"对公入账");
-        }else if(null != inforeportingCompany.getOrgId() && 208 == inforeportingCompany.getOrgId().longValue()){
+        }else if("company_zy".equals(template)){
             //中银
             return new ExcelUtil<TLcInforeportingCompanyExpZhongyin>(TLcInforeportingCompanyExpZhongyin.class).exportExcel(transformationCompanyZhongyin(list),"对公入账");
         }
@@ -80,16 +85,16 @@ public class TLcInforeportingCompanyServiceImpl implements TLcInforeportingCompa
             cep.setCustomName(cy.getCustomName());
             ///封装数据
             StringBuilder company = new StringBuilder();
-            company.append("客户姓名:"+cy.getCustomName()+"\r\n");
+            company.append("客户姓名:"+StringUtils.nvl(cy.getCustomName(),"-")+"\r\n");
             company.append("借据号:"+cy.getCaseNo()+"\n");
-            company.append("付款人姓名:"+cy.getDraweeName()+"\n");
-            company.append("付款人与客户关系:"+cy.getRelationship()+"\n");
-            company.append("付款卡前四位:"+cy.getTopFourCards()+"\n");
-            company.append("付款卡后四位:"+cy.getLastFourCards()+"\n");
-            company.append("付款银行:"+cy.getPayingBank()+"\n");
-            company.append("存入金额:"+cy.getDepositAmount()+"\n");
-            company.append("扣款金额:"+cy.getAmountOfDeduction()+"\n");
-            company.append("非本人对公还款原因:"+cy.getReasons()+"\n");
+            company.append("付款人姓名:"+StringUtils.nvl(cy.getDraweeName(),"-")+"\n");
+            company.append("付款人与客户关系:"+StringUtils.nvl(cy.getRelationship(),"-")+"\n");
+            company.append("付款卡前四位:"+StringUtils.nvl(cy.getTopFourCards(),"-")+"\n");
+            company.append("付款卡后四位:"+StringUtils.nvl(cy.getLastFourCards(),"-")+"\n");
+            company.append("付款银行:"+StringUtils.nvl(cy.getPayingBank(),"-")+"\n");
+            company.append("存入金额:"+StringUtils.nvl(cy.getDepositAmount(),"0.0")+"\n");
+            company.append("扣款金额:"+StringUtils.nvl(cy.getAmountOfDeduction(),"0.0")+"\n");
+            company.append("非本人对公还款原因:"+ StringUtils.nvl(cy.getReasons(),"-")+"\n");
             company.append("对公凭证上传附件");
             cep.setCompany(company.toString().replaceAll("\n", String.valueOf((char)10)));
             cep.setRemarks(cy.getRemarks());
@@ -119,8 +124,8 @@ public class TLcInforeportingCompanyServiceImpl implements TLcInforeportingCompa
             tn.setXh(++i);
             tn.setApplicationTime(cy.getApplicationTime());
             tn.setCaseNo(cy.getCaseNo());
-            tn.setProductName(cy.getProductName());
-            tn.setCustomName(cy.getCustomName());
+            tn.setProductName(StringUtils.nvl(cy.getProductName(),"-"));
+            tn.setCustomName(StringUtils.nvl(cy.getCustomName(),""));
             tn.setAmountOfDeduction(cy.getAmountOfDeduction());
             tn.setCreateTime(cy.getCreateTime());
             tn.setDraweeName(cy.getDraweeName());

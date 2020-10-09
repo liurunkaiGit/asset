@@ -154,6 +154,8 @@ public interface TLcTaskMapper {
      */
     List<TLcTask> selectMyTaskList(TLcTask tLcTask);
 
+    List<TLcTask> selectMyTaskList2(TLcTask tLcTask);
+
     /**
      * 根据机器人任务id查询对应的任务
      *
@@ -202,6 +204,7 @@ public interface TLcTaskMapper {
     Integer selectTaskCount(@Param("createTime")Date createTime, @Param("modifyTime")Date modifyTime);
 
     Map<String, BigDecimal> selectTotalCountMoney(TLcTask tLcTask);
+    Map<String, BigDecimal> selectTotalCountMoney2(TLcTask tLcTask);
 
     List<TLcTask> selectTaskListBySendRobotBatchNo(@Param("sendRobotBatchNo") String sendRobotBatchNo);
 

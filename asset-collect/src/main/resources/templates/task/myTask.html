@@ -285,8 +285,8 @@
                          <div class="modal-body" style="height: 200px;">
                              <div class="form-group">
                                  <span style="font-size: 15px;color:black;">&nbsp;&nbsp;*拨打号码设置：</span>
-                                 <input type="radio" name="isCallOther" value="0" />拨打本人
-                                 <input type="radio" name="isCallOther" value="1" />拨打本人+其他
+                                 <input type="radio" name="isCallOther" value="0"  />拨打本人
+                                 <input type="radio" name="isCallOther" value="1" checked/>拨打本人+其他
                              </div>
                              <div class="form-group">
                                  <span style="font-size: 15px;color:black;">&nbsp;&nbsp;*外显号码：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -821,6 +821,9 @@
 
         // 自动拨打
         function toAutoCall(isHasOther) {
+            if(null == isHasOther || '' == isHasOther){
+                isHasOther = $('input:radio[name="isCallOther"]:checked').val();
+            }
             var taskIdRows = $.table.selectFirstColumns();
             if (taskIdRows.length == 0) {
                 $.modal.alertWarning("请至少选择一条记录");

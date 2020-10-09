@@ -516,6 +516,52 @@
         ORDER BY t.task_status ASC,t.create_time DESC,t.recently_allot_date ASC,t.enter_coll_date ASC,t.case_no ASC
     </select>
 
+    <select id="selectMyTaskList2" parameterType="com.ruoyi.task.domain.TLcTask" resultMap="TLcTaskResult">
+        SELECT
+        d.ljyhje,t.color,d.remark,
+        <include refid="SELECT_T_LC_TASK"/>
+        FROM t_lc_task t,t_lc_duncase d
+        WHERE t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no
+        AND t.allot_type = 1 AND t.task_status != 3
+        <if test="orgId != null  and orgId != ''">
+            and t.org_id = #{orgId}
+        </if>
+        and (1=1
+        <if test="caseNo != null  and caseNo != ''">
+            and t.case_no = #{caseNo}
+        </if>
+        <if test="customName != null  and customName != ''">
+            and t.custom_name like concat('%', #{customName}, '%')
+        </if>
+        <if test="taskStatus != null ">
+            and t.task_status = #{taskStatus}
+        </if>
+        <if test="taskType != null ">
+            and t.task_type = #{taskType}
+        </if>
+        <if test="province != null and province != ''">
+            and left(t.certificate_no, 2) = #{province}
+        </if>
+        <if test="city != null and city != ''">
+            and left(t.certificate_no, 4) = #{city}
+        </if>
+        <if test="phoneStatus != null and phoneStatus != ''">
+            and t.phoneStatus = #{phoneStatus}
+        </if>
+        <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
+            and EXISTS(SELECT r.call_sign FROM t_lc_call_record r WHERE r.case_no = t.case_no and r.call_sign IN
+            <foreach collection="callCodeHistoryList" item="cl" open="(" close=")" separator=",">
+                #{cl}
+            </foreach>
+            )
+        </if>
+        <if test="freeSQL != null  and freeSQL != ''">
+            ${freeSQL}
+        </if>
+        )
+        ORDER BY t.task_status ASC,t.create_time DESC,t.recently_allot_date ASC,t.enter_coll_date ASC,t.case_no ASC
+    </select>
+
     <select id="selectTLcTaskById" parameterType="Long" resultMap="TLcTaskResult">
         SELECT
         dun.product_name as productName,
@@ -1387,6 +1433,59 @@
             and d.ljyhje <![CDATA[<=]]> #{endLjyhje}
         </if>
         <include refid="SELECT_TASK_WHERE"></include>
+        ORDER BY t.task_status ASC,t.create_time DESC,t.recently_allot_date ASC,t.enter_coll_date ASC,t.case_no ASC
+    </select>
+
+    <select id="selectTotalCountMoney2" parameterType="com.ruoyi.task.domain.TLcTask" resultType="java.util.Map">
+        SELECT
+        count(1) as totalCaseNum,
+        sum(t.arrears_total) as totalArrears,
+        sum(t.dqyhje) as totalPay
+        FROM t_lc_task t,t_lc_duncase d
+        WHERE t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no
+       /* AND t.allot_type = 1 AND t.task_status != 3*/
+        <if test="flag1 != null and flag1 != ''">
+            AND t.allot_type = #{flag1}
+        </if>
+        <if test="flag2 != null and flag2 != ''">
+            AND t.task_status != #{flag2}
+        </if>
+        <if test="orgId != null  and orgId != ''">
+            and t.org_id = #{orgId}
+        </if>
+        and (1=1
+        <if test="caseNo != null  and caseNo != ''">
+            and t.case_no = #{caseNo}
+        </if>
+        <if test="customName != null  and customName != ''">
+            and t.custom_name like concat('%', #{customName}, '%')
+        </if>
+        <if test="taskStatus != null ">
+            and t.task_status = #{taskStatus}
+        </if>
+        <if test="taskType != null ">
+            and t.task_type = #{taskType}
+        </if>
+        <if test="province != null and province != ''">
+            and left(t.certificate_no, 2) = #{province}
+        </if>
+        <if test="city != null and city != ''">
+            and left(t.certificate_no, 4) = #{city}
+        </if>
+        <if test="phoneStatus != null and phoneStatus != ''">
+            and t.phoneStatus = #{phoneStatus}
+        </if>
+        <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
+            and EXISTS(SELECT r.call_sign FROM t_lc_call_record r WHERE r.case_no = t.case_no and r.call_sign IN
+            <foreach collection="callCodeHistoryList" item="cl" open="(" close=")" separator=",">
+                #{cl}
+            </foreach>
+            )
+        </if>
+        <if test="freeSQL != null  and freeSQL != ''">
+            ${freeSQL}
+        </if>
+        )
         ORDER BY t.task_status ASC,t.create_time DESC,t.recently_allot_date ASC,t.enter_coll_date ASC,t.case_no ASC
     </select>
 

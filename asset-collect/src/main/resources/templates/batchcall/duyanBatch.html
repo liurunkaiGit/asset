@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('度言批量拨打')" />
+</head>
+<body>
+<input type="hidden" id="soundRecordingUrl" th:value="${soundRecordingUrl}">
+<input type="hidden" id="apikey"  th:value="${apikey}">
+<script id="dySdkScript" type="text/javascript" ctype="mini" src='https://cti.duyansoft.com/syui/dysdk/dysdk2.min.js' th:url="'https://cti.duyansoft.com/ctibar.html?noNumberInput=true&noOpBtn=true&account_id='+${accountId}+'&token='+${dytoken}" ></script>
+<th:block th:include="include :: footer" />
+<script type="text/javascript">
+    var duyanSdk = {};
+    var phone = [[${phone}]];
+    //日期函数
+    function getDate(str) {
+        var oDate = new Date(str),
+            oYear = oDate.getFullYear(),
+            oMonth = oDate.getMonth()+1,
+            oDay = oDate.getDate(),
+            oHour = oDate.getHours(),
+            oMin = oDate.getMinutes(),
+            oSen = oDate.getSeconds(),
+            oTime = oYear +'-'+ addZero(oMonth) +'-'+ addZero(oDay) +' '+ addZero(oHour) +':'+
+                addZero(oMin) +':'+addZero(oSen);
+        return oTime;
+    }
+    //补零操作
+    function addZero(num){
+        if(parseInt(num) < 10){
+            num = '0'+num;
+        }
+        return num;
+    }
+    //度言初始化函数
+    function dyInit(){
+        DYSDK.ready(function () {
+            duyanSdk.callme = function (tleNumber) {
+                DYSDK.call(tleNumber, function () {
+                }, '呼叫');
+            }
+        });
+        DYSDK.init();
+        // 接通电话的回调函数，返回电话号码等信息
+        DYSDK.callConfirm(function (data) {
+            console.log(data)
+            if (!data.uuid) {
+                alert("不存在uuid");
+            }
+            window.parent.jietong();
+        });
+        // 拨打电话失败的回调函数，返回电话号码等信息
+        DYSDK.callFail(function (data) {
+            if (!data.uuid) {
+                alert("不存在uuid");
+            }
+            window.parent.duyanNo("");
+        });
+        // 电话结束的回调函数，返回电话号码等信息
+        DYSDK.callEnd(function (data) {
+            console.log(data)
+            if (!data.uuid) {
+                alert("不存在uuid");
+            }
+            window.parent.agentIsCalling = false;
+            //根据返回的uuid获取通过记录 同步方法
+            var startTime;
+            var endTime;
+            var recordDuration;
+            $.ajax
+            (
+                {
+                    url: ctx + "duyan/info/call_log",    //请求的url地址
+                    dataType: "json",   //返回格式为json
+                    async: false, //请求是否异步，默认为异步，这也是ajax重要特性
+                    type: "post",   //请求方式
+                    data:
+                        {
+                            uuid: data.uuid
+                        },
+                    success: function (req) {
+                        //请求成功时处理
+                        startTime = getDate(req.data.call_time);
+                        endTime = getDate(req.data.call_time + req.data.duration * 1000 );
+                        recordDuration = req.data.duration * 1000;
+                    },
+                    error: function (e) {
+                        //请求出错处理
+                        layer.msg('获取读取通话时间出错', { icon: 5 });
+                    }
+                }
+            );
+            // 更新电催记录
+            var callRecordId = window.parent.callRecordId;
+            var currentCall = window.parent.currentCall;
+            debugger;
+            var soundRecordingUrl = $("#soundRecordingUrl").val();
+            var apikey = $("#apikey").val();
+            $.ajax
+            (
+                {
+                    url: window.parent.ctx + "collect/task/addCallRecord",    //请求的url地址
+                    dataType: "json",   //返回格式为json
+                    async: false, //请求是否异步，默认为异步，这也是ajax重要特性
+                    type: "post",   //请求方式
+                    data:
+                        {
+                            id: callRecordId,
+                            contactName: currentCall.contactName,
+                            phone: phone,
+                            contactRelation: currentCall.contactRelation,
+                            callSign: 'R01',
+                            callResult: '已接听',
+                            callStartTime: startTime,
+                            callEndTime: endTime,
+                            callLen: recordDuration,
+                            callRadioLocation: soundRecordingUrl+'?apikey='+apikey+'&call_uuid=' + data.uuid,
+                            caseNo: currentCall.caseNo,
+                            remark: '已接听',
+                            importBatchNo: currentCall.importBatchNo,
+                            orgId: currentCall.orgId,
+                            // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
+                            sendRadioCheck: 1,
+                            platform: 'DY'
+                        },
+                    success: function (data) {
+                        //请求成功
+                        if (data.status != 200) {
+                            layer.msg('更新电催记录失败', { icon: 5 });
+                        }
+                    },
+                    error: function (e) {
+                        //请求出错处理
+                        layer.msg('更新电催记录失败', { icon: 5 });
+                    }
+                }
+            );
+            window.parent.duyanNo("1");
+        });
+    }
+    //调用 度言初始化函数
+    dyInit();
+    //延迟两秒执行，确保度言组件初始化完毕
+    window.setTimeout(function(){
+       duyanSdk.callme(phone);
+    },2000);
+</script>
+</body>
+</html>

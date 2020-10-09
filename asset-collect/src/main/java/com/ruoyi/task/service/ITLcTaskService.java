@@ -195,6 +195,7 @@ public interface ITLcTaskService {
      * @return
      */
     List<TLcTask> selectMyTaskList(TLcTask tLcTask);
+    List<TLcTask> selectMyTaskList2(TLcTask tLcTask);
 
     /**
      * 查询用户信息
@@ -308,6 +309,7 @@ public interface ITLcTaskService {
     Integer selectTaskCount(Date createTime, Date modifyTime);
 
     Map<String, BigDecimal> selectTotalCountMoney(TLcTask tLcTask);
+    Map<String, BigDecimal> selectTotalCountMoney2(TLcTask tLcTask);
 
     Response sendRobotApply(String taskIds);
 

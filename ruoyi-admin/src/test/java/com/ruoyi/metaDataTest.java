@@ -1,13 +1,8 @@
 package com.ruoyi;
 
-import com.ruoyi.assetspackage.domain.TLiCaseInfo;
-import com.ruoyi.assetspackage.domain.TLiContractInfo;
-import com.ruoyi.assetspackage.domain.TLiTelInfo;
-import com.ruoyi.assetspackage.domain.TLiTelList;
-import com.ruoyi.assetspackage.mapper.TLiCaseInfoMapper;
-import com.ruoyi.assetspackage.mapper.TLiContractInfoMapper;
-import com.ruoyi.assetspackage.mapper.TLiTelInfoMapper;
-import com.ruoyi.assetspackage.mapper.TLiTelListMapper;
+import com.github.pagehelper.PageHelper;
+import com.ruoyi.assetspackage.domain.*;
+import com.ruoyi.assetspackage.mapper.*;
 import com.ruoyi.assetspackage.util.AESUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -16,6 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.Writer;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -107,34 +106,95 @@ public class metaDataTest {
      */
     @Test
     public void DataDeCodeTest4(){
-        try {
-            //查询电话表元数据
-            List<TLiTelInfo> tLiTelInfos = TLiTelInfoMapper.selectTLiTelInfoList(new TLiTelInfo());
-            //循环解密
-            for (TLiTelInfo tLiTelInfo : tLiTelInfos) {
-                String telephone = tLiTelInfo.getTelephone();
-                telephone = AESUtil.decrypt(telephone);
-                tLiTelInfo.setTelephone(telephone);
-                //更新元数据
-                TLiTelInfoMapper.updateTLiTelInfo(tLiTelInfo);
+            System.out.println("开始处理");
+            int size = 10000;
+            String fg = "|";
+            String path = "d:/";
+            String fileName = "1";
+            String tableName = "t_li_tel_info";
+            String hc = "\r\n";
+            int k = 0;
+            ///解密 AESUtil.decrypt(telephone);
+           // String title = "tuid|case_tuid|cust_no|tel_type|telephone|cust_name|cust_name_pinyin|relation|data_source|last_tel_code|last_call_time|last_call_user|stop_flag|shi_lian|created|createdby|updated|updatedby|import_batch|recheck_date|import_tuid|postcode|address|max_tel_code|appoint_time|effective_flag|sign_status|stress|display_flag|weight|dial_count\n";
+            for(int i=1;i<2;i++){
+                try {
+                    //查询电话表元数据
+                    long start = System.currentTimeMillis();
+                    List<TLiTelInfo> tLiTelInfos = null;//TLiTelInfoMapper.selectTLiTelInfoList(tableName);
+                    //System.out.println("数据库获取到数据----"+tLiTelInfos.size());
+                    System.out.println("数据库获取到数据----，所用时长:"+(System.currentTimeMillis() - start));
+                    //循环解密
+                    File file =new File(path+fileName+".csv");
+                    Writer out =new FileWriter(file);
+                    StringBuilder   srr = new StringBuilder();
+                    //out.write(title);
+                    for (TLiTelInfo to : tLiTelInfos) {
+                        StringBuilder sr = new StringBuilder();
+                        sr.append(to.getTuid()+fg);
+                        sr.append(to.getCaseTuid()+fg);
+                        sr.append(to.getCustNo()+fg);
+                        sr.append(to.getTelType()+fg);
+                        sr.append(AESUtil.decrypt(to.getTelephone())+fg);
+                        sr.append(to.getCustName()+fg);
+                        sr.append(to.getCustNamePinyin()+fg);
+                        sr.append(to.getRelation()+fg);
+                        sr.append(to.getDataSource()+fg);
+                        sr.append(to.getLastTelCode()+fg);
+                        sr.append(to.getLastCallTime()+fg);
+                        sr.append(to.getLastCallUser()+fg);
+                        sr.append(to.getStopFlag()+fg);
+                        sr.append(to.getShiLian()+fg);
+                        sr.append(to.getCreated()+fg);
+                        sr.append(to.getCreatedby()+fg);
+                        sr.append(to.getUpdated()+fg);
+                        sr.append(to.getUpdatedby()+fg);
+                        sr.append(to.getImportBatch()+fg);
+                        sr.append(to.getRecheckDate()+fg);
+                        sr.append(to.getImportTuid()+fg);
+                        sr.append(to.getPostcode()+fg);
+                        sr.append(to.getAddress()+fg);
+                        sr.append(to.getMaxTelCode()+fg);
+                        sr.append(to.getAppointTime()+fg);
+                        sr.append(to.getEffectiveFlag()+fg);
+                        sr.append(to.getSignStatus()+fg);
+                        sr.append(to.getStress()+fg);
+                        sr.append(to.getDisplayFlag()+fg);
+                        sr.append(to.getWeight()+fg);
+                        k++;
+                        if(k == tLiTelInfos.size()){
+                            hc="";
+                        }
+                        sr.append(to.getDialCount()+hc);
+                        out.write(sr.toString().replace("null",""));
+                    }
+                   // out.flush();
+                    out.close();
+                    System.out.println("第"+i+"次，所用时长:"+(System.currentTimeMillis() - start));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
+
+
+
+
+
+
+
+
 
 
     public static void main(String[] args) {
-        TLiContractInfo tLiContractInfo = new TLiContractInfo();
-        Double debt = 19.12;
-        String debt1 = AESUtil.encrypt(String.valueOf(debt));
-        System.out.println("加密后："+debt1);
-        String debt2 = AESUtil.decrypt(debt1);
-        System.out.println("解密后："+debt2);
-        tLiContractInfo.setDebt(debt2);
-        System.out.println("重新赋值后："+tLiContractInfo);
-
+//        TLiContractInfo tLiContractInfo = new TLiContractInfo();
+//        Double debt = 19.12;
+//        String debt1 = AESUtil.encrypt(String.valueOf(debt));
+//        System.out.println("加密后："+debt1);
+//        String debt2 = AESUtil.decrypt(debt1);
+//        System.out.println("解密后："+debt2);
+//        tLiContractInfo.setDebt(debt2);
+//        System.out.println("重新赋值后："+tLiContractInfo);
     }
-
 
 }

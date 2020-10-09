@@ -1,6 +1,7 @@
 package com.ruoyi.task.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.agent.domain.ExtPhone;
 import com.ruoyi.agent.service.IExtPhoneService;
 import com.ruoyi.assetspackage.domain.CurAssetsRepaymentPackage;
@@ -12,6 +13,7 @@ import com.ruoyi.caseConfig.service.ITLcAllocatCaseConfigService;
 import com.ruoyi.columnQuery.domain.TLcColumnQuery;
 import com.ruoyi.columnQuery.service.ITLcColumnQueryService;
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.config.DuYanConfig;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.PageDomain;
@@ -21,6 +23,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.enums.TableEnum;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.RestTemplateUtil;
+import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.custom.domain.TLcCustContact;
 import com.ruoyi.custom.service.ITLcCustContactService;
@@ -50,6 +53,7 @@ import com.ruoyi.task.service.ITLcSelectRecordService;
 import com.ruoyi.task.service.ITLcTaskService;
 import com.ruoyi.utils.CloseCaseUser;
 import com.ruoyi.utils.DataPermissionUtil;
+import com.ruoyi.utils.DuyanUtil;
 import com.ruoyi.utils.Response;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -114,6 +118,8 @@ public class TLcTaskController extends BaseController {
     private IOrgPackageService orgPackageService;
     @Autowired
     private ITLcRobotBlackService robotBlackService;
+    @Autowired
+    private DuYanConfig duYanConfig;
 
 
     @RequiresPermissions("collect:task:myTask")
@@ -190,8 +196,7 @@ public class TLcTaskController extends BaseController {
      *
      * @return
      */
-//    @RequiresPermissions("collect:task:collJob")
-    @GetMapping(value = "/collJobHis")
+   /* @GetMapping(value = "/collJobHis")
     public String toCollJobHis(TLcTask tLcTask, ModelMap modelMap) {
 //        modelMap.put("ownerId", this.tLcTaskService.selectTaskByCaseNo(tLcTask.getCaseNo()).getOwnerId());
 //        modelMap.put("orgId", this.tLcTaskService.selectTaskByCaseNo(tLcTask.getCaseNo()).getOrgId());
@@ -201,6 +206,26 @@ public class TLcTaskController extends BaseController {
         modelMap.put("importBatchNo", tLcTask.getImportBatchNo());
         modelMap.put("certificateNo", tLcTask.getCertificateNo());
         return prefix + "/collJobHis";
+    }*/
+    @GetMapping(value = "/collJobHis")
+    public String toCollJobHis(TLcTask tLcTask, String currentImportBatchNo, String currentCaseNo, ModelMap modelMap,String callCodeHistoryListStr,String toType) {
+        if(StringUtils.isNotEmpty(callCodeHistoryListStr)&& !"null".equals(callCodeHistoryListStr)){
+            tLcTask.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
+        }
+        modelMap.put("tLcTask", tLcTask);
+        modelMap.put("currentCaseNo", currentCaseNo);
+        modelMap.put("currentImportBatchNo", currentImportBatchNo);
+        modelMap.put("callCodeHistoryListStr", callCodeHistoryListStr);
+
+        // 查询总的金额及总的件数
+        if("1".equals(toType)){//再催页面
+            tLcTask.setFlag1("1");
+            tLcTask.setFlag2("3");
+        }
+        Map<String, BigDecimal> resultMap = this.tLcTaskService.selectTotalCountMoney2(tLcTask);
+        modelMap.put("totalCaseNum", resultMap.get("totalCaseNum"));
+        modelMap.put("totalArrears", resultMap.get("totalArrears"));
+        return prefix + "/collJobHis2";
     }
 
     /**
@@ -254,6 +279,35 @@ public class TLcTaskController extends BaseController {
         Map<String, BigDecimal> resultMap = this.tLcTaskService.selectTotalCountMoney(tLcTask);
         modelMap.put("totalCaseNum", resultMap.get("totalCaseNum"));
         modelMap.put("totalArrears", resultMap.get("totalArrears"));
+        if("DY".equals(ShiroUtils.getSysUser().getPlatform())){
+            Long userId;
+            try {
+                userId = ShiroUtils.getUserId();
+            } catch (Exception e) {
+                log.error("获取用户信息失败");
+                throw new RuntimeException("获取用户信息失败");
+            }
+            ExtPhone extPhone = new ExtPhone();
+            extPhone.setIsused("0");
+            extPhone.setSeatId(Integer.valueOf(String.valueOf(userId)));
+            //暂时写平安，后续从session里面取
+            extPhone.setCallPlatform(ShiroUtils.getSysUser().getPlatform());
+            List<ExtPhone> list = extPhoneService.selectExtPhoneList(extPhone);
+            if (list != null && list.size() > 0) {
+                // 分机号码
+                modelMap.put("extPhone", list.get(0).getAgentid());
+                String accountId = list.get(0).getAgentid();
+                try{
+                    modelMap.put("dytoken", DuyanUtil.getToken(duYanConfig.getTokenUrl(),accountId,duYanConfig.getApikey()));
+                    modelMap.put("accountId",accountId);
+                    modelMap.put("soundRecordingUrl",duYanConfig.getSoundRecordingUrl());
+                    modelMap.put("apikey",duYanConfig.getApikey());
+                }catch (Exception e){
+                    logger.info("度言获取token失败accountId="+accountId);
+                    e.printStackTrace();;
+                }
+            }
+        }
         logger.info("催收作业页面查询数据结束、进入页面sessionId="+sessionId);
         return prefix + "/collJob";
     }
@@ -443,6 +497,22 @@ public class TLcTaskController extends BaseController {
         String isAsc = (String) request.getSession().getAttribute("isAsc");
         startPageCustom(Integer.valueOf(request.getParameter("startNum")), Integer.valueOf(request.getParameter("endNum")), orderByColumn, isAsc);
         List<TLcTask> list = tLcTaskService.selectMyTaskList(tLcTask);
+        logger.info("查询客户列表结束ownerId="+tLcTask.getOwnerId());
+        return list;
+    }
+
+    @PostMapping("/findTaskByOwner2")
+    @ResponseBody
+    public List<TLcTask> findTaskByOwner2(TLcTask tLcTask,HttpServletRequest request) {
+        logger.info("查询客户列表开始ownerId="+tLcTask.getOwnerId());
+        String callCodeHistoryListStr = request.getParameter("callCodeHistoryListStr");//历史电话码
+        if(StringUtils.isNotEmpty(callCodeHistoryListStr) && !"null".equals(callCodeHistoryListStr)){
+            tLcTask.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
+        }
+        String orderByColumn = (String) request.getSession().getAttribute("orderByColumn");
+        String isAsc = (String) request.getSession().getAttribute("isAsc");
+        startPageCustom(Integer.valueOf(request.getParameter("startNum")), Integer.valueOf(request.getParameter("endNum")), orderByColumn, isAsc);
+        List<TLcTask> list = tLcTaskService.selectMyTaskList2(tLcTask);
         logger.info("查询客户列表结束ownerId="+tLcTask.getOwnerId());
         return list;
     }

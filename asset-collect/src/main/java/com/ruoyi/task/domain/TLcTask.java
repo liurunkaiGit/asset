@@ -498,4 +498,8 @@ public class TLcTask extends BaseEntity {
     //百融号码状态
     private String phoneStatus;
 
+    //标识字段只有再催页面的时候传值
+    private String flag1;//对应allotType
+    private String flag2;//对应taskStatus
+
 }

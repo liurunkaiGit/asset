@@ -1,0 +1,784 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.TLiDjXyMapper">
+    
+    <resultMap type="TLiDjXy" id="TLiDjXyResult">
+        <result property="tuid"    column="tuid"    />
+        <result property="importBatch"    column="import_batch"    />
+        <result property="queue"    column="queue"    />
+        <result property="status"    column="status"    />
+        <result property="isStop"    column="is_stop"    />
+        <result property="stopTime"    column="stop_time"    />
+        <result property="outTime"    column="out_time"    />
+        <result property="created"    column="created"    />
+        <result property="createdby"    column="createdby"    />
+        <result property="updated"    column="updated"    />
+        <result property="updatedby"    column="updatedby"    />
+        <result property="caseTuid"    column="case_tuid"    />
+        <result property="caseNo"    column="case_no"    />
+        <result property="debt"    column="debt"    />
+        <result property="loan"    column="loan"    />
+        <result property="importTuid"    column="import_tuid"    />
+        <result property="overdueDays"    column="overdue_days"    />
+        <result property="outType"    column="out_type"    />
+        <result property="name"    column="name"    />
+        <result property="cardNumber"    column="card_number"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="city"    column="city"    />
+        <result property="hands"    column="hands"    />
+        <result property="assignBalUsa"    column="assign_bal_usa"    />
+        <result property="cycle"    column="cycle"    />
+        <result property="minPay"    column="min_pay"    />
+        <result property="lastPayment"    column="last_payment"    />
+        <result property="email"    column="email"    />
+        <result property="truns"    column="truns"    />
+        <result property="notes"    column="notes"    />
+        <result property="assignDpd"    column="assign_dpd"    />
+        <result property="amtPrinciple"    column="amt_principle"    />
+        <result property="amtEppbal"    column="amt_eppbal"    />
+        <result property="amtCrelmt"    column="amt_crelmt"    />
+        <result property="lendingline"    column="lendingline"    />
+        <result property="mpLimit"    column="mp_limit"    />
+        <result property="mpRemyPpl"    column="mp_remy_ppl"    />
+        <result property="accountId"    column="account_id"    />
+        <result property="productName1"    column="product_name1"    />
+        <result property="sourcetype"    column="sourcetype"    />
+        <result property="branch"    column="branch"    />
+        <result property="assignDate"    column="assign_date"    />
+        <result property="assignBalRmb"    column="assign_bal_rmb"    />
+        <result property="expireDate"    column="expire_date"    />
+        <result property="assignBucket"    column="assign_bucket"    />
+        <result property="lastPaymentDate"    column="last_payment_date"    />
+        <result property="datOpen"    column="dat_open"    />
+        <result property="orgCodeValue"    column="org_code_value"    />
+        <result property="assignDpdOld"    column="assign_dpd_old"    />
+        <result property="assignBucketOld"    column="assign_bucket_old"    />
+        <result property="assignBalRmbOld"    column="assign_bal_rmb_old"    />
+        <result property="assignBalUsaOld"    column="assign_bal_usa_old"    />
+        <result property="amtPrincipleOld"    column="amt_principle_old"    />
+        <result property="lastPaymentOld"    column="last_payment_old"    />
+        <result property="lastPaymentDateOld"    column="last_payment_date_old"    />
+        <result property="minPayOld"    column="min_pay_old"    />
+        <result property="outsource"    column="outsource"    />
+        <result property="outsourceBatch"    column="outsource_batch"    />
+        <result property="monthType"    column="month_type"    />
+        <result property="accountType"    column="account_type"    />
+        <result property="accountSubcontract"    column="account_subcontract"    />
+        <result property="source"    column="source"    />
+        <result property="outAccountStatus"    column="out_account_status"    />
+        <result property="outForeignDebt"    column="out_foreign_debt"    />
+        <result property="outFee"    column="out_fee"    />
+        <result property="outCost"    column="out_cost"    />
+        <result property="outCapital"    column="out_capital"    />
+        <result property="outCapitalPart"    column="out_capital_part"    />
+        <result property="outCapitalTotal"    column="out_capital_total"    />
+        <result property="outOverdue"    column="out_overdue"    />
+        <result property="outDate"    column="out_date"    />
+        <result property="outDateEnd"    column="out_date_end"    />
+        <result property="nameEn"    column="name_en"    />
+        <result property="memo1"    column="memo_1"    />
+        <result property="memo2"    column="memo_2"    />
+        <result property="memo3"    column="memo_3"    />
+        <result property="statisticsDate"    column="statistics_date"    />
+        <result property="transDate"    column="trans_date"    />
+        <result property="sellDate"    column="sell_date"    />
+        <result property="accountLevel"    column="account_level"    />
+        <result property="accountTypeDetail"    column="account_type_detail"    />
+        <result property="openDate"    column="open_date"    />
+        <result property="accountLimit"    column="account_limit"    />
+        <result property="foreignDebt"    column="foreign_debt"    />
+        <result property="webApply"    column="web_apply"    />
+        <result property="billDate"    column="bill_date"    />
+        <result property="accountBalance"    column="account_balance"    />
+        <result property="capitalTotal"    column="capital_total"    />
+        <result property="capitalTotalDebt"    column="capital_total_debt"    />
+        <result property="fee"    column="fee"    />
+        <result property="cost"    column="cost"    />
+        <result property="capital"    column="capital"    />
+        <result property="capitalTotalPart"    column="capital_total_part"    />
+        <result property="feePart"    column="fee_part"    />
+        <result property="costPart"    column="cost_part"    />
+        <result property="capitalPart"    column="capital_part"    />
+        <result property="nomalUncapital"    column="nomal_uncapital"    />
+        <result property="largeUncapital"    column="large_uncapital"    />
+        <result property="accountUnfee"    column="account_unfee"    />
+        <result property="accountLatefee"    column="account_latefee"    />
+        <result property="accountUnservicefee"    column="account_unservicefee"    />
+        <result property="fServicefee"    column="f_servicefee"    />
+        <result property="fServicefeeDay"    column="f_servicefee_day"    />
+        <result property="fPenalty"    column="f_penalty"    />
+        <result property="fServicefeeFenq"    column="f_servicefee_fenq"    />
+        <result property="fFeeYear"    column="f_fee_year"    />
+        <result property="overdue1"    column="overdue_1"    />
+        <result property="overdue2"    column="overdue_2"    />
+        <result property="overdueRecent"    column="overdue_recent"    />
+        <result property="overduePhase"    column="overdue_phase"    />
+        <result property="down0Pay"    column="down_0_pay"    />
+        <result property="down1Pay"    column="down_1_pay"    />
+        <result property="down2Pay"    column="down_2_pay"    />
+        <result property="down3Pay"    column="down_3_pay"    />
+        <result property="outPay"    column="out_pay"    />
+        <result property="payCurmon"    column="pay_curmon"    />
+        <result property="payDateLast"    column="pay_date_last"    />
+        <result property="payLast"    column="pay_last"    />
+        <result property="outLocalPay"    column="out_local_pay"    />
+        <result property="outForeignPay"    column="out_foreign_pay"    />
+        <result property="outTotalPay"    column="out_total_pay"    />
+        <result property="curmonLocalPay"    column="curmon_local_pay"    />
+        <result property="curmonForeignPay"    column="curmon_foreign_pay"    />
+        <result property="curmonTotalPay"    column="curmon_total_pay"    />
+        <result property="curdayLocalPay"    column="curday_local_pay"    />
+        <result property="curdayForeignPay"    column="curday_foreign_pay"    />
+        <result property="curdayTotalPay"    column="curday_total_pay"    />
+        <result property="accountStatusNum"    column="account_status_num"    />
+        <result property="outDayNum"    column="out_day_num"    />
+        <result property="isPay"    column="is_pay"    />
+        <result property="outDayaverPay"    column="out_dayaver_pay"    />
+        <result property="curmonDay"    column="curmon_day"    />
+        <result property="curmonDayaverPay"    column="curmon_dayaver_pay"    />
+        <result property="systemSign"    column="system_sign"    />
+        <result property="businessSign"    column="business_sign"    />
+        <result property="signType"    column="sign_type"    />
+        <result property="signMeaning"    column="sign_meaning"    />
+        <result property="signDate"    column="sign_date"    />
+        <result property="totalBalance"    column="total_balance"    />
+        <result property="org1"    column="org_1"    />
+        <result property="org2"    column="org_2"    />
+        <result property="company"    column="company"    />
+        <result property="industry"    column="industry"    />
+        <result property="companyAddr"    column="company_addr"    />
+        <result property="postcode"    column="postcode"    />
+        <result property="homeAddr"    column="home_addr"    />
+        <result property="homePostcode"    column="home_postcode"    />
+        <result property="residenceAddress"    column="residence_address"    />
+        <result property="residencePostcode"    column="residence_postcode"    />
+        <result property="houseAddr"    column="house_addr"    />
+        <result property="housePostcode"    column="house_postcode"    />
+        <result property="industryCategory"    column="industry_category"    />
+        <result property="industryKind"    column="industry_kind"    />
+        <result property="custName"    column="cust_name"    />
+        <result property="mobile"    column="mobile"    />
+        <result property="cancelDate"    column="cancel_date"    />
+        <result property="overdueRecentInit"    column="overdue_recent_init"    />
+        <result property="payState"    column="pay_state"    />
+        <result property="borrowId"    column="borrow_id"    />
+        <result property="wbbd"    column="wbbd"    />
+        <result property="dataTime"    column="data_time"    />
+        <result property="csNode"    column="cs_node"    />
+        <result property="wbCompany"    column="wb_company"    />
+        <result property="originalManager"    column="original_manager"    />
+        <result property="manager"    column="manager"    />
+        <result property="accountNumber"    column="account_number"    />
+        <result property="newProductName"    column="new_product_name"    />
+        <result property="payType"    column="pay_type"    />
+        <result property="collectionDateEnd"    column="collection_date_end"    />
+        <result property="collectionDate"    column="collection_date"    />
+        <result property="productName"    column="product_name"    />
+        <result property="overdueDate"    column="overdue_date"    />
+        <result property="channelName"    column="channel_name"    />
+        <result property="recoveryTime"    column="recovery_time"    />
+        <result property="allocationTime"    column="allocation_time"    />
+        <result property="orderNumber"    column="order_number"    />
+        <result property="city2"    column="city_2"    />
+        <result property="contractId"    column="contract_id"    />
+        <result property="interestPenalty"    column="interest_penalty"    />
+        <result property="latefee"    column="latefee"    />
+        <result property="overdueServicefee"    column="overdue_servicefee"    />
+        <result property="city1"    column="city_1"    />
+        <result property="debtNo"    column="debt_no"    />
+        <result property="debtInit"    column="debt_init"    />
+    </resultMap>
+
+    <sql id="selectTLiDjXyVo">
+        select new_product_name,tuid, import_batch, queue, status, is_stop, stop_time, out_time, created, createdby, updated, updatedby, case_tuid, case_no, debt, loan, import_tuid, overdue_days, out_type, name, card_number, company_name, city, hands, assign_bal_usa, cycle, min_pay, last_payment, email, truns, notes, assign_dpd, amt_principle, amt_eppbal, amt_crelmt, lendingline, mp_limit, mp_remy_ppl, account_id, product_name1, sourcetype, branch, assign_date, assign_bal_rmb, expire_date, assign_bucket, last_payment_date, dat_open, org_code_value, assign_dpd_old, assign_bucket_old, assign_bal_rmb_old, assign_bal_usa_old, amt_principle_old, last_payment_old, last_payment_date_old, min_pay_old, outsource, outsource_batch, month_type, account_type, account_subcontract, source, out_account_status, out_foreign_debt, out_fee, out_cost, out_capital, out_capital_part, out_capital_total, out_overdue, out_date, out_date_end, name_en, memo_1, memo_2, memo_3, statistics_date, trans_date, sell_date, account_level, account_type_detail, open_date, account_limit, foreign_debt, web_apply, bill_date, account_balance, capital_total, capital_total_debt, fee, cost, capital, capital_total_part, fee_part, cost_part, capital_part, nomal_uncapital, large_uncapital, account_unfee, account_latefee, account_unservicefee, f_servicefee, f_servicefee_day, f_penalty, f_servicefee_fenq, f_fee_year, overdue_1, overdue_2, overdue_recent, overdue_phase, down_0_pay, down_1_pay, down_2_pay, down_3_pay, out_pay, pay_curmon, pay_date_last, pay_last, out_local_pay, out_foreign_pay, out_total_pay, curmon_local_pay, curmon_foreign_pay, curmon_total_pay, curday_local_pay, curday_foreign_pay, curday_total_pay, account_status_num, out_day_num, is_pay, out_dayaver_pay, curmon_day, curmon_dayaver_pay, system_sign, business_sign, sign_type, sign_meaning, sign_date, total_balance, org_1, org_2, company, industry, company_addr, postcode, home_addr, home_postcode, residence_address, residence_postcode, house_addr, house_postcode, industry_category, industry_kind, cust_name, mobile, cancel_date, overdue_recent_init, pay_state, borrow_id, wbbd, data_time, cs_node, wb_company, original_manager, manager, account_number, product_name, pay_type, collection_date_end, collection_date, product_name, overdue_date, channel_name, recovery_time, allocation_time, order_number, city_2, contract_id, interest_penalty, latefee, overdue_servicefee, city_1, debt_no, debt_init from t_li_dj_xy
+    </sql>
+
+    <select id="selectTLiDjXyList" parameterType="TLiDjXy" resultMap="TLiDjXyResult">
+        <include refid="selectTLiDjXyVo"/>
+    </select>
+    
+    <select id="selectTLiDjXyById" parameterType="String" resultMap="TLiDjXyResult">
+        <include refid="selectTLiDjXyVo"/>
+        where tuid = #{tuid}
+    </select>
+        
+    <insert id="insertTLiDjXy" parameterType="TLiDjXy">
+        insert into t_li_dj_xy
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tuid != null  and tuid != ''">tuid,</if>
+            <if test="importBatch != null  and importBatch != ''">import_batch,</if>
+            <if test="queue != null  and queue != ''">queue,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="isStop != null  and isStop != ''">is_stop,</if>
+            <if test="stopTime != null  and stopTime != ''">stop_time,</if>
+            <if test="outTime != null  and outTime != ''">out_time,</if>
+            <if test="created != null  and created != ''">created,</if>
+            <if test="createdby != null  and createdby != ''">createdby,</if>
+            <if test="updated != null  and updated != ''">updated,</if>
+            <if test="updatedby != null  and updatedby != ''">updatedby,</if>
+            <if test="caseTuid != null  and caseTuid != ''">case_tuid,</if>
+            <if test="caseNo != null  and caseNo != ''">case_no,</if>
+            <if test="debt != null  and debt != ''">debt,</if>
+            <if test="loan != null  and loan != ''">loan,</if>
+            <if test="importTuid != null  and importTuid != ''">import_tuid,</if>
+            <if test="overdueDays != null  and overdueDays != ''">overdue_days,</if>
+            <if test="outType != null  and outType != ''">out_type,</if>
+            <if test="name != null  and name != ''">name,</if>
+            <if test="cardNumber != null  and cardNumber != ''">card_number,</if>
+            <if test="companyName != null  and companyName != ''">company_name,</if>
+            <if test="city != null  and city != ''">city,</if>
+            <if test="hands != null  and hands != ''">hands,</if>
+            <if test="assignBalUsa != null  and assignBalUsa != ''">assign_bal_usa,</if>
+            <if test="cycle != null  and cycle != ''">cycle,</if>
+            <if test="minPay != null  and minPay != ''">min_pay,</if>
+            <if test="lastPayment != null  and lastPayment != ''">last_payment,</if>
+            <if test="email != null  and email != ''">email,</if>
+            <if test="truns != null  and truns != ''">truns,</if>
+            <if test="notes != null  and notes != ''">notes,</if>
+            <if test="assignDpd != null  and assignDpd != ''">assign_dpd,</if>
+            <if test="amtPrinciple != null  and amtPrinciple != ''">amt_principle,</if>
+            <if test="amtEppbal != null  and amtEppbal != ''">amt_eppbal,</if>
+            <if test="amtCrelmt != null  and amtCrelmt != ''">amt_crelmt,</if>
+            <if test="lendingline != null  and lendingline != ''">lendingline,</if>
+            <if test="mpLimit != null  and mpLimit != ''">mp_limit,</if>
+            <if test="mpRemyPpl != null  and mpRemyPpl != ''">mp_remy_ppl,</if>
+            <if test="accountId != null  and accountId != ''">account_id,</if>
+            <if test="productname != null  and productname != ''">productname,</if>
+            <if test="sourcetype != null  and sourcetype != ''">sourcetype,</if>
+            <if test="branch != null  and branch != ''">branch,</if>
+            <if test="assignDate != null  and assignDate != ''">assign_date,</if>
+            <if test="assignBalRmb != null  and assignBalRmb != ''">assign_bal_rmb,</if>
+            <if test="expireDate != null  and expireDate != ''">expire_date,</if>
+            <if test="assignBucket != null  and assignBucket != ''">assign_bucket,</if>
+            <if test="lastPaymentDate != null  and lastPaymentDate != ''">last_payment_date,</if>
+            <if test="datOpen != null  and datOpen != ''">dat_open,</if>
+            <if test="orgCodeValue != null  and orgCodeValue != ''">org_code_value,</if>
+            <if test="assignDpdOld != null  and assignDpdOld != ''">assign_dpd_old,</if>
+            <if test="assignBucketOld != null  and assignBucketOld != ''">assign_bucket_old,</if>
+            <if test="assignBalRmbOld != null  and assignBalRmbOld != ''">assign_bal_rmb_old,</if>
+            <if test="assignBalUsaOld != null  and assignBalUsaOld != ''">assign_bal_usa_old,</if>
+            <if test="amtPrincipleOld != null  and amtPrincipleOld != ''">amt_principle_old,</if>
+            <if test="lastPaymentOld != null  and lastPaymentOld != ''">last_payment_old,</if>
+            <if test="lastPaymentDateOld != null  and lastPaymentDateOld != ''">last_payment_date_old,</if>
+            <if test="minPayOld != null  and minPayOld != ''">min_pay_old,</if>
+            <if test="outsource != null  and outsource != ''">outsource,</if>
+            <if test="outsourceBatch != null  and outsourceBatch != ''">outsource_batch,</if>
+            <if test="monthType != null  and monthType != ''">month_type,</if>
+            <if test="accountType != null  and accountType != ''">account_type,</if>
+            <if test="accountSubcontract != null  and accountSubcontract != ''">account_subcontract,</if>
+            <if test="source != null  and source != ''">source,</if>
+            <if test="outAccountStatus != null  and outAccountStatus != ''">out_account_status,</if>
+            <if test="outForeignDebt != null  and outForeignDebt != ''">out_foreign_debt,</if>
+            <if test="outFee != null  and outFee != ''">out_fee,</if>
+            <if test="outCost != null  and outCost != ''">out_cost,</if>
+            <if test="outCapital != null  and outCapital != ''">out_capital,</if>
+            <if test="outCapitalPart != null  and outCapitalPart != ''">out_capital_part,</if>
+            <if test="outCapitalTotal != null  and outCapitalTotal != ''">out_capital_total,</if>
+            <if test="outOverdue != null  and outOverdue != ''">out_overdue,</if>
+            <if test="outDate != null  and outDate != ''">out_date,</if>
+            <if test="outDateEnd != null  and outDateEnd != ''">out_date_end,</if>
+            <if test="nameEn != null  and nameEn != ''">name_en,</if>
+            <if test="memo1 != null  and memo1 != ''">memo_1,</if>
+            <if test="memo2 != null  and memo2 != ''">memo_2,</if>
+            <if test="memo3 != null  and memo3 != ''">memo_3,</if>
+            <if test="statisticsDate != null  and statisticsDate != ''">statistics_date,</if>
+            <if test="transDate != null  and transDate != ''">trans_date,</if>
+            <if test="sellDate != null  and sellDate != ''">sell_date,</if>
+            <if test="accountLevel != null  and accountLevel != ''">account_level,</if>
+            <if test="accountTypeDetail != null  and accountTypeDetail != ''">account_type_detail,</if>
+            <if test="openDate != null  and openDate != ''">open_date,</if>
+            <if test="accountLimit != null  and accountLimit != ''">account_limit,</if>
+            <if test="foreignDebt != null  and foreignDebt != ''">foreign_debt,</if>
+            <if test="webApply != null  and webApply != ''">web_apply,</if>
+            <if test="billDate != null  and billDate != ''">bill_date,</if>
+            <if test="accountBalance != null  and accountBalance != ''">account_balance,</if>
+            <if test="capitalTotal != null  and capitalTotal != ''">capital_total,</if>
+            <if test="capitalTotalDebt != null  and capitalTotalDebt != ''">capital_total_debt,</if>
+            <if test="fee != null  and fee != ''">fee,</if>
+            <if test="cost != null  and cost != ''">cost,</if>
+            <if test="capital != null  and capital != ''">capital,</if>
+            <if test="capitalTotalPart != null  and capitalTotalPart != ''">capital_total_part,</if>
+            <if test="feePart != null  and feePart != ''">fee_part,</if>
+            <if test="costPart != null  and costPart != ''">cost_part,</if>
+            <if test="capitalPart != null  and capitalPart != ''">capital_part,</if>
+            <if test="nomalUncapital != null  and nomalUncapital != ''">nomal_uncapital,</if>
+            <if test="largeUncapital != null  and largeUncapital != ''">large_uncapital,</if>
+            <if test="accountUnfee != null  and accountUnfee != ''">account_unfee,</if>
+            <if test="accountLatefee != null  and accountLatefee != ''">account_latefee,</if>
+            <if test="accountUnservicefee != null  and accountUnservicefee != ''">account_unservicefee,</if>
+            <if test="fServicefee != null  and fServicefee != ''">f_servicefee,</if>
+            <if test="fServicefeeDay != null  and fServicefeeDay != ''">f_servicefee_day,</if>
+            <if test="fPenalty != null  and fPenalty != ''">f_penalty,</if>
+            <if test="fServicefeeFenq != null  and fServicefeeFenq != ''">f_servicefee_fenq,</if>
+            <if test="fFeeYear != null  and fFeeYear != ''">f_fee_year,</if>
+            <if test="overdue1 != null  and overdue1 != ''">overdue_1,</if>
+            <if test="overdue2 != null  and overdue2 != ''">overdue_2,</if>
+            <if test="overdueRecent != null  and overdueRecent != ''">overdue_recent,</if>
+            <if test="overduePhase != null  and overduePhase != ''">overdue_phase,</if>
+            <if test="down0Pay != null  and down0Pay != ''">down_0_pay,</if>
+            <if test="down1Pay != null  and down1Pay != ''">down_1_pay,</if>
+            <if test="down2Pay != null  and down2Pay != ''">down_2_pay,</if>
+            <if test="down3Pay != null  and down3Pay != ''">down_3_pay,</if>
+            <if test="outPay != null  and outPay != ''">out_pay,</if>
+            <if test="payCurmon != null  and payCurmon != ''">pay_curmon,</if>
+            <if test="payDateLast != null  and payDateLast != ''">pay_date_last,</if>
+            <if test="payLast != null  and payLast != ''">pay_last,</if>
+            <if test="outLocalPay != null  and outLocalPay != ''">out_local_pay,</if>
+            <if test="outForeignPay != null  and outForeignPay != ''">out_foreign_pay,</if>
+            <if test="outTotalPay != null  and outTotalPay != ''">out_total_pay,</if>
+            <if test="curmonLocalPay != null  and curmonLocalPay != ''">curmon_local_pay,</if>
+            <if test="curmonForeignPay != null  and curmonForeignPay != ''">curmon_foreign_pay,</if>
+            <if test="curmonTotalPay != null  and curmonTotalPay != ''">curmon_total_pay,</if>
+            <if test="curdayLocalPay != null  and curdayLocalPay != ''">curday_local_pay,</if>
+            <if test="curdayForeignPay != null  and curdayForeignPay != ''">curday_foreign_pay,</if>
+            <if test="curdayTotalPay != null  and curdayTotalPay != ''">curday_total_pay,</if>
+            <if test="accountStatusNum != null  and accountStatusNum != ''">account_status_num,</if>
+            <if test="outDayNum != null  and outDayNum != ''">out_day_num,</if>
+            <if test="isPay != null  and isPay != ''">is_pay,</if>
+            <if test="outDayaverPay != null  and outDayaverPay != ''">out_dayaver_pay,</if>
+            <if test="curmonDay != null  and curmonDay != ''">curmon_day,</if>
+            <if test="curmonDayaverPay != null  and curmonDayaverPay != ''">curmon_dayaver_pay,</if>
+            <if test="systemSign != null  and systemSign != ''">system_sign,</if>
+            <if test="businessSign != null  and businessSign != ''">business_sign,</if>
+            <if test="signType != null  and signType != ''">sign_type,</if>
+            <if test="signMeaning != null  and signMeaning != ''">sign_meaning,</if>
+            <if test="signDate != null  and signDate != ''">sign_date,</if>
+            <if test="totalBalance != null  and totalBalance != ''">total_balance,</if>
+            <if test="org1 != null  and org1 != ''">org_1,</if>
+            <if test="org2 != null  and org2 != ''">org_2,</if>
+            <if test="company != null  and company != ''">company,</if>
+            <if test="industry != null  and industry != ''">industry,</if>
+            <if test="companyAddr != null  and companyAddr != ''">company_addr,</if>
+            <if test="postcode != null  and postcode != ''">postcode,</if>
+            <if test="homeAddr != null  and homeAddr != ''">home_addr,</if>
+            <if test="homePostcode != null  and homePostcode != ''">home_postcode,</if>
+            <if test="residenceAddress != null  and residenceAddress != ''">residence_address,</if>
+            <if test="residencePostcode != null  and residencePostcode != ''">residence_postcode,</if>
+            <if test="houseAddr != null  and houseAddr != ''">house_addr,</if>
+            <if test="housePostcode != null  and housePostcode != ''">house_postcode,</if>
+            <if test="industryCategory != null  and industryCategory != ''">industry_category,</if>
+            <if test="industryKind != null  and industryKind != ''">industry_kind,</if>
+            <if test="custName != null  and custName != ''">cust_name,</if>
+            <if test="mobile != null  and mobile != ''">mobile,</if>
+            <if test="cancelDate != null  and cancelDate != ''">cancel_date,</if>
+            <if test="overdueRecentInit != null  and overdueRecentInit != ''">overdue_recent_init,</if>
+            <if test="payState != null  and payState != ''">pay_state,</if>
+            <if test="borrowId != null  and borrowId != ''">borrow_id,</if>
+            <if test="wbbd != null  and wbbd != ''">wbbd,</if>
+            <if test="dataTime != null  and dataTime != ''">data_time,</if>
+            <if test="csNode != null  and csNode != ''">cs_node,</if>
+            <if test="wbCompany != null  and wbCompany != ''">wb_company,</if>
+            <if test="originalManager != null  and originalManager != ''">original_manager,</if>
+            <if test="manager != null  and manager != ''">manager,</if>
+            <if test="accountNumber != null  and accountNumber != ''">account_number,</if>
+            <if test="newProductName != null  and newProductName != ''">new_product_name,</if>
+            <if test="payType != null  and payType != ''">pay_type,</if>
+            <if test="collectionDateEnd != null  and collectionDateEnd != ''">collection_date_end,</if>
+            <if test="collectionDate != null  and collectionDate != ''">collection_date,</if>
+            <if test="productName != null  and productName != ''">product_name,</if>
+            <if test="overdueDate != null  and overdueDate != ''">overdue_date,</if>
+            <if test="channelName != null  and channelName != ''">channel_name,</if>
+            <if test="recoveryTime != null  and recoveryTime != ''">recovery_time,</if>
+            <if test="allocationTime != null  and allocationTime != ''">allocation_time,</if>
+            <if test="orderNumber != null  and orderNumber != ''">order_number,</if>
+            <if test="city2 != null  and city2 != ''">city_2,</if>
+            <if test="contractId != null  and contractId != ''">contract_id,</if>
+            <if test="interestPenalty != null  and interestPenalty != ''">interest_penalty,</if>
+            <if test="latefee != null  and latefee != ''">latefee,</if>
+            <if test="overdueServicefee != null  and overdueServicefee != ''">overdue_servicefee,</if>
+            <if test="city1 != null  and city1 != ''">city_1,</if>
+            <if test="debtNo != null  and debtNo != ''">debt_no,</if>
+            <if test="debtInit != null  and debtInit != ''">debt_init,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tuid != null  and tuid != ''">#{tuid},</if>
+            <if test="importBatch != null  and importBatch != ''">#{importBatch},</if>
+            <if test="queue != null  and queue != ''">#{queue},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="isStop != null  and isStop != ''">#{isStop},</if>
+            <if test="stopTime != null  and stopTime != ''">#{stopTime},</if>
+            <if test="outTime != null  and outTime != ''">#{outTime},</if>
+            <if test="created != null  and created != ''">#{created},</if>
+            <if test="createdby != null  and createdby != ''">#{createdby},</if>
+            <if test="updated != null  and updated != ''">#{updated},</if>
+            <if test="updatedby != null  and updatedby != ''">#{updatedby},</if>
+            <if test="caseTuid != null  and caseTuid != ''">#{caseTuid},</if>
+            <if test="caseNo != null  and caseNo != ''">#{caseNo},</if>
+            <if test="debt != null  and debt != ''">#{debt},</if>
+            <if test="loan != null  and loan != ''">#{loan},</if>
+            <if test="importTuid != null  and importTuid != ''">#{importTuid},</if>
+            <if test="overdueDays != null  and overdueDays != ''">#{overdueDays},</if>
+            <if test="outType != null  and outType != ''">#{outType},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="cardNumber != null  and cardNumber != ''">#{cardNumber},</if>
+            <if test="companyName != null  and companyName != ''">#{companyName},</if>
+            <if test="city != null  and city != ''">#{city},</if>
+            <if test="hands != null  and hands != ''">#{hands},</if>
+            <if test="assignBalUsa != null  and assignBalUsa != ''">#{assignBalUsa},</if>
+            <if test="cycle != null  and cycle != ''">#{cycle},</if>
+            <if test="minPay != null  and minPay != ''">#{minPay},</if>
+            <if test="lastPayment != null  and lastPayment != ''">#{lastPayment},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="truns != null  and truns != ''">#{truns},</if>
+            <if test="notes != null  and notes != ''">#{notes},</if>
+            <if test="assignDpd != null  and assignDpd != ''">#{assignDpd},</if>
+            <if test="amtPrinciple != null  and amtPrinciple != ''">#{amtPrinciple},</if>
+            <if test="amtEppbal != null  and amtEppbal != ''">#{amtEppbal},</if>
+            <if test="amtCrelmt != null  and amtCrelmt != ''">#{amtCrelmt},</if>
+            <if test="lendingline != null  and lendingline != ''">#{lendingline},</if>
+            <if test="mpLimit != null  and mpLimit != ''">#{mpLimit},</if>
+            <if test="mpRemyPpl != null  and mpRemyPpl != ''">#{mpRemyPpl},</if>
+            <if test="accountId != null  and accountId != ''">#{accountId},</if>
+            <if test="productname != null  and productname != ''">#{productname},</if>
+            <if test="sourcetype != null  and sourcetype != ''">#{sourcetype},</if>
+            <if test="branch != null  and branch != ''">#{branch},</if>
+            <if test="assignDate != null  and assignDate != ''">#{assignDate},</if>
+            <if test="assignBalRmb != null  and assignBalRmb != ''">#{assignBalRmb},</if>
+            <if test="expireDate != null  and expireDate != ''">#{expireDate},</if>
+            <if test="assignBucket != null  and assignBucket != ''">#{assignBucket},</if>
+            <if test="lastPaymentDate != null  and lastPaymentDate != ''">#{lastPaymentDate},</if>
+            <if test="datOpen != null  and datOpen != ''">#{datOpen},</if>
+            <if test="orgCodeValue != null  and orgCodeValue != ''">#{orgCodeValue},</if>
+            <if test="assignDpdOld != null  and assignDpdOld != ''">#{assignDpdOld},</if>
+            <if test="assignBucketOld != null  and assignBucketOld != ''">#{assignBucketOld},</if>
+            <if test="assignBalRmbOld != null  and assignBalRmbOld != ''">#{assignBalRmbOld},</if>
+            <if test="assignBalUsaOld != null  and assignBalUsaOld != ''">#{assignBalUsaOld},</if>
+            <if test="amtPrincipleOld != null  and amtPrincipleOld != ''">#{amtPrincipleOld},</if>
+            <if test="lastPaymentOld != null  and lastPaymentOld != ''">#{lastPaymentOld},</if>
+            <if test="lastPaymentDateOld != null  and lastPaymentDateOld != ''">#{lastPaymentDateOld},</if>
+            <if test="minPayOld != null  and minPayOld != ''">#{minPayOld},</if>
+            <if test="outsource != null  and outsource != ''">#{outsource},</if>
+            <if test="outsourceBatch != null  and outsourceBatch != ''">#{outsourceBatch},</if>
+            <if test="monthType != null  and monthType != ''">#{monthType},</if>
+            <if test="accountType != null  and accountType != ''">#{accountType},</if>
+            <if test="accountSubcontract != null  and accountSubcontract != ''">#{accountSubcontract},</if>
+            <if test="source != null  and source != ''">#{source},</if>
+            <if test="outAccountStatus != null  and outAccountStatus != ''">#{outAccountStatus},</if>
+            <if test="outForeignDebt != null  and outForeignDebt != ''">#{outForeignDebt},</if>
+            <if test="outFee != null  and outFee != ''">#{outFee},</if>
+            <if test="outCost != null  and outCost != ''">#{outCost},</if>
+            <if test="outCapital != null  and outCapital != ''">#{outCapital},</if>
+            <if test="outCapitalPart != null  and outCapitalPart != ''">#{outCapitalPart},</if>
+            <if test="outCapitalTotal != null  and outCapitalTotal != ''">#{outCapitalTotal},</if>
+            <if test="outOverdue != null  and outOverdue != ''">#{outOverdue},</if>
+            <if test="outDate != null  and outDate != ''">#{outDate},</if>
+            <if test="outDateEnd != null  and outDateEnd != ''">#{outDateEnd},</if>
+            <if test="nameEn != null  and nameEn != ''">#{nameEn},</if>
+            <if test="memo1 != null  and memo1 != ''">#{memo1},</if>
+            <if test="memo2 != null  and memo2 != ''">#{memo2},</if>
+            <if test="memo3 != null  and memo3 != ''">#{memo3},</if>
+            <if test="statisticsDate != null  and statisticsDate != ''">#{statisticsDate},</if>
+            <if test="transDate != null  and transDate != ''">#{transDate},</if>
+            <if test="sellDate != null  and sellDate != ''">#{sellDate},</if>
+            <if test="accountLevel != null  and accountLevel != ''">#{accountLevel},</if>
+            <if test="accountTypeDetail != null  and accountTypeDetail != ''">#{accountTypeDetail},</if>
+            <if test="openDate != null  and openDate != ''">#{openDate},</if>
+            <if test="accountLimit != null  and accountLimit != ''">#{accountLimit},</if>
+            <if test="foreignDebt != null  and foreignDebt != ''">#{foreignDebt},</if>
+            <if test="webApply != null  and webApply != ''">#{webApply},</if>
+            <if test="billDate != null  and billDate != ''">#{billDate},</if>
+            <if test="accountBalance != null  and accountBalance != ''">#{accountBalance},</if>
+            <if test="capitalTotal != null  and capitalTotal != ''">#{capitalTotal},</if>
+            <if test="capitalTotalDebt != null  and capitalTotalDebt != ''">#{capitalTotalDebt},</if>
+            <if test="fee != null  and fee != ''">#{fee},</if>
+            <if test="cost != null  and cost != ''">#{cost},</if>
+            <if test="capital != null  and capital != ''">#{capital},</if>
+            <if test="capitalTotalPart != null  and capitalTotalPart != ''">#{capitalTotalPart},</if>
+            <if test="feePart != null  and feePart != ''">#{feePart},</if>
+            <if test="costPart != null  and costPart != ''">#{costPart},</if>
+            <if test="capitalPart != null  and capitalPart != ''">#{capitalPart},</if>
+            <if test="nomalUncapital != null  and nomalUncapital != ''">#{nomalUncapital},</if>
+            <if test="largeUncapital != null  and largeUncapital != ''">#{largeUncapital},</if>
+            <if test="accountUnfee != null  and accountUnfee != ''">#{accountUnfee},</if>
+            <if test="accountLatefee != null  and accountLatefee != ''">#{accountLatefee},</if>
+            <if test="accountUnservicefee != null  and accountUnservicefee != ''">#{accountUnservicefee},</if>
+            <if test="fServicefee != null  and fServicefee != ''">#{fServicefee},</if>
+            <if test="fServicefeeDay != null  and fServicefeeDay != ''">#{fServicefeeDay},</if>
+            <if test="fPenalty != null  and fPenalty != ''">#{fPenalty},</if>
+            <if test="fServicefeeFenq != null  and fServicefeeFenq != ''">#{fServicefeeFenq},</if>
+            <if test="fFeeYear != null  and fFeeYear != ''">#{fFeeYear},</if>
+            <if test="overdue1 != null  and overdue1 != ''">#{overdue1},</if>
+            <if test="overdue2 != null  and overdue2 != ''">#{overdue2},</if>
+            <if test="overdueRecent != null  and overdueRecent != ''">#{overdueRecent},</if>
+            <if test="overduePhase != null  and overduePhase != ''">#{overduePhase},</if>
+            <if test="down0Pay != null  and down0Pay != ''">#{down0Pay},</if>
+            <if test="down1Pay != null  and down1Pay != ''">#{down1Pay},</if>
+            <if test="down2Pay != null  and down2Pay != ''">#{down2Pay},</if>
+            <if test="down3Pay != null  and down3Pay != ''">#{down3Pay},</if>
+            <if test="outPay != null  and outPay != ''">#{outPay},</if>
+            <if test="payCurmon != null  and payCurmon != ''">#{payCurmon},</if>
+            <if test="payDateLast != null  and payDateLast != ''">#{payDateLast},</if>
+            <if test="payLast != null  and payLast != ''">#{payLast},</if>
+            <if test="outLocalPay != null  and outLocalPay != ''">#{outLocalPay},</if>
+            <if test="outForeignPay != null  and outForeignPay != ''">#{outForeignPay},</if>
+            <if test="outTotalPay != null  and outTotalPay != ''">#{outTotalPay},</if>
+            <if test="curmonLocalPay != null  and curmonLocalPay != ''">#{curmonLocalPay},</if>
+            <if test="curmonForeignPay != null  and curmonForeignPay != ''">#{curmonForeignPay},</if>
+            <if test="curmonTotalPay != null  and curmonTotalPay != ''">#{curmonTotalPay},</if>
+            <if test="curdayLocalPay != null  and curdayLocalPay != ''">#{curdayLocalPay},</if>
+            <if test="curdayForeignPay != null  and curdayForeignPay != ''">#{curdayForeignPay},</if>
+            <if test="curdayTotalPay != null  and curdayTotalPay != ''">#{curdayTotalPay},</if>
+            <if test="accountStatusNum != null  and accountStatusNum != ''">#{accountStatusNum},</if>
+            <if test="outDayNum != null  and outDayNum != ''">#{outDayNum},</if>
+            <if test="isPay != null  and isPay != ''">#{isPay},</if>
+            <if test="outDayaverPay != null  and outDayaverPay != ''">#{outDayaverPay},</if>
+            <if test="curmonDay != null  and curmonDay != ''">#{curmonDay},</if>
+            <if test="curmonDayaverPay != null  and curmonDayaverPay != ''">#{curmonDayaverPay},</if>
+            <if test="systemSign != null  and systemSign != ''">#{systemSign},</if>
+            <if test="businessSign != null  and businessSign != ''">#{businessSign},</if>
+            <if test="signType != null  and signType != ''">#{signType},</if>
+            <if test="signMeaning != null  and signMeaning != ''">#{signMeaning},</if>
+            <if test="signDate != null  and signDate != ''">#{signDate},</if>
+            <if test="totalBalance != null  and totalBalance != ''">#{totalBalance},</if>
+            <if test="org1 != null  and org1 != ''">#{org1},</if>
+            <if test="org2 != null  and org2 != ''">#{org2},</if>
+            <if test="company != null  and company != ''">#{company},</if>
+            <if test="industry != null  and industry != ''">#{industry},</if>
+            <if test="companyAddr != null  and companyAddr != ''">#{companyAddr},</if>
+            <if test="postcode != null  and postcode != ''">#{postcode},</if>
+            <if test="homeAddr != null  and homeAddr != ''">#{homeAddr},</if>
+            <if test="homePostcode != null  and homePostcode != ''">#{homePostcode},</if>
+            <if test="residenceAddress != null  and residenceAddress != ''">#{residenceAddress},</if>
+            <if test="residencePostcode != null  and residencePostcode != ''">#{residencePostcode},</if>
+            <if test="houseAddr != null  and houseAddr != ''">#{houseAddr},</if>
+            <if test="housePostcode != null  and housePostcode != ''">#{housePostcode},</if>
+            <if test="industryCategory != null  and industryCategory != ''">#{industryCategory},</if>
+            <if test="industryKind != null  and industryKind != ''">#{industryKind},</if>
+            <if test="custName != null  and custName != ''">#{custName},</if>
+            <if test="mobile != null  and mobile != ''">#{mobile},</if>
+            <if test="cancelDate != null  and cancelDate != ''">#{cancelDate},</if>
+            <if test="overdueRecentInit != null  and overdueRecentInit != ''">#{overdueRecentInit},</if>
+            <if test="payState != null  and payState != ''">#{payState},</if>
+            <if test="borrowId != null  and borrowId != ''">#{borrowId},</if>
+            <if test="wbbd != null  and wbbd != ''">#{wbbd},</if>
+            <if test="dataTime != null  and dataTime != ''">#{dataTime},</if>
+            <if test="csNode != null  and csNode != ''">#{csNode},</if>
+            <if test="wbCompany != null  and wbCompany != ''">#{wbCompany},</if>
+            <if test="originalManager != null  and originalManager != ''">#{originalManager},</if>
+            <if test="manager != null  and manager != ''">#{manager},</if>
+            <if test="accountNumber != null  and accountNumber != ''">#{accountNumber},</if>
+            <if test="newProductName != null  and newProductName != ''">#{newProductName},</if>
+            <if test="payType != null  and payType != ''">#{payType},</if>
+            <if test="collectionDateEnd != null  and collectionDateEnd != ''">#{collectionDateEnd},</if>
+            <if test="collectionDate != null  and collectionDate != ''">#{collectionDate},</if>
+            <if test="productName != null  and productName != ''">#{productName},</if>
+            <if test="overdueDate != null  and overdueDate != ''">#{overdueDate},</if>
+            <if test="channelName != null  and channelName != ''">#{channelName},</if>
+            <if test="recoveryTime != null  and recoveryTime != ''">#{recoveryTime},</if>
+            <if test="allocationTime != null  and allocationTime != ''">#{allocationTime},</if>
+            <if test="orderNumber != null  and orderNumber != ''">#{orderNumber},</if>
+            <if test="city2 != null  and city2 != ''">#{city2},</if>
+            <if test="contractId != null  and contractId != ''">#{contractId},</if>
+            <if test="interestPenalty != null  and interestPenalty != ''">#{interestPenalty},</if>
+            <if test="latefee != null  and latefee != ''">#{latefee},</if>
+            <if test="overdueServicefee != null  and overdueServicefee != ''">#{overdueServicefee},</if>
+            <if test="city1 != null  and city1 != ''">#{city1},</if>
+            <if test="debtNo != null  and debtNo != ''">#{debtNo},</if>
+            <if test="debtInit != null  and debtInit != ''">#{debtInit},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLiDjXy" parameterType="TLiDjXy">
+        update t_li_dj_xy
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="importBatch != null  and importBatch != ''">import_batch = #{importBatch},</if>
+            <if test="queue != null  and queue != ''">queue = #{queue},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="isStop != null  and isStop != ''">is_stop = #{isStop},</if>
+            <if test="stopTime != null  and stopTime != ''">stop_time = #{stopTime},</if>
+            <if test="outTime != null  and outTime != ''">out_time = #{outTime},</if>
+            <if test="created != null  and created != ''">created = #{created},</if>
+            <if test="createdby != null  and createdby != ''">createdby = #{createdby},</if>
+            <if test="updated != null  and updated != ''">updated = #{updated},</if>
+            <if test="updatedby != null  and updatedby != ''">updatedby = #{updatedby},</if>
+            <if test="caseTuid != null  and caseTuid != ''">case_tuid = #{caseTuid},</if>
+            <if test="caseNo != null  and caseNo != ''">case_no = #{caseNo},</if>
+            <if test="debt != null  and debt != ''">debt = #{debt},</if>
+            <if test="loan != null  and loan != ''">loan = #{loan},</if>
+            <if test="importTuid != null  and importTuid != ''">import_tuid = #{importTuid},</if>
+            <if test="overdueDays != null  and overdueDays != ''">overdue_days = #{overdueDays},</if>
+            <if test="outType != null  and outType != ''">out_type = #{outType},</if>
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="cardNumber != null  and cardNumber != ''">card_number = #{cardNumber},</if>
+            <if test="companyName != null  and companyName != ''">company_name = #{companyName},</if>
+            <if test="city != null  and city != ''">city = #{city},</if>
+            <if test="hands != null  and hands != ''">hands = #{hands},</if>
+            <if test="assignBalUsa != null  and assignBalUsa != ''">assign_bal_usa = #{assignBalUsa},</if>
+            <if test="cycle != null  and cycle != ''">cycle = #{cycle},</if>
+            <if test="minPay != null  and minPay != ''">min_pay = #{minPay},</if>
+            <if test="lastPayment != null  and lastPayment != ''">last_payment = #{lastPayment},</if>
+            <if test="email != null  and email != ''">email = #{email},</if>
+            <if test="truns != null  and truns != ''">truns = #{truns},</if>
+            <if test="notes != null  and notes != ''">notes = #{notes},</if>
+            <if test="assignDpd != null  and assignDpd != ''">assign_dpd = #{assignDpd},</if>
+            <if test="amtPrinciple != null  and amtPrinciple != ''">amt_principle = #{amtPrinciple},</if>
+            <if test="amtEppbal != null  and amtEppbal != ''">amt_eppbal = #{amtEppbal},</if>
+            <if test="amtCrelmt != null  and amtCrelmt != ''">amt_crelmt = #{amtCrelmt},</if>
+            <if test="lendingline != null  and lendingline != ''">lendingline = #{lendingline},</if>
+            <if test="mpLimit != null  and mpLimit != ''">mp_limit = #{mpLimit},</if>
+            <if test="mpRemyPpl != null  and mpRemyPpl != ''">mp_remy_ppl = #{mpRemyPpl},</if>
+            <if test="accountId != null  and accountId != ''">account_id = #{accountId},</if>
+            <if test="productname != null  and productname != ''">productname = #{productname},</if>
+            <if test="sourcetype != null  and sourcetype != ''">sourcetype = #{sourcetype},</if>
+            <if test="branch != null  and branch != ''">branch = #{branch},</if>
+            <if test="assignDate != null  and assignDate != ''">assign_date = #{assignDate},</if>
+            <if test="assignBalRmb != null  and assignBalRmb != ''">assign_bal_rmb = #{assignBalRmb},</if>
+            <if test="expireDate != null  and expireDate != ''">expire_date = #{expireDate},</if>
+            <if test="assignBucket != null  and assignBucket != ''">assign_bucket = #{assignBucket},</if>
+            <if test="lastPaymentDate != null  and lastPaymentDate != ''">last_payment_date = #{lastPaymentDate},</if>
+            <if test="datOpen != null  and datOpen != ''">dat_open = #{datOpen},</if>
+            <if test="orgCodeValue != null  and orgCodeValue != ''">org_code_value = #{orgCodeValue},</if>
+            <if test="assignDpdOld != null  and assignDpdOld != ''">assign_dpd_old = #{assignDpdOld},</if>
+            <if test="assignBucketOld != null  and assignBucketOld != ''">assign_bucket_old = #{assignBucketOld},</if>
+            <if test="assignBalRmbOld != null  and assignBalRmbOld != ''">assign_bal_rmb_old = #{assignBalRmbOld},</if>
+            <if test="assignBalUsaOld != null  and assignBalUsaOld != ''">assign_bal_usa_old = #{assignBalUsaOld},</if>
+            <if test="amtPrincipleOld != null  and amtPrincipleOld != ''">amt_principle_old = #{amtPrincipleOld},</if>
+            <if test="lastPaymentOld != null  and lastPaymentOld != ''">last_payment_old = #{lastPaymentOld},</if>
+            <if test="lastPaymentDateOld != null  and lastPaymentDateOld != ''">last_payment_date_old = #{lastPaymentDateOld},</if>
+            <if test="minPayOld != null  and minPayOld != ''">min_pay_old = #{minPayOld},</if>
+            <if test="outsource != null  and outsource != ''">outsource = #{outsource},</if>
+            <if test="outsourceBatch != null  and outsourceBatch != ''">outsource_batch = #{outsourceBatch},</if>
+            <if test="monthType != null  and monthType != ''">month_type = #{monthType},</if>
+            <if test="accountType != null  and accountType != ''">account_type = #{accountType},</if>
+            <if test="accountSubcontract != null  and accountSubcontract != ''">account_subcontract = #{accountSubcontract},</if>
+            <if test="source != null  and source != ''">source = #{source},</if>
+            <if test="outAccountStatus != null  and outAccountStatus != ''">out_account_status = #{outAccountStatus},</if>
+            <if test="outForeignDebt != null  and outForeignDebt != ''">out_foreign_debt = #{outForeignDebt},</if>
+            <if test="outFee != null  and outFee != ''">out_fee = #{outFee},</if>
+            <if test="outCost != null  and outCost != ''">out_cost = #{outCost},</if>
+            <if test="outCapital != null  and outCapital != ''">out_capital = #{outCapital},</if>
+            <if test="outCapitalPart != null  and outCapitalPart != ''">out_capital_part = #{outCapitalPart},</if>
+            <if test="outCapitalTotal != null  and outCapitalTotal != ''">out_capital_total = #{outCapitalTotal},</if>
+            <if test="outOverdue != null  and outOverdue != ''">out_overdue = #{outOverdue},</if>
+            <if test="outDate != null  and outDate != ''">out_date = #{outDate},</if>
+            <if test="outDateEnd != null  and outDateEnd != ''">out_date_end = #{outDateEnd},</if>
+            <if test="nameEn != null  and nameEn != ''">name_en = #{nameEn},</if>
+            <if test="memo1 != null  and memo1 != ''">memo_1 = #{memo1},</if>
+            <if test="memo2 != null  and memo2 != ''">memo_2 = #{memo2},</if>
+            <if test="memo3 != null  and memo3 != ''">memo_3 = #{memo3},</if>
+            <if test="statisticsDate != null  and statisticsDate != ''">statistics_date = #{statisticsDate},</if>
+            <if test="transDate != null  and transDate != ''">trans_date = #{transDate},</if>
+            <if test="sellDate != null  and sellDate != ''">sell_date = #{sellDate},</if>
+            <if test="accountLevel != null  and accountLevel != ''">account_level = #{accountLevel},</if>
+            <if test="accountTypeDetail != null  and accountTypeDetail != ''">account_type_detail = #{accountTypeDetail},</if>
+            <if test="openDate != null  and openDate != ''">open_date = #{openDate},</if>
+            <if test="accountLimit != null  and accountLimit != ''">account_limit = #{accountLimit},</if>
+            <if test="foreignDebt != null  and foreignDebt != ''">foreign_debt = #{foreignDebt},</if>
+            <if test="webApply != null  and webApply != ''">web_apply = #{webApply},</if>
+            <if test="billDate != null  and billDate != ''">bill_date = #{billDate},</if>
+            <if test="accountBalance != null  and accountBalance != ''">account_balance = #{accountBalance},</if>
+            <if test="capitalTotal != null  and capitalTotal != ''">capital_total = #{capitalTotal},</if>
+            <if test="capitalTotalDebt != null  and capitalTotalDebt != ''">capital_total_debt = #{capitalTotalDebt},</if>
+            <if test="fee != null  and fee != ''">fee = #{fee},</if>
+            <if test="cost != null  and cost != ''">cost = #{cost},</if>
+            <if test="capital != null  and capital != ''">capital = #{capital},</if>
+            <if test="capitalTotalPart != null  and capitalTotalPart != ''">capital_total_part = #{capitalTotalPart},</if>
+            <if test="feePart != null  and feePart != ''">fee_part = #{feePart},</if>
+            <if test="costPart != null  and costPart != ''">cost_part = #{costPart},</if>
+            <if test="capitalPart != null  and capitalPart != ''">capital_part = #{capitalPart},</if>
+            <if test="nomalUncapital != null  and nomalUncapital != ''">nomal_uncapital = #{nomalUncapital},</if>
+            <if test="largeUncapital != null  and largeUncapital != ''">large_uncapital = #{largeUncapital},</if>
+            <if test="accountUnfee != null  and accountUnfee != ''">account_unfee = #{accountUnfee},</if>
+            <if test="accountLatefee != null  and accountLatefee != ''">account_latefee = #{accountLatefee},</if>
+            <if test="accountUnservicefee != null  and accountUnservicefee != ''">account_unservicefee = #{accountUnservicefee},</if>
+            <if test="fServicefee != null  and fServicefee != ''">f_servicefee = #{fServicefee},</if>
+            <if test="fServicefeeDay != null  and fServicefeeDay != ''">f_servicefee_day = #{fServicefeeDay},</if>
+            <if test="fPenalty != null  and fPenalty != ''">f_penalty = #{fPenalty},</if>
+            <if test="fServicefeeFenq != null  and fServicefeeFenq != ''">f_servicefee_fenq = #{fServicefeeFenq},</if>
+            <if test="fFeeYear != null  and fFeeYear != ''">f_fee_year = #{fFeeYear},</if>
+            <if test="overdue1 != null  and overdue1 != ''">overdue_1 = #{overdue1},</if>
+            <if test="overdue2 != null  and overdue2 != ''">overdue_2 = #{overdue2},</if>
+            <if test="overdueRecent != null  and overdueRecent != ''">overdue_recent = #{overdueRecent},</if>
+            <if test="overduePhase != null  and overduePhase != ''">overdue_phase = #{overduePhase},</if>
+            <if test="down0Pay != null  and down0Pay != ''">down_0_pay = #{down0Pay},</if>
+            <if test="down1Pay != null  and down1Pay != ''">down_1_pay = #{down1Pay},</if>
+            <if test="down2Pay != null  and down2Pay != ''">down_2_pay = #{down2Pay},</if>
+            <if test="down3Pay != null  and down3Pay != ''">down_3_pay = #{down3Pay},</if>
+            <if test="outPay != null  and outPay != ''">out_pay = #{outPay},</if>
+            <if test="payCurmon != null  and payCurmon != ''">pay_curmon = #{payCurmon},</if>
+            <if test="payDateLast != null  and payDateLast != ''">pay_date_last = #{payDateLast},</if>
+            <if test="payLast != null  and payLast != ''">pay_last = #{payLast},</if>
+            <if test="outLocalPay != null  and outLocalPay != ''">out_local_pay = #{outLocalPay},</if>
+            <if test="outForeignPay != null  and outForeignPay != ''">out_foreign_pay = #{outForeignPay},</if>
+            <if test="outTotalPay != null  and outTotalPay != ''">out_total_pay = #{outTotalPay},</if>
+            <if test="curmonLocalPay != null  and curmonLocalPay != ''">curmon_local_pay = #{curmonLocalPay},</if>
+            <if test="curmonForeignPay != null  and curmonForeignPay != ''">curmon_foreign_pay = #{curmonForeignPay},</if>
+            <if test="curmonTotalPay != null  and curmonTotalPay != ''">curmon_total_pay = #{curmonTotalPay},</if>
+            <if test="curdayLocalPay != null  and curdayLocalPay != ''">curday_local_pay = #{curdayLocalPay},</if>
+            <if test="curdayForeignPay != null  and curdayForeignPay != ''">curday_foreign_pay = #{curdayForeignPay},</if>
+            <if test="curdayTotalPay != null  and curdayTotalPay != ''">curday_total_pay = #{curdayTotalPay},</if>
+            <if test="accountStatusNum != null  and accountStatusNum != ''">account_status_num = #{accountStatusNum},</if>
+            <if test="outDayNum != null  and outDayNum != ''">out_day_num = #{outDayNum},</if>
+            <if test="isPay != null  and isPay != ''">is_pay = #{isPay},</if>
+            <if test="outDayaverPay != null  and outDayaverPay != ''">out_dayaver_pay = #{outDayaverPay},</if>
+            <if test="curmonDay != null  and curmonDay != ''">curmon_day = #{curmonDay},</if>
+            <if test="curmonDayaverPay != null  and curmonDayaverPay != ''">curmon_dayaver_pay = #{curmonDayaverPay},</if>
+            <if test="systemSign != null  and systemSign != ''">system_sign = #{systemSign},</if>
+            <if test="businessSign != null  and businessSign != ''">business_sign = #{businessSign},</if>
+            <if test="signType != null  and signType != ''">sign_type = #{signType},</if>
+            <if test="signMeaning != null  and signMeaning != ''">sign_meaning = #{signMeaning},</if>
+            <if test="signDate != null  and signDate != ''">sign_date = #{signDate},</if>
+            <if test="totalBalance != null  and totalBalance != ''">total_balance = #{totalBalance},</if>
+            <if test="org1 != null  and org1 != ''">org_1 = #{org1},</if>
+            <if test="org2 != null  and org2 != ''">org_2 = #{org2},</if>
+            <if test="company != null  and company != ''">company = #{company},</if>
+            <if test="industry != null  and industry != ''">industry = #{industry},</if>
+            <if test="companyAddr != null  and companyAddr != ''">company_addr = #{companyAddr},</if>
+            <if test="postcode != null  and postcode != ''">postcode = #{postcode},</if>
+            <if test="homeAddr != null  and homeAddr != ''">home_addr = #{homeAddr},</if>
+            <if test="homePostcode != null  and homePostcode != ''">home_postcode = #{homePostcode},</if>
+            <if test="residenceAddress != null  and residenceAddress != ''">residence_address = #{residenceAddress},</if>
+            <if test="residencePostcode != null  and residencePostcode != ''">residence_postcode = #{residencePostcode},</if>
+            <if test="houseAddr != null  and houseAddr != ''">house_addr = #{houseAddr},</if>
+            <if test="housePostcode != null  and housePostcode != ''">house_postcode = #{housePostcode},</if>
+            <if test="industryCategory != null  and industryCategory != ''">industry_category = #{industryCategory},</if>
+            <if test="industryKind != null  and industryKind != ''">industry_kind = #{industryKind},</if>
+            <if test="custName != null  and custName != ''">cust_name = #{custName},</if>
+            <if test="mobile != null  and mobile != ''">mobile = #{mobile},</if>
+            <if test="cancelDate != null  and cancelDate != ''">cancel_date = #{cancelDate},</if>
+            <if test="overdueRecentInit != null  and overdueRecentInit != ''">overdue_recent_init = #{overdueRecentInit},</if>
+            <if test="payState != null  and payState != ''">pay_state = #{payState},</if>
+            <if test="borrowId != null  and borrowId != ''">borrow_id = #{borrowId},</if>
+            <if test="wbbd != null  and wbbd != ''">wbbd = #{wbbd},</if>
+            <if test="dataTime != null  and dataTime != ''">data_time = #{dataTime},</if>
+            <if test="csNode != null  and csNode != ''">cs_node = #{csNode},</if>
+            <if test="wbCompany != null  and wbCompany != ''">wb_company = #{wbCompany},</if>
+            <if test="originalManager != null  and originalManager != ''">original_manager = #{originalManager},</if>
+            <if test="manager != null  and manager != ''">manager = #{manager},</if>
+            <if test="accountNumber != null  and accountNumber != ''">account_number = #{accountNumber},</if>
+            <if test="newProductName != null  and newProductName != ''">new_product_name = #{newProductName},</if>
+            <if test="payType != null  and payType != ''">pay_type = #{payType},</if>
+            <if test="collectionDateEnd != null  and collectionDateEnd != ''">collection_date_end = #{collectionDateEnd},</if>
+            <if test="collectionDate != null  and collectionDate != ''">collection_date = #{collectionDate},</if>
+            <if test="productName != null  and productName != ''">product_name = #{productName},</if>
+            <if test="overdueDate != null  and overdueDate != ''">overdue_date = #{overdueDate},</if>
+            <if test="channelName != null  and channelName != ''">channel_name = #{channelName},</if>
+            <if test="recoveryTime != null  and recoveryTime != ''">recovery_time = #{recoveryTime},</if>
+            <if test="allocationTime != null  and allocationTime != ''">allocation_time = #{allocationTime},</if>
+            <if test="orderNumber != null  and orderNumber != ''">order_number = #{orderNumber},</if>
+            <if test="city2 != null  and city2 != ''">city_2 = #{city2},</if>
+            <if test="contractId != null  and contractId != ''">contract_id = #{contractId},</if>
+            <if test="interestPenalty != null  and interestPenalty != ''">interest_penalty = #{interestPenalty},</if>
+            <if test="latefee != null  and latefee != ''">latefee = #{latefee},</if>
+            <if test="overdueServicefee != null  and overdueServicefee != ''">overdue_servicefee = #{overdueServicefee},</if>
+            <if test="city1 != null  and city1 != ''">city_1 = #{city1},</if>
+            <if test="debtNo != null  and debtNo != ''">debt_no = #{debtNo},</if>
+            <if test="debtInit != null  and debtInit != ''">debt_init = #{debtInit},</if>
+        </trim>
+        where tuid = #{tuid}
+    </update>
+
+    <delete id="deleteTLiDjXyById" parameterType="String">
+        delete from t_li_dj_xy where tuid = #{tuid}
+    </delete>
+
+    <delete id="deleteTLiDjXyByIds" parameterType="String">
+        delete from t_li_dj_xy where tuid in 
+        <foreach item="tuid" collection="array" open="(" separator="," close=")">
+            #{tuid}
+        </foreach>
+    </delete>
+    
+</mapper>

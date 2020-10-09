@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
@@ -23,6 +23,13 @@
     <script th:src="@{/ajax/libs/agentjs/agent-toolbar.js}"></script>
     <script th:src="@{/js/reset.min.js}"></script>
 
+    <!--自建话务平台需要引用的js-->
+    <script th:src="@{/assets/js/jquery-1.10.2.min.js}"></script>
+    <script th:src="@{/assets/js/layer/layer.js}"></script>
+    <script th:src="@{/assets/js/SoftPhone.js}"></script>
+
+    <script th:src="@{/assets/js/sockjs.js}"></script>
+    <script th:src="@{/assets/js/callcenter.js}"></script>
     <th:block th:include="include :: header('催收作业页面')"/>
     <th:block th:include="include :: layout-latest-css"/>
     <th:block th:include="include :: ztree-css"/>
@@ -37,23 +44,97 @@
         .sameCaseValue {
             margin-right: 100px;
         }
-        #custContactTbody tr td{
-            text-align: center;
+        .textarea-inherit {
+            width: 100%;
+            overflow: auto;
+            word-break: break-all; // 解决兼容问题
         }
     </style>
 
 </head>
 
 <body class="gray-bg">
-<input type="hidden" id="firstEnterCaseNo" name="caseNo" th:value="${caseNo}">
-<input type="hidden" id="firstOrgId" name="caseNo" th:value="${orgId}">
-<input type="hidden" id="firstImportBatchNo" name="caseNo" th:value="${importBatchNo}">
-<input type="hidden" id="firstCertificateNo" name="certificateNo" th:value="${certificateNo}">
+
+<div class="ui-layout-west">
+    <!--<input type="hidden" id="ownerId" name="ownerId" th:value="${tLcTask.ownerId}">-->
+    <input type="hidden" id="orgId" name="orgId" th:value="${tLcTask.orgId}">
+    <input type="hidden" id="certificateNo" name="certificateNo" th:value="${certificateNo}">
+    <input type="hidden" id="firstEnterCaseNo" name="firstEnterCaseNo" th:value="${currentCaseNo}">
+    <input type="hidden" id="firstImportBatchNo" name="firstImportBatchNo" th:value="${currentImportBatchNo}">
+    <!--查询条件-->
+    <input type="hidden" id="caseNoSearch" name="caseNoSearch" th:value="${tLcTask.caseNo}">
+    <input type="hidden" id="customNameSearch" name="customNameSearch" th:value="${tLcTask.customName}">
+    <input type="hidden" id="taskStatusSearch" name="taskStatusSearch" th:value="${tLcTask.taskStatus}">
+    <input type="hidden" id="callCodeHistoryListStr" name="callCodeHistoryListStr" th:value="${callCodeHistoryListStr}">
+<!--    <input type="hidden" id="taskTypeSearch" name="taskTypeSearch" th:value="${tLcTask.taskType}">
+    <input type="hidden" id="startArrearsTotalSearch" name="startArrearsTotalSearch" th:value="${tLcTask.startArrearsTotal}">
+    <input type="hidden" id="endArrearsTotalSearch" name="endArrearsTotalSearch" th:value="${tLcTask.endArrearsTotal}">
+    <input type="hidden" id="callCodeSearch" name="callCodeSearch" th:value="${tLcTask.callCode}">
+    <input type="hidden" id="transferTypeSearch" name="transferTypeSearch" th:value="${tLcTask.transferType}">
+    <input type="hidden" id="phoneSearch" name="phoneSearch" th:value="${tLcTask.phone}">
+    <input type="hidden" id="startCloseCaseYhjeSearch" name="startCloseCaseYhjeSearch" th:value="${tLcTask.startCloseCaseYhje}">
+    <input type="hidden" id="endCloseCaseYhjeSearch" name="endCloseCaseYhjeSearch" th:value="${tLcTask.endCloseCaseYhje}">
+    <input type="hidden" id="actionCodeSearch" name="actionCodeSearch" th:value="${tLcTask.actionCode}">
+    <input type="hidden" id="startRecentlyAllotDateSearch" name="startRecentlyAllotDateSearch" th:value="${tLcTask.startRecentlyAllotDate}">
+    <input type="hidden" id="endRecentlyAllotDateSearch" name="endRecentlyAllotDateSearch" th:value="${tLcTask.endRecentlyAllotDate}">
+    <input type="hidden" id="startRecentlyFollowUpDateSearch" name="startRecentlyFollowUpDateSearch" th:value="${tLcTask.startRecentlyFollowUpDate}">
+    <input type="hidden" id="endRecentlyFollowUpDateSearch" name="endRecentlyFollowUpDateSearch" th:value="${tLcTask.endRecentlyFollowUpDate}">
+
+    <input type="hidden" id="startEnterCollDateSearch" name="startEnterCollDateSearch" th:value="${tLcTask.startEnterCollDate}">
+    <input type="hidden" id="endEnterCollDateSearch" name="endEnterCollDateSearch" th:value="${tLcTask.endEnterCollDate}">
+    <input type="hidden" id="productNameSearch" name="productNameSearch" th:value="${tLcTask.productName}">
+    <input type="hidden" id="startDqyhjeSearch" name="startDqyhjeSearch" th:value="${tLcTask.startDqyhje}">
+    <input type="hidden" id="endDqyhjeSearch" name="endDqyhjeSearch" th:value="${tLcTask.endDqyhje}">
+    <input type="hidden" id="startLjyhjeSearch" name="startLjyhjeSearch" th:value="${tLcTask.startLjyhje}">
+    <input type="hidden" id="endLjyhjeSearch" name="endLjyhjeSearch" th:value="${tLcTask.endLjyhje}">
+    <input type="hidden" id="startOverdueDaysSearch" name="startOverdueDaysSearch" th:value="${tLcTask.startOverdueDays}">
+    <input type="hidden" id="endOverdueDaysSearch" name="endOverdueDaysSearch" th:value="${tLcTask.endOverdueDays}">-->
+    <input type="hidden" id="province" name="province" th:value="${tLcTask.province}">
+    <input type="hidden" id="city" name="city" th:value="${tLcTask.city}">
+    <input type="hidden" id="freeSQL" name="freeSQL" th:value="${tLcTask.freeSQL}">
+    <input type="hidden" id="phoneStatus" name="phoneStatus" th:value="${tLcTask.phoneStatus}">
+    <input type="hidden" id="totalCaseNum" name="totalCaseNum" th:value="${totalCaseNum}">
+    <input type="hidden" id="totalArrears" name="totalArrears" th:value="${totalArrears}">
+    <input type="hidden" id="startNum" name="startNum" value="1">
+
+    <div class="box box-main">
+        <div  id="leftTopDiv" class="box-header" style="height: 30px">
+            <div class="box-title">
+                <i class="fa icon-grid" style="font-weight: bold;">客户列表</i>
+            </div>
+        </div>
+        <div  id="leftMidDiv" class="ui-layout-content" style="height: 458px;">
+
+            <div id="customNameList">
+                <ul class="dropdown-menu dropdown-user">
+                </ul>
+            </div>
+            <div id="more">
+                <ul class="dropdown-menu dropdown-user">
+                </ul>
+            </div>
+        </div>
+
+        <div  id="leftBotDiv" class="box-header"  style="height: 60px">
+            <div class="row">
+                <div  class="sumDiv">合计：</div>
+            </div>
+            <div class="row">
+                <div class="listDiv" id="customCount">&nbsp;</div>
+            </div>
+            <div class="row">
+                <div class="listDiv" id="allCustomTotalDebtAmount" style="text-align: right">&nbsp;</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <div class="ui-layout-center" >
     <div class="container-div" style="overflow: hidden">
         <div class="row">
             <div class="col-sm-12 search-collapse" id="baseInfoDiv" style="height: 105px">
-                <h4 class="form-header h4">基本信息 | <label id="orgCasnoTitle"></label></h4>
+                <h4 class="form-header h4">基本信息 | <label id="orgCasno"></label></h4>
                 <div class="collImgdiv">
                     <img src="/img/icontouxiang.png" class="imgso" width="30px" height="45px"/>
                 </div>
@@ -65,8 +146,8 @@
                     <span id="marrageStatus" style="font-size: 18px;"></span>|
                     <span id="education" style="font-size: 18px;"></span>
                 </div>
-                <div class="collBaseInfoRight">
-                    <span id="customCertificateNo"   style="font-size: 18px;"></span>
+                <div class="collBaseInfoRight" style="width:500px;">
+                    <span id="customCertificateNo"   style="font-size: 16px;"></span>
                     &nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 16px;">信函:</span>
                     <span id="letterStatus"  style="font-size: 16px;"></span>
                     &nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 16px;">共案:</span>
@@ -77,10 +158,10 @@
                     <b><span id="closeCaseYhje"  style="color: red;font-size: 18px"></span>元</b>
                 </div>
             </div>
-            <div class="col-sm-12 search-collapse" id="detailInfoDiv"  style="height: 380px;overflow: auto">
+            <div class="col-sm-12 search-collapse" id="detailInfoDiv"  style="height: calc(100% - 110px);overflow: auto">
                 <div class="tabs-container" >
                     <ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#tab-5" aria-expanded="true" onclick="viewTabDetail('info')">详细信息</a><input type="hidden" id="info" value="1"></li>
+                        <li class="active" id="infoLi"><a data-toggle="tab" href="#tab-5" aria-expanded="true" onclick="viewTabDetail('info')">详细信息</a><input type="hidden" id="info" value="1"></li>
                         <li class=""><a data-toggle="tab" href="#tab-1" aria-expanded="false" onclick="viewTabDetail('locus')">案件历史轨迹</a><input type="hidden" id="locus" value="0"></li>
                         <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false" onclick="viewTabDetail('call')">电催记录</a><input type="hidden" id="call" value="0"></li>
                         <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false" onclick="viewTabDetail('action')">行动历史</a><input type="hidden" id="action" value="0"></li>
@@ -89,19 +170,21 @@
                         <li class=""><a data-toggle="tab" href="#tab-7" aria-expanded="false" onclick="viewTabDetail('add')">补充信息</a><input type="hidden" id="add" value="0"></li>
                         <li class=""><a data-toggle="tab" href="#tab-8" aria-expanded="false" onclick="viewTabDetail('find')">查找记录</a><input type="hidden" id="find" value="0"></li>
                         <li class=""><a data-toggle="tab" href="#tab-9" aria-expanded="false" onclick="viewTabDetail('inforeporting')">信息上报</a><input type="hidden" id="inforeporting" value="0"></li>
-                        <li class=""><a data-toggle="tab" href="#tab-10" aria-expanded="false" onclick="viewTabDetail('sameCaseInfo')">共案信息</a><input type="hidden" id="sameCaseInfo" value="0"></li>
+                        <li class="" id="sameCaseLi" ><a data-toggle="tab" href="#tab-10" aria-expanded="false" onclick="viewTabDetail('sameCaseInfo')">共案信息</a><input type="hidden" id="sameCaseInfo" value="0"></li>
+
                     </ul>
                     <div id="tabDiv" class="tab-content tabDiv">
                         <div id="tab-5" class="tab-pane active">
                             <div class="collLeftInfo">
                                 <div class="collInfoOne">
-                                    <label>机构案件号：</label><label id="orgCasno"></label><br/>
+                                    <!--<label>机构案件号：</label><label id="orgCasno"></label><br/>-->
                                     <label>入催日：</label><label id="rcr"></label><br/>
                                     <label>借款日期：</label><label id="jkrq"></label><br/>
                                     <label>欠款总金额：</label><label id="rmbQkzje" style="color: red"></label><br/>
                                     <label>每期还款金额：</label><label id="mqhkje"></label><br/>
                                     <label>应还本金：</label><label id="rmbYhbjzje"></label><br/>
                                     <label>应还费用：</label><label id="rmbYhfyzje"></label><br/>
+                                    <label>滞纳金：</label><label id="znj"></label><br/>
                                     <label>还款状态：</label><label id="payStatus"></label>
                                 </div>
                                 <div class="collInfoTwo">
@@ -121,8 +204,8 @@
                                     <label>当期欠款金额：</label><label id="dqqkje"></label><br/>
                                     <label>已还期数：</label><label id="ykqs"></label><br/>
                                     <label>应还罚息：</label><label id="rmbYhfxzje"></label><br/>
-                                    <label>滞纳金：</label><label id="znj"></label><br/>
                                     <label>最近还款金额：</label><label id="lastRepayAmount"></label>
+
                                 </div>
                                 <div class="collInfoFour">
                                     <label>借款卡号：</label><label id="borrowNo"></label><br/>
@@ -206,6 +289,7 @@
                                     <th>联系方式</th>
                                     <th>关系</th>
                                     <th>电话码</th>
+                                    <th>查账日期</th>
                                     <th>备注</th>
                                     <th>坐席</th>
                                     <th>通话时间</th>
@@ -298,29 +382,149 @@
     </div>
 </div>
 
-</div>
-
 
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: layout-latest-js"/>
 <th:block th:include="include :: ztree-js"/>
 <th:block th:include="include :: datetimepicker-js" />
 <script th:inline="javascript">
+    // var currentCertificateNo; // 点击上一条和下一条按钮时使用，记录当前的客户的证件编号
+    var currentCaseNo; // 点击上一条和下一条按钮时使用，记录当前的案件编号
+    var currentImportBatchNo; // 点击上一条和下一条按钮时使用，记录当前的案件编号
+    var currentOrgId; // 点击上一条和下一条按钮时使用，记录当前的案件编号
+    var currentCertificateNo; //新增联系人时使用
+    // var allCertificateNo = new Array(); // 点击上一条和下一条按钮时使用，存放所有客户的证件编号
+    var allCaseNo = new Array(); // 点击上一条和下一条按钮时使用，存放所有案件编号
+    var allOrgId = new Array(); // 点击上一条和下一条按钮时使用，存放所有机构号
+    var allImportBatchNo = new Array(); // 点击上一条和下一条按钮时使用，存放所有案件导入批次号
+    var currentTaskId;
+    //var currentDuncaseNo;
+    var editFlag = [[${@permission.hasPermi('system:user:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:user:remove')}]];
+    var resetPwdFlag = [[${@permission.hasPermi('system:user:resetPwd')}]];
     var prefix = ctx + "collect/task";
-    var robotPrefix = ctx + "collect/robot";
     var letterPrefix = ctx + "coll/letter";
+    var duncaseActionPrefix = ctx + "collect/duncase/action";
+    var contactPrefix = ctx + "collect/cust/contact";
+    var taskPrefix = ctx + "collect/task";
+    var robotPrefix = ctx + "collect/robot";
     var curAssetsPrefix = ctx + "import/assets";
+    var startNum = 1;
+    var pageSize = 50;
+    var agentIsCalling;
     $(function () {
         var panehHidden = false;
         if ($(this).width() < 769) {
             panehHidden = true;
         }
-
+        $('body').layout({initClosed: panehHidden, west__size: 185});
         // 查询左边客户列表并显示第一个客户的数据
-        collJobDetail();
-        $(".ui-layout-center").css({"width":"100%"});
+        findTaskByOwner(startNum,pageSize);
+        // 设置左边div的宽度
+        $(".ui-layout-west").css({"width":"10%"});
+        $(".ui-layout-west").css({"overflow":"visible"});
+        $(".ui-layout-west").css({"height":"100%"});
+        // 设置右边div的宽度
+        $(".ui-layout-east").css({"width":"26%"});
+        $(".ui-layout-east").css({"overflow":"visible"});
+        $(".ui-layout-east").css({"height":"100%"});
+        // 设置中间div的宽度
+        $(".ui-layout-center").css({"left": "10%","width":"90%"});
         $(".ui-layout-center").css({"height":"100%"});
+        // 设置左右缩回栏的位置
+        //ui-layout-resizer ui-layout-resizer-east ui-layout-resizer-open ui-layout-resizer-east-open
+        $(".ui-layout-resizer-east").hide();
+        $(".ui-layout-resizer-west").hide();
+
+        $("input[name='cnhkDate']").datetimepicker({
+            format: "yyyy-mm-dd hh:ii:ss",
+            autoclose: true
+        });
     });
+
+
+   /* // 点击事件change
+    $('input[type=radio][name=radioChoose]').change(function () {
+        // 获取input radio选中值，方法一
+        var myvalue = $('input:radio[name="radioChoose"]:checked').val();
+        // 获取input radio选中值，方法二
+        var myvalue = $(this).val();
+    });*/
+
+
+    function findTaskByOwner(startNum,pageSize) {//获取案件用户列表
+        var customName= $("#customNameSearch").val();
+        var taskStatus= $("#taskStatusSearch").val();
+        var callCodeHistoryListStr = $("#callCodeHistoryListStr").val();
+        var freeSQL = $("#freeSQL").val();
+        var province = $("#province").val();
+        var city = $("#city").val();
+        var currentCaseNo = $("#firstEnterCaseNo").val();
+        var currentImportBatchNo = $("#firstImportBatchNo").val();
+        var phoneStatus = $("#phoneStatus").val();
+        $.post(
+            prefix + "/findTaskByOwner2",     // 请求路径url
+            {
+                caseNo:$("#caseNoSearch").val(),
+                orgId:$("#orgId").val(),
+                customName: customName,
+                callCodeHistoryListStr : callCodeHistoryListStr,
+                freeSQL:freeSQL,
+                province : province,
+                city : city,
+                taskStatus : taskStatus,
+                phoneStatus : phoneStatus,
+                startNum: $("#startNum").val(),
+                endNum: pageSize
+            }, // 请求参数
+            function(data) {
+                if(data != null){
+                    var str = "";
+                    var allCustomTotalDebtAmount = 0.00;
+                    var num = 0;
+                    var tp = $("#customNameList");
+
+                    $.each(data, function (i, n) {
+                        var style = "";
+                        if(n.recentlyFollowUpDate != null && getFormatDate(n.recentlyFollowUpDate) >= getFormatDate(new Date())){
+                            style ="background:rgb(169,169,169)";
+                        }
+                        tp.append("<li id='cust"+n.caseNo+"' style='"+style+"'><a href='javascript:void(0)' onclick='collJobDetail(\""+n.caseNo + "\",\""+n.orgId + "\",\""+n.importBatchNo + "\")'</a>" + n.customName + "</li>");
+                        allCustomTotalDebtAmount += n.arrearsTotal;
+                        num++;
+                        allCaseNo.push(n.caseNo);
+                        allOrgId.push(n.orgId);
+                        allImportBatchNo.push(n.importBatchNo);
+                        if(num == 1 && ($("#firstEnterCaseNo").val() == null || $("#firstEnterCaseNo").val() == '')){
+                            $("#firstEnterCaseNo").val(n.caseNo);
+                            $("#orgId").val(n.orgId);
+                            $("#firstImportBatchNo").val(n.importBatchNo)
+                        }
+                    });
+                    var more = $("#more");
+                    startNum = parseInt($("#startNum").val()) + 1;
+                    $("#startNum").val(startNum)
+                    if (startNum == 2) {
+                        more.append("<a href='javascript:void(0)' onclick='findTaskByOwner(startNum,pageSize)'</a>更多</li>");
+                    }
+                    var totalPage;
+                    if ((parseInt($("#totalCaseNum").val()) % pageSize) == 0) {
+                        totalPage =  parseInt($("#totalCaseNum").val()) / pageSize;
+                    } else {
+                        totalPage = parseInt($("#totalCaseNum").val()) / pageSize + 1;
+                    }
+                    if (startNum > totalPage) {
+                        $("#more").remove();
+                    }
+                    $("#customCount").text($("#totalCaseNum").val() + "件");
+                    $("#allCustomTotalDebtAmount").text(parseFloat($("#totalArrears").val()).toFixed(2) + "元");
+                    // $("#allCustomTotalDebtAmount").text(allCustomTotalDebtAmount.toFixed(2) + "元");
+                    collJobDetail($("#firstEnterCaseNo").val(),$("#orgId").val(),$("#firstImportBatchNo").val());
+
+                }
+            }
+        );
+    }
 
     function duncaseAssignList(caseNo){//获取案件历史轨迹
         $.post(
@@ -338,40 +542,6 @@
                 }
             }
         );
-    }
-
-    function callRecordList(caseNo){//获取电催记录
-        $.post(
-            prefix + "/callRecordList",     // 请求路径url
-            {
-                caseNo:caseNo
-            }, // 请求参数
-            function(data) {
-                if(data != null){ //填充电催记录
-                    // 添加table数据
-                    $("#callContactTrNew").html("");
-                    var tp = $("#callContactTrNew");
-                    $.each(data, function (i, n) {
-                        if (n.callRadioLocation != null && n.callRadioLocation != '') {
-                            var hm = "<tr ondblclick='hiddenTr(this)'><td>"+n.contactName+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.callSign,n.dictLabel)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>" +revert(nullToEmpty(n.callLen))+"</td>";
-                            hm += "<td>";
-                            if('DY' != n.platform){
-                                hm += "<a href='javascript:void(0)' onclick='listen("+n.id+")'><img src='/img/speaker.png'  class='imgso' width='20px' height='25px' alt='收听' title='收听'/></a>&nbsp;&nbsp;";
-                            }
-                            hm += "<a href='javascript:void(0)' onclick='downLoad("+n.id+",\""+n.callRadioLocation+"\",\""+n.platform+"\")'><img src='/img/download.png'  class='imgso' width='20px' height='25px' alt='下载' title='下载'/></a></td></tr>";
-                            tp.append(hm);
-                        } else {
-                            tp.append("<tr ondblclick='hiddenTr(this)'><td>"+n.contactName+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.callSign,n.dictLabel)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>"+nullToEmpty(n.callLen)+"</td>"+"<td></td></tr>");
-                        }
-                    });
-                }
-            }
-        );
-    }
-
-    function hiddenTr(obj){
-        var tp = $("#callContactTrNew");
-        obj.style.display = "none";
     }
 
     function findAppendInfo(caseNo){//自由导入补充信息
@@ -396,22 +566,28 @@
         );
     }
 
-    function listen(id){
-        var url = prefix + '/recordAudio?id='+id;
-        var width = "500";
-        var height = "300";
-        var options = {
-            title: "播放窗口",
-            width: width,
-            height: height,
-            maxmin:false,
-            url: url,
-            btn: ['关闭'],
-            yes: function (index, layero) {
-                layer.close(index);
+    function callRecordList(caseNo){//获取电催记录
+        $.post(
+            prefix + "/callRecordList",     // 请求路径url
+            {
+                caseNo:caseNo
+            }, // 请求参数
+            function(data) {
+                if(data != null){ //填充电催记录
+                    // 添加table数据
+                    $("#callContactTrNew").html("");
+                    var tp = $("#callContactTrNew");
+                    $.each(data, function (i, n) {
+                        if (n.callRadioLocation != null && n.callRadioLocation != '') {
+                            tp.append("<tr><td>"+nullToEmpty(n.contactName)+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.id,n.callSign,n.dictLabel)+"</td><td>"+nullToEmpty(n.findDate)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>" +revert(nullToEmpty(n.callLen))+"</td>" +
+                                "<td><a href='javascript:void(0)' onclick='listen("+n.id+")'><img src='/img/speaker.png'  class='imgso' width='20px' height='25px' alt='收听' title='收听'/></a>&nbsp;&nbsp;<a href='javascript:void(0)' onclick='downLoad("+n.id+")'><img src='/img/download.png'  class='imgso' width='20px' height='25px' alt='下载' title='下载'/></a></td></tr>");
+                        } else {
+                            tp.append("<tr><td>"+nullToEmpty(n.contactName)+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.id,n.callSign,n.dictLabel)+"</td><td>"+nullToEmpty(n.findDate)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>"+nullToEmpty(n.callLen)+"</td>"+"<td></td></tr>");
+                        }
+                    });
+                }
             }
-        };
-        $.modal.openOptions(options);
+        );
     }
 
     function  actionRecordList(caseNo){//获取行动历史记录
@@ -426,13 +602,36 @@
                     $("#actionTrNew").html("");
                     var tp = $("#actionTrNew");
                     $.each(data, function (i, n) {
-                        var remark = "";
                         tp.append("<tr><td>"+getActionCodeAndName(n.actionCode,n.dictLabel)+"</td><td>"+nullToEmpty(n.remark)+"</td><td>"+n.agentName+"</td><td>"+n.createTime+"</td></tr>");
                     });
                 }
             }
         );
     }
+
+    function  custContactList(caseNo,orgId,importBatchNo){//读取联系人信息
+        $.post(
+            prefix + "/custContactList",     // 请求路径url
+            {
+                caseNo:caseNo,
+                orgId:orgId,
+                importBatchNo:importBatchNo
+            }, // 请求参数
+            function(data) {
+                if(data != null){
+                    $("#custContactTbody").html("");
+                    // 添加table数据
+                    var tp = $("#custContactTbody");
+                    $.each(data, function (i, n) {
+                        if(n.phone != null && n.phone != ""){
+                            tp.append("<tr><td>"+n.contactName+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+tellToMd5(n.tel)+"</td><td>"+cardToMd5(n.certificateNo)+"</td><td>"+getRelaByCode(n.relation)+"</td><td>"+convertStatus(n.phoneStatus)+"</td></tr>");
+                        }
+                    });
+               }
+            }
+        );
+    }
+
     function  repaymentList(caseNo){//读取还款历史信息
         $.post(
             prefix + "/repaymentList",     // 请求路径url
@@ -444,7 +643,6 @@
                     $("#repayHisTrNew").html("");
                     var tp = $("#repayHisTrNew");
                     $.each(data, function (i, n) {
-                        /*tp.append("<tr><td>"+n.jyType+"</td><td>"+n.jyje+"</td><td>"+n.hkrq+"</td></tr>");*/
                         tp.append("<tr><td>"+nullToEmpty(n.jyType)+"</td><td>"+nullToEmpty(n.hkje)+"</td><td>"+n.hkrq+"</td></tr>");
                     });
                 }
@@ -465,6 +663,7 @@
                 orgId:orgId
             }, // 请求参数
             function(data) {
+                $("#sameCaseInfoDetail").html("");
                 if(data != null){
                     var tp = $("#sameCaseInfoDetail");
                     var sameCaseArrearsTotal = 0.00;
@@ -541,31 +740,127 @@
         );
     }
 
-    function  custContactList(caseNo,orgId,importBatchNo){//读取联系人信息
+    function disabledLetterApply(caseNo,orgId,importBatchNo){
         $.post(
-            prefix + "/custContactList",     // 请求路径url
+            letterPrefix + "/letterStatus",
             {
                 caseNo:caseNo,
                 orgId:orgId,
                 importBatchNo:importBatchNo
-            }, // 请求参数
+            },
             function(data) {
-                if(data != null){
-                    $("#custContactTbody").html("");
-                    // 添加table数据
-                    var tp = $("#custContactTbody");
-                    $.each(data, function (i, n) {
-                        if(n.phone != null && n.phone != ""){
-                            tp.append("<tr><td>"+n.contactName+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+tellToMd5(n.tel)+"</td><td>"+cardToMd5(n.certificateNo)+"</td><td>"+getRelaByCode(n.relation)+"</td><td>"+convertStatus(n.phoneStatus)+"</td></tr>");
+                if(data.status == 200){
+                    // for (var i = 0; i < data.result.length; i++) {
+                    //     if (data.result[i].applyStatus == 1) {
+                    //         document.getElementById("letterApply").disabled=true;
+                    //         $("#letterStatus").text("待审批");
+                    //         break;
+                    //     }
+                    // }
+                    if (data.result.length != 0) {
+                        if (data.result[0].applyStatus == 1) {
+                            // document.getElementById("letterApply").disabled=true;
+                            $("#letterStatus").text("待审批");
+                        } else if (data.result[0].applyStatus == 2) {
+                            $("#letterStatus").text("审批通过");
+                        } else if (data.result[0].applyStatus == 3) {
+                            $("#letterStatus").text("审批拒绝");
                         }
-                        // if (n.tel != null && n.tel != ''){
-                        //     tp.append("<tr><td>"+n.contactName+"</td><td>"+tellToMd5(n.tel)+"</td><td>"+cardToMd5(n.certificateNo)+"</td><td>"+getRelaByCode(n.relation)+"</td></tr>");
-                        // }
+                    } else {
+                        $("#letterStatus").text("");
 
-                    });
+                    }
                 }
             }
         );
+    }
+
+    /**
+     * 是否共案
+     * @param certificateNo
+     * @param orgId
+     */
+    function isSameCase(certificateNo,orgId){
+        $.post(
+            prefix + "/selectSameCaseInfo",
+            {
+                certificateNo:certificateNo,
+                orgId:orgId
+            },
+            function(data) {
+                if(data.status == 200){
+                    if (data.result.length > 1) {
+                        $("#isSameCase").text("是");
+                        // document.getElementById("tab-9").style.display = "block";
+                        // document.getElementById("sameCaseLi").style.display = "block";
+                        // $("#sameCaseLi").removeClass('active');
+                        // $("#tab-9").removeClass("active");
+                        // $("#infoLi").addClass("active");
+                        // $("#tab-9").removeClass("active");
+                        // $("#tab-5").addClass("active");
+                    } else {
+                        $("#isSameCase").text("否");
+                        document.getElementById("tab-9").style.display = "none";
+                        // document.getElementById("sameCaseLi").style.display = "none";
+                        // document.getElementById("tab-9").style.display = "none";
+                        // $("#infoLi").addClass("active");
+                        // // $("#tab-9").removeClass("active");
+                        // $("#tab-5").addClass("active");
+                    }
+                }
+                // $("a[aria-expanded='true']").click();
+            }
+        );
+    }
+
+    function  selectInforeportingList() {//获取查找记录
+        $.ajax({
+            url: ctx+'inforeporting/reduction/listAll',    //请求的url地址
+            dataType: "json",   //返回格式为json
+            async: false, //请求是否异步，默认为异步，这也是ajax重要特性
+            data:
+                {
+                    "caseNo": currentCaseNo,
+                    "orgId": currentOrgId,
+                    "importBatchNo": currentImportBatchNo
+                },    //参数值
+            type: "POST",   //请求方式
+            success: function(data) {
+                //请求成功时处理
+                $("#inforeportingTbody").html("");
+                var htm = "";
+                $.each(data, function (i, n) {
+                    htm+="<tr>";
+                    htm+="<td>";
+                    if(n.types==1){
+                        htm+="减免";
+                    }else if(n.types==2){
+                        htm+="划扣";
+                    }else{
+                        htm+="对公入账";
+                    }
+
+                    htm+="</td>";
+                    htm+="<td>";
+                    htm+=parseFloat(n.arrearsTotal).toFixed(2);
+                    htm+="</td>";
+                    htm+="<td>";
+                    htm+=n.createTime;
+                    htm+="</td>";
+                    htm+="<td>";
+                    htm+=n.remark==null ? '' : n.remark;
+                    htm+="</td>"
+                    htm+="<td>";
+                    htm+=n.createBy;
+                    htm+="</td>";
+                    htm+="</tr>";
+                });
+                $("#inforeportingTbody").html(htm);
+            },
+            error: function(e) {
+                //请求出错处理
+            }
+        });
     }
 
     function  selectRecordList(caseNo){//获取查找记录
@@ -588,17 +883,11 @@
         );
     }
 
-    function collJobDetail(caseNo, orgId, importBatchNo) {
-        if (caseNo == null || caseNo == '') {
-            caseNo = $("#firstEnterCaseNo").val();
-        }
-        if (orgId == null || orgId == '') {
-            orgId = $("#firstOrgId").val();
-        }
-        if (importBatchNo == null || importBatchNo == '') {
-            importBatchNo = $("#firstImportBatchNo").val();
-        }
-        var certificateNo = $("#firstCertificateNo").val();
+    function collJobDetail(caseNo,orgId,importBatchNo) {
+        currentCaseNo = caseNo;
+        currentImportBatchNo = importBatchNo;
+        currentOrgId = orgId;
+        $("#cust" +caseNo).prop("style","background:#EAEDF1");
         $.post(
             prefix + "/collJobDetail",     // 请求路径url
             {
@@ -607,10 +896,15 @@
                 importBatchNo:importBatchNo
             }, // 请求参数
             function(data) {
+                if (data.code == 1) {
+                    window.location.href="/login";
+                    return;
+                }
                 if(data != null) {
                     if(data.assets != null){ //通过接口查询资产信息
                         $("#customName").text(data.assets.curName);//客户姓名
-                        $("#customCertificateNo").text(cardToMd5(data.assets.certificateNo));//证件号码
+                        currentCertificateNo = data.assets.certificateNo;
+                        $("#customCertificateNo").text(data.assets.certificateNo);//证件号码
                         $("#sex").text(getSexByCode(data.assets.curSex));//客户性别
                         $("#age").text(getAgeByCertificateNo(data.assets.certificateNo)+"岁");//年龄
                         $("#marrageStatus").text(getMarrageByCode(data.assets.marriage));//婚姻状况
@@ -621,7 +915,6 @@
                         $("#closeCaseYhje").html(data.assets.waYe == null ? data.assets.waYe : data.assets.waYe.toFixed(2));//结案应还金额
 
                         $("#orgCasno").text(data.assets.orgCasno);//机构案件号
-                        $("#orgCasnoTitle").text(data.assets.orgCasno);//机构案件号
                         $("#rcr").text(data.assets.rcr);//入催日
                         $("#jkrq").html(data.assets.jkrq);//借款日期
                         $("#rmbQkzje").text(data.assets.rmbQkzje == null ? data.assets.rmbQkzje : data.assets.rmbQkzje.toFixed(2));//欠款总金额
@@ -642,7 +935,7 @@
                         $("#ykqs").html(data.assets.ykqs);//已还期数
                         $("#rmbYhfxzje").text(data.assets.rmbYhfxzje == null ? data.assets.rmbYhfxzje : data.assets.rmbYhfxzje.toFixed(2));//应还罚息
                         $("#znj").text(data.assets.znj == null ? data.assets.znj : data.assets.znj.toFixed(2));//滞纳金
-                        $("#borrowNo").text(cardToMd5(data.assets.borrowNo));//借款卡号
+                        $("#borrowNo").text(data.assets.borrowNo);//借款卡号
                         $("#borrowBlank").text(data.assets.borrowBlank);//借款卡银行
                         $("#workName").text(data.assets.workName);//单位名称
                         $("#workDept").html(data.assets.workDept);//工作部门
@@ -691,69 +984,43 @@
                         $("#lastRepayAmount").text(data.assets.lastRepayAmount);//最近还款金额
                         $("#dzhxrq").text(data.assets.dzhxrq);//呆账核销日期
                     }
-                }
-                disabledLetterApply(caseNo,orgId,importBatchNo);
-                isSameCase(certificateNo,orgId);
-            }
-        );
-    }
-
-    /**
-     * 是否共案
-     * @param certificateNo
-     * @param orgId
-     */
-    function isSameCase(certificateNo,orgId){
-        $.post(
-            prefix + "/selectSameCaseInfo",
-            {
-                certificateNo:certificateNo,
-                orgId:orgId
-            },
-            function(data) {
-                if(data.status == 200){
-                    if (data.result.length > 1) {
-                        $("#isSameCase").text("是");
-                    } else {
-                        $("#isSameCase").text("否");
-                        document.getElementById("tab-10").style.display = "none";
-                    }
+                    custContactList(currentCaseNo,currentOrgId,currentImportBatchNo);//获取联系人信息
+                    $('#locus').val('0');
+                    $('#call').val('0');
+                    $('#action').val('0');
+                    $('#repay').val('0');
+                    $('#cust').val('0');
+                    $('#add').val('0');
+                    $('#find').val('0');
+                    $('#inforeporting').val('0');
+                    $('#sameCaseInfo').val('0');
+                    // document.getElementById("letterApply").disabled=false;
+                    disabledLetterApply(currentCaseNo,currentOrgId,currentImportBatchNo);
+                    isSameCase(currentCertificateNo,currentOrgId);
+                    $("a[aria-expanded='true']").click();
+                    // $("#sameCaseLi").removeClass('active');
+                    // $("#infoLi").addClass("active");
+                    // $("#tab-9").removeClass("active");
+                    // $("#tab-5").addClass("active");
+                    // viewTabDetail("sameCaseInfo");
                 }
             }
         );
-    }
-
-    function disabledLetterApply(caseNo,orgId,importBatchNo){
-        $.post(
-            letterPrefix + "/letterStatus",
-            {
-                caseNo:caseNo,
-                orgId:orgId,
-                importBatchNo:importBatchNo
-            },
-            function(data) {
-                if(data.status == 200){
-                    if (data.result.length != 0) {
-                        if (data.result[0].applyStatus == 1) {
-                            $("#letterStatus").text("待审批");
-                        } else if (data.result[0].applyStatus == 2) {
-                            $("#letterStatus").text("审批通过");
-                        } else if (data.result[0].applyStatus == 3) {
-                            $("#letterStatus").text("审批拒绝");
-                        }
-                    } else {
-                        $("#letterStatus").text("");
-                    }
-                }
-            }
-        );
+        //清空电话码和行动码
+        $("#callStartTime").val("");
+        $("#callEndTime").val("");
+        $("#callLen").val("");
+        $("#callRadioLocation").val("");
+        $("#callCode").val("");
+        $("#findDate").val("");
+        $("#callRemarkAdd").val("");
+        $("#cnhkDate").val("");
+        $("#zclxDate").val("");
+        $("#actionRemark").val("");
+        $("#actionCode").val("");
     }
 
     function viewTabDetail(tab){
-        var currentCaseNo = $("#firstEnterCaseNo").val();
-        var orgId = $("#firstOrgId").val();
-        var importBatchNo = $("#firstImportBatchNo").val();
-        var certificateNo = $("#firstCertificateNo").val();
         if (tab != 'sameCaseInfo') {
             document.getElementById("tab-10").style.display = "none";
         } else {
@@ -775,111 +1042,50 @@
             actionRecordList(currentCaseNo);//获取行动历史记录
         }else if(tab == 'repay' && $('#repay').val()=='0'){//还款历史
             $('#repay').val('1');
-            repaymentList(currentCaseNo);//获取还款历史信息
+            repaymentList(currentCaseNo);//获取联系人信息
+        }else if(tab == 'cust' && $('#cust').val()=='0'){//联系人
+            $('#cust').val('1');
+            custContactList(currentCaseNo,currentOrgId,currentImportBatchNo);//获取还款历史信息
         }else if(tab == 'add' && $('#add').val()=='0'){//补充信息
             $('#add').val('1');
             findAppendInfo(currentCaseNo);//获取自由导入补充信息
         }else if(tab == 'find' && $('#find').val()=='0'){//查找记录
             $('#find').val('1');
             selectRecordList(currentCaseNo);//获取查找记录
-        }else if(tab == 'cust' && $('#cust').val()=='0'){//联系人
-            $('#cust').val('1');
-            custContactList(currentCaseNo,orgId,importBatchNo);//获取联系人信息
-        }else if(tab == 'inforeporting' && $('#inforeporting').val()=='0'){//上报信息查找记录
+        }else if(tab == 'inforeporting' && $('#inforeporting').val()=='0'){//查找记录
             $('#inforeporting').val('1');
-            selectInforeportingList();//获取上报信息记录
+            selectInforeportingList();//获取查找记录
         }else if(tab == 'sameCaseInfo' && $('#sameCaseInfo').val()=='0'){//查找记录
             $('#sameCaseInfo').val('1');
-            selectSameCaseInfo(certificateNo,orgId);//获取查找记录
+            selectSameCaseInfo(currentCertificateNo,currentOrgId);//获取查找记录
         }
 
     }
 
-    function  selectInforeportingList() {//获取上报信息记录
-        var caseNo = $("#firstEnterCaseNo").val();
-        var orgId = $("#firstOrgId").val();
-        var importBatchNo = $("#firstImportBatchNo").val();
-        $.ajax({
-            url: ctx+'inforeporting/reduction/listAll',    //请求的url地址
-            dataType: "json",   //返回格式为json
-            async: false, //请求是否异步，默认为异步，这也是ajax重要特性
-            data:
-                {
-                    "caseNo": caseNo,
-                    "orgId": orgId,
-                    "importBatchNo": importBatchNo
-                },    //参数值
-            type: "POST",   //请求方式
-            success: function(data) {
-                //请求成功时处理
-                $("#inforeportingTbody").html("");
-                var htm = "";
-                $.each(data, function (i, n) {
-                    htm+="<tr>";
-                    htm+="<td>";
-                    if(n.types==1){
-                        htm+="减免";
-                    }else if(n.types==2){
-                        htm+="划扣";
-                    }else{
-                        htm+="对公入账";
-                    }
 
-                    htm+="</td>";
-                    htm+="<td>";
-                    htm+=parseFloat(n.arrearsTotal).toFixed(2);
-                    htm+="</td>";
-                    htm+="<td>";
-                    htm+=n.createTime;
-                    htm+="</td>";
-                    htm+="<td>";
-                    htm+=n.remark==null ? '' : n.remark;
-                    htm+="</td>"
-                    htm+="<td>";
-                    htm+=n.createBy;
-                    htm+="</td>";
-                    htm+="</tr>";
-                });
-                $("#inforeportingTbody").html(htm);
-            },
-            error: function(e) {
-                //请求出错处理
+   var reset = new Reset(window);
+   reset.resetByClass("ui-layout-resizer ui-layout-resizer-east ui-layout-resizer-open ui-layout-resizer-east-open","ui-layout-resizer ui-layout-resizer-west ui-layout-resizer-open ui-layout-resizer-west-open");
+
+    function listen(id){
+        var url = prefix + '/recordAudio?id='+id;
+        var width = "500";
+        var height = "300";
+        var options = {
+            title: "播放窗口",
+            width: width,
+            height: height,
+            maxmin:false,
+            url: url,
+            btn: ['关闭'],
+            yes: function (index, layero) {
+                layer.close(index);
             }
-        });
-    }
-
-    function getDestType(destDesc) {
-        var destType = 3;
-        if (destDesc && destDesc.length <= 6 && destDesc.substring(0, 1) != '0' &&
-            destDesc.substring(0, 1) != '1' && destDesc.substring(0, 1) != '9') {
-            destType = 1;
-        }
-        return destType;
-    }
-
-    function getCallSign(callSign, dictLabel) {
-        if (dictLabel != null && dictLabel != '') {
-            return callSign + "(" + dictLabel + ")";
-        }
-        return callSign;
-    }
-
-    function getActionCodeAndName(actionCode, dictLabel) {
-        if (dictLabel != null && dictLabel != '') {
-            return actionCode + "(" + dictLabel + ")";
-        }
-        if (actionCode == 'QXBJ') {
-            return actionCode + "(取消标记)";
-        }
-        return actionCode;
+        };
+        $.modal.openOptions(options);
     }
 
 
-    function downLoad(id,url,pm){
-        if (pm == 'DY') {
-            window.location.href = url;
-            return;
-        }
+    function downLoad(id){
         window.location.href=prefix + "/downLoad?id="+id;
     }
 
@@ -921,14 +1127,14 @@
             rela = '同事';
         }else if(relaCode == 18){
             rela = '单位';
-        }  else if(relaCode == -1){
+        } else if(relaCode == -1){
             if(otherRemark != null){
                 rela = '其它'  + '(' + otherRemark + ')';
             }else{
                 rela = '其它';
             }
         }else {
-            rela = '-'
+            rela = '-';
         }
         return rela;
     }
@@ -961,20 +1167,38 @@
         return rela;
     }
 
-    function getCallSignByCode(callSignCode) {
-        var callSign;
-        if(callSignCode == 1){
-            callSign = '承诺还款';
-        } else if(callSignCode == 2){
-            callSign = '谈判';
-        } else if(callSignCode == 3){
-            callSign = '半失联';
-        }else if(callSignCode == 4){
-            callSign = '拒绝还款';
-        }else if(callSignCode == 5){
-            callSign = '失联';
+    /*function getCallSign(id, callSign, dictLabel) {
+        if (callSign == null || callSign == '') {
+            // return "<a href='javascript:void(0)' onclick='updateCallSign(\""+id+"\")'>待更新</a>";
+            return "<a onclick='showModal(\""+id+"\")'>待更新</a>";
+        }
+        if (callSign == 'R01' || callSign == 'R02') {
+            // return "<a href='javascript:void(0)' onclick='updateCallSign(\""+id+"\")'>待更新</a>";
+            return "<a onclick='showModal(\""+id+"\")'>"+callSign+"("+dictLabel+")</a>";
+        }
+        if (dictLabel != null && dictLabel != '') {
+            return callSign + "(" + dictLabel + ")";
         }
         return callSign;
+    }*/
+
+    function getCallSign(id, callSign, dictLabel) {
+        if (dictLabel != null && dictLabel != '') {
+            return callSign + "(" + dictLabel + ")";
+        }
+        return callSign;
+    }
+
+
+
+    function getActionCodeAndName(actionCode, dictLabel) {
+        if (dictLabel != null && dictLabel != '') {
+            return actionCode + "(" + dictLabel + ")";
+        }
+        if (actionCode == 'QXBJ') {
+            return actionCode + "(取消标记)";
+        }
+        return actionCode;
     }
 
     function getTransferType(type) {
@@ -1071,31 +1295,21 @@
         return age;
     }
 
-    function getActionCode(code) {
-        if(code == 'ALPA'){
-            code = '客户已还款并查到款项';
-        } else if(code == 'CNHK'){
-            code = '查到客户还款不足以退案';
-        } else if(code == 'ZTGJ'){
-            code = '死亡账户已发送死亡证明并报备';
-        }else if(code == 'TS'){
-            code = '客户称要报警/投诉';
-        }else if(code == 'NXT'){
-            code = '无还款诚意';
-        }else if(code == 'DYZG'){
-            code = '答应转告';
-        }else if(code == 'ZCLX'){
-            code = '再次联系';
-        }
-        return code;
-    }
+
 
     function getCallRecordRemark(str,createBy,id,agentName) {
-        if(str == null || str == "null" || str == undefined){
+        if(str == null || str == "null" || str == "undefined"){
             str = "";
         }
         if (createBy == -1 || agentName == "机器人") {
             return "<a href='javascript:void(0)' onclick='viewCallContent(\""+id+"\")'>查看文本</a>";
+        }
+        return str;
+    }
+
+    function nullToEmpty(str){
+        if(str == null || str == "" || str == "undefined"){
+            str = "-";
         }
         return str;
     }
@@ -1106,16 +1320,10 @@
         $.modal.open("通话内容", viewCallContentUrl);
     }
 
-    function nullToEmpty(str){
-        if(str == null || str == "" || str == "undefined"){
-            str = "-";
-        }
-        return str;
-    }
-
+    //电话号码脱敏
     function tellToMd5(tell){
         if(tell != null && tell != ""){
-           // tell = tell.substring(0,3) + "****" + tell.substring(7);
+            // tell = tell.substring(0,3) + "****" + tell.substring(7);
         }else{
             tell = "";
         }
@@ -1124,18 +1332,28 @@
     //银行卡、身份证脱敏
     function cardToMd5(cardno){
         if(cardno != null && cardno != ""){
-            //cardno = cardno.substring(0,2) + "************" + cardno.substring(14);
+            // cardno = cardno.substring(0,2) + "************" + cardno.substring(14);
         }else {
             cardno ="";
         }
         return cardno;
     }
 
-    function nullToEmpty(str){
-        if(str == null || str == "" || str == "undefined"){
-            str = "-";
+
+    function getFormatDate(str) {
+        var date = new Date(str);
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
         }
-        return str;
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        return currentdate;
     }
 
     function revert(value) {
@@ -1165,6 +1383,9 @@
         }
         return result;
     }
+
+
+
 
 </script>
 </body>

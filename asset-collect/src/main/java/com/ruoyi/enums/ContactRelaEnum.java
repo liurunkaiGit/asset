@@ -32,7 +32,10 @@ public enum ContactRelaEnum {
     HUBBAND(15, "husband", "老公"),
     WIFE(16, "wife", "老婆"),
     COLLEAGUE(17, "colleague", "同事"),
-    ORGAN(18, "organ", "单位");
+    ORGAN(18, "organ", "单位"),
+    CLASS_MATE(19, "class_mage", "同学"),
+    FATHER(20, "father", "父亲"),
+    MOTHER(21, "mother", "母亲");
 
     private Integer code;
     private String relation;
