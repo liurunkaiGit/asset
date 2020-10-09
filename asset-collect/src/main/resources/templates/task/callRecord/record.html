@@ -10,27 +10,8 @@
                 <form id="formId">
                     <div class="select-list">
                         <ul>
-                            <li class="select-time">
-                                <p>拨打时间：</p>
-                                <input type="text" name="startCreateTime" id="startCreateTime" placeholder="开始时间" class="time-input" style="width: 80px;" th:value="${#dates.format(curDate, 'yyyy-MM-dd')}"/>
-                                <span>-</span>
-                                <input type="text" name="endCreateTime" id="endCreateTime" placeholder="结束时间" class="time-input" style="width: 80px;" th:value="${#dates.format(curDate, 'yyyy-MM-dd')}"/>
-                            </li>
-                            <li class="select-time">
-                                <p>通话时间：</p>
-                                <input type="text" name="startCallStartTime" id="startCallStartTime" placeholder="开始时间" class="time-input" style="width: 80px;" />
-                                <span>-</span>
-                                <input type="text" name="endCallStartTime" id="endCallStartTime" placeholder="结束时间" class="time-input" style="width: 80px;" />
-                            </li>
-                            <li class="select-time">
-                                <p>通话时长：</p>
-                                <input type="text" name="startCallLen" id="startCallLen" style="width: 80px;" onblur="checkSZ(this);"/>
-                                <span>-</span>
-                                <input type="text" name="endCallLen" id="endCallLen" style="width: 80px;" onblur="checkSZ(this);"/>
-                            </li>
                             <li>
                                 <p>委托方：</p>
-                                <!--<input type="text" name="orgId"/>-->
                                 <select name="orgId" id="orgId">
                                     <option value="">所有</option>
                                 </select>
@@ -42,6 +23,24 @@
                             <li>
                                 <p>案件编号：</p>
                                 <input type="text" name="caseNo" id="caseNo"/>
+                            </li>
+                            <li class="select-time">
+                                <p>拨打时间：</p>
+                                <input type="text" name="startCreateTime" id="startCreateTime" placeholder="开始时间" class="time-input" th:value="${#dates.format(curDate, 'yyyy-MM-dd')}"/>
+                                <span>-</span>
+                                <input type="text" name="endCreateTime" id="endCreateTime" placeholder="结束时间" class="time-input" th:value="${#dates.format(curDate, 'yyyy-MM-dd')}"/>
+                            </li>
+                            <li class="select-time">
+                                <p>通话时间：</p>
+                                <input type="text" name="startCallStartTime" id="startCallStartTime" placeholder="开始时间" class="time-input" />
+                                <span>-</span>
+                                <input type="text" name="endCallStartTime" id="endCallStartTime" placeholder="结束时间" class="time-input" />
+                            </li>
+                            <li class="select-time">
+                                <p>通话时长：</p>
+                                <input type="text" name="startCallLen" id="startCallLen" style="width: 80px;" onblur="checkSZ(this);"/>
+                                <span>-</span>
+                                <input type="text" name="endCallLen" id="endCallLen" style="width: 80px;" onblur="checkSZ(this);"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="searchCallRecord()"><i class="fa fa-search"></i>&nbsp;搜索</a>
