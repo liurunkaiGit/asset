@@ -40,10 +40,10 @@ public class TLcInforeportingCompanyExpXing {
     /**
      * 申请时间
      */
+    @Excel(name = "申请时间",dateFormat = "yyyy-MM-dd")
     private Date applicationTime;
     /**
      * 创建时间
      */
-    @Excel(name = "申请时间",dateFormat = "yyyy-MM-dd")
     private Date createTime;
 }

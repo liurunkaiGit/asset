@@ -29,6 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="amountOfDeduction"    column="amount_of_deduction"    />
         <result property="reasons"    column="reasons"    />
         <result property="applicationTime"    column="application_time"    />
+        <result property="depositDate"    column="deposit_date"    />
         <result property="remarks"    column="remarks"    />
         <result property="area"    column="area"    />
         <result property="transferType"    column="transfer_type"    />
@@ -63,6 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         amount_of_deduction,
         reasons,
         application_time,
+        deposit_date,
         remarks,
         area,
         transfer_type,
@@ -103,6 +105,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{amountOfDeduction},
             #{reasons},
             #{applicationTime},
+            #{depositDate},
             #{remarks},
             #{area},
             #{transferType},

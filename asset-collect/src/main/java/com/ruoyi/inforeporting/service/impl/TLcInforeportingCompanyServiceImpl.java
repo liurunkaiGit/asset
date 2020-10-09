@@ -2,6 +2,7 @@ package com.ruoyi.inforeporting.service.impl;
 
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.inforeporting.domain.*;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Date;
 /**
  * @Description: 上报信息-对公入账
  * @author: gaohg
@@ -93,16 +94,21 @@ public class TLcInforeportingCompanyServiceImpl implements TLcInforeportingCompa
             company.append("付款卡后四位:"+StringUtils.nvl(cy.getLastFourCards(),"-")+"\n");
             company.append("付款银行:"+StringUtils.nvl(cy.getPayingBank(),"-")+"\n");
             company.append("存入金额:"+StringUtils.nvl(cy.getDepositAmount(),"0.0")+"\n");
+            company.append("存入日期:"+loadDate(cy.getDepositDate())+"\n");
             company.append("扣款金额:"+StringUtils.nvl(cy.getAmountOfDeduction(),"0.0")+"\n");
             company.append("非本人对公还款原因:"+ StringUtils.nvl(cy.getReasons(),"-")+"\n");
             company.append("对公凭证上传附件");
             cep.setCompany(company.toString().replaceAll("\n", String.valueOf((char)10)));
             cep.setRemarks(cy.getRemarks());
             cep.setApplicationTime(cy.getApplicationTime());
-            cep.setCreateTime(cy.getCreateTime());
             listExp.add(cep);
         }
         return listExp;
+    }
+
+    private String loadDate( Date date){
+         if(null == date)return "";
+        return DateUtils.dateTime(date);
     }
 
     /**

@@ -61,6 +61,12 @@ public class TLcInforeportingCompany extends TLcInforeportingTemplate implements
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date applicationTime;
     /**
+     * 存入日期
+     */
+    @Excel(name = "存入日期",dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date depositDate;
+    /**
      * 备注
      */
     @Excel(name = "备注")
