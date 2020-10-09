@@ -86,53 +86,53 @@
 
     <select id="selectTLcDuncaseByPage" parameterType="com.ruoyi.duncase.domain.TLcDuncase" resultMap="TLcDuncaseResult">
             SELECT
-            (select user_group from sys_user where user_id = ta.owner_id) as userGroup,
-            t.id,
-            t.case_no,
-            t.custom_name,
-            t.transfer_type,
-            ta.enter_coll_date,
-            ta.arrears_total as appoint_case_balance,
-            t.overdue_days,
-            ta.close_case_yhje,
-            t.product_name,
-            ta.call_sign,
-            ta.call_sign_value,
-            ta.action_code,
-            ta.action_code_value,
-            ta.recently_allot_date,
-            ta.recently_follow_up_date,
-            ta.owner_name,
-            ta.task_type,
-            ta.import_batch_no,
-            ta.org_id,
-            ta.task_status AS taskStatus,
-            ta.dqyhje,
-            t.score,
-            t.back_case_date
-            FROM t_lc_duncase_his t, t_lc_task_his ta
-            WHERE t.case_no = ta.case_no AND t.import_batch_no = ta.import_batch_no
+            (select user_group from sys_user where user_id = t.owner_id) as userGroup,
+            d.id,
+            d.case_no,
+            d.custom_name,
+            d.transfer_type,
+            t.enter_coll_date,
+            t.arrears_total as appoint_case_balance,
+            d.overdue_days,
+            t.close_case_yhje,
+            d.product_name,
+            t.call_sign,
+            t.call_sign_value,
+            t.action_code,
+            t.action_code_value,
+            t.recently_allot_date,
+            t.recently_follow_up_date,
+            t.owner_name,
+            t.task_type,
+            t.import_batch_no,
+            t.org_id,
+            t.task_status AS taskStatus,
+            t.dqyhje,
+            d.score,
+            d.back_case_date
+            FROM t_lc_duncase_his d, t_lc_task_his t
+            WHERE d.case_no = t.case_no AND d.import_batch_no = t.import_batch_no
             <if test="orgId != null  and orgId != ''">
-                and t.org_id = #{orgId}
+                and d.org_id = #{orgId}
             </if>
             and (1=1
             <if test="caseNo != null  and caseNo != ''">
-                and t.case_no = #{caseNo}
+                and d.case_no = #{caseNo}
             </if>
             <if test="customName != null  and customName != ''">
-                and t.custom_name like concat('%', #{customName}, '%')
+                and d.custom_name like concat('%', #{customName}, '%')
             </if>
             <if test="taskStatus != null ">
-                and ta.task_status = #{taskStatus}
+                and t.task_status = #{taskStatus}
             </if>
             <if test="provinceId != null and provinceId != ''">
-                and left(ta.certificate_no, 2) = #{provinceId}
+                and left(t.certificate_no, 2) = #{provinceId}
             </if>
             <if test="cityId != null and cityId != ''">
-                and left(ta.certificate_no, 4) = #{cityId}
+                and left(t.certificate_no, 4) = #{cityId}
             </if>
             <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
-                and EXISTS(SELECT r.call_sign FROM t_lc_call_record_his r WHERE r.case_no = t.case_no and r.call_sign IN
+                and EXISTS(SELECT r.call_sign FROM t_lc_call_record_his r WHERE r.case_no = d.case_no and r.call_sign IN
                 <foreach collection="callCodeHistoryList" item="cl" open="(" close=")" separator=",">
                     #{cl}
                 </foreach>
@@ -142,7 +142,7 @@
                 ${freeSQL}
             </if>
             )
-            ORDER BY ta.task_status ASC,t.create_time DESC,ta.recently_allot_date ASC,t.enter_coll_date ASC,t.case_no ASC
+            ORDER BY t.task_status ASC,d.create_time DESC,t.recently_allot_date ASC,d.enter_coll_date ASC,d.case_no ASC
     </select>
 
     <sql id="SELECT_DUNCASE_WHERE_FIX_COLUMN">
@@ -408,25 +408,25 @@
 
     <select id="searchHisDuncaseTotalMoney" resultType="java.util.Map">
         SELECT
-        sum(ta.arrears_total) as totalArrears,
-        sum(ta.dqyhje) as totalPay
-        FROM t_lc_duncase_his t, t_lc_task_his ta
-        WHERE t.case_no = ta.case_no AND t.import_batch_no = ta.import_batch_no
+        sum(t.arrears_total) as totalArrears,
+        sum(t.dqyhje) as totalPay
+        FROM t_lc_duncase_his d, t_lc_task_his t
+        WHERE d.case_no = t.case_no AND d.import_batch_no = t.import_batch_no
         <if test="orgId != null  and orgId != ''">
-            and t.org_id = #{orgId}
+            and d.org_id = #{orgId}
         </if>
         and (1=1
         <if test="caseNo != null  and caseNo != ''">
-            and t.case_no = #{caseNo}
+            and d.case_no = #{caseNo}
         </if>
         <if test="customName != null  and customName != ''">
-            and t.custom_name like concat('%', #{customName}, '%')
+            and d.custom_name like concat('%', #{customName}, '%')
         </if>
         <if test="taskStatus != null ">
-            and ta.task_status = #{taskStatus}
+            and t.task_status = #{taskStatus}
         </if>
         <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
-            and EXISTS(SELECT r.call_sign FROM t_lc_call_record_his r WHERE r.case_no = t.case_no and r.call_sign IN
+            and EXISTS(SELECT r.call_sign FROM t_lc_call_record_his r WHERE r.case_no = d.case_no and r.call_sign IN
             <foreach collection="callCodeHistoryList" item="cl" open="(" close=")" separator=",">
                 #{cl}
             </foreach>
