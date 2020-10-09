@@ -118,7 +118,8 @@
             t.score,
             ta.certificate_no,
             ta.phone,
-            t.remark
+            t.remark,
+            t.back_case_date
             FROM t_lc_duncase t, t_lc_task ta
             WHERE t.case_no = ta.case_no AND t.import_batch_no = ta.import_batch_no
             <if test="orgId != null  and orgId != ''">

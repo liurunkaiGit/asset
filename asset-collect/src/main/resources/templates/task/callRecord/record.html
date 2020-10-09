@@ -18,9 +18,9 @@
                             </li>
                             <li class="select-time">
                                 <p>通话时间：</p>
-                                <input type="text" name="startCallStartTime" id="startCallStartTime" placeholder="开始时间" class="time-input" style="width: 80px;" th:value="${#dates.format(curDate, 'yyyy-MM-dd')}"/>
+                                <input type="text" name="startCallStartTime" id="startCallStartTime" placeholder="开始时间" class="time-input" style="width: 80px;" />
                                 <span>-</span>
-                                <input type="text" name="endCallStartTime" id="endCallStartTime" placeholder="结束时间" class="time-input" style="width: 80px;" th:value="${#dates.format(curDate, 'yyyy-MM-dd')}"/>
+                                <input type="text" name="endCallStartTime" id="endCallStartTime" placeholder="结束时间" class="time-input" style="width: 80px;" />
                             </li>
                             <li class="select-time">
                                 <p>通话时长：</p>
@@ -34,6 +34,15 @@
                                 <select name="orgId" id="orgId">
                                     <option value="">所有</option>
                                 </select>
+                            <li>
+                            <li>
+                                <p>客户姓名：</p>
+                                <input type="text" name="customName" id="customName"/>
+                            </li>
+                            <li>
+                                <p>案件编号：</p>
+                                <input type="text" name="caseNo" id="caseNo"/>
+                            </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="searchCallRecord()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>

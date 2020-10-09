@@ -341,6 +341,7 @@
         t.notebook,
         t.phone,
         d.remark,
+        d.back_case_date as backCaseDate,
         CONCAT_WS('@',t.id,t.case_no,t.certificate_no,t.owner_id) AS idCaseNoCertificateNo
         FROM t_lc_task t,t_lc_duncase d
         WHERE t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no
@@ -492,7 +493,7 @@
 
     <select id="selectMyTaskList" parameterType="com.ruoyi.task.domain.TLcTask" resultMap="TLcTaskResult">
         SELECT
-        d.ljyhje,t.color,d.remark,
+        d.ljyhje,t.color,d.remark,d.back_case_date as backCaseDate,
         <include refid="SELECT_T_LC_TASK"/>
         FROM t_lc_task t,t_lc_duncase d
         WHERE 1=1
@@ -511,6 +512,12 @@
         </if>
         <if test="phoneStatus != null  and phoneStatus != ''">
             and t.phoneStatus = #{phoneStatus}
+        </if>
+        <if test="startBackCaseDate != null">
+            and d.back_case_date <![CDATA[>=]]> #{startBackCaseDate}
+        </if>
+        <if test="endBackCaseDate != null">
+            and d.back_case_date <![CDATA[<=]]> #{endBackCaseDate}
         </if>
         <include refid="SELECT_TASK_WHERE"></include>
         ORDER BY t.task_status ASC,t.create_time DESC,t.recently_allot_date ASC,t.enter_coll_date ASC,t.case_no ASC

@@ -688,7 +688,7 @@ public class TLcDuncase extends BaseEntity {
      */
     private String packNo;
     /*退案日*/
-//    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
 //    @Excel(name = "退案日", width = 30, dateFormat = "yyyy-MM-dd")
     private Date backCaseDate;
     /*贷款类型*/

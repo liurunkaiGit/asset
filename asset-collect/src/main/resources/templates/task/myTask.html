@@ -234,6 +234,19 @@
                                     <option value="0">不可联</option>
                                 </select>
                             </li>
+                            <li class="select-time">
+                                <p>退案日：</p>
+                                <input type="text" class="time-input" id="startBackCaseDate" placeholder="开始时间" name="startBackCaseDate"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endBackCaseDate" placeholder="结束时间" name="endBackCaseDate"/>
+                            </li>
+
+                            <li class="select-time">
+                                <p>入催日：</p>
+                                <input type="text" class="time-input" id="startEnterCollDate" placeholder="开始时间" name="startEnterCollDate"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endEnterCollDate" placeholder="结束时间" name="endEnterCollDate"/>
+                            </li>
                            <!-- <li>
                                 <p > </p>
                                 <select id="columnQuery1" onchange="addQuery('columnQuery1','custom1')">
@@ -502,6 +515,14 @@
                     field : 'certificateNo',
                     title : '证号号码'
                 },
+                    {
+                        field : 'enterCollDate',
+                        title : '入催日'
+                    },
+                    {
+                        field : 'backCaseDate',
+                        title : '退案日'
+                    },
                 {
                     field : 'remark',
                     title : '备注'
