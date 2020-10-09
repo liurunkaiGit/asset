@@ -31,6 +31,8 @@ server:
     min-spare-threads: 30
     accept-count: 10000
     max-connections: 10000000
+  max-http-header-size: 102400
+
 
 # 日志配置
 logging:
@@ -68,6 +70,7 @@ spring:
        max-file-size:  20MB
        # 设置总上传的文件大小
        max-request-size:  20MB
+
   # 服务模块
   devtools:
     restart:
