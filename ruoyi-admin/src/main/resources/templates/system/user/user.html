@@ -87,6 +87,9 @@
 		            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:user:export">
 			            <i class="fa fa-download"></i> 导出
 			        </a>
+					<a class="btn btn-primary single disabled" onclick="unlock()" shiro:hasPermission="monitor:logininfor:unlock">
+						<i class="fa fa-unlock"></i> 解锁
+					</a>
 		        </div>
 		        
 		        <div class="col-sm-12 select-table table-striped">
@@ -104,6 +107,7 @@
 		var removeFlag = [[${@permission.hasPermi('system:user:remove')}]];
 		var resetPwdFlag = [[${@permission.hasPermi('system:user:resetPwd')}]];
 		var prefix = ctx + "system/user";
+		var logininforPrefix = ctx + "monitor/logininfor";
 		var datas = [[${@dict.getType('sys_user_group')}]];
 
 		$(function() {
@@ -260,6 +264,10 @@
 			$.modal.confirm("确认要启用用户吗？", function() {
 				$.operate.post(prefix + "/changeStatus", { "userId": userId, "status": 0 });
 		    })
+		}
+
+		function unlock() {
+			$.operate.post(logininforPrefix + "/unlock?loginName=" + $.table.selectColumns("loginName"));
 		}
 	</script>
 </body>
