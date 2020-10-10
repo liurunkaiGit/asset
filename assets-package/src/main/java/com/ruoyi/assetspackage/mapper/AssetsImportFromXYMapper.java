@@ -42,11 +42,20 @@ public interface AssetsImportFromXYMapper
     public Map<String,Object> findOwner(CurAssetsPackage param)throws Exception;
 
     public void batchInsertTlcUrge(@Param(value="TlcUrgeList")List<TLcUrge> TlcUrgeList)throws Exception;
+    public void batchInsertTlcUrgeTemp(@Param(value="TlcUrgeList")List<TLcUrge> TlcUrgeList)throws Exception;
 
     public List<TLcImportFlowForXy> selectFlowList(TLcImportFlowForXy param)throws Exception;
 
     public List<Map<String,Object>> selectFileList(String importBatchNo)throws Exception;
 
     public List<TLcUrge> selectUrgeList(TLcUrge TLcUrge);
+
+    public long findXyFlow(Map<String,String> param);
+
+    public void updateflowForXy(TLcImportFlowForXy param);
+
+    public void insertTlcUrge(String importBatchNo);
+
+    public void deleteTlcUrgeTemp(String importBatchNo);
 
 }

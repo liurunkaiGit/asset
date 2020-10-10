@@ -24,6 +24,14 @@
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal" id="formId" >
         <input id = "importBatchNo" name="importBatchNo" th:value="${importBatchNo}" type="hidden">
+        <input id = "orgId" name="orgId" type="hidden">
+        <input id = "orgName" name="orgName" type="hidden">
+        <input id = "totalNum" name="totalNum" type="hidden">
+        <input id = "addNum" name="addNum" type="hidden">
+        <input id = "modifyNum" name="modifyNum" type="hidden">
+        <input id = "urgeNum" name="urgeNum" type="hidden">
+        <input id = "createBy" name="createBy" type="hidden">
+
         <div class="form-group">
             <div class="col-sm-8">
                 <input id="insert" value="" class="form-control" type="text" disabled>
@@ -68,9 +76,20 @@
                 var insertSize = result.insertSize;
                 var updateSize = result.updateSize;
                 var exectionSize = result.exectionSize;
+
                 $("#insert").val("需要新增"+insertSize+"条");
                 $("#update").val("需要更新"+updateSize+"条");
                 $("#exception").val("数据异常"+exectionSize+"条");
+
+                $("#importBatchNo").val(result.importBatchNo);
+                $("#orgId").val(result.orgId);
+                $("#orgName").val(result.orgName);
+                $("#totalNum").val(result.totalNum);
+                $("#addNum").val(result.addNum);
+                $("#modifyNum").val(result.modifyNum);
+                $("#urgeNum").val(result.urgeNum);
+                $("#createBy").val(result.createBy);
+
                 if(insertSize=="0"){
                     $("#xz").attr('disabled','true');
                     $("#xz").css('pointer-events','none');
@@ -103,11 +122,27 @@
         $("#xz").css('pointer-events','none');
         $.modal.loading("操作中，请稍后...");
         var pch = $("#importBatchNo").val();
+        var orgId = $("#orgId").val();
+        var orgName = $("#orgName").val();
+        var totalNum = $("#totalNum").val();
+        var addNum = $("#addNum").val();
+        var modifyNum = $("#modifyNum").val();
+        var urgeNum = $("#urgeNum").val();
+        var createBy = $("#createBy").val();
         $.ajax({
             url: prefix+"/insert",
             dataType: "json",
             type: "post",
-            data:{importBatchNo:pch},
+            data:{
+                importBatchNo:pch,
+                orgId:orgId,
+                orgName:orgName,
+                totalNum:totalNum,
+                addNum:addNum,
+                modifyNum:modifyNum,
+                urgeNum:urgeNum,
+                createBy:createBy
+            },
             success:function(data){
                 $.modal.closeLoading();
                 var result = data.msg;
@@ -124,11 +159,28 @@
         $("#gx").css('pointer-events','none');
         $.modal.loading("操作中，请稍后...");
         var pch = $("#importBatchNo").val();
+        var orgId = $("#orgId").val();
+        var orgName = $("#orgName").val();
+        var totalNum = $("#totalNum").val();
+        var addNum = $("#addNum").val();
+        var modifyNum = $("#modifyNum").val();
+        var urgeNum = $("#urgeNum").val();
+        var createBy = $("#createBy").val();
         $.ajax({
             url: prefix+"/update",
             dataType: "json",
             type: "post",
-            data:{importBatchNo:pch},
+            data:{
+                importBatchNo:pch,
+                importBatchNo:pch,
+                orgId:orgId,
+                orgName:orgName,
+                totalNum:totalNum,
+                addNum:addNum,
+                modifyNum:modifyNum,
+                urgeNum:urgeNum,
+                createBy:createBy
+            },
             success:function(data){
                 $.modal.closeLoading();
                 var result = data.msg;
