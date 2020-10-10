@@ -40,8 +40,9 @@
                     <select id="platform" name="platform" class="form-control org valid" style="width:360px" aria-invalid="false">
                         <option value="PA">平安</option>
                         <option value="ZJ">自建</option>
-                        <option value="DY">度言</option>
+<!--                        <option value="DY">度言</option>-->
                     </select>
+                    
                     <div class="row m-t" th:if="${captchaEnabled==true}">
 						<div class="col-xs-6">
 						    <input type="text" name="validateCode" class="form-control code" placeholder="验证码" maxlength="5" autocomplete="off">
