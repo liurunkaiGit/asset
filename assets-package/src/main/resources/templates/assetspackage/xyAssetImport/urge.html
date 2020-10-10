@@ -19,6 +19,14 @@
                             <p>业务归属人：</p>
                             <input type="text" name="ownerName"/>
                         </li>
+                        <li>
+                            <p style="width: 55px;">帐龄：</p>
+                            <input type="text" name="transfertype"/>
+                        </li>
+                        <li>
+                            <p>归属人工号：</p>
+                            <input type="text" name="loginName"/>
+                        </li>
                         <li class="select-time">
                             <p>生成时间：</p>
                             <input type="text" class="time-input" id="startCreateTime" placeholder="开始时间" name="startCreateTime"/>
@@ -51,7 +59,7 @@
             var options = {
                 url: prefix + "/urgeList",
                 exportUrl: prefix + "/urgeExport",
-                modalName: "客户资产",
+                modalName: "",
                 clickToSelect:true,
                 columns: [{
                     checkbox: true
@@ -76,6 +84,14 @@
                         title : '机构案件号'
                     },
                     {
+                        field : 'transfertype',
+                        title : '帐龄'
+                    },
+                    {
+                        field : 'rcr',
+                        title : '委案时间'
+                    },
+                    {
                         field : 'customeName',
                         title : '姓名'
                     },
@@ -86,6 +102,10 @@
                     {
                         field : 'dqyhje',
                         title : '当前已还金额'
+                    },
+                    {
+                        field : 'loginName',
+                        title : '归属人工号'
                     },
                     {
                         field : 'ownerName',

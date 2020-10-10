@@ -48,6 +48,18 @@ public class TLcUrge extends BaseEntity {
     private String orgCasNo;
 
     /**
+     * 手别
+     */
+    @Excel(name = "帐龄")
+    private String transfertype;
+    /**
+     * 入催日
+     */
+    @Excel(name = "委案时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date rcr;
+
+    /**
      * 客户姓名
      */
     @Excel(name = "姓名")
@@ -64,6 +76,12 @@ public class TLcUrge extends BaseEntity {
      */
     @Excel(name = "当前已还金额")
     private BigDecimal dqyhje;
+
+    /**
+     * 业务归属人登录名称
+     */
+    @Excel(name = "归属人工号")
+    private String loginName;
 
     /**
      * 业务归属人id

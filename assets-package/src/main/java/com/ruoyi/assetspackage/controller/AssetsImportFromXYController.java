@@ -2,9 +2,11 @@ package com.ruoyi.assetspackage.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.ruoyi.assetspackage.domain.*;
+import com.ruoyi.assetspackage.mapper.AssetsImportFromXYMapper;
 import com.ruoyi.assetspackage.service.IAssetsImportFromXYService;
 import com.ruoyi.assetspackage.service.ICurAssetsPackageService;
 import com.ruoyi.assetspackage.service.ITemplatesPackageService;
+import com.ruoyi.assetspackage.service.impl.AssetsImportFromXYServiceImpl;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -54,6 +56,12 @@ public class AssetsImportFromXYController extends BaseController {
 
     @Autowired
     private ITemplatesPackageService templatesPackageService;
+
+    @Autowired
+    private AssetsImportFromXYServiceImpl assetsImportFromXYServiceImpl;
+
+    @Autowired
+    private AssetsImportFromXYMapper assetsImportFromXYMapper;
 
 
     @RequiresPermissions("xyImport:assets:view")
@@ -201,6 +209,7 @@ public class AssetsImportFromXYController extends BaseController {
     @ResponseBody
     @Log(title = "数据导入")
     public AjaxResult upload(HttpServletRequest request, @RequestParam("file") MultipartFile[] files, String templateId) {
+        logger.error("兴业消金导入时间="+DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS, new Date())+"，导入人="+ShiroUtils.getSysUser().getUserName());
         if(StringUtils.isEmpty(templateId)){
             return AjaxResult.success("请先选择模板");
         }
@@ -247,10 +256,38 @@ public class AssetsImportFromXYController extends BaseController {
      */
     @PostMapping("/insert")
     @ResponseBody
-    public AjaxResult insert(HttpServletRequest request,String importBatchNo) {
+    public AjaxResult insert(HttpServletRequest request,String importBatchNo,
+                             String orgId,String orgName,String totalNum,String addNum,
+                             String modifyNum,String urgeNum,String createBy)
+    {
         try {
             List<TempCurAssetsPackage> insertList = this.curAssetsPackageService.selectInsertList(importBatchNo);
             this.assetsImportFromXYService.batchAddAssets(insertList);
+
+            Date createTime = (Date)request.getSession().getAttribute("urgeCreateTime");//临时表的创建时间
+            //流水表参数
+            TLcImportFlowForXy importFlow = new TLcImportFlowForXy();
+            importFlow.setImportBatchNo(importBatchNo)
+                    .setOrgId(orgId)
+                    .setOrgName(orgName)
+                    .setTotalNum(Integer.valueOf(totalNum))
+                    .setAddNum(Integer.valueOf(addNum))
+                    .setModifyNum(Integer.valueOf(modifyNum))
+                    .setUrgeNum(Integer.valueOf(urgeNum));
+            importFlow.setCreateTime(createTime);
+            importFlow.setCreateBy(createBy);
+
+            Map<String,String> param = new HashMap<>();
+            param.put("importBatchNo",importBatchNo);
+            param.put("orgId",orgId);
+            long xyFlow = assetsImportFromXYMapper.findXyFlow(param);//查询流水是否存在
+            if(xyFlow > 0){
+                //更新流水表
+                assetsImportFromXYMapper.updateflowForXy(importFlow);
+            }else{
+                //插入流水表
+                assetsImportFromXYMapper.insetflowForXy(importFlow);
+            }
             request.getSession().setAttribute("insertFlag","success");
         } catch (Exception e) {
             request.getSession().setAttribute("insertFlag","error");
@@ -269,9 +306,48 @@ public class AssetsImportFromXYController extends BaseController {
     @PostMapping("/update")
     @ResponseBody
     @Transactional
-    public AjaxResult update(HttpServletRequest request,String importBatchNo) {
+    public AjaxResult update(HttpServletRequest request,String importBatchNo,
+                             String orgId,String orgName,String totalNum,String addNum,
+                             String modifyNum,String urgeNum,String createBy)
+    {
         try {
+            //更新资产表
             this.curAssetsPackageService.updateHandler(request,importBatchNo);
+
+            List<CurAssetsPackage> preSettleList = request.getSession().getAttribute("preSettleList") != null ?(List<CurAssetsPackage>)request.getSession().getAttribute("preSettleList") :null;//回收结案=需要结案-出催案件
+            List<CurAssetsPackage> urgeList = request.getSession().getAttribute("urgeList") != null ?(List<CurAssetsPackage>)request.getSession().getAttribute("urgeList") :null;//出催案件
+            Date createTime = (Date)request.getSession().getAttribute("urgeCreateTime");//临时表的创建时间
+            //结案处理
+            if(preSettleList !=null && urgeList != null){
+                assetsImportFromXYServiceImpl.updateCloseCase(preSettleList,createTime,"2");//回收结案=需要结案-出催案件
+                assetsImportFromXYServiceImpl.updateCloseCase(urgeList,createTime,"1");//出催案件
+            }
+            //出催统计临时表复制到正式表
+            assetsImportFromXYMapper.insertTlcUrge(importBatchNo);
+            assetsImportFromXYMapper.deleteTlcUrgeTemp(importBatchNo);
+            //流水表参数
+            TLcImportFlowForXy importFlow = new TLcImportFlowForXy();
+            importFlow.setImportBatchNo(importBatchNo)
+                    .setOrgId(orgId)
+                    .setOrgName(orgName)
+                    .setTotalNum(Integer.valueOf(totalNum))
+                    .setAddNum(Integer.valueOf(addNum))
+                    .setModifyNum(Integer.valueOf(modifyNum))
+                    .setUrgeNum(Integer.valueOf(urgeNum));
+            importFlow.setCreateTime(createTime);
+            importFlow.setCreateBy(createBy);
+
+            Map<String,String> param = new HashMap<>();
+            param.put("importBatchNo",importBatchNo);
+            param.put("orgId",orgId);
+            long xyFlow = assetsImportFromXYMapper.findXyFlow(param);//查询流水是否存在
+            if(xyFlow > 0){
+                //更新流水表
+                assetsImportFromXYMapper.updateflowForXy(importFlow);
+            }else{
+                //插入流水表
+                assetsImportFromXYMapper.insetflowForXy(importFlow);
+            }
             request.getSession().setAttribute("updateFlag","success");
         } catch (Exception e) {
             request.getSession().setAttribute("updateFlag","error");
