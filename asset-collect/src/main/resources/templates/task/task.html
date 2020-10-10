@@ -382,6 +382,7 @@
                 },
                     {
                         field : 'enterCollDate',
+                        sortable: true,
                         title : '入催日'
                     },
                 {
@@ -520,6 +521,7 @@
                     },
                     {
                         field : 'backCaseDate',
+                        sortable: true,
                         title : '退案日'
                     },
                     {
@@ -836,6 +838,7 @@
                     $.modal.alertWarning("请至少选择一条记录");
                     return;
                 }
+                // alert($.table.selectColumns("ownerId"));
                 var taskStatus = $.table.selectColumns("taskStatus");
                 for(i=0;i<taskStatus.length;i++){
                     if(taskStatus[i] =="已结案" || taskStatus[i] =="3"){

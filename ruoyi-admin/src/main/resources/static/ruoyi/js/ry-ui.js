@@ -473,6 +473,7 @@ var table = {
         	    });
             	if ($.common.isNotEmpty(table.options.rememberSelected) && table.options.rememberSelected) {
             		var selectedRows = table.rememberSelecteds[table.options.id];
+            		// alert(JSON.stringify(selectedRows))
             		if($.common.isNotEmpty(selectedRows)) {
 	            		rows = $.map(table.rememberSelecteds[table.options.id], function (row) {
 	                        return row[column];
