@@ -847,6 +847,7 @@ public class TLcDuncaseServiceImpl implements ITLcDuncaseService {
         TLcCustContact selfContact = buildContactCommon(assetsPackage);
         selfContact = selfContact.setContactName(assetsPackage.getCurName())
                 .setRelation(ContactRelaEnum.SELE.getCode())
+                .setCertificateNo(assetsPackage.getCertificateNo())
                 .setPhone(assetsPackage.getCustomerMobile());
         tLcCustContactList.add(selfContact);
         // 本人家庭电话
@@ -940,7 +941,6 @@ public class TLcDuncaseServiceImpl implements ITLcDuncaseService {
      */
     private TLcCustContact buildContactCommon(Assets assetsPackage) {
         TLcCustContact contact = TLcCustContact.builder()
-                .certificateNo(assetsPackage.getCertificateNo())
                 .modifyBy(assetsPackage.getSendOptId())
                 .address(null)
                 .validateStatus(IsNoEnum.IS.getCode())

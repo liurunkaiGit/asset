@@ -82,3 +82,9 @@ alter table t_lc_duncase drop column call_sign;
 alter table t_lc_duncase drop column call_sign_value;
 alter table t_lc_duncase drop column phone;
 alter table t_lc_duncase drop column task_type;
+
+
+alter TABLE t_lc_task_his add COLUMN phoneStatus char(1) DEFAULT '0' COMMENT '案件号码状态：0不可联，1可联';
+alter TABLE t_lc_duncase_his add COLUMN remark varchar(255) DEFAULT NULL COMMENT '备注';
+
+update t_lc_cust_contact set certificate_no = null where relation != 1;
