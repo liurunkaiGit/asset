@@ -182,6 +182,7 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
         String orgId = tempCurAssetList.get(0).getOrgId();
         String orgName= tempCurAssetList.get(0).getOrg();
         Date createTime = tempCurAssetList.get(0).getCreateTime();
+        request.getSession().setAttribute("urgeCreateTime",createTime);//临时表的创建时间
         List<CurAssetsPackage> preSettleList = null;
         List<CurAssetsPackage> urgeList = null;
         List<CurAssetsPackage> partRepaymentList = null;
@@ -196,42 +197,26 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
             urgeList = this.assetsImportFromXYMapper.findUrgeList(orgId,importBatchNo);//出催案件
             partRepaymentList = this.assetsImportFromXYMapper.findPartRepaymentList(orgId,importBatchNo);//部分还款
             urgeNum = urgeList.size() + partRepaymentList.size();
-            //结案处理
-            this.updateCloseCase(preSettleList,createTime,"2");//回收结案=需要结案-出催案件
-            this.updateCloseCase(urgeList,createTime,"1");//出催案件
             //插入出催表
             if(urgeList.size()>0){
-                this.insertUrge(urgeList,"1",createTime,importBatchNo);//预测结清
+                this.insertUrgeTemp(urgeList,"1",createTime,importBatchNo);//预测结清
             }
             if(partRepaymentList.size()>0){
-                this.insertUrge(partRepaymentList,"2",createTime,importBatchNo);//部分还款
+                this.insertUrgeTemp(partRepaymentList,"2",createTime,importBatchNo);//部分还款
             }
 
-            //插入流水表
-            TLcImportFlowForXy importFlow = new TLcImportFlowForXy();
-            importFlow.setImportBatchNo(importBatchNo)
-                    .setOrgId(orgId)
-                    .setOrgName(orgName)
-                    .setTotalNum(tempCurAssetList.size())
-                    .setAddNum(insertCount)
-                    .setModifyNum(updateCount)
-                    .setUrgeNum(urgeNum);
-            importFlow.setCreateTime(createTime);
-            importFlow.setCreateBy(ShiroUtils.getLoginName());
-            this.assetsImportFromXYMapper.insetflowForXy(importFlow);
-        }else{
-            //插入流水表
-            TLcImportFlowForXy importFlow = new TLcImportFlowForXy();
-            importFlow.setImportBatchNo(importBatchNo)
-                    .setOrgId(orgId)
-                    .setOrgName(orgName)
-                    .setTotalNum(tempCurAssetList.size())
-                    .setAddNum(insertCount)
-                    .setModifyNum(updateCount);
-            importFlow.setCreateTime(createTime);
-            importFlow.setCreateBy(ShiroUtils.getLoginName());
-            this.assetsImportFromXYMapper.insetflowForXy(importFlow);
         }
+
+        request.getSession().setAttribute("preSettleList",preSettleList);//回收结案=需要结案-出催案件
+        request.getSession().setAttribute("urgeList",urgeList);//出催案件
+        map.put("importBatchNo",importBatchNo);
+        map.put("orgId",orgId);
+        map.put("orgName",orgName);
+        map.put("totalNum",String.valueOf(tempCurAssetList.size()));
+        map.put("addNum",String.valueOf(insertCount));
+        map.put("modifyNum",String.valueOf(updateCount));
+        map.put("urgeNum",String.valueOf(urgeNum));
+        map.put("createBy",ShiroUtils.getLoginName());
         return map;
     }
 
@@ -635,7 +620,7 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
      * @param createTime 临时表的创建时间
      * @throws Exception
      */
-    private void updateCloseCase(List<CurAssetsPackage> paramList,Date createTime,String isExitCollect) throws Exception{
+    public void updateCloseCase(List<CurAssetsPackage> paramList,Date createTime,String isExitCollect) throws Exception{
         if(paramList != null && paramList.size() >0) {
             List<CloseCase> remoteList = new ArrayList<>();
             for (CurAssetsPackage curAssetsPackage : paramList) {
@@ -667,24 +652,28 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
 
 
     /**
-     * 插入出催统计表
+     * 插入出催统计临时表
      * @param paramList
      * @param type
      * @param createTime 临时表的创建时间
      * @param importBatchNo 临时表的批次号
      * @throws Exception
      */
-    private void insertUrge(List<CurAssetsPackage> paramList,String type,Date createTime,String importBatchNo) throws Exception{
+    private void insertUrgeTemp(List<CurAssetsPackage> paramList,String type,Date createTime,String importBatchNo) throws Exception{
         List<TLcUrge> TlcUrgeList = new ArrayList<>();
         for (CurAssetsPackage curAsset : paramList) {
             Map<String, Object> owner = this.assetsImportFromXYMapper.findOwner(curAsset);//上一次资产导入的批次号
             Long ownerId = null;
             String ownerName = null;
+            String loginName = null;//业务归属人登录名称
             if(owner != null && owner.get("ownerId") != null && owner.get("ownerId") instanceof Long){
                 ownerId = (Long)owner.get("ownerId");
             }
             if(owner != null && owner.get("ownerName") != null && owner.get("ownerName") instanceof String){
                 ownerName = (String) owner.get("ownerName");
+            }
+            if(owner != null && owner.get("loginName") != null && owner.get("loginName") instanceof String){
+                loginName = (String) owner.get("loginName");
             }
             TLcUrge entity  = new TLcUrge();
             entity.setImportBatchNo(importBatchNo)//临时表的批次号
@@ -696,7 +685,10 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
                     .setDqyhje(curAsset.getDqyhje())
                     .setOwnerId(ownerId)
                     .setOwnerName(ownerName)
-                    .setType(type);
+                    .setType(type)
+                    .setTransfertype(curAsset.getTransfertype())
+                    .setRcr(curAsset.getRcr())
+                    .setLoginName(loginName);
             entity.setCreateTime(createTime);//临时表的创建时间
             entity.setCreateBy(ShiroUtils.getLoginName());
             TlcUrgeList.add(entity);
@@ -706,16 +698,16 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
         int index = 500;
         int pagesize = total/index;
         if(total <=index){
-            this.assetsImportFromXYMapper.batchInsertTlcUrge(TlcUrgeList);
+            this.assetsImportFromXYMapper.batchInsertTlcUrgeTemp(TlcUrgeList);
         }else{
             for(int i=0;i<pagesize;i++){
                 List lt = TlcUrgeList.subList(i*index, (i+1)*index);
-                this.assetsImportFromXYMapper.batchInsertTlcUrge(lt);
+                this.assetsImportFromXYMapper.batchInsertTlcUrgeTemp(lt);
 
             }
             if(total % index != 0){
                 List lt = TlcUrgeList.subList(index * pagesize,total);
-                this.assetsImportFromXYMapper.batchInsertTlcUrge(lt);
+                this.assetsImportFromXYMapper.batchInsertTlcUrgeTemp(lt);
             }
         }
 
