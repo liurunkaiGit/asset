@@ -14,7 +14,11 @@ ruoyi:
   addressEnabled: false
   # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath/tempDir，Linux配置 /home/ruoyi/uploadPath/tempDir
   tempDir: D:/ruoyi/uploadPath/tempDir
-
+duyan:
+  apikey: CzTAfTCxNdBUUXw7ZvpzwB48NxCBkO54
+  tokenUrl: https://open.duyansoft.com/api/v1/account/login/cti
+  logUrl: https://open.duyansoft.com/api/v1/call_log
+  soundRecordingUrl: https://open.duyansoft.com/api/v1/call/recording
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为80
