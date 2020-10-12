@@ -10,6 +10,7 @@ import com.ruoyi.caseConfig.service.ITLcAllocatCaseConfigService;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.file.FileUtils;
+import com.ruoyi.enums.ContactRelaEnum;
 import com.ruoyi.enums.IsNoEnum;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.framework.util.zipUtil;
@@ -159,8 +160,12 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
                 relateion = this.getRelateion(contactRelation);
             }
 //            String relateion = this.getRelateion(contactRelation);
-            contactName = relateion+"-"+contactName;
-            xyEntity.setContactName(contactName);
+            if (tLcCallRecord.getContactRelation().equals(ContactRelaEnum.SELE.getCode())) {
+                xyEntity.setContactName("本人");
+            } else {
+                contactName = relateion+"-"+contactName;
+                xyEntity.setContactName(contactName);
+            }
 
             String remark = tLcCallRecord.getRemark();
             if(remark != null && !"".equals(remark) && !"[]".equals(remark)){
