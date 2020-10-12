@@ -1011,19 +1011,19 @@ public class RepaymentDataImportUtil {
             dto.setJazt(IsCloseCaseEnum.NOT_CLOSE_CASE.getValue());
 //            if(orgName != null && orgName.contains("兴业消金")){
                 //查询 委案金额、手别、资产批次号、业务归属人
-                Map<String,String> param = new HashMap<>();
-                param.put("orgId",orgId);
-                param.put("orgCasNo",dto.getOrgCasno());
-                param.put("hkrq",dto.getHkrq());
-                CurAssetsPackage assetsInfo = service.findAssetsInfo(param);
-                String ownerName = service.findOwnerName(param);
-                if(assetsInfo != null){
-                    dto.setRmbYe(assetsInfo.getRmbYe());
-                    dto.setTransferType(assetsInfo.getTransfertype());
-                    dto.setAssetBatchNO(assetsInfo.getImportBatchNo());
-                    dto.setCurName(assetsInfo.getCurName());//以资产为准(还款导入不算)
-                }
-                dto.setOwnerName(ownerName);
+            Map<String, String> param = new HashMap<>();
+            param.put("orgId", orgId);
+            param.put("orgCasNo", dto.getOrgCasno());
+            param.put("hkrq", dto.getHkrq());
+            CurAssetsPackage assetsInfo = service.findAssetsInfo(param);
+            String ownerName = service.findOwnerName(param);
+            if (assetsInfo != null) {
+                dto.setRmbYe(assetsInfo.getRmbYe());
+                dto.setTransferType(assetsInfo.getTransfertype());
+                dto.setAssetBatchNO(assetsInfo.getImportBatchNo());
+                dto.setCurName(assetsInfo.getCurName());//以资产为准(还款导入不算)
+            }
+            dto.setOwnerName(ownerName);
 //            }
 
             list.add(dto);

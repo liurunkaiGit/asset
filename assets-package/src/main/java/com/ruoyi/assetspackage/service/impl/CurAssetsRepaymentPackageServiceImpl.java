@@ -205,12 +205,12 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
         }else{
             for(int i=0;i<pagesize;i++){
                 List lt = paramList.subList(i*index, (i+1)*index);
-                this.curAssetsRepaymentPackageMapper.batchAddTemp(paramList);
+                this.curAssetsRepaymentPackageMapper.batchAddTemp(lt);
 
             }
             if(total % index != 0){
                 List lt = paramList.subList(index * pagesize,total);
-                this.curAssetsRepaymentPackageMapper.batchAddTemp(paramList);
+                this.curAssetsRepaymentPackageMapper.batchAddTemp(lt);
             }
         }
     }
