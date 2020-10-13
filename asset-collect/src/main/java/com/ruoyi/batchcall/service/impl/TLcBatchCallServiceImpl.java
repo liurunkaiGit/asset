@@ -52,6 +52,11 @@ public class TLcBatchCallServiceImpl implements ITLcBatchCallService
         return tLcBatchCallMapper.selectTLcBatchCallList(tLcBatchCall);
     }
 
+    @Override
+    public List<TLcBatchCall> selectTLcBatchCall(TLcBatchCall tLcBatchCall) {
+        return tLcBatchCallMapper.selectTLcBatchCall(tLcBatchCall);
+    }
+
     /**
      * 新增批量外呼任务管理
      * 
@@ -76,6 +81,12 @@ public class TLcBatchCallServiceImpl implements ITLcBatchCallService
     {
         return tLcBatchCallMapper.updateTLcBatchCall(tLcBatchCall);
     }
+
+    @Override
+    public int updateTLcBatchCallBatch(TLcBatchCall tLcBatchCall) {
+        return tLcBatchCallMapper.updateTLcBatchCallBatch(tLcBatchCall);
+    }
+
 
     /**
      * 删除批量外呼任务管理对象

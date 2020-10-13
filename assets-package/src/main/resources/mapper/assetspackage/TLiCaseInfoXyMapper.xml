@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.TLiCaseInfoXyMapper">
+    
+    <resultMap type="TLiCaseInfoXy" id="TLiCaseInfoXyResult">
+        <result property="tuid"    column="tuid"    />
+        <result property="importBatch"    column="import_batch"    />
+        <result property="queue"    column="queue"    />
+        <result property="status"    column="status"    />
+        <result property="isStop"    column="is_stop"    />
+        <result property="stopTime"    column="stop_time"    />
+        <result property="outTime"    column="out_time"    />
+        <result property="created"    column="created"    />
+        <result property="createdby"    column="createdby"    />
+        <result property="updated"    column="updated"    />
+        <result property="updatedby"    column="updatedby"    />
+        <result property="collector"    column="collector"    />
+        <result property="collectorCurrent"    column="collector_current"    />
+        <result property="caseNo"    column="case_no"    />
+        <result property="custNo"    column="cust_no"    />
+        <result property="custName"    column="cust_name"    />
+        <result property="certificateNo"    column="certificate_no"    />
+        <result property="corpus"    column="corpus"    />
+        <result property="billDate"    column="bill_date"    />
+        <result property="collectionDate"    column="collection_date"    />
+        <result property="collectionDateEnd"    column="collection_date_end"    />
+        <result property="version"    column="version"    />
+        <result property="importTuid"    column="import_tuid"    />
+        <result property="overduePeriod"    column="overdue_period"    />
+        <result property="mobile"    column="mobile"    />
+        <result property="debtInit"    column="debt_init"    />
+        <result property="shiLian"    column="shi_lian"    />
+        <result property="bankCardName"    column="bank_card_name"    />
+        <result property="agencyName"    column="agency_name"    />
+        <result property="custAddress"    column="cust_address"    />
+        <result property="companyAddr"    column="company_addr"    />
+        <result property="black"    column="black"    />
+        <result property="outType"    column="out_type"    />
+        <result property="suggest"    column="suggest"    />
+        <result property="city"    column="city"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="sex"    column="sex"    />
+        <result property="age"    column="age"    />
+        <result property="email"    column="email"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="branch"    column="branch"    />
+        <result property="outReason"    column="out_reason"    />
+        <result property="household"    column="household"    />
+        <result property="cardCount"    column="card_count"    />
+        <result property="assignBalRmb"    column="assign_bal_rmb"    />
+        <result property="isNotice"    column="is_notice"    />
+        <result property="overdueStatus"    column="overdue_status"    />
+        <result property="bhStaff"    column="bh_staff"    />
+        <result property="score"    column="score"    />
+        <result property="probability"    column="probability"    />
+        <result property="level"    column="level"    />
+        <result property="minPayOld"    column="min_pay_old"    />
+        <result property="queryData"    column="query_data"    />
+        <result property="queryUrl"    column="query_url"    />
+        <result property="queryStatus"    column="query_status"    />
+        <result property="queryDataJh"    column="query_data_jh"    />
+        <result property="queryUrlJh"    column="query_url_jh"    />
+        <result property="isLaw"    column="is_law"    />
+        <result property="payCurmon"    column="pay_curmon"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="applyTimeReturn"    column="apply_time_return"    />
+        <result property="overdueRecent"    column="overdue_recent"    />
+        <result property="overdueRecentInit"    column="overdue_recent_init"    />
+        <result property="overdueRecentLast"    column="overdue_recent_last"    />
+        <result property="queryTime"    column="query_time"    />
+        <result property="queryResult"    column="query_result"    />
+        <result property="queryResultTime"    column="query_result_time"    />
+        <result property="queryStatusTd"    column="query_status_td"    />
+        <result property="queryTimeTd"    column="query_time_td"    />
+        <result property="statusDispaly"    column="status_dispaly"    />
+        <result property="signColor"    column="sign_color"    />
+        <result property="orderNumber"    column="order_number"    />
+        <result property="dataTime"    column="data_time"    />
+        <result property="city1"    column="city_1"    />
+        <result property="city2"    column="city_2"    />
+        <result property="csNode"    column="cs_node"    />
+        <result property="wbCompany"    column="wb_company"    />
+        <result property="originalManager"    column="original_manager"    />
+        <result property="manager"    column="manager"    />
+        <result property="overdueDate"    column="overdue_date"    />
+        <result property="newProductName"    column="new_product_name"    />
+        <result property="productName"    column="product_name"    />
+        <result property="payType"    column="pay_type"    />
+        <result property="accountBalance"    column="account_balance"    />
+        <result property="wbbd"    column="wbbd"    />
+        <result property="overdueDays"    column="overdue_days"    />
+        <result property="loan"    column="loan"    />
+        <result property="amtPrinciple"    column="amt_principle"    />
+        <result property="fee"    column="fee"    />
+        <result property="overdueServicefee"    column="overdue_servicefee"    />
+        <result property="latefee"    column="latefee"    />
+        <result property="interestPenalty"    column="interest_penalty"    />
+        <result property="accountNumber"    column="account_number"    />
+        <result property="companyPhone"    column="company_phone"    />
+        <result property="department"    column="department"    />
+        <result property="businessAddress"    column="business_address"    />
+        <result property="homeAddr"    column="home_addr"    />
+        <result property="homePhone"    column="home_phone"    />
+        <result property="contactName1"    column="contact_name_1"    />
+        <result property="contactPhone1"    column="contact_phone_1"    />
+        <result property="contactName2"    column="contact_name_2"    />
+        <result property="contactPhone2"    column="contact_phone_2"    />
+        <result property="contactName3"    column="contact_name_3"    />
+        <result property="contactPhone3"    column="contact_phone_3"    />
+        <result property="channelName"    column="channel_name"    />
+        <result property="hands"    column="hands"    />
+        <result property="lastPaymentDate"    column="last_payment_date"    />
+        <result property="allocationTime"    column="allocation_time"    />
+        <result property="recoveryTime"    column="recovery_time"    />
+        <result property="debt"    column="debt"    />
+    </resultMap>
+
+    <sql id="selectTLiCaseInfoXyVo">
+        select tuid, import_batch, queue, status, is_stop, stop_time, out_time, created, createdby, updated, updatedby, collector, collector_current, case_no, cust_no, cust_name, certificate_no, corpus, bill_date, collection_date, collection_date_end, version, import_tuid, overdue_period, mobile, debt_init, shi_lian, bank_card_name, agency_name, cust_address, company_addr, black, out_type, suggest, city, birthday, sex, age, email, company_name, branch, out_reason, household, card_count, assign_bal_rmb, is_notice, overdue_status, bh_staff, score, probability, level, min_pay_old, query_data, query_url, query_status, query_data_jh, query_url_jh, is_law, pay_curmon, apply_time, apply_time_return, overdue_recent, overdue_recent_init, overdue_recent_last, query_time, query_result, query_result_time, query_status_td, query_time_td, status_dispaly, sign_color, order_number, data_time, city_1, city_2, cs_node, wb_company, original_manager, manager, overdue_date, new_product_name, product_name, pay_type, account_balance, wbbd, overdue_days, loan, amt_principle, fee, overdue_servicefee, latefee, interest_penalty, account_number, company_phone, department, business_address, home_addr, home_phone, contact_name_1, contact_phone_1, contact_name_2, contact_phone_2, contact_name_3, contact_phone_3, channel_name, hands, last_payment_date, allocation_time, recovery_time, debt from t_li_case_info_xy_new
+    </sql>
+
+    <select id="selectTLiCaseInfoXyList" parameterType="TLiCaseInfoXy" resultMap="TLiCaseInfoXyResult">
+        <include refid="selectTLiCaseInfoXyVo"/>selectTLiCaseInfoXyList
+        <where>  
+            <if test="importBatch != null  and importBatch != ''"> and import_batch = #{importBatch}</if>
+            <if test="queue != null  and queue != ''"> and queue = #{queue}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="isStop != null  and isStop != ''"> and is_stop = #{isStop}</if>
+            <if test="stopTime != null  and stopTime != ''"> and stop_time = #{stopTime}</if>
+            <if test="outTime != null  and outTime != ''"> and out_time = #{outTime}</if>
+            <if test="created != null  and created != ''"> and created = #{created}</if>
+            <if test="createdby != null  and createdby != ''"> and createdby = #{createdby}</if>
+            <if test="updated != null  and updated != ''"> and updated = #{updated}</if>
+            <if test="updatedby != null  and updatedby != ''"> and updatedby = #{updatedby}</if>
+            <if test="collector != null  and collector != ''"> and collector = #{collector}</if>
+            <if test="collectorCurrent != null  and collectorCurrent != ''"> and collector_current = #{collectorCurrent}</if>
+            <if test="caseNo != null  and caseNo != ''"> and case_no = #{caseNo}</if>
+            <if test="custNo != null  and custNo != ''"> and cust_no = #{custNo}</if>
+            <if test="custName != null  and custName != ''"> and cust_name like concat('%', #{custName}, '%')</if>
+            <if test="certificateNo != null  and certificateNo != ''"> and certificate_no = #{certificateNo}</if>
+            <if test="corpus != null  and corpus != ''"> and corpus = #{corpus}</if>
+            <if test="billDate != null  and billDate != ''"> and bill_date = #{billDate}</if>
+            <if test="collectionDate != null  and collectionDate != ''"> and collection_date = #{collectionDate}</if>
+            <if test="collectionDateEnd != null  and collectionDateEnd != ''"> and collection_date_end = #{collectionDateEnd}</if>
+            <if test="version != null  and version != ''"> and version = #{version}</if>
+            <if test="importTuid != null  and importTuid != ''"> and import_tuid = #{importTuid}</if>
+            <if test="overduePeriod != null  and overduePeriod != ''"> and overdue_period = #{overduePeriod}</if>
+            <if test="mobile != null  and mobile != ''"> and mobile = #{mobile}</if>
+            <if test="debtInit != null  and debtInit != ''"> and debt_init = #{debtInit}</if>
+            <if test="shiLian != null  and shiLian != ''"> and shi_lian = #{shiLian}</if>
+            <if test="bankCardName != null  and bankCardName != ''"> and bank_card_name like concat('%', #{bankCardName}, '%')</if>
+            <if test="agencyName != null  and agencyName != ''"> and agency_name like concat('%', #{agencyName}, '%')</if>
+            <if test="custAddress != null  and custAddress != ''"> and cust_address = #{custAddress}</if>
+            <if test="companyAddr != null  and companyAddr != ''"> and company_addr = #{companyAddr}</if>
+            <if test="black != null  and black != ''"> and black = #{black}</if>
+            <if test="outType != null  and outType != ''"> and out_type = #{outType}</if>
+            <if test="suggest != null  and suggest != ''"> and suggest = #{suggest}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="birthday != null  and birthday != ''"> and birthday = #{birthday}</if>
+            <if test="sex != null  and sex != ''"> and sex = #{sex}</if>
+            <if test="age != null  and age != ''"> and age = #{age}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="companyName != null  and companyName != ''"> and company_name like concat('%', #{companyName}, '%')</if>
+            <if test="branch != null  and branch != ''"> and branch = #{branch}</if>
+            <if test="outReason != null  and outReason != ''"> and out_reason = #{outReason}</if>
+            <if test="household != null  and household != ''"> and household = #{household}</if>
+            <if test="cardCount != null  and cardCount != ''"> and card_count = #{cardCount}</if>
+            <if test="assignBalRmb != null  and assignBalRmb != ''"> and assign_bal_rmb = #{assignBalRmb}</if>
+            <if test="isNotice != null  and isNotice != ''"> and is_notice = #{isNotice}</if>
+            <if test="overdueStatus != null  and overdueStatus != ''"> and overdue_status = #{overdueStatus}</if>
+            <if test="bhStaff != null  and bhStaff != ''"> and bh_staff = #{bhStaff}</if>
+            <if test="score != null  and score != ''"> and score = #{score}</if>
+            <if test="probability != null  and probability != ''"> and probability = #{probability}</if>
+            <if test="level != null  and level != ''"> and level = #{level}</if>
+            <if test="minPayOld != null  and minPayOld != ''"> and min_pay_old = #{minPayOld}</if>
+            <if test="queryData != null  and queryData != ''"> and query_data = #{queryData}</if>
+            <if test="queryUrl != null  and queryUrl != ''"> and query_url = #{queryUrl}</if>
+            <if test="queryStatus != null  and queryStatus != ''"> and query_status = #{queryStatus}</if>
+            <if test="queryDataJh != null  and queryDataJh != ''"> and query_data_jh = #{queryDataJh}</if>
+            <if test="queryUrlJh != null  and queryUrlJh != ''"> and query_url_jh = #{queryUrlJh}</if>
+            <if test="isLaw != null  and isLaw != ''"> and is_law = #{isLaw}</if>
+            <if test="payCurmon != null  and payCurmon != ''"> and pay_curmon = #{payCurmon}</if>
+            <if test="applyTime != null  and applyTime != ''"> and apply_time = #{applyTime}</if>
+            <if test="applyTimeReturn != null  and applyTimeReturn != ''"> and apply_time_return = #{applyTimeReturn}</if>
+            <if test="overdueRecent != null  and overdueRecent != ''"> and overdue_recent = #{overdueRecent}</if>
+            <if test="overdueRecentInit != null  and overdueRecentInit != ''"> and overdue_recent_init = #{overdueRecentInit}</if>
+            <if test="overdueRecentLast != null  and overdueRecentLast != ''"> and overdue_recent_last = #{overdueRecentLast}</if>
+            <if test="queryTime != null  and queryTime != ''"> and query_time = #{queryTime}</if>
+            <if test="queryResult != null  and queryResult != ''"> and query_result = #{queryResult}</if>
+            <if test="queryResultTime != null  and queryResultTime != ''"> and query_result_time = #{queryResultTime}</if>
+            <if test="queryStatusTd != null  and queryStatusTd != ''"> and query_status_td = #{queryStatusTd}</if>
+            <if test="queryTimeTd != null  and queryTimeTd != ''"> and query_time_td = #{queryTimeTd}</if>
+            <if test="statusDispaly != null  and statusDispaly != ''"> and status_dispaly = #{statusDispaly}</if>
+            <if test="signColor != null  and signColor != ''"> and sign_color = #{signColor}</if>
+            <if test="orderNumber != null  and orderNumber != ''"> and order_number = #{orderNumber}</if>
+            <if test="dataTime != null  and dataTime != ''"> and data_time = #{dataTime}</if>
+            <if test="city1 != null  and city1 != ''"> and city_1 = #{city1}</if>
+            <if test="city2 != null  and city2 != ''"> and city_2 = #{city2}</if>
+            <if test="csNode != null  and csNode != ''"> and cs_node = #{csNode}</if>
+            <if test="wbCompany != null  and wbCompany != ''"> and wb_company = #{wbCompany}</if>
+            <if test="originalManager != null  and originalManager != ''"> and original_manager = #{originalManager}</if>
+            <if test="manager != null  and manager != ''"> and manager = #{manager}</if>
+            <if test="overdueDate != null  and overdueDate != ''"> and overdue_date = #{overdueDate}</if>
+            <if test="newProductName != null  and newProductName != ''"> and new_product_name like concat('%', #{newProductName}, '%')</if>
+            <if test="productName != null  and productName != ''"> and product_name like concat('%', #{productName}, '%')</if>
+            <if test="payType != null  and payType != ''"> and pay_type = #{payType}</if>
+            <if test="accountBalance != null  and accountBalance != ''"> and account_balance = #{accountBalance}</if>
+            <if test="wbbd != null  and wbbd != ''"> and wbbd = #{wbbd}</if>
+            <if test="overdueDays != null  and overdueDays != ''"> and overdue_days = #{overdueDays}</if>
+            <if test="loan != null  and loan != ''"> and loan = #{loan}</if>
+            <if test="amtPrinciple != null  and amtPrinciple != ''"> and amt_principle = #{amtPrinciple}</if>
+            <if test="fee != null  and fee != ''"> and fee = #{fee}</if>
+            <if test="overdueServicefee != null  and overdueServicefee != ''"> and overdue_servicefee = #{overdueServicefee}</if>
+            <if test="latefee != null  and latefee != ''"> and latefee = #{latefee}</if>
+            <if test="interestPenalty != null  and interestPenalty != ''"> and interest_penalty = #{interestPenalty}</if>
+            <if test="accountNumber != null  and accountNumber != ''"> and account_number = #{accountNumber}</if>
+            <if test="companyPhone != null  and companyPhone != ''"> and company_phone = #{companyPhone}</if>
+            <if test="department != null  and department != ''"> and department = #{department}</if>
+            <if test="businessAddress != null  and businessAddress != ''"> and business_address = #{businessAddress}</if>
+            <if test="homeAddr != null  and homeAddr != ''"> and home_addr = #{homeAddr}</if>
+            <if test="homePhone != null  and homePhone != ''"> and home_phone = #{homePhone}</if>
+            <if test="contactName1 != null  and contactName1 != ''"> and contact_name_1 = #{contactName1}</if>
+            <if test="contactPhone1 != null  and contactPhone1 != ''"> and contact_phone_1 = #{contactPhone1}</if>
+            <if test="contactName2 != null  and contactName2 != ''"> and contact_name_2 = #{contactName2}</if>
+            <if test="contactPhone2 != null  and contactPhone2 != ''"> and contact_phone_2 = #{contactPhone2}</if>
+            <if test="contactName3 != null  and contactName3 != ''"> and contact_name_3 = #{contactName3}</if>
+            <if test="contactPhone3 != null  and contactPhone3 != ''"> and contact_phone_3 = #{contactPhone3}</if>
+            <if test="channelName != null  and channelName != ''"> and channel_name like concat('%', #{channelName}, '%')</if>
+            <if test="hands != null  and hands != ''"> and hands = #{hands}</if>
+            <if test="lastPaymentDate != null  and lastPaymentDate != ''"> and last_payment_date = #{lastPaymentDate}</if>
+            <if test="allocationTime != null  and allocationTime != ''"> and allocation_time = #{allocationTime}</if>
+            <if test="recoveryTime != null  and recoveryTime != ''"> and recovery_time = #{recoveryTime}</if>
+            <if test="debt != null  and debt != ''"> and debt = #{debt}</if>
+        </where>
+    </select>
+    
+    <select id="selectTLiCaseInfoXyById" parameterType="String" resultMap="TLiCaseInfoXyResult">
+        <include refid="selectTLiCaseInfoXyVo"/>
+        where tuid = #{tuid}
+    </select>
+        
+    <insert id="insertTLiCaseInfoXy" parameterType="TLiCaseInfoXy">
+        insert into t_li_case_info_xy
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tuid != null  and tuid != ''">tuid,</if>
+            <if test="importBatch != null  and importBatch != ''">import_batch,</if>
+            <if test="queue != null  and queue != ''">queue,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="isStop != null  and isStop != ''">is_stop,</if>
+            <if test="stopTime != null  and stopTime != ''">stop_time,</if>
+            <if test="outTime != null  and outTime != ''">out_time,</if>
+            <if test="created != null  and created != ''">created,</if>
+            <if test="createdby != null  and createdby != ''">createdby,</if>
+            <if test="updated != null  and updated != ''">updated,</if>
+            <if test="updatedby != null  and updatedby != ''">updatedby,</if>
+            <if test="collector != null  and collector != ''">collector,</if>
+            <if test="collectorCurrent != null  and collectorCurrent != ''">collector_current,</if>
+            <if test="caseNo != null  and caseNo != ''">case_no,</if>
+            <if test="custNo != null  and custNo != ''">cust_no,</if>
+            <if test="custName != null  and custName != ''">cust_name,</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no,</if>
+            <if test="corpus != null  and corpus != ''">corpus,</if>
+            <if test="billDate != null  and billDate != ''">bill_date,</if>
+            <if test="collectionDate != null  and collectionDate != ''">collection_date,</if>
+            <if test="collectionDateEnd != null  and collectionDateEnd != ''">collection_date_end,</if>
+            <if test="version != null  and version != ''">version,</if>
+            <if test="importTuid != null  and importTuid != ''">import_tuid,</if>
+            <if test="overduePeriod != null  and overduePeriod != ''">overdue_period,</if>
+            <if test="mobile != null  and mobile != ''">mobile,</if>
+            <if test="debtInit != null  and debtInit != ''">debt_init,</if>
+            <if test="shiLian != null  and shiLian != ''">shi_lian,</if>
+            <if test="bankCardName != null  and bankCardName != ''">bank_card_name,</if>
+            <if test="agencyName != null  and agencyName != ''">agency_name,</if>
+            <if test="custAddress != null  and custAddress != ''">cust_address,</if>
+            <if test="companyAddr != null  and companyAddr != ''">company_addr,</if>
+            <if test="black != null  and black != ''">black,</if>
+            <if test="outType != null  and outType != ''">out_type,</if>
+            <if test="suggest != null  and suggest != ''">suggest,</if>
+            <if test="city != null  and city != ''">city,</if>
+            <if test="birthday != null  and birthday != ''">birthday,</if>
+            <if test="sex != null  and sex != ''">sex,</if>
+            <if test="age != null  and age != ''">age,</if>
+            <if test="email != null  and email != ''">email,</if>
+            <if test="companyName != null  and companyName != ''">company_name,</if>
+            <if test="branch != null  and branch != ''">branch,</if>
+            <if test="outReason != null  and outReason != ''">out_reason,</if>
+            <if test="household != null  and household != ''">household,</if>
+            <if test="cardCount != null  and cardCount != ''">card_count,</if>
+            <if test="assignBalRmb != null  and assignBalRmb != ''">assign_bal_rmb,</if>
+            <if test="isNotice != null  and isNotice != ''">is_notice,</if>
+            <if test="overdueStatus != null  and overdueStatus != ''">overdue_status,</if>
+            <if test="bhStaff != null  and bhStaff != ''">bh_staff,</if>
+            <if test="score != null  and score != ''">score,</if>
+            <if test="probability != null  and probability != ''">probability,</if>
+            <if test="level != null  and level != ''">level,</if>
+            <if test="minPayOld != null  and minPayOld != ''">min_pay_old,</if>
+            <if test="queryData != null  and queryData != ''">query_data,</if>
+            <if test="queryUrl != null  and queryUrl != ''">query_url,</if>
+            <if test="queryStatus != null  and queryStatus != ''">query_status,</if>
+            <if test="queryDataJh != null  and queryDataJh != ''">query_data_jh,</if>
+            <if test="queryUrlJh != null  and queryUrlJh != ''">query_url_jh,</if>
+            <if test="isLaw != null  and isLaw != ''">is_law,</if>
+            <if test="payCurmon != null  and payCurmon != ''">pay_curmon,</if>
+            <if test="applyTime != null  and applyTime != ''">apply_time,</if>
+            <if test="applyTimeReturn != null  and applyTimeReturn != ''">apply_time_return,</if>
+            <if test="overdueRecent != null  and overdueRecent != ''">overdue_recent,</if>
+            <if test="overdueRecentInit != null  and overdueRecentInit != ''">overdue_recent_init,</if>
+            <if test="overdueRecentLast != null  and overdueRecentLast != ''">overdue_recent_last,</if>
+            <if test="queryTime != null  and queryTime != ''">query_time,</if>
+            <if test="queryResult != null  and queryResult != ''">query_result,</if>
+            <if test="queryResultTime != null  and queryResultTime != ''">query_result_time,</if>
+            <if test="queryStatusTd != null  and queryStatusTd != ''">query_status_td,</if>
+            <if test="queryTimeTd != null  and queryTimeTd != ''">query_time_td,</if>
+            <if test="statusDispaly != null  and statusDispaly != ''">status_dispaly,</if>
+            <if test="signColor != null  and signColor != ''">sign_color,</if>
+            <if test="orderNumber != null  and orderNumber != ''">order_number,</if>
+            <if test="dataTime != null  and dataTime != ''">data_time,</if>
+            <if test="city1 != null  and city1 != ''">city_1,</if>
+            <if test="city2 != null  and city2 != ''">city_2,</if>
+            <if test="csNode != null  and csNode != ''">cs_node,</if>
+            <if test="wbCompany != null  and wbCompany != ''">wb_company,</if>
+            <if test="originalManager != null  and originalManager != ''">original_manager,</if>
+            <if test="manager != null  and manager != ''">manager,</if>
+            <if test="overdueDate != null  and overdueDate != ''">overdue_date,</if>
+            <if test="newProductName != null  and newProductName != ''">new_product_name,</if>
+            <if test="productName != null  and productName != ''">product_name,</if>
+            <if test="payType != null  and payType != ''">pay_type,</if>
+            <if test="accountBalance != null  and accountBalance != ''">account_balance,</if>
+            <if test="wbbd != null  and wbbd != ''">wbbd,</if>
+            <if test="overdueDays != null  and overdueDays != ''">overdue_days,</if>
+            <if test="loan != null  and loan != ''">loan,</if>
+            <if test="amtPrinciple != null  and amtPrinciple != ''">amt_principle,</if>
+            <if test="fee != null  and fee != ''">fee,</if>
+            <if test="overdueServicefee != null  and overdueServicefee != ''">overdue_servicefee,</if>
+            <if test="latefee != null  and latefee != ''">latefee,</if>
+            <if test="interestPenalty != null  and interestPenalty != ''">interest_penalty,</if>
+            <if test="accountNumber != null  and accountNumber != ''">account_number,</if>
+            <if test="companyPhone != null  and companyPhone != ''">company_phone,</if>
+            <if test="department != null  and department != ''">department,</if>
+            <if test="businessAddress != null  and businessAddress != ''">business_address,</if>
+            <if test="homeAddr != null  and homeAddr != ''">home_addr,</if>
+            <if test="homePhone != null  and homePhone != ''">home_phone,</if>
+            <if test="contactName1 != null  and contactName1 != ''">contact_name_1,</if>
+            <if test="contactPhone1 != null  and contactPhone1 != ''">contact_phone_1,</if>
+            <if test="contactName2 != null  and contactName2 != ''">contact_name_2,</if>
+            <if test="contactPhone2 != null  and contactPhone2 != ''">contact_phone_2,</if>
+            <if test="contactName3 != null  and contactName3 != ''">contact_name_3,</if>
+            <if test="contactPhone3 != null  and contactPhone3 != ''">contact_phone_3,</if>
+            <if test="channelName != null  and channelName != ''">channel_name,</if>
+            <if test="hands != null  and hands != ''">hands,</if>
+            <if test="lastPaymentDate != null  and lastPaymentDate != ''">last_payment_date,</if>
+            <if test="allocationTime != null  and allocationTime != ''">allocation_time,</if>
+            <if test="recoveryTime != null  and recoveryTime != ''">recovery_time,</if>
+            <if test="debt != null  and debt != ''">debt,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tuid != null  and tuid != ''">#{tuid},</if>
+            <if test="importBatch != null  and importBatch != ''">#{importBatch},</if>
+            <if test="queue != null  and queue != ''">#{queue},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="isStop != null  and isStop != ''">#{isStop},</if>
+            <if test="stopTime != null  and stopTime != ''">#{stopTime},</if>
+            <if test="outTime != null  and outTime != ''">#{outTime},</if>
+            <if test="created != null  and created != ''">#{created},</if>
+            <if test="createdby != null  and createdby != ''">#{createdby},</if>
+            <if test="updated != null  and updated != ''">#{updated},</if>
+            <if test="updatedby != null  and updatedby != ''">#{updatedby},</if>
+            <if test="collector != null  and collector != ''">#{collector},</if>
+            <if test="collectorCurrent != null  and collectorCurrent != ''">#{collectorCurrent},</if>
+            <if test="caseNo != null  and caseNo != ''">#{caseNo},</if>
+            <if test="custNo != null  and custNo != ''">#{custNo},</if>
+            <if test="custName != null  and custName != ''">#{custName},</if>
+            <if test="certificateNo != null  and certificateNo != ''">#{certificateNo},</if>
+            <if test="corpus != null  and corpus != ''">#{corpus},</if>
+            <if test="billDate != null  and billDate != ''">#{billDate},</if>
+            <if test="collectionDate != null  and collectionDate != ''">#{collectionDate},</if>
+            <if test="collectionDateEnd != null  and collectionDateEnd != ''">#{collectionDateEnd},</if>
+            <if test="version != null  and version != ''">#{version},</if>
+            <if test="importTuid != null  and importTuid != ''">#{importTuid},</if>
+            <if test="overduePeriod != null  and overduePeriod != ''">#{overduePeriod},</if>
+            <if test="mobile != null  and mobile != ''">#{mobile},</if>
+            <if test="debtInit != null  and debtInit != ''">#{debtInit},</if>
+            <if test="shiLian != null  and shiLian != ''">#{shiLian},</if>
+            <if test="bankCardName != null  and bankCardName != ''">#{bankCardName},</if>
+            <if test="agencyName != null  and agencyName != ''">#{agencyName},</if>
+            <if test="custAddress != null  and custAddress != ''">#{custAddress},</if>
+            <if test="companyAddr != null  and companyAddr != ''">#{companyAddr},</if>
+            <if test="black != null  and black != ''">#{black},</if>
+            <if test="outType != null  and outType != ''">#{outType},</if>
+            <if test="suggest != null  and suggest != ''">#{suggest},</if>
+            <if test="city != null  and city != ''">#{city},</if>
+            <if test="birthday != null  and birthday != ''">#{birthday},</if>
+            <if test="sex != null  and sex != ''">#{sex},</if>
+            <if test="age != null  and age != ''">#{age},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="companyName != null  and companyName != ''">#{companyName},</if>
+            <if test="branch != null  and branch != ''">#{branch},</if>
+            <if test="outReason != null  and outReason != ''">#{outReason},</if>
+            <if test="household != null  and household != ''">#{household},</if>
+            <if test="cardCount != null  and cardCount != ''">#{cardCount},</if>
+            <if test="assignBalRmb != null  and assignBalRmb != ''">#{assignBalRmb},</if>
+            <if test="isNotice != null  and isNotice != ''">#{isNotice},</if>
+            <if test="overdueStatus != null  and overdueStatus != ''">#{overdueStatus},</if>
+            <if test="bhStaff != null  and bhStaff != ''">#{bhStaff},</if>
+            <if test="score != null  and score != ''">#{score},</if>
+            <if test="probability != null  and probability != ''">#{probability},</if>
+            <if test="level != null  and level != ''">#{level},</if>
+            <if test="minPayOld != null  and minPayOld != ''">#{minPayOld},</if>
+            <if test="queryData != null  and queryData != ''">#{queryData},</if>
+            <if test="queryUrl != null  and queryUrl != ''">#{queryUrl},</if>
+            <if test="queryStatus != null  and queryStatus != ''">#{queryStatus},</if>
+            <if test="queryDataJh != null  and queryDataJh != ''">#{queryDataJh},</if>
+            <if test="queryUrlJh != null  and queryUrlJh != ''">#{queryUrlJh},</if>
+            <if test="isLaw != null  and isLaw != ''">#{isLaw},</if>
+            <if test="payCurmon != null  and payCurmon != ''">#{payCurmon},</if>
+            <if test="applyTime != null  and applyTime != ''">#{applyTime},</if>
+            <if test="applyTimeReturn != null  and applyTimeReturn != ''">#{applyTimeReturn},</if>
+            <if test="overdueRecent != null  and overdueRecent != ''">#{overdueRecent},</if>
+            <if test="overdueRecentInit != null  and overdueRecentInit != ''">#{overdueRecentInit},</if>
+            <if test="overdueRecentLast != null  and overdueRecentLast != ''">#{overdueRecentLast},</if>
+            <if test="queryTime != null  and queryTime != ''">#{queryTime},</if>
+            <if test="queryResult != null  and queryResult != ''">#{queryResult},</if>
+            <if test="queryResultTime != null  and queryResultTime != ''">#{queryResultTime},</if>
+            <if test="queryStatusTd != null  and queryStatusTd != ''">#{queryStatusTd},</if>
+            <if test="queryTimeTd != null  and queryTimeTd != ''">#{queryTimeTd},</if>
+            <if test="statusDispaly != null  and statusDispaly != ''">#{statusDispaly},</if>
+            <if test="signColor != null  and signColor != ''">#{signColor},</if>
+            <if test="orderNumber != null  and orderNumber != ''">#{orderNumber},</if>
+            <if test="dataTime != null  and dataTime != ''">#{dataTime},</if>
+            <if test="city1 != null  and city1 != ''">#{city1},</if>
+            <if test="city2 != null  and city2 != ''">#{city2},</if>
+            <if test="csNode != null  and csNode != ''">#{csNode},</if>
+            <if test="wbCompany != null  and wbCompany != ''">#{wbCompany},</if>
+            <if test="originalManager != null  and originalManager != ''">#{originalManager},</if>
+            <if test="manager != null  and manager != ''">#{manager},</if>
+            <if test="overdueDate != null  and overdueDate != ''">#{overdueDate},</if>
+            <if test="newProductName != null  and newProductName != ''">#{newProductName},</if>
+            <if test="productName != null  and productName != ''">#{productName},</if>
+            <if test="payType != null  and payType != ''">#{payType},</if>
+            <if test="accountBalance != null  and accountBalance != ''">#{accountBalance},</if>
+            <if test="wbbd != null  and wbbd != ''">#{wbbd},</if>
+            <if test="overdueDays != null  and overdueDays != ''">#{overdueDays},</if>
+            <if test="loan != null  and loan != ''">#{loan},</if>
+            <if test="amtPrinciple != null  and amtPrinciple != ''">#{amtPrinciple},</if>
+            <if test="fee != null  and fee != ''">#{fee},</if>
+            <if test="overdueServicefee != null  and overdueServicefee != ''">#{overdueServicefee},</if>
+            <if test="latefee != null  and latefee != ''">#{latefee},</if>
+            <if test="interestPenalty != null  and interestPenalty != ''">#{interestPenalty},</if>
+            <if test="accountNumber != null  and accountNumber != ''">#{accountNumber},</if>
+            <if test="companyPhone != null  and companyPhone != ''">#{companyPhone},</if>
+            <if test="department != null  and department != ''">#{department},</if>
+            <if test="businessAddress != null  and businessAddress != ''">#{businessAddress},</if>
+            <if test="homeAddr != null  and homeAddr != ''">#{homeAddr},</if>
+            <if test="homePhone != null  and homePhone != ''">#{homePhone},</if>
+            <if test="contactName1 != null  and contactName1 != ''">#{contactName1},</if>
+            <if test="contactPhone1 != null  and contactPhone1 != ''">#{contactPhone1},</if>
+            <if test="contactName2 != null  and contactName2 != ''">#{contactName2},</if>
+            <if test="contactPhone2 != null  and contactPhone2 != ''">#{contactPhone2},</if>
+            <if test="contactName3 != null  and contactName3 != ''">#{contactName3},</if>
+            <if test="contactPhone3 != null  and contactPhone3 != ''">#{contactPhone3},</if>
+            <if test="channelName != null  and channelName != ''">#{channelName},</if>
+            <if test="hands != null  and hands != ''">#{hands},</if>
+            <if test="lastPaymentDate != null  and lastPaymentDate != ''">#{lastPaymentDate},</if>
+            <if test="allocationTime != null  and allocationTime != ''">#{allocationTime},</if>
+            <if test="recoveryTime != null  and recoveryTime != ''">#{recoveryTime},</if>
+            <if test="debt != null  and debt != ''">#{debt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLiCaseInfoXy" parameterType="TLiCaseInfoXy">
+        update t_li_case_info_xy
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="importBatch != null  and importBatch != ''">import_batch = #{importBatch},</if>
+            <if test="queue != null  and queue != ''">queue = #{queue},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="isStop != null  and isStop != ''">is_stop = #{isStop},</if>
+            <if test="stopTime != null  and stopTime != ''">stop_time = #{stopTime},</if>
+            <if test="outTime != null  and outTime != ''">out_time = #{outTime},</if>
+            <if test="created != null  and created != ''">created = #{created},</if>
+            <if test="createdby != null  and createdby != ''">createdby = #{createdby},</if>
+            <if test="updated != null  and updated != ''">updated = #{updated},</if>
+            <if test="updatedby != null  and updatedby != ''">updatedby = #{updatedby},</if>
+            <if test="collector != null  and collector != ''">collector = #{collector},</if>
+            <if test="collectorCurrent != null  and collectorCurrent != ''">collector_current = #{collectorCurrent},</if>
+            <if test="caseNo != null  and caseNo != ''">case_no = #{caseNo},</if>
+            <if test="custNo != null  and custNo != ''">cust_no = #{custNo},</if>
+            <if test="custName != null  and custName != ''">cust_name = #{custName},</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no = #{certificateNo},</if>
+            <if test="corpus != null  and corpus != ''">corpus = #{corpus},</if>
+            <if test="billDate != null  and billDate != ''">bill_date = #{billDate},</if>
+            <if test="collectionDate != null  and collectionDate != ''">collection_date = #{collectionDate},</if>
+            <if test="collectionDateEnd != null  and collectionDateEnd != ''">collection_date_end = #{collectionDateEnd},</if>
+            <if test="version != null  and version != ''">version = #{version},</if>
+            <if test="importTuid != null  and importTuid != ''">import_tuid = #{importTuid},</if>
+            <if test="overduePeriod != null  and overduePeriod != ''">overdue_period = #{overduePeriod},</if>
+            <if test="mobile != null  and mobile != ''">mobile = #{mobile},</if>
+            <if test="debtInit != null  and debtInit != ''">debt_init = #{debtInit},</if>
+            <if test="shiLian != null  and shiLian != ''">shi_lian = #{shiLian},</if>
+            <if test="bankCardName != null  and bankCardName != ''">bank_card_name = #{bankCardName},</if>
+            <if test="agencyName != null  and agencyName != ''">agency_name = #{agencyName},</if>
+            <if test="custAddress != null  and custAddress != ''">cust_address = #{custAddress},</if>
+            <if test="companyAddr != null  and companyAddr != ''">company_addr = #{companyAddr},</if>
+            <if test="black != null  and black != ''">black = #{black},</if>
+            <if test="outType != null  and outType != ''">out_type = #{outType},</if>
+            <if test="suggest != null  and suggest != ''">suggest = #{suggest},</if>
+            <if test="city != null  and city != ''">city = #{city},</if>
+            <if test="birthday != null  and birthday != ''">birthday = #{birthday},</if>
+            <if test="sex != null  and sex != ''">sex = #{sex},</if>
+            <if test="age != null  and age != ''">age = #{age},</if>
+            <if test="email != null  and email != ''">email = #{email},</if>
+            <if test="companyName != null  and companyName != ''">company_name = #{companyName},</if>
+            <if test="branch != null  and branch != ''">branch = #{branch},</if>
+            <if test="outReason != null  and outReason != ''">out_reason = #{outReason},</if>
+            <if test="household != null  and household != ''">household = #{household},</if>
+            <if test="cardCount != null  and cardCount != ''">card_count = #{cardCount},</if>
+            <if test="assignBalRmb != null  and assignBalRmb != ''">assign_bal_rmb = #{assignBalRmb},</if>
+            <if test="isNotice != null  and isNotice != ''">is_notice = #{isNotice},</if>
+            <if test="overdueStatus != null  and overdueStatus != ''">overdue_status = #{overdueStatus},</if>
+            <if test="bhStaff != null  and bhStaff != ''">bh_staff = #{bhStaff},</if>
+            <if test="score != null  and score != ''">score = #{score},</if>
+            <if test="probability != null  and probability != ''">probability = #{probability},</if>
+            <if test="level != null  and level != ''">level = #{level},</if>
+            <if test="minPayOld != null  and minPayOld != ''">min_pay_old = #{minPayOld},</if>
+            <if test="queryData != null  and queryData != ''">query_data = #{queryData},</if>
+            <if test="queryUrl != null  and queryUrl != ''">query_url = #{queryUrl},</if>
+            <if test="queryStatus != null  and queryStatus != ''">query_status = #{queryStatus},</if>
+            <if test="queryDataJh != null  and queryDataJh != ''">query_data_jh = #{queryDataJh},</if>
+            <if test="queryUrlJh != null  and queryUrlJh != ''">query_url_jh = #{queryUrlJh},</if>
+            <if test="isLaw != null  and isLaw != ''">is_law = #{isLaw},</if>
+            <if test="payCurmon != null  and payCurmon != ''">pay_curmon = #{payCurmon},</if>
+            <if test="applyTime != null  and applyTime != ''">apply_time = #{applyTime},</if>
+            <if test="applyTimeReturn != null  and applyTimeReturn != ''">apply_time_return = #{applyTimeReturn},</if>
+            <if test="overdueRecent != null  and overdueRecent != ''">overdue_recent = #{overdueRecent},</if>
+            <if test="overdueRecentInit != null  and overdueRecentInit != ''">overdue_recent_init = #{overdueRecentInit},</if>
+            <if test="overdueRecentLast != null  and overdueRecentLast != ''">overdue_recent_last = #{overdueRecentLast},</if>
+            <if test="queryTime != null  and queryTime != ''">query_time = #{queryTime},</if>
+            <if test="queryResult != null  and queryResult != ''">query_result = #{queryResult},</if>
+            <if test="queryResultTime != null  and queryResultTime != ''">query_result_time = #{queryResultTime},</if>
+            <if test="queryStatusTd != null  and queryStatusTd != ''">query_status_td = #{queryStatusTd},</if>
+            <if test="queryTimeTd != null  and queryTimeTd != ''">query_time_td = #{queryTimeTd},</if>
+            <if test="statusDispaly != null  and statusDispaly != ''">status_dispaly = #{statusDispaly},</if>
+            <if test="signColor != null  and signColor != ''">sign_color = #{signColor},</if>
+            <if test="orderNumber != null  and orderNumber != ''">order_number = #{orderNumber},</if>
+            <if test="dataTime != null  and dataTime != ''">data_time = #{dataTime},</if>
+            <if test="city1 != null  and city1 != ''">city_1 = #{city1},</if>
+            <if test="city2 != null  and city2 != ''">city_2 = #{city2},</if>
+            <if test="csNode != null  and csNode != ''">cs_node = #{csNode},</if>
+            <if test="wbCompany != null  and wbCompany != ''">wb_company = #{wbCompany},</if>
+            <if test="originalManager != null  and originalManager != ''">original_manager = #{originalManager},</if>
+            <if test="manager != null  and manager != ''">manager = #{manager},</if>
+            <if test="overdueDate != null  and overdueDate != ''">overdue_date = #{overdueDate},</if>
+            <if test="newProductName != null  and newProductName != ''">new_product_name = #{newProductName},</if>
+            <if test="productName != null  and productName != ''">product_name = #{productName},</if>
+            <if test="payType != null  and payType != ''">pay_type = #{payType},</if>
+            <if test="accountBalance != null  and accountBalance != ''">account_balance = #{accountBalance},</if>
+            <if test="wbbd != null  and wbbd != ''">wbbd = #{wbbd},</if>
+            <if test="overdueDays != null  and overdueDays != ''">overdue_days = #{overdueDays},</if>
+            <if test="loan != null  and loan != ''">loan = #{loan},</if>
+            <if test="amtPrinciple != null  and amtPrinciple != ''">amt_principle = #{amtPrinciple},</if>
+            <if test="fee != null  and fee != ''">fee = #{fee},</if>
+            <if test="overdueServicefee != null  and overdueServicefee != ''">overdue_servicefee = #{overdueServicefee},</if>
+            <if test="latefee != null  and latefee != ''">latefee = #{latefee},</if>
+            <if test="interestPenalty != null  and interestPenalty != ''">interest_penalty = #{interestPenalty},</if>
+            <if test="accountNumber != null  and accountNumber != ''">account_number = #{accountNumber},</if>
+            <if test="companyPhone != null  and companyPhone != ''">company_phone = #{companyPhone},</if>
+            <if test="department != null  and department != ''">department = #{department},</if>
+            <if test="businessAddress != null  and businessAddress != ''">business_address = #{businessAddress},</if>
+            <if test="homeAddr != null  and homeAddr != ''">home_addr = #{homeAddr},</if>
+            <if test="homePhone != null  and homePhone != ''">home_phone = #{homePhone},</if>
+            <if test="contactName1 != null  and contactName1 != ''">contact_name_1 = #{contactName1},</if>
+            <if test="contactPhone1 != null  and contactPhone1 != ''">contact_phone_1 = #{contactPhone1},</if>
+            <if test="contactName2 != null  and contactName2 != ''">contact_name_2 = #{contactName2},</if>
+            <if test="contactPhone2 != null  and contactPhone2 != ''">contact_phone_2 = #{contactPhone2},</if>
+            <if test="contactName3 != null  and contactName3 != ''">contact_name_3 = #{contactName3},</if>
+            <if test="contactPhone3 != null  and contactPhone3 != ''">contact_phone_3 = #{contactPhone3},</if>
+            <if test="channelName != null  and channelName != ''">channel_name = #{channelName},</if>
+            <if test="hands != null  and hands != ''">hands = #{hands},</if>
+            <if test="lastPaymentDate != null  and lastPaymentDate != ''">last_payment_date = #{lastPaymentDate},</if>
+            <if test="allocationTime != null  and allocationTime != ''">allocation_time = #{allocationTime},</if>
+            <if test="recoveryTime != null  and recoveryTime != ''">recovery_time = #{recoveryTime},</if>
+            <if test="debt != null  and debt != ''">debt = #{debt},</if>
+        </trim>
+        where tuid = #{tuid}
+    </update>
+
+    <delete id="deleteTLiCaseInfoXyById" parameterType="String">
+        delete from t_li_case_info_xy where tuid = #{tuid}
+    </delete>
+
+    <delete id="deleteTLiCaseInfoXyByIds" parameterType="String">
+        delete from t_li_case_info_xy where tuid in 
+        <foreach item="tuid" collection="array" open="(" separator="," close=")">
+            #{tuid}
+        </foreach>
+    </delete>
+    
+</mapper>
