@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增中心信息')"/>
+    <th:block th:include="include :: select2-css"/>
+</head>
+<body>
+<div class="main-content">
+    <form id="form-centerInformation" class="form-horizontal">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">*中心名称：</label>
+                    <div class="col-sm-8">
+                        <input name="centerName" id="centerName" class="form-control" type="text" maxlength="50"
+                               required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">*负责人：</label>
+                    <div class="col-sm-8">
+                        <input name="leader" id="leader" class="form-control" type="text" maxlength="50" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">*坐席数量：</label>
+                    <div class="col-sm-8">
+                        <input name="agentNum" id="agentNum" class="form-control" type="number" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">*工位数量：</label>
+                    <div class="col-sm-8">
+                        <input name="workSeatNum" id="workSeatNum" class="form-control" type="number" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">满席率：</label>
+                    <div class="col-sm-8">
+                        <input id="seatRate" readonly="readonly" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">*中心地址：</label>
+                    <div class="col-xs-10">
+                        <textarea name="centerAddress" maxlength="100" class="form-control" rows="3"
+                                  style="width:450px;"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">培训室：</label>
+                    <div class="col-xs-10">
+                        <textarea name="trainningRoom" maxlength="100" class="form-control" rows="3"
+                                  style="width:450px;"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">休息区：</label>
+                    <div class="col-xs-10">
+                        <textarea name="restArea" maxlength="100" class="form-control" rows="3"
+                                  style="width:450px;"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: select2-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "information/center";
+    ;
+    $(document).ready(function () {
+        jQuery.validator.addMethod("validAgentAndWorkSeatNum", function (value, element, params) {
+            var workSeatNum = $("#workSeatNum").val();
+            var agentNum = $("#agentNum").val();
+            if (parseInt(agentNum) > parseInt(workSeatNum)) {
+                $("#seatRate").val(null)
+                return false;
+            } else {
+                return true;
+            }
+        })
+        $("#form-centerInformation").validate({
+            errorPlacement: function (error, element) {
+                if (element.parent().hasClass("form-control")) {
+                    element.parent().after(error);
+                } else
+                    element.after(error)
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent()); //直接把错误信息加在验证元素后··
+            },
+            rules: {
+                centerName: {
+                    minlength: 1,
+                    maxlength: 50,
+                    remote: {
+                        url: prefix + "/checkCenterNameUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            "centerName": function () {
+                                return $.common.trim($("#centerName").val());
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                            return parseInt(data) == 0;
+                        }
+                    }
+                },
+                agentNum: {
+                    digits: true,
+                    validAgentAndWorkSeatNum: true
+                },
+                workSeatNum: {
+                    digits: true,
+                    validAgentAndWorkSeatNum: true
+                },
+                centerAddress: {
+                    required: true
+                }
+            }, messages: {
+                "centerName": {
+                    remote: "中心名称已经存在"
+                },
+                "agentNum": {
+                    digits: "坐席数量只能输入正整数",
+                    validAgentAndWorkSeatNum: "坐席数量不能大于工位数量"
+                },
+                "workSeatNum": {
+                    digits: "工位数量只能输入正整数",
+                    validAgentAndWorkSeatNum: "工位数量不能小于坐席数量"
+                }
+            },
+            focusCleanup: true
+        });
+        $("#workSeatNum,#agentNum").on("blur", function () {
+            var workSeatNum = $("#workSeatNum").val();
+            var agentNum = $("#agentNum").val();
+            if (parseInt(agentNum) >= 0 && parseInt(workSeatNum) >= 0 && parseInt(agentNum) <= parseInt(workSeatNum)) {
+                $("#seatRate").val(parseFloat(agentNum / workSeatNum * 100).toFixed(2) + "%")
+            } else {
+                $("#seatRate").val(null)
+            }
+        })
+
+
+    })
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-centerInformation').serialize());
+        }
+    }
+</script>
+<style>
+    #centerAddress-error{
+        position: static;
+    }
+</style>
+</body>
+</html>

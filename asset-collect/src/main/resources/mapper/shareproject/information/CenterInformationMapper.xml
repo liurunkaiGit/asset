@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shareproject.information.mapper.CenterInformationMapper">
+    <resultMap type="com.ruoyi.shareproject.information.domain.TLpInformationCenter" id="TInformationCenterResult">
+        <id column="id" property="id"/>
+        <result column="center_name" property="centerName"/>
+        <result column="center_address" property="centerAddress"/>
+        <result column="agent_num" property="agentNum"/>
+        <result column="work_seat_num" property="workSeatNum"/>
+        <result column="trainning_room" property="trainningRoom"/>
+        <result column="rest_area" property="restArea"/>
+        <result column="leader" property="leader"/>
+        <result column="create_by"   property="createBy"   />
+        <result column="create_time" property="createTime"     />
+        <result column="update_by"   property="updateBy"   />
+        <result column="update_time" property="updateTime"     />
+    </resultMap>
+    <sql id="baseColumn">
+        t.id,
+        t.center_name,
+        t.center_address,
+        t.agent_num,
+        t.work_seat_num,
+        t.trainning_room,
+        t.rest_area,
+        t.leader,
+        t.update_time
+    </sql>
+    <sql id="tableName" >
+        t_lp_information_center t
+    </sql>
+
+    <sql id="tableNameNoAlias" >
+        t_lp_information_center
+    </sql>
+    <select id="selectCenterInformationList" resultMap="TInformationCenterResult"  parameterType="com.ruoyi.shareproject.information.domain.TLpInformationCenter">
+        select <include refid="baseColumn" />,su.user_name as update_by
+            from
+                <include refid="tableName" /> left join   sys_user su ON t.update_by = su.user_id
+        <where>
+            <if test="leader != null and leader != ''">
+                 t.leader like concat('%', #{leader}, '%')
+            </if>
+            <if test="centerName != null and centerName != ''">
+                AND t.center_name like concat('%', #{centerName}, '%')
+            </if>
+            <if test="beginUpdateTime != null"><!-- 开始时间检索 -->
+                and date_format(t.update_time,'%Y-%m-%d %H:%i:%s') &gt;= #{beginUpdateTime}
+            </if>
+            <if test="endUpdateTime != null"><!-- 结束时间检索 -->
+                and date_format(t.update_time,'%Y-%m-%d %H:%i:%s') &lt;= #{endUpdateTime}
+            </if>
+        </where>
+        order by update_time desc
+    </select>
+    <select id="selectCenterNameCount" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM <include refid="tableName" />
+            WHERE center_name = #{centerName}
+            <if test="id != null" >
+                and id != #{id}
+            </if>
+    </select>
+
+
+    <select id="selectCenterInformationById"
+            resultMap="TInformationCenterResult">
+        SELECT <include refid="baseColumn" /> FROM <include refid="tableName" />
+         WHERE id = #{id}
+    </select>
+
+    <insert id="insertCenterInformation" parameterType="com.ruoyi.shareproject.information.domain.TLpInformationCenter"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into <include refid="tableNameNoAlias" />
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            center_name,
+            center_address,
+            agent_num,
+            work_seat_num,
+            <if test="restArea != null and restArea != ''">
+                rest_area,
+            </if>
+            <if test="trainningRoom != null and trainningRoom != ''">
+                trainning_room,
+            </if>
+            leader,
+            create_by,
+            create_time,
+            update_by,
+            update_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+           #{centerName},
+           #{centerAddress},
+           #{agentNum},
+           #{workSeatNum},
+           <if test="restArea != null and restArea != ''">
+              #{restArea},
+           </if>
+           <if test="trainningRoom != null and trainningRoom != ''">
+               #{trainningRoom},
+           </if>
+           #{leader},
+           #{createBy},
+            now(),
+            #{updateBy},
+            now()
+        </trim>
+    </insert>
+
+    <update id="updateInformationCenter" >
+        update <include refid="tableNameNoAlias" />
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="centerName != null  and centerName != ''">center_name = #{centerName},</if>
+            <if test="centerAddress != null  and centerAddress != ''">center_address = #{centerAddress},</if>
+            <if test="agentNum != null">agent_num = #{agentNum},</if>
+            <if test="workSeatNum != null">work_seat_num = #{workSeatNum},</if>
+            <if test="leader != null and leader != '' ">leader = #{leader},</if>
+            trainning_room = #{trainningRoom},rest_area = #{restArea},
+            update_time = now(),update_by = #{updateBy}
+        </trim>
+        where id = #{id}
+    </update>
+    
+    <select id="selectCenterInformationByIds" resultMap="TInformationCenterResult" >
+        SELECT <include refid="baseColumn" /> ,su.user_name as update_by FROM <include refid="tableName" /> left join sys_user su ON t.update_by = su.user_id
+        where t.id in
+        <foreach collection="centerIds" close=")" separator="," item="item" open="(">
+            #{item}
+        </foreach>
+        order by update_time desc
+    </select>
+
+
+    <delete id="deleteCenterInformation">
+        DELETE FROM <include refid="tableNameNoAlias" />
+        WHERE id  in
+        <foreach collection="ids" open="(" item="item" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('中心信息列表')" />
+</head>
+<body class="gray-bg">
+
+
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>中心名称：</p>
+                            <input type="text" name="centerName"/>
+                        </li>
+                        <li>
+                            <p>负责人：</p>
+                            <input type="text" name="leader"/>
+                        </li>
+                        <li class="select-time">
+                            <p>操作时间：</p>
+                            <input type="text" class="time-input" id="beginUpdateTime" placeholder="开始时间" name="startUpdateTime"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endUpdateTime" placeholder="结束时间" name="endUpdateTime"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="information:center:add">
+                <i class="fa fa-plus"></i> 新增
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="information:center:edit" >
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="information:center:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="exportExcel()" shiro:hasPermission="information:center:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" ></table>
+        </div>
+    </div>
+</div>
+
+
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+
+    function exportExcel() {
+        var centerIds = $.table.selectFirstColumns();
+        var serializeArray = $("#formId").serializeArray();
+        var arr  =
+            {
+                "name" : "centerIds",
+                "value" : centerIds.join()
+            }
+        serializeArray.push(arr);
+        $.table.exportExcel2(serializeArray);
+    }
+    var prefix = ctx + "information/center";
+    $(document).ready(function(){
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            clickToSelect: true,
+           // sortName: "updateTime",
+           // sortOrder: "desc",
+            modalName: "中心信息",
+            id:"bootstrap-table",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: '编号'
+                },
+                {
+                    field: 'centerName',
+                    title: '中心名称'
+                },
+                {
+                    field: 'centerAddress',
+                    title: '中心地址'
+                },
+                {
+                    field: 'workSeatNum',
+                    title: '工位数量'
+                },
+                {
+                    field: 'agentNum',
+                    title: '坐席人数'
+                },
+                {
+                    field: 'trainningRoom',
+                    title: '培训室'
+                },
+                {
+                    field: 'restArea',
+                    title: '休息区'
+                },
+                {
+                    field: 'seatRate',
+                    title: '满席率'
+                },
+                {
+                    field: 'leader',
+                    title: '负责人'
+                },
+                {
+                    field: 'updateBy',
+                    title: '操作人'
+                },
+                {
+                    field: 'updateTime',
+                    title: '操作时间'
+                },
+            ]
+        };
+        $.table.init(options);
+    })
+
+</script>
+<style>
+
+</style>
+</body>
+</html>
