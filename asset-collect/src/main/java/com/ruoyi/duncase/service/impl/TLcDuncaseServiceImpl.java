@@ -610,6 +610,7 @@ public class TLcDuncaseServiceImpl implements ITLcDuncaseService {
                 .closeCaseYhje(duncase.getCloseCaseYhje()) // 结案应还金额
                 .importBatchNo(duncase.getImportBatchNo())
                 .phone(duncase.getCustomPhone())
+                .actionCode(CollActionCodeEnum.FRESH.getMessage())
                 .build();
         task.setCreateBy(duncase.getCreateBy());
         return task;
