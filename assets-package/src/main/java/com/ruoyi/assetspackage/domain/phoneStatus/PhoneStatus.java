@@ -30,6 +30,10 @@ public class PhoneStatus extends BaseEntity
     @Excel(name = "案件编号")
     private String caseNo;
 
+    /** 流水号 */
+    @Excel(name = "流水号")
+    private String flowNo;
+
     /** 委案金额 */
     @Excel(name = "委案金额")
     private BigDecimal waje;
