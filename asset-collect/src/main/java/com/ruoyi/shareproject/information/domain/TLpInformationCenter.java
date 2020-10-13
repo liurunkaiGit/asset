@@ -74,7 +74,7 @@ public class TLpInformationCenter extends BaseEntity {
     /**
      * 更新者
      */
-    @Excel(name = "操作时间",width = 30, dateFormat = "yyyy-MM-dd hh:mm:ss")
+    @Excel(name = "操作时间",width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     /**
      * 修改时间开始 (搜索条件)
