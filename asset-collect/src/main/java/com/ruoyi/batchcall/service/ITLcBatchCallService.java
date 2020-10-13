@@ -29,6 +29,13 @@ public interface ITLcBatchCallService
     public List<TLcBatchCall> selectTLcBatchCallList(TLcBatchCall tLcBatchCall);
 
     /**
+     * 查询本次案件 非本人关系的 电话
+     * @param tLcBatchCall
+     * @return
+     */
+    public List<TLcBatchCall> selectTLcBatchCall(TLcBatchCall tLcBatchCall);
+
+    /**
      * 新增批量外呼任务管理
      * 
      * @param tLcBatchCall 批量外呼任务管理
@@ -44,6 +51,12 @@ public interface ITLcBatchCallService
      */
     public int updateTLcBatchCall(TLcBatchCall tLcBatchCall);
 
+    /**
+     * 批量更新 非本人联系方式的 呼叫状态为取消
+     * @param tLcBatchCall
+     * @return
+     */
+    public int updateTLcBatchCallBatch(TLcBatchCall tLcBatchCall);
     /**
      * 批量删除批量外呼任务管理
      * 

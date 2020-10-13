@@ -116,6 +116,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
+    <select id="selectTLcBatchCall" resultType="TLcBatchCall">
+        SELECT id
+        FROM t_lc_batch_call
+        WHERE case_no = #{caseNo} and create_by = #{createBy} and org_id = #{orgId} and  contact_relation!=1 and task_status in(0,1)
+    </select>
+
+    <update id="updateTLcBatchCallBatch" parameterType="TLcBatchCall">
+        update t_lc_batch_call
+        set task_status = #{taskStatus},remark = #{remark}
+        where  case_no = #{caseNo} and create_by = #{createBy} and org_id = #{orgId} and  contact_relation!=1 and task_status in(0,1)
+    </update>
+
     <delete id="deleteTLcBatchCallById" parameterType="Long">
         delete from t_lc_batch_call where id = #{id}
     </delete>

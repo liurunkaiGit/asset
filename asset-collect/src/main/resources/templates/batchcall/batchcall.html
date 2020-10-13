@@ -210,6 +210,7 @@
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
                 modalName: "批量外呼任务管理",
+                uniqueId:'id',
                 columns: [
                 {
                     field : 'id', 
@@ -925,8 +926,8 @@
                 },
                 function (data) {
                     if (data.code == 0) {//请求成功
-                        $.table.refresh();
                         if(onlyUpdate == ''){//不是只更新
+                            $.table.refresh();
                             // alert(JSON.stringify(data));
                             if(data.data != '' && data.data != undefined){
                                 currentCall = data.data;
@@ -936,6 +937,9 @@
                                 $("#callingContent").html("");
                                 $.modal.alert("自动呼叫队列已呼叫完毕");
                             }
+                        }else{//只是更新状态则寻找数据行更新 不需要刷新表格
+                           var tbStatus = $.table.selectDictLabel(batchCallStatus, status);
+                           $("#bootstrap-table").bootstrapTable('updateByUniqueId', {id: 6, row: {status:tbStatus}});
                         }
                     }else if (data.code == 1) {
                         window.location.href="/login";

@@ -31,6 +31,12 @@ public interface TLcBatchCallMapper
     public List<TLcBatchCall> selectTLcBatchCallList(TLcBatchCall tLcBatchCall);
 
     /**
+     * 查询批量外呼任务管理列表 案件非本人 待外呼或正在呼
+     * @param tLcBatchCall
+     * @return
+     */
+    public List<TLcBatchCall> selectTLcBatchCall(TLcBatchCall tLcBatchCall);
+    /**
      * 新增批量外呼任务管理
      * 
      * @param tLcBatchCall 批量外呼任务管理
@@ -46,6 +52,12 @@ public interface TLcBatchCallMapper
      */
     public int updateTLcBatchCall(TLcBatchCall tLcBatchCall);
 
+    /**
+     * 批量更新 非本人联系方式的 呼叫状态为取消
+     * @param tLcBatchCall
+     * @return
+     */
+    public int updateTLcBatchCallBatch(TLcBatchCall tLcBatchCall);
     /**
      * 删除批量外呼任务管理
      * 

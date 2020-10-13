@@ -56,38 +56,6 @@ public class TLcBatchCallController extends BaseController
 //        String isCanAutoCall = "1";//可自动外呼
         String orgId = ShiroUtils.getSysUser().getOrgId()+"";
         TLcBatchCallConfig tbcc = this.tLcBatchCallConfigService.selectTLcBatchCallConfigByOrgId(orgId);
-        /*if(tbcc != null){
-            long now = DateUtils.getNowDate().getTime();//当前系统时间
-            String startTime1 = DateUtils.getDate() + " " + tbcc.getStartTime1() + ":00";
-            String endTime1 = DateUtils.getDate() + " " + tbcc.getEndTime1() + ":00";
-            long st1 = DateUtils.dateTime(DateUtils.YYYY_MM_DD_HH_MM_SS,startTime1).getTime();
-            long et1 = DateUtils.dateTime(DateUtils.YYYY_MM_DD_HH_MM_SS,endTime1).getTime();
-            if(now >= st1 && now <= et1){
-                isCanAutoCall = "0";//不可自动外呼
-                logger.info("自动外部不符合时间段1，用户账号为={}", ShiroUtils.getLoginName());
-            }else if(StringUtils.isNotEmpty(tbcc.getStartTime2()) && StringUtils.isNotEmpty(tbcc.getEndTime2())){
-                String startTime2 = DateUtils.getDate() + " " + tbcc.getStartTime2() + ":00";
-                String endTime2 = DateUtils.getDate() + " " + tbcc.getEndTime2() + ":00";
-                long st2 = DateUtils.dateTime(DateUtils.YYYY_MM_DD_HH_MM_SS,startTime2).getTime();
-                long et2 = DateUtils.dateTime(DateUtils.YYYY_MM_DD_HH_MM_SS,endTime2).getTime();
-
-                if(now >= st2 && now <= et2){
-                    isCanAutoCall = "0";//不可自动外呼
-                    logger.info("自动外部不符合时间段2，用户账号为={}", ShiroUtils.getLoginName());
-                }
-            }else if(StringUtils.isNotEmpty(tbcc.getStartTime3()) && StringUtils.isNotEmpty(tbcc.getEndTime3())){
-                String startTime3 = DateUtils.getDate() + " " + tbcc.getStartTime3() + ":00";
-                String endTime3 = DateUtils.getDate() + " " + tbcc.getEndTime3() + ":00";
-                long st3 = DateUtils.dateTime(DateUtils.YYYY_MM_DD_HH_MM_SS,startTime3).getTime();
-                long et3 = DateUtils.dateTime(DateUtils.YYYY_MM_DD_HH_MM_SS,endTime3).getTime();
-
-                if(now >= st3 && now <= et3){
-                    isCanAutoCall = "0";//不可自动外呼
-                    logger.info("自动外部不符合时间段3，用户账号为={}", ShiroUtils.getLoginName());
-                }
-            }
-        }
-        logger.info("可自动外呼标志：isCanAutoCall={}",isCanAutoCall);*/
         modelMap.put("isCanAutoCall",isCanAutoCall);
         modelMap.put("tLcBatchCallConfig",tbcc);//该部门的批量外呼配置信息
 
@@ -288,17 +256,14 @@ public class TLcBatchCallController extends BaseController
                         tbc.setCreateBy(ShiroUtils.getLoginName());
                         tbc.setOrgId(ShiroUtils.getSysUser().getOrgId()+"");
                         tbc.setCaseNo(tmp.getCaseNo());
-                        List<TLcBatchCall> batchCallList = tLcBatchCallService.selectTLcBatchCallList(tbc);
+                        tbc.setIsOnlyOne("1");//查询一条记录 是否有指
+                        tbc.setTaskStatusList(Arrays.asList(TLcBatchCall.DWH,TLcBatchCall.WHZ));
+                        List<TLcBatchCall> batchCallList = tLcBatchCallService.selectTLcBatchCall(tbc);
                         if(batchCallList != null && batchCallList.size() > 0){
-                            for(int i = 0 ; i < batchCallList.size(); i ++ ){
-                                TLcBatchCall tmptbc = batchCallList.get(i);
-                                if(tmptbc.getContactRelation() != 1){
-                                    tmptbc.setTaskStatus(TLcBatchCall.YQX);
-                                    tmptbc.setRemark("配置为本人拨打成功后，不拨打其他，状态置为取消");
-                                    tLcBatchCallService.updateTLcBatchCall(tmptbc);
-                                    logger.info("该案件下所有非本人的电话的通话状态修改已取消");
-                                }
-                            }
+                            tbc.setTaskStatus(TLcBatchCall.YQX);
+                            tbc.setRemark("配置为本人拨打成功后，不拨打其他，状态置为取消");
+                            tLcBatchCallService.updateTLcBatchCallBatch(tbc);
+                            logger.info("该案件下所有非本人的电话的通话状态修改已取消");
                         }
                     }
                 }
