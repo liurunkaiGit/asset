@@ -1094,6 +1094,7 @@ public class Assets extends BaseEntity {
      * 数据日期
      */
     @Excel(name = "数据日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date sjrq;
 
     /**

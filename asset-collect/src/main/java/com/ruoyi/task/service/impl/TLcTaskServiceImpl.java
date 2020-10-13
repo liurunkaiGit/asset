@@ -134,6 +134,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     @Autowired
     private PhoneStatusMapper phoneStatusMapper;
 
+
     /**
      * 查询任务
      *
@@ -1254,6 +1255,8 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             // 新增或者修改电催记录
             if (tLcCallRecord.getId() == null) {
                 tLcCallRecord.setAgentName(ShiroUtils.getSysUser().getUserName());
+                TLcTask tLcTask = this.tLcTaskMapper.selectTaskByCaseNo(tLcCallRecord.getCaseNo(),tLcCallRecord.getOrgId(),importBatchNo);
+                tLcCallRecord.setActionCode(tLcTask.getActionCode());
                 tLcCallRecordService.insertTLcCallRecord(tLcCallRecord);
             } else {
                 log.info("通话记录id不为空：{},话务平台：{},案件编号：{},录音地址：{},联系人手机号：{}",
@@ -1600,6 +1603,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     private Map<String,Integer> responseHandler(PhoneStatusResponse response , TLcCustContact custContact, int successFlag, int errorFlag){
         Date curDate = new Date();
         Map<String,Integer> map = new HashMap<>();
+        String swift_number = response.getSwift_number();
         String phoneStaus = null;
         if("00".equals(response.getCode()) && "600000".equals(response.getCodeDetail().getPhoneStatus())){
             phoneStaus = response.getPhoneStatus().getResult();
@@ -1622,6 +1626,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             insertParam.setOrgName(ShiroUtils.getSysUser().getOrgName());
             insertParam.setCreateBy(ShiroUtils.getLoginName());
             insertParam.setCreateTime(curDate);
+            insertParam.setFlowNo(swift_number);
             this.phoneStatusMapper.insertPhoneStatus(insertParam);
             //如果可联更新任务表案件状态(案件状态只能由 不可联-->可联)
             if("2".equals(phoneStaus) || "31".equals(phoneStaus) || "32".equals(phoneStaus) || "33".equals(phoneStaus)){
@@ -1650,6 +1655,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             insertParam.setOrgName(ShiroUtils.getSysUser().getOrgName());
             insertParam.setCreateBy(ShiroUtils.getLoginName());
             insertParam.setCreateTime(curDate);
+            insertParam.setFlowNo(swift_number);
             this.phoneStatusMapper.insertPhoneStatus(insertParam);
             errorFlag = errorFlag + 1;
         }

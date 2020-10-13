@@ -38,6 +38,7 @@
         <result property="wbjb" column="wbjb"/>
         <result property="csdz" column="csdz"/>
         <result property="recommendVendor" column="recommend_vendor"/>
+        <result property="actionCode" column="action_code"/>
     </resultMap>
 
     <resultMap id="JxphCallRecordResult" type="com.ruoyi.task.domain.JxphCallRecord">
@@ -84,7 +85,8 @@
         t.type,
         t.platform,
         t.star,
-        t.make_call_time
+        t.make_call_time,
+        t.action_code
     </sql>
 
     <!--<select id="selectTLcCallRecordList" parameterType="com.ruoyi.task.domain.TLcCallRecord" resultMap="TLcCallRecordResult">
@@ -228,6 +230,7 @@
             <if test="type != null ">type,</if>
             <if test="agentName != null and agentName != ''">agent_name,</if>
             <if test="makeCallTime != null">make_call_time,</if>
+            <if test="actionCode != null and actionCode != ''">action_code,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <!--<if test="certificateNo != null  and certificateNo != ''">#{certificateNo},</if>-->
@@ -250,6 +253,7 @@
             <if test="type != null ">#{type},</if>
             <if test="agentName != null and agentName != ''">#{agentName},</if>
             <if test="makeCallTime != null">#{makeCallTime},</if>
+            <if test="actionCode != null and actionCode != ''">#{actionCode},</if>
         </trim>
     </insert>
 
@@ -265,6 +269,7 @@
             <if test="callRadio != null  and callRadio != ''">call_radio = #{callRadio},</if>
             <if test="findDate != null  and findDate != ''">find_date = #{findDate},</if>
             <if test="remark != null ">remark = #{remark},</if>
+            <if test="actionCode != null and actionCode != ''">action_code = #{actionCode},</if>
         </trim>
         where id = #{id}
     </update>

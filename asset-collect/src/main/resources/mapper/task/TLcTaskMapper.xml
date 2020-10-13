@@ -1511,6 +1511,7 @@
             recently_follow_up_date = #{recentlyFollowUpDate},
             call_sign = #{callSign},
             call_sign_value = #{callSignValue},
+            action_code = #{actionCode},
             modify_time = NOW()
         WHERE case_no = #{caseNo} AND org_id = #{orgId} AND import_batch_no = #{importBatchNo}
     </update>

@@ -255,7 +255,12 @@ public class TLcCallRecord extends BaseEntity {
     private String csdz;
     private String recommendVendor;
 
-
+    private String actionCode;//行动码
+    private String actionCodeValue;
+    /**
+     * 任务编号
+     */
+    private String taskId;
 
 
 

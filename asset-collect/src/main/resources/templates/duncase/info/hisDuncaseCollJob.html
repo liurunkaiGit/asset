@@ -107,7 +107,8 @@
                                     <label>已还期数：</label><label id="ykqs"></label><br/>
                                     <label>应还罚息：</label><label id="rmbYhfxzje"></label><br/>
                                     <label>滞纳金：</label><label id="znj"></label><br/>
-                                    <label>最近还款金额：</label><label id="lastRepayAmount"></label>
+                                    <label>最近还款金额：</label><label id="lastRepayAmount"></label><br/>
+                                    <label>客户号：</label><label id="customerNo"></label>
                                 </div>
                                 <div class="collInfoFour">
                                     <label>借款卡号：</label><label id="borrowNo"></label><br/>
@@ -170,7 +171,8 @@
                                 <label>法催标签：</label><span id="fcbq" style="text-align: left;"></span><br/>
                                 <label>留案标签：</label><span id="laFlag" style="text-align: left;"></span><br/>
                                 <label>账龄：</label><span id="accountAge" style="text-align: left;"></span><br/>
-                                <label>呆账核销日期：</label><span id="dzhxrq" style="text-align: left;"></span>
+                                <label>呆账核销日期：</label><span id="dzhxrq" style="text-align: left;"></span><br/>
+                                <label>数据日期：</label><span id="sjrq" style="text-align: left;"></span>
                             </div>
                         </div>
                         <div id="tab-1" class="tab-pane">
@@ -569,6 +571,8 @@
                         $("#lastLoanDate").text(data.assets.lastLoanDate);//贷款到期日
                         $("#lastRepayAmount").text(data.assets.lastRepayAmount);//最近还款金额
                         $("#dzhxrq").text(data.assets.dzhxrq);//呆账核销日期
+                        $("#customerNo").text(data.assets.customerNo);//客户号
+                        $("#sjrq").text(data.assets.sjrq);//数据日期
                     }
                 }
             }

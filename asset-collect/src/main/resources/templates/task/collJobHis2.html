@@ -164,7 +164,7 @@
                         <li class="active" id="infoLi"><a data-toggle="tab" href="#tab-5" aria-expanded="true" onclick="viewTabDetail('info')">详细信息</a><input type="hidden" id="info" value="1"></li>
                         <li class=""><a data-toggle="tab" href="#tab-1" aria-expanded="false" onclick="viewTabDetail('locus')">案件历史轨迹</a><input type="hidden" id="locus" value="0"></li>
                         <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false" onclick="viewTabDetail('call')">电催记录</a><input type="hidden" id="call" value="0"></li>
-                        <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false" onclick="viewTabDetail('action')">行动历史</a><input type="hidden" id="action" value="0"></li>
+                        <!--<li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false" onclick="viewTabDetail('action')">行动历史</a><input type="hidden" id="action" value="0"></li>-->
                         <li class=""><a data-toggle="tab" href="#tab-4" aria-expanded="false" onclick="viewTabDetail('repay')">还款历史</a><input type="hidden" id="repay" value="0"></li>
                         <li class=""><a data-toggle="tab" href="#tab-6" aria-expanded="false" onclick="viewTabDetail('cust')">联系人</a><input type="hidden" id="cust" value="0"></li>
                         <li class=""><a data-toggle="tab" href="#tab-7" aria-expanded="false" onclick="viewTabDetail('add')">补充信息</a><input type="hidden" id="add" value="0"></li>
@@ -204,7 +204,8 @@
                                     <label>当期欠款金额：</label><label id="dqqkje"></label><br/>
                                     <label>已还期数：</label><label id="ykqs"></label><br/>
                                     <label>应还罚息：</label><label id="rmbYhfxzje"></label><br/>
-                                    <label>最近还款金额：</label><label id="lastRepayAmount"></label>
+                                    <label>最近还款金额：</label><label id="lastRepayAmount"></label><br/>
+                                    <label>客户号：</label><label id="customerNo"></label>
 
                                 </div>
                                 <div class="collInfoFour">
@@ -268,7 +269,8 @@
                                 <label>法催标签：</label><span id="fcbq" style="text-align: left;"></span><br/>
                                 <label>留案标签：</label><span id="laFlag" style="text-align: left;"></span><br/>
                                 <label>账龄：</label><span id="accountAge" style="text-align: left;"></span><br/>
-                                <label>呆账核销日期：</label><span id="dzhxrq" style="text-align: left;"></span>
+                                <label>呆账核销日期：</label><span id="dzhxrq" style="text-align: left;"></span><br/>
+                                <label>数据日期：</label><span id="sjrq" style="text-align: left;"></span>
                             </div>
                         </div>
                         <div id="tab-1" class="tab-pane">
@@ -282,13 +284,14 @@
                                 <tbody id="duncaseAssignTrNew"></tbody>
                             </table>
                         </div>
-                        <div id="tab-2" class="tab-pane">
+                        <div id="tab-2" class="tab-pane" style="width:1000px;">
                             <table id="callContactTable">
                                 <tr>
                                     <th>联系人</th>
                                     <th>联系方式</th>
                                     <th>关系</th>
                                     <th>电话码</th>
+                                    <th>行动码</th>
                                     <th>查账日期</th>
                                     <th>备注</th>
                                     <th>坐席</th>
@@ -579,10 +582,10 @@
                     var tp = $("#callContactTrNew");
                     $.each(data, function (i, n) {
                         if (n.callRadioLocation != null && n.callRadioLocation != '') {
-                            tp.append("<tr><td>"+nullToEmpty(n.contactName)+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.id,n.callSign,n.dictLabel)+"</td><td>"+nullToEmpty(n.findDate)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>" +revert(nullToEmpty(n.callLen))+"</td>" +
+                            tp.append("<tr><td>"+nullToEmpty(n.contactName)+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.id,n.callSign,n.dictLabel)+"</td><td>"+nullToEmpty(n.actionCode)+"</td><td>"+nullToEmpty(n.findDate)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>" +revert(nullToEmpty(n.callLen))+"</td>" +
                                 "<td><a href='javascript:void(0)' onclick='listen("+n.id+")'><img src='/img/speaker.png'  class='imgso' width='20px' height='25px' alt='收听' title='收听'/></a>&nbsp;&nbsp;<a href='javascript:void(0)' onclick='downLoad("+n.id+")'><img src='/img/download.png'  class='imgso' width='20px' height='25px' alt='下载' title='下载'/></a></td></tr>");
                         } else {
-                            tp.append("<tr><td>"+nullToEmpty(n.contactName)+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.id,n.callSign,n.dictLabel)+"</td><td>"+nullToEmpty(n.findDate)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>"+nullToEmpty(n.callLen)+"</td>"+"<td></td></tr>");
+                            tp.append("<tr><td>"+nullToEmpty(n.contactName)+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.id,n.callSign,n.dictLabel)+"</td><td>"+nullToEmpty(n.actionCode)+"</td><td>"+nullToEmpty(n.findDate)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>"+nullToEmpty(n.callLen)+"</td>"+"<td></td></tr>");
                         }
                     });
                 }
@@ -983,6 +986,8 @@
                         $("#lastLoanDate").text(data.assets.lastLoanDate);//贷款到期日
                         $("#lastRepayAmount").text(data.assets.lastRepayAmount);//最近还款金额
                         $("#dzhxrq").text(data.assets.dzhxrq);//呆账核销日期
+                        $("#customerNo").text(data.assets.customerNo);//客户号
+                        $("#sjrq").text(data.assets.sjrq);//数据日期
                     }
                     custContactList(currentCaseNo,currentOrgId,currentImportBatchNo);//获取联系人信息
                     $('#locus').val('0');
