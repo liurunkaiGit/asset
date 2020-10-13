@@ -441,4 +441,9 @@ public class SysUserServiceImpl implements ISysUserService {
     public List<Map<String,Object>> selectUserByTime(SysUser user) {
         return userMapper.selectUserByTime(user);
     }
+
+    @Override
+    public List<SysUser> selectUserListByUserIds(List<String> userIds) {
+        return this.userMapper.selectUserListByUserIds(userIds);
+    }
 }

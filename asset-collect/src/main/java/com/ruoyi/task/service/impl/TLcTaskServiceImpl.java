@@ -30,7 +30,9 @@ import com.ruoyi.duncase.domain.TLcDuncase;
 import com.ruoyi.duncase.domain.TLcDuncaseAssign;
 import com.ruoyi.duncase.mapper.TLcDuncaseAssignMapper;
 import com.ruoyi.duncase.mapper.TLcDuncaseMapper;
+import com.ruoyi.duncase.service.AsyncITLcDuncaseService;
 import com.ruoyi.duncase.service.ITLcDuncaseAssignService;
+import com.ruoyi.duncase.service.impl.AsyncTLcDuncaseServiceImpl;
 import com.ruoyi.enums.*;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.orgSpeechConf.domain.TLcOrgSpeechcraftConf;
@@ -68,6 +70,8 @@ import org.springframework.util.Assert;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -133,6 +137,10 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     private TLcCustContactMapper tLcCustContactMapper;
     @Autowired
     private PhoneStatusMapper phoneStatusMapper;
+    @Autowired
+    private ThreadPoolExecutor threadPoolExecutor;
+    @Autowired
+    private AsyncITLcDuncaseService asyncITLcDuncaseService;
 
 
     /**
@@ -174,7 +182,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     public List<TLcTask> selectTLcTaskByPage(TLcTask tLcTask) {
 //        setCustomSql(tLcTask, request);
         String city = tLcTask.getCity();
-        if(city != null && !"".equals(city)){
+        if (city != null && !"".equals(city)) {
             tLcTask.setProvince(null);
         }
         return tLcTaskMapper.selectTLcTaskByPage(tLcTask);
@@ -379,62 +387,89 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
      */
     @Override
     @Transactional
-    public AjaxResult reAllocat(String userIds, String taskIds, String orgId, Integer allocatNum, Integer allocatRule, String caseNos, String certificateNos,String arrearsTotals) {
-        // 判断需要分配全部任务还是随机分配指定数量的任务,并返回需要分配的任务集合
-        Set<TLcTask> randomTaskSet = getAllocatTaskSet(taskIds, allocatNum, caseNos, certificateNos,arrearsTotals);
-        List<SysUser> userList = Arrays.stream(userIds.split(","))
-                .map(userId -> this.sysUserService.selectUserById(Long.valueOf(userId)))
-                .collect(Collectors.toList());
-        List<TLcTask> taskList = new ArrayList<>(randomTaskSet);
-        // 查询是否需要共案处理
-        OrgPackage orgPackage = this.orgPackageService.selectOrgPackageByOrgId(orgId);
-        // 分配任务
-        if (orgPackage.getIsSameCaseDeal().equals(IsNoEnum.IS.getCode())) {
-            taskList = allocatTaskSameDeal(allocatRule, taskList, userList, orgId);
-        } else {
-            taskList = allocatTask(allocatRule, taskList, userList);
+    public AjaxResult reAllocat(String userIds, String taskIds, String orgId, Integer allocatNum, Integer allocatRule, String caseNos, String certificateNos, String arrearsTotals) {
+        try {
+            // 查询需要分配的坐席
+            CompletableFuture<List<SysUser>> userListFuture = CompletableFuture.supplyAsync(() -> this.sysUserService.selectUserListByUserIds(Arrays.asList(userIds.split(","))), threadPoolExecutor);
+            // 判断需要分配全部任务还是随机分配指定数量的任务,并返回需要分配的任务集合
+            CompletableFuture<List<TLcTask>> taskListFuture = CompletableFuture.supplyAsync(() -> getAllocatTaskList(taskIds, allocatNum, caseNos, certificateNos, arrearsTotals), threadPoolExecutor);
+            // 查询是否需要共案处理
+            CompletableFuture<OrgPackage> orgFuture = CompletableFuture.supplyAsync(() -> this.orgPackageService.selectOrgPackageByOrgId(orgId), threadPoolExecutor);
+            // 三个任务都完成并且获取对应的返回值，get()方法时阻塞的，必须放到最后获取
+            CompletableFuture.allOf(userListFuture, taskListFuture, orgFuture);
+            List<TLcTask> taskList = taskListFuture.get();
+            List<SysUser> userList = userListFuture.get();
+            OrgPackage orgPackage = orgFuture.get();
+            // 分配任务
+            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+                List<TLcTask> finalTaskList = taskList;
+                if (orgPackage.getIsSameCaseDeal().equals(IsNoEnum.IS.getCode())) {
+                    // 共案处理
+                    finalTaskList = allocatTaskSameDeal(allocatRule, finalTaskList, userList, orgId);
+                    log.info("共案任务分派--匹配业务归属人成功");
+                } else {
+                    // 非共案处理
+                    finalTaskList = allocatTask(allocatRule, finalTaskList, userList);
+                    log.info("非共案任务分派--匹配业务归属人成功");
+                }
+                this.tLcTaskMapper.batchUpdateTask(finalTaskList);
+                log.info("任务分派--修改任务表成功");
+            }, threadPoolExecutor);
+            // 当分配任务的异步任务完成后返回成功
+            try {
+                future.get();
+            } catch (Exception e) {
+
+            }
+            // 异步添加到案件轨迹表中
+            asyncITLcDuncaseService.insertDuncaseAssign(taskList,ShiroUtils.getSysUser());
+        } catch (Exception e) {
+            log.error("分配失败：{}", e);
+            throw new RuntimeException("任务分配失败");
         }
-        for (TLcTask task : taskList) {
-            task.setColor("0");
-        }
-        this.tLcTaskMapper.batchUpdateTask(taskList);
-        // 添加到案件轨迹表中
-        insertDuncaseAssign(taskList, ShiroUtils.getSysUser());
         return AjaxResult.success();
     }
 
     @Override
     public AjaxResult allDataReAllocat(String userIds, TLcTask tLcTask, Integer allocatNum, Integer allocatRule) {
-        // 查询所有的任务
-        String city = tLcTask.getCity();
-        if(city != null && !"".equals(city)){
-            tLcTask.setProvince(null);
-        }
-        List<TLcTask> taskList = this.tLcTaskMapper.selectTaskList(tLcTask);
-        if (allocatNum != null) {
-            // 随机获取要分配 allocatNum 个的任务
-            Set<TLcTask> randomTaskSet = getAllocatTaskSet(taskList, allocatNum);
-            // set 转 list
-            taskList = randomTaskSet.stream().collect(Collectors.toList());
-        }
-        List<SysUser> userList = Arrays.stream(userIds.split(","))
-                .map(userId -> this.sysUserService.selectUserById(Long.valueOf(userId)))
-                .collect(Collectors.toList());
-        // 查询是否需要共案处理
-        OrgPackage orgPackage = this.orgPackageService.selectOrgPackageByOrgId(ShiroUtils.getSysUser().getOrgId().toString());
-        // 分配任务
-        if (orgPackage.getIsSameCaseDeal().equals(IsNoEnum.IS.getCode())) {
-            taskList = allocatTaskSameDeal(allocatRule, taskList, userList, ShiroUtils.getSysUser().getOrgId().toString());
-        } else {
-            taskList = allocatTask(allocatRule, taskList, userList);
-        }
-        if (taskList != null && taskList.size() > 0) {
-            for (TLcTask task : taskList) {
-                task.setColor("0");
+        try {
+            // 查询需要分配的坐席
+            CompletableFuture<List<SysUser>> userListFuture = CompletableFuture.supplyAsync(() -> this.sysUserService.selectUserListByUserIds(Arrays.asList(userIds.split(","))), threadPoolExecutor);
+            // 判断需要分配全部任务还是随机分配指定数量的任务,并返回需要分配的任务集合
+            CompletableFuture<List<TLcTask>> taskListFuture = CompletableFuture.supplyAsync(() -> {
+                List<TLcTask> taskList = this.tLcTaskMapper.selectTaskList(tLcTask);
+                return getAllocatTaskList(taskList, allocatNum).stream().map(task -> task.setColor("0")).collect(Collectors.toList());
+            }, threadPoolExecutor);
+            // 查询是否需要共案处理
+            CompletableFuture<OrgPackage> orgFuture = CompletableFuture.supplyAsync(() -> this.orgPackageService.selectOrgPackageByOrgId(ShiroUtils.getSysUser().getOrgId().toString()), threadPoolExecutor);
+            // 三个任务都完成并且获取对应的返回值，get()方法时阻塞的，必须放到最后获取
+            CompletableFuture.allOf(userListFuture, taskListFuture, orgFuture);
+            List<TLcTask> taskList = taskListFuture.get();
+            List<SysUser> userList = userListFuture.get();
+            OrgPackage orgPackage = orgFuture.get();
+            // 分配任务
+            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+                List<TLcTask> finalTaskList = taskList;
+                if (orgPackage.getIsSameCaseDeal().equals(IsNoEnum.IS.getCode())) {
+                    // 共案处理
+                    finalTaskList = allocatTaskSameDeal(allocatRule, finalTaskList, userList, ShiroUtils.getSysUser().getOrgId().toString());
+                } else {
+                    // 非共案处理
+                    finalTaskList = allocatTask(allocatRule, finalTaskList, userList);
+                }
+                this.tLcTaskMapper.batchUpdateTask(finalTaskList);
+            }, threadPoolExecutor);
+            // 当分配任务的异步任务完成后返回成功
+            try {
+                future.get();
+            } catch (Exception e) {
+
             }
-            this.tLcTaskMapper.batchUpdateTask(taskList);
-            // 添加到案件轨迹表中
-            insertDuncaseAssign(taskList, ShiroUtils.getSysUser());
+            // 异步添加到案件轨迹表中
+            asyncITLcDuncaseService.insertDuncaseAssign(taskList,ShiroUtils.getSysUser());
+        } catch (Exception e) {
+            log.error("分配失败：{}", e);
+            throw new RuntimeException("任务分配失败");
         }
         return AjaxResult.success();
     }
@@ -627,7 +662,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     public void closeAllCase(TLcTask param, String closeCaseType) {
         ArrayList<CloseCase> closeCaseList = new ArrayList<>();
         String city = param.getCity();
-        if(city != null && !"".equals(city)){
+        if (city != null && !"".equals(city)) {
             param.setProvince(null);
         }
         List<TLcTask> tLcTaskList = this.tLcTaskMapper.selectTaskList(param);
@@ -851,13 +886,13 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         // 根据不同的分配策略进行不同的任务分配
         if (allocatRule.equals(AllocatRuleEnum.DUNCASE_NUM_AVERAGE.getCode())) {
             // 案件数量平均分配
-            taskList = this.allocatRuleUtil.averageAllocatTaskByNumSameDeal(taskList, userList, orgId);
+            taskList = this.allocatRuleUtil.averageAllocatTaskByNumSameDeal2(taskList, userList, orgId);
         } else if (allocatRule.equals(AllocatRuleEnum.DUNCASE_MONEY_AVERAGE.getCode())) {
             // 案件金额平均分配
-            taskList = this.allocatRuleUtil.averageAllocatTaskByMoneySameDeal(taskList, userList, orgId);
+            taskList = this.allocatRuleUtil.averageAllocatTaskByMoneySameDeal2(taskList, userList, orgId);
         } else if (allocatRule.equals(AllocatRuleEnum.DUNCASE_MONEY_NUM_AVERAGE.getCode())) {
             // 案件金额和数量平均分配
-            taskList = this.allocatRuleUtil.averageAllocatTaskByMoneyNumSameDeal(taskList, userList, orgId);
+            taskList = this.allocatRuleUtil.averageAllocatTaskByMoneyNumSameDeal2(taskList, userList, orgId);
         }
         return taskList;
     }
@@ -884,10 +919,10 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         return randomTaskSet;
     }
 
-    private Set<TLcTask> getAllocatTaskSet(String taskIds, Integer allocatNum, String caseNos, String certificateNos,String arrearsTotals) {
-        Set<TLcTask> randomTaskSet = new HashSet<>(allocatNum); // 这里用set，因为随机选择的时候会重复，set可以去重
-//        this.orgPackageService.selectOrgPackageByOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
+    private List<TLcTask> getAllocatTaskList(String taskIds, Integer allocatNum, String caseNos, String certificateNos, String arrearsTotals) {
+        List<TLcTask> taskList = new ArrayList<>();
         if (allocatNum < taskIds.split(",").length) {
+            Set<TLcTask> randomTaskSet = new HashSet<>(allocatNum); // 这里用set，因为随机选择的时候会重复，set可以去重
             Random random = new Random();
             int i = 0; //变量尽量不要循环定义
             while (randomTaskSet.size() < allocatNum) {
@@ -899,8 +934,10 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 tLcTask.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
                 tLcTask.setOrgName(ShiroUtils.getSysUser().getOrgName());
                 tLcTask.setCertificateNo(certificateNos.split(",")[i].split("@")[2]);
+                tLcTask.setColor("0");
                 randomTaskSet.add(tLcTask);
             }
+            taskList = new ArrayList<>(randomTaskSet);
         } else {
             for (int i = 0; i < taskIds.split(",").length; i++) {
                 TLcTask tLcTask = new TLcTask();
@@ -910,10 +947,11 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 tLcTask.setOrgName(ShiroUtils.getSysUser().getOrgName());
                 tLcTask.setCertificateNo(certificateNos.split(",")[i].split("@")[2]);
                 tLcTask.setArrearsTotal(new BigDecimal(arrearsTotals.split(",")[i]));
-                randomTaskSet.add(tLcTask);
+                tLcTask.setColor("0");
+                taskList.add(tLcTask);
             }
         }
-        return randomTaskSet;
+        return taskList;
     }
 
     /**
@@ -923,19 +961,18 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
      * @param allocatNum
      * @return
      */
-    private Set<TLcTask> getAllocatTaskSet(List<TLcTask> taskList, Integer allocatNum) {
-        Set<TLcTask> randomTaskSet = new HashSet<>(allocatNum); // 这里用set，因为随机选择的时候会重复，set可以去重
-        if (allocatNum < taskList.size()) {
+    private List<TLcTask> getAllocatTaskList(List<TLcTask> taskList, Integer allocatNum) {
+        if (allocatNum != null && allocatNum < taskList.size()) {
+            Set<TLcTask> randomTaskSet = new HashSet<>(allocatNum); // 这里用set，因为随机选择的时候会重复，set可以去重
             Random random = new Random();
             int i = 0; //变量尽量不要循环定义
             while (randomTaskSet.size() < allocatNum) {
                 i = random.nextInt(taskList.size());
                 randomTaskSet.add(taskList.get(i));
             }
-        } else {
-            randomTaskSet = taskList.stream().collect(Collectors.toSet());
+            taskList = new ArrayList<>(randomTaskSet);
         }
-        return randomTaskSet;
+        return taskList;
     }
 
     @Override
@@ -1414,6 +1451,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     public Map<String, BigDecimal> selectTotalCountMoney(TLcTask tLcTask) {
         return this.tLcTaskMapper.selectTotalCountMoney(tLcTask);
     }
+
     @Override
     public Map<String, BigDecimal> selectTotalCountMoney2(TLcTask tLcTask) {
         return this.tLcTaskMapper.selectTotalCountMoney2(tLcTask);
@@ -1473,32 +1511,33 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
 
     /**
      * 号码状态查询
+     *
      * @param caseNos
      * @param phoneStatus
      * @return
      */
     @Override
     @Transactional
-    public Map<String,Integer> selectPhoneStatus(String caseNos, String phoneStatus) {
-        Map<String,Integer> result = new HashMap<String,Integer>();
+    public Map<String, Integer> selectPhoneStatus(String caseNos, String phoneStatus) {
+        Map<String, Integer> result = new HashMap<String, Integer>();
         int successFlag = 0;
         int errorFlag = 0;
         //根据条件查询联系人信息
         TLcCustContact tLcCustContact = new TLcCustContact();
         tLcCustContact.setCaseNoList(Arrays.asList(caseNos.split(",")));
         tLcCustContact.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
-        if("1".equals(phoneStatus)){
+        if ("1".equals(phoneStatus)) {
             tLcCustContact.setRelation(Integer.valueOf(phoneStatus));//本人
         }
         List<TLcCustContact> custContactList = tLcCustContactMapper.findCustContactList(tLcCustContact);
         //获取号码状态
-        if(custContactList.size() > 0){
+        if (custContactList.size() > 0) {
             for (TLcCustContact custContact : custContactList) {
                 PhoneStatusRequestData reqData = new PhoneStatusRequestData();
                 String certificateNo = custContact.getCertificateNo();
                 String contactName = custContact.getContactName();
                 String phone = custContact.getPhone();
-                if(!checkPhone(phone)){//去除非手机号
+                if (!checkPhone(phone)) {//去除非手机号
                     continue;
                 }
                 reqData.setId(certificateNo);
@@ -1510,14 +1549,15 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 errorFlag = map.get("errorFlag");
             }
         }
-        result.put("successFlag",successFlag);
-        result.put("errorFlag",errorFlag);
+        result.put("successFlag", successFlag);
+        result.put("errorFlag", errorFlag);
         return result;
 
     }
 
     /**
      * 案件回收
+     *
      * @param taskIds
      * @param certificateNos
      * @return
@@ -1545,9 +1585,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             // 案件回收
             for (Map.Entry<Long, List<TLcTask>> map : taskListMap.entrySet()) {
                 // 随机获取要回收 caseRecycleNum 个的任务
-                Set<TLcTask> randomTaskSet = getAllocatTaskSet(map.getValue(), caseRecycleNum);
-                // set 转 list
-                List<TLcTask> ownerCaseRecyleTaskList = randomTaskSet.stream().collect(Collectors.toList());
+                List<TLcTask> ownerCaseRecyleTaskList = getAllocatTaskList(map.getValue(), caseRecycleNum);
                 ownerCaseRecyleTaskList = buildCaseRecycleTaskList(ownerCaseRecyleTaskList);
                 caseRecyleTaskList.addAll(ownerCaseRecyleTaskList);
             }
@@ -1582,7 +1620,6 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     }
 
 
-
     private List<TLcTask> buildCaseRecyleTaskList(String certificateNos) {
         List<TLcTask> taskList = Arrays.stream(certificateNos.split(",")).map(certificateNo -> {
             String[] split = certificateNo.split("@");
@@ -1600,15 +1637,15 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         return taskList;
     }
 
-    private Map<String,Integer> responseHandler(PhoneStatusResponse response , TLcCustContact custContact, int successFlag, int errorFlag){
+    private Map<String, Integer> responseHandler(PhoneStatusResponse response, TLcCustContact custContact, int successFlag, int errorFlag) {
         Date curDate = new Date();
-        Map<String,Integer> map = new HashMap<>();
+        Map<String, Integer> map = new HashMap<>();
         String swift_number = response.getSwift_number();
         String phoneStaus = null;
-        if("00".equals(response.getCode()) && "600000".equals(response.getCodeDetail().getPhoneStatus())){
+        if ("00".equals(response.getCode()) && "600000".equals(response.getCodeDetail().getPhoneStatus())) {
             phoneStaus = response.getPhoneStatus().getResult();
         }
-        if(phoneStaus != null){
+        if (phoneStaus != null) {
             //更新联系人号码状态
             TLcCustContact updateParam = new TLcCustContact();
             updateParam.setPhone(custContact.getPhone());
@@ -1629,7 +1666,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             insertParam.setFlowNo(swift_number);
             this.phoneStatusMapper.insertPhoneStatus(insertParam);
             //如果可联更新任务表案件状态(案件状态只能由 不可联-->可联)
-            if("2".equals(phoneStaus) || "31".equals(phoneStaus) || "32".equals(phoneStaus) || "33".equals(phoneStaus)){
+            if ("2".equals(phoneStaus) || "31".equals(phoneStaus) || "32".equals(phoneStaus) || "33".equals(phoneStaus)) {
                 TLcTask param = new TLcTask();
                 param.setCaseNo(custContact.getCaseNo());
                 param.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
@@ -1637,7 +1674,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 this.tLcTaskMapper.updatePhoneStatus(param);
             }
             successFlag = successFlag + 1;
-        }else{
+        } else {
             //更新联系人号码状态
             TLcCustContact updateParam = new TLcCustContact();
             updateParam.setPhone(custContact.getPhone());
@@ -1659,14 +1696,15 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             this.phoneStatusMapper.insertPhoneStatus(insertParam);
             errorFlag = errorFlag + 1;
         }
-        map.put("successFlag",successFlag);
-        map.put("errorFlag",errorFlag);
+        map.put("successFlag", successFlag);
+        map.put("errorFlag", errorFlag);
         return map;
     }
 
 
     /**
-     *更新任务颜色值
+     * 更新任务颜色值
+     *
      * @param tLcTask
      * @return
      */
@@ -1680,12 +1718,17 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         return this.tLcTaskMapper.selectTaskList(tLcTask);
     }
 
-    public boolean checkPhone(String phone){
+    @Override
+    public List<TLcTask> selectTaskListByCertificateNosAndOrdId(List<String> certificateNos, String orgId) {
+        return this.tLcTaskMapper.selectTaskListByCertificateNosAndOrdId(certificateNos, orgId);
+    }
+
+    public boolean checkPhone(String phone) {
         Pattern p = null;
         Matcher m = null;
         boolean b = false;
         String regex = "^[1](([3|5|8][\\d])|([4][5,6,7,8,9])|([6][5,6])|([7][3,4,5,6,7,8])|([9][8,9]))[\\d]{8}$";// 验证手机号
-        if(StringUtils.isNotBlank(phone) && phone.length() == 11){
+        if (StringUtils.isNotBlank(phone) && phone.length() == 11) {
             p = Pattern.compile(regex);
             m = p.matcher(phone);
             b = m.matches();

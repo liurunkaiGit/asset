@@ -188,4 +188,6 @@ public interface ISysUserService {
      * @return
      */
     public List<Map<String,Object>> selectUserByTime(SysUser user);
+
+    List<SysUser> selectUserListByUserIds(List<String> userIds);
 }

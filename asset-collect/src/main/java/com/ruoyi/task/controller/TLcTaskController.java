@@ -892,6 +892,10 @@ public class TLcTaskController extends BaseController {
         if(StringUtils.isNotEmpty(callCodeHistoryListStr) && !"null".equals(callCodeHistoryListStr)){
             tLcTask.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
         }
+        String city = tLcTask.getCity();
+        if (city != null && !"".equals(city)) {
+            tLcTask.setProvince(null);
+        }
         return this.tLcTaskService.allDataReAllocat(userId, tLcTask, allocatNum, allocatRule);
     }
 

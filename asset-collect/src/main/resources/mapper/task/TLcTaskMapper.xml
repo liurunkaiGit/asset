@@ -102,61 +102,11 @@
         t.id,
         t.case_no,
         t.certificate_no,
-        t.certificate_type,
-        t.custom_code,
-        t.custom_name,
         t.arrears_total,
-        t.task_status,
-        t.overdue_days,
-        t.overdue_aging,
         t.owner_id,
         t.owner_name,
         t.org_id,
-        t.org_name,
-        t.close_date,
-        t.old_owner_id,
-        t.old_owner_name,
-        t.task_type,
-        t.allot_type,
-        t.create_time,
-        t.modify_time,
-        t.create_by,
-        t.modify_by,
-        t.robot_task_id,
-        t.robot_call_strategy_id,
-        t.transfer_type,
-        t.enter_coll_date,
-        t.close_case_yhje,
-        t.recently_allot_date,
-        t.recently_follow_up_date,
-        t.hit_rule,
-        t.hit_rule_desc,
-        t.distribution_strategy,
-        t.import_batch_no,
-        t.action_code,
-        t.action_code_value,
-        t.call_sign,
-        t.call_sign_value,
-        t.phone,
-        t.dqyhje,
-        t.send_robot_batch_no,
-        t.notebook,
-        a.account_date AS accountDate,
-        a.jkrq,
-        a.first_yqjc_date AS firstYqjcDate,
-        a.rmb_qkzje as rmbQkzje,
-        a.zhychkr,
-        a.rmb_yhbjzje as rmbYhbjzje,
-        a.ykqs,
-        a.rmb_yhfyzje as rmbYhfyzje,
-        a.rmb_yhlizje as rmbYhlizje,
-        a.rmb_yhfxzje as rmbYhfxzje,
-        a.znj,
-        a.mqhkje,
-        a.dqqkje,
-        a.borrow_ed as borrowEd,
-        a.borrow_no AS borrowNo,
-        a.borrow_blank as borrowBlank
+        t.org_name
     </sql>
 
     <sql id="SELECT_TASK_WHERE">
@@ -1568,10 +1518,20 @@
     <select id="selectSameCaseTaskList" resultMap="TLcTaskResult">
         select
         <include refid="SELECT_SAME_TASK"/>
-        from t_lc_task t,cur_assets_package a
-        where t.case_no = a.org_casNo and t.org_id = a.org_id and t.import_batch_no = a.import_batch_no and t.certificate_no = #{certificateNo} and t.org_id = #{orgId}
-        and t.task_status != 3
+        from t_lc_task t
+        where t.certificate_no = #{certificateNo} and t.org_id = #{orgId} and t.task_status != 3
         order by t.owner_id desc
+    </select>
+
+    <select id="selectTaskListByCertificateNosAndOrdId" resultMap="TLcTaskResult">
+        select
+        <include refid="SELECT_SAME_TASK"/>
+        from t_lc_task t
+        where t.task_status != 3 and t.org_id = #{orgId}
+        and t.certificate_no in
+        <foreach collection="certificateNos" item="certificateNo" separator="," open="(" close=")">
+            #{certificateNo}
+        </foreach>
     </select>
 
     <update id="updateNotebook" parameterType="com.ruoyi.task.domain.TLcTask">

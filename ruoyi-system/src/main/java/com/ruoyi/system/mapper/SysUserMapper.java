@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ruoyi.system.domain.SysUser;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 用户表 数据层
@@ -135,4 +136,6 @@ public interface SysUserMapper
      * @return
      */
     List<Map<String,Object>> selectUserByTime(SysUser sysUser);
+
+    List<SysUser> selectUserListByUserIds(@Param("userIds") List<String> userIds);
 }

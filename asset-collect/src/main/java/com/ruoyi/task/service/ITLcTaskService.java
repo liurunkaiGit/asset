@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 任务Service接口
@@ -336,4 +337,6 @@ public interface ITLcTaskService {
     int updateColor(TLcTask tLcTask);
 
     List<TLcTask> selectTaskList(TLcTask tLcTask);
+
+    List<TLcTask> selectTaskListByCertificateNosAndOrdId(List<String> certificateNos, String orgId);
 }

@@ -2,6 +2,7 @@ package com.ruoyi.duncase.service;
 
 import com.ruoyi.duncase.domain.Assets;
 import com.ruoyi.duncase.domain.TLcDuncase;
+import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.task.domain.TLcTask;
 import com.ruoyi.utils.Response;
 
@@ -18,4 +19,6 @@ public interface AsyncITLcDuncaseService {
     void updateDuncase(List<TLcTask> taskList, Integer code, Integer status);
 
     void updateDuncase(List<TLcTask> taskList);
+
+    void insertDuncaseAssign(List<TLcTask> taskList, SysUser sysUser);
 }

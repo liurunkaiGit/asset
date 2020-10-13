@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 任务Mapper接口
@@ -230,4 +231,6 @@ public interface TLcTaskMapper {
     int updateColor(TLcTask tLcTask);
 
     int updatePhoneStatus(TLcTask tLcTask);
+
+    List<TLcTask> selectTaskListByCertificateNosAndOrdId(@Param("certificateNos") List<String> certificateNos, @Param("orgId") String orgId);
 }

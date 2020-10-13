@@ -109,6 +109,8 @@ public class AsyncTLcDuncaseServiceImpl implements AsyncITLcDuncaseService {
      *
      * @param taskList
      */
+    @Override
+    @Async
     public void insertDuncaseAssign(List<TLcTask> taskList, SysUser sysUser) {
         List<TLcDuncaseAssign> duncaseAssignList = taskList.stream()
                 .map(task -> {

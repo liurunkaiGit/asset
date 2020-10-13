@@ -332,4 +332,13 @@
         order by update_time desc
     </select>
 
+    <select id="selectUserListByUserIds" parameterType="java.util.List" resultMap="SysUserResult">
+        select user_id, dept_id, login_name, user_name, email,  phonenumber, sex,password,
+         status, create_by, create_time, update_by,update_time, user_group,job_no from sys_user
+        where 1 = 1 and user_id in
+        <foreach collection="userIds" open="(" separator="," close=")" item="userId">
+            #{userId}
+        </foreach>
+    </select>
+
 </mapper> 
