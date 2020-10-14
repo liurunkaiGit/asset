@@ -1918,7 +1918,7 @@
         }
         var actionCode = $("#actionCode").val();
         if(actionCode == 'Fresh-新任务'){
-            $.modal.alert("行动码不能为Fresh-新任务，请选择行动码");
+            $.modal.alert("请选择最新行动码");
             return;
         }
 
@@ -1987,6 +1987,7 @@
                     if($('#call').val() == '1') {
                         callRecordList(currentCaseNo);
                     }
+                    $("#actionCode").val("Fresh-新任务");
                 }else if (data.code == 1) {
                     window.location.href="/login";
                     return;

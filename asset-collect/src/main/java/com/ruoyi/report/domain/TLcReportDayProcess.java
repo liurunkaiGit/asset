@@ -97,7 +97,7 @@ public class TLcReportDayProcess extends BaseEntity {
     /**
      * 行动码数量
      */
-    @Excel(name = "行动码量")
+//    @Excel(name = "行动码量")
     private Integer actionCodeNum;
 
     /**
