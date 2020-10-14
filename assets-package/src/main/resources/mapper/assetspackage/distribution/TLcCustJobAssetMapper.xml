@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.distribution.TLcCustJobAssetMapper">
+
+    <resultMap id="TLcCustJobResult" type="com.ruoyi.assetspackage.domain.distribution.TLcCustJobAsset">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="customCode" column="custom_code" jdbcType="VARCHAR"/>
+        <result property="certificateNo" column="certificate_no" jdbcType="VARCHAR"/>
+        <result property="caseNo" column="case_no" jdbcType="VARCHAR"/>
+        <result property="profession" column="profession" jdbcType="VARCHAR"/>
+        <result property="companyName" column="company_name" jdbcType="VARCHAR"/>
+        <result property="companyTel" column="company_tel" jdbcType="VARCHAR"/>
+        <result property="companyAddress" column="company_address" jdbcType="VARCHAR"/>
+        <result property="companyPostcode" column="company_postcode" jdbcType="VARCHAR"/>
+        <result property="companyIndustry" column="company_industry" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="modifyBy" column="modify_by" jdbcType="BIGINT"/>
+        <result property="validateStatus" column="validate_status" jdbcType="INTEGER"/>
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+    </resultMap>
+
+    <sql id="selectTLcCustJobVo">
+        select id, custom_code, certificate_no, profession, company_name, company_tel, company_address, company_postcode, company_industry, create_time, modify_time, create_by, modify_by, validate_status, case_no, org_id, org_name, import_batch_no from t_lc_cust_job
+    </sql>
+
+    <insert id="batchInsertCustJob" parameterType="java.util.List">
+        INSERT INTO t_lc_cust_job (
+        custom_code,
+        certificate_no,
+        profession,
+        company_name,
+        company_tel,
+        company_address,
+        company_postcode,
+        company_industry,
+        create_time,
+        modify_time,
+        create_by,
+        modify_by,
+        validate_status,
+        case_no,
+        org_id,
+        org_name,
+        import_batch_no
+        )
+        VALUES
+        <foreach collection="jobInsertList" item="job" separator=",">
+            (
+            #{job.customCode},
+            #{job.certificateNo},
+            #{job.profession},
+            #{job.companyName},
+            #{job.companyTel},
+            #{job.companyAddress},
+            #{job.companyPostcode},
+            #{job.companyIndustry},
+            NOW(),
+            NOW(),
+            #{job.createBy},
+            #{job.modifyBy},
+            #{job.validateStatus},
+            #{job.caseNo},
+            #{job.orgId},
+            #{job.orgName},
+            #{job.importBatchNo}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

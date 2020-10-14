@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.distribution.TLcDuncaseAssignAssetMapper">
+
+    <resultMap type="com.ruoyi.assetspackage.domain.distribution.TLcDuncaseAssignAsset" id="TLcDuncaseAssignResult">
+        <result property="id" column="id"/>
+        <result property="customName" column="custom_name"/>
+        <result property="certificateNo" column="certificate_no"/>
+        <result property="caseNo" column="case_no"/>
+        <result property="taskId" column="task_id"/>
+        <result property="operationId" column="operation_id"/>
+        <result property="operationName" column="operation_name"/>
+        <result property="transferType" column="transfer_type"/>
+        <result property="taskStatus" column="task_status"/>
+        <result property="ownerId" column="owner_id"/>
+        <result property="ownerName" column="owner_name"/>
+        <result property="orgId" column="org_id"/>
+        <result property="orgName" column="org_name"/>
+        <result property="collectTeamId" column="collect_team_id"/>
+        <result property="collectTeamName" column="collect_team_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="validateStatus" column="validate_status"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectTLcDuncaseAssignVo">
+        select id, custom_name, certificate_no, case_no, task_id, operation_id, operation_name, transfer_type, task_status, owner_id, owner_name, org_id, org_name, collect_team_id, collect_team_name, create_time, create_by, validate_status, remark from t_lc_duncase_assign
+    </sql>
+
+    <sql id="SELECT_DUNCASE_ASSIGN">
+        t.id,
+        t.custom_name,
+        t.certificate_no,
+        t.case_no,
+        t.task_id,
+        t.operation_id,
+        t.operation_name,
+        t.transfer_type,
+        t.task_status,
+        t.owner_id,
+        t.owner_name,
+        t.org_id,
+        t.org_name,
+        t.collect_team_id,
+        t.collect_team_name,
+        t.create_time,
+        t.create_by,
+        t.validate_status,
+        t.remark
+    </sql>
+
+    <insert id="batchInsertDuncaseAssign" parameterType="java.util.List">
+        INSERT INTO t_lc_duncase_assign (
+        custom_name,
+        certificate_no,
+        case_no,
+        task_id,
+        operation_id,
+        operation_name,
+        transfer_type,
+        task_status,
+        owner_id,
+        owner_name,
+        org_id,
+        org_name,
+        collect_team_id,
+        collect_team_name,
+        create_time,
+        create_by,
+        validate_status,
+        remark
+        )
+        VALUES
+        <foreach collection="duncaseAssignList" item="assign" separator=",">
+            (
+            #{assign.customName},
+            #{assign.certificateNo},
+            #{assign.caseNo},
+            #{assign.taskId},
+            #{assign.operationId},
+            #{assign.operationName},
+            #{assign.transferType},
+            #{assign.taskStatus},
+            #{assign.ownerId},
+            #{assign.ownerName},
+            #{assign.orgId},
+            #{assign.orgName},
+            #{assign.collectTeamId},
+            #{assign.collectTeamName},
+            NOW(),
+            #{assign.createBy},
+            #{assign.validateStatus},
+            #{assign.remark}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

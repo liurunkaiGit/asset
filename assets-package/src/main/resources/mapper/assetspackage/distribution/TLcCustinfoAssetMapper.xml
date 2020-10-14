@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.distribution.TLcCustinfoAssetMapper">
+
+    <resultMap id="tLcCustinfo" type="com.ruoyi.assetspackage.domain.distribution.TLcCustinfoAsset">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="customCode" column="custom_code" jdbcType="VARCHAR"/>
+        <result property="customName" column="custom_name" jdbcType="VARCHAR"/>
+        <result property="customSex" column="custom_sex" jdbcType="INTEGER"/>
+        <result property="birthday" column="birthday" jdbcType="DATE"/>
+        <result property="certificateType" column="certificate_type" jdbcType="INTEGER"/>
+        <result property="certificateNo" column="certificate_no" jdbcType="VARCHAR"/>
+        <result property="caseNo" column="case_no" jdbcType="VARCHAR"/>
+        <result property="certificateAddress" column="certificate_address" jdbcType="VARCHAR"/>
+        <result property="censusAddress" column="census_address" jdbcType="VARCHAR"/>
+        <result property="profession" column="profession" jdbcType="VARCHAR"/>
+        <result property="city" column="city" jdbcType="VARCHAR"/>
+        <result property="education" column="education" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="tel" column="tel" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="incomeYear" column="income_year" jdbcType="DECIMAL"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="marrageStatus" column="marrage_status" jdbcType="INTEGER"/>
+        <result property="hasChild" column="has_child" jdbcType="INTEGER"/>
+        <result property="hasHouse" column="has_house" jdbcType="INTEGER"/>
+        <result property="hasCar" column="has_car" jdbcType="INTEGER"/>
+        <result property="orgId" column="org_id" jdbcType="VARCHAR"/>
+        <result property="orgName" column="org_name" jdbcType="VARCHAR"/>
+        <result property="validateStatus" column="validate_status" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="modifyBy" column="modify_by" jdbcType="BIGINT"/>
+        <result property="importBatchNo"    column="import_batch_no"    />
+    </resultMap>
+
+    <sql id="SELECT_CUSTINFO">
+        t.id,
+        t.custom_code,
+        t.custom_name,
+        t.custom_sex,
+        t.birthday,
+        t.certificate_type,
+        t.certificate_no,
+        t.certificate_address,
+        t.census_address,
+        t.profession,
+        t.city,
+        t.education,
+        t.phone,
+        t.tel,
+        t.email,
+        t.income_year,
+        t.address,
+        t.marrage_status,
+        t.has_child,
+        t.has_house,
+        t.has_car,
+        t.org_id,
+        t.org_name,
+        t.validate_status,
+        t.create_time,
+        t.modify_time,
+        t.create_by,
+        t.modify_by,
+        t.case_no,
+        t.import_batch_no
+    </sql>
+
+    <insert id="batchInsertCustinfo" parameterType="java.util.List">
+        INSERT INTO t_lc_custinfo (
+        custom_code,
+        custom_name,
+        custom_sex,
+        birthday,
+        certificate_type,
+        certificate_no,
+        certificate_address,
+        census_address,
+        profession,
+        city,
+        education,
+        phone,
+        tel,
+        email,
+        income_year,
+        address,
+        marrage_status,
+        has_child,
+        has_house,
+        has_car,
+        org_id,
+        org_name,
+        validate_status,
+        create_time,
+        modify_time,
+        create_by,
+        modify_by,
+        case_no,
+        import_batch_no
+        )
+        VALUES
+        <foreach collection="custInsertList" item="custinfo" separator=",">
+            (
+            #{custinfo.customCode},
+            #{custinfo.customName},
+            #{custinfo.customSex},
+            #{custinfo.birthday},
+            #{custinfo.certificateType},
+            #{custinfo.certificateNo},
+            #{custinfo.certificateAddress},
+            #{custinfo.censusAddress},
+            #{custinfo.profession},
+            #{custinfo.city},
+            #{custinfo.education},
+            #{custinfo.phone},
+            #{custinfo.tel},
+            #{custinfo.email},
+            #{custinfo.incomeYear},
+            #{custinfo.address},
+            #{custinfo.marrageStatus},
+            #{custinfo.hasChild},
+            #{custinfo.hasHouse},
+            #{custinfo.hasCar},
+            #{custinfo.orgId},
+            #{custinfo.orgName},
+            #{custinfo.validateStatus},
+            NOW(),
+            NOW(),
+            #{custinfo.createBy},
+            #{custinfo.modifyBy},
+            #{custinfo.caseNo},
+            #{custinfo.importBatchNo}
+            )
+        </foreach>
+    </insert>
+</mapper>

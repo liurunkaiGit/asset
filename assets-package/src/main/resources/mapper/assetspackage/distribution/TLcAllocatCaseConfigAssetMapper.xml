@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.assetspackage.mapper.distribution.TLcAllocatCaseConfigAssetMapper">
+    
+    <resultMap type="com.ruoyi.assetspackage.domain.distribution.TLcAllocatCaseConfigAsset" id="TLcAllocatCaseConfigResult">
+        <result property="id"    column="id"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="ruleEngine"    column="rule_engine"    />
+        <result property="robot"    column="robot"    />
+        <result property="callPlatform"    column="call_platform"    />
+        <result property="autoAllocatCase"    column="auto_allocat_case"    />
+        <result property="allocatCaseStartegy"    column="allocat_case_startegy"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="allocatCaseRule"    column="allocat_case_rule"    />
+        <result property="ruleEngineName"    column="rule_engine_name"    />
+        <result property="robotName"    column="robot_name"    />
+        <result property="callPlatformName"    column="call_platform_name"    />
+        <result property="allocatCaseStartegyName"    column="allocat_case_startegy_name"    />
+        <result property="allocatCaseRuleName"    column="allocat_case_rule_name"    />
+    </resultMap>
+
+    <sql id="selectTLcAllocatCaseConfigVo">
+        select id, org_id, org_name, rule_engine, robot, call_platform, auto_allocat_case, allocat_case_startegy, create_by, create_time, update_by, update_time, allocat_case_rule, rule_engine_name, robot_name, call_platform_name, allocat_case_startegy_name, allocat_case_rule_name from t_lc_allocat_case_config
+    </sql>
+
+    <select id="selectTLcAllocatCaseConfigByOrgId" parameterType="java.lang.String" resultMap="TLcAllocatCaseConfigResult">
+        <include refid="selectTLcAllocatCaseConfigVo"/>
+        where org_id = #{orgId}
+    </select>
+    
+</mapper>
