@@ -489,7 +489,11 @@
                     if (compareValue != null && compareValue != '') {
                         for (var i = 0; i < compareValue.split("|").length; i++) {
                             var dictValue = compareValue.split("|")[i];
-                            opt += "<option value='" + dictValue.split(":")[0] + "'>" + dictValue.split(":")[0] + "(" +dictValue.split(":")[1] +")</option>";
+                            if(columnName=="action_code"){//行动码
+                                opt += "<option value='"+ dictValue+"'>"+dictValue+"</option>";
+                            }else{
+                                opt += "<option value='" + dictValue.split(":")[0] + "'>" + dictValue.split(":")[0] + "(" +dictValue.split(":")[1] +")</option>";
+                            }
                         }
                     }
                     $("#"+option).html('<select ><option value="">请选择</option>'+opt+'</select>');
@@ -551,7 +555,11 @@
                         if (compareValue != null && compareValue != '') {
                             for (var i = 0; i < compareValue.split("|").length; i++) {
                                 var dictValue = compareValue.split("|")[i];
-                                opt += "<option value='" + dictValue.split(":")[0] + "'>" + dictValue.split(":")[0] + "(" +dictValue.split(":")[1] +")</option>";
+                                if(columnName=="action_code"){//行动码
+                                    opt += "<option value='"+dictValue+"'>"+dictValue+"</option>";
+                                }else{
+                                    opt += "<option value='" + dictValue.split(":")[0] + "'>" + dictValue.split(":")[0] + "(" +dictValue.split(":")[1] +")</option>";
+                                }
                             }
                         }
                         $("#"+option).html('<select   style="width: 85px;"><option value="">请选择</option>'+opt+'</select><span style="margin: 0 4px 0 4px;">-</span><select  style="width: 85px;" ><option value="">请选择</option>'+opt+'</select>');
@@ -648,49 +656,96 @@
                 var columnType = columnInfo.split(",")[1];
                 var tablePrefix = columnInfo.split(",")[4];
                 var columnValue = obj.children().eq(3).children().eq(0).val();
-                if(selectOper == "1" ) {//等于
-                    if(columnValue != null && columnValue != ''){
-                        freeSQL += andOr +" " + tablePrefix +"." +  columnName + " ='" +  columnValue + "' ";
-                    }
-                }else if(selectOper == "2" ) {//包含
-                    if(columnValue != null && columnValue != ''){
-                        freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " like'%" +  columnValue + "%' ";
-                    }
-                }else if(selectOper == "3" ) {//范围
-                    var startValue = columnValue;
-                    var endValue = obj.children().eq(3).children().eq(2).val();
-                    if (columnType == "date_interval") {
-                        if(startValue != null && startValue != ''){
-                            freeSQL += andOr +" " + tablePrefix +"." +  columnName + " >='" +  startValue + "' ";
+                if(columnName=="action_code"){
+                    if(selectOper == "1" ) {//等于
+                        if(columnValue != null && columnValue != ''){
+                            freeSQL += andOr +" " +"t." +  columnName + " ='" +  columnValue + "' ";
                         }
-                        if(endValue != null && endValue != ''){
-                            freeSQL += andOr +" " + tablePrefix +"." +  columnName + " <='" +  endValue + " 23:59:59' ";
+                    }else if(selectOper == "2" ) {//包含
+                        if(columnValue != null && columnValue != ''){
+                            freeSQL += andOr +" " +"t."  +  columnName + " like'%" +  columnValue + "%' ";
                         }
-                    }else{
-                        if(startValue != null && startValue != ''){
-                            freeSQL += andOr +" " + tablePrefix +"." +  columnName + " >='" +  startValue + "' ";
+                    }else if(selectOper == "3" ) {//范围
+                        var startValue = columnValue;
+                        var endValue = obj.children().eq(3).children().eq(2).val();
+                        if (columnType == "date_interval") {
+                            if(startValue != null && startValue != ''){
+                                freeSQL += andOr +" " +"t." +  columnName + " >='" +  startValue + "' ";
+                            }
+                            if(endValue != null && endValue != ''){
+                                freeSQL += andOr +" " +"t." +  columnName + " <='" +  endValue + " 23:59:59' ";
+                            }
+                        }else{
+                            if(startValue != null && startValue != ''){
+                                freeSQL += andOr +" " +"t." +  columnName + " >='" +  startValue + "' ";
+                            }
+                            if(endValue != null && endValue != ''){
+                                freeSQL += andOr +" " +"t." +  columnName + " <='" +  endValue + "' ";
+                            }
                         }
-                        if(endValue != null && endValue != ''){
-                            freeSQL += andOr +" " + tablePrefix +"." +  columnName + " <='" +  endValue + "' ";
-                        }
-                    }
 
-                }else if(selectOper == "4" ) {//不等于
-                    if(columnValue != null && columnValue != ''){
-                        freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " !='" +  columnValue + "' ";
+                    }else if(selectOper == "4" ) {//不等于
+                        if(columnValue != null && columnValue != ''){
+                            freeSQL += andOr +" " +"t."  +  columnName + " !='" +  columnValue + "' ";
+                        }
+                    }else if(selectOper == "5" ) {//开头
+                        if(columnValue != null && columnValue != ''){
+                            freeSQL += andOr +" " +"t."  +  columnName + " like'" +  columnValue + "%' ";
+                        }
+                    }else if(selectOper == "6" ) {//结尾
+                        if(columnValue != null && columnValue != ''){
+                            freeSQL += andOr +" " +"t."  +  columnName + " like'%" +  columnValue + "' ";
+                        }
+                    }else if(selectOper == "7" ) {//为空
+                        freeSQL += andOr +" " +"t."  +  columnName + " is null ";
+                    }else if(selectOper == "8" ) {//不为空
+                        freeSQL += andOr +" " +"t."  +  columnName + " is not null ";
                     }
-                }else if(selectOper == "5" ) {//开头
-                    if(columnValue != null && columnValue != ''){
-                        freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " like'" +  columnValue + "%' ";
+                }else{
+                    if(selectOper == "1" ) {//等于
+                        if(columnValue != null && columnValue != ''){
+                            freeSQL += andOr +" " + tablePrefix +"." +  columnName + " ='" +  columnValue + "' ";
+                        }
+                    }else if(selectOper == "2" ) {//包含
+                        if(columnValue != null && columnValue != ''){
+                            freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " like'%" +  columnValue + "%' ";
+                        }
+                    }else if(selectOper == "3" ) {//范围
+                        var startValue = columnValue;
+                        var endValue = obj.children().eq(3).children().eq(2).val();
+                        if (columnType == "date_interval") {
+                            if(startValue != null && startValue != ''){
+                                freeSQL += andOr +" " + tablePrefix +"." +  columnName + " >='" +  startValue + "' ";
+                            }
+                            if(endValue != null && endValue != ''){
+                                freeSQL += andOr +" " + tablePrefix +"." +  columnName + " <='" +  endValue + " 23:59:59' ";
+                            }
+                        }else{
+                            if(startValue != null && startValue != ''){
+                                freeSQL += andOr +" " + tablePrefix +"." +  columnName + " >='" +  startValue + "' ";
+                            }
+                            if(endValue != null && endValue != ''){
+                                freeSQL += andOr +" " + tablePrefix +"." +  columnName + " <='" +  endValue + "' ";
+                            }
+                        }
+
+                    }else if(selectOper == "4" ) {//不等于
+                        if(columnValue != null && columnValue != ''){
+                            freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " !='" +  columnValue + "' ";
+                        }
+                    }else if(selectOper == "5" ) {//开头
+                        if(columnValue != null && columnValue != ''){
+                            freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " like'" +  columnValue + "%' ";
+                        }
+                    }else if(selectOper == "6" ) {//结尾
+                        if(columnValue != null && columnValue != ''){
+                            freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " like'%" +  columnValue + "' ";
+                        }
+                    }else if(selectOper == "7" ) {//为空
+                        freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " is null ";
+                    }else if(selectOper == "8" ) {//不为空
+                        freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " is not null ";
                     }
-                }else if(selectOper == "6" ) {//结尾
-                    if(columnValue != null && columnValue != ''){
-                        freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " like'%" +  columnValue + "' ";
-                    }
-                }else if(selectOper == "7" ) {//为空
-                    freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " is null ";
-                }else if(selectOper == "8" ) {//不为空
-                    freeSQL += andOr +" " + tablePrefix +"."  +  columnName + " is not null ";
                 }
             }
         });

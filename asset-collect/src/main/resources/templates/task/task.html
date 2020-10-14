@@ -598,7 +598,11 @@
                         if (compareValue != null && compareValue != '') {
                             for (var i = 0; i < compareValue.split("|").length; i++) {
                                 var dictValue = compareValue.split("|")[i];
-                                opt += "<option value='" + dictValue.split(":")[0] + "'>" + dictValue.split(":")[0] + "(" +dictValue.split(":")[1] +")</option>";
+                                if(columnName=="action_code"){//行动码
+                                    opt += "<option value='" +dictValue+ "'>"+dictValue +"</option>";
+                                }else{
+                                    opt += "<option value='" + dictValue.split(":")[0] + "'>" + dictValue.split(":")[0] + "(" +dictValue.split(":")[1] +")</option>";
+                                }
                             }
                         }
                         $("#"+option).html('<select ><option value="">请选择</option>'+opt+'</select>');
@@ -660,7 +664,11 @@
                         if (compareValue != null && compareValue != '') {
                             for (var i = 0; i < compareValue.split("|").length; i++) {
                                 var dictValue = compareValue.split("|")[i];
-                                opt += "<option value='" + dictValue.split(":")[0] + "'>" + dictValue.split(":")[0] + "(" +dictValue.split(":")[1] +")</option>";
+                                if(columnName=="action_code"){//行动码
+                                    opt += "<option value='" +dictValue+ "'>" + dictValue+"</option>";
+                                }else{
+                                    opt += "<option value='" + dictValue.split(":")[0] + "'>" + dictValue.split(":")[0] + "(" +dictValue.split(":")[1] +")</option>";
+                                }
                             }
                         }
                         $("#"+option).html('<select   style="width: 85px;"><option value="">请选择</option>'+opt+'</select><span style="margin: 0 4px 0 4px;">-</span><select  style="width: 85px;" ><option value="">请选择</option>'+opt+'</select>');
