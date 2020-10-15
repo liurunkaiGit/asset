@@ -32,7 +32,7 @@ public class TLpAttendanceController extends BaseController {
     @Autowired
     private ITLpAttendanceService tLpAttendanceService;
 
-    @RequiresPermissions("ruoyi:attendance:view")
+    @RequiresPermissions("shareproject:attendance:view")
     @GetMapping()
     public String attendance()
     {
@@ -42,7 +42,7 @@ public class TLpAttendanceController extends BaseController {
     /**
      * 查询【出勤信息管理】列表
      */
-    @RequiresPermissions("ruoyi:attendance:list")
+    @RequiresPermissions("shareproject:attendance:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(TLpAttendance tLpAttendance)
@@ -55,7 +55,7 @@ public class TLpAttendanceController extends BaseController {
     /**
      * 导出【出勤信息管理】列表
      */
-    @RequiresPermissions("ruoyi:attendance:export")
+    @RequiresPermissions("shareproject:attendance:export")
     @Log(title = "【出勤信息管理】", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -78,7 +78,7 @@ public class TLpAttendanceController extends BaseController {
     /**
      * 新增保存【出勤信息管理】
      */
-    @RequiresPermissions("ruoyi:attendance:add")
+    @RequiresPermissions("shareproject:attendance:add")
     @Log(title = "【出勤信息管理】", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -104,6 +104,7 @@ public class TLpAttendanceController extends BaseController {
     /**
      * 修改【出勤信息管理】
      */
+    @RequiresPermissions("shareproject:attendance:edit")
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap)
     {
@@ -115,7 +116,7 @@ public class TLpAttendanceController extends BaseController {
     /**
      * 修改保存【出勤信息管理】
      */
-    @RequiresPermissions("ruoyi:attendance:edit")
+    @RequiresPermissions("shareproject:attendance:edit")
     @Log(title = "【出勤信息管理】", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -137,7 +138,7 @@ public class TLpAttendanceController extends BaseController {
     /**
      * 删除【出勤信息管理】
      */
-    @RequiresPermissions("ruoyi:attendance:remove")
+    @RequiresPermissions("shareproject:attendance:remove")
     @Log(title = "【出勤信息管理】", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

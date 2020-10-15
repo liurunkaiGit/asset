@@ -121,6 +121,7 @@ public class TLpMonthlyTargetController extends BaseController
     /**
      * 复制新增【月度指标】
      */
+    @RequiresPermissions("shareproject:monthlytarget:edit")
     @GetMapping("/copyone/{id}")
     public String copyone(@PathVariable("id") Long id, ModelMap mmap)
     {

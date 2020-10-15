@@ -32,7 +32,6 @@ public class TLpProjectInformationController extends BaseController {
     @Autowired
     private ITLpProjectInformationService tLpProjectInformationService;
 
-    @RequiresPermissions("ruoyi:information:view")
     @GetMapping()
     public String information()
     {
@@ -42,7 +41,7 @@ public class TLpProjectInformationController extends BaseController {
     /**
      * 查询【项目信息管理】列表
      */
-    @RequiresPermissions("ruoyi:information:list")
+    @RequiresPermissions("shareproject:projectinformation:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(TLpProjectInformation tLpProjectInformation)
@@ -54,7 +53,7 @@ public class TLpProjectInformationController extends BaseController {
     /**
      * 查询【项目信息管理】列表 下拉
      */
-    @RequiresPermissions("ruoyi:information:list")
+    @RequiresPermissions("shareproject:projectinformation:list")
     @PostMapping("/listxl")
     @ResponseBody
     public List<TLpProjectInformation> listxl(TLpProjectInformation tLpProjectInformation)
@@ -65,7 +64,7 @@ public class TLpProjectInformationController extends BaseController {
     /**
      * 导出【项目信息管理】列表
      */
-    @RequiresPermissions("ruoyi:information:export")
+    @RequiresPermissions("shareproject:projectinformation:export")
     @Log(title = "【项目信息管理】", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -88,7 +87,7 @@ public class TLpProjectInformationController extends BaseController {
     /**
      * 新增保存【项目信息管理】
      */
-    @RequiresPermissions("ruoyi:information:add")
+    @RequiresPermissions("shareproject:projectinformation:add")
     @Log(title = "【项目信息管理】", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -115,7 +114,7 @@ public class TLpProjectInformationController extends BaseController {
     /**
      * 修改保存【项目信息管理】
      */
-    @RequiresPermissions("ruoyi:information:edit")
+    @RequiresPermissions("shareproject:projectinformation:edit")
     @Log(title = "【项目信息管理】", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -129,7 +128,7 @@ public class TLpProjectInformationController extends BaseController {
     /**
      * 删除【项目信息管理】
      */
-    @RequiresPermissions("ruoyi:information:remove")
+    @RequiresPermissions("shareproject:projectinformation:remove")
     @Log(title = "【项目信息管理】", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody
