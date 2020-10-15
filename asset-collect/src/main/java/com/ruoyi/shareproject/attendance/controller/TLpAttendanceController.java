@@ -94,7 +94,7 @@ public class TLpAttendanceController extends BaseController {
             return toAjax(tLpAttendanceService.insertTLpAttendance(tLpAttendance));
         }catch (Exception e) {
             if(e instanceof DuplicateKeyException){
-                throw new DuplicateKeyException("项目名称和日期已经存在");
+                throw new DuplicateKeyException("项目名称和日期(不能重复)已经存在");
             }else{
                 throw e;
             }
@@ -121,9 +121,17 @@ public class TLpAttendanceController extends BaseController {
     @ResponseBody
     public AjaxResult editSave(TLpAttendance tLpAttendance)
     {
-        tLpAttendance.setUpdateBy(ShiroUtils.getLoginName());
-        tLpAttendance.setUpdateTime(new Date());
-        return toAjax(tLpAttendanceService.updateTLpAttendance(tLpAttendance));
+        try {
+            tLpAttendance.setUpdateBy(ShiroUtils.getLoginName());
+            tLpAttendance.setUpdateTime(new Date());
+            return toAjax(tLpAttendanceService.updateTLpAttendance(tLpAttendance));
+        }catch (Exception e) {
+            if(e instanceof DuplicateKeyException){
+                throw new DuplicateKeyException("项目名称和日期(不能重复)已经存在");
+            }else{
+                throw e;
+            }
+        }
     }
 
     /**
