@@ -235,4 +235,6 @@ public interface TLcTaskMapper {
     List<TLcTask> selectTaskListByCertificateNosAndOrdId(@Param("certificateNos") List<String> certificateNos, @Param("orgId") String orgId);
 
     Long selectAllocatedCount(TLcTask tLcTask);
+
+    List<TLcTask> selectAllotTaskList(TLcTask tLcTask);
 }

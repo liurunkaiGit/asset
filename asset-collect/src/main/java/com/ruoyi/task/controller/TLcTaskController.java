@@ -216,6 +216,7 @@ public class TLcTaskController extends BaseController {
         modelMap.put("currentCaseNo", currentCaseNo);
         modelMap.put("currentImportBatchNo", currentImportBatchNo);
         modelMap.put("callCodeHistoryListStr", callCodeHistoryListStr);
+        modelMap.put("toType", toType);
 
         // 查询总的金额及总的件数
         if("1".equals(toType)){//再催页面
@@ -512,6 +513,20 @@ public class TLcTaskController extends BaseController {
         String orderByColumn = (String) request.getSession().getAttribute("orderByColumn");
         String isAsc = (String) request.getSession().getAttribute("isAsc");
         startPageCustom(Integer.valueOf(request.getParameter("startNum")), Integer.valueOf(request.getParameter("endNum")), orderByColumn, isAsc);
+
+        if (tLcTask.getTaskStatus() == null) {
+            if (tLcTask.getToType().equals("1")) {
+                // 在催
+                String str = "1,2";
+                tLcTask.setTaskStatusList(Arrays.asList(str.split(",")));
+            } else {
+                // 在催
+                String str = "1,2,3";
+                tLcTask.setTaskStatusList(Arrays.asList(str.split(",")));
+            }
+        } else {
+            tLcTask.setTaskStatusList(null);
+        }
         List<TLcTask> list = tLcTaskService.selectMyTaskList2(tLcTask);
         logger.info("查询客户列表结束ownerId="+tLcTask.getOwnerId());
         return list;

@@ -401,7 +401,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             List<SysUser> userList = userListFuture.get();
             OrgPackage orgPackage = orgFuture.get();
             // 分配任务
-            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+            CompletableFuture<List<TLcTask>> allotTaskFuture = CompletableFuture.supplyAsync(() -> {
                 List<TLcTask> finalTaskList = taskList;
                 if (orgPackage.getIsSameCaseDeal().equals(IsNoEnum.IS.getCode())) {
                     // 共案处理
@@ -414,15 +414,14 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 }
                 this.tLcTaskMapper.batchUpdateTask(finalTaskList);
                 log.info("任务分派--修改任务表成功");
+                return finalTaskList;
             }, threadPoolExecutor);
-            // 当分配任务的异步任务完成后返回成功
-            try {
-                future.get();
-            } catch (Exception e) {
-
-            }
-            // 异步添加到案件轨迹表中
-            asyncITLcDuncaseService.insertDuncaseAssign(taskList,ShiroUtils.getSysUser());
+            // 当分配任务的异步任务完成后异步去修改任务表和插入轨迹表
+            List<TLcTask> allotTaskList = allotTaskFuture.get();
+            CompletableFuture<Void> updateTaskFuture = CompletableFuture.runAsync(() -> this.tLcTaskMapper.batchUpdateTask(allotTaskList), threadPoolExecutor);
+            CompletableFuture<Void> insertDuncaseAssignFuture = CompletableFuture.runAsync(() -> insertDuncaseAssign(allotTaskList, ShiroUtils.getSysUser()), threadPoolExecutor);
+            // 修改任务表和插入轨迹表两个异步任务都执行完成
+            CompletableFuture.allOf(updateTaskFuture, insertDuncaseAssignFuture);
         } catch (Exception e) {
             log.error("分配失败：{}", e);
             throw new RuntimeException("任务分配失败");
@@ -437,7 +436,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             CompletableFuture<List<SysUser>> userListFuture = CompletableFuture.supplyAsync(() -> this.sysUserService.selectUserListByUserIds(Arrays.asList(userIds.split(","))), threadPoolExecutor);
             // 判断需要分配全部任务还是随机分配指定数量的任务,并返回需要分配的任务集合
             CompletableFuture<List<TLcTask>> taskListFuture = CompletableFuture.supplyAsync(() -> {
-                List<TLcTask> taskList = this.tLcTaskMapper.selectTaskList(tLcTask);
+                List<TLcTask> taskList = this.tLcTaskMapper.selectAllotTaskList(tLcTask);
                 return getAllocatTaskList(taskList, allocatNum).stream().map(task -> task.setColor("0")).collect(Collectors.toList());
             }, threadPoolExecutor);
             // 查询是否需要共案处理
@@ -448,7 +447,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             List<SysUser> userList = userListFuture.get();
             OrgPackage orgPackage = orgFuture.get();
             // 分配任务
-            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+            CompletableFuture<List<TLcTask>> allotTaskFuture = CompletableFuture.supplyAsync(() -> {
                 List<TLcTask> finalTaskList = taskList;
                 if (orgPackage.getIsSameCaseDeal().equals(IsNoEnum.IS.getCode())) {
                     // 共案处理
@@ -457,16 +456,14 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                     // 非共案处理
                     finalTaskList = allocatTask(allocatRule, finalTaskList, userList);
                 }
-                this.tLcTaskMapper.batchUpdateTask(finalTaskList);
+                return finalTaskList;
             }, threadPoolExecutor);
-            // 当分配任务的异步任务完成后返回成功
-            try {
-                future.get();
-            } catch (Exception e) {
-
-            }
-            // 异步添加到案件轨迹表中
-            asyncITLcDuncaseService.insertDuncaseAssign(taskList,ShiroUtils.getSysUser());
+            // 当分配任务的异步任务完成后异步去修改任务表和插入轨迹表
+            List<TLcTask> allotTaskList = allotTaskFuture.get();
+            CompletableFuture<Void> updateTaskFuture = CompletableFuture.runAsync(() -> this.tLcTaskMapper.batchUpdateTask(allotTaskList), threadPoolExecutor);
+            CompletableFuture<Void> insertDuncaseAssignFuture = CompletableFuture.runAsync(() -> insertDuncaseAssign(allotTaskList, ShiroUtils.getSysUser()), threadPoolExecutor);
+            // 修改任务表和插入轨迹表两个异步任务都执行完成
+            CompletableFuture.allOf(updateTaskFuture, insertDuncaseAssignFuture);
         } catch (Exception e) {
             log.error("分配失败：{}", e);
             throw new RuntimeException("任务分配失败");

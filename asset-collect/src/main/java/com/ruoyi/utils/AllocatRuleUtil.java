@@ -496,12 +496,12 @@ public class AllocatRuleUtil {
         }else{
             for(int i=0;i<pagesize;i++){
                 List<String> certificateNoSubList = certificateNoList.subList(i*index, (i+1)*index);
-                List<TLcTask> subTaskList = this.taskService.selectTaskListByCertificateNosAndOrdId(certificateNoList,orgId);
+                List<TLcTask> subTaskList = this.taskService.selectTaskListByCertificateNosAndOrdId(certificateNoSubList,orgId);
                 taskList.addAll(subTaskList);
             }
             if(total % index != 0){
                 List<String> certificateNoSubList = certificateNoList.subList(index * pagesize,total);
-                List<TLcTask> subTaskList = this.taskService.selectTaskListByCertificateNosAndOrdId(certificateNoList,orgId);
+                List<TLcTask> subTaskList = this.taskService.selectTaskListByCertificateNosAndOrdId(certificateNoSubList,orgId);
                 taskList.addAll(subTaskList);
             }
         }

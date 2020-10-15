@@ -78,6 +78,7 @@ public class TLcTask extends BaseEntity {
      * 任务状态 多选时候的值存储 例如：1,2,3
      */
     private String taskStatusStr;
+    private List<String> taskStatusList;
 
     /**
      * 逾期天数
@@ -501,5 +502,6 @@ public class TLcTask extends BaseEntity {
     //标识字段只有再催页面的时候传值
     private String flag1;//对应allotType
     private String flag2;//对应taskStatus
+    private String toType;
 
 }

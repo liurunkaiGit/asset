@@ -512,6 +512,13 @@
             </foreach>
             )
         </if>
+        <if test="taskStatusList != null and taskStatusList.size()>0">
+            and t.task_status IN
+            <foreach collection="taskStatusList" item="taskStatus" open="(" close=")" separator=",">
+                #{taskStatus}
+            </foreach>
+            )
+        </if>
         <if test="freeSQL != null  and freeSQL != ''">
             ${freeSQL}
         </if>
@@ -1539,6 +1546,57 @@
         FROM t_lc_task t,t_lc_duncase d
         WHERE t.case_no = d.case_no and t.import_batch_no = d.import_batch_no and t.org_id = d.org_id
         AND t.allot_type = 1 AND t.task_status = 2
+        <if test="orgId != null  and orgId != ''">
+            and t.org_id = #{orgId}
+        </if>
+        and (1=1
+        <if test="caseNo != null  and caseNo != ''">
+            and t.case_no = #{caseNo}
+        </if>
+        <if test="customName != null  and customName != ''">
+            and t.custom_name like concat('%', #{customName}, '%')
+        </if>
+        <if test="taskStatus != null ">
+            and t.task_status = #{taskStatus}
+        </if>
+        <if test="taskType != null ">
+            and t.task_type = #{taskType}
+        </if>
+        <if test="province != null  and province != ''">
+            and left(t.certificate_no, 2) = #{province}
+        </if>
+        <if test="city != null  and city != ''">
+            and left(t.certificate_no, 4) = #{city}
+        </if>
+        <if test="callCodeHistoryList != null and callCodeHistoryList.size()>0">
+            and EXISTS(SELECT r.call_sign FROM t_lc_call_record r WHERE r.case_no = t.case_no and r.call_sign IN
+            <foreach collection="callCodeHistoryList" item="cl" open="(" close=")" separator=",">
+                #{cl}
+            </foreach>
+            )
+        </if>
+        <if test="freeSQL != null  and freeSQL != ''">
+            ${freeSQL}
+        </if>
+        )
+    </select>
+
+    <select id="selectAllotTaskList"  parameterType="com.ruoyi.task.domain.TLcTask" resultMap="TLcTaskResult">
+        SELECT
+        t.case_no,
+        t.certificate_no,
+        t.arrears_total,
+        t.task_status,
+        t.owner_id,
+        t.owner_name,
+        t.org_id,
+        t.org_name,
+        t.close_date,
+        t.task_type,
+        t.allot_type
+        FROM t_lc_task t,t_lc_duncase d
+        WHERE t.case_no = d.case_no and t.import_batch_no = d.import_batch_no and t.org_id = d.org_id
+        AND t.allot_type = 1 AND t.task_status != 3
         <if test="orgId != null  and orgId != ''">
             and t.org_id = #{orgId}
         </if>

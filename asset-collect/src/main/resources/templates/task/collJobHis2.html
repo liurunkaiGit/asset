@@ -61,6 +61,7 @@
     <input type="hidden" id="certificateNo" name="certificateNo" th:value="${certificateNo}">
     <input type="hidden" id="firstEnterCaseNo" name="firstEnterCaseNo" th:value="${currentCaseNo}">
     <input type="hidden" id="firstImportBatchNo" name="firstImportBatchNo" th:value="${currentImportBatchNo}">
+    <input type="hidden" id="toType" name="toType" th:value="${toType}">
     <!--查询条件-->
     <input type="hidden" id="caseNoSearch" name="caseNoSearch" th:value="${tLcTask.caseNo}">
     <input type="hidden" id="customNameSearch" name="customNameSearch" th:value="${tLcTask.customName}">
@@ -478,7 +479,8 @@
                 taskStatus : taskStatus,
                 phoneStatus : phoneStatus,
                 startNum: $("#startNum").val(),
-                endNum: pageSize
+                endNum: pageSize,
+                toType: $("#toType").val()
             }, // 请求参数
             function(data) {
                 if(data != null){
