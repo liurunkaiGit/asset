@@ -371,8 +371,14 @@
                 }
             }
         });
+        var zlIndex = 1;
         function addzl() {
+            if(zlIndex >=19 ){
+                $.modal.alertWarning('最多添加20项账龄');
+                return ;
+            }
             $("#dvct").append($("#dvcp").html());
+            zlIndex++;
         }
         function dels(th){
             $(th).parent("div").remove();
