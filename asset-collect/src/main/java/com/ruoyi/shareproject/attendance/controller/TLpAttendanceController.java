@@ -11,6 +11,7 @@ import com.ruoyi.shareproject.attendance.domain.TLpAttendance;
 import com.ruoyi.shareproject.attendance.service.ITLpAttendanceService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -83,13 +84,21 @@ public class TLpAttendanceController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(TLpAttendance tLpAttendance)
     {
-        tLpAttendance.setCreateBy(ShiroUtils.getLoginName());
-        tLpAttendance.setCreateTime(new Date());
-        tLpAttendance.setUpdateBy(ShiroUtils.getLoginName());
-        tLpAttendance.setUpdateTime(new Date());
-        tLpAttendance.setOrgId(ShiroUtils.getSysUser().getOrgId());
-        tLpAttendance.setOrgName(ShiroUtils.getSysUser().getOrgName());
-        return toAjax(tLpAttendanceService.insertTLpAttendance(tLpAttendance));
+        try{
+            tLpAttendance.setCreateBy(ShiroUtils.getLoginName());
+            tLpAttendance.setCreateTime(new Date());
+            tLpAttendance.setUpdateBy(ShiroUtils.getLoginName());
+            tLpAttendance.setUpdateTime(new Date());
+            tLpAttendance.setOrgId(ShiroUtils.getSysUser().getOrgId());
+            tLpAttendance.setOrgName(ShiroUtils.getSysUser().getOrgName());
+            return toAjax(tLpAttendanceService.insertTLpAttendance(tLpAttendance));
+        }catch (Exception e) {
+            if(e instanceof DuplicateKeyException){
+                throw new DuplicateKeyException("项目名称和日期已经存在");
+            }else{
+                throw e;
+            }
+        }
     }
 
     /**
