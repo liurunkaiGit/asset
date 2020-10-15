@@ -73,6 +73,13 @@
                     visible: false
                 },
                 {
+                    title: "序号",
+                    field:"",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                {
                     field : 'proName', 
                     title : '项目名称'
                 },
