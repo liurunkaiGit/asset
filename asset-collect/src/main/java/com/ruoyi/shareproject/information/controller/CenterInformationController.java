@@ -59,6 +59,17 @@ public class CenterInformationController extends BaseController {
         setSeatRate(list);
         return getDataTable(list);
     }
+    /**
+     * 中心信息查询数据集合 下拉
+     */
+    @PostMapping("/listxl")
+    @RequiresPermissions("information:center:list")
+    @ResponseBody
+    public List<TLpInformationCenter> listXL(TLpInformationCenter informationCenter) {
+        List<TLpInformationCenter> list = centerInformationService.selectCenterInformationList(informationCenter);
+        setSeatRate(list);
+        return list;
+    }
 
     /**
      * 新增中心信息数据

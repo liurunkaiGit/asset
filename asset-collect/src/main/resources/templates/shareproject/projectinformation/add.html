@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增【项目信息管理】')" />
+    <th:block th:include="include :: select2-css" />
+</head>
+<body>
+    <div class="main-content">
+        <form class="form-horizontal" id="form-information-add">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">项目名称：</label>
+                        <div class="col-sm-8">
+                            <input name="names" class="form-control" type="text" maxlength="50" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">关联委托方：</label>
+                        <div class="col-sm-8">
+                            <select class="form-control"   id="orgId" >
+                                <option value="0">请选择</option>
+                            </select>
+                            <input name="orgName" id="orgName" type="hidden" value="">
+                            <input name="orgCode" id="orgCode" type="hidden" value="">
+                            <input name="deptId" id="deptId" type="hidden" value="">
+                            <input name="deptName" id="deptName" type="hidden" value="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">归属中心：</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" name="belongingCenterId"  id="belongingCenterId" required>
+                                <option value="0">请选择</option>
+                            </select>
+                            <input name="belongingCenterName" id="belongingCenterName"  class="form-control" type="hidden" value="-">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">项目经理：</label>
+                        <div class="col-sm-8">
+                            <input name="projectManager" class="form-control" maxlength="50" type="text" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">项目主管：</label>
+                        <div class="col-sm-8">
+                            <input name="projectDirector" class="form-control" maxlength="50" type="text" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">坐席数量：</label>
+                        <div class="col-sm-8">
+                            <input name="seatsNumber" class="form-control" maxlength="9" type="number" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">甲方名称：</label>
+                        <div class="col-sm-8">
+                            <input name="partyName" class="form-control" type="text" maxlength="50" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">甲方类型：</label>
+                        <div class="col-sm-8">
+                            <select th:required="required" name="partyType" id="partyType"  class="form-control m-b" th:with="type=${@dict.getType('type_of_party')}" required>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">开票信息：</label>
+                        <div class="col-sm-8">
+                            <input name="billingInformation" class="form-control" maxlength="50" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">户均金额：</label>
+                        <div class="col-sm-8">
+                            <input name="perHousehold" class="form-control" maxlength="9" ismoney="true" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">产品名称：</label>
+                        <div class="col-sm-8">
+                            <input name="productName" class="form-control" maxlength="50" type="text" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">产品性质：</label>
+                        <div class="col-sm-8">
+                            <select th:required="required" name="productNature" id="productNature"  class="form-control" th:with="type=${@dict.getType('product_nature')}" required>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">结费方式：</label>
+                        <div class="col-sm-8">
+                            <select th:required="required" name="settlementMethod" id="settlementMethod"  class="form-control m-b" th:with="type=${@dict.getType('settlement_method')}" required>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">分案逻辑：</label>
+                        <div class="col-sm-8">
+                            <input name="divisionLogic" class="form-control" type="text" maxlength="50" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">撤案：</label>
+                        <div class="col-sm-8">
+                            <input name="withdrawCase" class="form-control" type="text" maxlength="50" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">费率：</label>
+                        <div class="col-sm-8">
+                            <input name="rates" class="form-control" type="text" maxlength="10" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">计费公式：</label>
+                        <div class="col-sm-8">
+                            <input name="billingFormula" class="form-control" maxlength="50" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">作业系统：</label>
+                        <div class="col-sm-8">
+                            <select th:required="required" name="operatingSystem" id="operatingSystem"  class="form-control m-b" th:with="type=${@dict.getType('operating_system')}" required>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">话务平台：</label>
+                        <div class="col-sm-8">
+                            <select th:required="required" name="trafficPlatform" id="trafficPlatform"  class="form-control" th:with="type=${@dict.getType('call_platform')}" required>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">人均委案量：</label>
+                        <div class="col-sm-8">
+                            <input name="casesNumber" class="form-control" maxlength="9" type="number" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">开始时间：</label>
+                        <div class="col-sm-8">
+                            <div class="input-group date">
+                                <input name="startTime" class="form-control time-input" placeholder="yyyy-MM-dd" type="text" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">结束时间：</label>
+                        <div class="col-sm-8">
+                            <div class="input-group date">
+                                <input name="endTime" class="form-control time-input" placeholder="yyyy-MM-dd" type="text" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">委案账龄：</label>
+                            <div id="dvct" class="col-sm-8" >
+                                <div >
+                                    <input name="accountAge" maxlength="10" required style="width: 80%"  type="text">
+                                    <label onclick="addzl()">&nbsp;&nbsp;+&nbsp;&nbsp;</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">备注：</label>
+                        <div class="col-xs-10" >
+                        <textarea name="remark" maxlength="50" class="form-control" rows="3" ></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div id="dvcp" style="display: none">
+            <div >
+                <input name="accountAge" maxlength="10"  style="width: 80%"  type="text" required>
+                <label onclick="dels(this)">&nbsp;&nbsp;-&nbsp;&nbsp;</label>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: select2-js" />
+    <script type="text/javascript" th:inline="javascript">
+        var prefix = ctx + "shareproject/projectinformation"
+        $("#form-information-add").validate({
+            focusCleanup: true
+        });
+        $.validator.addMethod(
+            "ismoney",//自定义校验规则的名称
+            function(value,element,params){//自定义校验规则的实现
+                return this.optional(element) || /^([1-9]{1}[0-9]{0,3}(\,[0-9]{3,4})*(\.[0-9]{0,2})?|[1-9]{1}\d*(\.[0-9]{0,2})?|0(\.[0-9]{0,2})?|(\.[0-9]{1,2})?)$/.test(value);
+            },"只允许两位小数"
+        );
+        function submitHandler() {
+            if($("#belongingCenterId").val() == 0){
+                $.modal.alertWarning('请选择归属中心');
+                return;
+            }
+            var flag = 1;
+            if($("#dvct input[name='accountAge']").length > 1) {
+                $("#dvct input[name='accountAge']").each(function () {
+                    if ($(this).val() == "") {
+                        $.modal.alertWarning('请填写委案账龄');
+                        flag = 0;
+                    }else{
+                        $(this).val($(this).val().replace(",",""));
+                    }
+                });
+            }
+            if(flag == 0){
+                return;
+            }
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-information-add').serialize());
+            }
+        }
+
+        $(document).ready(function(){
+            $.post(
+                ctx + "collect/task/initOrg",
+                function(data) {
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            var ob = data.rows[i];
+                            var opt = "<option value='"+ob.orgCode+"+-+"+ob.deptName+"+-+"+ob.deptId+"'>"+data.rows[i].orgName+"</option>";
+                            $("#orgId").append(opt);
+                        }
+                    }
+                }
+            );
+
+            $.post(
+                ctx + "information/center/listxl",
+                function(data) {
+                    if(data){
+                        for (var i = 0; i < data.length; i++) {
+                            var ob = data[i];
+                            var opt = "<option value='"+ob.id+"'>"+ob.centerName+"</option>";
+                            $("#belongingCenterId").append(opt);
+                        }
+                    }
+                }
+            );
+
+            $("#orgId").on("change",function(){
+                var orgName = $(this).children('option:selected').text();
+                var values = $(this).children('option:selected').val();
+                if(values == 0){
+                    $("#orgName").val('');
+                    $("#orgCode").val('');
+                    $("#deptName").val('');
+                    $("#deptId").val('');
+                    return;
+                }
+                $("#orgName").val(orgName);
+                var vssp = values.split("+-+");
+                $("#orgCode").val(vssp[0]);
+                $("#deptName").val(vssp[1]);
+                $("#deptId").val(vssp[2]);
+            });
+            $("#belongingCenterId").on("change",function(){
+                var belongingCenterName = $(this).children('option:selected').text();
+                $("#belongingCenterName").val(belongingCenterName);
+            });
+        });
+
+        function addzl() {
+            $("#dvct").append($("#dvcp").html());
+        }
+        function dels(th){
+            $(th).parent("div").remove();
+        }
+    </script>
+</body>
+</html>

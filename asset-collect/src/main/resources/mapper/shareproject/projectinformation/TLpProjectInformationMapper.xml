@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shareproject.projectinformation.mapper.TLpProjectInformationMapper">
+    <resultMap type="TLpProjectInformation" id="TLpProjectInformationResult">
+        <result property="id"    column="id"    />
+        <result property="names"    column="names"    />
+        <result property="orgCode"    column="org_code"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="belongingCenterId"    column="belonging_center_id"    />
+        <result property="belongingCenterName"    column="belonging_center_name"    />
+        <result property="projectManager"    column="project_manager"    />
+        <result property="projectDirector"    column="project_director"    />
+        <result property="seatsNumber"    column="seats_number"    />
+        <result property="partyName"    column="party_name"    />
+        <result property="partyType"    column="party_type"    />
+        <result property="billingInformation"    column="billing_information"    />
+        <result property="productName"    column="product_name"    />
+        <result property="productNature"    column="product_nature"    />
+        <result property="settlementMethod"    column="settlement_method"    />
+        <result property="divisionLogic"    column="division_logic"    />
+        <result property="withdrawCase"    column="withdraw_case"    />
+        <result property="rates"    column="rates"    />
+        <result property="billingFormula"    column="billing_formula"    />
+        <result property="operatingSystem"    column="operating_system"    />
+        <result property="trafficPlatform"    column="traffic_platform"    />
+        <result property="casesNumber"    column="cases_number"    />
+        <result property="perHousehold"    column="per_household"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="accountAge"    column="account_age"    />
+    </resultMap>
+
+    <sql id="selectTLpProjectInformationVo">
+        select id, names,org_code,org_name,dept_id,dept_name, belonging_center_id,belonging_center_name, project_manager, project_director, seats_number, party_name, party_type, billing_information, product_name, product_nature, settlement_method, division_logic,withdraw_case,rates, billing_formula, operating_system, traffic_platform, cases_number, per_household, start_time, end_time, remark, del_flag, create_by, create_time, update_by, update_time,account_age from t_lp_project_information
+    </sql>
+
+    <select id="selectTLpProjectInformationList" parameterType="TLpProjectInformation" resultMap="TLpProjectInformationResult">
+        <include refid="selectTLpProjectInformationVo"/>
+        <where>  
+            <if test="names != null  and names != ''"> and names = #{names}</if>
+            <if test="orgCode != null  and orgCode != ''"> and org_code = #{orgCode}</if>
+            <if test="orgName != null  and orgName != ''"> and org_name = #{orgName}</if>
+            <if test="deptId != null  and deptId != ''"> and dept_id = #{deptId}</if>
+            <if test="deptName != null  and deptName != ''"> and dept_name = #{deptName}</if>
+            <if test="belongingCenterId != null  and belongingCenterId != ''"> and belonging_center_id = #{belongingCenterId}</if>
+            <if test="belongingCenterName != null  and belongingCenterName != ''"> and belonging_center_name = #{belongingCenterName}</if>
+            <if test="projectManager != null  and projectManager != ''"> and project_manager = #{projectManager}</if>
+            <if test="projectDirector != null  and projectDirector != ''"> and project_director = #{projectDirector}</if>
+            <if test="seatsNumber != null "> and seats_number = #{seatsNumber}</if>
+            <if test="partyName != null  and partyName != ''"> and party_name like concat('%', #{partyName}, '%')</if>
+            <if test="partyType != null  and partyType != ''"> and party_type = #{partyType}</if>
+            <if test="billingInformation != null  and billingInformation != ''"> and billing_information = #{billingInformation}</if>
+            <if test="productName != null  and productName != ''"> and product_name like concat('%', #{productName}, '%')</if>
+            <if test="productNature != null  and productNature != ''"> and product_nature = #{productNature}</if>
+            <if test="settlementMethod != null  and settlementMethod != ''"> and settlement_method = #{settlementMethod}</if>
+            <if test="divisionLogic != null  and divisionLogic != ''"> and division_logic = #{divisionLogic}</if>
+            <if test="withdrawCase != null  and withdrawCase != ''"> and withdraw_case = #{withdrawCase}</if>
+            <if test="rates != null "> and rates = #{rates}</if>
+            <if test="billingFormula != null  and billingFormula != ''"> and billing_formula = #{billingFormula}</if>
+            <if test="operatingSystem != null  and operatingSystem != ''"> and operating_system = #{operatingSystem}</if>
+            <if test="trafficPlatform != null  and trafficPlatform != ''"> and traffic_platform = #{trafficPlatform}</if>
+            <if test="casesNumber != null "> and cases_number = #{casesNumber}</if>
+            <if test="perHousehold != null "> and per_household = #{perHousehold}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="accountAge != null "> and account_age = #{accountAge}</if>
+        </where>
+    </select>
+    
+    <select id="selectTLpProjectInformationById" parameterType="Long" resultMap="TLpProjectInformationResult">
+        <include refid="selectTLpProjectInformationVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLpProjectInformation" parameterType="TLpProjectInformation" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lp_project_information
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="names != null  and names != ''">names,</if>
+            <if test="orgCode != null  and orgCode != ''">org_code,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="deptId != null  and deptId != ''"> dept_id,</if>
+            <if test="deptName != null  and deptName != ''">dept_name,</if>
+            <if test="belongingCenterId != null  and belongingCenterId != ''">belonging_center_id,</if>
+            <if test="belongingCenterName != null  and belongingCenterName != ''">belonging_center_name,</if>
+            <if test="projectManager != null  and projectManager != ''">project_manager,</if>
+            <if test="projectDirector != null  and projectDirector != ''">project_director,</if>
+            <if test="seatsNumber != null ">seats_number,</if>
+            <if test="partyName != null  and partyName != ''">party_name,</if>
+            <if test="partyType != null  and partyType != ''">party_type,</if>
+            <if test="billingInformation != null  and billingInformation != ''">billing_information,</if>
+            <if test="productName != null  and productName != ''">product_name,</if>
+            <if test="productNature != null  and productNature != ''">product_nature,</if>
+            <if test="settlementMethod != null  and settlementMethod != ''">settlement_method,</if>
+            <if test="divisionLogic != null  and divisionLogic != ''">division_logic,</if>
+            <if test="withdrawCase != null  and withdrawCase != ''">withdraw_case,</if>
+            <if test="rates != null ">rates,</if>
+            <if test="billingFormula != null  and billingFormula != ''">billing_formula,</if>
+            <if test="operatingSystem != null  and operatingSystem != ''">operating_system,</if>
+            <if test="trafficPlatform != null  and trafficPlatform != ''">traffic_platform,</if>
+            <if test="casesNumber != null ">cases_number,</if>
+            <if test="perHousehold != null ">per_household,</if>
+            <if test="startTime != null ">start_time,</if>
+            <if test="endTime != null ">end_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="accountAge != null ">account_age</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="names != null  and names != ''">#{names},</if>
+            <if test="orgCode != null  and orgCode != ''">#{orgCode},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="deptId != null  and deptId != ''">#{deptId},</if>
+            <if test="deptName != null  and deptName != ''">#{deptName},</if>
+            <if test="belongingCenterId != null  and belongingCenterId != ''">#{belongingCenterId},</if>
+            <if test="belongingCenterName != null  and belongingCenterName != ''">#{belongingCenterName},</if>
+            <if test="projectManager != null  and projectManager != ''">#{projectManager},</if>
+            <if test="projectDirector != null  and projectDirector != ''">#{projectDirector},</if>
+            <if test="seatsNumber != null ">#{seatsNumber},</if>
+            <if test="partyName != null  and partyName != ''">#{partyName},</if>
+            <if test="partyType != null  and partyType != ''">#{partyType},</if>
+            <if test="billingInformation != null  and billingInformation != ''">#{billingInformation},</if>
+            <if test="productName != null  and productName != ''">#{productName},</if>
+            <if test="productNature != null  and productNature != ''">#{productNature},</if>
+            <if test="settlementMethod != null  and settlementMethod != ''">#{settlementMethod},</if>
+            <if test="divisionLogic != null  and divisionLogic != ''">#{divisionLogic},</if>
+            <if test="withdrawCase != null  and withdrawCase != ''">#{withdrawCase},</if>
+            <if test="rates != null ">#{rates},</if>
+            <if test="billingFormula != null  and billingFormula != ''">#{billingFormula},</if>
+            <if test="operatingSystem != null  and operatingSystem != ''">#{operatingSystem},</if>
+            <if test="trafficPlatform != null  and trafficPlatform != ''">#{trafficPlatform},</if>
+            <if test="casesNumber != null ">#{casesNumber},</if>
+            <if test="perHousehold != null ">#{perHousehold},</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="endTime != null ">#{endTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="accountAge != null ">#{accountAge}</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLpProjectInformation" parameterType="TLpProjectInformation">
+        update t_lp_project_information
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="names != null  and names != ''">names = #{names},</if>
+            <if test="orgCode != null  and orgCode != ''">org_code = #{orgCode},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="deptId != null  and deptId != ''">dept_id = #{deptId},</if>
+            <if test="deptName != null  and deptName != ''">dept_name = #{deptName},</if>
+            <if test="belongingCenterId != null  and belongingCenterId != ''">belonging_center_id = #{belongingCenterId},</if>
+            <if test="belongingCenterName != null  and belongingCenterName != ''">belonging_center_name = #{belongingCenterName},</if>
+            <if test="projectManager != null  and projectManager != ''">project_manager = #{projectManager},</if>
+            <if test="projectDirector != null  and projectDirector != ''">project_director = #{projectDirector},</if>
+            <if test="seatsNumber != null ">seats_number = #{seatsNumber},</if>
+            <if test="partyName != null  and partyName != ''">party_name = #{partyName},</if>
+            <if test="partyType != null  and partyType != ''">party_type = #{partyType},</if>
+            <if test="billingInformation != null  and billingInformation != ''">billing_information = #{billingInformation},</if>
+            <if test="productName != null  and productName != ''">product_name = #{productName},</if>
+            <if test="productNature != null  and productNature != ''">product_nature = #{productNature},</if>
+            <if test="settlementMethod != null  and settlementMethod != ''">settlement_method = #{settlementMethod},</if>
+            <if test="divisionLogic != null  and divisionLogic != ''">division_logic = #{divisionLogic},</if>
+            <if test="withdrawCase != null  and withdrawCase != ''">withdraw_case = #{withdrawCase},</if>
+            <if test="rates != null ">rates = #{rates},</if>
+            <if test="billingFormula != null  and billingFormula != ''">billing_formula = #{billingFormula},</if>
+            <if test="operatingSystem != null  and operatingSystem != ''">operating_system = #{operatingSystem},</if>
+            <if test="trafficPlatform != null  and trafficPlatform != ''">traffic_platform = #{trafficPlatform},</if>
+            <if test="casesNumber != null ">cases_number = #{casesNumber},</if>
+            <if test="perHousehold != null ">per_household = #{perHousehold},</if>
+            <if test="startTime != null ">start_time = #{startTime},</if>
+            <if test="endTime != null ">end_time = #{endTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="accountAge != null ">account_age = #{accountAge}</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLpProjectInformationById" parameterType="Long">
+        delete from t_lp_project_information where id = #{id}
+    </delete>
+
+    <delete id="deleteTLpProjectInformationByIds" parameterType="String">
+        delete from t_lp_project_information where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
