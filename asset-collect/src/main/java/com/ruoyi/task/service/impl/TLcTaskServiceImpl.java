@@ -1723,6 +1723,11 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         return this.tLcTaskMapper.selectTaskListByCertificateNosAndOrdId(certificateNos, orgId);
     }
 
+    @Override
+    public Long selectAllocatedCount(TLcTask tLcTask) {
+        return this.tLcTaskMapper.selectAllocatedCount(tLcTask);
+    }
+
     public boolean checkPhone(String phone) {
         Pattern p = null;
         Matcher m = null;

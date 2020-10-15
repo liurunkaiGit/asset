@@ -339,4 +339,6 @@ public interface ITLcTaskService {
     List<TLcTask> selectTaskList(TLcTask tLcTask);
 
     List<TLcTask> selectTaskListByCertificateNosAndOrdId(List<String> certificateNos, String orgId);
+
+    Long selectAllocatedCount(TLcTask tLcTask);
 }

@@ -233,4 +233,6 @@ public interface TLcTaskMapper {
     int updatePhoneStatus(TLcTask tLcTask);
 
     List<TLcTask> selectTaskListByCertificateNosAndOrdId(@Param("certificateNos") List<String> certificateNos, @Param("orgId") String orgId);
+
+    Long selectAllocatedCount(TLcTask tLcTask);
 }
