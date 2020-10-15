@@ -70,6 +70,7 @@ public class PhoneStatusController extends BaseController
     {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         String fileName = "号码状态"+sdf.format( new Date());
+        phoneStatus.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
         List<PhoneStatus> list = phoneStatusService.selectPhoneStatusList(phoneStatus);
         ExcelUtil<PhoneStatus> util = new ExcelUtil<PhoneStatus>(PhoneStatus.class);
         return util.exportExcel(list, "status",fileName);
