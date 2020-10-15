@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shareproject.attendance.mapper.TLpAttendanceMapper">
+    
+    <resultMap type="TLpAttendance" id="TLpAttendanceResult">
+        <result property="id"    column="id"    />
+        <result property="proId"    column="pro_id"    />
+        <result property="proName"    column="pro_name"    />
+        <result property="attendanceDate"    column="attendance_date"    />
+        <result property="attendanceRequired"    column="attendance_required"    />
+        <result property="actualAttendance"    column="actual_attendance"    />
+        <result property="numberOfDepartures"    column="number_of_departures"    />
+        <result property="numberOfRecruiters"    column="number_of_recruiters"    />
+        <result property="newNumberOfRecruiters"    column="new_number_of_recruiters"    />
+        <result property="numberTypes"    column="number_types"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+    </resultMap>
+
+    <sql id="selectTLpAttendanceVo">
+        select id, pro_id, pro_name, attendance_date, attendance_required, actual_attendance, number_of_departures, number_of_recruiters, new_number_of_recruiters, number_types,create_by, create_time, update_by, update_time,org_id,org_name from t_lp_attendance
+    </sql>
+
+    <select id="selectTLpAttendanceList" parameterType="TLpAttendance" resultMap="TLpAttendanceResult">
+        <include refid="selectTLpAttendanceVo"/>
+        <where>  
+            <if test="proId != null "> and pro_id = #{proId}</if>
+            <if test="proName != null  and proName != ''"> and pro_name like concat('%', #{proName}, '%')</if>
+            <if test="attendanceRequired != null "> and attendance_required = #{attendanceRequired}</if>
+            <if test="actualAttendance != null "> and actual_attendance = #{actualAttendance}</if>
+            <if test="numberOfDepartures != null "> and number_of_departures = #{numberOfDepartures}</if>
+            <if test="numberOfRecruiters != null "> and number_of_recruiters = #{numberOfRecruiters}</if>
+            <if test="newNumberOfRecruiters != null "> and new_number_of_recruiters = #{newNumberOfRecruiters}</if>
+            <if test="numberTypes != null "> and number_types = #{numberTypes}</if>
+            <if test="orgId != null "> and org_id = #{orgId}</if>
+            <if test="orgName != null "> and org_name = #{orgName}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and date_format(attendance_date,'%Y-%m-%d %H:%i:%s') &gt;= date_format(#{params.beginTime},'%Y-%m-%d %H:%i:%s')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and date_format(attendance_date,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{params.endTime},'%Y-%m-%d %H:%i:%s')
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectTLpAttendanceById" parameterType="Long" resultMap="TLpAttendanceResult">
+        <include refid="selectTLpAttendanceVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLpAttendance" parameterType="TLpAttendance">
+        insert into t_lp_attendance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="proId != null ">pro_id,</if>
+            <if test="proName != null  and proName != ''">pro_name,</if>
+            <if test="attendanceDate != null ">attendance_date,</if>
+            <if test="attendanceRequired != null ">attendance_required,</if>
+            <if test="actualAttendance != null ">actual_attendance,</if>
+            <if test="numberOfDepartures != null ">number_of_departures,</if>
+            <if test="numberOfRecruiters != null ">number_of_recruiters,</if>
+            <if test="newNumberOfRecruiters != null ">new_number_of_recruiters,</if>
+            <if test="numberTypes != null ">number_types,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="orgId != null  and orgId != '' ">org_id,</if>
+            <if test="orgName != null and orgName != ''">org_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="proId != null ">#{proId},</if>
+            <if test="proName != null  and proName != ''">#{proName},</if>
+            <if test="attendanceDate != null ">#{attendanceDate},</if>
+            <if test="attendanceRequired != null ">#{attendanceRequired},</if>
+            <if test="actualAttendance != null ">#{actualAttendance},</if>
+            <if test="numberOfDepartures != null ">#{numberOfDepartures},</if>
+            <if test="numberOfRecruiters != null ">#{numberOfRecruiters},</if>
+            <if test="newNumberOfRecruiters != null ">#{newNumberOfRecruiters},</if>
+            <if test="numberTypes != null ">#{numberTypes},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="orgId != null  and orgId != ''">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLpAttendance" parameterType="TLpAttendance">
+        update t_lp_attendance
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="proId != null ">pro_id = #{proId},</if>
+            <if test="proName != null  and proName != ''">pro_name = #{proName},</if>
+            <if test="attendanceDate != null ">attendance_date = #{attendanceDate},</if>
+            <if test="attendanceRequired != null ">attendance_required = #{attendanceRequired},</if>
+            <if test="actualAttendance != null ">actual_attendance = #{actualAttendance},</if>
+            <if test="numberOfDepartures != null ">number_of_departures = #{numberOfDepartures},</if>
+            <if test="numberOfRecruiters != null ">number_of_recruiters = #{numberOfRecruiters},</if>
+            <if test="newNumberOfRecruiters != null ">new_number_of_recruiters = #{newNumberOfRecruiters},</if>
+            <if test="numberTypes != null ">number_types = #{numberTypes},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLpAttendanceById" parameterType="Long">
+        delete from t_lp_attendance where id = #{id}
+    </delete>
+
+    <delete id="deleteTLpAttendanceByIds" parameterType="String">
+        delete from t_lp_attendance where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

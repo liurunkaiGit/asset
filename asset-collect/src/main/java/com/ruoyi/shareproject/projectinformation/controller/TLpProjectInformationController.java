@@ -40,7 +40,7 @@ public class TLpProjectInformationController extends BaseController {
     }
 
     /**
-     * 查询【请填写功能名称】列表
+     * 查询【项目信息管理】列表
      */
     @RequiresPermissions("ruoyi:information:list")
     @PostMapping("/list")
@@ -51,12 +51,22 @@ public class TLpProjectInformationController extends BaseController {
         List<TLpProjectInformation> list = tLpProjectInformationService.selectTLpProjectInformationList(tLpProjectInformation);
         return getDataTable(list);
     }
+    /**
+     * 查询【项目信息管理】列表 下拉
+     */
+    @RequiresPermissions("ruoyi:information:list")
+    @PostMapping("/listxl")
+    @ResponseBody
+    public List<TLpProjectInformation> listxl(TLpProjectInformation tLpProjectInformation)
+    {
+        return tLpProjectInformationService.selectTLpProjectInformationList(tLpProjectInformation);
+    }
 
     /**
-     * 导出【请填写功能名称】列表
+     * 导出【项目信息管理】列表
      */
     @RequiresPermissions("ruoyi:information:export")
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.EXPORT)
+    @Log(title = "【项目信息管理】", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(TLpProjectInformation tLpProjectInformation)
@@ -67,7 +77,7 @@ public class TLpProjectInformationController extends BaseController {
     }
 
     /**
-     * 新增【请填写功能名称】
+     * 新增【项目信息管理】
      */
     @GetMapping("/add")
     public String add()
@@ -76,10 +86,10 @@ public class TLpProjectInformationController extends BaseController {
     }
 
     /**
-     * 新增保存【请填写功能名称】
+     * 新增保存【项目信息管理】
      */
     @RequiresPermissions("ruoyi:information:add")
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.INSERT)
+    @Log(title = "【项目信息管理】", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(TLpProjectInformation tLpProjectInformation)
@@ -92,7 +102,7 @@ public class TLpProjectInformationController extends BaseController {
     }
 
     /**
-     * 修改【请填写功能名称】
+     * 修改【项目信息管理】
      */
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap)
@@ -103,10 +113,10 @@ public class TLpProjectInformationController extends BaseController {
     }
 
     /**
-     * 修改保存【请填写功能名称】
+     * 修改保存【项目信息管理】
      */
     @RequiresPermissions("ruoyi:information:edit")
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.UPDATE)
+    @Log(title = "【项目信息管理】", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(TLpProjectInformation tLpProjectInformation)
@@ -117,10 +127,10 @@ public class TLpProjectInformationController extends BaseController {
     }
 
     /**
-     * 删除【请填写功能名称】
+     * 删除【项目信息管理】
      */
     @RequiresPermissions("ruoyi:information:remove")
-    @Log(title = "【请填写功能名称】", businessType = BusinessType.DELETE)
+    @Log(title = "【项目信息管理】", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody
     public AjaxResult remove(String ids)

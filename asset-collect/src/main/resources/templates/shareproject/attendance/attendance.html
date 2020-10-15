@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('【出勤信息】列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>项目名称：</p>
+                                <select class="form-control" name="proId"  id="proId" >
+                                    <option value="">全部</option>
+                                </select>
+                            </li>
+                            <li class="select-time">
+                                <p>出勤日期：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="ruoyi:attendance:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="ruoyi:attendance:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="ruoyi:attendance:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="ruoyi:attendance:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('ruoyi:attendance:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('ruoyi:attendance:remove')}]];
+        var prefix = ctx + "shareproject/attendance";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "【出勤信息管理】",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '主键',
+                    visible: false
+                },
+                {
+                    field : 'proName', 
+                    title : '项目名称'
+                },
+                {
+                    field : 'attendanceDate', 
+                    title : '出勤日期'
+                },
+                {
+                    field : 'attendanceRequired', 
+                    title : '应出勤人数'
+                },
+                {
+                    field : 'actualAttendance', 
+                    title : '实际出勤人数'
+                },
+                {
+                    field : 'numberTypes',
+                    title : '休假/旷工/请假人数'
+                },
+                {
+                    field : 'numberOfDepartures', 
+                    title : '申请离职人数'
+                },
+                {
+                    field : 'numberOfRecruiters', 
+                    title : '待招聘上线人数'
+                },
+                {
+                    field : 'newNumberOfRecruiters', 
+                    title : '新人上线人数'
+                },
+                {
+                    field : 'updateTime',
+                    title : '操作时间'
+                },
+                {
+                    field : 'updateBy',
+                    title : '操作人'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        $(document).ready(function(){
+            $.post(
+                ctx + "shareproject/projectinformation/listxl",
+                function(data) {
+                    if(data){
+                        for (var i = 0; i < data.length; i++) {
+                            var ob = data[i];
+                            var opt = "<option value='"+ob.id+"'>"+ob.names+"</option>";
+                            $("#proId").append(opt);
+                        }
+                    }
+                }
+            );
+        });
+    </script>
+</body>
+</html>

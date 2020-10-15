@@ -3,49 +3,56 @@ package com.ruoyi.shareproject.projectinformation.mapper;
 import com.ruoyi.shareproject.projectinformation.domain.TLpProjectInformation;
 
 import java.util.List;
+
+/**
+ * 【项目信息管理】Mapper接口
+ *
+ * @author liurunkai
+ * @date 2020-10-14
+ */
 public interface TLpProjectInformationMapper {
     /**
-     * 查询【请填写功能名称】
+     * 查询【项目信息管理】
      *
-     * @param id 【请填写功能名称】ID
-     * @return 【请填写功能名称】
+     * @param id 【项目信息管理】ID
+     * @return 【项目信息管理】
      */
     public TLpProjectInformation selectTLpProjectInformationById(Long id);
 
     /**
-     * 查询【请填写功能名称】列表
+     * 查询【项目信息管理】列表
      *
-     * @param tLpProjectInformation 【请填写功能名称】
-     * @return 【请填写功能名称】集合
+     * @param tLpProjectInformation 【项目信息管理】
+     * @return 【项目信息管理】集合
      */
     public List<TLpProjectInformation> selectTLpProjectInformationList(TLpProjectInformation tLpProjectInformation);
 
     /**
-     * 新增【请填写功能名称】
+     * 新增【项目信息管理】
      *
-     * @param tLpProjectInformation 【请填写功能名称】
+     * @param tLpProjectInformation 【项目信息管理】
      * @return 结果
      */
     public int insertTLpProjectInformation(TLpProjectInformation tLpProjectInformation);
 
     /**
-     * 修改【请填写功能名称】
+     * 修改【项目信息管理】
      *
-     * @param tLpProjectInformation 【请填写功能名称】
+     * @param tLpProjectInformation 【项目信息管理】
      * @return 结果
      */
     public int updateTLpProjectInformation(TLpProjectInformation tLpProjectInformation);
 
     /**
-     * 删除【请填写功能名称】
+     * 删除【项目信息管理】
      *
-     * @param id 【请填写功能名称】ID
+     * @param id 【项目信息管理】ID
      * @return 结果
      */
     public int deleteTLpProjectInformationById(Long id);
 
     /**
-     * 批量删除【请填写功能名称】
+     * 批量删除【项目信息管理】
      *
      * @param ids 需要删除的数据ID
      * @return 结果

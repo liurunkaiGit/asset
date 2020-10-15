@@ -6,6 +6,12 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * 【项目信息管理】对象 t_lp_project_information
+ *
+ * @author gaohg
+ * @date 2020-10-14
+ */
 @Data
 public class TLpProjectInformation extends BaseEntity {
     private static final long serialVersionUID = 15515L;

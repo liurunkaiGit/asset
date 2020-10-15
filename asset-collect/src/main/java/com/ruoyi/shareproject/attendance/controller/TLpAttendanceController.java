@@ -1,0 +1,131 @@
+package com.ruoyi.shareproject.attendance.controller;
+
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.shareproject.attendance.domain.TLpAttendance;
+import com.ruoyi.shareproject.attendance.service.ITLpAttendanceService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
+import java.util.List;
+/**
+ * 【出勤信息管理】Controller
+ *
+ * @author gaohg
+ * @date 2020-10-15
+ */
+@Controller
+@RequestMapping("/shareproject/attendance")
+public class TLpAttendanceController extends BaseController {
+    private String prefix = "shareproject/attendance";
+
+    @Autowired
+    private ITLpAttendanceService tLpAttendanceService;
+
+    @RequiresPermissions("ruoyi:attendance:view")
+    @GetMapping()
+    public String attendance()
+    {
+        return prefix + "/attendance";
+    }
+
+    /**
+     * 查询【出勤信息管理】列表
+     */
+    @RequiresPermissions("ruoyi:attendance:list")
+    @PostMapping("/list")
+    @ResponseBody
+    public TableDataInfo list(TLpAttendance tLpAttendance)
+    {
+        startPage();
+        List<TLpAttendance> list = tLpAttendanceService.selectTLpAttendanceList(tLpAttendance);
+        return getDataTable(list);
+    }
+
+    /**
+     * 导出【出勤信息管理】列表
+     */
+    @RequiresPermissions("ruoyi:attendance:export")
+    @Log(title = "【出勤信息管理】", businessType = BusinessType.EXPORT)
+    @PostMapping("/export")
+    @ResponseBody
+    public AjaxResult export(TLpAttendance tLpAttendance)
+    {
+        List<TLpAttendance> list = tLpAttendanceService.selectTLpAttendanceList(tLpAttendance);
+        ExcelUtil<TLpAttendance> util = new ExcelUtil<TLpAttendance>(TLpAttendance.class);
+        return util.exportExcel(list, "attendance");
+    }
+
+    /**
+     * 新增【出勤信息管理】
+     */
+    @GetMapping("/add")
+    public String add()
+    {
+        return prefix + "/add";
+    }
+
+    /**
+     * 新增保存【出勤信息管理】
+     */
+    @RequiresPermissions("ruoyi:attendance:add")
+    @Log(title = "【出勤信息管理】", businessType = BusinessType.INSERT)
+    @PostMapping("/add")
+    @ResponseBody
+    public AjaxResult addSave(TLpAttendance tLpAttendance)
+    {
+        tLpAttendance.setCreateBy(ShiroUtils.getLoginName());
+        tLpAttendance.setCreateTime(new Date());
+        tLpAttendance.setUpdateBy(ShiroUtils.getLoginName());
+        tLpAttendance.setUpdateTime(new Date());
+        tLpAttendance.setOrgId(ShiroUtils.getSysUser().getOrgId());
+        tLpAttendance.setOrgName(ShiroUtils.getSysUser().getOrgName());
+        return toAjax(tLpAttendanceService.insertTLpAttendance(tLpAttendance));
+    }
+
+    /**
+     * 修改【出勤信息管理】
+     */
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id") Long id, ModelMap mmap)
+    {
+        TLpAttendance tLpAttendance = tLpAttendanceService.selectTLpAttendanceById(id);
+        mmap.put("tLpAttendance", tLpAttendance);
+        return prefix + "/edit";
+    }
+
+    /**
+     * 修改保存【出勤信息管理】
+     */
+    @RequiresPermissions("ruoyi:attendance:edit")
+    @Log(title = "【出勤信息管理】", businessType = BusinessType.UPDATE)
+    @PostMapping("/edit")
+    @ResponseBody
+    public AjaxResult editSave(TLpAttendance tLpAttendance)
+    {
+        tLpAttendance.setUpdateBy(ShiroUtils.getLoginName());
+        tLpAttendance.setUpdateTime(new Date());
+        return toAjax(tLpAttendanceService.updateTLpAttendance(tLpAttendance));
+    }
+
+    /**
+     * 删除【出勤信息管理】
+     */
+    @RequiresPermissions("ruoyi:attendance:remove")
+    @Log(title = "【出勤信息管理】", businessType = BusinessType.DELETE)
+    @PostMapping( "/remove")
+    @ResponseBody
+    public AjaxResult remove(String ids)
+    {
+        return toAjax(tLpAttendanceService.deleteTLpAttendanceByIds(ids));
+    }
+}
