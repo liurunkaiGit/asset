@@ -450,6 +450,14 @@ public class DataImportUtil {
                 if (key.equals(dzhxrq)) {
                     map.put("呆账核销日期", value);
                 }
+                String customerNo = bean.getCustomerNo();
+                if (key.equals(customerNo)) {
+                    map.put("客户号", value);
+                }
+                String sjrq = bean.getSjrq();
+                if (key.equals(sjrq)) {
+                    map.put("数据日期", value);
+                }
             }
 
             result.add(map);
@@ -867,6 +875,14 @@ public class DataImportUtil {
                     String dzhxrq = bean.getDzhxrq();
                     if (key.equals(dzhxrq)) {
                         map.put("呆账核销日期", value);
+                    }
+                    String customerNo = bean.getCustomerNo();
+                    if (key.equals(customerNo)) {
+                        map.put("客户号", value);
+                    }
+                    String sjrq = bean.getSjrq();
+                    if (key.equals(sjrq)) {
+                        map.put("数据日期", value);
                     }
                     if(freeRelations.size()>0){
                         for (String freeRelation : freeRelations) {//客户模板头
@@ -2858,6 +2874,18 @@ public class DataImportUtil {
                 if ("呆账核销日期".equals(entry.getKey())) {
                     if (entry.getValue() != null && !"".equals(entry.getValue())) {
                         dto.setDzhxrq(entry.getValue());
+                    }
+                    continue;
+                }
+                if ("客户号".equals(entry.getKey())) {
+                    if (entry.getValue() != null && !"".equals(entry.getValue())) {
+                        dto.setCustomerNo(entry.getValue());
+                    }
+                    continue;
+                }
+                if ("数据日期".equals(entry.getKey())) {
+                    if (entry.getValue() != null && !"".equals(entry.getValue())) {
+                        dto.setSjrq(entry.getValue());
                     }
                     continue;
                 }

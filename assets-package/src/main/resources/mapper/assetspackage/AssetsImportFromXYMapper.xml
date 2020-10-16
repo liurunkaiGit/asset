@@ -453,6 +453,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         import_batch_no,
         close_case_date,
         dzhxrq,
+        customer_no,
+        sjrq,
         package_id
         )
         VALUES
@@ -567,6 +569,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{item.importBatchNo},
             #{item.closeCaseDate},
             #{item.dzhxrq},
+            #{item.customerNo},
+            #{item.sjrq},
             #{item.packageId}
             )
         </foreach>

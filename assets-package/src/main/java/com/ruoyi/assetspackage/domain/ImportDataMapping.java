@@ -114,6 +114,8 @@ public class ImportDataMapping {
     private String fifthLiaisonRelation;//联系人5关系
     private String fifthLiaisonMobile;//联系人5电话
     private String dzhxrq;//呆账核销日期
+    private String customerNo;//客户号
+    private String sjrq;//数据日期
 
     private String headRowNum; //表头行
     private String dataRowNum; //数据起始行

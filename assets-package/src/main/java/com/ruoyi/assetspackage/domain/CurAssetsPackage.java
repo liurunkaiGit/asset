@@ -497,6 +497,8 @@ public class CurAssetsPackage extends BaseEntity {
 
     //中银新增
     private Date dzhxrq;//呆账核销日期
+    private String customerNo;//客户号
+    private Date sjrq;//数据日期
 
     @Override
     public String getCreateBy() {

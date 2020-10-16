@@ -210,6 +210,10 @@ public class SystemHeadMapping {
     private String fifth_liaison_mobile;
     @Value("${dzhxrq}")
     private String dzhxrq;
+    @Value("${customer_no}")
+    private String customer_no;
+    @Value("${sjrq}")
+    private String sjrq;
 
 
 

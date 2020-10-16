@@ -484,6 +484,7 @@ public class CurAssetsPackageController extends BaseController {
             e.printStackTrace();
             logger.error("数据导入失败:{}",e);
             return AjaxResult.success("数据导入失败",e.getMessage());
+//            return AjaxResult.success("数据导入失败","数据导入失败");
         }
         return AjaxResult.success("导入临时表成功",importBatchNo);
     }

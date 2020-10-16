@@ -609,6 +609,12 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
             if ("呆账核销日期".equals(systemTemplateName)) {
                 bean.setDzhxrq(customerTemplateName);
                 continue;}
+            if ("客户号".equals(systemTemplateName)) {
+                bean.setCustomerNo(customerTemplateName);
+                continue;}
+            if ("数据日期".equals(systemTemplateName)) {
+                bean.setSjrq(customerTemplateName);
+                continue;}
         }
         return bean;
     }
