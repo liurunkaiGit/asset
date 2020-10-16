@@ -405,22 +405,30 @@
                         </div>
                     </div>
                 </div>
-                <div class="btn-group-sm">
-                <a onclick="prevOrNext(1)"><img src="/img/pre.png" class="imgso" width="30px" title="上一条"/></a>
-                <a onclick="prevOrNext(2)"><img src="/img/next.png" class="imgso" width="30px" title="下一条"/></a>
-               <!-- <a data-toggle="modal" data-target="#myModal"><img src="/img/addContact.png" class="imgso" width="30px" title="新增联系人"/></a>&nbsp;&nbsp;-->
-                <!--<a onclick="helpCollApply()"><img src="/img/xiecui.png" class="imgso" width="25px" height="25px" title="协催申请"/></a>&nbsp;&nbsp;
-                <a onclick="stopCollApply()"><img src="/img/tingcui.png" class="imgso" width="25px" height="25px" title="停催申请"/></a>&nbsp;&nbsp;-->
-                <a onclick="helpCollApply();" title="协催申请" class="btn btn-danger" style="height: 25px;padding: 3px;">协催</a>
-                <a onclick="stopCollApply();" title="停催申请" class="btn btn-primary" style="height: 25px;padding: 3px;">停催</a>
-                    <a onclick="disableCall(1);" title="停止拨号" class="btn btn-danger" style="height: 25px;padding: 3px;">停拨</a>
-                    <a onclick="disableCall(0)" title="取消停拨" class="btn btn-primary" style="height: 25px;padding: 3px;">取消停拨</a>
-                    <a onclick="infoReportingSub()" title="信息上报" class="btn btn-primary" style="height: 25px;padding: 3px;">信息上报</a>
-                    <input id="callRecordId" name="callRecordId" class="form-control" type="hidden">
-                    <!--<button class="btn btn-danger" style="height: 25px;" id="letterApply" onclick="letterApply()">信函申请</button>-->
-                </div>
-                <div class="btn-group-sm">
-                    <button class="btn btn-danger" style="height: 25px;padding: 3px;" id="letterApply" onclick="letterApply()">信函申请</button>
+                <div style="display: flex;">
+                    <lable style="width:30%">
+                        <div class="btn-group-sm" align="right" style="margin-top: 10px;">
+                            <a onclick="prevOrNext(1)"><img src="/img/pre.png" class="imgso" width="30px" height="35px" title="上一条"/></a>
+                            <a onclick="prevOrNext(2)"><img src="/img/next.png" class="imgso" width="30px" height="35px" title="下一条"/></a>
+                        </div>
+                    </lable>
+                    <lable style="width:70%;margin: 5px 0px 5px 10px;">
+                        <div class="btn-group-sm" align="left">
+                       <!-- <a data-toggle="modal" data-target="#myModal"><img src="/img/addContact.png" class="imgso" width="30px" title="新增联系人"/></a>&nbsp;&nbsp;-->
+                        <!--<a onclick="helpCollApply()"><img src="/img/xiecui.png" class="imgso" width="25px" height="25px" title="协催申请"/></a>&nbsp;&nbsp;
+                        <a onclick="stopCollApply()"><img src="/img/tingcui.png" class="imgso" width="25px" height="25px" title="停催申请"/></a>&nbsp;&nbsp;-->
+                            <a onclick="helpCollApply();" title="协催申请" class="btn btn-danger" style="height: 19px;color: #02A7F0;border-color: #02A7F0;background-color: #ffffff;padding: 0px 10px;">协催</a>
+                            <a onclick="disableCall(0)" title="取消停拨" class="btn btn-primary" style="height: 19px;color: #02A7F0;border-color: #02A7F0;background-color: #ffffff;padding: 0px 10px;">复拨</a>
+                            <a onclick="infoReportingSub()" title="信息上报" class="btn btn-primary" style="height: 19px;color: #02A7F0;border-color: #02A7F0;background-color: #ffffff;padding: 0px 10px;">信息上报</a>
+                            <input id="callRecordId" name="callRecordId" class="form-control" type="hidden">
+                            <!--<button class="btn btn-danger" style="height: 25px;" id="letterApply" onclick="letterApply()">信函申请</button>-->
+                        </div>
+                        <div class="btn-group-sm" align="left" style="margin-top: 5px;">
+                            <a onclick="stopCollApply();" title="停催申请" class="btn btn-primary" style="height: 19px;color: #EC808D;border-color: #EC808D;background-color: #ffffff;padding: 0px 10px;">停催</a>
+                            <a onclick="disableCall(1);" title="停止拨号" class="btn btn-danger" style="height: 19px;color: #EC808D;border-color: #EC808D;background-color: #ffffff;padding: 0px 10px;">停拨</a>
+                            <a class="btn btn-danger" style="height: 19px;color: #EC808D;border-color: #EC808D;background-color: #ffffff;padding: 0px 10px;" id="letterApply" onclick="letterApply()">信函申请</a>
+                        </div>
+                    </lable>
                 </div>
             </div>
             <div class="tab-pane" style="height: 150px;overflow: auto">
