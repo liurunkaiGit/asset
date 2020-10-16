@@ -36,13 +36,13 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="information:center:add">
+            <a class="btn btn-success" onclick="$.operate.add()" >
                 <i class="fa fa-plus"></i> 新增
             </a>
-            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="information:center:edit" >
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" >
                 <i class="fa fa-edit"></i> 修改
             </a>
-            <a class="btn btn-warning" onclick="exportExcel()" shiro:hasPermission="information:center:export">
+            <a class="btn btn-warning" onclick="exportExcel()" >
                 <i class="fa fa-download"></i> 导出
             </a>
         </div>
