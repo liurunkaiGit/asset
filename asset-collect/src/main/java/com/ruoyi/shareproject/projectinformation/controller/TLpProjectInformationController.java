@@ -11,6 +11,7 @@ import com.ruoyi.shareproject.projectinformation.domain.TLpProjectInformation;
 import com.ruoyi.shareproject.projectinformation.service.ITLpProjectInformationService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -93,11 +94,19 @@ public class TLpProjectInformationController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(TLpProjectInformation tLpProjectInformation)
     {
-        tLpProjectInformation.setCreateBy(ShiroUtils.getLoginName());
-        tLpProjectInformation.setCreateTime(new Date());
-        tLpProjectInformation.setUpdateBy(ShiroUtils.getLoginName());
-        tLpProjectInformation.setUpdateTime(new Date());
-        return toAjax(tLpProjectInformationService.insertTLpProjectInformation(tLpProjectInformation));
+        try{
+            tLpProjectInformation.setCreateBy(ShiroUtils.getLoginName());
+            tLpProjectInformation.setCreateTime(new Date());
+            tLpProjectInformation.setUpdateBy(ShiroUtils.getLoginName());
+            tLpProjectInformation.setUpdateTime(new Date());
+            return toAjax(tLpProjectInformationService.insertTLpProjectInformation(tLpProjectInformation));
+        }catch (Exception e) {
+            if(e instanceof DuplicateKeyException){
+                throw new DuplicateKeyException("项目名称和委托方(不能重复)已经存在");
+            }else{
+                throw e;
+            }
+        }
     }
 
     /**
@@ -111,6 +120,14 @@ public class TLpProjectInformationController extends BaseController {
         return prefix + "/edit";
     }
 
+    @GetMapping("/lookups/{id}")
+    public String lookups(@PathVariable("id") Long id, ModelMap mmap)
+    {
+        TLpProjectInformation tLpProjectInformation = tLpProjectInformationService.selectTLpProjectInformationById(id);
+        mmap.put("tLpProjectInformation", tLpProjectInformation);
+        return prefix + "/lookups";
+    }
+
     /**
      * 修改保存【项目信息管理】
      */
@@ -120,9 +137,17 @@ public class TLpProjectInformationController extends BaseController {
     @ResponseBody
     public AjaxResult editSave(TLpProjectInformation tLpProjectInformation)
     {
-        tLpProjectInformation.setUpdateBy(ShiroUtils.getLoginName());
-        tLpProjectInformation.setUpdateTime(new Date());
-        return toAjax(tLpProjectInformationService.updateTLpProjectInformation(tLpProjectInformation));
+        try{
+            tLpProjectInformation.setUpdateBy(ShiroUtils.getLoginName());
+            tLpProjectInformation.setUpdateTime(new Date());
+            return toAjax(tLpProjectInformationService.updateTLpProjectInformation(tLpProjectInformation));
+        }catch (Exception e) {
+            if(e instanceof DuplicateKeyException){
+                throw new DuplicateKeyException("项目名称和委托方(不能重复)已经存在");
+            }else{
+                throw e;
+            }
+        }
     }
 
     /**

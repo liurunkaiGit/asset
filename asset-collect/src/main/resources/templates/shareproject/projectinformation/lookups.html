@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <th:block th:include="include :: header('修改【项目信息管理】')" />
+    <th:block th:include="include :: header('查看【项目信息管理】')" />
     <th:block th:include="include :: select2-css" />
 </head>
 <body>
@@ -68,7 +68,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label">坐席数量：</label>
                     <div class="col-sm-8">
-                        <input name="seatsNumber" class="form-control" maxlength="9" type="number" th:field="*{seatsNumber}" required>
+                        <input name="seatsNumber" class="form-control" maxlength="9" type="text" th:field="*{seatsNumber}" required>
                     </div>
                 </div>
             </div>
@@ -108,7 +108,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label">户均金额：</label>
                     <div class="col-sm-8">
-                        <input name="perHousehold" class="form-control" maxlength="9" th:field="*{perHousehold}" type="number">
+                        <input name="perHousehold" class="form-control" maxlength="9" th:field="*{perHousehold}" type="text">
                     </div>
                 </div>
             </div>
@@ -255,7 +255,7 @@
                 <div class="form-group">
                     <label class="col-xs-2 control-label">备注：</label>
                     <div class="col-xs-10" >
-                        <textarea name="remark" maxlength="50" style="width:450px;" th:field="*{remark}" class="form-control" rows="3"></textarea>
+                        <textarea name="remark" disabled maxlength="50" th:field="*{remark}" style="width:450px;" class="form-control" rows="3"></textarea>
                     </div>
                 </div>
             </div>
@@ -275,32 +275,13 @@
             focusCleanup: true
         });
         function submitHandler() {
-            if($("#belongingCenterId").val() == 0){
-                $.modal.alertWarning('请选择归属中心');
-                return;
-            }
-            var flag = 1;
-            if($("#dvct input[name='accountAge']").length > 1) {
-                $("#dvct input[name='accountAge']").each(function () {
-                    if ($(this).val() == "") {
-                        $.modal.alertWarning('请填写委案账龄');
-                        flag = 0;
-                    }else{
-                        $(this).val($(this).val().replace(",",""));
-                    }
-                });
-            }
-            if(flag == 0){
-                return;
-            }
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/edit", $('#form-information-edit').serialize());
-            }
+
         }
         var orgCodeH =  [[${tLpProjectInformation.orgCode}]];
         var belongingCenterIdH =  [[${tLpProjectInformation.belongingCenterId}]];
         var accountAgeList = [[${tLpProjectInformation.accountAge}]];
         $(document).ready(function(){
+            $("body").find("input[type='text']").attr("disabled","false");
             $.post(
                 ctx + "collect/task/initOrg",
                 function(data) {
@@ -310,9 +291,9 @@
                             var sel = "";
                             if(orgCodeH == ob.orgCode){
                                 sel = "selected";
+                                var opt = "<option "+sel+" value='"+ob.orgCode+"+-+"+ob.deptName+"+-+"+ob.deptId+"'>"+data.rows[i].orgName+"</option>";
+                                $("#orgId").append(opt);
                             }
-                            var opt = "<option "+sel+" value='"+ob.orgCode+"+-+"+ob.deptName+"+-+"+ob.deptId+"'>"+data.rows[i].orgName+"</option>";
-                            $("#orgId").append(opt);
                         }
                     }
                 }
@@ -327,62 +308,29 @@
                             var sel = "";
                             if(belongingCenterIdH == ob.id){
                                 sel = "selected";
+                                var opt = "<option "+sel+" value='"+ob.id+"'>"+ob.centerName+"</option>";
+                                $("#belongingCenterId").append(opt);
                             }
-                            var opt = "<option "+sel+" value='"+ob.id+"'>"+ob.centerName+"</option>";
-                            $("#belongingCenterId").append(opt);
                         }
                     }
                 }
             );
 
-            $("#orgId").on("change",function(){
-                var orgName = $(this).children('option:selected').text();
-                var values = $(this).children('option:selected').val();
-                if(values == 0){
-                    $("#orgName").val('');
-                    $("#orgCode").val('');
-                    $("#deptName").val('');
-                    $("#deptId").val('');
-                    return;
-                }
-                $("#orgName").val(orgName);
-                var vssp = values.split("+-+");
-                $("#orgCode").val(vssp[0]);
-                $("#deptName").val(vssp[1]);
-                $("#deptId").val(vssp[2]);
-            });
-            $("#belongingCenterId").on("change",function(){
-                var belongingCenterName = $(this).children('option:selected').text();
-                $("#belongingCenterName").val(belongingCenterName);
-            });
-
+            $("body").find("select").attr("disabled","false");
             if(accountAgeList){
                 var accountAgeListsp = accountAgeList.split(",");
-                debugger;
                 for(var i=0;i<accountAgeListsp.length;i++){
                     var hm = "<div>";
                     if(i==0){
-                        hm+="<input name=\"accountAge\" required style=\"width: 70%\"  type=\"text\" value='"+accountAgeListsp[i]+"'><label onclick=\"addzl()\">&nbsp;&nbsp;+&nbsp;&nbsp;</label>";
+                        hm+="<input name=\"accountAge\" disabled required style=\"width: 70%\" readonly  type=\"text\" value='"+accountAgeListsp[i]+"'>";
                     }else{
-                        hm+="<input name=\"accountAge\" required style=\"width: 70%\"  type=\"text\" value='"+accountAgeListsp[i]+"'><label onclick=\"dels(this)\">&nbsp;&nbsp;-&nbsp;&nbsp;</label>";
+                        hm+="<input name=\"accountAge\" disabled required style=\"width: 70%\" readonly type=\"text\" value='"+accountAgeListsp[i]+"'>";
                     }
                     hm+="</div>";
                     $("#dvct").append(hm);
                 }
             }
         });
-        var zlIndex = 1;
-        function addzl() {
-            if(zlIndex >=19 ){
-                $.modal.alertWarning('最多添加20项账龄');
-                return ;
-            }
-            $("#dvct").append($("#dvcp").html());
-            zlIndex++;
-        }
-        function dels(th){
-            $(th).parent("div").remove();
-        }
     </script>
 </body>
 </html>

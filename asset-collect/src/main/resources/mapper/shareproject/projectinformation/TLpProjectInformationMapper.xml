@@ -47,14 +47,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectTLpProjectInformationList" parameterType="TLpProjectInformation" resultMap="TLpProjectInformationResult">
         <include refid="selectTLpProjectInformationVo"/>
         <where>  
-            <if test="names != null  and names != ''"> and names = #{names}</if>
+            <if test="names != null  and names != ''"> and names like concat('%', #{names}, '%')</if>
             <if test="orgCode != null  and orgCode != ''"> and org_code = #{orgCode}</if>
             <if test="orgName != null  and orgName != ''"> and org_name = #{orgName}</if>
             <if test="deptId != null  and deptId != ''"> and dept_id = #{deptId}</if>
             <if test="deptName != null  and deptName != ''"> and dept_name = #{deptName}</if>
             <if test="belongingCenterId != null  and belongingCenterId != ''"> and belonging_center_id = #{belongingCenterId}</if>
             <if test="belongingCenterName != null  and belongingCenterName != ''"> and belonging_center_name = #{belongingCenterName}</if>
-            <if test="projectManager != null  and projectManager != ''"> and project_manager = #{projectManager}</if>
+            <if test="projectManager != null  and projectManager != ''"> and project_manager like concat('%', #{projectManager}, '%')</if>
             <if test="projectDirector != null  and projectDirector != ''"> and project_director = #{projectDirector}</if>
             <if test="seatsNumber != null "> and seats_number = #{seatsNumber}</if>
             <if test="partyName != null  and partyName != ''"> and party_name like concat('%', #{partyName}, '%')</if>
