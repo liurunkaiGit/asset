@@ -517,7 +517,6 @@
             <foreach collection="taskStatusList" item="taskStatus" open="(" close=")" separator=",">
                 #{taskStatus}
             </foreach>
-            )
         </if>
         <if test="freeSQL != null  and freeSQL != ''">
             ${freeSQL}
@@ -870,6 +869,21 @@
                 <if test="task.sendRobotBatchNo != null  and task.sendRobotBatchNo != ''">send_robot_batch_no = #{task.sendRobotBatchNo},</if>
                 <if test="task.closeType != null">close_type = #{task.closeType},</if>
                 <if test="task.color != null and task.phone != ''">color = #{task.color},</if>
+            </trim>
+            WHERE id = #{task.id}
+        </foreach>
+    </update>
+
+    <update id="batchUpdateAllotTask" parameterType="java.util.List">
+        <foreach collection="allotTaskList" item="task" separator=";">
+            UPDATE t_lc_task
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="task.taskStatus != null ">task_status = #{task.taskStatus},</if>
+                <if test="task.ownerId != null ">owner_id = #{task.ownerId},</if>
+                <if test="task.ownerName != null  and task.ownerName != ''">owner_name = #{task.ownerName},</if>
+                <if test="task.taskType != null ">task_type = #{task.taskType},</if>
+                modify_time = now(),
+                <if test="task.recentlyAllotDate != null ">recently_allot_date = #{task.recentlyAllotDate},</if>
             </trim>
             WHERE id = #{task.id}
         </foreach>
@@ -1583,6 +1597,7 @@
 
     <select id="selectAllotTaskList"  parameterType="com.ruoyi.task.domain.TLcTask" resultMap="TLcTaskResult">
         SELECT
+        t.id,
         t.case_no,
         t.certificate_no,
         t.arrears_total,

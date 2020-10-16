@@ -71,6 +71,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -418,15 +419,21 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             }, threadPoolExecutor);
             // 当分配任务的异步任务完成后异步去修改任务表和插入轨迹表
             List<TLcTask> allotTaskList = allotTaskFuture.get();
-            CompletableFuture<Void> updateTaskFuture = CompletableFuture.runAsync(() -> this.tLcTaskMapper.batchUpdateTask(allotTaskList), threadPoolExecutor);
+            CompletableFuture<Void> updateTaskFuture = CompletableFuture.runAsync(() -> this.tLcTaskMapper.batchUpdateAllotTask(allotTaskList), threadPoolExecutor);
             CompletableFuture<Void> insertDuncaseAssignFuture = CompletableFuture.runAsync(() -> insertDuncaseAssign(allotTaskList, ShiroUtils.getSysUser()), threadPoolExecutor);
             // 修改任务表和插入轨迹表两个异步任务都执行完成
             CompletableFuture.allOf(updateTaskFuture, insertDuncaseAssignFuture);
+            try {
+                updateTaskFuture.get();
+                insertDuncaseAssignFuture.get();
+            } catch (Exception e) {
+
+            }
+            return AjaxResult.success();
         } catch (Exception e) {
             log.error("分配失败：{}", e);
             throw new RuntimeException("任务分配失败");
         }
-        return AjaxResult.success();
     }
 
     @Override
@@ -460,15 +467,21 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             }, threadPoolExecutor);
             // 当分配任务的异步任务完成后异步去修改任务表和插入轨迹表
             List<TLcTask> allotTaskList = allotTaskFuture.get();
-            CompletableFuture<Void> updateTaskFuture = CompletableFuture.runAsync(() -> this.tLcTaskMapper.batchUpdateTask(allotTaskList), threadPoolExecutor);
+            CompletableFuture<Void> updateTaskFuture = CompletableFuture.runAsync(() -> this.tLcTaskMapper.batchUpdateAllotTask(allotTaskList), threadPoolExecutor);
             CompletableFuture<Void> insertDuncaseAssignFuture = CompletableFuture.runAsync(() -> insertDuncaseAssign(allotTaskList, ShiroUtils.getSysUser()), threadPoolExecutor);
             // 修改任务表和插入轨迹表两个异步任务都执行完成
             CompletableFuture.allOf(updateTaskFuture, insertDuncaseAssignFuture);
+            try {
+                updateTaskFuture.get();
+                insertDuncaseAssignFuture.get();
+            } catch (Exception e) {
+
+            }
+            return AjaxResult.success();
         } catch (Exception e) {
             log.error("分配失败：{}", e);
             throw new RuntimeException("任务分配失败");
         }
-        return AjaxResult.success();
     }
 
     /**
@@ -717,8 +730,6 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                             .taskId(task.getId().toString())
                             .operationId(sysUser.getUserId())
                             .customName(task.getCustomName())
-                            .collectTeamName(task.getCollectTeamName())
-                            .collectTeamId(task.getCollectTeamId())
                             .certificateNo(task.getCertificateNo())
                             .caseNo(task.getCaseNo())
                             .operationName(sysUser.getUserName())

@@ -237,4 +237,6 @@ public interface TLcTaskMapper {
     Long selectAllocatedCount(TLcTask tLcTask);
 
     List<TLcTask> selectAllotTaskList(TLcTask tLcTask);
+
+    void batchUpdateAllotTask(@Param("allotTaskList") List<TLcTask> allotTaskList);
 }
