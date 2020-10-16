@@ -500,6 +500,12 @@
             hangUp();//挂断电话
             updateStatus(currentCall.id,4,currentCall.remark,"1",onlyUpdate);//已完成
         }
+        function duyanCancle() {
+            hangUp();//挂断电话
+            updateStatus(currentCall.id,3,currentCall.remark,"1","");//已完成
+            layer.close(clIndex);
+        }
+
         //度言接通回掉
         function jietong(){
             window.parent.parent.$("#callstatus").html("<img style='width:30px;height: 30px;' src='/yijietong.png'/>");
@@ -522,7 +528,7 @@
                     shade: 0,
                     title: "度言拨打电话",
                     fix: false,
-                    area: [300 + 'px', 100 + 'px'],
+                    area: [300 + 'px', 140 + 'px'],
                     shadeClose: false,
                     zIndex:100,
                     // closeBtn:0,
