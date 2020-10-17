@@ -37,7 +37,7 @@
     function dyInit(){
         DYSDK.ready(function () {
             duyanSdk.callme = function (tleNumber) {
-                if(tleNumber){
+                if(tleNumber && isNaN(tleNumber)){
                     tleNumber = tleNumber.replace("-","");
                     tleNumber = tleNumber.replace("/","");
                     tleNumber = tleNumber.replace(" ","");
