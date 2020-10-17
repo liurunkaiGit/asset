@@ -37,6 +37,12 @@
     function dyInit(){
         DYSDK.ready(function () {
             duyanSdk.callme = function (tleNumber) {
+                if(tleNumber){
+                    tleNumber = tleNumber.replace("-","");
+                    tleNumber = tleNumber.replace("/","");
+                    tleNumber = tleNumber.replace(" ","");
+                    tleNumber = tleNumber.replace(/\b(0+)/gi,"");
+                }
                 DYSDK.call(tleNumber, function () {
                 }, '呼叫');
             }
