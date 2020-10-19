@@ -2524,25 +2524,25 @@
                 }
             });
             DYSDK.init();
-
-            DYSDK.callConnecting(function(data){
-                if(lxdata){
-                    $.each(lxdata, function (i, n) {
-                        //电话匹配 则增加电催记录
-                        if(n.phone == data.phone){
-                            var obj = {};
-                            obj.contactName = JSON.stringify(n.contactName);
-                            obj.phone = n.phone;
-                            obj.contactRelation = n.relation;
-                            obj.callSign = 'R02';
-                            obj.callResult = '无法接通';
-                            obj.remark = '无法接通';
-                            obj.platform = 'DY';
-                            pubAddCallRecord(obj);
-                        }
-                    });
-                }
-            });
+            //暂时屏蔽度言 页面 拨打电话按钮记录日志
+            // DYSDK.callConnecting(function(data){
+            //     if(lxdata){
+            //         $.each(lxdata, function (i, n) {
+            //             //电话匹配 则增加电催记录
+            //             if(n.phone == data.phone){
+            //                 var obj = {};
+            //                 obj.contactName = JSON.stringify(n.contactName);
+            //                 obj.phone = n.phone;
+            //                 obj.contactRelation = n.relation;
+            //                 obj.callSign = 'R02';
+            //                 obj.callResult = '无法接通';
+            //                 obj.remark = '无法接通';
+            //                 obj.platform = 'DY';
+            //                 pubAddCallRecord(obj);
+            //             }
+            //         });
+            //     }
+            // });
             // 接通电话的回调函数，返回电话号码等信息
             DYSDK.callConfirm(function(data){
                 console.log(data)
