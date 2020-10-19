@@ -80,7 +80,7 @@
                         <li class="active"><a data-toggle="tab" href="#tab-5" aria-expanded="true" onclick="viewTabDetail('info')">详细信息</a><input type="hidden" id="info" value="1"></li>
                         <li class=""><a data-toggle="tab" href="#tab-1" aria-expanded="false" onclick="viewTabDetail('locus')">案件历史轨迹</a><input type="hidden" id="locus" value="0"></li>
                         <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false" onclick="viewTabDetail('call')">电催记录</a><input type="hidden" id="call" value="0"></li>
-                        <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false" onclick="viewTabDetail('action')">行动历史</a><input type="hidden" id="action" value="0"></li>
+                        <!--<li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false" onclick="viewTabDetail('action')">行动历史</a><input type="hidden" id="action" value="0"></li>-->
                         <li class=""><a data-toggle="tab" href="#tab-4" aria-expanded="false" onclick="viewTabDetail('repay')">还款历史</a><input type="hidden" id="repay" value="0"></li>
                         <li class=""><a data-toggle="tab" href="#tab-7" aria-expanded="false" onclick="viewTabDetail('add')">补充信息</a><input type="hidden" id="add" value="0"></li>
                         <li class=""><a data-toggle="tab" href="#tab-6" aria-expanded="false" onclick="viewTabDetail('find')">查找记录</a><input type="hidden" id="find" value="0"></li>
@@ -198,6 +198,7 @@
                                     <th>联系方式</th>
                                     <th>关系</th>
                                     <th>电话码</th>
+                                    <th>行动码</th>
                                     <th>查账日期</th>
                                     <th>备注</th>
                                     <th>坐席</th>
@@ -209,7 +210,7 @@
                                 <tbody id="callContactTrNew"></tbody>
                             </table>
                         </div>
-                        <div id="tab-3" class="tab-pane">
+                       <!-- <div id="tab-3" class="tab-pane">
                             <table id="actionTable">
                                 <tr>
                                     <th>行动码</th>
@@ -219,7 +220,7 @@
                                 </tr>
                                 <tbody id = "actionTrNew"></tbody>
                             </table>
-                        </div>
+                        </div>-->
                         <div id="tab-4" class="tab-pane">
                             <table id="repayHisTable">
                                 <tr>
@@ -399,6 +400,26 @@
                                 <div class="select-list">
                                     <ul>
                                         <li class="select-time">
+                                            <label class="labelInfo">行动码：</label>
+                                            <select class="form-control" name="actionCode" id="actionCode" style="width: 180px; height: 30px">
+                                                <option value="Fresh-新任务" selected>Fresh-新任务</option>
+                                                <option value="Search1-联系方式有效">Search1-联系方式有效</option>
+                                                <option value="Search2-联系方式无效">Search2-联系方式无效</option>
+                                                <option value="Found1-找到本人">Found1-找到本人</option>
+                                                <option value="Found2-找到联系人">Found2-找到联系人</option>
+                                                <option value="PTP-承诺还款">PTP-承诺还款</option>
+                                                <option value="Check-检查付款">Check-检查付款</option>
+                                                <option value="TS-投诉">TS-投诉</option>
+                                                <option value="QT-其它">QT-其它</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="select-list">
+                                    <ul>
+                                        <li class="select-time">
                                             <label class="labelInfo">查账日期：</label>
                                             <input type="text" class="time-input" id="findDate" placeholder="  查账日期" name="findDate" style="width:180px;height: 30px"/>
                                         </li>
@@ -419,15 +440,17 @@
                             <div class="row" style="text-align: center">
                                 <button type="button" class="btn btn-sm btn-primary" onclick="addCallRecordByButton()"><i class="fa fa-check"></i>保 存</button>
                             </div>
+
+                            <!--
                             <div class="row">
                                 <div class="select-list">
                                     <ul>
-                                        <!--<li class="select-time">
+                                        &lt;!&ndash;<li class="select-time">
                                             <label class="labelInfo">行动码：</label>
                                             <select class="form-control" name="actionCode" id="actionCode" style="width: 180px; height: 30px" onchange="actionCodeTabChange()">
                                                 <option value="" selected>请选择</option>
                                             </select>
-                                        </li>-->
+                                        </li>&ndash;&gt;
                                         <li class="select-time">
                                             <label class="labelInfo">行动码：</label>
                                             <select class="form-control" name="actionCode" id="actionCode" style="width: 180px; height: 30px" onchange="actionCodeTabChange()">
@@ -458,6 +481,8 @@
                             <div class="row" style="text-align: center">
                                 <button type="button" class="btn btn-sm btn-primary" onclick="submitActionCode()"><i class="fa fa-check"></i>保 存</button>
                             </div>
+                            -->
+
                         </div>
                     </div>
                 </div>
@@ -976,7 +1001,7 @@
                     var tp = $("#callContactTrNew");
                     $.each(data, function (i, n) {
                         if (n.callRadioLocation != null && n.callRadioLocation != '') {
-                            var hm = "<tr><td>"+nullToEmpty(n.contactName)+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.id,n.callSign,n.dictLabel)+"</td><td>"+nullToEmpty(n.findDate)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>" +revert(nullToEmpty(n.callLen))+"</td>";
+                            var hm = "<tr><td>"+nullToEmpty(n.contactName)+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.id,n.callSign,n.dictLabel)+"</td><td>"+nullToEmpty(n.actionCode)+"</td><td>"+nullToEmpty(n.findDate)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>" +revert(nullToEmpty(n.callLen))+"</td>";
                             hm += '<td>';
                             if('DY' != n.platform){
                                 hm += "<a href='javascript:void(0)' onclick='listen("+n.id+")'><img src='/img/speaker.png'  class='imgso' width='20px' height='25px' alt='收听' title='收听'/></a>&nbsp;&nbsp;";
@@ -984,7 +1009,7 @@
                             hm += "<a href='javascript:void(0)' onclick='downLoad("+n.id+",\""+n.callRadioLocation+"\",\""+n.platform+"\")'><img src='/img/download.png'  class='imgso' width='20px' height='25px' alt='下载' title='下载'/></a></td></tr>";
                             tp.append(hm);
                         } else {
-                            tp.append("<tr><td>"+nullToEmpty(n.contactName)+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.id,n.callSign,n.dictLabel)+"</td><td>"+nullToEmpty(n.findDate)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>"+nullToEmpty(n.callLen)+"</td>"+"<td></td></tr>");
+                            tp.append("<tr><td>"+nullToEmpty(n.contactName)+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.id,n.callSign,n.dictLabel)+"</td><td>"+nullToEmpty(n.actionCode)+"</td><td>"+nullToEmpty(n.findDate)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>"+nullToEmpty(n.callLen)+"</td>"+"<td></td></tr>");
                         }
                     });
                 }
@@ -1574,6 +1599,11 @@
                 return;
             }
         }
+        var actionCode = $("#actionCode").val();
+        if(actionCode == 'Fresh-新任务'){
+            $.modal.alert("请选择最新行动码");
+            return;
+        }
         var findDate = $("#findDate").val();
 
         var val = $('input[name="radioChoose"]:checked').parents("tr");
@@ -1620,7 +1650,9 @@
                 importBatchNo:currentImportBatchNo,
                 orgId:currentOrgId,
                 type:2,
-                platform: $("#callPlatform").val()
+                platform: $("#callPlatform").val(),
+                actionCode:actionCode,
+                taskId:currentTaskId
             },
             function(data) {
                 // alert(JSON.stringify(data));
@@ -1637,6 +1669,7 @@
                     if($('#call').val() == '1') {
                         callRecordList(currentCaseNo);
                     }
+                    $("#actionCode").val("Fresh-新任务");
                 }else{
                     $.modal.alertSuccess("保存失败:"+data.message);
                 }
@@ -1747,7 +1780,7 @@
                     $("#cnhkDate").val("");
                     $("#zclxDate").val("");
                     $("#actionRemark").val("");
-                    $("#actionCode").val("");
+                    $("#actionCode").val("Fresh-新任务");
                     if($('#action').val() == '1') {
                         actionRecordList(currentCaseNo);
                     }
