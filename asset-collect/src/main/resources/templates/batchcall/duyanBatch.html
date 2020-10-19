@@ -122,7 +122,7 @@
                             callStartTime: startTime,
                             callEndTime: endTime,
                             callLen: recordDuration,
-                            callRadioLocation: soundRecordingUrl+'?apikey='+apikey+'&call_uuid=' + data.uuid,
+                            callRadioLocation: soundRecordingUrl+'?apikey='+apikey+'&call_uuid=' + data.uuid+"&/"+data.uuid+".wav",
                             caseNo: currentCall.caseNo,
                             remark: '已接听',
                             importBatchNo: currentCall.importBatchNo,

@@ -332,10 +332,8 @@
                         if (n.callRadioLocation != null && n.callRadioLocation != '') {
                             var hm = "<tr ondblclick='hiddenTr(this)'><td>"+n.contactName+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.callSign,n.dictLabel)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>" +revert(nullToEmpty(n.callLen))+"</td>";
                             hm += "<td>";
-                            if('DY' != n.platform){
-                                hm += "<a href='javascript:void(0)' onclick='listen("+n.id+")'><img src='/img/speaker.png'  class='imgso' width='20px' height='25px' alt='收听' title='收听'/></a>&nbsp;&nbsp;";
-                            }
-                            hm += "<a href='javascript:void(0)' onclick='downLoad("+n.id+",\""+n.callRadioLocation+"\",\""+n.platform+"\")'><img src='/img/download.png'  class='imgso' width='20px' height='25px' alt='下载' title='下载'/></a></td></tr>";
+                            hm += "<a href='javascript:void(0)' onclick='listen("+n.id+")'><img src='/img/speaker.png'  class='imgso' width='20px' height='25px' alt='收听' title='收听'/></a>&nbsp;&nbsp;";
+                            hm += "<a href='javascript:void(0)' onclick='downLoad("+n.id+")'><img src='/img/download.png'  class='imgso' width='20px' height='25px' alt='下载' title='下载'/></a></td></tr>";
                             tp.append(hm);
                         } else {
                             tp.append("<tr ondblclick='hiddenTr(this)'><td>"+n.contactName+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.callSign,n.dictLabel)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>"+nullToEmpty(n.callLen)+"</td>"+"<td></td></tr>");
@@ -686,11 +684,7 @@
     }
 
 
-    function downLoad(id,url,pm){
-        if (pm == 'DY') {
-            window.location.href = url;
-            return;
-        }
+    function downLoad(id){
         window.location.href=hisDuncasePrefix + "/downLoadHis?id="+id;
     }
 
