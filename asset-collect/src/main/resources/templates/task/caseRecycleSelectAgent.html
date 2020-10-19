@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('radio表格页')" />
+	<style type="text/css">
+		.fixed-table-pagination .pagination-detail, .fixed-table-pagination div.pagination{
+			display: none;
+		}
+	</style>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+	<div class="row">
+		<div class="col-sm-12 search-collapse">
+			<form id="user-form" th:object="${tLcTask}">
+				<div class="select-list">
+					<ul>
+						<input name="caseNo" id="caseNo" th:field="*{caseNo}" class="form-control" type="hidden">
+						<input name="orgId" id="orgId"  th:field="*{orgId}" class="form-control" type="hidden">
+						<input name="customName" id="customName" th:field="*{customName}" class="form-control" type="hidden">
+						<input name="taskStatus" id="taskStatus" th:field="*{taskStatus}" class="form-control" type="hidden">
+						<input name="callCodeHistoryListStr" id="callCodeHistoryListStr" th:value="${callCodeHistoryListStr}" class="form-control" type="hidden">
+						<input name="freeSQL" id="freeSQL" th:field="*{freeSQL}" class="form-control" type="hidden">
+						<input name="province" id="province" th:field="*{province}" class="form-control" type="hidden">
+						<input name="city" id="city" th:field="*{city}" class="form-control" type="hidden">
+
+						<li>
+							登录名称：<input type="text" name="loginName"/>
+						</li>
+						<li>
+							用户姓名：<input type="text" name="username"/>
+						</li>
+						<li>
+							<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+							<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+						</li>
+					</ul>
+				</div>
+			</form>
+		</div>
+		<div class="col-sm-12 select-table table-striped">
+			<table id="bootstrap-table"></table>
+		</div>
+	</div>
+
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+	var prefix = ctx + "collect/task";
+
+	$(function() {
+		var options = {
+			url: prefix + "/caseRecycleSelectAgent",
+			showSearch: false,
+			showRefresh: false,
+			showToggle: false,
+			showColumns: false,
+			clickToSelect:true,
+			columns: [{
+				//radio: true
+				checkbox:true
+			},
+				{
+					field : 'userId',
+					title : '用户ID',
+					visible: false
+				},
+				{
+					title: "序号",
+					formatter: function (value, row, index) {
+						return $.table.serialNumber(index);
+					}
+				},
+				{
+					field : 'loginName',
+					title : '登录名称'
+				},
+				{
+					field : 'userName',
+					title : '用户姓名'
+				},
+				{
+					field : 'caseNum',
+					title : '案件数量'
+				}]
+		};
+		$.table.init(options);
+	});
+
+	/* 添加用户-选择用户-提交 */
+	function submitHandler() {
+		var rows = $.table.selectFirstColumns();
+		if (rows.length == 0) {
+			$.modal.alertWarning("请至少选择一个用户");
+			return;
+		}
+		// 将选择用户添加到父页面
+		var rows = $.table.selectFirstColumns();
+		parent.$("#caseRecycleSelectAgentIds").val(rows.join());
+		$.modal.close();
+	}
+</script>
+</body>
+</html>

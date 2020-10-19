@@ -164,6 +164,16 @@ public class SysUser extends BaseEntity {
      */
     private String platform;
 
+    public Integer getCaseNum() {
+        return caseNum;
+    }
+
+    public void setCaseNum(Integer caseNum) {
+        this.caseNum = caseNum;
+    }
+
+    private Integer caseNum;
+
 
     public SysUser() {
 

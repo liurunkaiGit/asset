@@ -68,6 +68,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -1571,10 +1572,18 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
      * @return
      */
     @Override
-    public AjaxResult caseRecyle(String taskIds, String certificateNos, Integer caseRecycleNum) {
+    public AjaxResult caseRecyle(String taskIds, String certificateNos, Integer caseRecycleNum, String agentIds) {
         // 构建任务集合
         List<TLcTask> taskList = buildCaseRecyleTaskList(certificateNos);
-        return caseRecycle(caseRecycleNum, taskList);
+        List<String> agentIdList = Arrays.asList(agentIds.split(","));
+        // 获取选中坐席的任务集合
+        List<TLcTask> result = new ArrayList<>();
+        for (TLcTask tLcTask : taskList) {
+            if (tLcTask.getOwnerId() != null && agentIdList.contains(tLcTask.getOwnerId().toString())) {
+                result.add(tLcTask);
+            }
+        }
+        return caseRecycle(caseRecycleNum, result);
     }
 
     private AjaxResult caseRecycle(Integer caseRecycleNum, List<TLcTask> taskList) {
@@ -1736,6 +1745,11 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         return this.tLcTaskMapper.selectAllocatedCount(tLcTask);
     }
 
+    @Override
+    public List<SysUser> selectCaseRecycleSelectAgent(TLcTask tLcTask) {
+        return this.tLcTaskMapper.selectCaseRecycleSelectAgent(tLcTask);
+    }
+
     public boolean checkPhone(String phone) {
         Pattern p = null;
         Matcher m = null;
@@ -1748,8 +1762,6 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         }
         return b;
     }
-
-
 }
 
 class AssetsRepayResponse {
@@ -1757,3 +1769,5 @@ class AssetsRepayResponse {
     private String message;
     private AssetsRepayment data;
 }
+
+

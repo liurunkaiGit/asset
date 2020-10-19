@@ -330,7 +330,7 @@ public interface ITLcTaskService {
 
     public Map<String,Integer> selectPhoneStatus(String caseNo, String phoneStatus);
 
-    AjaxResult caseRecyle(String taskIds, String certificateNos, Integer caseRecycleNum);
+    AjaxResult caseRecyle(String taskIds, String certificateNos, Integer caseRecycleNum, String agentIds);
 
     AjaxResult allCaseRecyle(TLcTask tLcTask, Integer caseRecycleNum);
 
@@ -341,4 +341,6 @@ public interface ITLcTaskService {
     List<TLcTask> selectTaskListByCertificateNosAndOrdId(List<String> certificateNos, String orgId);
 
     Long selectAllocatedCount(TLcTask tLcTask);
+
+    List<SysUser> selectCaseRecycleSelectAgent(TLcTask tLcTask);
 }

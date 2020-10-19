@@ -1565,12 +1565,36 @@ public class TLcTaskController extends BaseController {
     }
 
     /**
+     * 跳转到案件回收选择用户页
+     */
+    @GetMapping("/toCaseRecycleSelectAgent")
+    public String toCaseRecycleSelectAgent(TLcTask tLcTask, HttpServletRequest request, ModelMap modelMap) {
+        String callCodeHistoryListStr = request.getParameter("callCodeHistoryListStr");//历史电话码
+        modelMap.put("tLcTask", tLcTask);
+        modelMap.put("callCodeHistoryListStr", callCodeHistoryListStr);
+        return prefix + "/caseRecycleSelectAgent";
+    }
+
+    /**
+     * 查询案件回收选择的用户
+     */
+    @ResponseBody
+    @PostMapping("/caseRecycleSelectAgent")
+    public TableDataInfo list(TLcTask tLcTask) {
+        TableDataInfo rspData = new TableDataInfo();
+        List<SysUser> userList = this.tLcTaskService.selectCaseRecycleSelectAgent(tLcTask);
+        rspData.setRows(userList);
+        return  rspData;
+    }
+
+
+    /**
      * 案件回收
      */
     @GetMapping("/caseRecyle")
     @ResponseBody
-    public AjaxResult caseRecyle(String taskIds, String certificateNos, Integer caseRecycleNum) {
-        return this.tLcTaskService.caseRecyle(taskIds, certificateNos, caseRecycleNum);
+    public AjaxResult caseRecyle(String taskIds, String certificateNos, Integer caseRecycleNum, String agentIds) {
+        return this.tLcTaskService.caseRecyle(taskIds, certificateNos, caseRecycleNum, agentIds);
     }
 
     /**
@@ -1578,12 +1602,13 @@ public class TLcTaskController extends BaseController {
      */
     @GetMapping("/allCaseRecyle")
     @ResponseBody
-    public AjaxResult allCaseRecyle(TLcTask tLcTask, HttpServletRequest request, Integer caseRecycleNum) {
+    public AjaxResult allCaseRecyle(TLcTask tLcTask, HttpServletRequest request, Integer caseRecycleNum, String agentIds) {
         String callCodeHistoryListStr = request.getParameter("callCodeHistoryListStr");//历史电话码
         if(StringUtils.isNotEmpty(callCodeHistoryListStr) && !"null".equals(callCodeHistoryListStr)){
             tLcTask.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
         }
         tLcTask.setOrgId(ShiroUtils.getSysUser().getOrgId().toString());
+        tLcTask.setAgentIdList(Arrays.asList(agentIds.split(",")));
         return this.tLcTaskService.allCaseRecyle(tLcTask, caseRecycleNum);
     }
 

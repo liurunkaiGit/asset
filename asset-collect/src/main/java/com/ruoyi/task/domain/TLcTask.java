@@ -504,4 +504,9 @@ public class TLcTask extends BaseEntity {
     private String flag2;//对应taskStatus
     private String toType;
 
+    private String loginName;
+    private String username;
+
+    private List<String> agentIdList;
+
 }

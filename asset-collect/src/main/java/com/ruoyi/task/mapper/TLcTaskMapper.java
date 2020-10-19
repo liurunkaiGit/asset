@@ -3,6 +3,7 @@ package com.ruoyi.task.mapper;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysRoleDept;
+import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.task.domain.TLcTask;
 import org.apache.ibatis.annotations.Param;
 
@@ -239,4 +240,6 @@ public interface TLcTaskMapper {
     List<TLcTask> selectAllotTaskList(TLcTask tLcTask);
 
     void batchUpdateAllotTask(@Param("allotTaskList") List<TLcTask> allotTaskList);
+
+    List<SysUser> selectCaseRecycleSelectAgent(TLcTask tLcTask);
 }

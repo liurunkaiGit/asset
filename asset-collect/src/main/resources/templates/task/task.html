@@ -304,13 +304,15 @@
                              </button>
                          </div>
                          <input type="hidden" id="caseRecycleUrl" />
+                         <input type="hidden" id="caseRecycleSelectAgentUrl" />
+                         <input type="hidden" id="caseRecycleSelectAgentIds" />
                          <div class="modal-body" style="height: 200px;">
-                             <div class="form-group">
+                             <!--<div class="form-group">
                                  <span style="font-size: 15px;color:black;">&nbsp;&nbsp;案件数量共计：<span id="caseRecycleTotal"></span></span>
-                             </div>
+                             </div>-->
                              <div class="form-group">
-                                 <span style="font-size: 15px;color:black;">&nbsp;&nbsp;回收用户：</span>
-                                 <input type="radio" value="选中所有用户" checked id="caseRecycleAgent"> <span style="font-size: 15px;color:black;">选中所有用户</span>
+                                 <span style="font-size: 15px;color:black;">&nbsp;&nbsp;选择坐席：</span>
+                                 <input type="radio" value="选择坐席" name="caseRecycleAgent" id="caseRecycleAgent"> <span style="font-size: 15px;color:black;">选择坐席</span>
                              </div>
                              <div class="form-group">
                                  <span style="font-size: 15px;color:black;">&nbsp;&nbsp;每人回收案件数：</span>
@@ -893,7 +895,18 @@
                     var freeSQL = $("#freeSQL").val();
                     // alert(freeSQL);
                     freeSQL = encodeURIComponent(freeSQL);
-                    $.post(
+                    var allCaseRecyleUrl = prefix + '/allCaseRecyle?orgId='+orgId +'&caseNo='+caseNo+'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr+'&freeSQL='+freeSQL+'&province='+province+'&city='+city;
+                    var caseRecycleSelectAgentUrl = prefix + '/toCaseRecycleSelectAgent?orgId='+orgId +'&caseNo='+caseNo+'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr+'&freeSQL='+freeSQL+'&province='+province+'&city='+city;
+                    $("#caseRecycleUrl").val(allCaseRecyleUrl);
+                    $("#caseRecycleSelectAgentUrl").val(caseRecycleSelectAgentUrl);
+                    $("#caseRecycleNum").val("");
+                    // $("#caseRecycleTotal").text(data.totalCount);
+                    // 设置选中坐席按钮为未选中，并且清空之前选中的坐席id
+                    var isChecked = document.getElementById("caseRecycleAgent");
+                    isChecked.checked = false;
+                    $("#caseRecycleSelectAgentIds").val("");
+                    $("#caseRecycleModal").modal('show');
+                    /*$.post(
                         prefix + "/searchAllTaskTotalMoney",
                         {
                             caseNo:caseNo,
@@ -907,13 +920,15 @@
                         function(data) {
                             $.modal.confirm("确认要对选中的" + data.totalCount + "条数据进行操作吗?", function() {
                                 var allCaseRecyleUrl = prefix + '/allCaseRecyle?orgId='+orgId +'&caseNo='+caseNo+'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr+'&freeSQL='+freeSQL+'&province='+province+'&city='+city;
+                                var caseRecycleSelectAgentUrl = prefix + '/caseRecycleSelectAgent?orgId='+orgId +'&caseNo='+caseNo+'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr+'&freeSQL='+freeSQL+'&province='+province+'&city='+city;
                                 $("#caseRecycleUrl").val(allCaseRecyleUrl);
+                                $("#caseRecycleSelectAgentUrl").val(caseRecycleSelectAgentUrl);
                                 $("#caseRecycleNum").val("");
-                                $("#caseRecycleTotal").text(data.totalCount);
+                                // $("#caseRecycleTotal").text(data.totalCount);
                                 $("#caseRecycleModal").modal('show');
                             });
                         }
-                    );
+                    );*/
                 });
                 return;
             }else{
@@ -934,8 +949,14 @@
                 $.modal.confirm("确认要对选中的" + rows.length + "条数据进行操作吗?", function() {
                     var caseRecyleUrl = prefix + '/caseRecyle?taskIds='+rows.join()+'&caseNos='+caseNoRows.join()+'&certificateNos='+certificateNoRows.join();
                     $("#caseRecycleUrl").val(caseRecyleUrl);
+                    var caseRecycleSelectAgentUrl = prefix + '/toCaseRecycleSelectAgent?taskIds='+rows.join()+'&caseNos='+caseNoRows.join()+'&certificateNos='+certificateNoRows.join();
+                    $("#caseRecycleSelectAgentUrl").val(caseRecycleSelectAgentUrl);
                     $("#caseRecycleNum").val("");
-                    $("#caseRecycleTotal").text(rows.length);
+                    // $("#caseRecycleTotal").text(rows.length);
+                    // 设置选中坐席按钮为未选中，并且清空之前选中的坐席id
+                    var isChecked = document.getElementById("caseRecycleAgent");
+                    isChecked.checked = false;
+                    $("#caseRecycleSelectAgentIds").val("");
                     $("#caseRecycleModal").modal('show');
                 });
             }
@@ -1099,6 +1120,7 @@
 
         function caseRecycleSave() {
             var url = $("#caseRecycleUrl").val();
+            var agentIds = $("#caseRecycleSelectAgentIds").val();
             // var caseRecycleTotal = $("#caseRecycleTotal").text();
             // var caseRecycleAgent = $("#caseRecycleAgent").val();
             var caseRecycleNum = $("#caseRecycleNum").val();
@@ -1106,9 +1128,14 @@
                 $.modal.alertWarning("每人回收案件数只能是正整数");
                 return false;
             }
-            url = url+'&caseRecycleNum='+caseRecycleNum;
+            if (agentIds == null || agentIds == '') {
+                $.modal.alertWarning("请选择坐席");
+                return false;
+            }
+            url = url+'&caseRecycleNum='+caseRecycleNum+'&agentIds='+agentIds;
             $.operate.submit(url);
             resetSelectAll();
+            $("#caseRecycleSelectAgentIds").val("");
             $("#caseRecycleModal").modal('hide');
         }
 
@@ -1512,6 +1539,11 @@
                 }
             });
         }
+
+        $("input[name=caseRecycleAgent]").click(function(){
+            var url = $("#caseRecycleSelectAgentUrl").val();
+            $.modal.open("选择用户", url);
+        });
     </script>
 </body>
 </html>
