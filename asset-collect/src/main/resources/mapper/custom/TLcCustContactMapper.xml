@@ -57,6 +57,7 @@
             resultMap="TLcCustContactResult">
         <include refid="selectTLcCustContactVo"/>
         <where>
+            LENGTH(phone)&gt;4
             <if test="certificateNo != null  and certificateNo != ''">and certificate_no = #{certificateNo}</if>
             <if test="contactName != null  and contactName != ''">and contact_name like concat('%', #{contactName},
                 '%')
