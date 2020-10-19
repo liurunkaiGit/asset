@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shareproject.result.mapper.TLpResultMapper">
+    
+    <resultMap type="com.ruoyi.shareproject.result.domain.TLpResult" id="TLpResultResult">
+        <result property="id"    column="id"    />
+        <result property="reportDate"    column="report_date"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="transferType"    column="transfer_type"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="commissionProportion"    column="commission_proportion"    />
+        <result property="totalRecycle"    column="total_recycle"    />
+        <result property="predictCommission"    column="predict_commission"    />
+        <result property="recycleRate"    column="recycle_rate"    />
+        <result property="targetRank"    column="target_rank"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTLpResultVo">
+        select id, report_date, org_id, org_name, transfer_type, import_batch_no, commission_proportion, total_recycle, predict_commission, recycle_rate, target_rank, create_by, create_time, update_by, update_time from t_lp_result
+    </sql>
+
+    <select id="selectTLpResultList" parameterType="com.ruoyi.shareproject.result.domain.TLpResult" resultMap="TLpResultResult">
+        <include refid="selectTLpResultVo"/>
+        <where>
+            <if test="orgId != null "> and org_id = #{orgId}</if>
+            <if test="startReportDate != null">
+                and report_date <![CDATA[>=]]> #{startReportDate}
+            </if>
+            <if test="endReportDate != null">
+                and report_date <![CDATA[<=]]> #{endReportDate}
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectTLpResultById" parameterType="Long" resultMap="TLpResultResult">
+        <include refid="selectTLpResultVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectProjectResultUnique" parameterType="com.ruoyi.shareproject.result.domain.TLpResult" resultType="java.lang.Integer">
+        select count(1) from t_lp_result
+        <where>
+            and report_date = #{reportDate}
+            <if test="transferType != null  and transferType != ''"> and transfer_type = #{transferType}</if>
+            <if test="transferType == null  or transferType == ''"> and transfer_type is null</if>
+            and org_id = #{orgId}
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+            <if test="importBatchNo == null  or importBatchNo == ''"> and import_batch_no is null</if>
+        </where>
+    </select>
+
+    <insert id="insertTLpResult" parameterType="com.ruoyi.shareproject.result.domain.TLpResult" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lp_result
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reportDate != null ">report_date,</if>
+            <if test="orgId != null ">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="transferType != null  and transferType != ''">transfer_type,</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no,</if>
+            <if test="commissionProportion != null  and commissionProportion != ''">commission_proportion,</if>
+            <if test="totalRecycle != null ">total_recycle,</if>
+            <if test="predictCommission != null ">predict_commission,</if>
+            <if test="recycleRate != null  and recycleRate != ''">recycle_rate,</if>
+            <if test="targetRank != null ">target_rank,</if>
+            <if test="createBy != null ">create_by,</if>
+            create_time,
+            <if test="updateBy != null ">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reportDate != null ">#{reportDate},</if>
+            <if test="orgId != null ">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="transferType != null  and transferType != ''">#{transferType},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">#{importBatchNo},</if>
+            <if test="commissionProportion != null  and commissionProportion != ''">#{commissionProportion},</if>
+            <if test="totalRecycle != null ">#{totalRecycle},</if>
+            <if test="predictCommission != null ">#{predictCommission},</if>
+            <if test="recycleRate != null  and recycleRate != ''">#{recycleRate},</if>
+            <if test="targetRank != null ">#{targetRank},</if>
+            <if test="createBy != null ">#{createBy},</if>
+            NOW(),
+            <if test="updateBy != null ">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLpResult" parameterType="com.ruoyi.shareproject.result.domain.TLpResult">
+        update t_lp_result
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="reportDate != null ">report_date = #{reportDate},</if>
+            <if test="orgId != null ">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="transferType != null  and transferType != ''">transfer_type = #{transferType},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no = #{importBatchNo},</if>
+            <if test="commissionProportion != null  and commissionProportion != ''">commission_proportion = #{commissionProportion},</if>
+            <if test="totalRecycle != null ">total_recycle = #{totalRecycle},</if>
+            <if test="predictCommission != null ">predict_commission = #{predictCommission},</if>
+            <if test="recycleRate != null  and recycleRate != ''">recycle_rate = #{recycleRate},</if>
+            <if test="targetRank != null ">target_rank = #{targetRank},</if>
+            <if test="createBy != null ">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null ">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLpResultById" parameterType="Long">
+        delete from t_lp_result where id = #{id}
+    </delete>
+
+    <delete id="deleteTLpResultByIds" parameterType="String">
+        delete from t_lp_result where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

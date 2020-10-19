@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改【请填写功能名称】')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-process-edit" th:object="${tLpProcess}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">报表日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="reportDate" id="reportDate" th:value="${#dates.format(tLpProcess.reportDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" onchange="selectDayProcess()">
+                    </div>
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">机构id：</label>
+                <div class="col-sm-8">
+                    <input name="orgId" th:field="*{orgId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机构名称：</label>
+                <div class="col-sm-8">
+                    <input name="orgName" th:field="*{orgName}" class="form-control" type="text">
+                </div>
+            </div>-->
+            <div class="form-group">
+                <label class="col-sm-3 control-label">项目：</label>
+                <!--<div class="col-sm-8">
+                    <input name="orgId" th:field="*{orgId}" class="form-control" type="text">
+                </div>-->
+                <div class="col-sm-8">
+                    <input name="orgId" id="orgIdValue" th:field="*{orgId}" class="form-control" type="hidden">
+                    <select name="projectIdName" id="orgId" class="form-control m-b" onchange="selectDayProcess()" required>
+                        <!--<option value="">所有</option>-->
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">拨打量(次)：</label>
+                <div class="col-sm-8">
+                    <input name="totalCallNum" id="totalCallNum" th:field="*{totalCallNum}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人均拨打量：</label>
+                <div class="col-sm-8">
+                    <input name="aveCallNum" id="aveCallNum" th:field="*{aveCallNum}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">接通量(次)：</label>
+                <div class="col-sm-8">
+                    <input name="totalCalledNum" id="totalCalledNum" th:field="*{totalCalledNum}" class="form-control" type="text">
+                </div>
+            </div>
+           <!-- <div class="form-group">
+                <label class="col-sm-3 control-label">人均接通次数：</label>
+                <div class="col-sm-8">
+                    <input name="avgCalledNum" id="avgCalledNum" th:field="*{avgCalledNum}" class="form-control" type="text">
+                </div>
+            </div>-->
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">通话时长：</label>
+                <div class="col-sm-8">
+                    <input name="totalCallLen" id="totalCallLen" th:field="*{totalCallLen}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人均通话时长：</label>
+                <div class="col-sm-8">
+                    <input name="avgCallLen" id="avgCallLen" th:field="*{avgCallLen}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">接通率：</label>
+                <div class="col-sm-8">
+                    <input name="totalCalledRate" id="totalCalledRate" th:field="*{totalCalledRate}" class="form-control" type="text">
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">人均接通率：</label>
+                <div class="col-sm-8">
+                    <input name="avgCalledRate" id="avgCalledRate" th:field="*{avgCalledRate}" class="form-control" type="text">
+                </div>
+            </div>-->
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">外显号码标记情况：</label>
+                <div class="col-sm-8">
+                    <input name="extPhoneSign" id="extPhoneSign" th:field="*{extPhoneSign}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "project/process";
+        $("#form-process-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-process-edit').serialize());
+            }
+        }
+
+        $("input[name='reportDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $(function () {
+            initProject();
+        })
+
+        function initProject() {
+            var orgIdValue = $("#orgIdValue").val();
+            $.post(
+                ctx + "shareproject/projectinformation/listxl",
+                function(data) {
+                    for (var i = 0; i < data.length; i++) {
+                        if (orgIdValue == data[i].id) {
+                            var opt = "<option value='"+data[i].id+","+data[i].names+"' selected>"+data[i].names+"</option>";
+                        } else {
+                            var opt = "<option value='"+data[i].id+","+data[i].names+"'>"+data[i].names+"</option>";
+                        }
+                        $("#orgId").append(opt);
+                    }
+                }
+            );
+        }
+
+        /**
+         * 根据项目获取相应账龄
+         */
+        function selectDayProcess() {
+            var projectId = $("#orgId").val().split(",")[0];
+            var reportDate = $("#reportDate").val();
+            if (projectId == null || projectId == '' || reportDate == null || reportDate == '') {
+                return;
+            }
+            $.post(
+                prefix + "/selectDayProcess",
+                {
+                    id: projectId,
+                    reportDate: reportDate
+                },
+                function(data) {
+                    if(data.status == 200){
+                        // 填充数据
+                        $("#totalCallNum").val(data.result.totalCallNum);
+                        $("#aveCallNum").val(data.result.aveCallNum);
+                        $("#totalCalledNum").val(data.result.totalCalledNum);
+                        $("#totalCallLen").val(data.result.totalCallLen);
+                        $("#avgCallLen").val(data.result.avgCallLen);
+                        $("#totalCalledRate").val(data.result.totalCalledRate);
+                    }
+                }
+            );
+        }
+    </script>
+</body>
+</html>

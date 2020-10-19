@@ -81,7 +81,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectTLpProjectInformationVo"/>
         where id = #{id}
     </select>
-        
+
+    <select id="selectOrg" resultMap="TLpProjectInformationResult">
+        select distinct org_code,org_name from t_lp_project_information
+    </select>
+
     <insert id="insertTLpProjectInformation" parameterType="TLpProjectInformation" useGeneratedKeys="true" keyProperty="id">
         insert into t_lp_project_information
         <trim prefix="(" suffix=")" suffixOverrides=",">

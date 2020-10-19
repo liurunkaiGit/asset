@@ -58,4 +58,6 @@ public interface TLpProjectInformationMapper {
      * @return 结果
      */
     public int deleteTLpProjectInformationByIds(String[] ids);
+
+    List<TLpProjectInformation> selectOrg();
 }

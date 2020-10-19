@@ -91,4 +91,9 @@ public class TLpProjectInformationServiceImpl implements ITLpProjectInformationS
     {
         return tLpProjectInformationMapper.deleteTLpProjectInformationById(id);
     }
+
+    @Override
+    public List<TLpProjectInformation> selectOrg() {
+        return this.tLpProjectInformationMapper.selectOrg();
+    }
 }

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shareproject.process.mapper.TLpProcessMapper">
+    
+    <resultMap type="com.ruoyi.shareproject.process.domain.TLpProcess" id="TLpProcessResult">
+        <result property="id"    column="id"    />
+        <result property="reportDate"    column="report_date"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="totalCallNum"    column="total_call_num"    />
+        <result property="aveCallNum"    column="ave_call_num"    />
+        <result property="totalCalledNum"    column="total_called_num"    />
+        <result property="avgCalledNum"    column="avg_called_num"    />
+        <result property="totalCallLen"    column="total_call_len"    />
+        <result property="avgCallLen"    column="avg_call_len"    />
+        <result property="totalCalledRate"    column="total_called_rate"    />
+        <result property="avgCalledRate"    column="avg_called_rate"    />
+        <result property="extPhoneSign"    column="ext_phone_sign"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTLpProcessVo">
+        select id, report_date, org_id, org_name, total_call_num, ave_call_num, total_called_num, avg_called_num, total_call_len, avg_call_len, total_called_rate, avg_called_rate, ext_phone_sign, create_by, create_time, update_by, update_time from t_lp_process
+    </sql>
+
+    <select id="selectTLpProcessList" parameterType="com.ruoyi.shareproject.process.domain.TLpProcess" resultMap="TLpProcessResult">
+        <include refid="selectTLpProcessVo"/>
+        <where>
+            <if test="orgId != null "> and org_id = #{orgId}</if>
+            <if test="startReportDate != null">
+                and report_date <![CDATA[>=]]> #{startReportDate}
+            </if>
+            <if test="endReportDate != null">
+                and report_date <![CDATA[<=]]> #{endReportDate}
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectTLpProcessById" parameterType="Long" resultMap="TLpProcessResult">
+        <include refid="selectTLpProcessVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLpProcess" parameterType="com.ruoyi.shareproject.process.domain.TLpProcess" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lp_process
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reportDate != null ">report_date,</if>
+            <if test="orgId != null ">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="totalCallNum != null ">total_call_num,</if>
+            <if test="aveCallNum != null ">ave_call_num,</if>
+            <if test="totalCalledNum != null ">total_called_num,</if>
+            <if test="avgCalledNum != null ">avg_called_num,</if>
+            <if test="totalCallLen != null ">total_call_len,</if>
+            <if test="avgCallLen != null ">avg_call_len,</if>
+            <if test="totalCalledRate != null ">total_called_rate,</if>
+            <if test="avgCalledRate != null ">avg_called_rate,</if>
+            <if test="extPhoneSign != null  and extPhoneSign != ''">ext_phone_sign,</if>
+            <if test="createBy != null ">create_by,</if>
+            create_time,
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reportDate != null ">#{reportDate},</if>
+            <if test="orgId != null ">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="totalCallNum != null ">#{totalCallNum},</if>
+            <if test="aveCallNum != null ">#{aveCallNum},</if>
+            <if test="totalCalledNum != null ">#{totalCalledNum},</if>
+            <if test="avgCalledNum != null ">#{avgCalledNum},</if>
+            <if test="totalCallLen != null ">#{totalCallLen},</if>
+            <if test="avgCallLen != null ">#{avgCallLen},</if>
+            <if test="totalCalledRate != null ">#{totalCalledRate},</if>
+            <if test="avgCalledRate != null ">#{avgCalledRate},</if>
+            <if test="extPhoneSign != null  and extPhoneSign != ''">#{extPhoneSign},</if>
+            <if test="createBy != null ">#{createBy},</if>
+            NOW(),
+         </trim>
+    </insert>
+
+    <update id="updateTLpProcess" parameterType="com.ruoyi.shareproject.process.domain.TLpProcess">
+        update t_lp_process
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="reportDate != null ">report_date = #{reportDate},</if>
+            <if test="orgId != null ">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="totalCallNum != null ">total_call_num = #{totalCallNum},</if>
+            <if test="aveCallNum != null ">ave_call_num = #{aveCallNum},</if>
+            <if test="totalCalledNum != null ">total_called_num = #{totalCalledNum},</if>
+            <if test="avgCalledNum != null ">avg_called_num = #{avgCalledNum},</if>
+            <if test="totalCallLen != null ">total_call_len = #{totalCallLen},</if>
+            <if test="avgCallLen != null ">avg_call_len = #{avgCallLen},</if>
+            <if test="totalCalledRate != null ">total_called_rate = #{totalCalledRate},</if>
+            <if test="avgCalledRate != null ">avg_called_rate = #{avgCalledRate},</if>
+            <if test="extPhoneSign != null  and extPhoneSign != ''">ext_phone_sign = #{extPhoneSign},</if>
+            <if test="updateBy != null ">update_by = #{updateBy},</if>
+            update_time = now(),
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLpProcessById" parameterType="Long">
+        delete from t_lp_process where id = #{id}
+    </delete>
+
+    <delete id="deleteTLpProcessByIds" parameterType="String">
+        delete from t_lp_process where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -59,4 +59,7 @@ public interface ITLpProjectInformationService {
      * @return 结果
      */
     public int deleteTLpProjectInformationById(Long id);
+
+    List<TLpProjectInformation> selectOrg();
+
 }
