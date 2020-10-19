@@ -6,6 +6,7 @@
 <body>
 <input type="hidden" id="soundRecordingUrl" th:value="${soundRecordingUrl}">
 <input type="hidden" id="apikey"  th:value="${apikey}">
+<input type="hidden" id="phone"  th:value="${phone}">
 <div style="width:250px;" >
  <script id="dySdkScript" type="text/javascript" ctype="mini" src='https://cti.duyansoft.com/syui/dysdk/dysdk2.min.js' th:url="'https://cti.duyansoft.com/ctibar.html?noNumberInput=true&noOpBtn=true&account_id='+${accountId}+'&token='+${dytoken}" ></script>
 </div>
@@ -14,7 +15,6 @@
 <th:block th:include="include :: footer" />
 <script type="text/javascript">
     var duyanSdk = {};
-    var phone = [[${phone}]];
     //日期函数
     function getDate(str) {
         var oDate = new Date(str),
@@ -115,7 +115,7 @@
                         {
                             id: callRecordId,
                             contactName: currentCall.contactName,
-                            phone: phone,
+                            phone: $("#phone").val(),
                             contactRelation: currentCall.contactRelation,
                             callSign: 'R01',
                             callResult: '已接听',
@@ -150,7 +150,11 @@
     dyInit();
     //延迟两秒执行，确保度言组件初始化完毕
     window.setTimeout(function(){
-       duyanSdk.callme(phone);
+        if(duyanSdk){
+            duyanSdk.callme($("#phone").val());
+        }else{
+            layer.msg('度言平台初始化错误', { icon: 5 });
+        }
     },2000);
 </script>
 </body>
