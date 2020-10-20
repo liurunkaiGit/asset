@@ -1301,8 +1301,8 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             // 新增或者修改电催记录
             if (tLcCallRecord.getId() == null) {
                 tLcCallRecord.setAgentName(ShiroUtils.getSysUser().getUserName());
-                TLcTask tLcTask = this.tLcTaskMapper.selectTaskByCaseNo(tLcCallRecord.getCaseNo(),tLcCallRecord.getOrgId(),importBatchNo);
-                tLcCallRecord.setActionCode(tLcTask.getActionCode());
+//                TLcTask tLcTask = this.tLcTaskMapper.selectTaskByCaseNo(tLcCallRecord.getCaseNo(),tLcCallRecord.getOrgId(),importBatchNo);
+//                tLcCallRecord.setActionCode(tLcTask.getActionCode());
                 tLcCallRecordService.insertTLcCallRecord(tLcCallRecord);
             } else {
                 log.info("通话记录id不为空：{},话务平台：{},案件编号：{},录音地址：{},联系人手机号：{}",

@@ -378,7 +378,8 @@
                                 // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
                                 sendRadioCheck:1,
                                 type:1,
-                                platform: "ZJ"
+                                platform: "ZJ",
+                                actionCode: "Fresh-新任务"
                             },
                             function(data) {
                                 // alert(JSON.stringify(data));
@@ -639,7 +640,8 @@
                         // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
                         sendRadioCheck:1,
                         type:1,
-                        platform: 'PA'
+                        platform: 'PA',
+                        actionCode:"Fresh-新任务"
                     },
                     function(data) {
                         // alert(JSON.stringify(data));
@@ -763,7 +765,8 @@
                     importBatchNo:currentImportBatchNo,
                     orgId:currentOrgId,
                     type:1,
-                    platform: callPlatform
+                    platform: callPlatform,
+                    actionCode: "Fresh-新任务"
                 },
                 function(data) {
                     // alert(JSON.stringify(data));

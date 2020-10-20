@@ -2394,7 +2394,8 @@
                         // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
                         sendRadioCheck:1,
                         type:1,
-                        platform: "ZJ"
+                        platform: "ZJ",
+                        actionCode: $("#actionCode").val()
                     },
                     function(data) {
                         // alert(JSON.stringify(data));
@@ -2408,6 +2409,7 @@
                             $("#callCode").val("");
                             $("#callRemarkAdd").val("");
                             $("#callRecordId").val(data.result);
+                            $("#actionCode").val("Fresh-新任务");
                             if($('#call').val() == '1') {
                                 callRecordList(currentCaseNo);
                             }
@@ -2601,6 +2603,7 @@
                 obj.callRadioLocation = soundRecordingUrl+'?apikey='+apikey+'&call_uuid='+data.uuid+"&/"+data.uuid+".wav";
                 obj.remark = '已接听';
                 obj.platform = 'DY';
+                obj.actionCode = $("#actionCode").val();
                 pubAddCallRecord(obj);
             });
         }
@@ -2626,7 +2629,8 @@
                orgId:currentOrgId,
                // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
                sendRadioCheck:1,
-               platform: objCall.platform
+               platform: objCall.platform,
+               actionCode: objCall.actionCode
            },
            function(data) {
                if (data.status == 200) {//请求成功
@@ -2637,6 +2641,7 @@
                    $("#callCode").val("");
                    $("#callRemarkAdd").val("");
                    $("#callRecordId").val(data.result);
+                   $("#actionCode").val("Fresh-新任务");
                    if($('#call').val() == '1') {
                        callRecordList(currentCaseNo);
                    }
@@ -2734,7 +2739,8 @@
                         // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
                         sendRadioCheck:1,
                         type:1,
-                        platform: 'PA'
+                        platform: 'PA',
+                        actionCode:$("#actionCode").val()
                     },
                     function(data) {
                         // alert(JSON.stringify(data));
@@ -2748,6 +2754,7 @@
                             $("#callCode").val("");
                             $("#callRemarkAdd").val("");
                             $("#callRecordId").val(data.result);
+                            $("#actionCode").val("Fresh-新任务");
                             if($('#call').val() == '1') {
                                 callRecordList(currentCaseNo);
                             }
@@ -2911,11 +2918,13 @@
                 importBatchNo:currentImportBatchNo,
                 orgId:currentOrgId,
                 type:1,
-                platform: callPlatform
+                platform: callPlatform,
+                actionCode: $("#actionCode").val()
             },
             function(data) {
-                // alert(JSON.stringify(data));
                 if (data.status == 200) {//请求成功
+                    $("#actionCode").val("Fresh-新任务");
+                    // alert(JSON.stringify(data));
                     // $.modal.alertSuccess("保存成功");
                     //collJobDetail(data.result);
                     $("#callRecordId").val(data.result);
