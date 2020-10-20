@@ -528,7 +528,8 @@
                                         <li class="select-time">
                                             <label class="labelInfo">行动码：</label>
                                             <select class="form-control" name="actionCode" id="actionCode" style="width: 180px; height: 30px">
-                                                <option value="Fresh-新任务" selected>Fresh-新任务</option>
+                                                <option value="" selected>请选择</option>
+                                                <option value="Fresh-新任务">Fresh-新任务</option>
                                                 <option value="Search1-联系方式有效">Search1-联系方式有效</option>
                                                 <option value="Search2-联系方式无效">Search2-联系方式无效</option>
                                                 <option value="Found1-找到本人">Found1-找到本人</option>
@@ -536,6 +537,7 @@
                                                 <option value="PTP-承诺还款">PTP-承诺还款</option>
                                                 <option value="Check-检查付款">Check-检查付款</option>
                                                 <option value="TS-投诉">TS-投诉</option>
+                                                <option value="Transfer-建议转移">Transfer-建议转移</option>
                                                 <option value="QT-其它">QT-其它</option>
                                             </select>
                                         </li>
@@ -1850,7 +1852,7 @@
         $("#cnhkDate").val("");
         $("#zclxDate").val("");
         $("#actionRemark").val("");
-        $("#actionCode").val("Fresh-新任务");
+        $("#actionCode").val("");
     }
 
     function viewTabDetail(tab){
@@ -1925,7 +1927,7 @@
             }
         }
         var actionCode = $("#actionCode").val();
-        if(actionCode == 'Fresh-新任务'){
+        if(actionCode == 'Fresh-新任务' || actionCode == '' || actionCode == null || actionCode == 'undefined'){
             $.modal.alert("请选择最新行动码");
             return;
         }
@@ -1992,10 +1994,10 @@
                     $("#callCode").val("");
                     $("#callRemarkAdd").val("");
                     $("#callRecordId").val("");
+                    $("#actionCode").val("");
                     if($('#call').val() == '1') {
                         callRecordList(currentCaseNo);
                     }
-                    $("#actionCode").val("Fresh-新任务");
                 }else if (data.code == 1) {
                     window.location.href="/login";
                     return;
@@ -2146,7 +2148,7 @@
                     $("#cnhkDate").val("");
                     $("#zclxDate").val("");
                     $("#actionRemark").val("");
-                    $("#actionCode").val("Fresh-新任务");
+                    $("#actionCode").val("");
                     if($('#action').val() == '1') {
                         actionRecordList(currentCaseNo);
                     }
@@ -2395,7 +2397,7 @@
                         sendRadioCheck:1,
                         type:1,
                         platform: "ZJ",
-                        actionCode: $("#actionCode").val()
+                        actionCode: "Fresh-新任务"
                     },
                     function(data) {
                         // alert(JSON.stringify(data));
@@ -2409,7 +2411,7 @@
                             $("#callCode").val("");
                             $("#callRemarkAdd").val("");
                             $("#callRecordId").val(data.result);
-                            $("#actionCode").val("Fresh-新任务");
+                            $("#actionCode").val("");
                             if($('#call').val() == '1') {
                                 callRecordList(currentCaseNo);
                             }
@@ -2603,7 +2605,7 @@
                 obj.callRadioLocation = soundRecordingUrl+'?apikey='+apikey+'&call_uuid='+data.uuid+"&/"+data.uuid+".wav";
                 obj.remark = '已接听';
                 obj.platform = 'DY';
-                obj.actionCode = $("#actionCode").val();
+                obj.actionCode = "Fresh-新任务";
                 pubAddCallRecord(obj);
             });
         }
@@ -2641,7 +2643,7 @@
                    $("#callCode").val("");
                    $("#callRemarkAdd").val("");
                    $("#callRecordId").val(data.result);
-                   $("#actionCode").val("Fresh-新任务");
+                   $("#actionCode").val("");
                    if($('#call').val() == '1') {
                        callRecordList(currentCaseNo);
                    }
@@ -2740,7 +2742,7 @@
                         sendRadioCheck:1,
                         type:1,
                         platform: 'PA',
-                        actionCode:$("#actionCode").val()
+                        actionCode:"Fresh-新任务"
                     },
                     function(data) {
                         // alert(JSON.stringify(data));
@@ -2754,7 +2756,7 @@
                             $("#callCode").val("");
                             $("#callRemarkAdd").val("");
                             $("#callRecordId").val(data.result);
-                            $("#actionCode").val("Fresh-新任务");
+                            $("#actionCode").val("");
                             if($('#call').val() == '1') {
                                 callRecordList(currentCaseNo);
                             }
@@ -2919,11 +2921,11 @@
                 orgId:currentOrgId,
                 type:1,
                 platform: callPlatform,
-                actionCode: $("#actionCode").val()
+                actionCode: "Fresh-新任务"
             },
             function(data) {
                 if (data.status == 200) {//请求成功
-                    $("#actionCode").val("Fresh-新任务");
+                    $("#actionCode").val("");
                     // alert(JSON.stringify(data));
                     // $.modal.alertSuccess("保存成功");
                     //collJobDetail(data.result);

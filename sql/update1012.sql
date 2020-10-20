@@ -14,5 +14,5 @@ alter table t_lc_call_record add COLUMN action_code_value varchar(100) DEFAULT N
 alter table t_lc_call_record_his add COLUMN action_code varchar(100) DEFAULT NULL COMMENT '行动码键值';
 alter table t_lc_call_record_his add COLUMN action_code_value varchar(100) DEFAULT NULL COMMENT '行动码中文';
 
-update t_lc_column_query set column_value='Fresh-新任务|Search1-联系方式有效|Search2-联系方式无效|Found1-找到本人|Found2-找到联系人|PTP-承诺还款|Check-检查付款|TS-投诉|QT-其它' where table_name = 't_lc_task' and column_name = 'action_code' and column_type = 'dict';
-update t_lc_column_query set column_value='Fresh-新任务|Search1-联系方式有效|Search2-联系方式无效|Found1-找到本人|Found2-找到联系人|PTP-承诺还款|Check-检查付款|TS-投诉|QT-其它' where table_name = 't_lc_duncase' and column_name = 'action_code' and column_type = 'dict';
+update t_lc_column_query set column_value='Fresh-新任务|Search1-联系方式有效|Search2-联系方式无效|Found1-找到本人|Found2-找到联系人|PTP-承诺还款|Check-检查付款|TS-投诉|Transfer-建议转移|QT-其它' where table_name = 't_lc_task' and column_name = 'action_code' and column_type = 'dict';
+update t_lc_column_query set column_value='Fresh-新任务|Search1-联系方式有效|Search2-联系方式无效|Found1-找到本人|Found2-找到联系人|PTP-承诺还款|Check-检查付款|TS-投诉|Transfer-建议转移|QT-其它' where table_name = 't_lc_duncase' and column_name = 'action_code' and column_type = 'dict';
