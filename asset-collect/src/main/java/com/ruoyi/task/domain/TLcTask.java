@@ -509,4 +509,6 @@ public class TLcTask extends BaseEntity {
 
     private List<String> agentIdList;
 
+    private List<String> taskIdList;
+
 }

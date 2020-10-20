@@ -896,7 +896,7 @@
                     // alert(freeSQL);
                     freeSQL = encodeURIComponent(freeSQL);
                     var allCaseRecyleUrl = prefix + '/allCaseRecyle?orgId='+orgId +'&caseNo='+caseNo+'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr+'&freeSQL='+freeSQL+'&province='+province+'&city='+city;
-                    var caseRecycleSelectAgentUrl = prefix + '/toCaseRecycleSelectAgent?orgId='+orgId +'&caseNo='+caseNo+'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr+'&freeSQL='+freeSQL+'&province='+province+'&city='+city;
+                    var caseRecycleSelectAgentUrl = prefix + '/toAllCaseRecycleSelectAgent?orgId='+orgId +'&caseNo='+caseNo+'&customName='+customName+'&taskStatus='+taskStatus+'&callCodeHistoryListStr='+callCodeHistoryListStr+'&freeSQL='+freeSQL+'&province='+province+'&city='+city;
                     $("#caseRecycleUrl").val(allCaseRecyleUrl);
                     $("#caseRecycleSelectAgentUrl").val(caseRecycleSelectAgentUrl);
                     $("#caseRecycleNum").val("");

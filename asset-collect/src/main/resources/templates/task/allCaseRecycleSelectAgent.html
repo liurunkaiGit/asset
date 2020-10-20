@@ -15,10 +15,15 @@
 			<form id="user-form" th:object="${tLcTask}">
 				<div class="select-list">
 					<ul>
-						<input type="hidden" name="orgId" id="orgId" th:value="${orgId}">
-						<input type="hidden" name="taskIds" id="taskIds" th:value="${taskIds}">
-						<input type="hidden" name="caseNos" id="caseNos" th:value="${caseNos}">
-						<input type="hidden" name="certificateNos" id="certificateNos" th:value="${certificateNos}">
+						<input name="caseNo" id="caseNo" th:field="*{caseNo}" class="form-control" type="hidden">
+						<input name="orgId" id="orgId"  th:field="*{orgId}" class="form-control" type="hidden">
+						<input name="customName" id="customName" th:field="*{customName}" class="form-control" type="hidden">
+						<input name="taskStatus" id="taskStatus" th:field="*{taskStatus}" class="form-control" type="hidden">
+						<input name="callCodeHistoryListStr" id="callCodeHistoryListStr" th:value="${callCodeHistoryListStr}" class="form-control" type="hidden">
+						<input name="freeSQL" id="freeSQL" th:field="*{freeSQL}" class="form-control" type="hidden">
+						<input name="province" id="province" th:field="*{province}" class="form-control" type="hidden">
+						<input name="city" id="city" th:field="*{city}" class="form-control" type="hidden">
+
 						<li>
 							登录名称：<input type="text" name="loginName"/>
 						</li>
