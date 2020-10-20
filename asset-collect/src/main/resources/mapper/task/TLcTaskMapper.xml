@@ -1662,6 +1662,12 @@
         FROM t_lc_task t,t_lc_duncase d, sys_user su
         WHERE t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no and t.owner_id = su.user_id
         AND t.allot_type = 1 AND t.task_status != 3
+        <if test="taskIdList != null and taskIdList.size()>0">
+            and t.id IN
+            <foreach collection="taskIdList" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
         <if test="orgId != null  and orgId != ''">
             and t.org_id = #{orgId}
         </if>

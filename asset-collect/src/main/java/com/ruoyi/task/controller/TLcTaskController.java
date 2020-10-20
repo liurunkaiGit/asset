@@ -1567,11 +1567,24 @@ public class TLcTaskController extends BaseController {
     /**
      * 跳转到案件回收选择用户页
      */
-    @GetMapping("/toCaseRecycleSelectAgent")
-    public String toCaseRecycleSelectAgent(TLcTask tLcTask, HttpServletRequest request, ModelMap modelMap) {
+    @GetMapping("/toAllCaseRecycleSelectAgent")
+    public String toAllCaseRecycleSelectAgent(TLcTask tLcTask, HttpServletRequest request, ModelMap modelMap) {
         String callCodeHistoryListStr = request.getParameter("callCodeHistoryListStr");//历史电话码
         modelMap.put("tLcTask", tLcTask);
         modelMap.put("callCodeHistoryListStr", callCodeHistoryListStr);
+        return prefix + "/allCaseRecycleSelectAgent";
+    }
+
+    /**
+     * 跳转到案件回收选择用户页
+     */
+    @GetMapping("/toCaseRecycleSelectAgent")
+    public String toCaseRecycleSelectAgent(String taskIds, String caseNos, String certificateNos, HttpServletRequest request, ModelMap modelMap) {
+        String callCodeHistoryListStr = request.getParameter("callCodeHistoryListStr");//历史电话码
+        modelMap.put("orgId", ShiroUtils.getSysUser().getOrgId());
+        modelMap.put("taskIds", taskIds);
+        modelMap.put("caseNos", caseNos);
+        modelMap.put("certificateNos", certificateNos);
         return prefix + "/caseRecycleSelectAgent";
     }
 
@@ -1580,8 +1593,11 @@ public class TLcTaskController extends BaseController {
      */
     @ResponseBody
     @PostMapping("/caseRecycleSelectAgent")
-    public TableDataInfo list(TLcTask tLcTask) {
+    public TableDataInfo list(TLcTask tLcTask, String taskIds) {
         TableDataInfo rspData = new TableDataInfo();
+        if (StringUtils.isNotBlank(taskIds)) {
+            tLcTask.setTaskIdList(Arrays.asList(taskIds.split(",")));
+        }
         List<SysUser> userList = this.tLcTaskService.selectCaseRecycleSelectAgent(tLcTask);
         rspData.setRows(userList);
         return  rspData;
