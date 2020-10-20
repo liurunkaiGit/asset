@@ -136,7 +136,11 @@
                 },
                 {
                     field : 'perHousehold', 
-                    title : '户均金额'
+                    title : '户均金额',
+                    formatter:function (value, row, index) {
+                        if(value =='' || null ==  value)return'';
+                        return  parseFloat(value).toFixed(2) ;
+                    }
                 },
                 {
                     title: '操作',
