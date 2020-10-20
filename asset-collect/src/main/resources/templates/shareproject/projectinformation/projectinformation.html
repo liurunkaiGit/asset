@@ -59,7 +59,7 @@
         var removeFlag = [[${@permission.hasPermi('ruoyi:information:remove')}]];
         var prefix = ctx + "shareproject/projectinformation";
         var datas = [[${@dict.getType('type_of_party')}]];
-        var productNatureDatas = [[${@dict.getType('product_nature')}]];
+        var dataSys = [[${@dict.getType('operating_system')}]];
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -124,7 +124,10 @@
                 },
                 {
                     field : 'operatingSystem', 
-                    title : '作业系统'
+                    title : '作业系统',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(dataSys, value);
+                    }
                 },
                 {
                     field : 'trafficPlatform', 
