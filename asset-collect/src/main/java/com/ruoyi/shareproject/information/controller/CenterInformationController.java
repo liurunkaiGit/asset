@@ -54,7 +54,7 @@ public class CenterInformationController extends BaseController {
     @ResponseBody
     public TableDataInfo list(TLpInformationCenter informationCenter) {
         startPage();
-        informationCenter.setCreateBy(ShiroUtils.getLoginName());
+        //informationCenter.setCreateBy(ShiroUtils.getLoginName());
         List<TLpInformationCenter> list = centerInformationService.selectCenterInformationList(informationCenter);
         setSeatRate(list);
         return getDataTable(list);
