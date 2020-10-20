@@ -37,6 +37,10 @@
     }
     //度言初始化函数
     function dyInit(){
+        if(typeof(DYSDK) == undefined || typeof(DYSDK) == "undefined"){
+            $.modal.alertWarning('度言平台初始失败，请刷新页面重试');
+            return;
+        }
         DYSDK.ready(function () {
             duyanSdk.callme = function (tleNumber) {
                 if(tleNumber && isNaN(tleNumber)){

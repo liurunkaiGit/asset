@@ -2509,13 +2509,17 @@
         }else if (platform == 'DY'){
             var soundRecordingUrl = [[${soundRecordingUrl}]];
             var apikey = [[${apikey}]];
+            if(typeof(DYSDK) == undefined || typeof(DYSDK) == "undefined"){
+                $.modal.alertWarning('度言平台初始失败，请刷新页面重试');
+                return;
+            }
             DYSDK.ready(function(){
                 duyanSdk.callme = function(tleNumber){
                     if(tleNumber && isNaN(tleNumber)){
-                            tleNumber = tleNumber.replace("-","");
-                            tleNumber = tleNumber.replace("/","");
-                            tleNumber = tleNumber.replace(" ","");
-                            tleNumber = tleNumber.replace(/\b(0+)/gi,"");
+                        tleNumber = tleNumber.replace("-","");
+                        tleNumber = tleNumber.replace("/","");
+                        tleNumber = tleNumber.replace(" ","");
+                        tleNumber = tleNumber.replace(/\b(0+)/gi,"");
                     }
                     DYSDK.call(tleNumber,function(){
                     },'呼叫');
@@ -2836,7 +2840,6 @@
      */
     var temp_phone = null;
     function call(contactName,id,contactRelation,phone,obj) {
-        debugger;
         if (agentIsCalling) {
             $.modal.alertError("正在通话中，请先挂断当前通话再拨打");
             return;
