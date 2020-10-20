@@ -135,7 +135,7 @@ public class TLpProcessServiceImpl implements ITLpProcessService {
         }
         // 计算拨打量，人均拨打量，通话时长，人均通话时长，接通率
         Integer callNum = 0;
-        BigDecimal callLen = new BigDecimal(0.00);
+        BigDecimal callLen = new BigDecimal("0.00");
         Integer connectedCallNum = 0;
         if (dayProcessList != null && dayProcessList.size() > 0) {
             for (TLcReportDayProcess dayProcess : dayProcessList) {
@@ -152,18 +152,18 @@ public class TLpProcessServiceImpl implements ITLpProcessService {
         }
         tLpProcess.setTotalCallNum(callNum);
         if (actualAttendance > 0) {
-            tLpProcess.setAveCallNum(new BigDecimal(callNum / actualAttendance));
-            tLpProcess.setAvgCallLen(callLen.divide(new BigDecimal(actualAttendance)));
+            tLpProcess.setAveCallNum(new BigDecimal(callNum / actualAttendance).setScale(2, BigDecimal.ROUND_HALF_UP));
+            tLpProcess.setAvgCallLen(callLen.divide(new BigDecimal(actualAttendance)).setScale(2, BigDecimal.ROUND_HALF_UP));
         } else {
-            tLpProcess.setAveCallNum(new BigDecimal(0.00));
+            tLpProcess.setAveCallNum(new BigDecimal("0.00"));
             tLpProcess.setAvgCallLen(new BigDecimal("0.00"));
         }
-        tLpProcess.setTotalCallLen(callLen);
+        tLpProcess.setTotalCallLen(callLen.setScale(2, BigDecimal.ROUND_HALF_UP));
         tLpProcess.setTotalCalledNum(connectedCallNum);
         if (connectedCallNum > 0) {
-            tLpProcess.setTotalCalledRate(new BigDecimal(callNum / connectedCallNum));
+            tLpProcess.setTotalCalledRate((connectedCallNum * 100 / callNum) + "%");
         } else {
-            tLpProcess.setTotalCalledRate(new BigDecimal(0.00));
+            tLpProcess.setTotalCalledRate("0.00%");
         }
         return tLpProcess;
     }

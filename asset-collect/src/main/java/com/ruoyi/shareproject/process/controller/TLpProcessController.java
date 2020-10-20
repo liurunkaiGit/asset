@@ -8,6 +8,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.report.domain.TLcReportDayProcess;
 import com.ruoyi.report.service.ITLcReportDayProcessService;
+import com.ruoyi.shareproject.monthlytarget.domain.TLpMonthlyTarget;
 import com.ruoyi.shareproject.process.domain.TLpProcess;
 import com.ruoyi.shareproject.process.service.ITLpProcessService;
 import com.ruoyi.shareproject.projectinformation.domain.TLpProjectInformation;
@@ -130,5 +131,17 @@ public class TLpProcessController extends BaseController {
 //        Map<String, Object> result = new HashMap<>();
         tLpProcess = this.tLpProcessService.selectDayProcess(tLpProcess);
         return Response.success(tLpProcess);
+    }
+
+    /**
+     * 复制新增
+     */
+//    @RequiresPermissions("shareproject:monthlytarget:edit")
+    @GetMapping("/copy")
+    public String copyone(Long id, ModelMap mmap)
+    {
+        TLpProcess tLpProcess = this.tLpProcessService.selectTLpProcessById(id);
+        mmap.put("tLpProcess", tLpProcess);
+        return prefix + "/copy";
     }
 }

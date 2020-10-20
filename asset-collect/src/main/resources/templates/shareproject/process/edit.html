@@ -9,11 +9,10 @@
         <form class="form-horizontal m" id="form-process-edit" th:object="${tLpProcess}">
             <input name="id" th:field="*{id}" type="hidden">
             <div class="form-group">    
-                <label class="col-sm-3 control-label">报表日期：</label>
+                <label class="col-sm-3 control-label">日期：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input name="reportDate" id="reportDate" th:value="${#dates.format(tLpProcess.reportDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" onchange="selectDayProcess()">
+                        <input name="reportDate" id="reportDate" th:value="${#dates.format(tLpProcess.reportDate, 'yyyy-MM-dd')}" class="form-control time-input" placeholder="yyyy-MM-dd" type="text" onchange="selectDayProcess()" required>
                     </div>
                 </div>
             </div>
@@ -36,7 +35,7 @@
                 </div>-->
                 <div class="col-sm-8">
                     <input name="orgId" id="orgIdValue" th:field="*{orgId}" class="form-control" type="hidden">
-                    <select name="projectIdName" id="orgId" class="form-control m-b" onchange="selectDayProcess()" required>
+                    <select name="projectIdName" id="orgId" class="form-control" onchange="selectDayProcess()" required>
                         <!--<option value="">所有</option>-->
                     </select>
                 </div>
@@ -44,7 +43,7 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">拨打量(次)：</label>
                 <div class="col-sm-8">
-                    <input name="totalCallNum" id="totalCallNum" th:field="*{totalCallNum}" class="form-control" type="text">
+                    <input name="totalCallNum" id="totalCallNum" th:field="*{totalCallNum}" class="form-control" type="number" required>
                 </div>
             </div>
             <div class="form-group">    
@@ -56,7 +55,7 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">接通量(次)：</label>
                 <div class="col-sm-8">
-                    <input name="totalCalledNum" id="totalCalledNum" th:field="*{totalCalledNum}" class="form-control" type="text">
+                    <input name="totalCalledNum" id="totalCalledNum" th:field="*{totalCalledNum}" class="form-control" type="number">
                 </div>
             </div>
            <!-- <div class="form-group">
@@ -68,7 +67,7 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">通话时长：</label>
                 <div class="col-sm-8">
-                    <input name="totalCallLen" id="totalCallLen" th:field="*{totalCallLen}" class="form-control" type="text">
+                    <input name="totalCallLen" id="totalCallLen" th:field="*{totalCallLen}" class="form-control" type="text" required>
                 </div>
             </div>
             <div class="form-group">    
@@ -106,16 +105,53 @@
         });
 
         function submitHandler() {
+            var IntReg = /^[0-9]\d*$/; //正整数的正则表达式
+            var IntOrDecimalReg = /^[0-9][0-9]*([\.][0-9]{1,2})?$/; //整数或者小数的正则表达式
+            var totalCallNum = $("#totalCallNum").val();
+            var totalCalledNum = $("#totalCalledNum").val();
+            var aveCallNum = $("#aveCallNum").val();
+            var totalCallLen = $("#totalCallLen").val();
+            var avgCallLen = $("#avgCallLen").val();
+            if(totalCallNum != null && totalCallNum != '') {
+                if (!IntReg.test(totalCallNum)) {
+                    $.modal.alert("拨打量(次)必须是大于0的数");
+                    return;
+                }
+            }
+            if(totalCalledNum != null && totalCalledNum != '') {
+                if (!IntReg.test(totalCalledNum)) {
+                    $.modal.alert("接通量(次)必须是大于0的数");
+                    return;
+                }
+            }
+            if(aveCallNum != null && aveCallNum != '') {
+                if (!IntOrDecimalReg.test(aveCallNum)) {
+                    $.modal.alert("人均拨打量必须是整数或者两位小数");
+                    return;
+                }
+            }
+            if(totalCallLen != null && totalCallLen != '') {
+                if (!IntOrDecimalReg.test(totalCallLen)) {
+                    $.modal.alert("通话时长必须是整数或者两位小数");
+                    return;
+                }
+            }
+            if(avgCallLen != null && avgCallLen != '') {
+                if (!IntOrDecimalReg.test(avgCallLen)) {
+                    $.modal.alert("人均通话时长必须是整数或者两位小数");
+                    return;
+                }
+            }
             if ($.validate.form()) {
                 $.operate.save(prefix + "/edit", $('#form-process-edit').serialize());
             }
         }
 
-        $("input[name='reportDate']").datetimepicker({
+        /*$("input[name='reportDate']").datetimepicker({
             format: "yyyy-mm-dd",
             minView: "month",
             autoclose: true
-        });
+        });*/
 
         $(function () {
             initProject();

@@ -6,6 +6,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.shareproject.process.domain.TLpProcess;
 import com.ruoyi.shareproject.projectinformation.domain.TLpProjectInformation;
 import com.ruoyi.shareproject.projectinformation.service.ITLpProjectInformationService;
 import com.ruoyi.shareproject.result.domain.TLpResult;
@@ -139,5 +140,18 @@ public class TLpResultController extends BaseController {
     public Response selectProjectResultUnique(TLpResult tLpResult) {
         Integer count = this.tLpResultService.selectProjectResultUnique(tLpResult);
         return Response.success(count);
+    }
+
+    /**
+     * 复制新增
+     */
+//    @RequiresPermissions("shareproject:monthlytarget:edit")
+    @GetMapping("/copy")
+    public String copyone(Long id, ModelMap mmap)
+    {
+        TLpResult tLpResult = this.tLpResultService.selectTLpResultById(id);
+        mmap.put("tLpResult", tLpResult);
+        mmap.put("transferTypeValue", tLpResult.getTransferType());
+        return prefix + "/copy";
     }
 }

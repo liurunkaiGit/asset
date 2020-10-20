@@ -5,6 +5,7 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -65,13 +66,13 @@ public class TLpResult extends BaseEntity {
      * 累计回收
      */
     @Excel(name = "累计回收")
-    private Long totalRecycle;
+    private BigDecimal totalRecycle;
 
     /**
      * 预计佣金
      */
     @Excel(name = "预计佣金")
-    private Long predictCommission;
+    private BigDecimal predictCommission;
 
     /**
      * 回收率

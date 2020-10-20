@@ -84,13 +84,13 @@ public class TLpProcess extends BaseEntity {
      * 接通率
      */
     @Excel(name = "接通率")
-    private BigDecimal totalCalledRate;
+    private String totalCalledRate;
 
     /**
      * 人均接通率
      */
     @Excel(name = "人均接通率")
-    private BigDecimal avgCalledRate;
+    private String avgCalledRate;
 
     /**
      * 外显号码标记情况

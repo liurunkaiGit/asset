@@ -36,13 +36,13 @@
                     <i class="fa fa-plus"></i> 添加
                 </a>
                 <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="project:process:edit">
-                    <i class="fa fa-edit"></i> 修改
+                    <i class="fa fa-edit"></i> 编辑
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="project:process:remove">
+                <!--<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="project:process:remove">
                     <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="project:process:export">
-                    <i class="fa fa-download"></i> 导出
+                </a>-->
+                <a class="btn btn-primary single disabled" onclick="copy()" >
+                    <i class="fa fa-download"></i> 复制
                  </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
@@ -64,7 +64,8 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
-                modalName: "【请填写功能名称】",
+                clickToSelect: true,
+                modalName: "",
                 columns: [{
                     checkbox: true
                 },
@@ -121,6 +122,15 @@
                 var opt = "<option value='"+projectList[i].id+"'>"+projectList[i].names+"</option>";
                 $("#orgId").append(opt);
             }
+        }
+        
+        function copy() {
+            var id = $.table.selectFirstColumns();
+            if (id.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.modal.open("复制",prefix+"/copy?id="+id);
         }
     </script>
 </body>
