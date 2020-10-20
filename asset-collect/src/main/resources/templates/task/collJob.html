@@ -3078,14 +3078,14 @@
     }
 
     function getCallSign(id, callSign, dictLabel) {
-        if (callSign == null || callSign == '') {
+        /*if (callSign == null || callSign == '') {
             // return "<a href='javascript:void(0)' onclick='updateCallSign(\""+id+"\")'>待更新</a>";
             return "<a onclick='showModal(\""+id+"\")'>待更新</a>";
         }
         if (callSign == 'R01' || callSign == 'R02') {
             // return "<a href='javascript:void(0)' onclick='updateCallSign(\""+id+"\")'>待更新</a>";
             return "<a onclick='showModal(\""+id+"\")'>"+callSign+"("+dictLabel+")</a>";
-        }
+        }*/
         if (dictLabel != null && dictLabel != '') {
             return callSign + "(" + dictLabel + ")";
         }
