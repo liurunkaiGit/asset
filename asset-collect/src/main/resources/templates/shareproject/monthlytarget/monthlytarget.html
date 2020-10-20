@@ -103,15 +103,27 @@
                 },
                 {
                     field : 'commissionAmount', 
-                    title : '委案金额(元)'
+                    title : '委案金额(元)',
+                    formatter:function (value, row, index) {
+                        if(value =='')return'';
+                        return  parseFloat(value).toFixed(2) ;
+                    }
                 },
                 {
                     field : 'amountReceived', 
-                    title : '目标回款金额(元)'
+                    title : '目标回款金额(元)',
+                    formatter:function (value, row, index) {
+                        if(value =='')return'';
+                        return  parseFloat(value).toFixed(2) ;
+                    }
                 },
                 {
                     field : 'amountCreated', 
-                    title : '目标创佣金额(元)'
+                    title : '目标创佣金额(元)',
+                    formatter:function (value, row, index) {
+                        if(value =='')return'';
+                        return  parseFloat(value).toFixed(2) ;
+                    }
                 },
                 {
                     field : 'inflowrateOfLastmonth', 

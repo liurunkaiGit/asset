@@ -4,6 +4,7 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -104,7 +105,7 @@ public class TLpProjectInformation extends BaseEntity {
 
     /** 户均金额 */
     @Excel(name = "户均金额")
-    private Double perHousehold;
+    private BigDecimal perHousehold;
 
     /** 项目开始时间 */
     @Excel(name = "项目开始时间", width = 30, dateFormat = "yyyy-MM-dd")

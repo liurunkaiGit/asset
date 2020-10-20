@@ -6,6 +6,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
+import java.math.BigDecimal;
+
 /**
  * 【月度指标】对象 t_lp_monthly_target
  * 
@@ -49,15 +51,15 @@ public class TLpMonthlyTarget extends BaseEntity
 
     /** 委案金额 */
     @Excel(name = "委案金额")
-    private Double commissionAmount;
+    private BigDecimal commissionAmount;
 
     /** 目标回款金额 */
     @Excel(name = "目标回款金额")
-    private Double amountReceived;
+    private BigDecimal amountReceived;
 
     /** 创佣金额 */
     @Excel(name = "创佣金额")
-    private Double amountCreated;
+    private BigDecimal amountCreated;
 
     /** 上月流入率 */
     @Excel(name = "上月流入率")

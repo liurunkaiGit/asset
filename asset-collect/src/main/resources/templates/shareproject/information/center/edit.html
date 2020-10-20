@@ -33,7 +33,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label">*坐席数量：</label>
                     <div class="col-sm-8">
-                        <input name="agentNum" id="agentNum" class="form-control" th:field="*{centerInformationEntry.agentNum}" type="number" required>
+                        <input name="agentNum" id="agentNum" class="form-control" th:field="*{centerInformationEntry.agentNum}" type="number" maxlength="9" required>
                     </div>
                 </div>
             </div>
@@ -41,7 +41,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label">*工位数量：</label>
                     <div class="col-sm-8">
-                        <input name="workSeatNum" id="workSeatNum" th:field="*{centerInformationEntry.workSeatNum}" class="form-control" type="number" required>
+                        <input name="workSeatNum" id="workSeatNum" th:field="*{centerInformationEntry.workSeatNum}" class="form-control" type="number" maxlength="9" required>
                     </div>
                 </div>
             </div>
