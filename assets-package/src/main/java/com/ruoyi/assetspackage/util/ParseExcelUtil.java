@@ -62,6 +62,35 @@ public class ParseExcelUtil {
         return data;
     }
 
+    public static List<Map<String,String>> resolveExcel2(String fileUrl,int headRowNum,int dataRowNum,ExcelParser excelParser) throws Exception{
+        List<String> head = new ArrayList<String>();
+        List<Map<String,String>> data = new ArrayList<Map<String,String>>();
+
+        FileInputStream inputStream = new FileInputStream(fileUrl);
+        ExcelParser parse = excelParser.parse(inputStream);
+        List<String[]> resultList = parse.getDatas(false);
+
+        String[] headRow = resultList.get(headRowNum-1);
+        for(int l=0;l<headRow.length;l++){
+            head.add(headRow[l]);
+        }
+        for (int i = dataRowNum-1; i<resultList.size(); i++) {
+            //存放每一列的名值对
+            Map<String,String> map = new LinkedHashMap<String,String>();
+            String[] row = resultList.get(i);
+            if(row !=null){
+                for (int j=0;j<head.size();j++){
+                    String cellData = row[j];
+                    map.put(head.get(j), cellData);
+                }
+            }else{
+                break;
+            }
+            data.add(map);
+        }
+        return data;
+    }
+
     //读取excel
     private static Workbook readExcel(String filePath) throws Exception{
         Workbook wb = null;

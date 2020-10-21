@@ -14,10 +14,7 @@ import com.ruoyi.assetspackage.mapper.CurAssetsPackageMapper;
 import com.ruoyi.assetspackage.mapper.distribution.*;
 import com.ruoyi.assetspackage.service.*;
 import com.ruoyi.assetspackage.service.distribution.ITLcTaskAssetService;
-import com.ruoyi.assetspackage.util.AllocatRuleUtilAsset;
-import com.ruoyi.assetspackage.util.DataImportUtil;
-import com.ruoyi.assetspackage.util.ParseExcelUtil;
-import com.ruoyi.assetspackage.util.Response;
+import com.ruoyi.assetspackage.util.*;
 import com.ruoyi.common.config.Global;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.core.controller.BaseController;
@@ -98,6 +95,8 @@ public class CurAssetsPackageServiceImpl extends BaseController implements ICurA
     private AllocatRuleUtilAsset allocatRuleUtilAsset;
     @Autowired
     private ITLcTaskAssetService tLcTaskAssetService;
+    @Autowired
+    private ExcelParser excelParser;
 
     /**
      * 查询客户资产
@@ -1257,7 +1256,12 @@ public class CurAssetsPackageServiceImpl extends BaseController implements ICurA
             importDataMapping = this.voluation(importDataMapping, templateId);
             int headNum = Integer.valueOf(importDataMapping.getHeadRowNum());
             int dataNum = Integer.valueOf(importDataMapping.getDataRowNum());
-            List<Map<String, String>> datas = ParseExcelUtil.resolveExcel(fileNameFull, headNum, dataNum);
+            List<Map<String, String>> datas = null;
+            if("xlsx".equals(extension)){
+                datas = ParseExcelUtil.resolveExcel2(fileNameFull,headNum,dataNum,excelParser);
+            }else{
+                datas = ParseExcelUtil.resolveExcel(fileNameFull, headNum, dataNum);
+            }
             //自由导入数据组装、更新
             String templateType = templatesPackage.getType();
             if ("4".equals(templateType)) {//更新模板

@@ -6,6 +6,7 @@ import com.ruoyi.assetspackage.mapper.AssetsImportFromXYMapper;
 import com.ruoyi.assetspackage.mapper.CurAssetsPackageMapper;
 import com.ruoyi.assetspackage.service.*;
 import com.ruoyi.assetspackage.util.DataImportUtil;
+import com.ruoyi.assetspackage.util.ExcelParser;
 import com.ruoyi.assetspackage.util.ParseExcelUtil;
 import com.ruoyi.common.config.Global;
 import com.ruoyi.common.constant.Constants;
@@ -55,6 +56,8 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
     private AssetsImportFromXYMapper assetsImportFromXYMapper;
     @Autowired
     private CurAssetsRepaymentPackageServiceImpl curAssetsRepaymentPackageServiceImpl;
+    @Autowired
+    private ExcelParser excelParser;
 
 
 
@@ -93,7 +96,12 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
             importDataMapping = this.voluation(importDataMapping, templateId);
             int headNum = Integer.valueOf(importDataMapping.getHeadRowNum());
             int dataNum = Integer.valueOf(importDataMapping.getDataRowNum());
-            List<Map<String, String>> datas = ParseExcelUtil.resolveExcel(fileNameFull, headNum, dataNum);
+            List<Map<String, String>> datas = null;
+            if("xlsx".equals(extension)){
+                datas = ParseExcelUtil.resolveExcel2(fileNameFull,headNum,dataNum,excelParser);
+            }else{
+                datas = ParseExcelUtil.resolveExcel(fileNameFull, headNum, dataNum);
+            }
             datas = DataImportUtil.dataReplace(datas, importDataMapping);
             OrgPackage orgPackage = this.orgPackageService.selectOrgPackageByDeptId(orgId);
             String orgName = orgPackage.getOrgName();
@@ -736,26 +744,6 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
                 .build();
     }
 
-
-   /* *//**
-     * @方法描述：获取两个ArrayList的差集
-     * @param firstArrayList 第一个ArrayList
-     * @param secondArrayList 第二个ArrayList
-     * @return resultList 差集ArrayList
-     *//*
-    public List<CurAssetsPackage> receiveDefectList(List<CurAssetsPackage> firstArrayList, List<CurAssetsPackage> secondArrayList) {
-        List<CurAssetsPackage> resultList = new ArrayList<CurAssetsPackage>();
-        LinkedList<CurAssetsPackage> result = new LinkedList<CurAssetsPackage>(firstArrayList);// 大集合用linkedlist
-        HashSet<CurAssetsPackage> othHash = new HashSet<CurAssetsPackage>(secondArrayList);// 小集合用hashset
-        Iterator<CurAssetsPackage> iter = result.iterator();// 采用Iterator迭代器进行数据的操作
-        while(iter.hasNext()){
-            if(othHash.contains(iter.next())){
-                iter.remove();
-            }
-        }
-        resultList = new ArrayList<CurAssetsPackage>(result);
-        return resultList;
-    }*/
 
 
 
