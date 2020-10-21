@@ -53,6 +53,7 @@
                 }, '呼叫');
             }
         });
+        $.modal.loading("度言初始化中，请稍后...");
         DYSDK.init();
         // 接通电话的回调函数，返回电话号码等信息
         DYSDK.callConfirm(function (data) {
@@ -61,6 +62,18 @@
                 alert("度言平台ID不存在，请稍候重试。");
             }
             window.parent.jietong();
+        });
+
+        DYSDK.ctiLogined(function(data){
+            $.modal.closeLoading();
+            //延迟两秒执行，确保度言组件初始化完毕
+            window.setTimeout(function(){
+                if(duyanSdk){
+                    duyanSdk.callme($("#phone").val());
+                }else{
+                    layer.msg('度言平台初始化错误', { icon: 5 });
+                }
+            },3000);
         });
         // 拨打电话失败的回调函数，返回电话号码等信息
         DYSDK.callFail(function (data) {
@@ -152,14 +165,7 @@
     }
     //调用 度言初始化函数
     dyInit();
-    //延迟两秒执行，确保度言组件初始化完毕
-    window.setTimeout(function(){
-        if(duyanSdk){
-            duyanSdk.callme($("#phone").val());
-        }else{
-            layer.msg('度言平台初始化错误', { icon: 5 });
-        }
-    },3000);
+
 </script>
 </body>
 </html>

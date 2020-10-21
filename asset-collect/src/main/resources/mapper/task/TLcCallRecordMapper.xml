@@ -141,65 +141,66 @@
     </select>-->
 
     <select id="selectTLcCallRecordList" parameterType="com.ruoyi.task.domain.TLcCallRecord" resultMap="TLcCallRecordResult">
-        SELECT
-        (@a :=@a + 1) as sque,
-        re.case_no,
-        cap.cur_name as customName,
-        cap.certificate_no,
-        cap.rcr AS enterCollDate,
-        cap.rmb_ye AS arrearsTotal,
-        cap.wa_ye AS closeCaseYhje,
-        cap.overdue_days AS overdueDays,
-        re.contact_name,
-        re.contact_relation,
-        re.phone,
-        (SELECT su.user_name FROM sys_user su WHERE re.create_by = su.user_id) AS agent_name,
-        re.call_sign as callSignEn,
-        CONCAT(re.call_sign,'(',re.call_result,')') AS call_sign,
-        re.find_date,
-        re.remark,
-        re.create_time,
-        re.call_start_time,
-        re.call_end_time,
-        re.call_len / 1000 AS call_len,
-        re.call_radio_location,
-        cap.cpmc as productName,
-        cap.tar ,
-        cap.tj_firm as recommendVendor,
-        '华道数据' AS wbjb,
-        '电催' AS csdz,
-        re.call_result
-        FROM
-        t_lc_call_record re,
-        cur_assets_package cap,(SELECT @a := 0) t1
-        WHERE
-        re.case_no = cap.org_casNo and cap.close_case != 1
-        AND cap.org_id = #{orgId}
-        <if test="startCreateTime != null">
-            AND re.create_time <![CDATA[>=]]> #{startCreateTime}
-        </if>
-        <if test="endCreateTime != null">
-            AND re.create_time <![CDATA[<=]]> #{endCreateTime}
-        </if>
-        <if test="startCallStartTime != null">
-            AND re.call_start_time <![CDATA[>=]]> #{startCallStartTime}
-        </if>
-        <if test="endCallStartTime != null">
-            AND re.call_start_time <![CDATA[<=]]> #{endCallStartTime}
-        </if>
-        <if test="startCallLen != null">
-            AND re.call_len <![CDATA[>=]]> #{startCallLen}
-        </if>
-        <if test="endCallLen != null">
-            AND re.call_len <![CDATA[<=]]> #{endCallLen}
-        </if>
-        <if test="caseNo != null and caseNo != '' ">
-            AND re.case_no = #{caseNo}
-        </if>
-        <if test="customName != null and customName != '' ">
-            AND cap.cur_name = #{customName}
-        </if>
-        order by re.create_time desc
+        select (@a :=@a + 1) as sque,tab.* from (
+            SELECT
+            distinct
+            re.case_no,
+            cap.cur_name as customName,
+            cap.certificate_no,
+            cap.rcr AS enterCollDate,
+            cap.rmb_ye AS arrearsTotal,
+            cap.wa_ye AS closeCaseYhje,
+            cap.overdue_days AS overdueDays,
+            re.contact_name,
+            re.contact_relation,
+            re.phone,
+            (SELECT su.user_name FROM sys_user su WHERE re.create_by = su.user_id) AS agent_name,
+            re.call_sign as callSignEn,
+            CONCAT(re.call_sign,'(',re.call_result,')') AS call_sign,
+            re.find_date,
+            re.remark,
+            re.create_time,
+            re.call_start_time,
+            re.call_end_time,
+            re.call_len / 1000 AS call_len,
+            re.call_radio_location,
+            cap.cpmc as productName,
+            cap.tar,
+            cap.tj_firm as recommendVendor,
+            '华道数据' AS wbjb,
+            '电催' AS csdz,
+            re.call_result
+            FROM
+            t_lc_call_record re,
+            cur_assets_package cap
+            WHERE
+            re.case_no = cap.org_casNo AND cap.org_id = #{orgId}
+            <if test="startCreateTime != null">
+                AND re.create_time <![CDATA[>=]]> #{startCreateTime}
+            </if>
+            <if test="endCreateTime != null">
+                AND re.create_time <![CDATA[<=]]> #{endCreateTime}
+            </if>
+            <if test="startCallStartTime != null">
+                AND re.call_start_time <![CDATA[>=]]> #{startCallStartTime}
+            </if>
+            <if test="endCallStartTime != null">
+                AND re.call_start_time <![CDATA[<=]]> #{endCallStartTime}
+            </if>
+            <if test="startCallLen != null">
+                AND re.call_len <![CDATA[>=]]> #{startCallLen}
+            </if>
+            <if test="endCallLen != null">
+                AND re.call_len <![CDATA[<=]]> #{endCallLen}
+            </if>
+            <if test="caseNo != null and caseNo != '' ">
+                AND re.case_no = #{caseNo}
+            </if>
+            <if test="customName != null and customName != '' ">
+                AND cap.cur_name = #{customName}
+            </if>
+            order by re.create_time desc
+        ) tab,(SELECT @a := 0) t1
     </select>
 
     <select id="selectTLcCallRecordById" parameterType="Long" resultMap="TLcCallRecordResult">
@@ -318,7 +319,9 @@
     </select>
 
     <select id="findListenCallRecord" parameterType="com.ruoyi.task.domain.TLcCallRecord" resultMap="TLcCallRecordResult">
-        SELECT DISTINCT t.case_no,tt.org_name,tt.org_id,u.user_name,u.login_name,
+        SELECT distinct t.case_no,tt.org_name,tt.org_id,
+        t.agent_name as user_name,
+        (select u.login_name from sys_user u where u.user_id = t.create_by) as login_name,
         t.id,
         t.contact_name,
         t.phone,
@@ -337,10 +340,9 @@
         t.type,
         t.platform,
         t.star
-        from t_lc_call_record t,t_lc_duncase tt,sys_user u
+        from t_lc_call_record t,t_lc_task tt
         <where>
-            t.case_no=tt.case_no and t.create_by = u.user_id
-            and t.call_radio_location is not null
+            t.case_no=tt.case_no and t.call_radio_location is not null
             <if test="caseNo != null  and caseNo != ''">and t.case_no = #{caseNo}</if>
             <if test="orgId != null  and orgId != ''">and tt.org_id = #{orgId}</if>
             <if test="contactName != null  and contactName != ''">and t.contact_name like concat('%', #{contactName},'%')</if>
@@ -352,8 +354,8 @@
             <if test="callStartTime != null">and t.call_start_time <![CDATA[>=]]> #{callStartTime}</if>
             <if test="callEndTime != null">and t.call_start_time <![CDATA[<=]]> #{callEndTime}</if>
             <if test="startCallLen != null  and startCallLen != ''">and t.call_len <![CDATA[>=]]> #{startCallLen}</if>
+            <if test="createName != null  and createName != ''">and t.agent_name like concat('%', #{createName},'%')</if>
             <if test="endCallLen != null  and endCallLen != ''">and t.call_len <![CDATA[<=]]> #{endCallLen}</if>
-            <if test="createName != null  and createName != ''">and u.user_name like concat('%', #{createName},'%')</if>
         </where>
         order by t.call_start_time desc
     </select>
