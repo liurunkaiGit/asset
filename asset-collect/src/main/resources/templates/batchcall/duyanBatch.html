@@ -58,14 +58,14 @@
         DYSDK.callConfirm(function (data) {
             console.log(data)
             if (!data.uuid) {
-                alert("度言平台需初始化，请重新刷新页面。");
+                alert("度言平台ID不存在，请稍候重试。");
             }
             window.parent.jietong();
         });
         // 拨打电话失败的回调函数，返回电话号码等信息
         DYSDK.callFail(function (data) {
             if (!data.uuid) {
-                alert("度言平台需初始化，请重新刷新页面。");
+                alert("电话号码有误或不支持此种类型电话，请稍候重试。");
             }
             window.parent.duyanNo("");
         });
@@ -73,7 +73,7 @@
         DYSDK.callEnd(function (data) {
             console.log(data)
             if (!data.uuid) {
-                alert("度言平台需初始化，请重新刷新页面。");
+                alert("度言平台拨打记录ID不存在。");
             }
             window.parent.agentIsCalling = false;
             //根据返回的uuid获取通过记录 同步方法
