@@ -1543,6 +1543,7 @@
         }
 
         $("input[name=caseRecycleAgent]").click(function(){
+            $("#caseRecycleSelectAgentIds").val("");
             var url = $("#caseRecycleSelectAgentUrl").val();
             $.modal.open("选择用户", url);
         });
