@@ -1,14 +1,15 @@
 package com.ruoyi.assetspackage.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.ruoyi.assetspackage.domain.StreamPackage;
-import com.ruoyi.assetspackage.domain.TemplatesPackage;
+import com.ruoyi.assetspackage.domain.*;
 import com.ruoyi.assetspackage.enums.IsCloseCaseEnum;
 import com.ruoyi.assetspackage.service.ICurAssetsPackageService;
 import com.ruoyi.assetspackage.service.ICurAssetsRepaymentPackageService;
 import com.ruoyi.assetspackage.service.IOrgPackageService;
 import com.ruoyi.assetspackage.service.IStreamPackageService;
+import com.ruoyi.assetspackage.util.DataImportUtil;
 import com.ruoyi.assetspackage.util.DynamicSqlUtil;
+import com.ruoyi.assetspackage.util.ParseExcelUtil;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.config.Global;
 import com.ruoyi.common.constant.Constants;
@@ -16,9 +17,11 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.file.FileUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -28,11 +31,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +47,8 @@ import java.util.Map;
  * @date 2020-04-15
  */
 @Controller
-@RequestMapping("/assetspackage/dynamicsql")
+@RequestMapping("" +
+        "/assetspackage/dynamicsql")
 public class DynamicSqlController extends BaseController
 {
     private String prefix = "assetspackage/dynamicsql";
@@ -235,5 +240,39 @@ public class DynamicSqlController extends BaseController
         }
     }
 
+    @PostMapping("/fileUpload")
+    @ResponseBody
+    @Log(title = "文件上传")
+    public AjaxResult fileUpload(HttpServletRequest request, MultipartFile file, String uploadPath) {
+        InputStream stream = null;
+        String fileName = "";
+        String fileNameFull = "";
+        try {
+            File dirPath = new File(uploadPath);
+            if (!dirPath.exists()) {
+                dirPath.mkdirs();
+            }
+            if (file != null) {
+                stream = file.getInputStream();
+                fileName = file.getOriginalFilename();
+                String extension = fileName.lastIndexOf(".") == -1 ? "" : fileName.substring(fileName.lastIndexOf(".") + 1);
+
+                //组装文件路径写入磁盘
+                fileNameFull = uploadPath + fileName;
+                OutputStream bos = new FileOutputStream(fileNameFull);
+                int bytesRead = 0;
+                byte[] buffer = new byte[8192];
+                while ((bytesRead = stream.read(buffer, 0, 8192)) != -1) {
+                    bos.write(buffer, 0, bytesRead);
+                }
+                bos.close();
+                stream.close();
+            }
+        } catch (IOException e) {
+            logger.error("文件上传失败{}",e);
+            return AjaxResult.error("error","文件上传失败");
+        }
+        return AjaxResult.success("success","文件上传成功");
+    }
 
 }
