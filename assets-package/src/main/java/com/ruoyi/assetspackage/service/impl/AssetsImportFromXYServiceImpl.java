@@ -96,12 +96,7 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
             importDataMapping = this.voluation(importDataMapping, templateId);
             int headNum = Integer.valueOf(importDataMapping.getHeadRowNum());
             int dataNum = Integer.valueOf(importDataMapping.getDataRowNum());
-            List<Map<String, String>> datas = null;
-            if("xlsx".equals(extension)){
-                datas = ParseExcelUtil.resolveExcel2(fileNameFull,headNum,dataNum,excelParser);
-            }else{
-                datas = ParseExcelUtil.resolveExcel(fileNameFull, headNum, dataNum);
-            }
+            List<Map<String, String>> datas = ParseExcelUtil.resolveExcel(fileNameFull, headNum, dataNum);
             datas = DataImportUtil.dataReplace(datas, importDataMapping);
             OrgPackage orgPackage = this.orgPackageService.selectOrgPackageByDeptId(orgId);
             String orgName = orgPackage.getOrgName();
