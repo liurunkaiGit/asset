@@ -1510,6 +1510,7 @@
             $("#myModal1").modal('show');
         }
         function savePhoneStatus(){
+            $.modal.loading("操作中，请稍后...");
             var phoneStatus = $("input[name='phoneStatus']:checked").val();
             if(phoneStatus == null || phoneStatus==undefined){
                 $.modal.alertSuccess("请选择本人手机或者本人+三方手机");
@@ -1525,6 +1526,7 @@
                     "caseNo": caseNo
                 },
                 success:function(data){
+                    $.modal.closeLoading();
                     var msg = data.msg;
                     $('input:radio[name="phoneStatus"]').prop('checked',false);
                     $("#myModal1").modal('hide');
