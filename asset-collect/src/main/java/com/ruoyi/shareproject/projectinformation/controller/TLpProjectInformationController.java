@@ -9,6 +9,8 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.shareproject.projectinformation.domain.TLpProjectInformation;
 import com.ruoyi.shareproject.projectinformation.service.ITLpProjectInformationService;
+import com.ruoyi.system.domain.SysDictData;
+import com.ruoyi.system.service.ISysDictDataService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -72,8 +74,42 @@ public class TLpProjectInformationController extends BaseController {
     public AjaxResult export(TLpProjectInformation tLpProjectInformation)
     {
         List<TLpProjectInformation> list = tLpProjectInformationService.selectTLpProjectInformationList(tLpProjectInformation);
+        transferTLpProjectInformation(list);
         ExcelUtil<TLpProjectInformation> util = new ExcelUtil<TLpProjectInformation>(TLpProjectInformation.class);
         return util.exportExcel(list, "information");
+    }
+    @Autowired
+    private ISysDictDataService dictDataService;
+    private void transferTLpProjectInformation(List<TLpProjectInformation> list){
+        List<SysDictData> tpList = dictDataService.selectDictDataByType("type_of_party");
+        List<SysDictData> osList = dictDataService.selectDictDataByType("operating_system");
+        List<SysDictData> cpList = dictDataService.selectDictDataByType("call_platform");
+        if(null != list && !list.isEmpty()){
+            for(int i=0;i<list.size();i++){
+                TLpProjectInformation tn = list.get(i);
+                tn.setId((long)(i+1));
+                tn.setPartyType(dictDataLb(tpList,tn.getPartyType()));
+                tn.setOperatingSystem(dictDataLb(osList,tn.getOperatingSystem()));
+                String [] pts = tn.getTrafficPlatform().split(",");
+                StringBuilder sr = new StringBuilder();
+                for(String pt:pts){
+                    sr.append(dictDataLb(cpList,pt)+" ");
+                }
+                tn.setTrafficPlatform(sr.toString());
+            }
+        }
+    }
+
+    private String dictDataLb(List<SysDictData> list,String value){
+        if(null != list && !list.isEmpty()){
+            for(int i=0;i<list.size();i++){
+                SysDictData sd = list.get(i);
+                if(sd.getDictValue().equals(value)){
+                    return sd.getDictLabel();
+                }
+            }
+        }
+        return value;
     }
 
     /**

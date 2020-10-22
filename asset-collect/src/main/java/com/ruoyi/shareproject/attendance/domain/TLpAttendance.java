@@ -20,6 +20,7 @@ public class TLpAttendance extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
+    @Excel(name = "序号")
     private Long id;
     /** 机构id*/
     private Long orgId;

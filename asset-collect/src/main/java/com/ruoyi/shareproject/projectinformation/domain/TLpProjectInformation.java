@@ -18,6 +18,7 @@ public class TLpProjectInformation extends BaseEntity {
     private static final long serialVersionUID = 15515L;
 
     /** 主键 */
+    @Excel(name = "编号")
     private Long id;
 
     /** $column.columnComment */
@@ -60,7 +61,6 @@ public class TLpProjectInformation extends BaseEntity {
     private String partyType;
 
     /** 开票信息 */
-    @Excel(name = "开票信息")
     private String billingInformation;
 
     /** 产品名称 */
@@ -68,27 +68,21 @@ public class TLpProjectInformation extends BaseEntity {
     private String productName;
 
     /** 产品性质 */
-    @Excel(name = "产品性质")
     private String productNature;
 
     /** 结费方式 */
-    @Excel(name = "结费方式")
     private String settlementMethod;
 
     /** 分案逻辑 */
-    @Excel(name = "分案逻辑")
     private String divisionLogic;
 
     /** 撤案 */
-    @Excel(name = "撤案")
     private String withdrawCase;
 
     /** 费率 */
-    @Excel(name = "费率")
     private String rates;
 
     /** 计费公式 */
-    @Excel(name = "计费公式")
     private String billingFormula;
 
     /** 作业系统 */
@@ -108,11 +102,9 @@ public class TLpProjectInformation extends BaseEntity {
     private BigDecimal perHousehold;
 
     /** 项目开始时间 */
-    @Excel(name = "项目开始时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date startTime;
 
     /** 项目结束时间 */
-    @Excel(name = "项目结束时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date endTime;
 
     /** $column.columnComment */

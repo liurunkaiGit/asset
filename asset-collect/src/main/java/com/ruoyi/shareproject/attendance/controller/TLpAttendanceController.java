@@ -9,6 +9,7 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.shareproject.attendance.domain.TLpAttendance;
 import com.ruoyi.shareproject.attendance.service.ITLpAttendanceService;
+import com.ruoyi.shareproject.projectinformation.domain.TLpProjectInformation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -62,10 +63,18 @@ public class TLpAttendanceController extends BaseController {
     public AjaxResult export(TLpAttendance tLpAttendance)
     {
         List<TLpAttendance> list = tLpAttendanceService.selectTLpAttendanceList(tLpAttendance);
+        transferTLpProjectInformation(list);
         ExcelUtil<TLpAttendance> util = new ExcelUtil<TLpAttendance>(TLpAttendance.class);
         return util.exportExcel(list, "attendance");
     }
-
+    private void transferTLpProjectInformation(List<TLpAttendance> list){
+        if(null != list && !list.isEmpty()){
+            for(int i=0;i<list.size();i++){
+                TLpAttendance te = list.get(i);
+                te.setId((long)(i+1));
+            }
+        }
+    }
     /**
      * 新增【出勤信息管理】
      */
