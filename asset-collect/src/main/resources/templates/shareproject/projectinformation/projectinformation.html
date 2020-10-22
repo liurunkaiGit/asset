@@ -134,7 +134,12 @@
                     field : 'trafficPlatform', 
                     title : '话务平台',
                     formatter: function(value, row, index) {
-                        return $.table.selectDictLabel(dataHw, value);
+                        var trafficPlatformHSP = value.split(',');
+                        var vlh = '';
+                        for(var i=0;i<trafficPlatformHSP.length;i++){
+                            vlh+= $.table.selectDictLabel(dataHw, trafficPlatformHSP[i])+"&nbsp";
+                        }
+                        return vlh;
                     }
                 },
                 {

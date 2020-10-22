@@ -200,10 +200,10 @@
             <div class="col-sm-6">
                 <div class="form-group">
                     <label class="col-sm-4 control-label">话务平台：</label>
-                    <div class="col-sm-8">
-                        <select th:required="required" name="trafficPlatform" id="trafficPlatform"  class="form-control" th:with="type=${@dict.getType('call_platform')}" required>
-                            <option  th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{trafficPlatform}"></option>
-                        </select>
+                    <div class="col-sm-8" id="trafficPlatform">
+<!--                        <select th:required="required" name="trafficPlatform" id="trafficPlatform"  class="form-control" th:with="type=${@dict.getType('call_platform')}" required>-->
+<!--                            <option  th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{trafficPlatform}"></option>-->
+<!--                        </select>-->
                     </div>
                 </div>
             </div>
@@ -280,8 +280,27 @@
         var orgCodeH =  [[${tLpProjectInformation.orgCode}]];
         var belongingCenterIdH =  [[${tLpProjectInformation.belongingCenterId}]];
         var accountAgeList = [[${tLpProjectInformation.accountAge}]];
+        var datapm = [[${@dict.getType('call_platform')}]];
+        var trafficPlatformH = [[${tLpProjectInformation.trafficPlatform}]];
         $(document).ready(function(){
+            var trafficPlatformHSP = trafficPlatformH.split(',');
+            var trafficPlatformHSPObj = {};
+            for(var k=0;k<trafficPlatformHSP.length;k++){
+                trafficPlatformHSPObj[trafficPlatformHSP[k]]="checked";
+            }
+            //话务平台初始多选
+            var hpHtm = "";
+            for(var i=0;i<datapm.length;i++){
+                var obp = datapm[i];
+                hpHtm +="<label>";
+                hpHtm += "<input name=\"trafficPlatform\"  type=\"checkbox\"  "+trafficPlatformHSPObj[obp.dictValue]+" value='"+obp.dictValue+"' >";
+                hpHtm += obp.dictLabel;
+                hpHtm +="</label>&nbsp;&nbsp;&nbsp;&nbsp;";
+            }
+            $("#trafficPlatform").html(hpHtm);
+
             $("body").find("input[type='text']").attr("disabled","false");
+            $("body").find("input[type='checkbox']").attr("disabled","false");
             $.post(
                 ctx + "collect/task/initOrg",
                 function(data) {

@@ -199,10 +199,10 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="col-sm-4 control-label">话务平台：</label>
-                        <div class="col-sm-8">
-                            <select th:required="required" name="trafficPlatform" id="trafficPlatform"  class="form-control" th:with="type=${@dict.getType('call_platform')}" required>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                            </select>
+                        <div class="col-sm-8" id="trafficPlatformdv" >
+<!--                            <select th:required="required" name="trafficPlatform" id="trafficPlatform"  class="form-control" th:with="type=${@dict.getType('call_platform')}" required>-->
+<!--                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>-->
+<!--                            </select>-->
                         </div>
                     </div>
                 </div>
@@ -277,6 +277,8 @@
         $("#form-information-add").validate({
             focusCleanup: true
         });
+        var datapm = [[${@dict.getType('call_platform')}]];
+
         $.validator.addMethod(
             "ismoney",//自定义校验规则的名称
             function(value,element,params){//自定义校验规则的实现
@@ -306,6 +308,10 @@
                 $.modal.alertWarning('请选择归属中心');
                 return;
             }
+            if(!$("#trafficPlatformdv input[type='checkbox']").is(':checked')){
+                $.modal.alertWarning('请选择话务平台');
+                return;
+            }
             var flag = 1;
             if($("#dvct input[name='accountAge']").length > 1) {
                 $("#dvct input[name='accountAge']").each(function () {
@@ -326,6 +332,17 @@
         }
 
         $(document).ready(function(){
+            //话务平台多选
+            var hpHtm = "";
+            for(var i=0;i<datapm.length;i++){
+                var obp = datapm[i];
+                hpHtm +="<label>";
+                hpHtm += "<input name=\"trafficPlatform\"  type=\"checkbox\" value='"+obp.dictValue+"' >";
+                hpHtm += obp.dictLabel;
+                hpHtm +="</label>&nbsp;&nbsp;&nbsp;&nbsp;";
+            }
+            $("#trafficPlatformdv").html(hpHtm);
+
             $.post(
                 ctx + "collect/task/initOrg",
                 function(data) {
