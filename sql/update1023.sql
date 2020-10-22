@@ -20,7 +20,7 @@ CREATE TABLE `t_lp_result` (
 
 -- 菜单 SQL
 insert into sys_menu (menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
-values('项目结果指标', (select t.menu_id from sys_menu t where t.menu_name = '通用项目指标'), '1', '/project/result', 'C', '0', 'project:result:view', '#', 'admin', NOW(), 'admin', NOW(), '项目结果指标');
+values('结果指标', (select t.menu_id from sys_menu t where t.menu_name = '指标信息管理'), '1', '/project/result', 'C', '0', 'project:result:view', '#', 'admin', NOW(), 'admin', NOW(), '项目结果指标');
 
 -- 按钮父菜单ID
 SELECT @parentId := LAST_INSERT_ID();
@@ -66,7 +66,7 @@ CREATE TABLE `t_lp_process` (
 
 -- 菜单 SQL
 insert into sys_menu (menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
-values('项目过程指标', (select t.menu_id from sys_menu t where t.menu_name = '通用项目指标'), '1', '/project/process', 'C', '0', 'project:process:view', '#', 'admin', NOW(), 'admin', NOW(), '项目过程指标');
+values('过程指标', (select t.menu_id from sys_menu t where t.menu_name = '指标信息管理'), '1', '/project/process', 'C', '0', 'project:process:view', '#', 'admin', NOW(), 'admin', NOW(), '项目过程指标');
 
 -- 按钮父菜单ID
 SELECT @parentId := LAST_INSERT_ID();
