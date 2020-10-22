@@ -4,9 +4,9 @@ INSERT INTO `sys_dict_type` VALUES ('145', '甲方类型', 'type_of_party', '0',
 INSERT INTO `sys_dict_type` VALUES ('146', '结费方式', 'settlement_method', '0', 'admin', '2020-10-14 10:47:29', '', null, null);
 INSERT INTO `sys_dict_type` VALUES ('147', '作业系统', 'operating_system', '0', 'admin', '2020-10-14 10:48:43', '', null, null);
 
-INSERT INTO `sys_dict_data` VALUES ('341', '1', '信用卡', '1', 'product_nature', null, null, 'Y', '0', 'admin', '2020-10-14 10:00:36', '', null, null);
-INSERT INTO `sys_dict_data` VALUES ('342', '2', '消费贷', '2', 'product_nature', null, null, 'Y', '0', 'admin', '2020-10-14 10:01:06', '', null, null);
-INSERT INTO `sys_dict_data` VALUES ('343', '1', '银行', '1', 'type_of_party', null, null, 'Y', '0', 'admin', '2020-10-14 10:09:27', '', null, null);
+INSERT INTO `sys_dict_data` VALUES ('353', '1', '信用卡', '1', 'product_nature', null, null, 'Y', '0', 'admin', '2020-10-14 10:00:36', '', null, null);
+INSERT INTO `sys_dict_data` VALUES ('354', '2', '消费贷', '2', 'product_nature', null, null, 'Y', '0', 'admin', '2020-10-14 10:01:06', '', null, null);
+INSERT INTO `sys_dict_data` VALUES ('356', '1', '银行', '1', 'type_of_party', null, null, 'Y', '0', 'admin', '2020-10-14 10:09:27', '', null, null);
 INSERT INTO `sys_dict_data` VALUES ('344', '2', '消金', '2', 'type_of_party', null, null, 'Y', '0', 'admin', '2020-10-14 10:29:53', '', null, null);
 INSERT INTO `sys_dict_data` VALUES ('345', '3', '小贷', '3', 'type_of_party', null, null, 'Y', '0', 'admin', '2020-10-14 10:46:18', '', null, null);
 INSERT INTO `sys_dict_data` VALUES ('346', '4', '担保', '4', 'type_of_party', null, null, 'Y', '0', 'admin', '2020-10-14 10:46:29', '', null, null);
@@ -17,6 +17,7 @@ INSERT INTO `sys_dict_data` VALUES ('350', '1', '甲方系统', '1', 'operating_
 INSERT INTO `sys_dict_data` VALUES ('351', '2', '掘金系统', '2', 'operating_system', null, null, 'Y', '0', 'admin', '2020-10-14 10:49:11', '', null, null);
 INSERT INTO `sys_dict_data` VALUES ('352', '3', '智催系统', '3', 'operating_system', null, null, 'Y', '0', 'admin', '2020-10-14 10:49:28', '', null, null);
 
+INSERT INTO `sys_dict_data` VALUES ('323', '3', '度言', 'DY', 'call_platform', '', '', 'Y', '0', 'admin', '2020-09-14 09:38:36', 'admin', '2020-09-14 09:39:02', '度言');
 
 CREATE TABLE `t_lp_attendance` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
