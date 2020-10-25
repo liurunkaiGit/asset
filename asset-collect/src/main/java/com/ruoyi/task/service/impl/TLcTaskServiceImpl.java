@@ -414,8 +414,6 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                     finalTaskList = allocatTask(allocatRule, finalTaskList, userList);
                     log.info("非共案任务分派--匹配业务归属人成功");
                 }
-                this.tLcTaskMapper.batchUpdateTask(finalTaskList);
-                log.info("任务分派--修改任务表成功");
                 return finalTaskList;
             }, threadPoolExecutor);
             // 当分配任务的异步任务完成后异步去修改任务表和插入轨迹表
