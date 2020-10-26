@@ -1691,6 +1691,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="findNowNeedClose" parameterType="CurAssetsPackage" resultMap="CurAssetsPackageResult">
         <include refid="selectCurAssetsPackageVo"/>
         where close_case= #{closeCase} and tar <![CDATA[<]]> CURDATE()
+        <if test="orgIdList != null">
+            and org_id in
+            <foreach collection="orgIdList" open="(" separator="," close=")" item="orgId">
+                #{orgId}
+            </foreach>
+        </if>
     </select>
 
 </mapper>

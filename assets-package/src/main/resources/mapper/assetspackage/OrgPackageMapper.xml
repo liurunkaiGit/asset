@@ -55,6 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sendRuleEngine != null "> and send_rule_engine = #{sendRuleEngine}</if>
             <if test="autoAllocatTask != null "> and auto_allocat_task = #{autoAllocatTask}</if>
             <if test="allocatTaskStartegy != null "> and allocat_task_startegy = #{allocatTaskStartegy}</if>
+            <if test="isExpireAutoBackCase != null "> and is_expire_auto_back_case = #{isExpireAutoBackCase}</if>
             <if test="deptIds != null">
                 and dept_id in
                 <foreach collection="deptIds" item="deptId" open="(" close=")" separator=",">

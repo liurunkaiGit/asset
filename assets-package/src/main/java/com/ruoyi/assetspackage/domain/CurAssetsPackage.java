@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -509,6 +510,8 @@ public class CurAssetsPackage extends BaseEntity {
     public void setCreateBy(String createBy) {
         this.createBy = createBy;
     }
+
+    private List<Long> orgIdList;
 
 
 }
