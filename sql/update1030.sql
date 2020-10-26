@@ -1,0 +1,1 @@
+alter table org_package add column is_expire_auto_back_case tinyint(1) default null comment '是否到期自动退案,1：是，2：否';

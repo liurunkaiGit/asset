@@ -161,4 +161,10 @@ public class OrgPackage extends BaseEntity {
     @Excel(name = "是否共案处理，1：是，2：否")
     private Integer isSameCaseDeal;
 
+    /**
+     * 是否到期自动退案，1：是，2：否
+     */
+    @Excel(name = "是否到期自动退案，1：是，2：否")
+    private Integer isExpireAutoBackCase;
+
 }

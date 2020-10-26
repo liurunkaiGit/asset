@@ -80,9 +80,9 @@
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="assetspackage:org:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="assetspackage:org:export">
+                <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="assetspackage:org:export">
                     <i class="fa fa-download"></i> 导出
-                 </a>
+                 </a>-->
                <!-- <a class="btn btn-warning" style="background-color: #ed5565;border-color: #ed5565" data-toggle="modal" data-target="#myModal">
                     <i class="glyphicon glyphicon-cloud-upload"></i> 上传
                 </a>-->
@@ -236,6 +236,17 @@
                     {
                         field : 'isSameCaseDeal',
                         title : '是否共案处理',
+                        formatter: function (value, row, index) {
+                            if (value == 1) {
+                                return '是';
+                            }
+                            if (value == 2) {
+                                return '否';
+                            }
+                        }
+                    },{
+                        field : 'isExpireAutoBackCase',
+                        title : '是否到期自动退案',
                         formatter: function (value, row, index) {
                             if (value == 1) {
                                 return '是';

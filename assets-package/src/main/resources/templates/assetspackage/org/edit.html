@@ -115,6 +115,14 @@
                     </select>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>是否到期自动退案</label>
+                <div class="col-sm-8">
+                    <input id="isExpireAutoBackCaseValue" th:field="*{isExpireAutoBackCase}" class="form-control" type="hidden">
+                    <select name="isExpireAutoBackCase" class="form-control" id="isExpireAutoBackCase" required>
+                    </select>
+                </div>
+            </div>
             <!--<div class="form-group">
                 <label class="col-sm-3 control-label">项目名称：</label>
                 <div class="col-sm-8">
@@ -242,7 +250,8 @@
                     isAutoScore:$("#isAutoScore").val(),
                     // isAutoSendSms:isAutoSendSms,
                     // smsTemplateName:$("#smsTemplateName").val(),
-                    isSameCaseDeal:$("#isSameCaseDeal").val()
+                    isSameCaseDeal:$("#isSameCaseDeal").val(),
+                    isExpireAutoBackCase:$("#isExpireAutoBackCase").val()
                     // allocatTaskStartegy:allocatTaskStartegy
                 },
                 function(data) {
@@ -321,6 +330,7 @@
                         var sendRadioQcValue = $("#sendRadioQcValue").val();
                         var autoAllocatTaskValue = $("#autoAllocatTaskValue").val();
                         var isSameCaseDealValue = $("#isSameCaseDealValue").val();
+                        var isExpireAutoBackCaseValue = $("#isExpireAutoBackCaseValue").val();
                         for (var i = 0; i < data.rows.length; i++) {
                             /*if(sendRobotValue == data.rows[i].code) {
                                 var opt = "<option value='"+data.rows[i].code+"' selected>"+data.rows[i].message+"</option>";
@@ -358,6 +368,12 @@
                                 var opt = "<option value='"+data.rows[i].code+"'>"+data.rows[i].message+"</option>";
                             }
                             $("#isSameCaseDeal").append(opt);
+                            if(isExpireAutoBackCaseValue == data.rows[i].code) {
+                                var opt = "<option value='"+data.rows[i].code+"' selected>"+data.rows[i].message+"</option>";
+                            } else {
+                                var opt = "<option value='"+data.rows[i].code+"'>"+data.rows[i].message+"</option>";
+                            }
+                            $("#isExpireAutoBackCase").append(opt);
                         }
                     }
                 }

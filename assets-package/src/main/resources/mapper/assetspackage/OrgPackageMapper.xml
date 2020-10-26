@@ -29,10 +29,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="smsTemplateId"    column="sms_template_id"    />
         <result property="smsTemplateName"    column="sms_template_name"    />
         <result property="isSameCaseDeal"    column="is_same_case_deal"    />
+        <result property="isExpireAutoBackCase"    column="is_expire_auto_back_case"    />
     </resultMap>
 
     <sql id="selectOrgPackageVo">
-        select id, org_name, org_code, start_date, end_date, org_status, dept_id, dept_name, create_by, create_date, update_by, update_date, send_robot, auto_start_robot_task, send_radio_qc, send_rule_engine, auto_allocat_task, allocat_task_startegy, project_name,is_auto_score, is_auto_send_sms, sms_template_id, sms_template_name, is_same_case_deal from org_package
+        select id, org_name, org_code, start_date, end_date, org_status, dept_id, dept_name, create_by, create_date, update_by, update_date, send_robot, auto_start_robot_task, send_radio_qc, send_rule_engine, auto_allocat_task, allocat_task_startegy, project_name,is_auto_score, is_auto_send_sms, sms_template_id, sms_template_name, is_same_case_deal, is_expire_auto_back_case from org_package
     </sql>
 
     <select id="selectOrgPackageList" parameterType="OrgPackage" resultMap="OrgPackageResult">
@@ -100,6 +101,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="smsTemplateId != null  and smsTemplateId != ''">sms_template_id,</if>
             <if test="smsTemplateName != null  and smsTemplateName != ''">sms_template_name,</if>
             <if test="isSameCaseDeal != null">is_same_case_deal,</if>
+            <if test="isExpireAutoBackCase != null">is_expire_auto_back_case,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null  and id != ''">#{id},</if>
@@ -126,6 +128,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="smsTemplateId != null  and smsTemplateId != ''">#{smsTemplateId},</if>
             <if test="smsTemplateName != null  and smsTemplateName != ''">#{smsTemplateName},</if>
             <if test="isSameCaseDeal != null">#{isSameCaseDeal},</if>
+            <if test="isExpireAutoBackCase != null">#{isExpireAutoBackCase},</if>
         </trim>
     </insert>
 
@@ -155,6 +158,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             sms_template_id = #{smsTemplateId},
             sms_template_name = #{smsTemplateName},
             <if test="isSameCaseDeal != null ">is_same_case_deal = #{isSameCaseDeal},</if>
+            <if test="isExpireAutoBackCase != null ">is_expire_auto_back_case = #{isExpireAutoBackCase},</if>
         </trim>
         where id = #{id}
     </update>
