@@ -394,7 +394,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             // 查询需要分配的坐席
             CompletableFuture<List<SysUser>> userListFuture = CompletableFuture.supplyAsync(() -> this.sysUserService.selectUserListByUserIds(Arrays.asList(userIds.split(","))), threadPoolExecutor);
             // 判断需要分配全部任务还是随机分配指定数量的任务,并返回需要分配的任务集合
-            CompletableFuture<List<TLcTask>> taskListFuture = CompletableFuture.supplyAsync(() -> getAllocatTaskList(taskIds, allocatNum, caseNos, certificateNos, arrearsTotals), threadPoolExecutor);
+            CompletableFuture<List<TLcTask>> taskListFuture = CompletableFuture.supplyAsync(() -> getAllocatTaskList(taskIds, allocatNum, caseNos, certificateNos, arrearsTotals, sysUser), threadPoolExecutor);
             // 查询是否需要共案处理
             CompletableFuture<OrgPackage> orgFuture = CompletableFuture.supplyAsync(() -> this.orgPackageService.selectOrgPackageByOrgId(orgId), threadPoolExecutor);
             // 三个任务都完成并且获取对应的返回值，get()方法时阻塞的，必须放到最后获取
@@ -926,7 +926,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         return randomTaskSet;
     }
 
-    private List<TLcTask> getAllocatTaskList(String taskIds, Integer allocatNum, String caseNos, String certificateNos, String arrearsTotals) {
+    private List<TLcTask> getAllocatTaskList(String taskIds, Integer allocatNum, String caseNos, String certificateNos, String arrearsTotals,SysUser sysUser) {
         List<TLcTask> taskList = new ArrayList<>();
         if (allocatNum < taskIds.split(",").length) {
             Set<TLcTask> randomTaskSet = new HashSet<>(allocatNum); // 这里用set，因为随机选择的时候会重复，set可以去重
@@ -938,8 +938,10 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 tLcTask.setId(Long.valueOf(taskIds.split(",")[i]));
                 tLcTask.setCaseNo(caseNos.split(",")[i]);
                 tLcTask.setArrearsTotal(new BigDecimal(arrearsTotals.split(",")[i]));
-                tLcTask.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
-                tLcTask.setOrgName(ShiroUtils.getSysUser().getOrgName());
+              /*  tLcTask.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
+                tLcTask.setOrgName(ShiroUtils.getSysUser().getOrgName());*/
+                tLcTask.setOrgId(String.valueOf(sysUser.getOrgId()));
+                tLcTask.setOrgName(sysUser.getOrgName());
                 tLcTask.setCertificateNo(certificateNos.split(",")[i].split("@")[2]);
                 tLcTask.setColor("0");
                 randomTaskSet.add(tLcTask);
@@ -950,8 +952,10 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 TLcTask tLcTask = new TLcTask();
                 tLcTask.setId(Long.valueOf(taskIds.split(",")[i]));
                 tLcTask.setCaseNo(caseNos.split(",")[i]);
-                tLcTask.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
-                tLcTask.setOrgName(ShiroUtils.getSysUser().getOrgName());
+               /* tLcTask.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
+                tLcTask.setOrgName(ShiroUtils.getSysUser().getOrgName());*/
+                tLcTask.setOrgId(String.valueOf(sysUser.getOrgId()));
+                tLcTask.setOrgName(sysUser.getOrgName());
                 tLcTask.setCertificateNo(certificateNos.split(",")[i].split("@")[2]);
                 tLcTask.setArrearsTotal(new BigDecimal(arrearsTotals.split(",")[i]));
                 tLcTask.setColor("0");
