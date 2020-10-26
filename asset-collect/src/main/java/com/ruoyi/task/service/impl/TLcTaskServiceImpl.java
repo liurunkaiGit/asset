@@ -446,7 +446,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 return getAllocatTaskList(taskList, allocatNum).stream().map(task -> task.setColor("0")).collect(Collectors.toList());
             }, threadPoolExecutor);
             // 查询是否需要共案处理
-            CompletableFuture<OrgPackage> orgFuture = CompletableFuture.supplyAsync(() -> this.orgPackageService.selectOrgPackageByOrgId(ShiroUtils.getSysUser().getOrgId().toString()), threadPoolExecutor);
+            CompletableFuture<OrgPackage> orgFuture = CompletableFuture.supplyAsync(() -> this.orgPackageService.selectOrgPackageByOrgId(sysUser.getOrgId().toString()), threadPoolExecutor);
             // 三个任务都完成并且获取对应的返回值，get()方法时阻塞的，必须放到最后获取
             CompletableFuture.allOf(userListFuture, taskListFuture, orgFuture);
             List<TLcTask> taskList = taskListFuture.get();
@@ -457,7 +457,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 List<TLcTask> finalTaskList = taskList;
                 if (orgPackage.getIsSameCaseDeal().equals(IsNoEnum.IS.getCode())) {
                     // 共案处理
-                    finalTaskList = allocatTaskSameDeal(allocatRule, finalTaskList, userList, ShiroUtils.getSysUser().getOrgId().toString());
+                    finalTaskList = allocatTaskSameDeal(allocatRule, finalTaskList, userList, sysUser.getOrgId().toString());
                 } else {
                     // 非共案处理
                     finalTaskList = allocatTask(allocatRule, finalTaskList, userList);
