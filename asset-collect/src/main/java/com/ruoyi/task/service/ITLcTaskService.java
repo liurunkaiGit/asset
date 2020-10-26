@@ -121,7 +121,7 @@ public interface ITLcTaskService {
      * @param allocatNum
      * @param allocatRule
      */
-    AjaxResult reAllocat(String userId, String taskIds, String orgId, Integer allocatNum, Integer allocatRule, String caseNos, String certificateNos,String arrearsTotals);
+    AjaxResult reAllocat(String userId, String taskIds, String orgId, Integer allocatNum, Integer allocatRule, String caseNos, String certificateNos,String arrearsTotals, SysUser sysUser);
 
     /**
      * 临时代理
@@ -269,7 +269,7 @@ public interface ITLcTaskService {
 
     List<SysUser> searchUserByDept(SysUser sysUser);
 
-    AjaxResult allDataReAllocat(String userId, TLcTask tLcTask, Integer allocatNum, Integer allocatRule);
+    AjaxResult allDataReAllocat(String userId, TLcTask tLcTask, Integer allocatNum, Integer allocatRule, SysUser sysUser);
 
     TLcRobotTask createRobotTask(TLcTask task, Integer robotTaskId, Integer speechcraftId, String speechcraftName, String robot, Integer continueCallDays, Integer continueCallFrequency);
 

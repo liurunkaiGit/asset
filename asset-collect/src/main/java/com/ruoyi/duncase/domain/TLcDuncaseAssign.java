@@ -117,4 +117,5 @@ public class TLcDuncaseAssign extends BaseEntity {
     @Excel(name = "是否有效 1：是，2：否")
     private Integer validateStatus;
 
+    private String createBy;
 }

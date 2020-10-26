@@ -389,7 +389,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
      */
     @Override
     @Transactional
-    public AjaxResult reAllocat(String userIds, String taskIds, String orgId, Integer allocatNum, Integer allocatRule, String caseNos, String certificateNos, String arrearsTotals) {
+    public AjaxResult reAllocat(String userIds, String taskIds, String orgId, Integer allocatNum, Integer allocatRule, String caseNos, String certificateNos, String arrearsTotals, SysUser sysUser) {
         try {
             // 查询需要分配的坐席
             CompletableFuture<List<SysUser>> userListFuture = CompletableFuture.supplyAsync(() -> this.sysUserService.selectUserListByUserIds(Arrays.asList(userIds.split(","))), threadPoolExecutor);
@@ -419,7 +419,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             // 当分配任务的异步任务完成后异步去修改任务表和插入轨迹表
             List<TLcTask> allotTaskList = allotTaskFuture.get();
             CompletableFuture<Void> updateTaskFuture = CompletableFuture.runAsync(() -> this.tLcTaskMapper.batchUpdateAllotTask(allotTaskList), threadPoolExecutor);
-            CompletableFuture<Void> insertDuncaseAssignFuture = CompletableFuture.runAsync(() -> insertDuncaseAssign(allotTaskList, ShiroUtils.getSysUser()), threadPoolExecutor);
+            CompletableFuture<Void> insertDuncaseAssignFuture = CompletableFuture.runAsync(() -> insertDuncaseAssign(allotTaskList, sysUser), threadPoolExecutor);
             // 修改任务表和插入轨迹表两个异步任务都执行完成
             CompletableFuture.allOf(updateTaskFuture, insertDuncaseAssignFuture);
             try {
@@ -436,7 +436,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     }
 
     @Override
-    public AjaxResult allDataReAllocat(String userIds, TLcTask tLcTask, Integer allocatNum, Integer allocatRule) {
+    public AjaxResult allDataReAllocat(String userIds, TLcTask tLcTask, Integer allocatNum, Integer allocatRule, SysUser sysUser) {
         try {
             // 查询需要分配的坐席
             CompletableFuture<List<SysUser>> userListFuture = CompletableFuture.supplyAsync(() -> this.sysUserService.selectUserListByUserIds(Arrays.asList(userIds.split(","))), threadPoolExecutor);
@@ -467,7 +467,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             // 当分配任务的异步任务完成后异步去修改任务表和插入轨迹表
             List<TLcTask> allotTaskList = allotTaskFuture.get();
             CompletableFuture<Void> updateTaskFuture = CompletableFuture.runAsync(() -> this.tLcTaskMapper.batchUpdateAllotTask(allotTaskList), threadPoolExecutor);
-            CompletableFuture<Void> insertDuncaseAssignFuture = CompletableFuture.runAsync(() -> insertDuncaseAssign(allotTaskList, ShiroUtils.getSysUser()), threadPoolExecutor);
+            CompletableFuture<Void> insertDuncaseAssignFuture = CompletableFuture.runAsync(() -> insertDuncaseAssign(allotTaskList, sysUser), threadPoolExecutor);
             // 修改任务表和插入轨迹表两个异步任务都执行完成
             CompletableFuture.allOf(updateTaskFuture, insertDuncaseAssignFuture);
             try {
@@ -737,8 +737,8 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                             .orgName(task.getOrgName())
                             .taskStatus(task.getTaskStatus())
                             .validateStatus(IsNoEnum.IS.getCode())
+                            .createBy(String.valueOf(sysUser.getUserId()))
                             .build();
-                    tLcDuncaseAssign.setCreateBy(String.valueOf(ShiroUtils.getSysUser().getUserId()));
                     return tLcDuncaseAssign;
                 }).collect(Collectors.toList());
         // 将该任务添加到案件历史轨迹表

@@ -891,7 +891,15 @@ public class TLcTaskController extends BaseController {
     @ResponseBody
     @PostMapping("/reAllocat")
     public AjaxResult reAllocat(String userId, String taskIds, String orgId, Integer allocatNum, Integer allocatRule, String caseNos, String certificateNos,String arrearsTotals) {
-        return this.tLcTaskService.reAllocat(userId, taskIds, orgId, allocatNum, allocatRule, caseNos, certificateNos,arrearsTotals);
+        SysUser sysUser = null;
+        try {
+            sysUser = ShiroUtils.getSysUser();
+        } catch (Exception e) {
+            sysUser = new SysUser();
+            sysUser.setUserId(-1L);
+            sysUser.setUserName("");
+        }
+        return this.tLcTaskService.reAllocat(userId, taskIds, orgId, allocatNum, allocatRule, caseNos, certificateNos,arrearsTotals, sysUser);
     }
 
     /**
@@ -903,7 +911,14 @@ public class TLcTaskController extends BaseController {
     @ResponseBody
     @PostMapping("/allDataReAllocat")
     public AjaxResult allDataReAllocat(String userId, TLcTask tLcTask, Integer allocatNum, Integer allocatRule, HttpServletRequest request) {
-
+        SysUser sysUser = null;
+        try {
+            sysUser = ShiroUtils.getSysUser();
+        } catch (Exception e) {
+            sysUser = new SysUser();
+            sysUser.setUserId(-1L);
+            sysUser.setUserName("");
+        }
         String callCodeHistoryListStr = request.getParameter("callCodeHistoryListStr");//历史电话码
         if(StringUtils.isNotEmpty(callCodeHistoryListStr) && !"null".equals(callCodeHistoryListStr)){
             tLcTask.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
@@ -912,7 +927,7 @@ public class TLcTaskController extends BaseController {
         if (city != null && !"".equals(city)) {
             tLcTask.setProvince(null);
         }
-        return this.tLcTaskService.allDataReAllocat(userId, tLcTask, allocatNum, allocatRule);
+        return this.tLcTaskService.allDataReAllocat(userId, tLcTask, allocatNum, allocatRule, sysUser);
     }
 
     /**
