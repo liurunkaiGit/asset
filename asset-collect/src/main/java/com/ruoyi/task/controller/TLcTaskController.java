@@ -891,7 +891,7 @@ public class TLcTaskController extends BaseController {
     @ResponseBody
     @PostMapping("/reAllocat")
     public AjaxResult reAllocat(String userId, String taskIds, String orgId, Integer allocatNum, Integer allocatRule, String caseNos, String certificateNos,String arrearsTotals) {
-        SysUser sysUser = null;
+        SysUser sysUser;
         try {
             sysUser = ShiroUtils.getSysUser();
         } catch (Exception e) {
@@ -911,7 +911,7 @@ public class TLcTaskController extends BaseController {
     @ResponseBody
     @PostMapping("/allDataReAllocat")
     public AjaxResult allDataReAllocat(String userId, TLcTask tLcTask, Integer allocatNum, Integer allocatRule, HttpServletRequest request) {
-        SysUser sysUser = null;
+        SysUser sysUser;
         try {
             sysUser = ShiroUtils.getSysUser();
         } catch (Exception e) {
