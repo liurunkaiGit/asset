@@ -1256,7 +1256,12 @@ public class CurAssetsPackageServiceImpl extends BaseController implements ICurA
             importDataMapping = this.voluation(importDataMapping, templateId);
             int headNum = Integer.valueOf(importDataMapping.getHeadRowNum());
             int dataNum = Integer.valueOf(importDataMapping.getDataRowNum());
-            List<Map<String, String>> datas = ParseExcelUtil.resolveExcel(fileNameFull, headNum, dataNum);
+            List<Map<String, String>> datas = null;
+            if("xlsx".equals(extension)){
+                datas = ParseExcelUtil.resolveExcel2(fileNameFull,headNum,dataNum,excelParser);
+            }else{
+                datas = ParseExcelUtil.resolveExcel(fileNameFull, headNum, dataNum);
+            }
             //自由导入数据组装、更新
             String templateType = templatesPackage.getType();
             if ("4".equals(templateType)) {//更新模板
