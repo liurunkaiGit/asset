@@ -152,8 +152,8 @@ public class TLpProcessServiceImpl implements ITLpProcessService {
         }
         tLpProcess.setTotalCallNum(callNum);
         if (actualAttendance > 0) {
-            tLpProcess.setAveCallNum(new BigDecimal(callNum / actualAttendance).setScale(2, BigDecimal.ROUND_HALF_UP));
-            tLpProcess.setAvgCallLen(callLen.divide(new BigDecimal(actualAttendance)).setScale(2, BigDecimal.ROUND_HALF_UP));
+            tLpProcess.setAveCallNum(new BigDecimal(callNum).divide(new BigDecimal(actualAttendance), 2, BigDecimal.ROUND_HALF_UP));
+            tLpProcess.setAvgCallLen(callLen.divide(new BigDecimal(actualAttendance), 2, BigDecimal.ROUND_HALF_UP));
         } else {
             tLpProcess.setAveCallNum(new BigDecimal("0.00"));
             tLpProcess.setAvgCallLen(new BigDecimal("0.00"));
@@ -161,7 +161,7 @@ public class TLpProcessServiceImpl implements ITLpProcessService {
         tLpProcess.setTotalCallLen(callLen.setScale(2, BigDecimal.ROUND_HALF_UP));
         tLpProcess.setTotalCalledNum(connectedCallNum);
         if (connectedCallNum > 0) {
-            tLpProcess.setTotalCalledRate((connectedCallNum * 100 / callNum) + "%");
+            tLpProcess.setTotalCalledRate(new BigDecimal(connectedCallNum * 100 ).divide(new BigDecimal(callNum), 2, BigDecimal.ROUND_HALF_UP) + "%");
         } else {
             tLpProcess.setTotalCalledRate("0.00%");
         }

@@ -101,11 +101,11 @@
                 },
                 {
                     field : 'commissionProportion', 
-                    title : '佣金比例'
+                    title : '佣金比例(%)'
                 },
                 {
                     field : 'totalRecycle', 
-                    title : '累计回收',
+                    title : '累计回收(元)',
                     footerFormatter:function (value) {
                         var sumBalance = 0;
                         for (var i in value) {
@@ -118,7 +118,7 @@
                 },
                 {
                     field : 'predictCommission', 
-                    title : '预计佣金',
+                    title : '预计佣金(元)',
                     footerFormatter:function (value) {
                         var sumBalance = 0;
                         for (var i in value) {
@@ -131,7 +131,7 @@
                 },
                 {
                     field : 'recycleRate', 
-                    title : '回收率'
+                    title : '回收率(%)'
                 }]
             };
             $.table.init(options);

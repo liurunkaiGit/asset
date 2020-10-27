@@ -8,7 +8,7 @@
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-process-add">
             <div class="form-group">    
-                <label class="col-sm-3 control-label">报表日期：</label>
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>日期：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
                         <input name="reportDate" id="reportDate" class="form-control time-input" placeholder="yyyy-MM-dd" type="text" onchange="selectDayProcess()" required>
@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">项目：</label>
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>项目：</label>
                 <div class="col-sm-8">
                     <select name="projectIdName" id="orgId" class="form-control" onchange="selectDayProcess()" required>
                         <option value="">所有</option>
@@ -24,13 +24,13 @@
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">拨打量(次)：</label>
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>拨打量(次)：</label>
                 <div class="col-sm-8">
                     <input name="totalCallNum" id="totalCallNum" class="form-control" type="number" required>
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">人均拨打量：</label>
+                <label class="col-sm-3 control-label">人均拨打量(次)：</label>
                 <div class="col-sm-8">
                     <input name="aveCallNum" id="aveCallNum" class="form-control" type="text">
                 </div>
@@ -48,19 +48,19 @@
                 </div>
             </div>-->
             <div class="form-group">    
-                <label class="col-sm-3 control-label">通话时长：</label>
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>通话时长(分钟)：</label>
                 <div class="col-sm-8">
                     <input name="totalCallLen" id="totalCallLen" class="form-control" type="text" required>
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">人均通话时长：</label>
+                <label class="col-sm-3 control-label">人均通话时长(分钟)：</label>
                 <div class="col-sm-8">
                     <input name="avgCallLen" id="avgCallLen" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">接通率：</label>
+                <label class="col-sm-3 control-label">接通率(%)：</label>
                 <div class="col-sm-8">
                     <input name="totalCalledRate" id="totalCalledRate" class="form-control" type="text">
                 </div>
