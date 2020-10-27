@@ -100,6 +100,10 @@ public class TLcReportPersonalController extends BaseController {
                 BigDecimal bigDecimal = new BigDecimal(personal.getPaCallLen());
                 personal.setPaCallLen(String.valueOf(bigDecimal.setScale(2, RoundingMode.HALF_UP)));
             }
+            if (StringUtils.isNoneBlank(personal.getDyCallLen())) {
+                BigDecimal bigDecimal = new BigDecimal(personal.getDyCallLen());
+                personal.setDyCallLen(String.valueOf(bigDecimal.setScale(2, RoundingMode.HALF_UP)));
+            }
             if (StringUtils.isNoneBlank(personal.getTotalCallLen())) {
                 BigDecimal bigDecimal = new BigDecimal(personal.getTotalCallLen());
                 personal.setTotalCallLen(String.valueOf(bigDecimal.setScale(2, RoundingMode.HALF_UP)));

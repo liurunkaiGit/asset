@@ -107,6 +107,7 @@ public class TLpResultController extends BaseController {
     public String edit(@PathVariable("id") Long id, ModelMap mmap) {
         TLpResult tLpResult = tLpResultService.selectTLpResultById(id);
         mmap.put("tLpResult", tLpResult);
+        mmap.put("transferTypeValue", tLpResult.getTransferType());
         return prefix + "/edit";
     }
 

@@ -70,7 +70,10 @@ public class TLpResultServiceImpl implements ITLpResultService {
      */
     @Override
     public int updateTLpResult(TLpResult tLpResult) {
-        tLpResult.setUpdateTime(DateUtils.getNowDate());
+        String[] projectIdName = tLpResult.getProjectIdName().split(",");
+        tLpResult.setOrgId(Long.valueOf(projectIdName[0]));
+        tLpResult.setOrgName(projectIdName[1]);
+        tLpResult.setUpdateBy(ShiroUtils.getSysUser().getUserId().toString());
         return tLpResultMapper.updateTLpResult(tLpResult);
     }
 

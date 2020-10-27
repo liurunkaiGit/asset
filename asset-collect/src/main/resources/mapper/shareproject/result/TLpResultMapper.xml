@@ -53,6 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             and org_id = #{orgId}
             <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
             <if test="importBatchNo == null  or importBatchNo == ''"> and import_batch_no is null</if>
+            <if test="id != null"> and id != #{id}</if>
         </where>
     </select>
 
@@ -105,10 +106,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="predictCommission != null ">predict_commission = #{predictCommission},</if>
             <if test="recycleRate != null  and recycleRate != ''">recycle_rate = #{recycleRate},</if>
             <if test="targetRank != null ">target_rank = #{targetRank},</if>
-            <if test="createBy != null ">create_by = #{createBy},</if>
-            <if test="createTime != null ">create_time = #{createTime},</if>
             <if test="updateBy != null ">update_by = #{updateBy},</if>
-            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateTime != null ">update_time = now(),</if>
         </trim>
         where id = #{id}
     </update>

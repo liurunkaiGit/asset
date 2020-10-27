@@ -13,13 +13,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="zjCalledNum"    column="zj_called_num"    />
         <result property="zjCallLen"    column="zj_call_len"    />
         <result property="zjCallNum"    column="zj_call_num"    />
+        <result property="dyCalledNum"    column="dy_called_num"    />
+        <result property="dyCallLen"    column="dy_call_len"    />
+        <result property="dyCallNum"    column="dy_call_num"    />
         <result property="totalCalledNum"    column="total_called_num"    />
         <result property="totalCallLen"    column="total_call_len"    />
         <result property="totalCallNum"    column="total_call_num"    />
     </resultMap>
 
     <sql id="selectTLcReportPlatformVo">
-        select report_data, time_period, pa_called_num, pa_call_len, pa_call_num, zj_called_num, zj_call_len, zj_call_num, total_called_num, total_call_len, total_call_num from t_lc_report_platform
+        select report_data, time_period, pa_called_num, pa_call_len, pa_call_num, zj_called_num, zj_call_len, zj_call_num, dy_called_num, dy_call_len, dy_call_num, total_called_num, total_call_len, total_call_num from t_lc_report_platform
     </sql>
 
     <select id="selectTLcReportPlatformList" parameterType="com.ruoyi.report.domain.TLcReportPlatform" resultMap="TLcReportPlatformResult">
@@ -49,7 +52,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             MAX(t.pa_call_num) as pa_call_num,
             MAX(t.zj_called_num) as zj_called_num,
             MAX(t.zj_call_len) as zj_call_len,
-            MAX(t.zj_call_num) as zj_call_num
+            MAX(t.zj_call_num) as zj_call_num,
+            MAX(t.dy_called_num) as dy_called_num,
+            MAX(t.dy_call_len) as dy_call_len,
+            MAX(t.dy_call_num) as dy_call_num
         from(
             select
                 CASE t.platform WHEN 'PA' THEN t.called_num END  'pa_called_num',
@@ -58,6 +64,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 CASE t.platform WHEN 'ZJ' THEN t.called_num END  'zj_called_num',
                 CASE t.platform WHEN 'ZJ' THEN t.call_len/1000/60 END  'zj_call_len',
                 CASE t.platform WHEN 'ZJ' THEN t.call_num END  'zj_call_num',
+                CASE t.platform WHEN 'DY' THEN t.called_num END  'dy_called_num',
+                CASE t.platform WHEN 'DY' THEN t.call_len/1000/60 END  'dy_call_len',
+                CASE t.platform WHEN 'DY' THEN t.call_num END  'dy_call_num',
                 t.report_data,
                 t.time_period
             from t_lc_report_platform_new t where t.report_data = #{reportData}

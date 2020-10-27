@@ -42,6 +42,9 @@ public class TLcReportPersonalServiceImpl implements ITLcReportPersonalService {
                 Integer zjCalledNum = 0;
                 Integer zjCallNum = 0;
                 BigDecimal zjCalledLen = new BigDecimal(0.00);
+                Integer dyCalledNum = 0;
+                Integer dyCallNum = 0;
+                BigDecimal dyCalledLen = new BigDecimal(0.00);
                 Integer totalCalledNum = 0;
                 Integer totalCallNum = 0;
                 BigDecimal totalCalledLen = new BigDecimal(0.00);
@@ -50,9 +53,9 @@ public class TLcReportPersonalServiceImpl implements ITLcReportPersonalService {
                 for (TLcReportPersonal personal : personalMap.getValue()) {
                     timePeriodList.add(personal.getTimePeriod());
                     // 计算每一行的合计值
-                    Integer rowTotalCalledNum = (personal.getPaCalledNum() == null ? 0 : personal.getPaCalledNum()) + (personal.getZjCalledNum() == null ? 0 : personal.getZjCalledNum());
-                    Integer rowTotalCallNum = (personal.getPaCallNum() == null ? 0 : personal.getPaCallNum()) + (personal.getZjCallNum() == null ? 0 : personal.getZjCallNum());
-                    String rowTotalCallLen = String.valueOf(org.apache.commons.lang3.StringUtils.isEmpty(personal.getPaCallLen()) ? new BigDecimal(0.00) : new BigDecimal(personal.getPaCallLen()).add(StringUtils.isEmpty(personal.getZjCallLen()) ? new BigDecimal(0.00) : new BigDecimal(personal.getZjCallLen())));
+                    Integer rowTotalCalledNum = (personal.getPaCalledNum() == null ? 0 : personal.getPaCalledNum()) + (personal.getZjCalledNum() == null ? 0 : personal.getZjCalledNum()) + (personal.getDyCalledNum() == null ? 0 : personal.getDyCalledNum());
+                    Integer rowTotalCallNum = (personal.getPaCallNum() == null ? 0 : personal.getPaCallNum()) + (personal.getZjCallNum() == null ? 0 : personal.getZjCallNum()) + (personal.getDyCallNum() == null ? 0 : personal.getDyCallNum());
+                    String rowTotalCallLen = String.valueOf(org.apache.commons.lang3.StringUtils.isEmpty(personal.getPaCallLen()) ? new BigDecimal(0.00) : new BigDecimal(personal.getPaCallLen()).add(StringUtils.isEmpty(personal.getZjCallLen()) ? new BigDecimal(0.00) : new BigDecimal(personal.getZjCallLen())).add(StringUtils.isEmpty(personal.getDyCallLen()) ? new BigDecimal(0.00) : new BigDecimal(personal.getDyCallLen())));
                     // 设置每一行的合计值
                     personal.setTotalCalledNum(rowTotalCalledNum);
                     personal.setTotalCallNum(rowTotalCallNum);
@@ -64,6 +67,9 @@ public class TLcReportPersonalServiceImpl implements ITLcReportPersonalService {
                     zjCalledNum += personal.getZjCalledNum() == null ? 0 : personal.getZjCalledNum();
                     zjCallNum += personal.getZjCallNum() == null ? 0 : personal.getZjCallNum();
                     zjCalledLen = zjCalledLen.add(StringUtils.isEmpty(personal.getZjCallLen()) ? new BigDecimal(0.00) : new BigDecimal(personal.getZjCallLen()));
+                    dyCalledNum += personal.getDyCalledNum() == null ? 0 : personal.getDyCalledNum();
+                    dyCallNum += personal.getDyCallNum() == null ? 0 : personal.getDyCallNum();
+                    dyCalledLen = dyCalledLen.add(StringUtils.isEmpty(personal.getDyCallLen()) ? new BigDecimal(0.00) : new BigDecimal(personal.getDyCallLen()));
                     totalCalledNum += personal.getTotalCalledNum();
                     totalCallNum += personal.getTotalCallNum();
                     totalCalledLen = totalCalledLen.add(new BigDecimal(personal.getTotalCallLen()));
@@ -142,6 +148,9 @@ public class TLcReportPersonalServiceImpl implements ITLcReportPersonalService {
                         .zjCalledNum(zjCalledNum)
                         .zjCallNum(zjCallNum)
                         .zjCallLen(String.valueOf(zjCalledLen))
+                        .dyCalledNum(dyCalledNum)
+                        .dyCallNum(dyCallNum)
+                        .dyCallLen(String.valueOf(dyCalledLen))
                         .totalCalledNum(totalCalledNum)
                         .totalCallNum(totalCallNum)
                         .totalCallLen(String.valueOf(totalCalledLen))

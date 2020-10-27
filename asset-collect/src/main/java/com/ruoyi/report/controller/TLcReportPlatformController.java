@@ -76,6 +76,10 @@ public class TLcReportPlatformController extends BaseController {
                 BigDecimal bigDecimal = new BigDecimal(platform.getPaCallLen());
                 platform.setPaCallLen(String.valueOf(bigDecimal.setScale(2, RoundingMode.HALF_UP)));
             }
+            if (StringUtils.isNoneBlank(platform.getDyCallLen())) {
+                BigDecimal bigDecimal = new BigDecimal(platform.getDyCallLen());
+                platform.setDyCallLen(String.valueOf(bigDecimal.setScale(2, RoundingMode.HALF_UP)));
+            }
             if (StringUtils.isNoneBlank(platform.getTotalCallLen())) {
                 BigDecimal bigDecimal = new BigDecimal(platform.getTotalCallLen());
                 platform.setTotalCallLen(String.valueOf(bigDecimal.setScale(2, RoundingMode.HALF_UP)));

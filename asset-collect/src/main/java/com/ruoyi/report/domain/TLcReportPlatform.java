@@ -77,6 +77,24 @@ public class TLcReportPlatform extends BaseEntity {
     private Integer zjCallNum;
 
     /**
+     * 度言通话次数
+     */
+    @Excel(name = "度言通话次数")
+    private Integer dyCalledNum;
+
+    /**
+     * 度言通话时长
+     */
+    @Excel(name = "度言通话时长(分)")
+    private String dyCallLen;
+
+    /**
+     * 度言拨打次数
+     */
+    @Excel(name = "度言拨打次数")
+    private Integer dyCallNum;
+
+    /**
      * 全部通话次数
      */
     @Excel(name = "全部通话次数")

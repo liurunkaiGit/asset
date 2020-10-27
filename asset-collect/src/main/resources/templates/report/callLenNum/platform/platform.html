@@ -156,6 +156,46 @@
                         }
                     }
                 },
+                    {
+                        field : 'dyCalledNum',
+                        title : '度言通话次数',
+                        formatter: function (value, row, index) {
+                            if (row.timePeriod == '合计') {
+                                if (value != null && value != '') {
+                                    return '<b>' + value + '</b>';
+                                }
+                            } else {
+                                return value;
+                            }
+                        }
+                    },
+                    {
+                        field : 'dyCallLen',
+                        title : '度言通话时长(分)',
+                        formatter: function (value, row, index) {
+                            // return callLenFix(value);
+                            if (row.timePeriod == '合计') {
+                                if (value != null && value != '') {
+                                    return '<b>' + callLenFix(value) + '</b>';
+                                }
+                            } else {
+                                return callLenFix(value);
+                            }
+                        }
+                    },
+                    {
+                        field : 'dyCallNum',
+                        title : '度言拨打次数',
+                        formatter: function (value, row, index) {
+                            if (row.timePeriod == '合计') {
+                                if (value != null && value != '') {
+                                    return '<b>' + value + '</b>';
+                                }
+                            } else {
+                                return value;
+                            }
+                        }
+                    },
                 {
                     field : 'totalCalledNum',
                     title : '全部通话次数',

@@ -6,13 +6,14 @@
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <input type="hidden" name="transferTypeValue" id="transferTypeValue" th:value="${transferTypeValue}">
         <form class="form-horizontal m" id="form-result-edit" th:object="${tLpResult}">
-            <input name="id" th:field="*{id}" type="hidden">
+            <input name="id" id="id" th:field="*{id}" type="hidden">
             <div class="form-group">    
                 <label class="col-sm-3 control-label">日期：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
-                        <input name="reportDate" th:value="${#dates.format(tLpResult.reportDate, 'yyyy-MM-dd')}" class="form-control time-input" placeholder="yyyy-MM-dd" type="text" readonly>
+                        <input name="reportDate" id="reportDate" th:value="${#dates.format(tLpResult.reportDate, 'yyyy-MM-dd')}" class="form-control time-input" placeholder="yyyy-MM-dd" type="text">
                     </div>
                 </div>
             </div>
@@ -23,55 +24,54 @@
                 </div>-->
                 <div class="col-sm-8">
                     <input name="orgId" id="orgIdValue" th:field="*{orgId}" class="form-control" type="hidden">
-                    <input name="orgId" id="orgName" th:field="*{orgName}" class="form-control" readonly>
-                    <!--<select name="projectIdName" id="orgId" class="form-control m-b" onchange="selectTransferTypeByProject()" required readonly>
-                        <option value="">所有</option>
-                    </select>-->
+                    <select name="projectIdName" id="orgId" class="form-control" onchange="selectTransferTypeByProject()" required>
+                        <!--<option value="">所有</option>-->
+                    </select>
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">账龄：</label>
                 <div class="col-sm-8">
-                    <!--<select name="transferType" class="form-control m-b">
-                        <option value="">所有</option>
-                    </select>-->
-                    <input name="transferType" id="transferType" th:field="*{transferType}" class="form-control" readonly>
+                    <select name="transferType" id="transferType" class="form-control">
+                        <!--<option value="">所有</option>-->
+                    </select>
+                    <!--<input type="hidden" id="transferTypeValue" th:field="*{transferType}" class="form-control">-->
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">委案批次：</label>
                 <div class="col-sm-8">
-                    <input name="importBatchNo" th:field="*{importBatchNo}" class="form-control" type="text" readonly>
+                    <input name="importBatchNo" id="importBatchNo" th:field="*{importBatchNo}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">佣金比例：</label>
                 <div class="col-sm-8">
-                    <input name="commissionProportion" th:field="*{commissionProportion}" class="form-control" type="text">
+                    <input name="commissionProportion" id="commissionProportion" th:field="*{commissionProportion}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">累计回收：</label>
                 <div class="col-sm-8">
-                    <input name="totalRecycle" th:field="*{totalRecycle}" class="form-control" type="text">
+                    <input name="totalRecycle" id="totalRecycle" th:field="*{totalRecycle}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">预计佣金：</label>
                 <div class="col-sm-8">
-                    <input name="predictCommission" th:field="*{predictCommission}" class="form-control" type="text">
+                    <input name="predictCommission" id="predictCommission" th:field="*{predictCommission}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">回收率：</label>
                 <div class="col-sm-8">
-                    <input name="recycleRate" th:field="*{recycleRate}" class="form-control" type="text">
+                    <input name="recycleRate" id="recycleRate" th:field="*{recycleRate}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">目标排名：</label>
                 <div class="col-sm-8">
-                    <input name="targetRank" th:field="*{targetRank}" class="form-control" type="number">
+                    <input name="targetRank" id="targetRank" th:field="*{targetRank}" class="form-control" type="number">
                 </div>
             </div>
         </form>
@@ -100,9 +100,27 @@
                     return;
                 }
             }
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/edit", $('#form-result-edit').serialize());
-            }
+            $.post(
+                prefix + "/selectProjectResultUnique",
+                {
+                    reportDate: $("#reportDate").val(),
+                    transferType: $("#transferType").val(),
+                    orgId: $("#orgId").val().split(",")[0],
+                    importBatchNo: $("#importBatchNo").val(),
+                    id: $("#id").val()
+                },
+                function(data) {
+                    if(data.status == 200){
+                        if (data.result > 0) {
+                            $.modal.alertError("日期+账龄+项目+委案批次只能唯一");
+                        } else {
+                            if ($.validate.form()) {
+                                $.operate.save(prefix + "/edit", $('#form-result-edit').serialize());
+                            }
+                        }
+                    }
+                }
+            );
         }
 
         // $("input[name='reportDate']").datetimepicker({
@@ -112,23 +130,75 @@
         // });
 
         $(function () {
-            // initProject();
+            initProject();
+            initTransferType();
         })
+
+        /**
+         * 根据项目获取相应账龄
+         */
+        function selectTransferTypeByProject() {
+            var obj=document.getElementById('transferType');
+            obj.options.length=0;
+            var projectId = $("#orgId").val().split(",")[0];
+            $.post(
+                prefix + "/selectById",
+                {
+                    id: projectId
+                },
+                function(data) {
+                    if(data.status == 200){
+                        var opt = "<option value=''>请选择</option>";
+                        $("#transferType").append(opt);
+                        var accountAges = data.result.accountAge.split(",")
+                        for (var i = 0; i < accountAges.length; i++) {
+                            var ob = accountAges[i];
+                            var opt = "<option value='"+ob+"'>"+ob+"</option>";
+                            $("#transferType").append(opt);
+                        }
+                    }
+                }
+            );
+        }
 
         function initProject() {
             var orgIdValue = $("#orgIdValue").val();
             $.post(
-                taskPrefix+"/initOrg",
+                ctx + "shareproject/projectinformation/listxl",
                 function(data) {
-                    // alert(JSON.stringify(data));
-                    if (data.code == 0) {//请求成功
-                        for (var i = 0; i < data.rows.length; i++) {
-                            if (orgIdValue == data.rows[i].deptId) {
-                                var opt = "<option value='"+data.rows[i].deptId+"' selected>"+data.rows[i].deptName+"</option>";
+                    for (var i = 0; i < data.length; i++) {
+                        if (orgIdValue == data[i].id) {
+                            var opt = "<option value='"+data[i].id+","+data[i].names+"' selected>"+data[i].names+"</option>";
+                        } else {
+                            var opt = "<option value='"+data[i].id+","+data[i].names+"'>"+data[i].names+"</option>";
+                        }
+                        $("#orgId").append(opt);
+                    }
+                }
+            );
+        }
+
+        function initTransferType() {
+            var projectId = $("#orgIdValue").val();
+            var transferTypeValue = $("#transferTypeValue").val();
+            $.post(
+                prefix + "/selectById",
+                {
+                    id: projectId
+                },
+                function(data) {
+                    if(data.status == 200){
+                        var opt = "<option value=''>请选择</option>";
+                        $("#transferType").append(opt);
+                        var accountAges = data.result.accountAge.split(",")
+                        for (var i = 0; i < accountAges.length; i++) {
+                            var ob = accountAges[i];
+                            if (transferTypeValue == ob) {
+                                var opt = "<option value='"+ob+"' selected>"+ob+"</option>";
                             } else {
-                                var opt = "<option value='"+data.rows[i].deptId+"'>"+data.rows[i].deptName+"</option>";
+                                var opt = "<option value='"+ob+"'>"+ob+"</option>";
                             }
-                            $("#orgId").append(opt);
+                            $("#transferType").append(opt);
                         }
                     }
                 }

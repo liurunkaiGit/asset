@@ -126,15 +126,18 @@ public class TLcReportPlatformServiceImpl implements ITLcReportPlatformService {
             Integer zjCalledNum = 0;
             Integer zjCallNum = 0;
             BigDecimal zjCalledLen = new BigDecimal(0.00);
+            Integer dyCalledNum = 0;
+            Integer dyCallNum = 0;
+            BigDecimal dyCalledLen = new BigDecimal(0.00);
             Integer totalCalledNum = 0;
             Integer totalCallNum = 0;
             BigDecimal totalCalledLen = new BigDecimal(0.00);
             // 遍历计算合计行的合计值
             for (TLcReportPlatform platform : list) {
                 // 计算每一行的合计值
-                Integer rowTotalCalledNum = (platform.getPaCalledNum() == null ? 0 : platform.getPaCalledNum()) + (platform.getZjCalledNum() == null ? 0 : platform.getZjCalledNum());
-                Integer rowTotalCallNum = (platform.getPaCallNum() == null ? 0 : platform.getPaCallNum()) + (platform.getZjCallNum() == null ? 0 : platform.getZjCallNum());
-                String rowTotalCallLen = String.valueOf(StringUtils.isEmpty(platform.getPaCallLen()) ? new BigDecimal(0.00) : new BigDecimal(platform.getPaCallLen()).add(StringUtils.isEmpty(platform.getZjCallLen()) ? new BigDecimal(0.00) : new BigDecimal(platform.getZjCallLen())));
+                Integer rowTotalCalledNum = (platform.getPaCalledNum() == null ? 0 : platform.getPaCalledNum()) + (platform.getZjCalledNum() == null ? 0 : platform.getZjCalledNum()) + (platform.getDyCalledNum() == null ? 0 : platform.getDyCalledNum());
+                Integer rowTotalCallNum = (platform.getPaCallNum() == null ? 0 : platform.getPaCallNum()) + (platform.getZjCallNum() == null ? 0 : platform.getZjCallNum()) + (platform.getDyCallNum() == null ? 0 : platform.getDyCallNum());
+                String rowTotalCallLen = String.valueOf(StringUtils.isEmpty(platform.getPaCallLen()) ? new BigDecimal(0.00) : new BigDecimal(platform.getPaCallLen()).add(StringUtils.isEmpty(platform.getZjCallLen()) ? new BigDecimal(0.00) : new BigDecimal(platform.getZjCallLen())).add(StringUtils.isEmpty(platform.getDyCallLen()) ? new BigDecimal(0.00) : new BigDecimal(platform.getDyCallLen())));
                 // 设置每一行的合计
                 platform.setTotalCalledNum(rowTotalCalledNum);
                 platform.setTotalCallNum(rowTotalCallNum);
@@ -146,6 +149,9 @@ public class TLcReportPlatformServiceImpl implements ITLcReportPlatformService {
                 zjCalledNum += platform.getZjCalledNum() == null ? 0 : platform.getZjCalledNum();
                 zjCallNum += platform.getZjCallNum() == null ? 0 : platform.getZjCallNum();
                 zjCalledLen = zjCalledLen.add(StringUtils.isEmpty(platform.getZjCallLen()) ? new BigDecimal(0.00) : new BigDecimal(platform.getZjCallLen()));
+                dyCalledNum += platform.getDyCalledNum() == null ? 0 : platform.getDyCalledNum();
+                dyCallNum += platform.getDyCallNum() == null ? 0 : platform.getDyCallNum();
+                dyCalledLen = dyCalledLen.add(StringUtils.isEmpty(platform.getDyCallLen()) ? new BigDecimal(0.00) : new BigDecimal(platform.getDyCallLen()));
                 totalCalledNum += platform.getTotalCalledNum();
                 totalCallNum += platform.getTotalCallNum();
                 totalCalledLen = totalCalledLen.add(new BigDecimal(platform.getTotalCallLen()));
@@ -159,6 +165,9 @@ public class TLcReportPlatformServiceImpl implements ITLcReportPlatformService {
                     .zjCalledNum(zjCalledNum)
                     .zjCallNum(zjCallNum)
                     .zjCallLen(String.valueOf(zjCalledLen))
+                    .dyCalledNum(dyCalledNum)
+                    .dyCallNum(dyCallNum)
+                    .dyCallLen(String.valueOf(dyCalledLen))
                     .totalCalledNum(totalCalledNum)
                     .totalCallNum(totalCallNum)
                     .totalCallLen(String.valueOf(totalCalledLen))
