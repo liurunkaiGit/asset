@@ -267,6 +267,9 @@ public class TLcCallRecord extends BaseEntity {
      */
     private BigDecimal cnje;
 
+    private String tjWd;
+    private String areaCenter;
+
 
 
 }

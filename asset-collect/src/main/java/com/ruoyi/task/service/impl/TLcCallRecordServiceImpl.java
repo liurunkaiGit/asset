@@ -18,10 +18,7 @@ import com.ruoyi.radioQc.service.ITLcSendRadioQcRecordService;
 import com.ruoyi.robot.domain.CallContent;
 import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysUserService;
-import com.ruoyi.task.domain.JxphCallRecord;
-import com.ruoyi.task.domain.TLcCallRecord;
-import com.ruoyi.task.domain.TLcCallRecordForJX;
-import com.ruoyi.task.domain.TLcCallRecordForXY;
+import com.ruoyi.task.domain.*;
 import com.ruoyi.task.mapper.TLcCallRecordMapper;
 import com.ruoyi.task.service.ITLcCallRecordService;
 import com.ruoyi.task.service.ITLcTaskService;
@@ -435,6 +432,49 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
         List<TLcCallRecord> list = tLcCallRecordMapper.selectTLcCallRecordList(tLcCallRecord);
         List<TLcCallRecordForJX> jxList = this.convertJXList(list,tLcCallRecord);
         return jxList;
+    }
+
+    @Override
+    public List<TLcCallRecordForDQ> selectTLcCallRecordListForDQ(TLcCallRecord tLcCallRecord) {
+        if (tLcCallRecord.getEndCreateTime() != null) {
+            tLcCallRecord.setEndCreateTime(DateUtils.getEndOfDay(tLcCallRecord.getEndCreateTime()));
+        }
+        if (tLcCallRecord.getEndCallStartTime() != null) {
+            tLcCallRecord.setEndCallStartTime(DateUtils.getEndOfDay(tLcCallRecord.getEndCallStartTime()));
+        }
+        if (tLcCallRecord.getStartCallLen() != null) {
+            tLcCallRecord.setStartCallLen(tLcCallRecord.getStartCallLen() * 1000);
+        }
+        if (tLcCallRecord.getEndCallLen() != null) {
+            tLcCallRecord.setEndCallLen(tLcCallRecord.getEndCallLen() * 1000);
+        }
+        List<TLcCallRecord> list = tLcCallRecordMapper.selectTLcCallRecordList(tLcCallRecord);
+        List<TLcCallRecordForDQ> dqList = this.ConvertDQList(list);
+        return dqList;
+    }
+
+    private List<TLcCallRecordForDQ> ConvertDQList(List<TLcCallRecord> list) {
+        List<TLcCallRecordForDQ> dqList = list.stream().map(callRecord -> {
+            TLcCallRecordForDQ tLcCallRecordForDQ = new TLcCallRecordForDQ();
+            String callSign = callRecord.getCallSignEn();
+            tLcCallRecordForDQ.setSque(callRecord.getSque())
+                    .setCaseNo(callRecord.getCaseNo())
+                    .setAreaCenter(callRecord.getAreaCenter())
+                    .setCustomName(callRecord.getCustomName())
+                    .setTjWd(callRecord.getTjWd())
+                    .setContactStatus((callSign.equalsIgnoreCase("PTP") || callSign.equalsIgnoreCase("CYH") || callSign.equalsIgnoreCase("TP") || callSign.equalsIgnoreCase("WCY") || callSign.equalsIgnoreCase("HKKN") || callSign.equalsIgnoreCase("ZG") || callSign.equalsIgnoreCase("R01") || callSign.equalsIgnoreCase("FBRJT") || callSign.equalsIgnoreCase("BPHZG")) ? "可联" : "失联")
+                    .setRepayStatus(callSign.equalsIgnoreCase("CYH")?"称已还":null)
+                    .setActualRepayAmount(callRecord.getCnje())
+                    .setContactRelation(callRecord.getContactRelation())
+                    .setAgentName(callRecord.getAgentName())
+                    .setCallSign(callRecord.getCallSign())
+                    .setCollRecord(callRecord.getRemark())
+                    .setRmbYe(callRecord.getArrearsTotal())
+                    .setOverdueDays(callRecord.getOverdueDays())
+                    .setCreateTime(callRecord.getCreateTime());
+            return tLcCallRecordForDQ;
+        }).collect(Collectors.toList());
+        return dqList;
     }
 
     private List<TLcCallRecordForJX> convertJXList(List<TLcCallRecord> list, TLcCallRecord tLcCallRecord) {

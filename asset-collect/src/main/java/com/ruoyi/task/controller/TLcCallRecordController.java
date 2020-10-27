@@ -13,6 +13,7 @@ import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.robot.domain.CallContent;
 import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.task.domain.TLcCallRecord;
+import com.ruoyi.task.domain.TLcCallRecordForDQ;
 import com.ruoyi.task.domain.TLcCallRecordForJX;
 import com.ruoyi.task.domain.TLcCallRecordForXY;
 import com.ruoyi.task.service.ITLcCallRecordService;
@@ -83,6 +84,7 @@ public class TLcCallRecordController extends BaseController {
     public AjaxResult export(TLcCallRecord tLcCallRecord) {
         String configValue = sysConfigService.selectConfigByKey("orgId");
         String jxOrgId = sysConfigService.selectConfigByKey("jxOrgId");
+        String dqOrgId = sysConfigService.selectConfigByKey("dqConfigOrgId");
         String orgId = tLcCallRecord.getOrgId();
         if(configValue.equals(orgId)){//兴业导出
             List<TLcCallRecordForXY> list = tLcCallRecordService.selectTLcCallRecordListForXY(tLcCallRecord);
@@ -92,7 +94,11 @@ public class TLcCallRecordController extends BaseController {
             List<TLcCallRecordForJX> list = tLcCallRecordService.selectTLcCallRecordListForJX(tLcCallRecord);
             ExcelUtil<TLcCallRecordForJX> util = new ExcelUtil<>(TLcCallRecordForJX.class);
             return util.exportExcel(list, "record", "捷信消金华道催记" + DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS, new Date()));
-        } else {
+        } else if (dqOrgId.equals(orgId)) {
+            List<TLcCallRecordForDQ> list = tLcCallRecordService.selectTLcCallRecordListForDQ(tLcCallRecord);
+            ExcelUtil<TLcCallRecordForDQ> util = new ExcelUtil<>(TLcCallRecordForDQ.class);
+            return util.exportExcel(list, "record", "东乔催记");
+        }else {
             List<TLcCallRecord> list = tLcCallRecordService.selectTLcCallRecordList(tLcCallRecord);
             ExcelUtil<TLcCallRecord> util = new ExcelUtil<TLcCallRecord>(TLcCallRecord.class);
             return util.exportExcel(list, "record",System.currentTimeMillis() + "record");
