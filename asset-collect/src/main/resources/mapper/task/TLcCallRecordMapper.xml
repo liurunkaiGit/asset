@@ -232,6 +232,7 @@
             <if test="agentName != null and agentName != ''">agent_name,</if>
             <if test="makeCallTime != null">make_call_time,</if>
             <if test="actionCode != null and actionCode != ''">action_code,</if>
+            <if test="cnje != null">cnje,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <!--<if test="certificateNo != null  and certificateNo != ''">#{certificateNo},</if>-->
@@ -255,6 +256,7 @@
             <if test="agentName != null and agentName != ''">#{agentName},</if>
             <if test="makeCallTime != null">#{makeCallTime},</if>
             <if test="actionCode != null and actionCode != ''">#{actionCode},</if>
+            <if test="cnje != null">#{cnje},</if>
         </trim>
     </insert>
 

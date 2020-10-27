@@ -262,6 +262,11 @@ public class TLcCallRecord extends BaseEntity {
      */
     private String taskId;
 
+    /**
+     * 承诺金额
+     */
+    private BigDecimal cnje;
+
 
 
 }
