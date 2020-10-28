@@ -338,8 +338,7 @@
             FROM
                 t_lc_call_record t,t_lc_task ta
             WHERE
-            t.case_no = ta.case_no
-            and ta.task_status != 3
+            t.case_no = ta.case_no and ta.org_id = #{orgId} and ta.task_status != 3
             AND EXISTS (
             SELECT
             cc.call_code
