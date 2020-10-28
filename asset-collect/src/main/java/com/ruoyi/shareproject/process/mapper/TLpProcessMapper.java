@@ -58,4 +58,6 @@ public interface TLpProcessMapper {
      * @return 结果
      */
     public int deleteTLpProcessByIds(String[] ids);
+
+    Integer selectProjectProcessUnique(TLpProcess tLpProcess);
 }

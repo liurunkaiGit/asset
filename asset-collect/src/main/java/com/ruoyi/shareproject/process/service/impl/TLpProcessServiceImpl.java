@@ -167,4 +167,9 @@ public class TLpProcessServiceImpl implements ITLpProcessService {
         }
         return tLpProcess;
     }
+
+    @Override
+    public Integer selectProjectProcessUnique(TLpProcess tLpProcess) {
+        return this.tLpProcessMapper.selectProjectProcessUnique(tLpProcess);
+    }
 }

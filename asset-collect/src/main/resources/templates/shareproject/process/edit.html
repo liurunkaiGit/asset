@@ -7,7 +7,7 @@
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-process-edit" th:object="${tLpProcess}">
-            <input name="id" th:field="*{id}" type="hidden">
+            <input name="id" th:field="*{id}" id="id" type="hidden">
             <div class="form-group">    
                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>日期：</label>
                 <div class="col-sm-8">
@@ -142,9 +142,25 @@
                     return;
                 }
             }
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/edit", $('#form-process-edit').serialize());
-            }
+            $.post(
+                prefix + "/selectProjectProcessUnique",
+                {
+                    reportDate: $("#reportDate").val(),
+                    orgId: $("#orgId").val().split(",")[0],
+                    id: $("#id").val()
+                },
+                function(data) {
+                    if(data.status == 200){
+                        if (data.result > 0) {
+                            $.modal.alertError("日期+项目只能唯一");
+                        } else {
+                            if ($.validate.form()) {
+                                $.operate.save(prefix + "/edit", $('#form-process-edit').serialize());
+                            }
+                        }
+                    }
+                }
+            );
         }
 
         /*$("input[name='reportDate']").datetimepicker({

@@ -13,6 +13,7 @@ import com.ruoyi.shareproject.process.domain.TLpProcess;
 import com.ruoyi.shareproject.process.service.ITLpProcessService;
 import com.ruoyi.shareproject.projectinformation.domain.TLpProjectInformation;
 import com.ruoyi.shareproject.projectinformation.service.ITLpProjectInformationService;
+import com.ruoyi.shareproject.result.domain.TLpResult;
 import com.ruoyi.utils.Response;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,5 +144,15 @@ public class TLpProcessController extends BaseController {
         TLpProcess tLpProcess = this.tLpProcessService.selectTLpProcessById(id);
         mmap.put("tLpProcess", tLpProcess);
         return prefix + "/copy";
+    }
+
+    /**
+     * 查找唯一
+     */
+    @PostMapping("selectProjectProcessUnique")
+    @ResponseBody
+    public Response selectProjectProcessUnique(TLpProcess tLpProcess) {
+        Integer count = this.tLpProcessService.selectProjectProcessUnique(tLpProcess);
+        return Response.success(count);
     }
 }

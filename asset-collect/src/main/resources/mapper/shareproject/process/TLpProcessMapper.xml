@@ -46,7 +46,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectTLpProcessVo"/>
         where id = #{id}
     </select>
-        
+
+    <select id="selectProjectProcessUnique" parameterType="com.ruoyi.shareproject.process.domain.TLpProcess" resultType="java.lang.Integer">
+        select count(1) from t_lp_process
+        <where>
+            and report_date = #{reportDate}
+            and org_id = #{orgId}
+            <if test="id != null"> and id != #{id}</if>
+        </where>
+    </select>
+
     <insert id="insertTLpProcess" parameterType="com.ruoyi.shareproject.process.domain.TLpProcess" useGeneratedKeys="true" keyProperty="id">
         insert into t_lp_process
         <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -60,4 +60,6 @@ public interface ITLpProcessService {
     public int deleteTLpProcessById(Long id);
 
     TLpProcess selectDayProcess(TLpProcess tLpProcess);
+
+    Integer selectProjectProcessUnique(TLpProcess tLpProcess);
 }

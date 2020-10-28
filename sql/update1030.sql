@@ -20,7 +20,7 @@ CREATE TABLE `t_lp_finance_commission` (
 
 -- 菜单 SQL
 INSERT INTO `sys_menu` (`menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
-VALUES ('财务核算', (select t.menu_id from sys_menu t where t.menu_name = '共享信息管理'), '4', '#', 'menuItem', 'M', '0', NULL, '#', 'admin', NOW(), '', NULL, '');
+VALUES ('财务核算', (select t.menu_id from sys_menu t where t.menu_name = '共享管理'), '4', '#', 'menuItem', 'M', '0', NULL, '#', 'admin', NOW(), '', NULL, '');
 
 insert into sys_menu (menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
 values('财务结佣', (select t.menu_id from sys_menu t where t.menu_name = '财务核算'), '1', '/finance/commission', 'C', '0', 'finance:commission:view', '#', 'admin', NOW(), 'admin', NOW(), '财务结佣');
@@ -34,3 +34,6 @@ values('查询', @parentId, '1',  '#',  'F', '0', 'finance:commission:list',    
 
 insert into sys_menu  (menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
 values('导出', @parentId, '2',  '#',  'F', '0', 'finance:commission:export',       '#', 'admin', 'admin', NOW(), 'admin', NOW(), '');
+
+INSERT INTO `sys_job` (`job_name`, `job_group`, `invoke_target`, `cron_expression`, `misfire_policy`, `concurrent`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES ('生成任务结佣数据', 'DEFAULT', 'financeSchedule.createCommission', '0 0 0 1 * ?', '1', '1', '1', 'admin', '2020-10-27 18:42:56', '', NULL, '每个月1号生成任务结佣数据');

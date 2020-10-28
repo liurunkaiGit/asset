@@ -142,9 +142,24 @@
                     return;
                 }
             }
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/add", $('#form-process-edit').serialize());
-            }
+            $.post(
+                prefix + "/selectProjectProcessUnique",
+                {
+                    reportDate: $("#reportDate").val(),
+                    orgId: $("#orgId").val().split(",")[0]
+                },
+                function(data) {
+                    if(data.status == 200){
+                        if (data.result > 0) {
+                            $.modal.alertError("日期+项目只能唯一");
+                        } else {
+                            if ($.validate.form()) {
+                                $.operate.save(prefix + "/add", $('#form-process-edit').serialize());
+                            }
+                        }
+                    }
+                }
+            );
         }
 
         /*$("input[name='reportDate']").datetimepicker({
