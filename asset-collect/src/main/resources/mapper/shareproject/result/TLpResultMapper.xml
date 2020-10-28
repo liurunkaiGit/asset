@@ -38,6 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and report_date <![CDATA[<=]]> #{endReportDate}
             </if>
         </where>
+        order by report_date desc
     </select>
     
     <select id="selectTLpResultById" parameterType="Long" resultMap="TLpResultResult">

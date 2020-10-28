@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shareproject.finance.commission.mapper.TLpFinanceCommissionMapper">
+    
+    <resultMap type="com.ruoyi.shareproject.finance.commission.domain.TLpFinanceCommission" id="TLpFinanceCommissionResult">
+        <result property="id"    column="id"    />
+        <result property="month"    column="month"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="totalNum"    column="total_num"    />
+        <result property="latestPredictCommission"    column="latest_predict_commission"    />
+        <result property="actualCommission"    column="actual_commission"    />
+        <result property="commissionDifferent"    column="commission_different"    />
+        <result property="feeStatus"    column="fee_status"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTLpFinanceCommissionVo">
+        select id, month, project_id, project_name, total_num, latest_predict_commission, actual_commission, commission_different, fee_status, update_by, update_time from t_lp_finance_commission
+    </sql>
+
+    <select id="selectTLpFinanceCommissionList" parameterType="com.ruoyi.shareproject.finance.commission.domain.TLpFinanceCommission" resultMap="TLpFinanceCommissionResult">
+        <include refid="selectTLpFinanceCommissionVo"/>
+        <where>
+            <if test="startMonth != null and startMonth != ''">
+                and month <![CDATA[>=]]> #{startMonth}
+            </if>
+            <if test="endMonth != null and endMonth != ''">
+                and month <![CDATA[<=]]> #{endMonth}
+            </if>
+            <if test="projectId != null "> and project_id = #{projectId}</if>
+            <if test="idList != null">
+                and id in
+                <foreach collection="idList" item="id" open="(" close=")" separator=",">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectTLpFinanceCommissionById" parameterType="Long" resultMap="TLpFinanceCommissionResult">
+        <include refid="selectTLpFinanceCommissionVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLpFinanceCommission" parameterType="com.ruoyi.shareproject.finance.commission.domain.TLpFinanceCommission" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lp_finance_commission
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="month != null  and month != ''">month,</if>
+            <if test="projectId != null ">project_id,</if>
+            <if test="projectName != null  and projectName != ''">project_name,</if>
+            <if test="totalNum != null ">total_num,</if>
+            <if test="latestPredictCommission != null ">latest_predict_commission,</if>
+            <if test="actualCommission != null ">actual_commission,</if>
+            <if test="commissionDifferent != null ">commission_different,</if>
+            <if test="feeStatus != null ">fee_status,</if>
+            <if test="updateBy != null ">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="month != null  and month != ''">#{month},</if>
+            <if test="projectId != null ">#{projectId},</if>
+            <if test="projectName != null  and projectName != ''">#{projectName},</if>
+            <if test="totalNum != null ">#{totalNum},</if>
+            <if test="latestPredictCommission != null ">#{latestPredictCommission},</if>
+            <if test="actualCommission != null ">#{actualCommission},</if>
+            <if test="commissionDifferent != null ">#{commissionDifferent},</if>
+            <if test="feeStatus != null ">#{feeStatus},</if>
+            <if test="updateBy != null ">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLpFinanceCommission" parameterType="com.ruoyi.shareproject.finance.commission.domain.TLpFinanceCommission">
+        update t_lp_finance_commission
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="month != null  and month != ''">month = #{month},</if>
+            <if test="projectId != null ">project_id = #{projectId},</if>
+            <if test="projectName != null  and projectName != ''">project_name = #{projectName},</if>
+            <if test="totalNum != null ">total_num = #{totalNum},</if>
+            <if test="latestPredictCommission != null ">latest_predict_commission = #{latestPredictCommission},</if>
+            <if test="actualCommission != null ">actual_commission = #{actualCommission},</if>
+            <if test="commissionDifferent != null ">commission_different = #{commissionDifferent},</if>
+            <if test="feeStatus != null ">fee_status = #{feeStatus},</if>
+            <if test="updateBy != null ">update_by = #{updateBy},</if>
+            update_time = now(),
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLpFinanceCommissionById" parameterType="Long">
+        delete from t_lp_finance_commission where id = #{id}
+    </delete>
+
+    <delete id="deleteTLpFinanceCommissionByIds" parameterType="String">
+        delete from t_lp_finance_commission where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

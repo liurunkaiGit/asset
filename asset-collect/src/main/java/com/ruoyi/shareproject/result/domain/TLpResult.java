@@ -3,7 +3,10 @@ package com.ruoyi.shareproject.result.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -15,6 +18,9 @@ import java.util.Date;
  * @date 2020-10-16
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
 public class TLpResult extends BaseEntity {
     private static final long serialVersionUID = 1L;
 

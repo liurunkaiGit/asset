@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('财务结佣列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li class="select-time">
+                                <p>月份：</p>
+                                <input type="text" class="time-input" id="startMonth" placeholder="开始时间" name="startMonth"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endMonth" placeholder="结束时间" name="endMonth"/>
+                            </li>
+                            <li>
+                                <p>项目：</p>
+                                <select name="projectId" id="projectId">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <!--<li>
+                                <p>结费状态，1：已填写，2：未填写：</p>
+                                <select name="feeStatus">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>-->
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <!--<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="finance:commission:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>-->
+                <a class="btn btn-primary single disabled" onclick="setActualCommission()">
+                    <i class="fa fa-edit"></i> 设置实际结佣
+                </a>
+                <!--<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="finance:commission:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>-->
+                <a class="btn btn-warning" onclick="exportExcel()" shiro:hasPermission="finance:commission:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+
+         <div class="col-sm-12">
+             <div class="modal" id="setActualCommissionModal" tabindex="-1" role="dialog" aria-hidden="true">
+                 <div class="modal-dialog">
+                     <div class="modal-content animated bounceInRight">
+                         <div class="modal-header">
+                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
+                             </button>
+                         </div>
+                         <input type="hidden" id="id" />
+                         <div class="modal-body" style="height: 200px;">
+                             <div class="form-group">
+                                 <span style="font-size: 15px;color:black;">&nbsp;&nbsp;月份：<span id="month" readonly></span></span>
+                             </div>
+                             <div class="form-group">
+                                 <span style="font-size: 15px;color:black;">&nbsp;&nbsp;项目：<span id="projectName" readonly></span></span>
+                             </div>
+                             <div class="form-group">
+                                 <span style="font-size: 15px;color:black;">&nbsp;&nbsp;总笔数：<span id="totalNum" readonly></span></span>
+                             </div>
+                             <div class="form-group">
+                                 <span style="font-size: 15px;color:black;">&nbsp;&nbsp;实际结佣：</span>
+                                 <input type="text" style="font-size: 15px;color:black;" id="actualCommission">
+                             </div>
+                         </div>
+                         <div class="modal-footer" style="text-align: center">
+                             <button type="button" class="btn btn-primary" onclick="setActualCommissionSub();">确定</button>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('ruoyi:commission:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('ruoyi:commission:remove')}]];
+        var projectList = [[${projectList}]];
+        var prefix = ctx + "finance/commission";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                clickToSelect: true,
+                modalName: "财务结佣",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '主键id',
+                    visible: false
+                },
+                    {
+                        field : '',
+                        title : '序号',
+                        formatter: function (value, row, index) {
+                            return $.table.serialNumber(index);
+                        },
+                        footerFormatter:function (value) {
+                            return "<font color=\"black\"> <b>合计</b></font>";
+                        }
+                    },
+                {
+                    field : 'month', 
+                    title : '月份'
+                },
+                /*{
+                    field : 'projectId', 
+                    title : '项目id'
+                },*/
+                {
+                    field : 'projectName', 
+                    title : '项目名称'
+                },
+                {
+                    field : 'totalNum', 
+                    title : '总笔数'
+                },
+                {
+                    field : 'latestPredictCommission', 
+                    title : '最新预计结佣'
+                },
+                {
+                    field : 'actualCommission', 
+                    title : '实际结佣'
+                },
+                {
+                    field : 'commissionDifferent', 
+                    title : '结佣差异'
+                },
+                {
+                    field : 'feeStatus', 
+                    title : '结费状态',
+                    formatter: function (value) {
+                        if (value == 1) {
+                            return '已填写';
+                        } else if (value == 2) {
+                            return '未填写';
+                        }
+                    }
+                }]
+            };
+            $.table.init(options);
+            initProject();
+        });
+
+        function initProject() {
+            for (var i = 0; i < projectList.length; i++) {
+                var opt = "<option value='"+projectList[i].id+"'>"+projectList[i].names+"</option>";
+                $("#projectId").append(opt);
+            }
+        }
+        
+        function setActualCommission() {
+            var id = $.table.selectFirstColumns();
+            var month = $.table.selectColumns("month");
+            var projectName = $.table.selectColumns("projectName");
+            var totalNum = $.table.selectColumns("totalNum");
+            $("#id").val(id.join());
+            $("#month").text(month.join());
+            $("#projectName").text(projectName.join());
+            $("#totalNum").text(totalNum.join());
+            $("#actualCommission").val("");
+            $("#setActualCommissionModal").modal('show');
+        }
+
+        function setActualCommissionSub() {
+            var id = $("#id").val();
+            var actualCommission = $("#actualCommission").val();
+            var IntOrDecimalReg = /^[0-9][0-9]*([\.][0-9]{1,2})?$/; //整数或者小数的正则表达式
+            if(actualCommission == null || actualCommission == '') {
+                $.modal.alert("请填写实际结佣金额且必须是整数或者两位小数");
+                return;
+            } else {
+                if (!IntOrDecimalReg.test(actualCommission)) {
+                    $.modal.alert("实际结佣必须是整数或者两位小数");
+                    return;
+                }
+            }
+            var latestPredictCommission = $.table.selectColumns("latestPredictCommission");
+            var totalNum = $.table.selectColumns("totalNum");
+            var url = prefix+'/setActualCommission?actualCommission='+actualCommission+'&id='+id+'&latestPredictCommission='+latestPredictCommission+'&totalNum='+totalNum;
+            $.operate.submit(url);
+            $("#setActualCommissionModal").modal('hide');
+        }
+
+        function exportExcel() {
+            var ids = $.table.selectFirstColumns();
+            $.modal.confirm("确定导出数据吗？", function() {
+                $.modal.loading("正在导出数据，请稍后...");
+                var serializeArray = $("#formId").serializeArray();
+                serializeArray.push({"name":"ids","value":ids.join()});
+                $.post(prefix + "/export", serializeArray, function(result) {
+                    if (result.code == web_status.SUCCESS) {
+                        window.location.href = ctx + "common/downloadByName?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.closeLoading();
+                });
+            });
+        }
+    </script>
+</body>
+</html>
