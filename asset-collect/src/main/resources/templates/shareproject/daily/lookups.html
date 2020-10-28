@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('【项目日报】列表')" />
+</head>
+<body >
+    <input th:type="hidden" id="dailyId"  th:value="${ty.id}">
+    <input th:type="hidden" id="proId"  th:value="${ty.proId}">
+     <div class="container-div">
+            <div class="col-sm-12 select-table table-striped">
+                <div  ><input name="dailyTime" id="dailyTime"  class=" time-input" data-callback="chaqb" th:value="${#dates.format(ty.dailyTime, 'yyyy-MM-dd')}"   style="width: 100px;float: right" required type="text"></div>
+                <div style="text-align: center" ><label th:text="${ty.dailyName}"></label>日报</div>
+                <hr/>
+                <span>一、项目今日小结</span>
+                <table id="bootstrap-table"></table>
+                备注:
+                <label th:text="${ty.remarks}"></label>
+                <hr/>
+                <span>二、项目情况介绍</span>
+                <table id="proqk-table"></table>
+                <hr/>
+                <span>三、项目月度目标</span>
+                <table id="yuedu-table"></table>
+                <hr/>
+                <span>四、项目结果目标</span>
+                <table id="jieguo-table"></table>
+                <hr/>
+                <span>五、项目过程目标</span>
+                <table id="guocheng-table"></table>
+                <hr/>
+                <span>六、客户最新通知</span>
+                <div th:text="${ty.customerUpdate}"></div>
+                <hr/>
+                <span>七、项目其它事项</span>
+                <div th:text="${ty.otherProject}"></div>
+            </div>
+    </div>
+
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('shareproject:daily:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('shareproject:daily:remove')}]];
+        var prefix = ctx + "shareproject/daily";
+
+        var dataXz = [[${@dict.getType('product_nature')}]];
+        var dataSys = [[${@dict.getType('operating_system')}]];
+        var dataHw = [[${@dict.getType('call_platform')}]];
+        //结费方式
+        var dataJf = [[${@dict.getType('settlement_method')}]];
+
+        function chaqb(){
+            var dailyTime = $("#dailyTime").val();
+            var proId = $("#proId").val();
+
+            $.ajax({
+                url: prefix + "/findsone",    //请求的url地址
+                dataType: "json",   //返回格式为json
+                data:
+                    {
+                        "proId": proId,
+                        "dailyTime": dailyTime
+                    },    //参数值
+                type: "POST",   //请求方式
+                success: function(req) {
+                    //请求成功时处理
+                    if(null ==req.id || '' == req.id){
+                        $.modal.alertWarning('选择日期没有生成日报');
+                        return;
+                    }
+                    window.location.href = prefix+"/lookups/"+req.id;
+                },
+                error: function(e) {
+                    $.modal.alertError(e);
+                }
+            });
+        }
+
+        function initFn(){
+            var dId = $("#dailyId").val();
+            $('#bootstrap-table').bootstrapTable({
+                url: prefix + "/listattendanceDaily/"+dId, // 请求路径
+                method: 'post',
+                striped: true, // 是否显示行间隔色
+                queryParams: function(params) { // 上传服务器的参数
+                    var temp = {"dailyId":$("#dailyId").val()};
+                    return temp;
+                },
+                columns: [
+                    {
+                        field : 'attendanceDate',
+                        title : '日期'
+                    },
+                    {
+                        field : 'attendanceRequired',
+                        title : '应出勤人数'
+                    },
+                    {
+                        field : 'actualAttendance',
+                        title : '实际出勤人数'
+                    },
+                    {
+                        field : 'numberTypes',
+                        title : '休假/旷工/请假人数'
+                    },
+                    {
+                        field : 'numberOfDepartures',
+                        title : '申请离职人数'
+                    },
+                    {
+                        field : 'numberOfRecruiters',
+                        title : '待招聘上线人数'
+                    },
+                    {
+                        field : 'newNumberOfRecruiters',
+                        title : '新人上线人数'
+                    }]
+            });
+
+            //项目情况
+            $('#proqk-table').bootstrapTable({
+                method: 'post',
+                url: prefix + "/listproinfo/"+dId, // 请求路径
+                striped: true, // 是否显示行间隔色
+                // pagination: false, // 是否分页
+                queryParams: function(params) { // 上传服务器的参数
+                    var temp = {
+                        dailyId:$("#dailyId").val()
+                    };
+                    return temp;
+                },
+                columns: [
+                    {
+                        field : 'productName',
+                        title : '产品名称'
+                    },
+                    {
+                        field : 'accountAge',
+                        title : '账龄'
+                    },
+                    {
+                        field : 'settlementMethod',
+                        title : '结费模式'
+                    },
+                    {
+                        field : 'divisionLogic',
+                        title : '分案逻辑'
+                    },
+                    {
+                        field : 'withdrawCase',
+                        title : '撤案'
+                    },
+                    {
+                        field : 'productNature',
+                        title : '性质',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(dataXz, value);
+                        }
+                    },
+                    {
+                        field : 'operatingSystem',
+                        title : '作业系统',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(dataSys, value);
+                        }
+                    },
+                    {
+                        field : 'trafficPlatform',
+                        title : '话务平台',
+                        formatter: function(value, row, index) {
+                            var trafficPlatformHSP = value.split(',');
+                            var vlh = '';
+                            for(var i=0;i<trafficPlatformHSP.length;i++){
+                                vlh+= $.table.selectDictLabel(dataHw, trafficPlatformHSP[i])+"&nbsp";
+                            }
+                            return vlh;
+                        }
+                    },
+                    {
+                        field : 'casesNumber',
+                        title : '人均委案量'
+                    },
+                    {
+                        field : 'perHousehold',
+                        title : '户均金额'
+                    },
+                    {
+                        field : 'settlementMethod',
+                        title : '结费方式',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(dataJf, value);
+                        }
+                    },
+                    {
+                        field : 'settlementMethod',
+                        title : '结费描述',
+                        formatter: function(value, row, index) {
+                            var vl =  $.table.selectDictLabel(dataJf, value);
+                            if('包人头' == vl){
+                                return '人数*单价*系数';
+                            }
+                            return '回款金额*佣金比例*系数';
+                        }
+                    }
+                ]
+            })
+
+            //月度情况
+            $('#yuedu-table').bootstrapTable({
+                method: 'post',
+                url: prefix + "/listmonth/"+dId, // 请求路径
+                striped: true, // 是否显示行间隔色
+                queryParams: function(params) { // 上传服务器的参数
+                    var temp = {
+                        dailyId:$("#dailyId").val(),
+                    };
+                    return temp;
+                },
+                columns: [
+                    {
+                        field : 'commissionBatch',
+                        title : '委案批次'
+                    },
+                    {
+                        field : 'numberOfCommission',
+                        title : '委案件数(件)'
+                    },
+                    {
+                        field : 'commissionAmount',
+                        title : '委案金额',
+                        formatter:function (value, row, index) {
+                            if(value =='')return'';
+                            return  parseFloat(value).toFixed(2) ;
+                        }
+                    },
+                    {
+                        field : 'amountReceived',
+                        title : '本月目标回款',
+                        formatter:function (value, row, index) {
+                            if(value =='')return'';
+                            return  parseFloat(value).toFixed(2) ;
+                        }
+                    },
+                    {
+                        field : 'amountCreated',
+                        title : '本月目标创收',
+                        formatter:function (value, row, index) {
+                            if(value =='')return'';
+                            return  parseFloat(value).toFixed(2) ;
+                        }
+                    }]
+            })
+
+            //结果指标
+            $('#jieguo-table').bootstrapTable({
+                method: 'post',
+                url: prefix + "/listjieguo/"+dId, // 请求路径
+                striped: true, // 是否显示行间隔色
+                showFooter:true,
+                queryParams: function(params) { // 上传服务器的参数
+                    var temp = {
+                        dailyId:$("#dailyId").val(),
+                    };
+                    return temp;
+                },
+                columns: [
+                    {
+                        field : 'reportDate',
+                        title : '日期',
+                        footerFormatter:function (value) {
+                            return "合计";
+                        }
+                    },
+                    {
+                        field : 'transferType',
+                        title : '账龄'
+                    },
+                    {
+                        field : 'commissionProportion',
+                        title : '佣金比例'
+                    },
+                    {
+                        field : 'totalRecycle',
+                        title : '累计回收',
+                        formatter:function (value, row, index) {
+                            var sumBalance = parseFloat(value);
+                            return  sumBalance.toFixed(2) ;
+                        },
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                if(value[i].totalRecycle != null && value[i].totalRecycle != "") {
+                                    sumBalance += parseFloat(value[i].totalRecycle);
+                                }
+                            }
+                            return "<font color=\"red\"><b>" + sumBalance.toFixed(2) + "</b></font>";
+                        }
+                    },
+                    {
+                        field : 'predictCommission',
+                        title : '预计佣金',
+                        formatter:function (value, row, index) {
+                            var sumBalance = parseFloat(value);
+                            return  sumBalance.toFixed(2) ;
+                        },
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                if(value[i].predictCommission != null && value[i].predictCommission != "") {
+                                    sumBalance += parseFloat(value[i].predictCommission);
+                                }
+                            }
+                            return "<font color=\"red\"><b>" + sumBalance.toFixed(2) + "</b></font>";
+                        }
+                    },
+                    {
+                        field : 'recycleRate',
+                        title : '回收率'
+                    }]
+            })
+
+            //过程指标
+            $('#guocheng-table').bootstrapTable({
+                method: 'post',
+                url: prefix + "/listguocheng/"+dId, // 请求路径
+                striped: true, // 是否显示行间隔色
+                queryParams: function(params) { // 上传服务器的参数
+                    var temp = {
+                        dailyId:$("#dailyId").val(),
+                    };
+                    return temp;
+                },
+                columns: [
+                    {
+                        field : 'reportDate',
+                        title : '日期'
+                    },
+                    {
+                        field : 'totalCalledNum',
+                        title : '通次'
+                    },
+                    {
+                        field : 'totalCallLen',
+                        title : '通时'
+                    },
+                    {
+                        field : 'totalCalledRate',
+                        title : '接通率'
+                    }]
+            })
+        }
+
+
+        $(document).ready(function(){
+            initFn();
+        });
+
+    </script>
+</body>
+</html>

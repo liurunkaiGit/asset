@@ -32,6 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectTLpProcessVo"/>
         <where>
             <if test="orgId != null "> and org_id = #{orgId}</if>
+            <if test="reportDate != null "> and report_date = #{reportDate}</if>
             <if test="startReportDate != null">
                 and report_date <![CDATA[>=]]> #{startReportDate}
             </if>

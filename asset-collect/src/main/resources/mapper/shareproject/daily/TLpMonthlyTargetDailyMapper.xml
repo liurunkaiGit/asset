@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shareproject.daily.mapper.TLpMonthlyTargetDailyMapper">
+    
+    <resultMap type="TLpMonthlyTargetDaily" id="TLpMonthlyTargetDailyResult">
+        <result property="id"    column="id"    />
+        <result property="particularYear"    column="particular_year"    />
+        <result property="particularMonth"    column="particular_month"    />
+        <result property="proId"    column="pro_id"    />
+        <result property="proName"    column="pro_name"    />
+        <result property="allocationOfSeats"    column="allocation_of_seats"    />
+        <result property="commissionBatch"    column="commission_batch"    />
+        <result property="numberOfCommission"    column="number_of_commission"    />
+        <result property="commissionAmount"    column="commission_amount"    />
+        <result property="amountReceived"    column="amount_received"    />
+        <result property="amountCreated"    column="amount_created"    />
+        <result property="inflowrateOfLastmonth"    column="inflowrate_of_lastmonth"    />
+        <result property="inflowrateOfMonth"    column="inflowrate_of_month"    />
+        <result property="targetRanking"    column="target_ranking"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="dailyId"    column="daily_id"    />
+        <result property="dailyName"    column="daily_name"    />
+    </resultMap>
+
+    <sql id="selectTLpMonthlyTargetDailyVo">
+        select id, particular_year, particular_month, pro_id, pro_name, allocation_of_seats, commission_batch, number_of_commission, commission_amount, amount_received, amount_created, inflowrate_of_lastmonth, inflowrate_of_month, target_ranking, remark, create_by, create_time, update_by, update_time, org_id, org_name, daily_id, daily_name from t_lp_monthly_target_daily
+    </sql>
+
+    <select id="selectTLpMonthlyTargetDailyList" parameterType="TLpMonthlyTargetDaily" resultMap="TLpMonthlyTargetDailyResult">
+        <include refid="selectTLpMonthlyTargetDailyVo"/>
+        <where>  
+            <if test="particularYear != null "> and particular_year = #{particularYear}</if>
+            <if test="particularMonth != null "> and particular_month = #{particularMonth}</if>
+            <if test="proId != null "> and pro_id = #{proId}</if>
+            <if test="proName != null  and proName != ''"> and pro_name like concat('%', #{proName}, '%')</if>
+            <if test="allocationOfSeats != null "> and allocation_of_seats = #{allocationOfSeats}</if>
+            <if test="commissionBatch != null "> and commission_batch = #{commissionBatch}</if>
+            <if test="numberOfCommission != null "> and number_of_commission = #{numberOfCommission}</if>
+            <if test="commissionAmount != null "> and commission_amount = #{commissionAmount}</if>
+            <if test="amountReceived != null "> and amount_received = #{amountReceived}</if>
+            <if test="amountCreated != null "> and amount_created = #{amountCreated}</if>
+            <if test="inflowrateOfLastmonth != null  and inflowrateOfLastmonth != ''"> and inflowrate_of_lastmonth = #{inflowrateOfLastmonth}</if>
+            <if test="inflowrateOfMonth != null  and inflowrateOfMonth != ''"> and inflowrate_of_month = #{inflowrateOfMonth}</if>
+            <if test="targetRanking != null  and targetRanking != ''"> and target_ranking = #{targetRanking}</if>
+            <if test="orgId != null "> and org_id = #{orgId}</if>
+            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+            <if test="dailyId != null "> and daily_id = #{dailyId}</if>
+            <if test="dailyName != null  and dailyName != ''"> and daily_name like concat('%', #{dailyName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectTLpMonthlyTargetDailyById" parameterType="Long" resultMap="TLpMonthlyTargetDailyResult">
+        <include refid="selectTLpMonthlyTargetDailyVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLpMonthlyTargetDaily" parameterType="TLpMonthlyTargetDaily">
+        insert into t_lp_monthly_target_daily
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="particularYear != null ">particular_year,</if>
+            <if test="particularMonth != null ">particular_month,</if>
+            <if test="proId != null ">pro_id,</if>
+            <if test="proName != null  and proName != ''">pro_name,</if>
+            <if test="allocationOfSeats != null ">allocation_of_seats,</if>
+            <if test="commissionBatch != null ">commission_batch,</if>
+            <if test="numberOfCommission != null ">number_of_commission,</if>
+            <if test="commissionAmount != null ">commission_amount,</if>
+            <if test="amountReceived != null ">amount_received,</if>
+            <if test="amountCreated != null ">amount_created,</if>
+            <if test="inflowrateOfLastmonth != null  and inflowrateOfLastmonth != ''">inflowrate_of_lastmonth,</if>
+            <if test="inflowrateOfMonth != null  and inflowrateOfMonth != ''">inflowrate_of_month,</if>
+            <if test="targetRanking != null  and targetRanking != ''">target_ranking,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="orgId != null ">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="dailyId != null ">daily_id,</if>
+            <if test="dailyName != null  and dailyName != ''">daily_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="particularYear != null ">#{particularYear},</if>
+            <if test="particularMonth != null ">#{particularMonth},</if>
+            <if test="proId != null ">#{proId},</if>
+            <if test="proName != null  and proName != ''">#{proName},</if>
+            <if test="allocationOfSeats != null ">#{allocationOfSeats},</if>
+            <if test="commissionBatch != null ">#{commissionBatch},</if>
+            <if test="numberOfCommission != null ">#{numberOfCommission},</if>
+            <if test="commissionAmount != null ">#{commissionAmount},</if>
+            <if test="amountReceived != null ">#{amountReceived},</if>
+            <if test="amountCreated != null ">#{amountCreated},</if>
+            <if test="inflowrateOfLastmonth != null  and inflowrateOfLastmonth != ''">#{inflowrateOfLastmonth},</if>
+            <if test="inflowrateOfMonth != null  and inflowrateOfMonth != ''">#{inflowrateOfMonth},</if>
+            <if test="targetRanking != null  and targetRanking != ''">#{targetRanking},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="orgId != null ">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="dailyId != null ">#{dailyId},</if>
+            <if test="dailyName != null  and dailyName != ''">#{dailyName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLpMonthlyTargetDaily" parameterType="TLpMonthlyTargetDaily">
+        update t_lp_monthly_target_daily
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="particularYear != null ">particular_year = #{particularYear},</if>
+            <if test="particularMonth != null ">particular_month = #{particularMonth},</if>
+            <if test="proId != null ">pro_id = #{proId},</if>
+            <if test="proName != null  and proName != ''">pro_name = #{proName},</if>
+            <if test="allocationOfSeats != null ">allocation_of_seats = #{allocationOfSeats},</if>
+            <if test="commissionBatch != null ">commission_batch = #{commissionBatch},</if>
+            <if test="numberOfCommission != null ">number_of_commission = #{numberOfCommission},</if>
+            <if test="commissionAmount != null ">commission_amount = #{commissionAmount},</if>
+            <if test="amountReceived != null ">amount_received = #{amountReceived},</if>
+            <if test="amountCreated != null ">amount_created = #{amountCreated},</if>
+            <if test="inflowrateOfLastmonth != null  and inflowrateOfLastmonth != ''">inflowrate_of_lastmonth = #{inflowrateOfLastmonth},</if>
+            <if test="inflowrateOfMonth != null  and inflowrateOfMonth != ''">inflowrate_of_month = #{inflowrateOfMonth},</if>
+            <if test="targetRanking != null  and targetRanking != ''">target_ranking = #{targetRanking},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="orgId != null ">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="dailyId != null ">daily_id = #{dailyId},</if>
+            <if test="dailyName != null  and dailyName != ''">daily_name = #{dailyName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLpMonthlyTargetDailyById" parameterType="Long">
+        delete from t_lp_monthly_target_daily where id = #{id}
+    </delete>
+
+    <delete id="deleteTLpMonthlyTargetDailyByDailyId" parameterType="Long">
+        delete from t_lp_monthly_target_daily where daily_id = #{dailyId}
+    </delete>
+
+    <delete id="deleteTLpMonthlyTargetDailyByIds" parameterType="String">
+        delete from t_lp_monthly_target_daily where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

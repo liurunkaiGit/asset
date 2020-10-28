@@ -123,6 +123,19 @@ public class TLpAttendanceController extends BaseController {
     }
 
     /**
+     * 根据项目id和日期查询【出勤信息管理】
+     */
+    @RequiresPermissions("shareproject:attendance:lookOne")
+    @PostMapping("/lookOne")
+    @ResponseBody
+    public TLpAttendance lookOne(TLpAttendance tLpAttendance, ModelMap mmap)
+    {
+        List<TLpAttendance> list = tLpAttendanceService.selectTLpAttendanceList(tLpAttendance);
+        if(list == null || list.isEmpty())return new TLpAttendance();
+        return list.get(0);
+    }
+
+    /**
      * 修改保存【出勤信息管理】
      */
     @RequiresPermissions("shareproject:attendance:edit")

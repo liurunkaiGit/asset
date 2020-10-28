@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shareproject.daily.mapper.TLpProjectDailyMapper">
+    
+    <resultMap type="TLpProjectDaily" id="TLpProjectDailyResult">
+        <result property="id"    column="id"    />
+        <result property="attendanceToday"    column="attendance_today"    />
+        <result property="indexToday"    column="index_today"    />
+        <result property="dailyTime"    column="daily_time"    />
+        <result property="customerUpdate"    column="customer_update"    />
+        <result property="otherProject"    column="other_project"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="namesAttendance"    column="names_attendance"    />
+        <result property="urlAttendance"    column="url__attendance"    />
+        <result property="proId"    column="pro_id"    />
+        <result property="proName"    column="pro_name"    />
+        <result property="dailyName"    column="daily_name"    />
+    </resultMap>
+
+    <sql id="selectTLpProjectDailyVo">
+        select id, attendance_today, index_today, daily_time, customer_update, other_project, remarks, create_by, create_time, update_by, update_time, org_id, org_name, names_attendance, url__attendance, pro_id, pro_name,daily_name from t_lp_project_daily
+    </sql>
+
+    <select id="selectTLpProjectDailyList" parameterType="TLpProjectDaily" resultMap="TLpProjectDailyResult">
+        <include refid="selectTLpProjectDailyVo"/>
+        <where>  
+            <if test="attendanceToday != null  and attendanceToday != ''"> and attendance_today = #{attendanceToday}</if>
+            <if test="indexToday != null  and indexToday != ''"> and index_today = #{indexToday}</if>
+            <if test="dailyTime != null "> and daily_time = #{dailyTime}</if>
+            <if test="customerUpdate != null  and customerUpdate != ''"> and customer_update = #{customerUpdate}</if>
+            <if test="otherProject != null  and otherProject != ''"> and other_project = #{otherProject}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+            <if test="orgId != null "> and org_id = #{orgId}</if>
+            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+            <if test="namesAttendance != null  and namesAttendance != ''"> and names_attendance = #{namesAttendance}</if>
+            <if test="urlAttendance != null  and urlAttendance != ''"> and url__attendance = #{urlAttendance}</if>
+            <if test="proId != null "> and pro_id = #{proId}</if>
+            <if test="proName != null  and proName != ''"> and pro_name like concat('%', #{proName}, '%')</if>
+            <if test="dailyName != null  and dailyName != ''"> and daily_name like concat('%', #{dailyName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectTLpProjectDailyById" parameterType="Long" resultMap="TLpProjectDailyResult">
+        <include refid="selectTLpProjectDailyVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLpProjectDaily" parameterType="TLpProjectDaily" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lp_project_daily
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="attendanceToday != null  and attendanceToday != ''">attendance_today,</if>
+            <if test="indexToday != null  and indexToday != ''">index_today,</if>
+            <if test="dailyTime != null ">daily_time,</if>
+            <if test="customerUpdate != null  and customerUpdate != ''">customer_update,</if>
+            <if test="otherProject != null  and otherProject != ''">other_project,</if>
+            <if test="remarks != null  and remarks != ''">remarks,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="orgId != null ">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="namesAttendance != null  and namesAttendance != ''">names_attendance,</if>
+            <if test="urlAttendance != null  and urlAttendance != ''">url__attendance,</if>
+            <if test="proId != null ">pro_id,</if>
+            <if test="proName != null  and proName != ''">pro_name,</if>
+            <if test="dailyName != null  and dailyName != ''">daily_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="attendanceToday != null  and attendanceToday != ''">#{attendanceToday},</if>
+            <if test="indexToday != null  and indexToday != ''">#{indexToday},</if>
+            <if test="dailyTime != null ">#{dailyTime},</if>
+            <if test="customerUpdate != null  and customerUpdate != ''">#{customerUpdate},</if>
+            <if test="otherProject != null  and otherProject != ''">#{otherProject},</if>
+            <if test="remarks != null  and remarks != ''">#{remarks},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="orgId != null ">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="namesAttendance != null  and namesAttendance != ''">#{namesAttendance},</if>
+            <if test="urlAttendance != null  and urlAttendance != ''">#{urlAttendance},</if>
+            <if test="proId != null ">#{proId},</if>
+            <if test="proName != null  and proName != ''">#{proName},</if>
+            <if test="dailyName != null  and dailyName != ''">#{dailyName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLpProjectDaily" parameterType="TLpProjectDaily">
+        update t_lp_project_daily
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="attendanceToday != null  and attendanceToday != ''">attendance_today = #{attendanceToday},</if>
+            <if test="indexToday != null  and indexToday != ''">index_today = #{indexToday},</if>
+            <if test="dailyTime != null ">daily_time = #{dailyTime},</if>
+            <if test="customerUpdate != null  and customerUpdate != ''">customer_update = #{customerUpdate},</if>
+            <if test="otherProject != null  and otherProject != ''">other_project = #{otherProject},</if>
+            <if test="remarks != null  and remarks != ''">remarks = #{remarks},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="orgId != null ">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="namesAttendance != null  and namesAttendance != ''">names_attendance = #{namesAttendance},</if>
+            <if test="urlAttendance != null  and urlAttendance != ''">url__attendance = #{urlAttendance},</if>
+            <if test="proId != null ">pro_id = #{proId},</if>
+            <if test="proName != null  and proName != ''">pro_name = #{proName},</if>
+            <if test="dailyName != null  and dailyName != ''">daily_name = #{dailyName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLpProjectDailyById" parameterType="Long">
+        delete from t_lp_project_daily where id = #{id}
+    </delete>
+
+    <delete id="deleteTLpProjectDailyByIds" parameterType="String">
+        delete from t_lp_project_daily where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

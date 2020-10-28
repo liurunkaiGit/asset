@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shareproject.daily.mapper.TLpProcessDailyMapper">
+    
+    <resultMap type="TLpProcessDaily" id="TLpProcessDailyResult">
+        <result property="id"    column="id"    />
+        <result property="reportDate"    column="report_date"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="totalCallNum"    column="total_call_num"    />
+        <result property="aveCallNum"    column="ave_call_num"    />
+        <result property="totalCalledNum"    column="total_called_num"    />
+        <result property="avgCalledNum"    column="avg_called_num"    />
+        <result property="totalCallLen"    column="total_call_len"    />
+        <result property="avgCallLen"    column="avg_call_len"    />
+        <result property="totalCalledRate"    column="total_called_rate"    />
+        <result property="avgCalledRate"    column="avg_called_rate"    />
+        <result property="extPhoneSign"    column="ext_phone_sign"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="dailyId"    column="daily_id"    />
+        <result property="dailyName"    column="daily_name"    />
+    </resultMap>
+
+    <sql id="selectTLpProcessDailyVo">
+        select id, report_date, org_id, org_name, total_call_num, ave_call_num, total_called_num, avg_called_num, total_call_len, avg_call_len, total_called_rate, avg_called_rate, ext_phone_sign, create_by, create_time, update_by, update_time, daily_id, daily_name from t_lp_process_daily
+    </sql>
+
+    <select id="selectTLpProcessDailyList" parameterType="TLpProcessDaily" resultMap="TLpProcessDailyResult">
+        <include refid="selectTLpProcessDailyVo"/>
+        <where>  
+            <if test="reportDate != null "> and report_date = #{reportDate}</if>
+            <if test="orgId != null "> and org_id = #{orgId}</if>
+            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+            <if test="totalCallNum != null "> and total_call_num = #{totalCallNum}</if>
+            <if test="aveCallNum != null "> and ave_call_num = #{aveCallNum}</if>
+            <if test="totalCalledNum != null "> and total_called_num = #{totalCalledNum}</if>
+            <if test="avgCalledNum != null "> and avg_called_num = #{avgCalledNum}</if>
+            <if test="totalCallLen != null "> and total_call_len = #{totalCallLen}</if>
+            <if test="avgCallLen != null "> and avg_call_len = #{avgCallLen}</if>
+            <if test="totalCalledRate != null  and totalCalledRate != ''"> and total_called_rate = #{totalCalledRate}</if>
+            <if test="avgCalledRate != null  and avgCalledRate != ''"> and avg_called_rate = #{avgCalledRate}</if>
+            <if test="extPhoneSign != null  and extPhoneSign != ''"> and ext_phone_sign = #{extPhoneSign}</if>
+            <if test="dailyId != null "> and daily_id = #{dailyId}</if>
+            <if test="dailyName != null  and dailyName != ''"> and daily_name like concat('%', #{dailyName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectTLpProcessDailyById" parameterType="Long" resultMap="TLpProcessDailyResult">
+        <include refid="selectTLpProcessDailyVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLpProcessDaily" parameterType="TLpProcessDaily">
+        insert into t_lp_process_daily
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="reportDate != null ">report_date,</if>
+            <if test="orgId != null ">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="totalCallNum != null ">total_call_num,</if>
+            <if test="aveCallNum != null ">ave_call_num,</if>
+            <if test="totalCalledNum != null ">total_called_num,</if>
+            <if test="avgCalledNum != null ">avg_called_num,</if>
+            <if test="totalCallLen != null ">total_call_len,</if>
+            <if test="avgCallLen != null ">avg_call_len,</if>
+            <if test="totalCalledRate != null  and totalCalledRate != ''">total_called_rate,</if>
+            <if test="avgCalledRate != null  and avgCalledRate != ''">avg_called_rate,</if>
+            <if test="extPhoneSign != null  and extPhoneSign != ''">ext_phone_sign,</if>
+            <if test="createBy != null ">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null ">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="dailyId != null ">daily_id,</if>
+            <if test="dailyName != null  and dailyName != ''">daily_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="reportDate != null ">#{reportDate},</if>
+            <if test="orgId != null ">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="totalCallNum != null ">#{totalCallNum},</if>
+            <if test="aveCallNum != null ">#{aveCallNum},</if>
+            <if test="totalCalledNum != null ">#{totalCalledNum},</if>
+            <if test="avgCalledNum != null ">#{avgCalledNum},</if>
+            <if test="totalCallLen != null ">#{totalCallLen},</if>
+            <if test="avgCallLen != null ">#{avgCallLen},</if>
+            <if test="totalCalledRate != null  and totalCalledRate != ''">#{totalCalledRate},</if>
+            <if test="avgCalledRate != null  and avgCalledRate != ''">#{avgCalledRate},</if>
+            <if test="extPhoneSign != null  and extPhoneSign != ''">#{extPhoneSign},</if>
+            <if test="createBy != null ">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null ">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="dailyId != null ">#{dailyId},</if>
+            <if test="dailyName != null  and dailyName != ''">#{dailyName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLpProcessDaily" parameterType="TLpProcessDaily">
+        update t_lp_process_daily
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="reportDate != null ">report_date = #{reportDate},</if>
+            <if test="orgId != null ">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="totalCallNum != null ">total_call_num = #{totalCallNum},</if>
+            <if test="aveCallNum != null ">ave_call_num = #{aveCallNum},</if>
+            <if test="totalCalledNum != null ">total_called_num = #{totalCalledNum},</if>
+            <if test="avgCalledNum != null ">avg_called_num = #{avgCalledNum},</if>
+            <if test="totalCallLen != null ">total_call_len = #{totalCallLen},</if>
+            <if test="avgCallLen != null ">avg_call_len = #{avgCallLen},</if>
+            <if test="totalCalledRate != null  and totalCalledRate != ''">total_called_rate = #{totalCalledRate},</if>
+            <if test="avgCalledRate != null  and avgCalledRate != ''">avg_called_rate = #{avgCalledRate},</if>
+            <if test="extPhoneSign != null  and extPhoneSign != ''">ext_phone_sign = #{extPhoneSign},</if>
+            <if test="createBy != null ">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null ">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="dailyId != null ">daily_id = #{dailyId},</if>
+            <if test="dailyName != null  and dailyName != ''">daily_name = #{dailyName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLpProcessDailyById" parameterType="Long">
+        delete from t_lp_process_daily where id = #{id}
+    </delete>
+
+    <delete id="deleteTLpProcessDailyByDailyId" parameterType="Long">
+        delete from t_lp_process_daily where daily_id = #{dailyId}
+    </delete>
+
+    <delete id="deleteTLpProcessDailyByIds" parameterType="String">
+        delete from t_lp_process_daily where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

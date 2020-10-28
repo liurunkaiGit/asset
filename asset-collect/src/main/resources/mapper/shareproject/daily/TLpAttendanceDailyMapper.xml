@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.shareproject.attendance.mapper.TLpAttendanceMapper">
+<mapper namespace="com.ruoyi.shareproject.daily.mapper.TLpAttendanceDailyMapper">
     
-    <resultMap type="TLpAttendance" id="TLpAttendanceResult">
+    <resultMap type="TLpAttendanceDaily" id="TLpAttendanceDailyResult">
         <result property="id"    column="id"    />
         <result property="proId"    column="pro_id"    />
         <result property="proName"    column="pro_name"    />
@@ -21,42 +21,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="orgId"    column="org_id"    />
         <result property="orgName"    column="org_name"    />
+        <result property="dailyId"    column="daily_id"    />
+        <result property="dailyName"    column="daily_name"    />
     </resultMap>
 
-    <sql id="selectTLpAttendanceVo">
-        select id, pro_id, pro_name, attendance_date, attendance_required, actual_attendance, number_of_departures, number_of_recruiters, new_number_of_recruiters, number_types,create_by, create_time, update_by, update_time,org_id,org_name from t_lp_attendance
+    <sql id="selectTLpAttendanceDailyVo">
+        select id, pro_id, pro_name, attendance_date, attendance_required, actual_attendance, number_of_departures, number_of_recruiters, new_number_of_recruiters, number_types, create_by, create_time, update_by, update_time, org_id, org_name, daily_id, daily_name from t_lp_attendance_daily
     </sql>
 
-    <select id="selectTLpAttendanceList" parameterType="TLpAttendance" resultMap="TLpAttendanceResult">
-        <include refid="selectTLpAttendanceVo"/>
+    <select id="selectTLpAttendanceDailyList" parameterType="TLpAttendanceDaily" resultMap="TLpAttendanceDailyResult">
+        <include refid="selectTLpAttendanceDailyVo"/>
         <where>  
             <if test="proId != null "> and pro_id = #{proId}</if>
             <if test="proName != null  and proName != ''"> and pro_name like concat('%', #{proName}, '%')</if>
-            <if test="attendanceRequired != null "> and attendance_required = #{attendanceRequired}</if>
             <if test="attendanceDate != null "> and attendance_date = #{attendanceDate}</if>
+            <if test="attendanceRequired != null "> and attendance_required = #{attendanceRequired}</if>
             <if test="actualAttendance != null "> and actual_attendance = #{actualAttendance}</if>
             <if test="numberOfDepartures != null "> and number_of_departures = #{numberOfDepartures}</if>
             <if test="numberOfRecruiters != null "> and number_of_recruiters = #{numberOfRecruiters}</if>
             <if test="newNumberOfRecruiters != null "> and new_number_of_recruiters = #{newNumberOfRecruiters}</if>
             <if test="numberTypes != null "> and number_types = #{numberTypes}</if>
             <if test="orgId != null "> and org_id = #{orgId}</if>
-            <if test="orgName != null "> and org_name = #{orgName}</if>
-            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                and date_format(attendance_date,'%Y-%m-%d %H:%i:%s') &gt;= date_format(#{params.beginTime},'%Y-%m-%d %H:%i:%s')
-            </if>
-            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                and date_format(attendance_date,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{params.endTime},'%Y-%m-%d %H:%i:%s')
-            </if>
+            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+            <if test="dailyId != null "> and daily_id = #{dailyId}</if>
+            <if test="dailyName != null  and dailyName != ''"> and daily_name like concat('%', #{dailyName}, '%')</if>
         </where>
     </select>
     
-    <select id="selectTLpAttendanceById" parameterType="Long" resultMap="TLpAttendanceResult">
-        <include refid="selectTLpAttendanceVo"/>
+    <select id="selectTLpAttendanceDailyById" parameterType="Long" resultMap="TLpAttendanceDailyResult">
+        <include refid="selectTLpAttendanceDailyVo"/>
         where id = #{id}
     </select>
         
-    <insert id="insertTLpAttendance" parameterType="TLpAttendance">
-        insert into t_lp_attendance
+    <insert id="insertTLpAttendanceDaily" parameterType="TLpAttendanceDaily">
+        insert into t_lp_attendance_daily
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">id,</if>
             <if test="proId != null ">pro_id,</if>
@@ -72,8 +70,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">create_time,</if>
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
             <if test="updateTime != null ">update_time,</if>
-            <if test="orgId != null  and orgId != '' ">org_id,</if>
-            <if test="orgName != null and orgName != ''">org_name,</if>
+            <if test="orgId != null ">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="dailyId != null ">daily_id,</if>
+            <if test="dailyName != null  and dailyName != ''">daily_name,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
@@ -90,13 +90,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">#{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
             <if test="updateTime != null ">#{updateTime},</if>
-            <if test="orgId != null  and orgId != ''">#{orgId},</if>
+            <if test="orgId != null ">#{orgId},</if>
             <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="dailyId != null ">#{dailyId},</if>
+            <if test="dailyName != null  and dailyName != ''">#{dailyName},</if>
          </trim>
     </insert>
 
-    <update id="updateTLpAttendance" parameterType="TLpAttendance">
-        update t_lp_attendance
+    <update id="updateTLpAttendanceDaily" parameterType="TLpAttendanceDaily">
+        update t_lp_attendance_daily
         <trim prefix="SET" suffixOverrides=",">
             <if test="proId != null ">pro_id = #{proId},</if>
             <if test="proName != null  and proName != ''">pro_name = #{proName},</if>
@@ -111,18 +113,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">create_time = #{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
             <if test="updateTime != null ">update_time = #{updateTime},</if>
-            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="orgId != null ">org_id = #{orgId},</if>
             <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="dailyId != null ">daily_id = #{dailyId},</if>
+            <if test="dailyName != null  and dailyName != ''">daily_name = #{dailyName},</if>
         </trim>
         where id = #{id}
     </update>
 
-    <delete id="deleteTLpAttendanceById" parameterType="Long">
-        delete from t_lp_attendance where id = #{id}
+    <delete id="deleteTLpAttendanceDailyById" parameterType="Long">
+        delete from t_lp_attendance_daily where id = #{id}
     </delete>
 
-    <delete id="deleteTLpAttendanceByIds" parameterType="String">
-        delete from t_lp_attendance where id in 
+    <delete id="deleteTLpAttendanceDailyByDailyId" parameterType="Long">
+        delete from t_lp_attendance_daily where daily_id = #{dailyId}
+    </delete>
+
+    <delete id="deleteTLpAttendanceDailyByIds" parameterType="String">
+        delete from t_lp_attendance_daily where id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

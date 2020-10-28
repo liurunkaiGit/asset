@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.shareproject.result.mapper.TLpResultMapper">
+<mapper namespace="com.ruoyi.shareproject.daily.mapper.TLpResultDailyMapper">
     
-    <resultMap type="com.ruoyi.shareproject.result.domain.TLpResult" id="TLpResultResult">
+    <resultMap type="TLpResultDaily" id="TLpResultDailyResult">
         <result property="id"    column="id"    />
         <result property="reportDate"    column="report_date"    />
         <result property="orgId"    column="org_id"    />
@@ -20,47 +20,48 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="dailyId"    column="daily_id"    />
+        <result property="dailyName"    column="daily_name"    />
     </resultMap>
 
-    <sql id="selectTLpResultVo">
-        select id, report_date, org_id, org_name, transfer_type, import_batch_no, commission_proportion, total_recycle, predict_commission, recycle_rate, target_rank, create_by, create_time, update_by, update_time from t_lp_result
+    <sql id="selectTLpResultDailyVo">
+        select id, report_date, org_id, org_name, transfer_type, import_batch_no, commission_proportion, total_recycle, predict_commission, recycle_rate, target_rank, create_by, create_time, update_by, update_time, daily_id, daily_name from t_lp_result_daily
     </sql>
 
-    <select id="selectTLpResultList" parameterType="com.ruoyi.shareproject.result.domain.TLpResult" resultMap="TLpResultResult">
-        <include refid="selectTLpResultVo"/>
-        <where>
-            <if test="orgId != null "> and org_id = #{orgId}</if>
+    <sql id="selectTLpResultVo">
+        select id, report_date, org_id, org_name, transfer_type, import_batch_no, commission_proportion, total_recycle, predict_commission, recycle_rate, target_rank, create_by, create_time, update_by, update_time
+    </sql>
+
+    <select id="selectTLpResultDailyList" parameterType="TLpResultDaily" resultMap="TLpResultDailyResult">
+        <include refid="selectTLpResultDailyVo"/>
+        <where>  
             <if test="reportDate != null "> and report_date = #{reportDate}</if>
-            <if test="startReportDate != null">
-                and report_date <![CDATA[>=]]> #{startReportDate}
-            </if>
-            <if test="endReportDate != null">
-                and report_date <![CDATA[<=]]> #{endReportDate}
-            </if>
+            <if test="orgId != null "> and org_id = #{orgId}</if>
+            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+            <if test="transferType != null  and transferType != ''"> and transfer_type = #{transferType}</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+            <if test="commissionProportion != null  and commissionProportion != ''"> and commission_proportion = #{commissionProportion}</if>
+            <if test="totalRecycle != null "> and total_recycle = #{totalRecycle}</if>
+            <if test="predictCommission != null "> and predict_commission = #{predictCommission}</if>
+            <if test="recycleRate != null  and recycleRate != ''"> and recycle_rate = #{recycleRate}</if>
+            <if test="targetRank != null "> and target_rank = #{targetRank}</if>
+            <if test="dailyId != null "> and daily_id = #{dailyId}</if>
+            <if test="dailyName != null  and dailyName != ''"> and daily_name like concat('%', #{dailyName}, '%')</if>
         </where>
     </select>
     
-    <select id="selectTLpResultById" parameterType="Long" resultMap="TLpResultResult">
-        <include refid="selectTLpResultVo"/>
+    <select id="selectTLpResultDailyById" parameterType="Long" resultMap="TLpResultDailyResult">
+        <include refid="selectTLpResultDailyVo"/>
         where id = #{id}
     </select>
 
-    <select id="selectProjectResultUnique" parameterType="com.ruoyi.shareproject.result.domain.TLpResult" resultType="java.lang.Integer">
-        select count(1) from t_lp_result
-        <where>
-            and report_date = #{reportDate}
-            <if test="transferType != null  and transferType != ''"> and transfer_type = #{transferType}</if>
-            <if test="transferType == null  or transferType == ''"> and transfer_type is null</if>
-            and org_id = #{orgId}
-            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
-            <if test="importBatchNo == null  or importBatchNo == ''"> and import_batch_no is null</if>
-            <if test="id != null"> and id != #{id}</if>
-        </where>
-    </select>
-
-    <insert id="insertTLpResult" parameterType="com.ruoyi.shareproject.result.domain.TLpResult" useGeneratedKeys="true" keyProperty="id">
-        insert into t_lp_result
+    <insert id="insertTLpResultDailyBatch" parameterType="TLpResultDaily">
+     insert into t_lp_result_daily  <include refid="selectTLpResultVo"/>,#{dailyId} as daily_id,#{dailyName} as daily_name from t_lp_result  where org_id=#{orgId} and report_date=#{reportDate}
+    </insert>
+    <insert id="insertTLpResultDaily" parameterType="TLpResultDaily">
+        insert into t_lp_result_daily
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
             <if test="reportDate != null ">report_date,</if>
             <if test="orgId != null ">org_id,</if>
             <if test="orgName != null  and orgName != ''">org_name,</if>
@@ -72,11 +73,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="recycleRate != null  and recycleRate != ''">recycle_rate,</if>
             <if test="targetRank != null ">target_rank,</if>
             <if test="createBy != null ">create_by,</if>
-            create_time,
+            <if test="createTime != null ">create_time,</if>
             <if test="updateBy != null ">update_by,</if>
             <if test="updateTime != null ">update_time,</if>
+            <if test="dailyId != null ">daily_id,</if>
+            <if test="dailyName != null  and dailyName != ''">daily_name,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
             <if test="reportDate != null ">#{reportDate},</if>
             <if test="orgId != null ">#{orgId},</if>
             <if test="orgName != null  and orgName != ''">#{orgName},</if>
@@ -88,14 +92,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="recycleRate != null  and recycleRate != ''">#{recycleRate},</if>
             <if test="targetRank != null ">#{targetRank},</if>
             <if test="createBy != null ">#{createBy},</if>
-            NOW(),
+            <if test="createTime != null ">#{createTime},</if>
             <if test="updateBy != null ">#{updateBy},</if>
             <if test="updateTime != null ">#{updateTime},</if>
+            <if test="dailyId != null ">#{dailyId},</if>
+            <if test="dailyName != null  and dailyName != ''">#{dailyName},</if>
          </trim>
     </insert>
 
-    <update id="updateTLpResult" parameterType="com.ruoyi.shareproject.result.domain.TLpResult">
-        update t_lp_result
+    <update id="updateTLpResultDaily" parameterType="TLpResultDaily">
+        update t_lp_result_daily
         <trim prefix="SET" suffixOverrides=",">
             <if test="reportDate != null ">report_date = #{reportDate},</if>
             <if test="orgId != null ">org_id = #{orgId},</if>
@@ -107,18 +113,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="predictCommission != null ">predict_commission = #{predictCommission},</if>
             <if test="recycleRate != null  and recycleRate != ''">recycle_rate = #{recycleRate},</if>
             <if test="targetRank != null ">target_rank = #{targetRank},</if>
+            <if test="createBy != null ">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
             <if test="updateBy != null ">update_by = #{updateBy},</if>
-            <if test="updateTime != null ">update_time = now(),</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="dailyId != null ">daily_id = #{dailyId},</if>
+            <if test="dailyName != null  and dailyName != ''">daily_name = #{dailyName},</if>
         </trim>
         where id = #{id}
     </update>
 
-    <delete id="deleteTLpResultById" parameterType="Long">
-        delete from t_lp_result where id = #{id}
+    <delete id="deleteTLpResultDailyById" parameterType="Long">
+        delete from t_lp_result_daily where id = #{id}
     </delete>
 
-    <delete id="deleteTLpResultByIds" parameterType="String">
-        delete from t_lp_result where id in 
+    <delete id="deleteTLpResultDailyByDailyId" parameterType="Long">
+        delete from t_lp_result_daily where daily_id = #{dailyId}
+    </delete>
+
+    <delete id="deleteTLpResultDailyByIds" parameterType="String">
+        delete from t_lp_result_daily where id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

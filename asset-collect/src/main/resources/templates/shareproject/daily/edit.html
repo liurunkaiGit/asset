@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改【项目日报】')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-daily-edit" th:object="${tLpProjectDaily}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">项目：</label>
+                <div class="col-sm-8">
+                    <select class="form-control" name="proId"  id="proId" onchange="chaqb()">
+                        <option value="">请选择</option>
+                    </select>
+                    <input name="proName" id="proName"   class="form-control" type="hidden" th:field="*{proName}" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">今日出勤：</label>
+                <div class="col-sm-8">
+                    <input name="attendanceToday" id="attendanceToday" th:field="*{attendanceToday}" readonly class="form-control" type="text" required maxlength="10">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">今日指标：</label>
+                <div class="col-sm-8">
+                    <input name="indexToday" id="indexToday" class="form-control"  th:field="*{indexToday}" readonly type="text" required maxlength="10">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">日报时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="dailyTime" id="dailyTime"  class="form-control time-input" data-callback="chaqb" th:value="${#dates.format(tLpProjectDaily.dailyTime, 'yyyy-MM-dd')}"    required type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">客户最新通知：</label>
+                <div class="col-sm-8">
+                    <textarea name="customerUpdate" class="form-control" style="width:450px;" th:field="*{customerUpdate}"  maxlength="200"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">项目其它事项：</label>
+                <div class="col-sm-8">
+                    <textarea name="otherProject" class="form-control" style="width:450px;" th:field="*{otherProject}" maxlength="200"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <textarea name="remarks" class="form-control" style="width:450px;" th:field="*{remarks}" maxlength="200"></textarea>
+                </div>
+            </div>
+        </form>
+        <input name="proIdH" id="proIdH" th:field="${tLpProjectDaily.proId}" type="hidden">
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "shareproject/daily";
+        $("#form-daily-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if($("#proId").val() == ''){
+                $.modal.alertWarning('请选择项目');
+                return;
+            }
+            if($("#dailyTime").val() == ''){
+                $.modal.alertWarning('请选择日报时间');
+                return;
+            }
+
+            if($("#attendanceToday").val() == '未填写' ){
+                $.modal.alertWarning('今日出勤未填写');
+                return;
+            }
+            if($("#indexToday").val() == '未填写'){
+                $.modal.alertWarning('今日指标未填写');
+                return;
+            }
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-daily-edit').serialize());
+            }
+        }
+
+        function chaqb(){
+            var dailyTime = $("#dailyTime").val();
+            if(dailyTime == ''){
+                $.modal.alertWarning('请选择日报时间');
+                return;
+            }
+            var proId = $("#proId").val();
+            if(proId == ''){
+                $.modal.alertWarning('请选择项目');
+                return;
+            }
+            findData(proId,dailyTime);
+        }
+
+        function findData(proId,dailyTime){
+            $.ajax({
+                url: ctx + "shareproject/attendance/lookOne",    //请求的url地址
+                dataType: "json",   //返回格式为json
+                data:
+                    {
+                        "proId": proId,
+                        "attendanceDate": dailyTime
+                    },    //参数值
+                type: "POST",   //请求方式
+                success: function(req) {
+                    var attendanceTodayTxt = '未填写';
+                    //请求成功时处理
+                    if(req.id!=null && req.id>0){
+                        attendanceTodayTxt = '已填写';
+                    }
+                    $("#attendanceToday").val(attendanceTodayTxt);
+                },
+                error: function(e) {
+                    $.modal.alertError(e);
+                }
+            });
+            $.ajax({
+                url: ctx + "shareproject/daily/zhibiao",    //请求的url地址
+                dataType: "json",   //返回格式为json
+                data:
+                    {
+                        "proId": proId,
+                        "dailyTime": dailyTime
+                    },    //参数值
+                type: "POST",   //请求方式
+                success: function(req) {
+                    var attendanceTodayTxt = '未填写';
+                    //请求成功时处理
+                    if(req != null && req > 0){
+                        attendanceTodayTxt = '已填写';
+                    }
+                    $("#indexToday").val(attendanceTodayTxt);
+                },
+                error: function(e) {
+                    $.modal.alertError(e);
+                }
+            });
+        }
+
+        $(document).ready(function(){
+            var proIdH = $("#proIdH").val();
+            findData(proIdH,$("#dailyTime").val());
+            $.post(
+                ctx + "shareproject/projectinformation/listxl",
+                function(data) {
+                    if(data){
+                        for (var i = 0; i < data.length; i++) {
+                            var ob = data[i];
+                            var sel = "";
+                            if(proIdH == ob.id){
+                                sel = "selected";
+                            }
+                            var opt = "<option "+sel+" value='"+ob.id+"'>"+ob.names+"</option>";
+                            $("#proId").append(opt);
+                        }
+                    }
+                }
+            );
+            $("#proId").on("change",function(){
+                var proName = $(this).children('option:selected').text();
+                $("#proName").val(proName);
+            });
+        });
+
+    </script>
+</body>
+</html>
