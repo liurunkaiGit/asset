@@ -8,31 +8,32 @@
     <input th:type="hidden" id="proId"  th:value="${ty.proId}">
      <div class="container-div">
             <div class="col-sm-12 select-table table-striped">
+                <br/>
                 <div  ><input name="dailyTime" id="dailyTime"  class=" time-input" data-callback="chaqb" th:value="${#dates.format(ty.dailyTime, 'yyyy-MM-dd')}"   style="width: 100px;float: right" required type="text"></div>
-                <div style="text-align: center" ><label th:text="${ty.dailyName}"></label>日报</div>
+                 <div style="text-align: center;font-weight:bold;font-size: 17px;" ><span th:text="${ty.dailyName}"></span>日报</div>
                 <hr/>
-                <span>一、项目今日小结</span>
-                <table id="bootstrap-table"></table>
+                <span style="font-weight:bold;font-size: 13px;" >一、项目今日小结</span>
+                <table id="bootstrap-table" class="table-bordered"></table>
                 备注:
-                <label th:text="${ty.remarks}"></label>
+                <div style="border: 1px solid #D5C9C9;"><label th:text="${ty.remarks}"></label></div>
                 <hr/>
-                <span>二、项目情况介绍</span>
-                <table id="proqk-table"></table>
+                <span style="font-weight:bold;font-size: 13px;">二、项目情况介绍</span>
+                <table id="proqk-table" class="table-bordered"></table>
                 <hr/>
-                <span>三、项目月度目标</span>
-                <table id="yuedu-table"></table>
+                <span style="font-weight:bold;font-size: 13px;">三、项目月度目标</span>
+                <table id="yuedu-table" class="table-bordered"></table>
                 <hr/>
-                <span>四、项目结果目标</span>
-                <table id="jieguo-table"></table>
+                <span style="font-weight:bold;font-size: 13px;">四、项目结果目标</span>
+                <table id="jieguo-table" class="table-bordered"></table>
                 <hr/>
-                <span>五、项目过程目标</span>
-                <table id="guocheng-table"></table>
+                <span style="font-weight:bold;font-size: 13px;">五、项目过程目标</span>
+                <table id="guocheng-table" class="table-bordered"></table>
                 <hr/>
-                <span>六、客户最新通知</span>
-                <div th:text="${ty.customerUpdate}"></div>
+                <span style="font-weight:bold;font-size: 13px;">六、客户最新通知</span>
+                <div style="border: 1px solid #D5C9C9;" th:text="${ty.customerUpdate}"></div>
                 <hr/>
-                <span>七、项目其它事项</span>
-                <div th:text="${ty.otherProject}"></div>
+                <span style="font-weight:bold;font-size: 13px;">七、项目其它事项</span>
+                <div style="border: 1px solid #D5C9C9;" th:text="${ty.otherProject}"></div>
             </div>
     </div>
 
@@ -80,6 +81,7 @@
             $('#bootstrap-table').bootstrapTable({
                 url: prefix + "/listattendanceDaily/"+dId, // 请求路径
                 method: 'post',
+                bordered:true,
                 striped: true, // 是否显示行间隔色
                 queryParams: function(params) { // 上传服务器的参数
                     var temp = {"dailyId":$("#dailyId").val()};
@@ -121,6 +123,7 @@
                 method: 'post',
                 url: prefix + "/listproinfo/"+dId, // 请求路径
                 striped: true, // 是否显示行间隔色
+                bordered:true,
                 // pagination: false, // 是否分页
                 queryParams: function(params) { // 上传服务器的参数
                     var temp = {
@@ -208,6 +211,7 @@
                 method: 'post',
                 url: prefix + "/listmonth/"+dId, // 请求路径
                 striped: true, // 是否显示行间隔色
+                bordered:true,
                 queryParams: function(params) { // 上传服务器的参数
                     var temp = {
                         dailyId:$("#dailyId").val(),
@@ -227,7 +231,7 @@
                         field : 'commissionAmount',
                         title : '委案金额',
                         formatter:function (value, row, index) {
-                            if(value =='')return'';
+                            if(value =='' || null == value)return'';
                             return  parseFloat(value).toFixed(2) ;
                         }
                     },
@@ -235,7 +239,8 @@
                         field : 'amountReceived',
                         title : '本月目标回款',
                         formatter:function (value, row, index) {
-                            if(value =='')return'';
+                            debugger;
+                            if(value =='' || null == value)return'';
                             return  parseFloat(value).toFixed(2) ;
                         }
                     },
@@ -243,7 +248,7 @@
                         field : 'amountCreated',
                         title : '本月目标创收',
                         formatter:function (value, row, index) {
-                            if(value =='')return'';
+                            if(value =='' || null == value)return'';
                             return  parseFloat(value).toFixed(2) ;
                         }
                     }]
@@ -255,6 +260,7 @@
                 url: prefix + "/listjieguo/"+dId, // 请求路径
                 striped: true, // 是否显示行间隔色
                 showFooter:true,
+                bordered:true,
                 queryParams: function(params) { // 上传服务器的参数
                     var temp = {
                         dailyId:$("#dailyId").val(),
@@ -281,6 +287,7 @@
                         field : 'totalRecycle',
                         title : '累计回收',
                         formatter:function (value, row, index) {
+                            if(value =='' || null == value)return'';
                             var sumBalance = parseFloat(value);
                             return  sumBalance.toFixed(2) ;
                         },
@@ -298,6 +305,7 @@
                         field : 'predictCommission',
                         title : '预计佣金',
                         formatter:function (value, row, index) {
+                            if(value =='' || null == value)return'';
                             var sumBalance = parseFloat(value);
                             return  sumBalance.toFixed(2) ;
                         },
@@ -322,6 +330,7 @@
                 method: 'post',
                 url: prefix + "/listguocheng/"+dId, // 请求路径
                 striped: true, // 是否显示行间隔色
+                bordered:true,
                 queryParams: function(params) { // 上传服务器的参数
                     var temp = {
                         dailyId:$("#dailyId").val(),
