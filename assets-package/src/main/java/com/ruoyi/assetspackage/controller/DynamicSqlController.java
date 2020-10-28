@@ -62,15 +62,6 @@ public class DynamicSqlController extends BaseController
     @Autowired
     private IOrgPackageService orgPackageService;
 
-    @Autowired
-    private ICurAssetsPackageService curAssetsPackageService;
-
-    @Autowired
-    private ICurAssetsRepaymentPackageService curAssetsRepaymentPackageService;
-
-
-
-
 
     @RequiresPermissions("assetspackage:dynamicsql:view")
     @GetMapping()
@@ -123,8 +114,6 @@ public class DynamicSqlController extends BaseController
     @PostMapping("/apply")
     @ResponseBody
     public AjaxResult apply(String sql, HttpServletResponse response)throws Exception{
-//        boolean boo = checkSql(sql);
-//        if(!boo){
         int result = 0;
         try {
             result = dynamicSqlUtil.toExecute(sql);
@@ -133,16 +122,6 @@ public class DynamicSqlController extends BaseController
             e.printStackTrace();
             return AjaxResult.error("执行失败");
         }
-//        }else{
-//            List<Map<String, Object>> queryResult = dynamicSqlUtil.toQuery(sql);
-//            HSSFWorkbook wb = dynamicSqlUtil.getHSSFWorkbook("sheet1", queryResult);
-//            response.setHeader("Content-Disposition", "attachment;Filename=" + System.currentTimeMillis() + ".xls");
-//            OutputStream outputStream = response.getOutputStream();
-//            wb.write(outputStream);
-//            outputStream.close();
-//            return AjaxResult.success("执行成功");
-//        }
-
     }
 
     @GetMapping("/apply2")

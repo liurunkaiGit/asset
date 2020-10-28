@@ -471,7 +471,7 @@ public class DataImportUtil {
         List<Map<String, String>> result = new ArrayList<Map<String, String>>();
             for (Map<String, String> rowMap : list) {
                 Map<String, String> map = new HashMap<>();//转换后每一行的k,v
-                Map<String, String> freeRowMap = new HashMap<>();//自由导入行map
+                Map<String, String> freeRowMap = new LinkedHashMap<>();//自由导入行map
                 for (Map.Entry<String, String> colum : rowMap.entrySet()) {
                     String key = colum.getKey().trim().replace(" ", "");//导入的key
                     String value = colum.getValue();//导入的value

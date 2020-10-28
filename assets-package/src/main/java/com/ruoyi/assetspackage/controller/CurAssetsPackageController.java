@@ -68,13 +68,6 @@ public class CurAssetsPackageController extends BaseController {
     private IOrgPackageService orgPackageService;
 
     @Autowired
-    private ITemplateRelationPackageService templateRelationPackageService;
-    @Autowired
-    private ISysUserService sysUserService;
-    @Autowired
-    private ITLcImportFlowService tlcImportFlowService;
-
-    @Autowired
     private PackageDataPermissionUtil dataPermissionUtil;
 
     @RequiresPermissions("import:assets:view")

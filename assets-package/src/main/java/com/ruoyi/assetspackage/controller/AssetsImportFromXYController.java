@@ -162,30 +162,15 @@ public class AssetsImportFromXYController extends BaseController {
             /**3判断标识*/
             if(insertFlag==null && updateFlag==null){//没有操作
                 this.assetsImportFromXYService.deleteFlowXyByBatchNo(importBatchNo);//删除流水表
-                /*//更新上一次的数据为 未比较状态
-                List<CurAssetsPackage> upNotCompareList = (List<CurAssetsPackage>)request.getSession().getAttribute("upNotCompareList");
-                if(upNotCompareList != null){
-                    this.assetsImportFromXYService.batchUpdateIsCompare(upNotCompareList);
-                }*/
             }
             if("error".equals(insertFlag)){//新增失败
                 if(!"success".equals(updateFlag)){
                     this.assetsImportFromXYService.deleteFlowXyByBatchNo(importBatchNo);//删除流水表
-                    /*//更新上一次的数据为 未比较状态
-                    List<CurAssetsPackage> upNotCompareList = (List<CurAssetsPackage>)request.getSession().getAttribute("upNotCompareList");
-                    if(upNotCompareList != null){
-                        this.assetsImportFromXYService.batchUpdateIsCompare(upNotCompareList);
-                    }*/
                 }
             }
             if("error".equals(updateFlag)){//更新失败
                 if(!"success".equals(insertFlag)){
                     this.assetsImportFromXYService.deleteFlowXyByBatchNo(importBatchNo);//删除流水表
-                   /* //更新上一次的数据为 未比较状态
-                    List<CurAssetsPackage> upNotCompareList = (List<CurAssetsPackage>)request.getSession().getAttribute("upNotCompareList");
-                    if(upNotCompareList != null){
-                        this.assetsImportFromXYService.batchUpdateIsCompare(upNotCompareList);
-                    }*/
                 }
             }
 
