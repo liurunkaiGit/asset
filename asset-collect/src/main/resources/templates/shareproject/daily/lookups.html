@@ -194,8 +194,7 @@
                         field : 'settlementMethod',
                         title : '结费描述',
                         formatter: function(value, row, index) {
-                            var vl =  $.table.selectDictLabel(dataJf, value);
-                            if('包人头' == vl){
+                            if('1' == value){
                                 return '人数*单价*系数';
                             }
                             return '回款金额*佣金比例*系数';
