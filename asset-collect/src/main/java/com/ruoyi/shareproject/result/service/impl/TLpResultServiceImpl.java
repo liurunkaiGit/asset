@@ -60,6 +60,7 @@ public class TLpResultServiceImpl implements ITLpResultService {
         tLpResult.setOrgId(Long.valueOf(projectIdName[0]));
         tLpResult.setOrgName(projectIdName[1]);
         tLpResult.setCreateBy(ShiroUtils.getSysUser().getUserId().toString());
+        tLpResult.setUpdateBy(ShiroUtils.getSysUser().getUserId().toString());
         return tLpResultMapper.insertTLpResult(tLpResult);
     }
 

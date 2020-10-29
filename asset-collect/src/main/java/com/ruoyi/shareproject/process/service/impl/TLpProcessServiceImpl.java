@@ -75,6 +75,7 @@ public class TLpProcessServiceImpl implements ITLpProcessService {
         tLpProcess.setOrgId(Long.valueOf(projectIdName[0]));
         tLpProcess.setOrgName(projectIdName[1]);
         tLpProcess.setCreateBy(ShiroUtils.getSysUser().getUserId().toString());
+        tLpProcess.setUpdateBy(ShiroUtils.getSysUser().getUserId().toString());
         return tLpProcessMapper.insertTLpProcess(tLpProcess);
     }
 

@@ -111,7 +111,14 @@
                 {
                     field : 'totalCalledRate', 
                     title : '接通率(%)'
-                }]
+                },{
+                        field : 'updateName',
+                        title : '操作人'
+                    },
+                    {
+                        field : 'updateTime',
+                        title : '操作时间'
+                    }]
             };
             $.table.init(options);
             initProject();

@@ -28,9 +28,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, report_date, org_id, org_name, total_call_num, ave_call_num, total_called_num, avg_called_num, total_call_len, avg_call_len, total_called_rate, avg_called_rate, ext_phone_sign, create_by, create_time, update_by, update_time from t_lp_process
     </sql>
 
+    <sql id="selectTLpProcessColumn">
+        t.id,
+        t.report_date,
+        t.org_id, org_name,
+        t.total_call_num,
+        t.ave_call_num,
+        t.total_called_num,
+        t.avg_called_num,
+        t.total_call_len,
+        t.avg_call_len,
+        t.total_called_rate,
+        t.avg_called_rate,
+        t.ext_phone_sign,
+        t.create_by,
+        t.create_time,
+        t.update_by,
+        t.update_time
+    </sql>
+
     <select id="selectTLpProcessList" parameterType="com.ruoyi.shareproject.process.domain.TLpProcess" resultMap="TLpProcessResult">
-        <include refid="selectTLpProcessVo"/>
+        select su.user_name as updateName,
+        <include refid="selectTLpProcessColumn"/>
+        from t_lp_process t,sys_user su
         <where>
+            t.update_by = su.user_id
             <if test="orgId != null "> and org_id = #{orgId}</if>
             <if test="reportDate != null "> and report_date = #{reportDate}</if>
             <if test="startReportDate != null">
@@ -73,6 +95,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="extPhoneSign != null  and extPhoneSign != ''">ext_phone_sign,</if>
             <if test="createBy != null ">create_by,</if>
             create_time,
+            <if test="updateBy != null ">update_by,</if>
+            update_time,
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="reportDate != null ">#{reportDate},</if>
@@ -88,6 +112,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="avgCalledRate != null ">#{avgCalledRate},</if>
             <if test="extPhoneSign != null  and extPhoneSign != ''">#{extPhoneSign},</if>
             <if test="createBy != null ">#{createBy},</if>
+            NOW(),
+            <if test="updateBy != null ">#{updateBy},</if>
             NOW(),
          </trim>
     </insert>

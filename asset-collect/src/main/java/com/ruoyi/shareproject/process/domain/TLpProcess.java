@@ -101,4 +101,6 @@ public class TLpProcess extends BaseEntity {
     private Date startReportDate;
     private Date endReportDate;
 
+    private String updateName;
+
 }
