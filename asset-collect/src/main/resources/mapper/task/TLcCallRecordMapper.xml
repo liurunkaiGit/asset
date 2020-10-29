@@ -214,7 +214,7 @@
     <insert id="insertTLcCallRecord" parameterType="com.ruoyi.task.domain.TLcCallRecord" useGeneratedKeys="true" keyProperty="id">
         insert into t_lc_call_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <!--<if test="certificateNo != null  and certificateNo != ''">certificate_no,</if>-->
+            <if test="orgId != null  and orgId != ''">org_id,</if>
             <if test="caseNo != null  and caseNo != ''">case_no,</if>
             <if test="contactName != null  and contactName != ''">contact_name,</if>
             <if test="phone != null  and phone != ''">phone,</if>
@@ -238,7 +238,7 @@
             <if test="cnje != null">cnje,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <!--<if test="certificateNo != null  and certificateNo != ''">#{certificateNo},</if>-->
+            <if test="orgId != null  and orgId != ''">#{orgId},</if>
             <if test="caseNo != null  and caseNo != ''">#{caseNo},</if>
             <if test="contactName != null  and contactName != ''">#{contactName},</if>
             <if test="phone != null  and phone != ''">#{phone},</if>

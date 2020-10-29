@@ -304,7 +304,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         remark,
         type,
         agent_name,
-        make_call_time
+        make_call_time,
+        org_id
         )
        SELECT
            name as contact_name,
@@ -371,7 +372,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
            (CASE seat
              WHEN '-1' THEN '机器人'
              ELSE seat END) as seat,
-           make_call_time
+           make_call_time,
+           org_id
        FROM t_lc_collectionrecordimprot_temp
        where import_batch_no = #{importBatchNo} and is_exception = '0'
     </insert>

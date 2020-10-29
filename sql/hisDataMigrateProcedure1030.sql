@@ -234,7 +234,7 @@ begin
     DELETE t from t_lc_cust_contact t,t_lc_task ta
     where t.case_no = ta.case_no and t.import_batch_no = ta.import_batch_no and t.org_id = ta.org_id and ta.task_status = 3 AND NOW() >= (SELECT date_sub(ta.close_date, INTERVAL - days DAY));
 -- 插入电催记录历史表
-    INSERT INTO `t_lc_call_record_his` (`contact_name`, `phone`, `contact_relation`, `call_start_time`, `call_end_time`, `call_len`, `call_sign`, `call_result`, `call_radio_location`, `call_radio`, `create_time`, `create_by`, `case_no`, `remark`, `platform`, `find_date`, `agent_name`, `star`, `type`, `make_call_time`, `action_code`, `action_code_value`, `cnje`)
+    INSERT INTO `t_lc_call_record_his` (`contact_name`, `phone`, `contact_relation`, `call_start_time`, `call_end_time`, `call_len`, `call_sign`, `call_result`, `call_radio_location`, `call_radio`, `create_time`, `create_by`, `case_no`, `remark`, `platform`, `find_date`, `agent_name`, `star`, `type`, `make_call_time`, `action_code`, `action_code_value`, `cnje`, `org_id`)
     select
         t.contact_name,
         t.phone,
@@ -258,7 +258,8 @@ begin
         t.make_call_time,
         t.action_code,
         t.action_code_value,
-        t.cnje
+        t.cnje,
+        t.org_id
     from t_lc_call_record t,t_lc_task ta
     where t.case_no = ta.case_no and t.create_time <= ta.close_date and ta.task_status = 3 AND NOW() >= (SELECT date_sub(ta.close_date, INTERVAL - days DAY));
 -- 删除电催记录表

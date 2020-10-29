@@ -926,7 +926,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         return randomTaskSet;
     }
 
-    private List<TLcTask> getAllocatTaskList(String taskIds, Integer allocatNum, String caseNos, String certificateNos, String arrearsTotals,SysUser sysUser) {
+    private List<TLcTask> getAllocatTaskList(String taskIds, Integer allocatNum, String caseNos, String certificateNos, String arrearsTotals, SysUser sysUser) {
         List<TLcTask> taskList = new ArrayList<>();
         if (allocatNum < taskIds.split(",").length) {
             Set<TLcTask> randomTaskSet = new HashSet<>(allocatNum); // 这里用set，因为随机选择的时候会重复，set可以去重
@@ -1303,8 +1303,12 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             // 新增或者修改电催记录
             if (tLcCallRecord.getId() == null) {
                 tLcCallRecord.setAgentName(ShiroUtils.getSysUser().getUserName());
-//                TLcTask tLcTask = this.tLcTaskMapper.selectTaskByCaseNo(tLcCallRecord.getCaseNo(),tLcCallRecord.getOrgId(),importBatchNo);
-//                tLcCallRecord.setActionCode(tLcTask.getActionCode());
+                try {
+                    tLcCallRecord.setOrgId(ShiroUtils.getSysUser().getOrgId().toString());
+                } catch (Exception e) {
+                    log.error("案件编号：{},获取orgId异常", tLcCallRecord.getCaseNo());
+                    tLcCallRecord.setOrgId("-1");
+                }
                 tLcCallRecordService.insertTLcCallRecord(tLcCallRecord);
             } else {
                 log.info("通话记录id不为空：{},话务平台：{},案件编号：{},录音地址：{},联系人手机号：{}",
