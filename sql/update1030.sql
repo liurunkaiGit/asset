@@ -1,7 +1,7 @@
 alter table org_package add column is_expire_auto_back_case tinyint(1) default null comment '是否到期自动退案,1：是，2：否';
 
-alter TABLE t_lp_result MODIFY COLUMN `total_recycle` decimal(10,2) DEFAULT NULL COMMENT '累计回收';
-alter TABLE t_lp_result MODIFY COLUMN `predict_commission` decimal(10,2) DEFAULT NULL COMMENT '预计佣金';
+-- alter TABLE t_lp_result MODIFY COLUMN `total_recycle` decimal(10,2) DEFAULT NULL COMMENT '累计回收';
+-- alter TABLE t_lp_result MODIFY COLUMN `predict_commission` decimal(10,2) DEFAULT NULL COMMENT '预计佣金';
 
 CREATE TABLE `t_lp_finance_commission` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
@@ -33,7 +33,7 @@ insert into sys_menu  (menu_name, parent_id, order_num, url, menu_type, visible,
 values('查询', @parentId, '1',  '#',  'F', '0', 'finance:commission:list',         '#', 'admin', NOW(), 'admin', NOW(), '');
 
 insert into sys_menu  (menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
-values('导出', @parentId, '2',  '#',  'F', '0', 'finance:commission:export',       '#', 'admin', 'admin', NOW(), 'admin', NOW(), '');
+values('导出', @parentId, '2',  '#',  'F', '0', 'finance:commission:export',       '#', 'admin', NOW(), 'admin', NOW(), '');
 
 INSERT INTO `sys_job` (`job_name`, `job_group`, `invoke_target`, `cron_expression`, `misfire_policy`, `concurrent`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
 VALUES ('生成任务结佣数据', 'DEFAULT', 'financeSchedule.createCommission', '0 0 0 1 * ?', '1', '1', '1', 'admin', '2020-10-27 18:42:56', '', NULL, '每个月1号生成任务结佣数据');

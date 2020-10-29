@@ -1,5 +1,6 @@
 package com.ruoyi.shareproject.finance.commission.controller;
 
+import com.ruoyi.assetspackage.domain.TLcImportFlow;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -7,7 +8,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.enums.IsNoEnum;
+import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.shareproject.finance.commission.domain.TLpFinanceCommission;
 import com.ruoyi.shareproject.finance.commission.service.ITLpFinanceCommissionService;
 import com.ruoyi.shareproject.projectinformation.domain.TLpProjectInformation;
@@ -21,9 +22,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAdjusters;
 import java.util.Arrays;
 import java.util.List;
 
@@ -138,4 +136,34 @@ public class TLpFinanceCommissionController extends BaseController {
     public AjaxResult setActualCommission(Long id, BigDecimal actualCommission, BigDecimal latestPredictCommission, Integer totalNum) {
         return this.tLpFinanceCommissionService.setActualCommission(id, actualCommission, latestPredictCommission, totalNum);
     }
+
+    /**
+     * 跳转财务结佣详情页
+     *
+     * @param month
+     * @param projectId
+     * @param modelMap
+     * @return
+     */
+    @GetMapping("/toShowFinanceCommissionDetail")
+    public String showFinanceCommissionDetail(String month, Long projectId, ModelMap modelMap) {
+        modelMap.put("month", month);
+        modelMap.put("projectId", projectId);
+        return prefix + "/showFinanceCommissionDetail";
+    }
+
+    /**
+     * 查询财务结佣详情
+     *
+     * @param financeCommission
+     * @return
+     */
+    @PostMapping("/showFinanceCommissionDetail")
+    @ResponseBody
+    public TableDataInfo showFinanceCommissionDetail(TLpFinanceCommission financeCommission) {
+        startPage();
+        List<TLpResult> list = this.tLpFinanceCommissionService.showFinanceCommissionDetail(financeCommission);
+        return getDataTable(list);
+    }
+
 }

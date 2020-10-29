@@ -2,6 +2,7 @@ package com.ruoyi.shareproject.finance.commission.service;
 
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.shareproject.finance.commission.domain.TLpFinanceCommission;
+import com.ruoyi.shareproject.result.domain.TLpResult;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -62,4 +63,6 @@ public interface ITLpFinanceCommissionService {
     public int deleteTLpFinanceCommissionById(Long id);
 
     AjaxResult setActualCommission(Long id, BigDecimal actualCommission, BigDecimal latestPredictCommission, Integer totalNum);
+
+    List<TLpResult> showFinanceCommissionDetail(TLpFinanceCommission financeCommission);
 }

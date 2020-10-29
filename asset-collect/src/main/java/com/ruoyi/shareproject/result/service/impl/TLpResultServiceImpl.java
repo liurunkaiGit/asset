@@ -3,6 +3,7 @@ package com.ruoyi.shareproject.result.service.impl;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.shareproject.finance.commission.domain.TLpFinanceCommission;
 import com.ruoyi.shareproject.result.domain.TLpResult;
 import com.ruoyi.shareproject.result.mapper.TLpResultMapper;
 import com.ruoyi.shareproject.result.service.ITLpResultService;
@@ -102,5 +103,10 @@ public class TLpResultServiceImpl implements ITLpResultService {
     @Override
     public Integer selectProjectResultUnique(TLpResult tLpResult) {
         return this.tLpResultMapper.selectProjectResultUnique(tLpResult);
+    }
+
+    @Override
+    public List<TLpResult> showFinanceCommissionDetail(TLpResult tLpResult) {
+        return this.tLpResultMapper.showFinanceCommissionDetail(tLpResult);
     }
 }

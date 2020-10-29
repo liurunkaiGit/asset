@@ -184,4 +184,13 @@ public class TLpFinanceCommissionServiceImpl implements ITLpFinanceCommissionSer
         this.tLpFinanceCommissionMapper.updateTLpFinanceCommission(financeCommission);
         return AjaxResult.success();
     }
+
+    @Override
+    public List<TLpResult> showFinanceCommissionDetail(TLpFinanceCommission financeCommission) {
+        TLpResult tLpResult = new TLpResult();
+        tLpResult.setStartReportDate(getFirstDay(financeCommission.getMonth()));
+        tLpResult.setEndReportDate(getLastDay(financeCommission.getMonth()));
+        tLpResult.setOrgId(financeCommission.getProjectId());
+        return this.resultService.showFinanceCommissionDetail(tLpResult);
+    }
 }

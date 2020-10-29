@@ -1,5 +1,6 @@
 package com.ruoyi.shareproject.result.service;
 
+import com.ruoyi.shareproject.finance.commission.domain.TLpFinanceCommission;
 import com.ruoyi.shareproject.result.domain.TLpResult;
 
 import java.util.List;
@@ -60,4 +61,6 @@ public interface ITLpResultService {
     public int deleteTLpResultById(Long id);
 
     Integer selectProjectResultUnique(TLpResult tLpResult);
+
+    List<TLpResult> showFinanceCommissionDetail(TLpResult tLpResult);
 }

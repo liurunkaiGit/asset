@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('财务结佣列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <!--<div class="col-sm-12 search-collapse">-->
+                <form id="formId">
+                    <input type="hidden" name="month" id="month" th:value="${month}"/>
+                    <input type="hidden" name="projectId" id="projectId" th:value="${projectId}"/>
+                </form>
+            <!--</div>-->
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "finance/commission";
+
+        $(function() {
+            var options = {
+                url: prefix + "/showFinanceCommissionDetail",
+                clickToSelect: true,
+                modalName: "财务结佣",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '主键id',
+                    visible: false
+                },
+                    {
+                        field : '',
+                        title : '序号',
+                        formatter: function (value, row, index) {
+                            return $.table.serialNumber(index);
+                        }
+                    },
+                {
+                    field : 'month', 
+                    title : '月份',
+                    formatter: function (value, row, index) {
+                        return row.reportDate.substr(0, 7);
+                    }
+                },
+                /*{
+                    field : 'projectId', 
+                    title : '项目id'
+                },*/
+                {
+                    field : 'orgName',
+                    title : '项目'
+                },
+                {
+                    field : 'reportDate',
+                    title : '日期'
+                },
+                {
+                    field : 'predictCommission',
+                    title : '预计佣金合计',
+                    footerFormatter:function (value) {
+                        return "<font color=\"black\"> <b>合计</b></font>";
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+
+    </script>
+</body>
+</html>

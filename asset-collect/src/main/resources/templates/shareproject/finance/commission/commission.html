@@ -124,7 +124,10 @@
                     },
                 {
                     field : 'month', 
-                    title : '月份'
+                    title : '月份',
+                    formatter: function (value, row, index) {
+                        return "<a href='javascript:void(0)' onclick='showDetail(\""+value + "\",\""+row.projectId + "\")'>"+value+"</a>";
+                    },
                 },
                 /*{
                     field : 'projectId', 
@@ -223,6 +226,11 @@
                     $.modal.closeLoading();
                 });
             });
+        }
+
+        function showDetail(month, projectId) {
+            var toShowFinanceCommissionDetail = prefix + '/toShowFinanceCommissionDetail?month='+month+"&projectId="+projectId;
+            $.modal.open("财务结佣详情", toShowFinanceCommissionDetail);
         }
     </script>
 </body>

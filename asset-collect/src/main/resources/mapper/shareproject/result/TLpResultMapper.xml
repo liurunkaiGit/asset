@@ -59,6 +59,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+    <select id="showFinanceCommissionDetail" resultType="com.ruoyi.shareproject.result.domain.TLpResult" resultMap="TLpResultResult">
+        SELECT
+            id,
+            report_date,
+            org_name,
+            sum(predict_commission) as predict_commission
+        FROM
+            t_lp_result
+        <where>
+            <if test="orgId != null "> and org_id = #{orgId}</if>
+            <if test="startReportDate != null">
+                and report_date <![CDATA[>=]]> #{startReportDate}
+            </if>
+            <if test="endReportDate != null">
+                and report_date <![CDATA[<=]]> #{endReportDate}
+            </if>
+        </where>
+        group by report_date
+    </select>
+
     <insert id="insertTLpResult" parameterType="com.ruoyi.shareproject.result.domain.TLpResult" useGeneratedKeys="true" keyProperty="id">
         insert into t_lp_result
         <trim prefix="(" suffix=")" suffixOverrides=",">

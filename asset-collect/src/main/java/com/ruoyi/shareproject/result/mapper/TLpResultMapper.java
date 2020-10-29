@@ -60,4 +60,6 @@ public interface TLpResultMapper {
     public int deleteTLpResultByIds(String[] ids);
 
     Integer selectProjectResultUnique(TLpResult tLpResult);
+
+    List<TLpResult> showFinanceCommissionDetail(TLpResult tLpResult);
 }
