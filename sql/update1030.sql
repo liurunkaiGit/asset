@@ -3,6 +3,8 @@ alter table org_package add column is_expire_auto_back_case tinyint(1) default n
 -- alter TABLE t_lp_result MODIFY COLUMN `total_recycle` decimal(10,2) DEFAULT NULL COMMENT '累计回收';
 -- alter TABLE t_lp_result MODIFY COLUMN `predict_commission` decimal(10,2) DEFAULT NULL COMMENT '预计佣金';
 
+alter table t_lp_result MODIFY column `target_rank` VARCHAR(20) DEFAULT NULL COMMENT '目标排名';
+
 CREATE TABLE `t_lp_finance_commission` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `month` varchar(10) DEFAULT NULL COMMENT '月份',

@@ -137,7 +137,11 @@ public class TLcReportPlatformServiceImpl implements ITLcReportPlatformService {
                 // 计算每一行的合计值
                 Integer rowTotalCalledNum = (platform.getPaCalledNum() == null ? 0 : platform.getPaCalledNum()) + (platform.getZjCalledNum() == null ? 0 : platform.getZjCalledNum()) + (platform.getDyCalledNum() == null ? 0 : platform.getDyCalledNum());
                 Integer rowTotalCallNum = (platform.getPaCallNum() == null ? 0 : platform.getPaCallNum()) + (platform.getZjCallNum() == null ? 0 : platform.getZjCallNum()) + (platform.getDyCallNum() == null ? 0 : platform.getDyCallNum());
-                String rowTotalCallLen = String.valueOf(StringUtils.isEmpty(platform.getPaCallLen()) ? new BigDecimal(0.00) : new BigDecimal(platform.getPaCallLen()).add(StringUtils.isEmpty(platform.getZjCallLen()) ? new BigDecimal(0.00) : new BigDecimal(platform.getZjCallLen())).add(StringUtils.isEmpty(platform.getDyCallLen()) ? new BigDecimal(0.00) : new BigDecimal(platform.getDyCallLen())));
+//                String rowTotalCallLen = String.valueOf(StringUtils.isEmpty(platform.getPaCallLen()) ? new BigDecimal(0.00) : new BigDecimal(platform.getPaCallLen()).add(StringUtils.isEmpty(platform.getZjCallLen()) ? new BigDecimal(0.00) : new BigDecimal(platform.getZjCallLen())).add(StringUtils.isEmpty(platform.getDyCallLen()) ? new BigDecimal(0.00) : new BigDecimal(platform.getDyCallLen())));
+                BigDecimal paCallLen = StringUtils.isEmpty(platform.getPaCallLen()) ? new BigDecimal(0.00) : new BigDecimal(platform.getPaCallLen());
+                BigDecimal zjCallLen = StringUtils.isEmpty(platform.getZjCallLen()) ? new BigDecimal(0.00) : new BigDecimal(platform.getZjCallLen());
+                BigDecimal dyCallLen = StringUtils.isEmpty(platform.getDyCallLen()) ? new BigDecimal(0.00) : new BigDecimal(platform.getDyCallLen());
+                String rowTotalCallLen = String.valueOf(paCallLen.add(zjCallLen).add(dyCallLen));
                 // 设置每一行的合计
                 platform.setTotalCalledNum(rowTotalCalledNum);
                 platform.setTotalCallNum(rowTotalCallNum);

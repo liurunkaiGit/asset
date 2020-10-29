@@ -90,7 +90,7 @@ public class TLpResult extends BaseEntity {
      * 目标排名
      */
     @Excel(name = "目标排名")
-    private Integer targetRank;
+    private String targetRank;
 
     private Date startReportDate;
     private Date endReportDate;

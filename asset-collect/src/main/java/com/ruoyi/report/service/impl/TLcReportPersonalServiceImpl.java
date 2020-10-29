@@ -55,7 +55,10 @@ public class TLcReportPersonalServiceImpl implements ITLcReportPersonalService {
                     // 计算每一行的合计值
                     Integer rowTotalCalledNum = (personal.getPaCalledNum() == null ? 0 : personal.getPaCalledNum()) + (personal.getZjCalledNum() == null ? 0 : personal.getZjCalledNum()) + (personal.getDyCalledNum() == null ? 0 : personal.getDyCalledNum());
                     Integer rowTotalCallNum = (personal.getPaCallNum() == null ? 0 : personal.getPaCallNum()) + (personal.getZjCallNum() == null ? 0 : personal.getZjCallNum()) + (personal.getDyCallNum() == null ? 0 : personal.getDyCallNum());
-                    String rowTotalCallLen = String.valueOf(org.apache.commons.lang3.StringUtils.isEmpty(personal.getPaCallLen()) ? new BigDecimal(0.00) : new BigDecimal(personal.getPaCallLen()).add(StringUtils.isEmpty(personal.getZjCallLen()) ? new BigDecimal(0.00) : new BigDecimal(personal.getZjCallLen())).add(StringUtils.isEmpty(personal.getDyCallLen()) ? new BigDecimal(0.00) : new BigDecimal(personal.getDyCallLen())));
+                    BigDecimal paCallLen = StringUtils.isEmpty(personal.getPaCallLen()) ? new BigDecimal(0.00) : new BigDecimal(personal.getPaCallLen());
+                    BigDecimal zjCallLen = StringUtils.isEmpty(personal.getZjCallLen()) ? new BigDecimal(0.00) : new BigDecimal(personal.getZjCallLen());
+                    BigDecimal dyCallLen = StringUtils.isEmpty(personal.getDyCallLen()) ? new BigDecimal(0.00) : new BigDecimal(personal.getDyCallLen());
+                    String rowTotalCallLen = String.valueOf(paCallLen.add(zjCallLen).add(dyCallLen));
                     // 设置每一行的合计值
                     personal.setTotalCalledNum(rowTotalCalledNum);
                     personal.setTotalCallNum(rowTotalCallNum);

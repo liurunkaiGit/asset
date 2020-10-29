@@ -112,7 +112,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="totalRecycle != null ">total_recycle,</if>
             <if test="predictCommission != null ">predict_commission,</if>
             <if test="recycleRate != null  and recycleRate != ''">recycle_rate,</if>
-            <if test="targetRank != null ">target_rank,</if>
+            <if test="targetRank != null and targetRank != ''">target_rank,</if>
             <if test="createBy != null ">create_by,</if>
             create_time,
             <if test="updateBy != null ">update_by,</if>
@@ -128,7 +128,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="totalRecycle != null ">#{totalRecycle},</if>
             <if test="predictCommission != null ">#{predictCommission},</if>
             <if test="recycleRate != null  and recycleRate != ''">#{recycleRate},</if>
-            <if test="targetRank != null ">#{targetRank},</if>
+            <if test="targetRank != null and targetRank != ''">#{targetRank},</if>
             <if test="createBy != null ">#{createBy},</if>
             NOW(),
             <if test="updateBy != null ">#{updateBy},</if>
