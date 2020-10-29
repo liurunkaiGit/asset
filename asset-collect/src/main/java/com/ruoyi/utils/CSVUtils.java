@@ -16,10 +16,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.druid.util.StringUtils;
-
+import com.ruoyi.common.utils.file.FileUtils;
 
 
 /**
@@ -28,6 +29,7 @@ import com.alibaba.druid.util.StringUtils;
 public class CSVUtils {
 
     private static String Separator = "|";
+    private static String Separator2 = ",";
     /**
      * 每个文件的数据条数
      */
@@ -147,6 +149,84 @@ public class CSVUtils {
                 e.printStackTrace();
             }
         }
+        return csvFile;
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static File createAndDownLoadCSVFile(HttpServletRequest request, HttpServletResponse response,
+                                                List<Map<String,Object>> exportData, LinkedHashMap map,
+                                                String outPutPath, String fileName) {
+        File csvFile = null;
+        BufferedWriter csvFileOutputStream = null;
+        try {
+            File file = new File(outPutPath);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            //定义文件名格式并创建
+            csvFile =new File(outPutPath+fileName);
+            file.createNewFile();
+            // UTF-8使正确读取分隔符","
+            //如果生产文件乱码，windows下用gbk，linux用UTF-8
+            csvFileOutputStream = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
+                    csvFile), "gbk"), 1024);
+
+            // 写入文件头部
+            if(map != null){
+                for (Iterator propertyIterator = map.entrySet().iterator(); propertyIterator.hasNext();) {
+                    java.util.Map.Entry propertyEntry = (java.util.Map.Entry) propertyIterator.next();
+                    csvFileOutputStream.write((String) propertyEntry.getValue() != null ? (String) propertyEntry.getValue() : "" );
+                    if (propertyIterator.hasNext()) {
+                        csvFileOutputStream.write(Separator2);
+                    }
+                }
+                csvFileOutputStream.newLine();
+            }
+
+            // 写入文件内容
+            if(exportData != null && exportData.size() > 0){
+                for( int i = 0; i < exportData.size(); i++ ){
+                    Map<String,Object> row = exportData.get(i);
+                    for(Iterator propertyIterator = row.entrySet().iterator(); propertyIterator.hasNext();){
+                        java.util.Map.Entry propertyEntry = (java.util.Map.Entry) propertyIterator
+                                .next();
+                        String str = row != null?((String)(row).get( propertyEntry.getKey())):"";
+                        if(StringUtils.isEmpty(str)){
+                            str="";
+                        }else{
+                            str=str.replaceAll("\"","\"\"");
+                            if(str.indexOf(",")>=0){
+                                str="\""+str+"\"";
+                            }
+                        }
+                        csvFileOutputStream.write(str);
+                        if (propertyIterator.hasNext()) {
+                            csvFileOutputStream.write(Separator2);
+                        }
+                    }
+                    csvFileOutputStream.newLine();
+                }
+
+            }
+            csvFileOutputStream.flush();
+
+            //下载
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("multipart/form-data");
+            response.setHeader("Content-Disposition",
+                    "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, fileName));
+            FileUtils.writeBytes(outPutPath+fileName, response.getOutputStream());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                csvFileOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         return csvFile;
     }
 

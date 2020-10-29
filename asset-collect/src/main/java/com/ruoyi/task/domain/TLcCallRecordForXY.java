@@ -101,7 +101,29 @@ public class TLcCallRecordForXY extends BaseEntity {
     @Excel(name = "到期时间",dateFormat = "yyyy-MM-dd")
     private Date tar;
 
+    /**
+     * 通话时长
+     */
+    private Integer startCallLen;
+    private Integer endCallLen;
 
+
+    /**
+     * 拨打时间
+     */
+    private Date startCreateTime;
+    private Date endCreateTime;
+
+    /**
+     * 通话时间
+     */
+    private Date startCallStartTime;
+    private Date endCallStartTime;
+
+    private String orgId;
+
+    private Integer pNum;
+    private Integer pSize;
 
     @Override
     public Date getCreateTime() {

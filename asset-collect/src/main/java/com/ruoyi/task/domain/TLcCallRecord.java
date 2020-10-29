@@ -271,5 +271,9 @@ public class TLcCallRecord extends BaseEntity {
     private String areaCenter;
 
 
+    private Integer pNum;
+    private Integer pSize;
+
+
 
 }

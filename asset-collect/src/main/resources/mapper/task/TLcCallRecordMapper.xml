@@ -140,6 +140,37 @@
         </if>
     </select>-->
 
+    <select id="selectTLcCallRecordCount" parameterType="com.ruoyi.task.domain.TLcCallRecord" resultType="java.lang.Integer">
+        SELECT
+          count(*)
+        FROM
+        t_lc_call_record re
+        WHERE
+        re.org_id = #{orgId}
+        <if test="startCreateTime != null">
+            AND re.create_time <![CDATA[>=]]> #{startCreateTime}
+        </if>
+        <if test="endCreateTime != null">
+            AND re.create_time <![CDATA[<=]]> #{endCreateTime}
+        </if>
+        <if test="startCallStartTime != null">
+            AND re.call_start_time <![CDATA[>=]]> #{startCallStartTime}
+        </if>
+        <if test="endCallStartTime != null">
+            AND re.call_start_time <![CDATA[<=]]> #{endCallStartTime}
+        </if>
+        <if test="startCallLen != null">
+            AND re.call_len <![CDATA[>=]]> #{startCallLen}
+        </if>
+        <if test="endCallLen != null">
+            AND re.call_len <![CDATA[<=]]> #{endCallLen}
+        </if>
+        <if test="caseNo != null and caseNo != '' ">
+            AND re.case_no = #{caseNo}
+        </if>
+        order by re.create_time desc
+    </select>
+
     <select id="selectTLcCallRecordList" parameterType="com.ruoyi.task.domain.TLcCallRecord" resultMap="TLcCallRecordResult">
         select (@a :=@a + 1) as sque,tab.* from (
             SELECT
@@ -203,6 +234,9 @@
                 AND cap.cur_name = #{customName}
             </if>
             order by re.create_time desc
+            <if test="pNum != null and pSize != null" >
+                limit #{pNum},#{pSize}
+            </if>
         ) tab,(SELECT @a := 0) t1
     </select>
 

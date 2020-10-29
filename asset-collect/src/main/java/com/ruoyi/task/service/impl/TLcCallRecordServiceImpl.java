@@ -7,6 +7,7 @@ import com.ruoyi.assetspackage.service.IOrgPackageService;
 import com.ruoyi.assetspackage.util.DownLoadFromHttpsUtil;
 import com.ruoyi.caseConfig.domain.TLcAllocatCaseConfig;
 import com.ruoyi.caseConfig.service.ITLcAllocatCaseConfigService;
+import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.file.FileUtils;
@@ -33,10 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -123,6 +121,41 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
         return xyList;
     }
 
+
+    @Override
+    public List<Map<String,Object>> selectTLcCallRecordListForXY2(TLcCallRecord tLcCallRecord) {
+        if (tLcCallRecord.getEndCreateTime() != null) {
+            tLcCallRecord.setEndCreateTime(DateUtils.getEndOfDay(tLcCallRecord.getEndCreateTime()));
+        }
+        if (tLcCallRecord.getEndCallStartTime() != null) {
+            tLcCallRecord.setEndCallStartTime(DateUtils.getEndOfDay(tLcCallRecord.getEndCallStartTime()));
+        }
+        if (tLcCallRecord.getStartCallLen() != null) {
+            tLcCallRecord.setStartCallLen(tLcCallRecord.getStartCallLen() * 1000);
+        }
+        if (tLcCallRecord.getEndCallLen() != null) {
+            tLcCallRecord.setEndCallLen(tLcCallRecord.getEndCallLen() * 1000);
+        }
+
+
+        int pageSize = 10000;//每页的数据条数
+        int pageCount = 0;//总页数
+        int count = tLcCallRecordMapper.selectTLcCallRecordCount(tLcCallRecord);
+        pageCount = count/pageSize + 1;
+
+        List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+        for(int i = 0 ; i < pageCount; i ++){
+            tLcCallRecord.setPNum(pageSize*i);
+            tLcCallRecord.setPSize(pageSize);
+            List<TLcCallRecord> recordList = tLcCallRecordMapper.selectTLcCallRecordList(tLcCallRecord);
+            List<TLcCallRecordForXY> xyList = this.ConvertXYList(recordList);
+            List<Map<String, Object>> datas = this.ConvertXYList2(xyList);
+            list.addAll(datas);
+        }
+
+        return list;
+    }
+
     private List<TLcCallRecordForXY> ConvertXYList(List<TLcCallRecord> list){
         List<TLcCallRecordForXY> resultList = new ArrayList<>();
         for (TLcCallRecord tLcCallRecord : list) {
@@ -175,7 +208,28 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
         return resultList;
     }
 
-
+    private List<Map<String,Object>> ConvertXYList2(List<TLcCallRecordForXY> list){
+        List<Map<String,Object>> resultList = new ArrayList<>();
+        for (TLcCallRecordForXY xyRecord : list) {
+            Map<String,Object> rowMap = new LinkedHashMap<>();
+            rowMap.put("序号",xyRecord.getSque() != null ? xyRecord.getSque().toString() : null);
+            rowMap.put("贷款合同号",xyRecord.getCaseNo() != null ? xyRecord.getCaseNo() : null);
+            rowMap.put("业务部门",xyRecord.getYwdetp() != null ? xyRecord.getYwdetp() : null);
+            rowMap.put("外包经办",xyRecord.getWbjb() != null ? xyRecord.getWbjb() : null);
+            rowMap.put("客户姓名",xyRecord.getCustomName() != null ? xyRecord.getCustomName() : null);
+            rowMap.put("产品名称",xyRecord.getProductName() != null ? xyRecord.getProductName() : null);
+            rowMap.put("催收动作",xyRecord.getCsdz() != null ? xyRecord.getCsdz() : null);
+            rowMap.put("催收时间",xyRecord.getCreateTime() != null ? DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS,xyRecord.getCreateTime()) : null);
+            rowMap.put("催收结果",xyRecord.getCallResult() != null ? xyRecord.getCallResult() : null);
+            rowMap.put("联络人",xyRecord.getContactName() != null ? xyRecord.getContactName() : null);
+            rowMap.put("联络方式",xyRecord.getPhone() != null ? xyRecord.getPhone() : null);
+            rowMap.put("催收详细情况",xyRecord.getRemarkDetail() != null ? xyRecord.getRemarkDetail() : null);
+            rowMap.put("委案时间",xyRecord.getEnterCollDate() != null ? DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD,xyRecord.getEnterCollDate()) : null);
+            rowMap.put("到期时间",xyRecord.getTar() != null ? DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD,xyRecord.getTar()) : null);
+            resultList.add(rowMap);
+        }
+        return resultList;
+    }
 
 
     /**

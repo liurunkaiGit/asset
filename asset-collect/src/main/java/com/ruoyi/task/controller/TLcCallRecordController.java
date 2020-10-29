@@ -17,6 +17,7 @@ import com.ruoyi.task.domain.TLcCallRecordForDQ;
 import com.ruoyi.task.domain.TLcCallRecordForJX;
 import com.ruoyi.task.domain.TLcCallRecordForXY;
 import com.ruoyi.task.service.ITLcCallRecordService;
+import com.ruoyi.utils.CSVUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +28,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 通话结果记录Controller
@@ -55,6 +58,14 @@ public class TLcCallRecordController extends BaseController {
         return prefix + "/record";
     }
 
+    @RequiresPermissions("call:record:view")
+    @GetMapping("/recordForXY")
+    public String recordForXY(ModelMap mmap) {
+        String curDate = DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD, new Date());
+        mmap.put("curDate", DateUtils.parseDate(curDate));
+        return prefix + "/recordForXY";
+    }
+
 
     @RequiresPermissions("call:record:view")
     @GetMapping("/listenRecord")
@@ -69,6 +80,20 @@ public class TLcCallRecordController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(TLcCallRecord tLcCallRecord) {
+        startPage();
+        List<TLcCallRecord> list = tLcCallRecordService.selectTLcCallRecordList(tLcCallRecord);
+        return getDataTable(list);
+    }
+
+    /**
+     * 查询兴业通话结果记录列表
+     */
+    @RequiresPermissions("call:record:List")
+    @PostMapping("/XYList")
+    @ResponseBody
+    public TableDataInfo getXYList(TLcCallRecord tLcCallRecord) {
+        String configValue = sysConfigService.selectConfigByKey("orgId");
+        tLcCallRecord.setOrgId(configValue);
         startPage();
         List<TLcCallRecord> list = tLcCallRecordService.selectTLcCallRecordList(tLcCallRecord);
         return getDataTable(list);
@@ -104,6 +129,40 @@ public class TLcCallRecordController extends BaseController {
             return util.exportExcel(list, "record",System.currentTimeMillis() + "record");
         }
     }
+
+
+    /**
+     * 兴业导出通话结果记录列表
+     */
+    @RequiresPermissions("call:record:export")
+    @Log(title = "兴业通话记录", businessType = BusinessType.EXPORT)
+    @GetMapping("/XYExport")
+    @ResponseBody
+    public void getXYExport(HttpServletRequest request, HttpServletResponse response,TLcCallRecord tLcCallRecord) {
+        String xyOutPath = sysConfigService.selectConfigByKey("xyOutPath");
+        String configValue = sysConfigService.selectConfigByKey("orgId");
+        tLcCallRecord.setOrgId(configValue);
+        List<Map<String,Object>> list = tLcCallRecordService.selectTLcCallRecordListForXY2(tLcCallRecord);
+        LinkedHashMap map = new LinkedHashMap();
+        map.put("序号","序号");
+        map.put("贷款合同号","贷款合同号");
+        map.put("业务部门","业务部门");
+        map.put("外包经办","外包经办");
+        map.put("客户姓名","客户姓名");
+        map.put("产品名称","产品名称");
+        map.put("催收动作","催收动作");
+        map.put("催收时间","催收时间");
+        map.put("催收结果","催收结果");
+        map.put("联络人","联络人");
+        map.put("联络方式","联络方式");
+        map.put("催收详细情况","催收详细情况");
+        map.put("委案时间","委案时间");
+        map.put("到期时间","到期时间");
+        CSVUtils.createAndDownLoadCSVFile(request ,response ,list ,
+                map ,xyOutPath ,System.currentTimeMillis() + "兴业催记.csv");
+
+    }
+
 
     /**
      * 新增通话结果记录
