@@ -46,6 +46,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="proName != null  and proName != ''"> and pro_name like concat('%', #{proName}, '%')</if>
             <if test="dailyName != null  and dailyName != ''"> and daily_name like concat('%', #{dailyName}, '%')</if>
         </where>
+        order by update_time desc
     </select>
     
     <select id="selectTLpProjectDailyById" parameterType="Long" resultMap="TLpProjectDailyResult">
