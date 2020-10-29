@@ -103,6 +103,23 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
     }
 
     @Override
+    public List<TLcCallRecord> selectTLcCallRecordXYList(TLcCallRecord tLcCallRecord) {
+        if (tLcCallRecord.getEndCreateTime() != null) {
+            tLcCallRecord.setEndCreateTime(DateUtils.getEndOfDay(tLcCallRecord.getEndCreateTime()));
+        }
+        if (tLcCallRecord.getEndCallStartTime() != null) {
+            tLcCallRecord.setEndCallStartTime(DateUtils.getEndOfDay(tLcCallRecord.getEndCallStartTime()));
+        }
+        if (tLcCallRecord.getStartCallLen() != null) {
+            tLcCallRecord.setStartCallLen(tLcCallRecord.getStartCallLen() * 1000);
+        }
+        if (tLcCallRecord.getEndCallLen() != null) {
+            tLcCallRecord.setEndCallLen(tLcCallRecord.getEndCallLen() * 1000);
+        }
+        return tLcCallRecordMapper.selectTLcCallRecordXYList(tLcCallRecord);
+    }
+
+    @Override
     public List<TLcCallRecordForXY> selectTLcCallRecordListForXY(TLcCallRecord tLcCallRecord) {
         if (tLcCallRecord.getEndCreateTime() != null) {
             tLcCallRecord.setEndCreateTime(DateUtils.getEndOfDay(tLcCallRecord.getEndCreateTime()));
@@ -147,10 +164,11 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
         for(int i = 0 ; i < pageCount; i ++){
             tLcCallRecord.setPNum(pageSize*i);
             tLcCallRecord.setPSize(pageSize);
-            List<TLcCallRecord> recordList = tLcCallRecordMapper.selectTLcCallRecordList(tLcCallRecord);
+            List<TLcCallRecord> recordList = tLcCallRecordMapper.selectTLcCallRecordXYList(tLcCallRecord);
             List<TLcCallRecordForXY> xyList = this.ConvertXYList(recordList);
             List<Map<String, Object>> datas = this.ConvertXYList2(xyList);
             list.addAll(datas);
+            log.error("*******兴业催记导出生成"+(i+1)+"万条*********");
         }
 
         return list;

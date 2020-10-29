@@ -32,6 +32,8 @@ public interface TLcCallRecordMapper {
      */
     public List<TLcCallRecord> selectTLcCallRecordList(TLcCallRecord tLcCallRecord);
 
+    public List<TLcCallRecord> selectTLcCallRecordXYList(TLcCallRecord tLcCallRecord);
+
     public Integer selectTLcCallRecordCount(TLcCallRecord tLcCallRecord);
 
     /**

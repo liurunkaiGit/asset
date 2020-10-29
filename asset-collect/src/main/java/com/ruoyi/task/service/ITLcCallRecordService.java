@@ -31,6 +31,7 @@ public interface ITLcCallRecordService {
      * @return 通话结果记录集合
      */
     public List<TLcCallRecord> selectTLcCallRecordList(TLcCallRecord tLcCallRecord);
+    public List<TLcCallRecord> selectTLcCallRecordXYList(TLcCallRecord tLcCallRecord);
     public List<TLcCallRecordForXY> selectTLcCallRecordListForXY(TLcCallRecord tLcCallRecord);
     public List<Map<String,Object>> selectTLcCallRecordListForXY2(TLcCallRecord tLcCallRecord);
 

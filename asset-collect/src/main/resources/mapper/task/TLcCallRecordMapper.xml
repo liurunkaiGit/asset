@@ -240,6 +240,65 @@
         ) tab,(SELECT @a := 0) t1
     </select>
 
+    <select id="selectTLcCallRecordXYList" parameterType="com.ruoyi.task.domain.TLcCallRecord" resultMap="TLcCallRecordResult">
+        SELECT
+        (@a :=@a + 1) as sque,
+        re.case_no,
+        (select cap.cur_name from cur_assets_package cap where re.case_no = cap.org_casNo limit 1) as customName,
+        (select cap.rcr from cur_assets_package cap where re.case_no = cap.org_casNo limit 1) AS enterCollDate,
+        re.contact_name,
+        re.contact_relation,
+        re.phone,
+        re.call_sign as callSignEn,
+        CONCAT(re.call_sign,'(',re.call_result,')') AS call_sign,
+        re.find_date,
+        re.remark,
+        re.create_time,
+        re.call_start_time,
+        re.call_end_time,
+        re.call_len / 1000 AS call_len,
+        re.call_radio_location,
+        (select cap.cpmc from cur_assets_package cap where re.case_no = cap.org_casNo limit 1) as product_name,
+        (select cap.tar from cur_assets_package cap where re.case_no = cap.org_casNo limit 1) as back_case_date,
+        (select cap.tj_firm from cur_assets_package cap where re.case_no = cap.org_casNo limit 1) as recommend_vendor,
+        '华道数据' AS wbjb,
+        '电催' AS csdz,
+        re.call_result,
+        re.cnje
+        FROM
+        t_lc_call_record re,(SELECT @a := 0) t1
+        WHERE
+        re.org_id = #{orgId}
+        <if test="startCreateTime != null">
+            AND re.create_time <![CDATA[>=]]> #{startCreateTime}
+        </if>
+        <if test="endCreateTime != null">
+            AND re.create_time <![CDATA[<=]]> #{endCreateTime}
+        </if>
+        <if test="startCallStartTime != null">
+            AND re.call_start_time <![CDATA[>=]]> #{startCallStartTime}
+        </if>
+        <if test="endCallStartTime != null">
+            AND re.call_start_time <![CDATA[<=]]> #{endCallStartTime}
+        </if>
+        <if test="startCallLen != null">
+            AND re.call_len <![CDATA[>=]]> #{startCallLen}
+        </if>
+        <if test="endCallLen != null">
+            AND re.call_len <![CDATA[<=]]> #{endCallLen}
+        </if>
+        <if test="caseNo != null and caseNo != '' ">
+            AND re.case_no = #{caseNo}
+        </if>
+        <if test="customName != null and customName != '' ">
+            AND cap.cur_name = #{customName}
+        </if>
+        order by re.create_time desc
+        <if test="pNum != null and pSize != null" >
+            limit #{pNum},#{pSize}
+        </if>
+    </select>
+
     <select id="selectTLcCallRecordById" parameterType="Long" resultMap="TLcCallRecordResult">
         <include refid="selectTLcCallRecordVo"/>
         where id = #{id}

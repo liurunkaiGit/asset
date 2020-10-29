@@ -95,7 +95,7 @@ public class TLcCallRecordController extends BaseController {
         String configValue = sysConfigService.selectConfigByKey("orgId");
         tLcCallRecord.setOrgId(configValue);
         startPage();
-        List<TLcCallRecord> list = tLcCallRecordService.selectTLcCallRecordList(tLcCallRecord);
+        List<TLcCallRecord> list = tLcCallRecordService.selectTLcCallRecordXYList(tLcCallRecord);
         return getDataTable(list);
     }
 
