@@ -41,7 +41,6 @@ public class TLpFinanceCommission extends BaseEntity {
     /**
      * 项目id
      */
-    @Excel(name = "项目id")
     private Long projectId;
 
     /**
