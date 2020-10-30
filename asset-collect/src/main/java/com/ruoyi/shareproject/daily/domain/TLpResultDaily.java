@@ -61,7 +61,7 @@ public class TLpResultDaily extends BaseEntity
 
     /** 目标排名 */
     @Excel(name = "目标排名")
-    private Integer targetRank;
+    private String targetRank;
     /** 日报id */
     @Excel(name = "日报id")
     private Long dailyId;

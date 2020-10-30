@@ -169,7 +169,7 @@ CREATE TABLE `t_lp_result_daily` (
   `total_recycle` decimal(10,0) DEFAULT NULL COMMENT '累计回收',
   `predict_commission` decimal(10,0) DEFAULT NULL COMMENT '预计佣金',
   `recycle_rate` varchar(255) DEFAULT NULL COMMENT '回收率',
-  `target_rank` int(2) DEFAULT NULL COMMENT '目标排名',
+  `target_rank` varchar(20) DEFAULT NULL COMMENT '目标排名',
   `create_by` int(255) DEFAULT NULL COMMENT '创建人',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_by` int(11) DEFAULT NULL COMMENT '修改人',
