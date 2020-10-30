@@ -208,7 +208,7 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
                 relateion = this.getRelateion(contactRelation);
             }
 //            String relateion = this.getRelateion(contactRelation);
-            if (tLcCallRecord.getContactRelation().equals(ContactRelaEnum.SELE.getCode())) {
+            if (tLcCallRecord.getContactRelation() == ContactRelaEnum.SELE.getCode()) {
                 xyEntity.setContactName("本人");
             } else {
                 contactName = relateion+"-"+contactName;
