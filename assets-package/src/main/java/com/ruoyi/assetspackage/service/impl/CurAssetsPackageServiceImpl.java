@@ -44,6 +44,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
@@ -1793,11 +1795,64 @@ public class CurAssetsPackageServiceImpl extends BaseController implements ICurA
         paramList.stream().forEach(tempCurAssets -> {
 //            String importBatchNo = this.curAssetsPackageMapper.selectBatchNo(tempCurAssets);
 //            tempCurAssets.setImportBatchNo(importBatchNo);
+            if(tempCurAssets.getRcr() != null && !"".equals(tempCurAssets.getRcr())){
+                tempCurAssets.setRcr(dateRepair(tempCurAssets.getRcr()));
+            }
+            if(tempCurAssets.getFirstYqDate() != null && !"".equals(tempCurAssets.getFirstYqDate())){
+                tempCurAssets.setFirstYqDate(dateRepair(tempCurAssets.getFirstYqDate()));
+            }
+            if(tempCurAssets.getFirstYqjcDate() != null && !"".equals(tempCurAssets.getFirstYqjcDate())){
+                tempCurAssets.setFirstYqjcDate(dateRepair(tempCurAssets.getFirstYqjcDate()));
+            }
+            if(tempCurAssets.getTar() != null && !"".equals(tempCurAssets.getTar())){
+                tempCurAssets.setTar(dateRepair(tempCurAssets.getTar()));
+            }
+            if(tempCurAssets.getJkrq() != null && !"".equals(tempCurAssets.getJkrq())){
+                tempCurAssets.setJkrq(dateRepair(tempCurAssets.getJkrq()));
+            }
+            if(tempCurAssets.getZhychkr() != null && !"".equals(tempCurAssets.getZhychkr())){
+                tempCurAssets.setZhychkr(dateRepair(tempCurAssets.getZhychkr()));
+            }
+            if(tempCurAssets.getLastLoanDate() != null && !"".equals(tempCurAssets.getLastLoanDate())){
+                tempCurAssets.setLastLoanDate(dateRepair(tempCurAssets.getLastLoanDate()));
+            }
+            if(tempCurAssets.getDzhxrq() != null && !"".equals(tempCurAssets.getDzhxrq())){
+                tempCurAssets.setDzhxrq(dateRepair(tempCurAssets.getDzhxrq()));
+            }
+            if(tempCurAssets.getSjrq() != null && !"".equals(tempCurAssets.getSjrq())){
+                tempCurAssets.setSjrq(dateRepair(tempCurAssets.getSjrq()));
+            }
             String jsonStr = JSON.toJSONString(tempCurAssets);
             Assets2 assets = JSONObject.parseObject(jsonStr, Assets2.class);
             desList.add(assets);
         });
         return desList;
+    }
+
+    public String dateRepair(String date) {
+        String result = null;
+        if(date != null && date.contains("/")){
+            String[] split = date.split("/");
+            if(split[1].length()==1){
+                split[1] = "0"+split[1];
+            }
+            if(split[2].length()==1){
+                split[2] = "0"+split[2];
+            }
+            result = StringUtils.join(split, "/");
+        }else if(date != null && date.contains("-")){
+            String[] split = date.split("-");
+            if(split[1].length()==1){
+                split[1] = "0"+split[1];
+            }
+            if(split[2].length()==1){
+                split[2] = "0"+split[2];
+            }
+            result = StringUtils.join(split, "-");
+        }else {
+            result = date;
+        }
+        return result;
     }
 
     private void insertFreeImport(List<TempCurAssetsPackage> paramList) throws Exception {

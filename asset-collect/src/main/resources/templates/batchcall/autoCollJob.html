@@ -418,6 +418,17 @@
                                     </ul>
                                 </div>
                             </div>
+                            <div class="row" style="display: none" id="cnjeDiv">
+                                <div class="select-list">
+                                    <ul>
+                                        <li class="select-time">
+                                            <label class="labelInfo">承诺金额：</label>
+                                            <input class="form-control" name="cnje" id="cnje" style="width: 180px; height: 30px" type="text" placeholder="最多只能输入两位小数"/>
+                                            <input class="form-control" id="configOrgId" type="hidden" th:value="${@config.getKey('dqConfigOrgId')}"/>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="select-list">
                                     <ul>
@@ -948,6 +959,11 @@
             var text = value.substring(value.indexOf("(")+1,value.indexOf(")"));
             $('#callRemarkAdd').val(text);
             $('#callResult').val(text);
+            if("承诺还款"== text || "称已还" == text){
+                $("#cnjeDiv").css("display","block");
+            }else{
+                $("#cnjeDiv").css("display","none");
+            }
         }else{
             $('#callRemarkAdd').val("");
             $('#callResult').val("");
@@ -1606,6 +1622,23 @@
             $.modal.alert("请选择最新行动码");
             return;
         }
+
+        var orgId = $("#orgId").val();
+        var cnje = $("#cnje").val();
+        var configOrgId = $("#configOrgId").val();
+        if(orgId == configOrgId && (sign=="PTP" || sign == "CYH")){
+            if(cnje == "" || cnje == null){
+                $.modal.alert("承诺金额不能为空");
+                return;
+            }
+        }
+        if(cnje != "" && cnje != null){
+            if(!checkJE(cnje)){
+                $.modal.alert("承诺金额必须是最多只能有两位小数的数字");
+                return;
+            }
+        }
+
         var findDate = $("#findDate").val();
 
         var val = $('input[name="radioChoose"]:checked').parents("tr");
@@ -2757,6 +2790,18 @@
             $("#notebook").attr("title",value);
             return _text;
         }
+    }
+
+    function checkJE(str){
+        if(isNaN(Number(str))){
+            return false;
+        }
+        if(str.indexOf(".") != -1){
+            if(str.split(".")[1].length > 2){
+                return false;
+            }
+        }
+        return true;
     }
 
 </script>
