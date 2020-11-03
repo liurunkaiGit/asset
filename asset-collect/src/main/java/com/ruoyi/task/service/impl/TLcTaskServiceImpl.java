@@ -68,6 +68,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Size;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.*;
@@ -617,13 +618,14 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
      */
     @Override
     public void helpColl(String userId, String taskIds, String ownerIds) {
+        String userName = this.sysUserService.selectUserById(Long.valueOf(userId)).getUserName();
         List<TLcTask> taskList = Arrays.stream(taskIds.split(","))
                 .map(taskId -> {
                     TLcTask tLcTask = this.tLcTaskMapper.selectTLcTaskById(Long.valueOf(taskId));
                     tLcTask.setTaskType(TaskTypeEnum.HELP_COLLECT_APPLY.getCode())
                             .setOldOwnerId(tLcTask.getOwnerId())
                             .setOwnerId(Long.valueOf(userId))
-                            .setOwnerName(this.sysUserService.selectUserById(Long.valueOf(userId)).getUserName())
+                            .setOwnerName(userName)
                             .setOldOwnerName(this.sysUserService.selectUserById(Long.valueOf(tLcTask.getOldOwnerId())).getUserName());
 //                    TLcDuncase tLcDuncase = this.tLcDuncaseMapper.findDuncaseByCaseNoAndImportBatchNo(tLcTask.getCaseNo(), tLcTask.getOrgId(), tLcTask.getImportBatchNo());
 //                    tLcDuncase.setTaskType(TaskTypeEnum.HELP_COLLECT_APPLY.getCode());
