@@ -646,13 +646,14 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     public void closeCase(String taskIds, String closeCaseType) {
         ArrayList<CloseCase> closeCaseList = new ArrayList<>();
         ArrayList<String> caseNoList = new ArrayList<>();
+        Long userId = ShiroUtils.getUserId();
         List<TLcTask> tLcTaskList = Arrays.stream(taskIds.split(","))
                 .map(taskId -> {
                     TLcTask tLcTask = this.tLcTaskMapper.selectTLcTaskById(Long.valueOf(taskId));
                     tLcTask.setTaskStatus(TaskStatusEnum.CLOSE.getStatus());
                     tLcTask.setTaskType(TaskTypeEnum.CLOSE_CASE_TRANSFER.getCode());
                     tLcTask.setCloseDate(new Date());
-                    tLcTask.setModifyBy(ShiroUtils.getUserId());
+                    tLcTask.setModifyBy(userId);
                     tLcTask.setCloseType(Integer.valueOf(closeCaseType));
 //                    CloseCase closeCase = CloseCase.builder().caseNo(tLcTask.getCaseNo()).orgId(tLcTask.getOrgId()).importBatchNo(tLcTask.getImportBatchNo()).isExitCollect(IsNoEnum.NO.getCode().toString()).build();
                     CloseCase closeCase = CloseCase.builder().caseNo(tLcTask.getCaseNo()).orgId(tLcTask.getOrgId()).importBatchNo(tLcTask.getImportBatchNo()).isExitCollect(closeCaseType).isClose(TaskStatusEnum.CLOSE.getStatus()).build();
@@ -674,12 +675,13 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         if (city != null && !"".equals(city)) {
             param.setProvince(null);
         }
+        Long userId = ShiroUtils.getUserId();
         List<TLcTask> tLcTaskList = this.tLcTaskMapper.selectTaskList(param);
         List<String> caseNoList = tLcTaskList.stream().map(tlcTask -> {
             tlcTask.setTaskStatus(TaskStatusEnum.CLOSE.getStatus());
             tlcTask.setTaskType(TaskTypeEnum.CLOSE_CASE_TRANSFER.getCode());
             tlcTask.setCloseDate(new Date());
-            tlcTask.setModifyBy(ShiroUtils.getUserId());
+            tlcTask.setModifyBy(userId);
             tlcTask.setCloseType(Integer.valueOf(closeCaseType));
             CloseCase closeCase = CloseCase.builder().caseNo(tlcTask.getCaseNo()).orgId(tlcTask.getOrgId()).importBatchNo(tlcTask.getImportBatchNo()).isExitCollect(closeCaseType).isClose(TaskStatusEnum.CLOSE.getStatus()).build();
             closeCaseList.add(closeCase);
