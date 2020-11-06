@@ -1,13 +1,17 @@
 package com.ruoyi.web.controller.system;
 
+import java.util.Date;
 import java.util.List;
 
+import com.ruoyi.assetspackage.domain.SysIpConfig;
+import com.ruoyi.assetspackage.service.ISysIpConfigService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysLoginStatus;
 import com.ruoyi.system.service.ISysLoginStatusService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,10 +39,14 @@ public class SysLoginStatusController extends BaseController
     @Autowired
     private ISysLoginStatusService sysLoginStatusService;
 
+    @Autowired
+    private ISysIpConfigService sysIpConfigService;
+
     @RequiresPermissions("system:status:view")
     @GetMapping()
-    public String status()
+    public String status(ModelMap modelMap)
     {
+        modelMap.put("curDate",new Date());
         return prefix + "/loginStatus";
     }
 
@@ -50,9 +58,10 @@ public class SysLoginStatusController extends BaseController
     @ResponseBody
     public TableDataInfo list(SysLoginStatus sysLoginStatus)
     {
+        List<String> ipList = sysIpConfigService.selectPartIpList();
         sysLoginStatus.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
         startPage();
-        List<SysLoginStatus> list = sysLoginStatusService.selectSysLoginStatusList(sysLoginStatus);
+        List<SysLoginStatus> list = sysLoginStatusService.selectSysLoginStatusList(sysLoginStatus,ipList);
         return getDataTable(list);
     }
 
@@ -65,8 +74,9 @@ public class SysLoginStatusController extends BaseController
     @ResponseBody
     public AjaxResult export(SysLoginStatus sysLoginStatus)
     {
+        List<String> ipList = sysIpConfigService.selectPartIpList();
         sysLoginStatus.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
-        List<SysLoginStatus> list = sysLoginStatusService.selectSysLoginStatusList(sysLoginStatus);
+        List<SysLoginStatus> list = sysLoginStatusService.selectSysLoginStatusList(sysLoginStatus,ipList);
         ExcelUtil<SysLoginStatus> util = new ExcelUtil<SysLoginStatus>(SysLoginStatus.class);
         return util.exportExcel(list, "status");
     }

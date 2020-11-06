@@ -56,16 +56,35 @@ public class SysLoginStatus extends BaseEntity
     private Date endTime;
 
     /** 登录次数 */
-    @Excel(name = "登录次数")
+//    @Excel(name = "登录次数")
     private Integer loginNum;
+
+    /** 退出次数 */
+    @Excel(name = "退出次数")
+    private Integer logoutNum;
 
     /** 在线时长 */
     @Excel(name = "在线时长")
     private String onlineLen;
 
+    /** 间隔时间 */
+    @Excel(name = "间隔时间")
+    private String intervalTime;
+
+    /** 在岗状态 */
+    @Excel(name = "在岗状态")
+    private String postStatus;
+
     /** 当前状态(0未登录,1已登录) */
     @Excel(name = "当前状态", readConverterExp = "0=未登录,1=已登录")
     private String status;
+
+
+    private String ipAddr;//IP地址
+
+    private String sessionId;
+
+    private String hostAddr;//服务器ip地址
 
     /** 创建者 */
     private String createBy;
@@ -84,4 +103,5 @@ public class SysLoginStatus extends BaseEntity
     private Date startCensusDate;
     private Date endCensusDate;
 
+    private Date lastStartTime;//最后一次登录时间
 }

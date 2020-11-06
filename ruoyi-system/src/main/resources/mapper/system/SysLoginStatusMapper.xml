@@ -18,16 +18,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
-        <result property="censusDate"    column="censusDate"    />
+        <result property="ipAddr"    column="ip_addr"    />
         <result property="loginNum"    column="loginNum"    />
+        <result property="logoutNum"    column="logout_num"    />
+        <result property="sessionId"    column="session_id"    />
+        <result property="hostAddr"    column="host_addr"    />
+        <result property="intervalTime"    column="interval_time"    />
+        <result property="censusDate"    column="censusDate"    />
+        <result property="lastStartTime"    column="lastStartTime"    />
         <result property="sque"    column="sque"    />
     </resultMap>
 
     <sql id="selectSysLoginStatusVo">
-        select id, org_id, org_name, login_name, user_name, start_time, end_time, online_len, status, create_by, create_time, update_by, update_time from sys_login_status
+        select id, org_id, org_name, login_name, user_name, start_time, end_time, online_len, status, create_by, create_time, update_by, update_time, ip_addr, logout_num, session_id, host_addr, interval_time from sys_login_status
     </sql>
 
-    <select id="selectSysLoginStatusList" parameterType="SysLoginStatus" resultMap="SysLoginStatusResult">
+    <!--<select id="selectSysLoginStatusList" parameterType="SysLoginStatus" resultMap="SysLoginStatusResult">
         SELECT (@a :=@a + 1)as sque,t.censusDate,t.login_name,t.user_name,t.org_name,t.start_time,t.end_time,t.loginNum,t.online_len,t.status
         from(
             select
@@ -58,6 +64,43 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="endCensusDate != null">
             AND t.censusDate <![CDATA[<=]]> DATE_FORMAT(#{endCensusDate},'%Y-%m-%d')
         </if>
+    </select>-->
+
+    <select id="selectSysLoginStatusList" parameterType="SysLoginStatus" resultMap="SysLoginStatusResult">
+        SELECT (@a :=@a + 1)as sque,tt.censusDate,tt.login_name,tt.user_name,tt.org_name,tt.start_time,tt.end_time,tt.loginNum,tt.online_len,tt.status,tt.logout_num,tt.interval_time,tt.ip_addr,tt.lastStartTime
+        from(
+            select
+                DATE_FORMAT(t.create_time,'%Y-%m-%d')as censusDate,
+                t.login_name,
+                max(t.user_name) as user_name,
+                max(t.org_name) as org_name,
+                min(t.start_time) as start_time,
+                max(t.end_time) as end_time,
+                count(1) as loginNum,
+                sum(t.online_len) as online_len,
+                max(t.status) as status,
+                max(t.logout_num) as logout_num,
+                sum(t.interval_time) as interval_time,
+                max(t.start_time) as lastStartTime,
+                (select a.ip_addr from sys_login_status a WHERE t.org_id = a.org_id and t.login_name = a.login_name ORDER BY a.create_time desc limit 1) as ip_addr
+            from sys_login_status t
+            WHERE t.org_id = #{orgId}
+            group by DATE_FORMAT(t.create_time,'%Y-%m-%d'),t.login_name
+            ORDER BY censusDate desc
+        )tt,(SELECT @a := 0) t1
+        where 1=1
+        <if test="userName != null and userName != ''">
+            AND tt.user_name like concat('%', #{userName}, '%')
+        </if>
+        <if test="status != null and status != ''">
+            AND tt.status = #{status}
+        </if>
+        <if test="startCensusDate != null">
+            AND tt.censusDate <![CDATA[>=]]> DATE_FORMAT(#{startCensusDate},'%Y-%m-%d')
+        </if>
+        <if test="endCensusDate != null">
+            AND tt.censusDate <![CDATA[<=]]> DATE_FORMAT(#{endCensusDate},'%Y-%m-%d')
+        </if>
     </select>
     
     <select id="selectSysLoginStatusById" parameterType="String" resultMap="SysLoginStatusResult">
@@ -81,7 +124,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">create_time,</if>
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
             <if test="updateTime != null ">update_time,</if>
-         </trim>
+            <if test="ipAddr != null and ipAddr != ''">ip_addr,</if>
+            <if test="sessionId != null and sessionId != ''">session_id,</if>
+            <if test="logoutNum != null ">logout_num,</if>
+            <if test="hostAddr != null ">host_addr,</if>
+            <if test="intervalTime != null and intervalTime != ''">interval_time,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null  and id != ''">#{id},</if>
             <if test="orgId != null  and orgId != ''">#{orgId},</if>
@@ -96,6 +144,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null ">#{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
             <if test="updateTime != null ">#{updateTime},</if>
+            <if test="ipAddr != null and ipAddr != ''">#{ipAddr},</if>
+            <if test="sessionId != null and sessionId != ''">#{sessionId},</if>
+            <if test="logoutNum != null ">#{logoutNum},</if>
+            <if test="hostAddr != null ">#{hostAddr},</if>
+            <if test="intervalTime != null and intervalTime != ''">#{intervalTime},</if>
          </trim>
     </insert>
 
@@ -103,6 +156,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update sys_login_status
         <trim prefix="SET" suffixOverrides=",">
             <if test="endTime != null ">end_time = #{endTime},</if>
+            <if test="logoutNum != null ">logout_num = #{logoutNum},</if>
             <if test="onlineLen != null  and onlineLen != ''">online_len = #{onlineLen},</if>
             <if test="status != null  and status != ''">status = #{status},</if>
             <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
@@ -111,6 +165,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
+    <select id="selectSysLoginStatus" resultMap="SysLoginStatusResult">
+        <include refid="selectSysLoginStatusVo"/>
+        where org_id = #{orgId} and login_name = #{loginName} and DATE_FORMAT(start_time,'%Y-%m-%d') = DATE_FORMAT(now(),'%Y-%m-%d')
+        order by create_time desc
+        limit 1
+    </select>
 
-    
+    <select id="selectMaxLogoutCount" resultType="java.lang.Integer">
+        select max(logout_num) as logout_num
+        from sys_login_status
+        where org_id = #{orgId} and login_name = #{loginName}
+        and DATE_FORMAT(start_time,'%Y-%m-%d') = DATE_FORMAT(now(),'%Y-%m-%d')
+    </select>
+
+    <select id="selectNotLogoutStatus" parameterType="java.lang.String" resultMap="SysLoginStatusResult">
+        <include refid="selectSysLoginStatusVo"/>
+        where end_time is null and host_addr = #{hostAddr}
+    </select>
+
 </mapper>

@@ -2,6 +2,7 @@ package com.ruoyi.system.mapper;
 
 
 import com.ruoyi.system.domain.SysLoginStatus;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -44,6 +45,24 @@ public interface SysLoginStatusMapper
      * @return 结果
      */
     public int updateSysLoginStatus(SysLoginStatus sysLoginStatus);
+
+    /**
+     * 查询用户当天最后一次登录信息
+     * @return
+     */
+    public SysLoginStatus selectSysLoginStatus(@Param("orgId")String orgId, @Param("loginName")String loginName);
+
+    /**
+     * 查询用户当天最大的退出次数
+     * @return
+     */
+    public Integer selectMaxLogoutCount(@Param("orgId")String orgId, @Param("loginName")String loginName);
+
+    /**
+     * 查询当天未退出系统的登录信息
+     * @return
+     */
+    public List<SysLoginStatus> selectNotLogoutStatus(String hostAddr);
 
 
 }

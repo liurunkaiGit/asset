@@ -20,7 +20,7 @@
                         <ul>
                             <li class="select-time">
                                 <p>统计日期：</p>
-                                <input type="text" class="time-input" id="startCensusDate" placeholder="开始时间" name="startCensusDate"/>
+                                <input type="text" class="time-input" id="startCensusDate" placeholder="开始时间" name="startCensusDate" th:value="${#dates.format(curDate, 'yyyy-MM-dd')}" />
                                 <span>-</span>
                                 <input type="text" class="time-input" id="endCensusDate" placeholder="结束时间" name="endCensusDate"/>
                             </li>
@@ -63,6 +63,7 @@
                 url: prefix + "/list",
                 exportUrl: prefix + "/export",
                 modalName: "登录状态",
+                /*firstLoad:false,*/
                 columns: [{
                     checkbox: false
                 },
@@ -94,13 +95,25 @@
                     field : 'endTime', 
                     title : '最后访问时间'
                 },
-                {
+               /* {
                     field : 'loginNum', 
                     title : '登录次数'
+                },*/
+                {
+                    field : 'logoutNum',
+                    title : '退出次数'
                 },
                 {
                     field : 'onlineLen', 
                     title : '在线时长(分钟)'
+                },
+                {
+                    field : 'intervalTime',
+                    title : '间隔时间(分钟)'
+                },
+                {
+                    field : 'postStatus',
+                    title : '在岗状态'
                 },
                 {
                     field : 'status', 
@@ -109,7 +122,7 @@
                         var icon = '';
                         if(value == '1'){
                             icon = icon +'<a class="btn btn-primary small" href="javascript:void(0)">在线</a>';
-                        }else{
+                        }else if(value == '0'){
                             icon = icon +'<a class="btn btn-danger small" href="javascript:void(0)">离线</a>';
                         }
                         return icon;

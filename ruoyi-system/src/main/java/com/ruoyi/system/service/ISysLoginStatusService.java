@@ -27,7 +27,7 @@ public interface ISysLoginStatusService
      * @param sysLoginStatus 登录状态
      * @return 登录状态集合
      */
-    public List<SysLoginStatus> selectSysLoginStatusList(SysLoginStatus sysLoginStatus);
+    public List<SysLoginStatus> selectSysLoginStatusList(SysLoginStatus sysLoginStatus,List<String> ipList);
 
     /**
      * 新增登录状态
@@ -44,6 +44,26 @@ public interface ISysLoginStatusService
      * @return 结果
      */
     public int updateSysLoginStatus(SysLoginStatus sysLoginStatus);
+
+    /**
+     * 查询用户当天最后一次登录信息
+     * @return
+     */
+    public SysLoginStatus selectSysLoginStatus(String orgId, String loginName);
+
+    /**
+     * 查询用户当天最大的退出次数
+     * @return
+     */
+    public Integer selectMaxLogoutCount(String orgId, String loginName);
+
+
+    /**
+     * 查询当天未退出系统的登录信息
+     * @return
+     */
+    public List<SysLoginStatus> selectNotLogoutStatus(String hostAddr);
+
 
 
 }
