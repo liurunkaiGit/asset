@@ -28,12 +28,12 @@ public class TLcInforeportingCompany extends TLcInforeportingTemplate implements
      * 付款卡前四位
      */
     @Excel(name = "付款卡前四位")
-    private Integer topFourCards;
+    private String topFourCards;
     /**
      * 付款卡后四位
      */
     @Excel(name = "付款卡后四位")
-    private Integer lastFourCards;
+    private String lastFourCards;
     /**
      * 付款银行
      */

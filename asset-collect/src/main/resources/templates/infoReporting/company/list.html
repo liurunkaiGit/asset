@@ -94,6 +94,7 @@
                     field: 'depositAmount',
                     title: '存入金额',
                     formatter:function (value, row, index) {
+                        if(value =='' || null == value)return'';
                         var sumBalance = parseFloat(value);
                         return  sumBalance.toFixed(2) ;
                     }
@@ -102,6 +103,7 @@
                     field: 'amountOfDeduction',
                     title: '扣款金额',
                     formatter:function (value, row, index) {
+                        if(value =='' || null == value)return'';
                         var sumBalance = parseFloat(value);
                         return  sumBalance.toFixed(2) ;
                     }

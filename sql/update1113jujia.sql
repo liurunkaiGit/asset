@@ -257,3 +257,6 @@ CREATE TABLE `t_lj_rule_user_logs` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `ud` (`rule_id`,`details_id`,`days`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+
+alter table t_lc_inforeporting_company  modify column top_four_cards varchar(10) COMMENT '卡号前四位';
+alter table t_lc_inforeporting_company  modify column last_four_cards varchar(10) COMMENT '卡号后四位';
