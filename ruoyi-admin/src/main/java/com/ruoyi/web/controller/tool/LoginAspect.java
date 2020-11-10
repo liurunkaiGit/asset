@@ -72,8 +72,7 @@ public class LoginAspect {
     private void loginStatus(SysUser sysUser){
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String sessionId = request.getRequestedSessionId();
-//        String ipAddr = IpUtils.getIpAddr(request);
-        String ipAddr = this.getClientIp();
+        String ipAddr = IpUtils.getIpAddr(request);
         String hostAddress = IpUtils.getHostIp();
 
         Date curTime = new Date();
@@ -141,15 +140,5 @@ public class LoginAspect {
     }
 
 
-    private static String getClientIp() {
-        String hostAddress = "127.0.0.1";
-        try {
-            InetAddress localHost = InetAddress.getLocalHost();
-            hostAddress = localHost.getHostAddress();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        return hostAddress;
-    }
 
 }
