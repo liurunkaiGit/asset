@@ -319,7 +319,7 @@ function getStationLetter() {
 }
 
 // 每隔5分钟去获取一次站内信
-window.setInterval("getStationLetter()",1000 * 60 * 1);
+window.setInterval("getStationLetter()",1000 * 60 * 5);
 
 $(function() {
 	if($.common.equals("history", mode) && window.performance.navigation.type == 1) {
@@ -378,9 +378,9 @@ function showLetter() {
         // }
         $.each(letterList, function (i, n) {
             if (n.readStatus == 2) {
-                tp.append("<tr><td rowspan='2' style='border-bottom: 1px solid; border-color: #cccccc'><a href='javascript:void(0)' onclick='showDetail(\""+n.id + "\")'><img src='/img/waitRead.png' style='width:18px;height: 15px;' /></a></td><td rowspan='2' style='padding: 0px 0px 0px 15px; border-bottom: 1px solid; border-color: #cccccc'>"+n.sendUserName+"</td><td style='padding: 0px 0px 0px 15px'>"+n.title+"</td><td rowspan='2' style='padding: 0px 0px 0px 80px; border-bottom: 1px solid; border-color: #cccccc'>"+n.sendTime+"</td></tr><tr><td style='padding: 0px 0px 0px 15px; border-bottom: 1px solid; border-color: #cccccc'>"+subContent(n.content)+"</td></tr>");
+                tp.append("<tr><td rowspan='2' style='border-bottom: 1px solid; border-color: #cccccc'><a href='javascript:void(0)' onclick='showDetail(\""+n.id + "\")'><img src='/img/waitRead.png' style='width:18px;height: 15px;' /></a></td><td rowspan='2' style='padding: 0px 0px 0px 15px; border-bottom: 1px solid; border-color: #cccccc'>"+n.sendUserName+"</td><td style='padding: 0px 0px 0px 15px; width: 375px'>"+n.title+"</td><td rowspan='2' style='border-bottom: 1px solid; border-color: #cccccc'>"+n.sendTime+"</td></tr><tr><td style='padding: 0px 0px 0px 15px; border-bottom: 1px solid; border-color: #cccccc; width: 375px'>"+subContent(n.content)+"</td></tr>");
             } else {
-                tp.append("<tr><td rowspan='2' style='border-bottom: 1px solid; border-color: #cccccc'><a href='javascript:void(0)' onclick='showDetail(\""+n.id + "\")'><img src='/img/havaRead.png' style='width:18px;height: 15px;' /></a></td><td rowspan='2' style='padding: 0px 0px 0px 15px; border-bottom: 1px solid; border-color: #cccccc'>"+n.sendUserName+"</td><td style='padding: 0px 0px 0px 15px'>"+n.title+"</td><td rowspan='2' style='padding: 0px 0px 0px 80px; border-bottom: 1px solid; border-color: #cccccc'>"+n.sendTime+"</td></tr><tr><td style='padding: 0px 0px 0px 15px; border-bottom: 1px solid; border-color: #cccccc'>"+subContent(n.content)+"</td></tr>");
+                tp.append("<tr><td rowspan='2' style='border-bottom: 1px solid; border-color: #cccccc'><a href='javascript:void(0)' onclick='showDetail(\""+n.id + "\")'><img src='/img/havaRead.png' style='width:18px;height: 15px;' /></a></td><td rowspan='2' style='padding: 0px 0px 0px 15px; border-bottom: 1px solid; border-color: #cccccc'>"+n.sendUserName+"</td><td style='padding: 0px 0px 0px 15px; width: 375px'>"+n.title+"</td><td rowspan='2' style='border-bottom: 1px solid; border-color: #cccccc'>"+n.sendTime+"</td></tr><tr><td style='padding: 0px 0px 0px 15px; border-bottom: 1px solid; border-color: #cccccc; width: 375px'>"+subContent(n.content)+"</td></tr>");
             }
 
         });
@@ -397,7 +397,7 @@ function showAllLetter() {
 }
 
 function subContent(value, length) {
-    var _length = $.common.isEmpty(length) ? 20 : length;
+    var _length = $.common.isEmpty(length) ? 25 : length;
     var _text = "";
     var _value = $.common.nullToStr(value);
     if (_value.length > _length) {

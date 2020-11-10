@@ -102,6 +102,7 @@ public class TLcStationLetterAgentServiceImpl implements ITLcStationLetterAgentS
     public Response getStationLetter() {
         TLcStationLetterAgent tLcStationLetterAgent = new TLcStationLetterAgent();
         tLcStationLetterAgent.setAgentId(ShiroUtils.getSysUser().getUserId().toString());
+        tLcStationLetterAgent.setOrgId(ShiroUtils.getSysUser().getOrgId());
         List<TLcStationLetterAgent> letterAgentList = this.tLcStationLetterAgentMapper.selectWaitSendLetterAgentList(tLcStationLetterAgent);
         // 修改状态为已发送
 //        this.stationLetterService.updateLetterSendStatus();
@@ -122,6 +123,7 @@ public class TLcStationLetterAgentServiceImpl implements ITLcStationLetterAgentS
     public List<TLcStationLetterAgent> getStationLetterDetail() {
         TLcStationLetterAgent tLcStationLetterAgent = new TLcStationLetterAgent();
         tLcStationLetterAgent.setAgentId(ShiroUtils.getSysUser().getUserId().toString());
+        tLcStationLetterAgent.setOrgId(ShiroUtils.getSysUser().getOrgId());
         List<TLcStationLetterAgent> letterAgentList = this.tLcStationLetterAgentMapper.selectTLcStationLetterAgentList(tLcStationLetterAgent);
         return letterAgentList;
     }

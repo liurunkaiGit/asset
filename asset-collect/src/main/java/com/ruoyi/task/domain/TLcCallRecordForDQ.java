@@ -114,6 +114,12 @@ public class TLcCallRecordForDQ extends BaseEntity {
     @Excel(name = "逾期天数")
     private String overdueDays;
 
+    /**
+     * 行动码
+     */
+    @Excel(name = "行动码")
+    private String actionCode;
+
     @Override
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;

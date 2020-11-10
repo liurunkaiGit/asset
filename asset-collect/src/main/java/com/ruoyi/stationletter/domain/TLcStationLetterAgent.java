@@ -67,6 +67,18 @@ public class TLcStationLetterAgent extends BaseEntity {
     @Excel(name = "状态，1：已读，2：未读")
     private Integer readStatus;
 
+    /**
+     * 所属机构
+     */
+    @Excel(name = "所属机构")
+    private Long orgId;
+
+    /**
+     * 所属机构名称
+     */
+    @Excel(name = "所属机构名称")
+    private String orgName;
+
     private String sendUserName;
 
 }

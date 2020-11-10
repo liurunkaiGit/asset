@@ -72,6 +72,18 @@ public class TLcStationLetter extends BaseEntity {
      */
     private String operateUser;
 
+    /**
+     * 所属机构
+     */
+    @Excel(name = "所属机构")
+    private Long orgId;
+
+    /**
+     * 所属机构名称
+     */
+    @Excel(name = "所属机构名称")
+    private String orgName;
+
     private Date startCreateTime;
     private Date endCreateTime;
 

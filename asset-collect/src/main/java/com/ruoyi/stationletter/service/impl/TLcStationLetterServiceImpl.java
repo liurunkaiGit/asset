@@ -56,6 +56,7 @@ public class TLcStationLetterServiceImpl implements ITLcStationLetterService {
      */
     @Override
     public List<TLcStationLetter> selectTLcStationLetterList(TLcStationLetter tLcStationLetter) {
+        tLcStationLetter.setOrgId(ShiroUtils.getSysUser().getOrgId());
         return tLcStationLetterMapper.selectTLcStationLetterList(tLcStationLetter);
     }
 
@@ -67,10 +68,14 @@ public class TLcStationLetterServiceImpl implements ITLcStationLetterService {
      */
     @Override
     public int insertTLcStationLetter(TLcStationLetter tLcStationLetter) {
+        Long orgId = ShiroUtils.getSysUser().getOrgId();
+        String orgName = ShiroUtils.getSysUser().getOrgName();
         tLcStationLetter.setCreateBy(ShiroUtils.getSysUser().getUserId().toString());
         tLcStationLetter.setUpdateBy(ShiroUtils.getSysUser().getUserId().toString());
         tLcStationLetter.setCreateTime(DateUtils.getNowDate());
         tLcStationLetter.setUpdateTime(tLcStationLetter.getCreateTime());
+        tLcStationLetter.setOrgId(orgId);
+        tLcStationLetter.setOrgName(orgName);
         if (tLcStationLetter.getSendType() == 1) {
             // 立即发送
             tLcStationLetter.setSendTime(tLcStationLetter.getCreateTime());
@@ -80,7 +85,7 @@ public class TLcStationLetterServiceImpl implements ITLcStationLetterService {
         }
         int i = tLcStationLetterMapper.insertTLcStationLetter(tLcStationLetter);
         // 将站内信添加到用户
-        addLetterToUser(tLcStationLetter);
+        addLetterToUser(tLcStationLetter, orgId, orgName);
         return i;
     }
 
@@ -88,7 +93,7 @@ public class TLcStationLetterServiceImpl implements ITLcStationLetterService {
      * 将站内信添加到用户
      * @param tLcStationLetter
      */
-    private void addLetterToUser(TLcStationLetter tLcStationLetter) {
+    private void addLetterToUser(TLcStationLetter tLcStationLetter, Long orgId, String orgName) {
         List<String> userIdList = new ArrayList<>();
         if (tLcStationLetter.getSendRange().equals(IsNoEnum.IS.getCode())) {
             // 查询所有拥有此机构权限的所有用户
@@ -97,20 +102,24 @@ public class TLcStationLetterServiceImpl implements ITLcStationLetterService {
             String userIds = tLcStationLetter.getUserIds();
             userIdList = Arrays.asList(userIds.split(","));
         }
-        List<TLcStationLetterAgent> letterAgentList = userIdList.stream().map(userId -> {
-            TLcStationLetterAgent tLcStationLetterAgent = new TLcStationLetterAgent();
-            tLcStationLetterAgent.setLetterId(tLcStationLetter.getId());
-            tLcStationLetterAgent.setTitle(tLcStationLetter.getTitle());
-            tLcStationLetterAgent.setContent(tLcStationLetter.getContent());
-            tLcStationLetterAgent.setAgentId(userId);
-            tLcStationLetterAgent.setSendBy(Integer.valueOf(tLcStationLetter.getCreateBy()));
-            tLcStationLetterAgent.setSendTime(tLcStationLetter.getSendTime());
-            tLcStationLetterAgent.setReadStatus(IsNoEnum.NO.getCode());
-            tLcStationLetterAgent.setCreateBy(tLcStationLetter.getCreateBy());
-            tLcStationLetterAgent.setCreateTime(tLcStationLetter.getCreateTime());
-            return tLcStationLetterAgent;
-        }).collect(Collectors.toList());
-        this.stationLetterAgentService.batchInsertTLcStationLetterAgent(letterAgentList);
+        if (userIdList != null && userIdList.size() > 0) {
+            List<TLcStationLetterAgent> letterAgentList = userIdList.stream().map(userId -> {
+                TLcStationLetterAgent tLcStationLetterAgent = new TLcStationLetterAgent();
+                tLcStationLetterAgent.setLetterId(tLcStationLetter.getId());
+                tLcStationLetterAgent.setTitle(tLcStationLetter.getTitle());
+                tLcStationLetterAgent.setContent(tLcStationLetter.getContent());
+                tLcStationLetterAgent.setAgentId(userId);
+                tLcStationLetterAgent.setSendBy(Integer.valueOf(tLcStationLetter.getCreateBy()));
+                tLcStationLetterAgent.setSendTime(tLcStationLetter.getSendTime());
+                tLcStationLetterAgent.setReadStatus(IsNoEnum.NO.getCode());
+                tLcStationLetterAgent.setCreateBy(tLcStationLetter.getCreateBy());
+                tLcStationLetterAgent.setCreateTime(tLcStationLetter.getCreateTime());
+                tLcStationLetterAgent.setOrgId(orgId);
+                tLcStationLetterAgent.setOrgName(orgName);
+                return tLcStationLetterAgent;
+            }).collect(Collectors.toList());
+            this.stationLetterAgentService.batchInsertTLcStationLetterAgent(letterAgentList);
+        }
     }
 
     /**
@@ -121,6 +130,8 @@ public class TLcStationLetterServiceImpl implements ITLcStationLetterService {
      */
     @Override
     public int updateTLcStationLetter(TLcStationLetter tLcStationLetter) {
+        Long orgId = ShiroUtils.getSysUser().getOrgId();
+        String orgName = ShiroUtils.getSysUser().getOrgName();
         Date now = DateUtils.getNowDate();
         tLcStationLetter.setUpdateTime(now);
         tLcStationLetter.setUpdateBy(ShiroUtils.getSysUser().getUserId().toString());
@@ -130,6 +141,8 @@ public class TLcStationLetterServiceImpl implements ITLcStationLetterService {
         if (tLcStationLetter.getSendType().equals(IsNoEnum.IS.getCode())) {
             tLcStationLetter.setSendTime(now);
         }
+        tLcStationLetter.setOrgId(orgId);
+        tLcStationLetter.setOrgName(orgName);
         updateStationLetterAgent(tLcStationLetter);
         return tLcStationLetterMapper.updateTLcStationLetter(tLcStationLetter);
     }
@@ -139,7 +152,7 @@ public class TLcStationLetterServiceImpl implements ITLcStationLetterService {
         TLcStationLetter stationLetter = this.tLcStationLetterMapper.selectTLcStationLetterById(tLcStationLetter.getId());
         tLcStationLetter.setCreateBy(stationLetter.getCreateBy());
         tLcStationLetter.setCreateTime(stationLetter.getCreateTime());
-        addLetterToUser(tLcStationLetter);
+        addLetterToUser(tLcStationLetter, tLcStationLetter.getOrgId(), tLcStationLetter.getOrgName());
     }
 
     /**

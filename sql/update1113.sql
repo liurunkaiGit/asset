@@ -14,6 +14,8 @@ CREATE TABLE `t_lc_station_letter` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_by` int(5) DEFAULT NULL COMMENT '修改人',
   `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `org_id` int(11) DEFAULT NULL COMMENT '机构id',
+  `org_name` varchar(255) DEFAULT NULL COMMENT '机构名称',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COMMENT='站内信';
 
@@ -33,6 +35,8 @@ CREATE TABLE `t_lc_station_letter_agent` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_by` int(5) DEFAULT NULL COMMENT '修改人',
   `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `org_id` int(11) DEFAULT NULL COMMENT '机构id',
+  `org_name` varchar(255) DEFAULT NULL COMMENT '机构名称',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8 COMMENT='站内信';
 
