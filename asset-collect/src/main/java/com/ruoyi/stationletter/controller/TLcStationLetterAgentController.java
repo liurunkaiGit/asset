@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -59,7 +60,11 @@ public class TLcStationLetterAgentController extends BaseController {
         List<TLcStationLetterAgent> agentList = this.tLcStationLetterAgentService.getStationLetterDetail();
         long count = agentList.stream().filter(agent -> agent.getReadStatus().equals(IsNoEnum.NO.getCode())).count();
         letterDetailVo.setWaitReadNum(count);
-        letterDetailVo.setLetterList(agentList.subList(0, 5));
+        if (agentList != null && agentList.size() > 5) {
+            letterDetailVo.setLetterList(agentList.subList(0, 5));
+        } else {
+            letterDetailVo.setLetterList(agentList);
+        }
         return Response.success(letterDetailVo);
     }
 
@@ -102,5 +107,4 @@ public class TLcStationLetterAgentController extends BaseController {
         this.tLcStationLetterAgentService.updateReadStatus(id);
         return Response.success(letterAgent);
     }
-
 }
