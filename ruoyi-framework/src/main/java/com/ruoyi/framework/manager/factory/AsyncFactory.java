@@ -86,7 +86,7 @@ public class AsyncFactory
                 // 远程查询操作地点
 //                operLog.setOperLocation(AddressUtils.getRealAddressByIP(operLog.getOperIp()));
 //                SpringUtils.getBean(ISysOperLogService.class).insertOperlog(operLog);
-            }
+        }
         };
     }
 
