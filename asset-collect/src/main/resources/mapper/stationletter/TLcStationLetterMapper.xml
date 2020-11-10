@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.stationletter.mapper.TLcStationLetterMapper">
+    
+    <resultMap type="com.ruoyi.stationletter.domain.TLcStationLetter" id="TLcStationLetterResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="content"    column="content"    />
+        <result property="sendRange"    column="send_range"    />
+        <result property="userIds"    column="user_ids"    />
+        <result property="sendType"    column="send_type"    />
+        <result property="sendTime"    column="send_time"    />
+        <result property="sendStatus"    column="send_status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTLcStationLetterVo">
+        select id, title, content, send_range, user_ids, send_type, send_time, send_status, create_by, create_time, update_by, update_time from t_lc_station_letter
+    </sql>
+
+    <sql id="selectTLcStationLetterColumn">
+        t.id,
+        t.title,
+        t.content,
+        t.send_range,
+        t.user_ids,
+        t.send_type,
+        t.send_time,
+        t.send_status,
+        t.create_by,
+        t.create_time,
+        t.update_by,
+        t.update_time
+    </sql>
+
+    <select id="selectTLcStationLetterList" parameterType="com.ruoyi.stationletter.domain.TLcStationLetter" resultMap="TLcStationLetterResult">
+        select su.user_name as operateUser,
+        <include refid="selectTLcStationLetterColumn"/>
+        from t_lc_station_letter t,sys_user su
+        <where>
+            t.update_by = su.user_id
+            <if test="title != null  and title != ''"> and t.title like concat('%', #{title}, '%')</if>
+            <if test="sendType != null "> and t.send_type = #{sendType}</if>
+            <if test="startCreateTime != null">
+                and t.create_time <![CDATA[>=]]> #{startCreateTime}
+            </if>
+            <if test="endCreateTime != null">
+                and t.create_time <![CDATA[<=]]> #{endCreateTime}
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectTLcStationLetterById" parameterType="Long" resultMap="TLcStationLetterResult">
+        <include refid="selectTLcStationLetterVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectWaitSendLetter" parameterType="com.ruoyi.stationletter.domain.TLcStationLetter" resultMap="TLcStationLetterResult">
+        select
+        <include refid="selectTLcStationLetterColumn"/>
+        from t_lc_station_letter t
+        where t.send_status = #{sendStatus} and t.send_time <![CDATA[<=]]> now()
+    </select>
+
+    <insert id="insertTLcStationLetter" parameterType="com.ruoyi.stationletter.domain.TLcStationLetter" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_station_letter
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null  and title != ''">title,</if>
+            <if test="content != null  and content != ''">content,</if>
+            <if test="sendRange != null ">send_range,</if>
+            <if test="userIds != null  and userIds != ''">user_ids,</if>
+            <if test="sendType != null ">send_type,</if>
+            <if test="sendTime != null ">send_time,</if>
+            <if test="sendStatus != null ">send_status,</if>
+            <if test="createBy != null ">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null ">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null  and title != ''">#{title},</if>
+            <if test="content != null  and content != ''">#{content},</if>
+            <if test="sendRange != null ">#{sendRange},</if>
+            <if test="userIds != null  and userIds != ''">#{userIds},</if>
+            <if test="sendType != null ">#{sendType},</if>
+            <if test="sendTime != null ">#{sendTime},</if>
+            <if test="sendStatus != null ">#{sendStatus},</if>
+            <if test="createBy != null ">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null ">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLcStationLetter" parameterType="com.ruoyi.stationletter.domain.TLcStationLetter">
+        update t_lc_station_letter
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null  and title != ''">title = #{title},</if>
+            <if test="content != null  and content != ''">content = #{content},</if>
+            <if test="sendRange != null ">send_range = #{sendRange},</if>
+            user_ids = #{userIds},
+            <if test="sendType != null ">send_type = #{sendType},</if>
+            send_time = #{sendTime},
+            <if test="sendStatus != null ">send_status = #{sendStatus},</if>
+            <if test="updateBy != null ">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateLetterSendStatus" >
+        update t_lc_station_letter set send_status = 1 where send_time <![CDATA[<=]]> now()
+    </update>
+
+    <delete id="deleteTLcStationLetterById" parameterType="Long">
+        delete from t_lc_station_letter where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcStationLetterByIds" parameterType="String">
+        delete from t_lc_station_letter where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

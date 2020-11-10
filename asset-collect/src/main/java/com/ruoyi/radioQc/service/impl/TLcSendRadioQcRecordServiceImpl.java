@@ -127,7 +127,7 @@ public class TLcSendRadioQcRecordServiceImpl implements ITLcSendRadioQcRecordSer
     }
 
     @Override
-    @Async
+    @Async("threadPoolTaskExecutor")
     public void sendRadioToQualityCheck(TLcCallRecord tLcCallRecord, String jobNo, String loginName) {
         if (!"-1".equals(tLcCallRecord.getCreateBy()) && StringUtils.isNotBlank(tLcCallRecord.getCallRadioLocation()) && tLcCallRecord.getSendRadioCheck() != null && tLcCallRecord.getSendRadioCheck() == 1) {
             OrgPackage orgPackage = this.orgPackageService.selectOrgPackageByOrgId(tLcCallRecord.getOrgId());

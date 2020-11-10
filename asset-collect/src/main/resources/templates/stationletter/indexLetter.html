@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('站内信列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <!--<div class="col-sm-12 search-collapse">-->
+        <form id="formId">
+            <input type="hidden" id="userId" name="agentId" th:value="${userId}">
+        </form>
+        <!--</div>-->
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="modal" id="waitReadLetter" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content animated bounceInRight">
+                    <div class="modal-header">
+                        <span>您有<b id="waitReadNum"></b>[[${letterDetailVo.waitReadNum}]]条未读消息</span>
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
+                        </button>
+                    </div>
+                    <!--<div class="modal-body" style="height: 200px;" th:each="letter:${letterDetailVo.letterList}">-->
+                        <div class="form-group" th:each="letter:${letterDetailVo.letterList}">
+                            <span style="font-size: 15px;color:black;" id="readStatus">[[${letter.readStatus}]]</span>
+                            <span style="font-size: 15px;color:black;" id="sendBy">[[${letter.sendUserName}]]</span>
+                            <span style="font-size: 15px;color:black;" id="title">[[${letter.title}]]</span>
+                            <span style="font-size: 15px;color:black;" id="content">[[${letter.content}]]</span>
+                            <span style="font-size: 15px;color:black;" id="sendTime">[[${letter.sendTime}]]</span>
+                        <!--</div>-->
+                        <!--<table style="border-collapse:separate; border-spacing:0px 10px;" cellspacing="10">
+                            <tbody id="letterTr"></tbody>
+                        </table>-->
+                    </div>
+                    <div class="modal-footer" style="text-align: center">
+                        <button type="button" class="btn btn-primary" onclick="showAllLetter();" style="text-align: center">查看全部消息</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var prefix = ctx + "station/letter/agent";
+
+    $(function () {
+        /*var options = {
+            url: prefix + "/list",
+            modalName: "站内信",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: '主键id',
+                    visible: false
+                },
+                {
+                    field: '',
+                    title: '序号',
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                {
+                    field: 'title',
+                    title: '消息标题'
+                },
+                {
+                    field: 'content',
+                    title: '消息内容',
+                    formatter: function (value, row, index) {
+                        return "<a href='javascript:void(0)' onclick='showDetail(\""+row.id + "\")'>"+subContent(value, 30)+"</a>";
+                    }
+                },
+                {
+                    field : 'readStatus',
+                    title : '状态',
+                    formatter: function (value, row, index) {
+                        if (value == 1) {
+                            return '<img src="/img/havaRead.png" style="width:18px;height: 15px;" />已读';
+                        } else {
+                            return '<img src="/img/waitRead.png" style="width:18px;height: 15px;" />未读';
+                        }
+                    }
+                },
+                {
+                    field: 'sendUserName',
+                    title: '发送人'
+                },
+                {
+                    field: 'sendTime',
+                    title: '发送时间'
+                }]
+        };
+        $.table.init(options);*/
+        $("#waitReadLetter").modal('show');
+    });
+
+    /*function showDetail(id) {
+        $.get(ctx + "station/letter/agent/letterDetail/"+id,function (data) {
+            $("#sendBy").text("发送人：" + data.result.sendUserName);
+            $("#title").text(data.result.title);
+            $("#content").text(data.result.content);
+            $("#sendTime").text(data.result.sendTime);
+        })
+        $("#letterDetail").modal('show');
+    }
+
+    function ok() {
+        $("#letterDetail").modal('hide');
+    }
+
+    function subContent(value, length) {
+        var _length = $.common.isEmpty(length) ? 35 : length;
+        var _text = "";
+        var _value = $.common.nullToStr(value);
+        if (_value.length > _length) {
+            _text = _value.substr(0, _length) + "...";
+            return _text;
+        } else {
+            _text = _value;
+            return _text;
+        }
+    }*/
+</script>
+</body>
+</html>

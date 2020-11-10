@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改站内信')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-letter-edit" th:object="${tLcStationLetter}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>消息标题：</label>
+                <div class="col-sm-8">
+                    <input name="title" th:field="*{title}" class="form-control" type="text" readonly>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>消息内容：</label>
+                <div class="col-sm-8">
+                    <input name="content" th:field="*{content}" class="form-control" type="text" readonly>
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>发送范围：</label>
+                <div class="col-sm-8">
+                    <input name="sendRange" th:field="*{sendRange}" class="form-control" type="text">
+                </div>
+            </div>-->
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>发送范围：</label>
+                <div class="col-sm-8">
+                    <div class="radio" th:style="${tLcStationLetter.sendRange == 1}?'display: block':'display: none'">
+                        <label><input type="radio" id="allUser" name="sendRange" value="1" th:checked="${tLcStationLetter.sendRange == 1}">全部用户</label>
+                    </div>
+                    <div class="radio" th:style="${tLcStationLetter.sendRange == 2}?'display: block':'display: none'">
+                        <label><input type="radio" id="selectUser" name="sendRange" value="2" th:checked="${tLcStationLetter.sendRange == 2}">指定用户</label>
+                        <input type="hidden" id="selectUserIds" name="userIds" th:field="*{userIds}">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>发送方式：</label>
+                <div class="col-sm-8">
+                    <div class="radio" th:style="${tLcStationLetter.sendType == 1}?'display: block':'display: none'">
+                        <label><input type="radio" id="immediateSend" name="sendType" value="1" th:checked="${tLcStationLetter.sendType == 1}">立即发送</label>
+                    </div>
+                    <div class="radio" th:style="${tLcStationLetter.sendType == 2}?'display: block':'display: none'">
+                        <label><input type="radio" id="timeSend" name="sendType" value="2" th:checked="${tLcStationLetter.sendType == 2}" >定时发送</label>
+                        <input type="text" id="sendTime" placeholder="发送时间" name="sendTime" th:value="${tLcStationLetter.sendType == 2}?${#dates.format(tLcStationLetter.sendTime,'yyyy-MM-dd HH:mm:ss')}:''" readonly/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+
+    </script>
+</body>
+</html>

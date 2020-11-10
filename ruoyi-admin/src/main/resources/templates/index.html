@@ -23,6 +23,26 @@
             font-size: 14px;
             float: left;
         }
+
+        .ci-count {
+            position: absolute;
+            top: 1px;
+            left: 10px;
+            right: auto;
+            display: inline-block;
+            padding: 1px 3px;
+            font-size: 12px;
+            line-height: 12px;
+            color: #fff;
+            background-color: #e1251b;
+            border-radius: 7px;
+            min-width: 12px;
+            text-align: center;
+        }
+
+        .td {
+
+        }
     </style>
 </head>
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow: hidden">
@@ -113,6 +133,7 @@
                 </div>
 
                 <ul class="nav navbar-top-links navbar-right welcome-message">
+                    <li><img src="/img/letter.png" style="width:18px;height: 15px;" onmouseover="showLetter()" /><span class="ci-count" id="stationLetterNum" style="color: white">0</span></li>
                     <li><a title="全屏显示" href="javascript:void(0)" id="fullScreen"><i class="fa fa-arrows-alt"></i> 全屏显示&nbsp;&nbsp;&nbsp;&nbsp;|</a></li>
                     <li><a title="" href="javascript:void(0)" id=""><i class="fa fa-database"></i> [[${user.orgName}]]&nbsp;&nbsp;&nbsp;&nbsp;|</a></li>
                     <li class="dropdown user-menu">
@@ -168,6 +189,65 @@
         <!--<div class="footer">
             <div class="pull-right">© [[${copyrightYear}]] RuoYi Copyright </div>
         </div>-->
+    </div>
+
+    <div class="col-sm-12">
+        <div class="modal" id="waitReadLetter" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content animated bounceInRight">
+                    <div class="modal-header">
+                        <span>您有<b id="waitReadNum"></b>条未读消息</span>
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="height: 250px;padding: 0px 10px 10px 10px;" >
+                        <!--<div class="form-group">
+                            <span style="font-size: 15px;color:black;" id="readStatus"></span>
+                            <span style="font-size: 15px;color:black;" id="sendBy"></span>
+                            <span style="font-size: 15px;color:black;" id="title"></span>
+                            <span style="font-size: 15px;color:black;" id="content"></span>
+                            <span style="font-size: 15px;color:black;" id="sendTime"></span>
+                        </div>-->
+                        <table style="border-collapse:separate; border-spacing:0px 5px;" cellspacing="0">
+                            <tbody id="letterTr"></tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer" style="text-align: center">
+                        <button type="button" class="btn btn-primary" onclick="showAllLetter();" style="text-align: center">查看全部消息</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="modal" id="letterDetail" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content animated bounceInRight">
+                    <div class="modal-header" style="text-align: center">
+                        <!--<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
+                        </button>-->
+                        <p style="font-size: 28px;color:black; text-align: center; display: inline-block; vertical-align: middle; margin: 0px" id="title"></p>
+                        <div style="float: right; width: 200px" >
+                            <span style="font-size: 15px;color:black; float: right " id="sendBy"></span>
+                            <span style="font-size: 15px;color:black; float: right; white-space: pre-wrap" id="sendTime"></span>
+                        </div>
+                    </div>
+                    <div class="modal-body" style="height: 200px;" >
+                        <div class="form-group">
+
+                            <span style="font-size: 15px;color:black;" id="content"></span>
+                        </div>
+                        <!--<table style="border-collapse:separate; border-spacing:0px 10px;" cellspacing="10">
+                            <tbody id="letterTr"></tbody>
+                        </table>-->
+                    </div>
+                    <div class="modal-footer" style="text-align: center">
+                        <button type="button" class="btn btn-primary" onclick="ok();" style="text-align: center">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <!--右侧部分结束-->
 </div>
@@ -232,6 +312,15 @@ function applyPath(url) {
     }
 }
 
+function getStationLetter() {
+    $.get(ctx + "station/letter/agent/getStationLetter",function (data) {
+        $("#stationLetterNum").html(data.result.length);
+    })
+}
+
+// 每隔5分钟去获取一次站内信
+window.setInterval("getStationLetter()",1000 * 60 * 1);
+
 $(function() {
 	if($.common.equals("history", mode) && window.performance.navigation.type == 1) {
 		var url = storage.get('publicPath');
@@ -266,7 +355,69 @@ $(function() {
             $("#exonNum").append("<option value='"+agentId+"'>"+agentId+"</option>");
         });
     }
+
+    getStationLetter();
 });
+
+function showLetter() {
+    $.get(ctx + "station/letter/agent/getStationLetterDetail",function (data) {
+        $("#waitReadNum").text(data.result.waitReadNum);
+        var letterList = data.result.letterList;
+        $("#letterTr").html("");
+        var tp = $("#letterTr");
+        // for (var i = 0; i < letterList.length; i++) {
+        //     $("#readStatus").text(letterList[i].readStatus);
+        //     $("#sendBy").text(letterList[i].sendBy);
+        //     $("#title").text(letterList[i].title);
+        //     $("#content").text(letterList[i].content);
+        //     $("#sendTime").text(letterList[i].sendTime);
+        // }
+        $.each(letterList, function (i, n) {
+            if (n.readStatus == 2) {
+                tp.append("<tr><td rowspan='2' style='border-bottom: 1px solid; border-color: #cccccc'><a href='javascript:void(0)' onclick='showDetail(\""+n.id + "\")'><img src='/img/waitRead.png' style='width:18px;height: 15px;' /></a></td><td rowspan='2' style='padding: 0px 0px 0px 15px; border-bottom: 1px solid; border-color: #cccccc'>"+n.sendUserName+"</td><td style='padding: 0px 0px 0px 15px'>"+n.title+"</td><td rowspan='2' style='padding: 0px 0px 0px 80px; border-bottom: 1px solid; border-color: #cccccc'>"+n.sendTime+"</td></tr><tr><td style='padding: 0px 0px 0px 15px; border-bottom: 1px solid; border-color: #cccccc'>"+subContent(n.content)+"</td></tr>");
+            } else {
+                tp.append("<tr><td rowspan='2' style='border-bottom: 1px solid; border-color: #cccccc'><a href='javascript:void(0)' onclick='showDetail(\""+n.id + "\")'><img src='/img/havaRead.png' style='width:18px;height: 15px;' /></a></td><td rowspan='2' style='padding: 0px 0px 0px 15px; border-bottom: 1px solid; border-color: #cccccc'>"+n.sendUserName+"</td><td style='padding: 0px 0px 0px 15px'>"+n.title+"</td><td rowspan='2' style='padding: 0px 0px 0px 80px; border-bottom: 1px solid; border-color: #cccccc'>"+n.sendTime+"</td></tr><tr><td style='padding: 0px 0px 0px 15px; border-bottom: 1px solid; border-color: #cccccc'>"+subContent(n.content)+"</td></tr>");
+            }
+
+        });
+    })
+    $("#waitReadLetter").modal('show');
+    // location.href = ctx + "station/letter/agent/getStationLetterDetail";
+    // var indexLetterUrl = ctx + "station/letter/agent/getStationLetterDetail2";
+    // $.modal.open("站内信", indexLetterUrl);
+
+}
+
+function showAllLetter() {
+    $.modal.open("站内信", ctx + "station/letter/agent/toGetAllStationLetter","900", "600");
+}
+
+function subContent(value, length) {
+    var _length = $.common.isEmpty(length) ? 20 : length;
+    var _text = "";
+    var _value = $.common.nullToStr(value);
+    if (_value.length > _length) {
+        _text = _value.substr(0, _length) + "...";
+        return _text;
+    } else {
+        _text = _value;
+        return _text;
+    }
+}
+
+function showDetail(id) {
+    $.get(ctx + "station/letter/agent/letterDetail/"+id,function (data) {
+        $("#sendBy").text("发送人：" + data.result.sendUserName);
+        $("#title").text(data.result.title);
+        $("#content").text(data.result.content);
+        $("#sendTime").text(data.result.sendTime);
+    })
+    $("#letterDetail").modal('show');
+}
+
+function ok() {
+    $("#letterDetail").modal('hide');
+}
 </script>
 </body>
 </html>

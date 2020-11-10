@@ -138,4 +138,6 @@ public interface SysUserMapper
     List<Map<String,Object>> selectUserByTime(SysUser sysUser);
 
     List<SysUser> selectUserListByUserIds(@Param("userIds") List<String> userIds);
+
+    List<String> searchUserIdByDeptAndHaveDept(@Param("deptId") Long deptId);
 }

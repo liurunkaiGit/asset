@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('站内信列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>消息标题：</p>
+                            <input type="text" name="title"/>
+                        </li>
+                        <li class="select-time">
+                            <p>创建时间：</p>
+                            <input type="text" class="time-input" id="startCreateTime" placeholder="开始时间"
+                                   name="startCreateTime"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endCreateTime" placeholder="结束时间"
+                                   name="endCreateTime"/>
+                        </li>
+                        <li>
+                            <p>发送方式：</p>
+                            <select name="sendType">
+                                <option value="">所有</option>
+                                <option value="1">立即发送</option>
+                                <option value="2">定时发送</option>
+                            </select>
+                        </li>
+                        <!--<li>
+                            <p>发送状态：</p>
+                            <select name="sendStatus">
+                                <option value="">所有</option>
+                                <option value="1">已发送</option>
+                                <option value="2">待发送</option>
+                            </select>
+                        </li>-->
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="station:letter:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <!--<a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="station:letter:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="station:letter:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="station:letter:export">
+                <i class="fa fa-download"></i> 导出
+             </a>-->
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('station:letter:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('station:letter:remove')}]];
+    var prefix = ctx + "station/letter";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "站内信",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: '主键id',
+                    visible: false
+                },
+                {
+                    field: '',
+                    title: '序号',
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                {
+                    field: 'title',
+                    title: '消息标题'
+                },
+                {
+                    field: 'sendType',
+                    title: '发送方式',
+                    formatter: function (value, row, index) {
+                        if (value == 1) {
+                            return '立即发送';
+                        } else {
+                            return '定时发送';
+                        }
+                    }
+                },{
+                    field: 'sendRange',
+                    title: '发送范围',
+                    formatter: function (value, row, index) {
+                        if (value == 1) {
+                            return '全部用户';
+                        } else {
+                            return '指定用户';
+                        }
+                    }
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间'
+                },
+                {
+                    field: 'sendTime',
+                    title: '发送时间'
+                },
+                {
+                    field: 'operateUser',
+                    title: '操作人'
+                },
+                {
+                    field : 'sendStatus', 
+                    title : '发送状态',
+                    formatter: function (value, row, index) {
+                        if (row.sendType == 1) {
+                            return '已发送';
+                        } else if (new Date(row.sendTime).getTime() <= new Date().getTime()) {
+                            return '已发送';
+                        } else {
+                            return '待发送';
+                        }
+                        /*if (value == 1) {
+                            return '已发送';
+                        } else {
+                            return '待发送';
+                        }*/
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.id + '\',\'' + row.createTime + '\',\'' + row.sendTime + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="del(\'' + row.id + '\',\'' + row.createTime + '\',\'' + row.sendTime + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="detail(\'' + row.id + '\')"><i class="fa fa-detail"></i>详情</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    function del(id, createTime, sendTime) {
+        // alert(new Date(sendTime).getTime()); //1606372200000
+        // alert(new Date().getTime());// 1604308994525
+        if (new Date().getTime() >= new Date(sendTime).getTime()) {
+            $.modal.alertWarning("当前时间大于等于发送时间，不允许删除");
+            return false;
+        }
+        $.operate.remove(id);
+    }
+
+    function edit(id, createTime, sendTime) {
+        // alert(new Date(sendTime).getTime()); //1606372200000
+        // alert(new Date().getTime());// 1604308994525
+        if (new Date().getTime() >= new Date(sendTime).getTime()) {
+            $.modal.alertWarning("当前时间大于等于发送时间，不允许编辑");
+            return false;
+        }
+        $.operate.edit(id);
+    }
+
+    function detail(id) {
+        $.modal.open("详情", prefix + "/detail/" + id);
+    }
+</script>
+</body>
+</html>

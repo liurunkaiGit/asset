@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增站内信')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-letter-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>消息标题：</label>
+                <div class="col-sm-8">
+                    <input name="title" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>消息内容：</label>
+                <div class="col-sm-8">
+                    <input name="content" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>发送范围：</label>
+                <div class="col-sm-8">
+                    <div class="radio">
+                        <label><input type="radio" id="allUser" name="sendRange" value="1">全部用户</label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" id="selectUser" name="sendRange" value="2">指定用户</label>
+                        <input type="hidden" id="selectUserIds" name="userIds">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>发送方式：</label>
+                <div class="col-sm-8">
+                    <div class="radio">
+                        <label><input type="radio" id="immediateSend" name="sendType" value="1">立即发送</label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" id="timeSend" name="sendType" value="2">定时发送</label>
+                        <input type="text" id="sendTime" placeholder="发送时间" name="sendTime"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "station/letter"
+        $("#form-letter-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            // 发送范围校验
+            var sendRange = $("input[name='sendRange']:checked").val();
+            // alert(sendRange)
+            if (sendRange == null || sendRange == '' || sendRange == undefined) {
+                $.modal.alertWarning("请选择发送范围");
+                return false;
+            }
+            if (sendRange == 2) {
+                var agentIds = $("#selectUserIds").val();
+                // alert(agentIds);
+                if (agentIds == null || agentIds == '') {
+                    $.modal.alertWarning("请选择消息接收人");
+                    return false;
+                }
+            }
+            // 发送方式校验
+            var sendType = $("input[name='sendType']:checked").val();
+            if (sendType == null || sendType == '' || sendType == undefined) {
+                $.modal.alertWarning("请选择发送方式");
+                return false;
+            }
+            if (sendType == 2) {
+                var sendTime = $("#sendTime").val();
+                if (sendTime == null || sendTime == '') {
+                    $.modal.alertWarning("请选择发送时间");
+                    return false;
+                }
+            }
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-letter-add').serialize());
+            }
+        }
+
+        /*$("input[name='sendTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });*/
+
+        $("#sendTime").datetimepicker({
+            format: "yyyy-mm-dd hh:ii",
+            autoclose: true
+        });
+
+        $("input[id=selectUser]").click(function(){
+            $("#selectUserIds").val("");
+            $.modal.open("选择用户", prefix + "/toSelectUser");
+        });
+    </script>
+</body>
+</html>
