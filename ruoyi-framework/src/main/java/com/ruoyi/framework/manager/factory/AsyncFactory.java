@@ -147,7 +147,7 @@ public class AsyncFactory
     /**
      * 记录登出信息
      */
-    public static TimerTask logoutStatus(final String loginStatusId,final String loginName)
+    public static TimerTask logoutStatus(final String loginStatusId,final String loginName, final Integer logoutNum)
     {
         return new TimerTask()
         {
@@ -157,12 +157,15 @@ public class AsyncFactory
                 SysLoginStatus sysLoginStatus = SpringUtils.getBean(ISysLoginStatusService.class).selectSysLoginStatusById(loginStatusId);
                 Date startTime = sysLoginStatus.getStartTime();
                 Date endTime = new Date();
-                BigDecimal startDcm = new BigDecimal(startTime.getTime());
+                /*BigDecimal startDcm = new BigDecimal(startTime.getTime());
                 BigDecimal endDcm = new BigDecimal(endTime.getTime());
                 BigDecimal subtract = endDcm.subtract(startDcm);
-                String length = subtract.divide(new BigDecimal(1000 * 60), 2, BigDecimal.ROUND_HALF_UP).toString();
+                String length = subtract.divide(new BigDecimal(1000 * 60), 2, BigDecimal.ROUND_HALF_UP).toString();*/
+                long length = endTime.getTime() - startTime.getTime();
+
                 sysLoginStatus.setEndTime(endTime);
-                sysLoginStatus.setOnlineLen(length);
+                sysLoginStatus.setLogoutNum(logoutNum);
+                sysLoginStatus.setOnlineLen(String.valueOf(length/1000));
                 sysLoginStatus.setStatus(LoginStatusEnum.off.getCode());
                 sysLoginStatus.setUpdateBy(loginName);
                 sysLoginStatus.setUpdateTime(endTime);

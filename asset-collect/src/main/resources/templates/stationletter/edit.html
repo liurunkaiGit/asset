@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改站内信')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-letter-edit" th:object="${tLcStationLetter}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>消息标题：</label>
+                <div class="col-sm-8">
+                    <input name="title" th:field="*{title}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>消息内容：</label>
+                <div class="col-sm-8">
+                    <input name="content" th:field="*{content}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>发送范围：</label>
+                <div class="col-sm-8">
+                    <div class="radio">
+                        <label><input type="radio" id="allUser" name="sendRange" value="1" th:checked="${tLcStationLetter.sendRange == 1}">全部用户</label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" id="selectUser" name="sendRange" value="2" th:checked="${tLcStationLetter.sendRange == 2}">指定用户</label>
+                        <input type="hidden" id="selectUserIds" name="userIds" th:field="*{userIds}">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>发送方式：</label>
+                <div class="col-sm-8">
+                    <div class="radio">
+                        <label><input type="radio" id="immediateSend" name="sendType" value="1" th:checked="${tLcStationLetter.sendType == 1}">立即发送</label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" id="timeSend" name="sendType" value="2" th:checked="${tLcStationLetter.sendType == 2}">定时发送</label>
+                        <input type="text" id="sendTime" placeholder="发送时间" name="sendTime" th:value="${tLcStationLetter.sendType == 2}?${#dates.format(tLcStationLetter.sendTime,'yyyy-MM-dd HH:mm:ss')}:''"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "station/letter";
+        $("#form-letter-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            // 发送范围校验
+            var sendRange = $("input[name='sendRange']:checked").val();
+            // alert(sendRange)
+            if (sendRange == null || sendRange == '' || sendRange == undefined) {
+                $.modal.alertWarning("请选择发送范围");
+                return false;
+            }
+            if (sendRange == 2) {
+                var agentIds = $("#selectUserIds").val();
+                // alert(agentIds);
+                if (agentIds == null || agentIds == '') {
+                    $.modal.alertWarning("请选择消息接收人");
+                    return false;
+                }
+            }
+            // 发送方式校验
+            var sendType = $("input[name='sendType']:checked").val();
+            if (sendType == null || sendType == '' || sendType == undefined) {
+                $.modal.alertWarning("请选择发送方式");
+                return false;
+            }
+            if (sendType == 2) {
+                var sendTime = $("#sendTime").val();
+                if (sendTime == null || sendTime == '') {
+                    $.modal.alertWarning("请选择发送时间");
+                    return false;
+                }
+            }
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-letter-edit').serialize());
+            }
+        }
+
+        // 点击立即发送时清空时间
+        $("input[id=immediateSend]").click(function(){
+            $("#sendTime").val("");
+        });
+
+        $("#sendTime").datetimepicker({
+            format: "yyyy-mm-dd hh:ii",
+            autoclose: true
+        });
+
+        $("input[id=selectUser]").click(function(){
+            $("#selectUserIds").val("");
+            $.modal.open("选择用户", prefix + "/toSelectUser");
+        });
+
+        // 点击全部用户时清空选择的用户
+        $("input[id=allUser]").click(function(){
+            $("#selectUserIds").val("");
+        });
+    </script>
+</body>
+</html>

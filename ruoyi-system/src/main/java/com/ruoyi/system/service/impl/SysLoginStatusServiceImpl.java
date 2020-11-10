@@ -87,6 +87,7 @@ public class SysLoginStatusServiceImpl implements ISysLoginStatusService
             for (String confIp : ipList) {
                 if(confIp.equals(ipAddrPart)){
                     postStatus = "职场";
+                    break;
                 }else{
                     postStatus = "居家";
                 }
@@ -129,6 +130,7 @@ public class SysLoginStatusServiceImpl implements ISysLoginStatusService
             return false;
         }
     }
+
 
 
 

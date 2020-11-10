@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.stationletter.mapper.TLcStationLetterAgentMapper">
+    
+    <resultMap type="com.ruoyi.stationletter.domain.TLcStationLetterAgent" id="TLcStationLetterAgentResult">
+        <result property="id"    column="id"    />
+        <result property="letterId"    column="letter_id"    />
+        <result property="title"    column="title"    />
+        <result property="content"    column="content"    />
+        <result property="agentId"    column="agent_id"    />
+        <result property="sendBy"    column="send_by"    />
+        <result property="sendTime"    column="send_time"    />
+        <result property="readStatus"    column="read_status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTLcStationLetterAgentVo">
+        select id, letter_id, title, content, agent_id, send_by, send_time, read_status, create_by, create_time, update_by, update_time from t_lc_station_letter_agent
+    </sql>
+
+    <sql id="selectTLcStationLetterAgentColumn">
+        t.id,
+        t.letter_id,
+        t.title,
+        t.content,
+        t.agent_id,
+        t.send_by,
+        t.send_time,
+        t.read_status,
+        t.create_by,
+        t.create_time,
+        t.update_by,
+        t.update_time
+    </sql>
+
+    <select id="selectTLcStationLetterAgentList" parameterType="com.ruoyi.stationletter.domain.TLcStationLetterAgent" resultMap="TLcStationLetterAgentResult">
+        select su.user_name as sendUserName,
+        <include refid="selectTLcStationLetterAgentColumn"/>
+        from t_lc_station_letter_agent t,sys_user su
+        <where>
+            t.send_by = su.user_id
+            <if test="letterId != null "> and t.letter_id = #{letterId}</if>
+            <if test="title != null  and title != ''"> and t.title = #{title}</if>
+            <if test="content != null  and content != ''"> and t.content = #{content}</if>
+            <if test="agentId != null  and agentId != ''"> and t.agent_id = #{agentId}</if>
+            <if test="sendBy != null "> and t.send_by = #{sendBy}</if>
+            <if test="sendTime != null "> and t.send_time = #{sendTime}</if>
+            <if test="readStatus != null "> and t.read_status = #{readStatus}</if>
+            and t.send_time <![CDATA[<=]]> now()
+        </where>
+        order by t.read_status desc,t.send_time desc
+    </select>
+    
+    <select id="selectTLcStationLetterAgentById" parameterType="Long" resultMap="TLcStationLetterAgentResult">
+        select su.user_name as sendUserName,
+        <include refid="selectTLcStationLetterAgentColumn"/>
+        from t_lc_station_letter_agent t,sys_user su
+        where t.send_by = su.user_id and t.id = #{id}
+    </select>
+
+    <select id="selectWaitSendLetterAgentList" parameterType="com.ruoyi.stationletter.domain.TLcStationLetterAgent" resultMap="TLcStationLetterAgentResult">
+        select su.user_name as sendUserName,
+        <include refid="selectTLcStationLetterAgentColumn"/>
+        from t_lc_station_letter_agent t,sys_user su
+        where t.send_by = su.user_id and t.agent_id = #{agentId} and t.read_status = 2 and t.send_time <![CDATA[<=]]> now()
+    </select>
+
+    <insert id="insertTLcStationLetterAgent" parameterType="com.ruoyi.stationletter.domain.TLcStationLetterAgent" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_station_letter_agent
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="letterId != null ">letter_id,</if>
+            <if test="title != null  and title != ''">title,</if>
+            <if test="content != null  and content != ''">content,</if>
+            <if test="agentId != null  and agentId != ''">agent_id,</if>
+            <if test="sendBy != null ">send_by,</if>
+            <if test="sendTime != null ">send_time,</if>
+            <if test="readStatus != null ">read_status,</if>
+            <if test="createBy != null ">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null ">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="letterId != null ">#{letterId},</if>
+            <if test="title != null  and title != ''">#{title},</if>
+            <if test="content != null  and content != ''">#{content},</if>
+            <if test="agentId != null  and agentId != ''">#{agentId},</if>
+            <if test="sendBy != null ">#{sendBy},</if>
+            <if test="sendTime != null ">#{sendTime},</if>
+            <if test="readStatus != null ">#{readStatus},</if>
+            <if test="createBy != null ">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null ">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <insert id="batchInsertTLcStationLetterAgent" parameterType="java.util.List">
+        INSERT INTO t_lc_station_letter_agent (
+        letter_id,
+        title,
+        content,
+        agent_id,
+        send_by,
+        send_time,
+        read_status,
+        create_by,
+        create_time,
+        update_by,
+        update_time
+        ) VALUES
+        <foreach collection="letterAgentList" item="letter" separator=",">
+            (
+            #{letter.letterId},
+            #{letter.title},
+            #{letter.content},
+            #{letter.agentId},
+            #{letter.sendBy},
+            #{letter.sendTime},
+            #{letter.readStatus},
+            #{letter.createBy},
+            #{letter.createTime},
+            #{letter.updateBy},
+            #{letter.updateTime}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateTLcStationLetterAgent" parameterType="com.ruoyi.stationletter.domain.TLcStationLetterAgent">
+        update t_lc_station_letter_agent
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="letterId != null ">letter_id = #{letterId},</if>
+            <if test="title != null  and title != ''">title = #{title},</if>
+            <if test="content != null  and content != ''">content = #{content},</if>
+            <if test="agentId != null  and agentId != ''">agent_id = #{agentId},</if>
+            <if test="sendBy != null ">send_by = #{sendBy},</if>
+            <if test="sendTime != null ">send_time = #{sendTime},</if>
+            <if test="readStatus != null ">read_status = #{readStatus},</if>
+            <if test="createBy != null ">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null ">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateReadStatus" parameterType="java.lang.Long">
+        update t_lc_station_letter_agent set read_status = 1 where id = #{id}
+    </update>
+
+    <delete id="deleteTLcStationLetterAgentById" parameterType="Long">
+        delete from t_lc_station_letter_agent where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcStationLetterAgentByIds" parameterType="String">
+        delete from t_lc_station_letter_agent where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByLetterId" parameterType="java.lang.Long">
+        delete from t_lc_station_letter_agent where letter_id = #{letterId}
+    </delete>
+
+</mapper>

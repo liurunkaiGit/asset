@@ -111,28 +111,30 @@ public class TLcDuncaseAssignServiceImpl implements ITLcDuncaseAssignService {
     @Override
     @Async
     public void batchInsertDuncaseAssign(List<TLcTask> taskList, SysUser sysUser, Integer taskType) {
-        List<TLcDuncaseAssign> duncaseAssignList = taskList.stream()
-                .map(task -> {
-                    TLcDuncaseAssign tLcDuncaseAssign = TLcDuncaseAssign.builder()
-                            .ownerId(task.getOwnerId())
-                            .ownerName(task.getOwnerName())
-                            .taskId(task.getId().toString())
-                            .operationId(sysUser.getUserId())
-                            .customName(task.getCustomName())
-                            .collectTeamName(task.getCollectTeamName())
-                            .collectTeamId(task.getCollectTeamId())
-                            .certificateNo(task.getCertificateNo())
-                            .caseNo(task.getCaseNo())
-                            .operationName(sysUser.getUserName())
-                            .transferType(taskType)
-                            .orgId(task.getOrgId())
-                            .orgName(task.getOrgName())
-                            .taskStatus(task.getTaskStatus())
-                            .validateStatus(IsNoEnum.IS.getCode())
-                            .build();
-                    return tLcDuncaseAssign;
-                }).collect(Collectors.toList());
-        // 将该任务添加到案件历史轨迹表
-        this.tLcDuncaseAssignMapper.batchInsertDuncaseAssign(duncaseAssignList);
+        if (taskList != null && taskList.size() > 0) {
+            List<TLcDuncaseAssign> duncaseAssignList = taskList.stream()
+                    .map(task -> {
+                        TLcDuncaseAssign tLcDuncaseAssign = TLcDuncaseAssign.builder()
+                                .ownerId(task.getOwnerId())
+                                .ownerName(task.getOwnerName())
+                                .taskId(task.getId().toString())
+                                .operationId(sysUser.getUserId())
+                                .customName(task.getCustomName())
+                                .collectTeamName(task.getCollectTeamName())
+                                .collectTeamId(task.getCollectTeamId())
+                                .certificateNo(task.getCertificateNo())
+                                .caseNo(task.getCaseNo())
+                                .operationName(sysUser.getUserName())
+                                .transferType(taskType)
+                                .orgId(task.getOrgId())
+                                .orgName(task.getOrgName())
+                                .taskStatus(task.getTaskStatus())
+                                .validateStatus(IsNoEnum.IS.getCode())
+                                .build();
+                        return tLcDuncaseAssign;
+                    }).collect(Collectors.toList());
+            // 将该任务添加到案件历史轨迹表
+            this.tLcDuncaseAssignMapper.batchInsertDuncaseAssign(duncaseAssignList);
+        }
     }
 }
