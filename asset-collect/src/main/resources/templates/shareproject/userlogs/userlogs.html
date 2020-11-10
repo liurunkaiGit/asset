@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('【员工状态】列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>员工姓名：</p>
+                                <input type="text" name="userName"/>
+                            </li>
+
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="lookups()" shiro:hasPermission="shareproject:userlogs:add">
+                    <i class="fa fa-search"></i> 查看
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('shareproject:userlogs:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('shareproject:userlogs:remove')}]];
+        var prefix = ctx + "shareproject/userlogs";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                modalName: "【员工状态】",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : 'id',
+                    visible: false
+                },
+                {
+                    field : 'userName', 
+                    title : '用户昵称'
+                },
+                {
+                    field : 'days',
+                    title : '日期'
+                },
+                {
+                    field : 'startTime', 
+                    title : '时间段',
+                    formatter: function (value, row, index) {
+                        return value+"--"+row.endTime;
+                    }
+                },
+                {
+                    field : 'errors', 
+                    title : '异常数'
+                },
+                {
+                    field : 'updateTime',
+                    title : '操作时间'
+                }]
+            };
+            $.table.init(options);
+        });
+        function lookups() {
+            var taskIdRows = $.table.selectColumns("id");
+            if (taskIdRows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.modal.open("查看",prefix+"/lookups/"+taskIdRows[0],$(window).width(),$(window).height(),function (index, layero) {
+                layer.close(index);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -239,7 +239,6 @@
                         field : 'amountReceived',
                         title : '本月目标回款',
                         formatter:function (value, row, index) {
-                            debugger;
                             if(value =='' || null == value)return'';
                             return  parseFloat(value).toFixed(2) ;
                         }

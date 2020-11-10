@@ -31,6 +31,19 @@ public interface SysLoginStatusMapper
     public List<SysLoginStatus> selectSysLoginStatusList(SysLoginStatus sysLoginStatus);
 
     /**
+     * 根据loginName获取最新ip
+     * @param loginName
+     * @return
+     */
+    public List<SysLoginStatus> selIpByLoginName(String loginName);
+    /**
+     * 查询登录状态列表
+     *
+     * @param sysLoginStatus 登录状态
+     * @return 登录状态集合
+     */
+    public List<SysLoginStatus> selectSysLoginStatusListTask(SysLoginStatus sysLoginStatus);
+    /**
      * 新增登录状态
      * 
      * @param sysLoginStatus 登录状态

@@ -3,6 +3,7 @@ package com.ruoyi.task.mapper;
 import com.ruoyi.task.domain.JxphCallRecord;
 import com.ruoyi.task.domain.TLcCallRecord;
 import com.ruoyi.task.domain.TLcCallRecordForXY;
+import com.ruoyi.task.domain.TlcCallRecordTotal;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -35,7 +36,7 @@ public interface TLcCallRecordMapper {
     public List<TLcCallRecord> selectTLcCallRecordXYList(TLcCallRecord tLcCallRecord);
 
     public Integer selectTLcCallRecordCount(TLcCallRecord tLcCallRecord);
-
+    public TlcCallRecordTotal selectUserTotal(TLcCallRecord tLcCallRecord);
     /**
      * 新增通话结果记录
      *

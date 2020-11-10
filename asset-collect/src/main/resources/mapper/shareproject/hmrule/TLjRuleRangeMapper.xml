@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shareproject.hmrule.mapper.TLjRuleRangeMapper">
+    
+    <resultMap type="TLjRuleRange" id="TLjRuleRangeResult">
+        <result property="id"    column="id"    />
+        <result property="ruleId"    column="rule_id"    />
+        <result property="dporusId"    column="dporus_id"    />
+        <result property="types"    column="types"    />
+        <result property="names"    column="names"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+    </resultMap>
+
+    <sql id="selectTLjRuleRangeVo">
+        select id, rule_id, dporus_id, types, names, create_by, create_time, update_by, update_time, org_id, org_name from t_lj_rule_range
+    </sql>
+
+    <select id="selectTLjRuleRangeList" parameterType="TLjRuleRange" resultMap="TLjRuleRangeResult">
+        <include refid="selectTLjRuleRangeVo"/>
+        <where>  
+            <if test="ruleId != null "> and rule_id = #{ruleId}</if>
+            <if test="dporusId != null "> and dporus_id = #{dporusId}</if>
+            <if test="types != null "> and types = #{types}</if>
+            <if test="names != null  and names != ''"> and names = #{names}</if>
+            <if test="orgId != null "> and org_id = #{orgId}</if>
+            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectTLjRuleRangeById" parameterType="Long" resultMap="TLjRuleRangeResult">
+        <include refid="selectTLjRuleRangeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLjRuleRange" parameterType="TLjRuleRange" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lj_rule_range
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ruleId != null ">rule_id,</if>
+            <if test="dporusId != null ">dporus_id,</if>
+            <if test="types != null ">types,</if>
+            <if test="names != null  and names != ''">names,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="orgId != null ">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ruleId != null ">#{ruleId},</if>
+            <if test="dporusId != null ">#{dporusId},</if>
+            <if test="types != null ">#{types},</if>
+            <if test="names != null  and names != ''">#{names},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="orgId != null ">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLjRuleRange" parameterType="TLjRuleRange">
+        update t_lj_rule_range
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ruleId != null ">rule_id = #{ruleId},</if>
+            <if test="dporusId != null ">dporus_id = #{dporusId},</if>
+            <if test="types != null ">types = #{types},</if>
+            <if test="names != null  and names != ''">names = #{names},</if>
+            <if test="createBy != null  ">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="orgId != null ">org_id = #{orgId},</if>
+            <if test="orgName != null  ">org_name = #{orgName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLjRuleRangeById" parameterType="Long">
+        delete from t_lj_rule_range where id = #{id}
+    </delete>
+
+    <delete id="deleteTLjRuleRangeByRuleId" parameterType="Long">
+        delete from t_lj_rule_range where rule_id = #{ruleId}
+    </delete>
+
+    <delete id="deleteTLjRuleRangeByIds" parameterType="String">
+        delete from t_lj_rule_range where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteTLjRuleRangeByRuleIds" parameterType="String">
+        delete from t_lj_rule_range where rule_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    
+</mapper>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('【居家规则】列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>规则编码：</p>
+                                <input type="text" name="ruleCode"/>
+                            </li>
+                            <li>
+                                <p>规则名称：</p>
+                                <input type="text" name="ruleName"/>
+                            </li>
+                            <li>
+                                <p>规则状态：</p>
+                                <select th:required="required" name="ruleStatus" id="ruleStatus"  class="form-control m-b" th:with="type=${@dict.getType('rule_status')}" required>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+
+                            <li class="select-time">
+                                <p>规则有效时间：</p>
+                                <input type="text"  id="startTime" class="time-input"  name="params[startTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime"  name="params[endTime]"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="shareproject:rule:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="shareproject:rule:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-warning" onclick="tiaojian()" shiro:hasPermission="shareproject:rule:export">
+                    <i class="fa fa-edit"></i> 条件
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('shareproject:rule:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('shareproject:rule:remove')}]];
+        var prefix = ctx + "shareproject/hmrule";
+        var gzdata = [[${@dict.getType('rule_type')}]];
+        var ztdata = [[${@dict.getType('rule_status')}]];
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "【居家规则】",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id',
+                    title : 'id',
+                    visible: false
+                },
+                {
+                    field : 'ruleCode', 
+                    title : '规则编码'
+                },
+                {
+                    field : 'ruleName',
+                    title : '规则名称'
+                },
+                {
+                    field : 'remark',
+                    title : '描述'
+                },
+                {
+                    field : 'ruleType',
+                    title : '规则范围',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(gzdata, value);
+                    }
+                },
+                {
+                    field : 'startTime', 
+                    title : '规则有效时间',
+                    formatter: function(value, row, index) {
+                        return value +'--'+ row.endTime;
+                    }
+                },
+                {
+                    field : 'ruleStatus',
+                    title : '规则状态',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(ztdata, value);
+                    }
+                },
+                {
+                    field : 'updateBy',
+                    title : '操作人'
+                },
+                {
+                    field : 'updateTime',
+                    title : '机构名称'
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function tiaojian() {
+            var taskIdRows = $.table.selectColumns("id");
+            if (taskIdRows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.modal.open("条件",ctx+"shareproject/details/view/"+taskIdRows[0],$(window).width(),$(window).height(),function (index, layero) {
+                layer.close(index);
+            });
+        }
+    </script>
+</body>
+</html>

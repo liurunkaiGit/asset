@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-details-add">
+            <input name="ruleId" id="ruleId" th:value="${ruleId}" type="hidden">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">时间段：</label>
+                <div class="col-sm-8">
+                    <input name="startTime" id="startTime" class="time-input"  data-type="time"  style="width: 70px; float:left;" maxlength="8"  type="text" required><span style=" float:left;">--</span>
+                    <input name="endTime" id="endTime" class="time-input" data-type="time"  style="width: 70px;float:left;"  maxlength="8"  type="text" required>
+                    <input name="endTimeHm" id="endTimeHm" type="hidden">
+                    <input name="startTimeHm" id="startTimeHm" type="hidden">
+                </div>
+            </div>
+            <div class="form-group" style="200px;">
+                <label class="col-sm-3 control-label">登录：</label>
+                <input type="checkbox"  name="onlineTime" errmsg="在线时长"  value="0">在线时长&nbsp;&nbsp;
+                条件
+                <select  name="onlineCondition"  >
+                    <option value="0">范围</option>
+                    <option value="1">大于</option>
+                    <option value="2">小于</option>
+                </select>
+                <input name="onlineOne" id="onlineTimeOne" style="width: 70px;"  type="text" positiveinteger="true"  maxlength="8">---<input id="onlineTimeTwo" name="onlineTwo" style="width: 70px;"   type="number" maxlength="8">分钟
+            </div>
+            <div class="form-group" style="200px;">
+                <label class="col-sm-3 control-label"></label>
+                <input type="checkbox"  name="outTime" errmsg="退出次数" value="0">退出次数&nbsp;&nbsp;
+                条件
+                <select  name="outCondition"   required>
+                    <option value="0">范围</option>
+                    <option value="1">大于</option>
+                    <option value="2">小于</option>
+                </select>
+                <input name="outOne" id="outTimeOne"  style="width: 70px;"  type="number" maxlength="8">---<input name="outTwo" id="outTimeTwo" style="width: 70px;"   type="number" maxlength="8">次
+            </div>
+            <div class="form-group" style="200px;">
+                <label class="col-sm-3 control-label"></label>
+                <input type="checkbox"  name="intervals" errmsg="间隔时长" value="0">间隔时长&nbsp;&nbsp;
+                条件
+                <select  name="intervalsCondition"  required>
+                    <option value="0">范围</option>
+                    <option value="1">大于</option>
+                    <option value="2">小于</option>
+                </select>
+                <input name="intervalsOne" id="intervalsOne"  style="width: 70px;"  type="number" maxlength="8">---<input name="intervalsTwo" id="intervalsTwo" style="width: 70px;"   type="number" maxlength="8">分钟
+            </div>
+
+            <div class="form-group" style="200px;">
+                <label class="col-sm-3 control-label">通话</label>
+                <input type="checkbox"  name="conversationTime" errmsg="通话时长" value="0">通话时长&nbsp;&nbsp;
+                条件
+                <select  name="conversationCondition"   required>
+                    <option value="0">范围</option>
+                    <option value="1">大于</option>
+                    <option value="2">小于</option>
+                </select>
+                <input name="conversationOne" id="conversationTimeOne"  style="width: 70px;"  type="number" maxlength="8">---<input name="conversationTwo" id="conversationTimeTwo" style="width: 70px;"   type="number" maxlength="8">分钟
+            </div>
+            <div class="form-group" style="200px;">
+                <label class="col-sm-3 control-label"></label>
+                <input type="checkbox"  name="conversationCishu" errmsg="通话次数" value="0">通话次数&nbsp;&nbsp;
+                条件
+                <select  name="conversationCishuCondition"  required>
+                    <option value="0">范围</option>
+                    <option value="1">大于</option>
+                    <option value="2">小于</option>
+                </select>
+                <input name="conversationCishuOne" id="conversationCishuOne"  style="width: 70px;"  type="number" maxlength="8">---<input name="conversationCishuTwo" id="conversationCishuTwo" style="width: 70px;" ismoney="true"  type="text" maxlength="8">次
+            </div>
+            <div class="form-group" style="200px;">
+                <label class="col-sm-3 control-label"></label>
+                <input type="checkbox"  name="engRate" errmsg="接通率" value="0">接通率&nbsp;&nbsp;
+                条件
+                <select  name="engRateCondition"  required>
+                    <option value="0">范围</option>
+                    <option value="1">大于</option>
+                    <option value="2">小于</option>
+                </select>
+                <input name="engRateOne" id="engRateOne"  style="width: 70px;"  type="number" maxlength="8">---<input name="engRateTwo" id="engRateTwo"  style="width: 70px;"   type="number" maxlength="8">%
+            </div>
+
+
+            <div class="form-group" style="200px;">
+                <label class="col-sm-3 control-label">案件</label>
+                <input type="checkbox"  name="caseNumbers" errmsg="案件处理量" value="0">案件处理量&nbsp;&nbsp;
+                条件
+                <select  name="caseNumbersCondition"   required>
+                    <option value="0">范围</option>
+                    <option value="1">大于</option>
+                    <option value="2">小于</option>
+                </select>
+                <input name="caseNumbersOne" id="caseNumbersOne"  style="width: 70px;"  type="number" maxlength="8">---<input id="caseNumbersTwo" name="caseNumbersTwo" style="width: 70px;"   type="number" maxlength="8">件
+            </div>
+            <div class="form-group" style="200px;">
+                <label class="col-sm-3 control-label"></label>
+                <input type="checkbox"  name="caseRate" errmsg="案件处理率" value="0">案件处理率&nbsp;&nbsp;
+                条件
+                <select  name="caseRateCondition"  required>
+                    <option value="0">范围</option>
+                    <option value="1">大于</option>
+                    <option value="2">小于</option>
+                </select>
+                <input name="caseRateOne" id="caseRateConditionOne"  style="width: 70px;"  type="number" maxlength="8">---<input id="caseRateConditionTwo" name="caseRateTwo" style="width: 70px;"   type="number" maxlength="8">%
+            </div>
+
+            <div class="form-group" style="200px;">
+                <label class="col-sm-3 control-label">还款达成</label>
+                <input type="checkbox"  name="sjRepayment" errmsg="实际还款" value="0">实际还款&nbsp;&nbsp;
+                条件
+                <select  name="sjRepaymentCondition"  required>
+                    <option value="0">范围</option>
+                    <option value="1">大于</option>
+                    <option value="2">小于</option>
+                </select>
+                <input name="sjRepaymentOne" id="sjRepaymentOne"  style="width: 70px;"  type="number" maxlength="8">---<input id="sjRepaymentTwo" name="sjRepaymentTwo" style="width: 70px;"   type="number" maxlength="8">元
+            </div>
+            <div class="form-group" style="200px;">
+                <label class="col-sm-3 control-label"></label>
+                <input type="checkbox"  name="sjRepaymentRate" errmsg="实际还款率" value="0">实际还款率&nbsp;&nbsp;
+                条件
+                <select  name="sjRepaymentRateCondition"   required>
+                    <option value="0">范围</option>
+                    <option value="1">大于</option>
+                    <option value="2">小于</option>
+                </select>
+                <input name="sjRepaymentRateOne" id="sjRepaymentRateOne"  style="width: 70px;"  type="number" maxlength="8">---<input id="sjRepaymentRateTwo" name="sjRepaymentRateTwo" style="width: 70px;"   type="number" maxlength="8">%
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "shareproject/details"
+        $("#form-details-add").validate({
+            focusCleanup: true
+        });
+        function isPInt(str) {
+            var g = /^[1-9]*[1-9][0-9]*$/;
+            return g.test(str);
+        }
+        function submitHandler() {
+            if ($.validate.form()) {
+                var stps = $("#startTime").val().split(":");
+                var stpL = stps[0]*60*60*1000+stps[1]*60*1000+stps[2]*1000;
+                $("#startTimeHm").val(stpL);
+                var edps = $("#endTime").val().split(":");
+                var edpL = edps[0]*60*60*1000+edps[1]*60*1000+edps[2]*1000;
+                $("#endTimeHm").val(edpL);
+                if(edpL<=stpL){
+                    $.modal.alertWarning("时间段不正确");
+                    return;
+                }
+                var sign = 0;
+                var sel = 0;
+                $("input[type='checkbox']").each(function (index, item) {
+                    var bt = $(this);
+                    var sl = bt.val();
+                    if(sl == 1){
+                        sel=1;
+                        var names = bt.attr("name");
+                        var errmsg = bt.attr("errmsg");
+                        var one = $("#"+names+"One").val();
+                        var two = $("#"+names+"Two").val();
+                        if(one == '' || ''==two){
+                            $.modal.alertWarning("请填写"+errmsg);
+                            sign=1;
+                            return;
+                        }
+                        if(!isPInt(one) || !isPInt(two)){
+                            $.modal.alertWarning("请正确填写(正整数)"+errmsg);
+                            sign=1;
+                            return;
+                        }
+                        if(one <= 0 || two <= 0 || two == one || two < one ){
+                            $.modal.alertWarning("请正确填写"+errmsg);
+                            sign=1
+                            return;
+                        }
+                    }
+                });
+                if( sign==1)return;
+                if(sel == 0){
+                    $.modal.alertWarning("请至少勾选一个规则");
+                    return;
+                }
+                $.ajax({
+                    url: prefix + "/tmisuse",    //请求的url地址
+                    dataType: "json",   //返回格式为json
+                    async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+                    data:
+                        {
+                            "startTimeHm": stpL,
+                            "endTimeHm": edpL,
+                            "ruleId": $("#ruleId").val()
+                        },    //参数值
+                    type: "POST",   //请求方式
+                    success: function(req) {
+                        //请求成功时处理
+                        if(req.code != 0){
+                            $.modal.alertWarning("时间段已使用,请重新选择");
+                        }else{
+                            $.operate.save(prefix + "/add", $('#form-details-add').serialize());
+                        }
+                    },
+                    error: function(e) {
+                        //请求出错处理
+                    }
+                });
+            }
+        }
+        $(document).ready(function(){
+            $("input[type='checkbox']").change(function() {
+                if ($(this).prop('checked')) {
+                    $(this).val(1);
+                }else{
+                    $(this).val(0);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

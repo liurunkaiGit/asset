@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shareproject.hmuserst.mapper.TLjRuleUserLogsMapper">
+
+    <resultMap type="TLjRuleUserLogs" id="TLjRuleUserLogsResult">
+        <result property="id"    column="id"    />
+        <result property="loginName"    column="login_name"    />
+        <result property="userName"    column="user_name"    />
+        <result property="ruleId"    column="rule_id"    />
+        <result property="detailsId"    column="details_id"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="errors"    column="errors"    />
+        <result property="days"    column="days"    />
+        <result property="onlineError"    column="online_error"    />
+        <result property="onlineTime"    column="online_time"    />
+        <result property="outError"    column="out_error"    />
+        <result property="outCishu"    column="out_cishu"    />
+        <result property="jiangeError"    column="jiange_error"    />
+        <result property="jiange"    column="jiange"    />
+        <result property="tonghuaError"    column="tonghua_error"    />
+        <result property="tonghuaDuration"    column="tonghua_duration"    />
+        <result property="tonghuacsError"    column="tonghuacs_error"    />
+        <result property="tonghuacs"    column="tonghuacs"    />
+        <result property="jietonglvError"    column="jietonglv_error"    />
+        <result property="jietongcs"    column="jietongcs"    />
+        <result property="jietonglv"    column="jietonglv"    />
+        <result property="anjianError"    column="anjian_error"    />
+        <result property="anjianDuration"    column="anjian_duration"    />
+        <result property="anjianlvError"    column="anjianlv_error"    />
+        <result property="anjianlv"    column="anjianlv"    />
+        <result property="anjianyichuli"    column="anjianyichuli"    />
+        <result property="shijiError"    column="shiji_error"    />
+        <result property="yinghuan"    column="yinghuan"    />
+        <result property="shijilvError"    column="shijilv_error"    />
+        <result property="shijilv"    column="shijilv"    />
+        <result property="shiji"    column="shiji"    />
+        <result property="loginZong"    column="login_zong"    />
+        <result property="huankuanZong"    column="huankuan_zong"    />
+        <result property="tonghuaZong"    column="tonghua_zong"    />
+        <result property="anjianZong"    column="anjian_zong"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="onlineCondition"    column="online_condition"    />
+        <result property="onlineOne"    column="online_one"    />
+        <result property="onlineTwo"    column="online_two"    />
+        <result property="outCondition"    column="out_condition"    />
+        <result property="outOne"    column="out_one"    />
+        <result property="outTwo"    column="out_two"    />
+        <result property="intervalsCondition"    column="intervals_condition"    />
+        <result property="intervalsOne"    column="intervals_one"    />
+        <result property="intervalsTwo"    column="intervals_two"    />
+        <result property="conversationCondition"    column="conversation_condition"    />
+        <result property="conversationOne"    column="conversation_one"    />
+        <result property="conversationTwo"    column="conversation_two"    />
+        <result property="conversationCishuCondition"    column="conversation_cishu_condition"    />
+        <result property="conversationCishuOne"    column="conversation_cishu_one"    />
+        <result property="conversationCishuTwo"    column="conversation_cishu_two"    />
+        <result property="engRateCondition"    column="eng_rate_condition"    />
+        <result property="engRateOne"    column="eng_rate_one"    />
+        <result property="engRateTwo"    column="eng_rate_two"    />
+        <result property="caseNumbersCondition"    column="case_numbers_condition"    />
+        <result property="caseNumbersOne"    column="case_numbers_one"    />
+        <result property="caseNumbersTwo"    column="case_numbers_two"    />
+        <result property="caseRateCondition"    column="case_rate_condition"    />
+        <result property="caseRateOne"    column="case_rate_one"    />
+        <result property="caseRateTwo"    column="case_rate_two"    />
+        <result property="sjRepaymentCondition"    column="sj_repayment_condition"    />
+        <result property="sjRepaymentOne"    column="sj_repayment_one"    />
+        <result property="sjRepaymentTwo"    column="sj_repayment_two"    />
+        <result property="sjRepaymentRateCondition"    column="sj_repayment_rate_condition"    />
+        <result property="sjRepaymentRateOne"    column="sj_repayment_rate_one"    />
+        <result property="sjRepaymentRateTwo"    column="sj_repayment_rate_two"    />
+    </resultMap>
+
+    <sql id="selectTLjRuleUserLogsVo">
+        select id, login_name, user_name, rule_id, details_id, start_time, end_time, errors, days, online_error, online_time, out_error, out_cishu, jiange_error, jiange, tonghua_error, tonghua_duration, tonghuacs_error, tonghuacs, jietonglv_error, jietongcs,jietonglv, anjian_error, anjian_duration, anjianlv_error,anjianlv, anjianyichuli, shiji_error, yinghuan, shijilv_error,shijilv, shiji, login_zong, huankuan_zong, tonghua_zong, anjian_zong, create_by, create_time, update_by, update_time, org_id, org_name, online_condition, online_one, online_two, out_condition, out_one, out_two, intervals_condition, intervals_one, intervals_two, conversation_condition, conversation_one, conversation_two, conversation_cishu_condition, conversation_cishu_one, conversation_cishu_two, eng_rate_condition, eng_rate_one, eng_rate_two, case_numbers_condition, case_numbers_one, case_numbers_two, case_rate_condition, case_rate_one, case_rate_two, sj_repayment_condition, sj_repayment_one, sj_repayment_two, sj_repayment_rate_condition, sj_repayment_rate_one, sj_repayment_rate_two from t_lj_rule_user_logs
+    </sql>
+
+    <select id="selectTLjRuleUserLogsList" parameterType="TLjRuleUserLogs" resultMap="TLjRuleUserLogsResult">
+        <include refid="selectTLjRuleUserLogsVo"/>
+        <where>
+            <if test="loginName != null  and loginName != ''"> and login_name like concat('%', #{loginName}, '%')</if>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="ruleId != null "> and rule_id = #{ruleId}</if>
+            <if test="detailsId != null "> and details_id = #{detailsId}</if>
+            <if test="startTime != null  and startTime != ''"> and start_time = #{startTime}</if>
+            <if test="endTime != null  and endTime != ''"> and end_time = #{endTime}</if>
+            <if test="errors != null "> and errors = #{errors}</if>
+            <if test="days != null "> and days = #{days}</if>
+            <if test="onlineError != null "> and online_error = #{onlineError}</if>
+            <if test="onlineTime != null "> and online_time = #{onlineTime}</if>
+            <if test="outError != null "> and out_error = #{outError}</if>
+            <if test="outCishu != null "> and out_cishu = #{outCishu}</if>
+            <if test="jiangeError != null "> and jiange_error = #{jiangeError}</if>
+            <if test="jiange != null "> and jiange = #{jiange}</if>
+            <if test="tonghuaError != null "> and tonghua_error = #{tonghuaError}</if>
+            <if test="tonghuaDuration != null "> and tonghua_duration = #{tonghuaDuration}</if>
+            <if test="tonghuacsError != null "> and tonghuacs_error = #{tonghuacsError}</if>
+            <if test="tonghuacs != null "> and tonghuacs = #{tonghuacs}</if>
+            <if test="jietonglvError != null "> and jietonglv_error = #{jietonglvError}</if>
+            <if test="jietongcs != null "> and jietongcs = #{jietongcs}</if>
+            <if test="jietonglv != null "> and jietonglv = #{jietonglv}</if>
+            <if test="anjianError != null "> and anjian_error = #{anjianError}</if>
+            <if test="anjianDuration != null "> and anjian_duration = #{anjianDuration}</if>
+            <if test="anjianlvError != null "> and anjianlv_error = #{anjianlvError}</if>
+            <if test="anjianlv != null "> and anjianlv = #{anjianlv}</if>
+            <if test="anjianyichuli != null "> and anjianyichuli = #{anjianyichuli}</if>
+            <if test="shijiError != null "> and shiji_error = #{shijiError}</if>
+            <if test="yinghuan != null "> and yinghuan = #{yinghuan}</if>
+            <if test="shijilvError != null "> and shijilv_error = #{shijilvError}</if>
+            <if test="shijilv != null "> and shijilv = #{shijilv}</if>
+            <if test="shiji != null "> and shiji = #{shiji}</if>
+            <if test="loginZong != null "> and login_zong = #{loginZong}</if>
+            <if test="huankuanZong != null "> and huankuan_zong = #{huankuanZong}</if>
+            <if test="tonghuaZong != null "> and tonghua_zong = #{tonghuaZong}</if>
+            <if test="anjianZong != null "> and anjian_zong = #{anjianZong}</if>
+            <if test="orgId != null "> and org_id = #{orgId}</if>
+            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+            <if test="onlineCondition != null  and onlineCondition != ''"> and online_condition = #{onlineCondition}</if>
+            <if test="onlineOne != null "> and online_one = #{onlineOne}</if>
+            <if test="onlineTwo != null "> and online_two = #{onlineTwo}</if>
+            <if test="outCondition != null  and outCondition != ''"> and out_condition = #{outCondition}</if>
+            <if test="outOne != null "> and out_one = #{outOne}</if>
+            <if test="outTwo != null "> and out_two = #{outTwo}</if>
+            <if test="intervalsCondition != null  and intervalsCondition != ''"> and intervals_condition = #{intervalsCondition}</if>
+            <if test="intervalsOne != null "> and intervals_one = #{intervalsOne}</if>
+            <if test="intervalsTwo != null "> and intervals_two = #{intervalsTwo}</if>
+            <if test="conversationCondition != null  and conversationCondition != ''"> and conversation_condition = #{conversationCondition}</if>
+            <if test="conversationOne != null "> and conversation_one = #{conversationOne}</if>
+            <if test="conversationTwo != null "> and conversation_two = #{conversationTwo}</if>
+            <if test="conversationCishuCondition != null  and conversationCishuCondition != ''"> and conversation_cishu_condition = #{conversationCishuCondition}</if>
+            <if test="conversationCishuOne != null "> and conversation_cishu_one = #{conversationCishuOne}</if>
+            <if test="conversationCishuTwo != null "> and conversation_cishu_two = #{conversationCishuTwo}</if>
+            <if test="engRateCondition != null  and engRateCondition != ''"> and eng_rate_condition = #{engRateCondition}</if>
+            <if test="engRateOne != null "> and eng_rate_one = #{engRateOne}</if>
+            <if test="engRateTwo != null "> and eng_rate_two = #{engRateTwo}</if>
+            <if test="caseNumbersCondition != null  and caseNumbersCondition != ''"> and case_numbers_condition = #{caseNumbersCondition}</if>
+            <if test="caseNumbersOne != null "> and case_numbers_one = #{caseNumbersOne}</if>
+            <if test="caseNumbersTwo != null "> and case_numbers_two = #{caseNumbersTwo}</if>
+            <if test="caseRateCondition != null  and caseRateCondition != ''"> and case_rate_condition = #{caseRateCondition}</if>
+            <if test="caseRateOne != null "> and case_rate_one = #{caseRateOne}</if>
+            <if test="caseRateTwo != null "> and case_rate_two = #{caseRateTwo}</if>
+            <if test="sjRepaymentCondition != null  and sjRepaymentCondition != ''"> and sj_repayment_condition = #{sjRepaymentCondition}</if>
+            <if test="sjRepaymentOne != null "> and sj_repayment_one = #{sjRepaymentOne}</if>
+            <if test="sjRepaymentTwo != null "> and sj_repayment_two = #{sjRepaymentTwo}</if>
+            <if test="sjRepaymentRateCondition != null  and sjRepaymentRateCondition != ''"> and sj_repayment_rate_condition = #{sjRepaymentRateCondition}</if>
+            <if test="sjRepaymentRateOne != null "> and sj_repayment_rate_one = #{sjRepaymentRateOne}</if>
+            <if test="sjRepaymentRateTwo != null "> and sj_repayment_rate_two = #{sjRepaymentRateTwo}</if>
+        </where>
+    </select>
+
+    <select id="selectTLjRuleUserLogsByRuleIdAnddetailsId" parameterType="TLjRuleUserLogs" resultType="java.lang.Long">
+       select id from t_lj_rule_user_logs where rule_id=#{ruleId} and details_id = #{detailsId} and days<![CDATA[=]]> DATE_FORMAT(#{days},'%Y-%m-%d')
+    </select>
+
+    <select id="selectTLjRuleUserLogsById" parameterType="Long" resultMap="TLjRuleUserLogsResult">
+        <include refid="selectTLjRuleUserLogsVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTLjRuleUserLogs" parameterType="TLjRuleUserLogs" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lj_rule_user_logs
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="loginName != null  and loginName != ''">login_name,</if>
+            <if test="userName != null  and userName != ''">user_name,</if>
+            <if test="ruleId != null ">rule_id,</if>
+            <if test="detailsId != null ">details_id,</if>
+            <if test="startTime != null  and startTime != ''">start_time,</if>
+            <if test="endTime != null  and endTime != ''">end_time,</if>
+            <if test="errors != null ">errors,</if>
+            <if test="days != null ">days,</if>
+            <if test="onlineError != null ">online_error,</if>
+            <if test="onlineTime != null ">online_time,</if>
+            <if test="outError != null ">out_error,</if>
+            <if test="outCishu != null ">out_cishu,</if>
+            <if test="jiangeError != null ">jiange_error,</if>
+            <if test="jiange != null ">jiange,</if>
+            <if test="tonghuaError != null ">tonghua_error,</if>
+            <if test="tonghuaDuration != null ">tonghua_duration,</if>
+            <if test="tonghuacsError != null ">tonghuacs_error,</if>
+            <if test="tonghuacs != null ">tonghuacs,</if>
+            <if test="jietonglvError != null ">jietonglv_error,</if>
+            <if test="jietongcs != null ">jietongcs,</if>
+            <if test="jietonglv != null ">jietonglv,</if>
+            <if test="anjianError != null ">anjian_error,</if>
+            <if test="anjianDuration != null ">anjian_duration,</if>
+            <if test="anjianlvError != null ">anjianlv_error,</if>
+            <if test="anjianlv != null ">anjianlv,</if>
+            <if test="anjianyichuli != null ">anjianyichuli,</if>
+            <if test="shijiError != null ">shiji_error,</if>
+            <if test="yinghuan != null ">yinghuan,</if>
+            <if test="shijilvError != null ">shijilv_error,</if>
+            <if test="shijilv != null ">shijilv,</if>
+            <if test="shiji != null ">shiji,</if>
+            <if test="loginZong != null ">login_zong,</if>
+            <if test="huankuanZong != null ">huankuan_zong,</if>
+            <if test="tonghuaZong != null ">tonghua_zong,</if>
+            <if test="anjianZong != null ">anjian_zong,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="orgId != null ">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="onlineCondition != null  and onlineCondition != ''">online_condition,</if>
+            <if test="onlineOne != null ">online_one,</if>
+            <if test="onlineTwo != null ">online_two,</if>
+            <if test="outCondition != null  and outCondition != ''">out_condition,</if>
+            <if test="outOne != null ">out_one,</if>
+            <if test="outTwo != null ">out_two,</if>
+            <if test="intervalsCondition != null  and intervalsCondition != ''">intervals_condition,</if>
+            <if test="intervalsOne != null ">intervals_one,</if>
+            <if test="intervalsTwo != null ">intervals_two,</if>
+            <if test="conversationCondition != null  and conversationCondition != ''">conversation_condition,</if>
+            <if test="conversationOne != null ">conversation_one,</if>
+            <if test="conversationTwo != null ">conversation_two,</if>
+            <if test="conversationCishuCondition != null  and conversationCishuCondition != ''">conversation_cishu_condition,</if>
+            <if test="conversationCishuOne != null ">conversation_cishu_one,</if>
+            <if test="conversationCishuTwo != null ">conversation_cishu_two,</if>
+            <if test="engRateCondition != null  and engRateCondition != ''">eng_rate_condition,</if>
+            <if test="engRateOne != null ">eng_rate_one,</if>
+            <if test="engRateTwo != null ">eng_rate_two,</if>
+            <if test="caseNumbersCondition != null  and caseNumbersCondition != ''">case_numbers_condition,</if>
+            <if test="caseNumbersOne != null ">case_numbers_one,</if>
+            <if test="caseNumbersTwo != null ">case_numbers_two,</if>
+            <if test="caseRateCondition != null  and caseRateCondition != ''">case_rate_condition,</if>
+            <if test="caseRateOne != null ">case_rate_one,</if>
+            <if test="caseRateTwo != null ">case_rate_two,</if>
+            <if test="sjRepaymentCondition != null  and sjRepaymentCondition != ''">sj_repayment_condition,</if>
+            <if test="sjRepaymentOne != null ">sj_repayment_one,</if>
+            <if test="sjRepaymentTwo != null ">sj_repayment_two,</if>
+            <if test="sjRepaymentRateCondition != null  and sjRepaymentRateCondition != ''">sj_repayment_rate_condition,</if>
+            <if test="sjRepaymentRateOne != null ">sj_repayment_rate_one,</if>
+            <if test="sjRepaymentRateTwo != null ">sj_repayment_rate_two,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="loginName != null  and loginName != ''">#{loginName},</if>
+            <if test="userName != null  and userName != ''">#{userName},</if>
+            <if test="ruleId != null ">#{ruleId},</if>
+            <if test="detailsId != null ">#{detailsId},</if>
+            <if test="startTime != null  and startTime != ''">#{startTime},</if>
+            <if test="endTime != null  and endTime != ''">#{endTime},</if>
+            <if test="errors != null ">#{errors},</if>
+            <if test="days != null ">#{days},</if>
+            <if test="onlineError != null ">#{onlineError},</if>
+            <if test="onlineTime != null ">#{onlineTime},</if>
+            <if test="outError != null ">#{outError},</if>
+            <if test="outCishu != null ">#{outCishu},</if>
+            <if test="jiangeError != null ">#{jiangeError},</if>
+            <if test="jiange != null ">#{jiange},</if>
+            <if test="tonghuaError != null ">#{tonghuaError},</if>
+            <if test="tonghuaDuration != null ">#{tonghuaDuration},</if>
+            <if test="tonghuacsError != null ">#{tonghuacsError},</if>
+            <if test="tonghuacs != null ">#{tonghuacs},</if>
+            <if test="jietonglvError != null ">#{jietonglvError},</if>
+            <if test="jietongcs != null ">#{jietongcs},</if>
+            <if test="jietonglv != null ">#{jietonglv},</if>
+            <if test="anjianError != null ">#{anjianError},</if>
+            <if test="anjianDuration != null ">#{anjianDuration},</if>
+            <if test="anjianlvError != null ">#{anjianlvError},</if>
+            <if test="anjianlv != null ">#{anjianlv},</if>
+            <if test="anjianyichuli != null ">#{anjianyichuli},</if>
+            <if test="shijiError != null ">#{shijiError},</if>
+            <if test="yinghuan != null ">#{yinghuan},</if>
+            <if test="shijilvError != null ">#{shijilvError},</if>
+            <if test="shijilv != null ">#{shijilv},</if>
+            <if test="shiji != null ">#{shiji},</if>
+            <if test="loginZong != null ">#{loginZong},</if>
+            <if test="huankuanZong != null ">#{huankuanZong},</if>
+            <if test="tonghuaZong != null ">#{tonghuaZong},</if>
+            <if test="anjianZong != null ">#{anjianZong},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="orgId != null ">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="onlineCondition != null  and onlineCondition != ''">#{onlineCondition},</if>
+            <if test="onlineOne != null ">#{onlineOne},</if>
+            <if test="onlineTwo != null ">#{onlineTwo},</if>
+            <if test="outCondition != null  and outCondition != ''">#{outCondition},</if>
+            <if test="outOne != null ">#{outOne},</if>
+            <if test="outTwo != null ">#{outTwo},</if>
+            <if test="intervalsCondition != null  and intervalsCondition != ''">#{intervalsCondition},</if>
+            <if test="intervalsOne != null ">#{intervalsOne},</if>
+            <if test="intervalsTwo != null ">#{intervalsTwo},</if>
+            <if test="conversationCondition != null  and conversationCondition != ''">#{conversationCondition},</if>
+            <if test="conversationOne != null ">#{conversationOne},</if>
+            <if test="conversationTwo != null ">#{conversationTwo},</if>
+            <if test="conversationCishuCondition != null  and conversationCishuCondition != ''">#{conversationCishuCondition},</if>
+            <if test="conversationCishuOne != null ">#{conversationCishuOne},</if>
+            <if test="conversationCishuTwo != null ">#{conversationCishuTwo},</if>
+            <if test="engRateCondition != null  and engRateCondition != ''">#{engRateCondition},</if>
+            <if test="engRateOne != null ">#{engRateOne},</if>
+            <if test="engRateTwo != null ">#{engRateTwo},</if>
+            <if test="caseNumbersCondition != null  and caseNumbersCondition != ''">#{caseNumbersCondition},</if>
+            <if test="caseNumbersOne != null ">#{caseNumbersOne},</if>
+            <if test="caseNumbersTwo != null ">#{caseNumbersTwo},</if>
+            <if test="caseRateCondition != null  and caseRateCondition != ''">#{caseRateCondition},</if>
+            <if test="caseRateOne != null ">#{caseRateOne},</if>
+            <if test="caseRateTwo != null ">#{caseRateTwo},</if>
+            <if test="sjRepaymentCondition != null  and sjRepaymentCondition != ''">#{sjRepaymentCondition},</if>
+            <if test="sjRepaymentOne != null ">#{sjRepaymentOne},</if>
+            <if test="sjRepaymentTwo != null ">#{sjRepaymentTwo},</if>
+            <if test="sjRepaymentRateCondition != null  and sjRepaymentRateCondition != ''">#{sjRepaymentRateCondition},</if>
+            <if test="sjRepaymentRateOne != null ">#{sjRepaymentRateOne},</if>
+            <if test="sjRepaymentRateTwo != null ">#{sjRepaymentRateTwo},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTLjRuleUserLogs" parameterType="TLjRuleUserLogs">
+        update t_lj_rule_user_logs
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="loginName != null  and loginName != ''">login_name = #{loginName},</if>
+            <if test="userName != null  and userName != ''">user_name = #{userName},</if>
+            <if test="ruleId != null ">rule_id = #{ruleId},</if>
+            <if test="detailsId != null ">details_id = #{detailsId},</if>
+            <if test="startTime != null  and startTime != ''">start_time = #{startTime},</if>
+            <if test="endTime != null  and endTime != ''">end_time = #{endTime},</if>
+            <if test="errors != null ">errors = #{errors},</if>
+            <if test="days != null ">days = #{days},</if>
+            <if test="onlineError != null ">online_error = #{onlineError},</if>
+            <if test="onlineTime != null ">online_time = #{onlineTime},</if>
+            <if test="outError != null ">out_error = #{outError},</if>
+            <if test="outCishu != null ">out_cishu = #{outCishu},</if>
+            <if test="jiangeError != null ">jiange_error = #{jiangeError},</if>
+            <if test="jiange != null ">jiange = #{jiange},</if>
+            <if test="tonghuaError != null ">tonghua_error = #{tonghuaError},</if>
+            <if test="tonghuaDuration != null ">tonghua_duration = #{tonghuaDuration},</if>
+            <if test="tonghuacsError != null ">tonghuacs_error = #{tonghuacsError},</if>
+            <if test="tonghuacs != null ">tonghuacs = #{tonghuacs},</if>
+            <if test="jietonglvError != null ">jietonglv_error = #{jietonglvError},</if>
+            <if test="jietongcs != null ">jietongcs = #{jietongcs},</if>
+            <if test="jietonglv != null ">jietonglv = #{jietonglv},</if>
+            <if test="anjianError != null ">anjian_error = #{anjianError},</if>
+            <if test="anjianDuration != null ">anjian_duration = #{anjianDuration},</if>
+            <if test="anjianlvError != null ">anjianlv_error = #{anjianlvError},</if>
+            <if test="anjianlv != null ">anjianlv = #{anjianlv},</if>
+            <if test="anjianyichuli != null ">anjianyichuli = #{anjianyichuli},</if>
+            <if test="shijiError != null ">shiji_error = #{shijiError},</if>
+            <if test="yinghuan != null ">yinghuan = #{yinghuan},</if>
+            <if test="shijilvError != null ">shijilv_error = #{shijilvError},</if>
+            <if test="shijilv != null ">shijilv = #{shijilv},</if>
+            <if test="shiji != null ">shiji = #{shiji},</if>
+            <if test="loginZong != null ">login_zong = #{loginZong},</if>
+            <if test="huankuanZong != null ">huankuan_zong = #{huankuanZong},</if>
+            <if test="tonghuaZong != null ">tonghua_zong = #{tonghuaZong},</if>
+            <if test="anjianZong != null ">anjian_zong = #{anjianZong},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="orgId != null ">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="onlineCondition != null  and onlineCondition != ''">online_condition = #{onlineCondition},</if>
+            <if test="onlineOne != null ">online_one = #{onlineOne},</if>
+            <if test="onlineTwo != null ">online_two = #{onlineTwo},</if>
+            <if test="outCondition != null  and outCondition != ''">out_condition = #{outCondition},</if>
+            <if test="outOne != null ">out_one = #{outOne},</if>
+            <if test="outTwo != null ">out_two = #{outTwo},</if>
+            <if test="intervalsCondition != null  and intervalsCondition != ''">intervals_condition = #{intervalsCondition},</if>
+            <if test="intervalsOne != null ">intervals_one = #{intervalsOne},</if>
+            <if test="intervalsTwo != null ">intervals_two = #{intervalsTwo},</if>
+            <if test="conversationCondition != null  and conversationCondition != ''">conversation_condition = #{conversationCondition},</if>
+            <if test="conversationOne != null ">conversation_one = #{conversationOne},</if>
+            <if test="conversationTwo != null ">conversation_two = #{conversationTwo},</if>
+            <if test="conversationCishuCondition != null  and conversationCishuCondition != ''">conversation_cishu_condition = #{conversationCishuCondition},</if>
+            <if test="conversationCishuOne != null ">conversation_cishu_one = #{conversationCishuOne},</if>
+            <if test="conversationCishuTwo != null ">conversation_cishu_two = #{conversationCishuTwo},</if>
+            <if test="engRateCondition != null  and engRateCondition != ''">eng_rate_condition = #{engRateCondition},</if>
+            <if test="engRateOne != null ">eng_rate_one = #{engRateOne},</if>
+            <if test="engRateTwo != null ">eng_rate_two = #{engRateTwo},</if>
+            <if test="caseNumbersCondition != null  and caseNumbersCondition != ''">case_numbers_condition = #{caseNumbersCondition},</if>
+            <if test="caseNumbersOne != null ">case_numbers_one = #{caseNumbersOne},</if>
+            <if test="caseNumbersTwo != null ">case_numbers_two = #{caseNumbersTwo},</if>
+            <if test="caseRateCondition != null  and caseRateCondition != ''">case_rate_condition = #{caseRateCondition},</if>
+            <if test="caseRateOne != null ">case_rate_one = #{caseRateOne},</if>
+            <if test="caseRateTwo != null ">case_rate_two = #{caseRateTwo},</if>
+            <if test="sjRepaymentCondition != null  and sjRepaymentCondition != ''">sj_repayment_condition = #{sjRepaymentCondition},</if>
+            <if test="sjRepaymentOne != null ">sj_repayment_one = #{sjRepaymentOne},</if>
+            <if test="sjRepaymentTwo != null ">sj_repayment_two = #{sjRepaymentTwo},</if>
+            <if test="sjRepaymentRateCondition != null  and sjRepaymentRateCondition != ''">sj_repayment_rate_condition = #{sjRepaymentRateCondition},</if>
+            <if test="sjRepaymentRateOne != null ">sj_repayment_rate_one = #{sjRepaymentRateOne},</if>
+            <if test="sjRepaymentRateTwo != null ">sj_repayment_rate_two = #{sjRepaymentRateTwo},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLjRuleUserLogsById" parameterType="Long">
+        delete from t_lj_rule_user_logs where id = #{id}
+    </delete>
+
+    <delete id="deleteTLjRuleUserLogsByIds" parameterType="String">
+        delete from t_lj_rule_user_logs where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

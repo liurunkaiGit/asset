@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('查看')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-logs-edit" th:object="${tLjRuleUserLogs}">
+
+            <div class="row">
+                <div  style="width: 20%;float: left">
+                        项目名称：<span th:text="*{userName}" ></span>
+                </div>
+                <div  style="width: 20%;float: left">
+                        日期：<span th:text="${#dates.format(tLjRuleUserLogs.days, 'yyyy-MM-dd')}" ></span>
+                </div>
+                <div style="width: 60%;float: left">
+                        规则作用时间：<span th:text="*{startTime}" ></span>-<span th:text="*{endTime}" ></span>
+                </div>
+            </div>
+
+            <div class="row">
+                    <div  style="width: 20%;float: left">
+                        <label class="col-sm-4 control-label">当日异常数：<span th:text="*{errors}" ></span></label>
+                    </div>
+
+                     <div  style="width: 20%;float: left">
+                         <label class="col-sm-4 control-label">案件异常：<span th:text="*{anjianZong}" ></span></label>
+                    </div>
+
+                    <div style="width: 20%;float: left">
+                        <label class="col-sm-4 control-label">还款达成异常：<span th:text="*{huankuanZong}" ></span></label>
+                    </div>
+
+                    <div style="width: 20%;float: left">
+                        <label class="col-sm-4 control-label">通话异常：<span th:text="*{tonghuaZong}" ></span></label>
+                    </div>
+                    <div style="width: 20%;float: left">
+                        <label class="col-sm-4 control-label">登录异常：<span th:text="*{loginZong}" ></span></label>
+                    </div>
+            </div>
+
+            <div class="row">
+                    <div style="width: 25%;float: left">
+                        <label class="col-sm-4 control-label">案件处理量(件)：<span th:text="*{anjianDuration}" ></span></label>
+                        <span th:if="*{anjianDurationZhibiao eq   1}" style="color: red"><span  th:text="*{anjianDurationBaifen}"></span>高于指标</span>
+                        <span th:if="*{anjianDurationZhibiao eq   -1}" style="color: green"><span  th:text="*{anjianDurationBaifen}"></span>低于指标</span>
+                        <span th:if="*{anjianDurationZhibiao eq   0}" style="color: green"><span  th:text="*{anjianDurationBaifen}"></span>正常</span>
+                    </div>
+                    <div style="width: 25%;float: left">
+                        <label class="col-sm-4 control-label">案件处理率(%)：<span th:text="*{anjianyichuli}" ></span></label>
+                        <span th:if="*{anjianyichuliZhibiao eq   1}" style="color: red"><span  th:text="*{anjianyichuliBaifen}"></span>高于指标</span>
+                        <span th:if="*{anjianyichuliZhibiao eq   -1}" style="color: green"><span  th:text="*{anjianyichuliBaifen}"></span>低于指标</span>
+                        <span th:if="*{anjianyichuliZhibiao eq   0}" style="color: green"><span  th:text="*{anjianyichuliBaifen}"></span>正常</span>
+                    </div>
+                    <div style="width: 25%;float: left">
+                        <label class="col-sm-4 control-label">实际还款(元)：<span th:text="*{yinghuan}" ></span></label>
+                        <span th:if="*{yinghuanZhibiao eq   1}" style="color: red"><span  th:text="*{yinghuanBaifen}"></span>高于指标</span>
+                        <span th:if="*{yinghuanZhibiao eq   -1}" style="color: green"><span  th:text="*{yinghuanBaifen}"></span>低于指标</span>
+                        <span th:if="*{yinghuanZhibiao eq   0}" style="color: green"><span  th:text="*{yinghuanBaifen}"></span>正常</span>
+                    </div>
+                    <div style="width: 25%;float: left">
+                        <label class="col-sm-4 control-label">实际还款率(%)：<span th:text="*{shiji}" ></span></label>
+                        <span th:if="*{shijiZhibiao eq   1}" style="color: red"><span  th:text="*{shijiBaifen}"></span>高于指标</span>
+                        <span th:if="*{shijiZhibiao eq   -1}" style="color: green"><span  th:text="*{shijiBaifen}"></span>低于指标</span>
+                        <span th:if="*{shijiZhibiao eq   0}" style="color: green"><span  th:text="*{shijiBaifen}"></span>正常</span>
+                    </div>
+            </div>
+
+            <div class="row">
+                    <div style="width: 30%;float: left">
+                        <label class="col-sm-4 control-label">通话时长(分)：<span th:text="*{tonghuaDuration}" ></span></label>
+                        <span th:if="*{tonghuaDurationZhibiao eq   1}" style="color: red"><span  th:text="*{tonghuaDurationBaifen}"></span>高于指标</span>
+                        <span th:if="*{tonghuaDurationZhibiao eq   -1}" style="color: green"><span  th:text="*{tonghuaDurationBaifen}"></span>低于指标</span>
+                        <span th:if="*{tonghuaDurationZhibiao eq   0}" style="color: green"><span  th:text="*{tonghuaDurationBaifen}"></span>正常</span>
+                    </div>
+                    <div style="width: 30%;float: left">
+                        <label class="col-sm-4 control-label">通话次数(次)：<span th:text="*{tonghuacs}" ></span></label>
+                        <span th:if="*{tonghuacsZhibiao eq   1}" style="color: red"><span  th:text="*{tonghuacsBaifen}"></span>高于指标</span>
+                        <span th:if="*{tonghuacsZhibiao eq   -1}" style="color: green"><span  th:text="*{tonghuacsBaifen}"></span>低于指标</span>
+                        <span th:if="*{tonghuacsZhibiao eq   0}" style="color: green"><span  th:text="*{tonghuacsBaifen}"></span>正常</span>
+                    </div>
+                    <div style="width: 40%;float: left">
+                        <label class="col-sm-4 control-label">接通率(%)：<span th:text="*{jietongcs}" ></span></label>
+                        <span th:if="*{jietongcsZhibiao eq   1}" style="color: red"><span  th:text="*{jietongcsBaifen}"></span>高于指标</span>
+                        <span th:if="*{jietongcsZhibiao eq   -1}" style="color: green"><span  th:text="*{jietongcsBaifen}"></span>低于指标</span>
+                        <span th:if="*{jietongcsZhibiao eq   0}" style="color: green"><span  th:text="*{jietongcsBaifen}"></span>正常</span>
+                    </div>
+            </div>
+
+
+            <div class="row">
+                    <div style="width: 30%;float: left">
+                        <label class="col-sm-4 control-label">在线时长(分)：<span th:text="*{onlineTime}" ></span></label>
+                        <span th:if="*{onlineZhibiao eq   1}" style="color: red"><span  th:text="*{onlineBaifen}"></span>高于指标</span>
+                        <span th:if="*{onlineZhibiao eq   -1}" style="color: green"><span  th:text="*{onlineBaifen}"></span>低于指标</span>
+                        <span th:if="*{onlineZhibiao eq   0}" style="color: green"><span  th:text="*{onlineBaifen}"></span>正常</span>
+                    </div>
+                    <div style="width: 30%;float: left">
+                        <label class="col-sm-4 control-label">退出次数(次)：<span th:text="*{outCishu}" ></span></label>
+                        <span th:if="*{outCishuZhibiao eq   1}" style="color: red"><span  th:text="*{outCishuBaifen}"></span>高于指标</span>
+                        <span th:if="*{outCishuZhibiao eq   -1}" style="color: green"><span  th:text="*{outCishuBaifen}"></span>低于指标</span>
+                        <span th:if="*{outCishuZhibiao eq   0}" style="color: green"><span  th:text="*{outCishuBaifen}"></span>正常</span>
+                    </div>
+                    <div style="width: 40%;float: left">
+                        <label class="col-sm-4 control-label">间隔时长(分)：<span th:text="*{jiange}" ></span></label>
+                        <span th:if="*{jiangeZhibiao eq   1}" style="color: red"><span  th:text="*{jiangeBaifen}"></span>高于指标</span>
+                        <span th:if="*{jiangeZhibiao eq   -1}" style="color: green"><span  th:text="*{jiangeBaifen}"></span>低于指标</span>
+                        <span th:if="*{jiangeZhibiao eq   0}" style="color: green"><span  th:text="*{jiangeBaifen}"></span>正常</span>
+                    </div>
+            </div>
+
+
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "ruoyi/logs";
+        $("#form-logs-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-logs-edit').serialize());
+            }
+        }
+
+        $("input[name='days']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

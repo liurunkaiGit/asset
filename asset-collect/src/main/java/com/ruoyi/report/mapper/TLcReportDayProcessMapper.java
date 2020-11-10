@@ -61,4 +61,19 @@ public interface TLcReportDayProcessMapper {
     public int deleteTLcReportDayProcessByIds(String[] ids);
 
     List<TLcReportDayProcess> selectDayProcess(Map<String, Object> param);
+
+    /**
+     * 居家规则 案件处理量 参数：开始、结束时间和userId
+     * @param param
+     * @return
+     */
+    List<TLcReportDayProcess> selectDayProcessTask(Map<String, Object> param);
+
+    /**
+     * 居家规则 还款达成 参数：userId
+     * @param param
+     * @return
+     */
+    List<TLcReportDayProcess> selectTaskReach(Map<String, Object> param);
+
 }

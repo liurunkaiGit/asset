@@ -416,6 +416,11 @@
         ORDER BY t.create_time desc
     </select>
 
+    <select id="selectUserTotal" parameterType="TLcCallRecord" resultType="TlcCallRecordTotal">
+        select count(1) as frequencys ,sum(call_len) as durations,count(call_len)as connections from t_lc_call_record
+        where  create_time <![CDATA[>=]]> '2020-10-14 00:00:00' and create_time <![CDATA[<=]]> '2020-10-15'  and create_by=${createBy}
+    </select>
+
     <select id="findListenCallRecord" parameterType="com.ruoyi.task.domain.TLcCallRecord" resultMap="TLcCallRecordResult">
         SELECT distinct t.case_no,tt.org_name,tt.org_id,
         t.agent_name as user_name,

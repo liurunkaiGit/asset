@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.shareproject.hmrule.mapper.TLjRuleMapper">
+    
+    <resultMap type="TLjRule" id="TLjRuleResult">
+        <result property="id"    column="id"    />
+        <result property="ruleCode"    column="rule_code"    />
+        <result property="ruleStatus"    column="rule_status"    />
+        <result property="onthejobStatus"    column="onthejob_status"    />
+        <result property="ruleType"    column="rule_type"    />
+        <result property="ruleName"    column="rule_name"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+    </resultMap>
+
+    <sql id="selectTLjRuleVo">
+        select id, rule_code, rule_status, onthejob_status, rule_type, rule_name, start_time, end_time, remark, create_by, create_time, update_by, update_time, org_id, org_name from t_lj_rule
+    </sql>
+
+    <select id="selectTLjRuleList" parameterType="TLjRule" resultMap="TLjRuleResult">
+        <include refid="selectTLjRuleVo"/>
+        <where>  
+            <if test="ruleCode != null  and ruleCode != ''"> and rule_code = #{ruleCode}</if>
+            <if test="ruleStatus != null  and ruleStatus != ''"> and rule_status = #{ruleStatus}</if>
+            <if test="onthejobStatus != null  and onthejobStatus != ''"> and onthejob_status = #{onthejobStatus}</if>
+            <if test="ruleType != null  and ruleType != ''"> and rule_type = #{ruleType}</if>
+            <if test="ruleName != null  and ruleName != ''"> and rule_name like concat('%', #{ruleName}, '%')</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and   date_format(#{params.startTime},'%Y-%m-%d %H:%i:%s') <![CDATA[>=]]>  date_format(start_time,'%Y-%m-%d %H:%i:%s')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and  date_format(#{params.endTime},'%Y-%m-%d %H:%i:%s') <![CDATA[<=]]> date_format(end_time,'%Y-%m-%d %H:%i:%s')
+            </if>
+            <if test="orgId != null "> and org_id = #{orgId}</if>
+            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+        </where>
+        order  by update_time desc
+    </select>
+    
+    <select id="selectTLjRuleById" parameterType="Long" resultMap="TLjRuleResult">
+        <include refid="selectTLjRuleVo"/>
+        where id = #{id}
+    </select>
+    <select id="selectTLjRuleListIsUse" parameterType="TLjRule" resultMap="TLjRuleResult">
+        select t.id from (select id from t_lj_rule where date_format(#{startTime},'%Y-%m-%d %H:%i:%s') <![CDATA[>=]]>  date_format(start_time,'%Y-%m-%d %H:%i:%s') and date_format(#{startTime},'%Y-%m-%d %H:%i:%s') <![CDATA[<=]]> date_format(end_time,'%Y-%m-%d %H:%i:%s') and   rule_type=${ruleType} and  rule_status!=${ruleStatus} ) t,t_lj_rule_range re
+        where t.id=re.rule_id  and re.dporus_id in
+        <foreach item="idsz" collection="array" open="(" separator="," close=")">
+            #{idsz}
+        </foreach>
+    </select>
+
+    <select id="selectTLjRuleListIsUseByLoginName" parameterType="TLjRule" resultMap="TLjRuleResult">
+        select s.user_id as id from (select login_name,dept_id,user_id from sys_user where login_name in
+        <foreach item="idsz" collection="array" open="(" separator="," close=")">
+            #{idsz}
+        </foreach>
+        ) s , (select re.dporus_id from
+        (select id from t_lj_rule where date_format(#{startTime},'%Y-%m-%d %H:%i:%s') <![CDATA[>=]]>  date_format(start_time,'%Y-%m-%d %H:%i:%s')   and date_format(#{startTime},'%Y-%m-%d %H:%i:%s') <![CDATA[<=]]> date_format(end_time,'%Y-%m-%d %H:%i:%s')  and rule_type=${ruleType} and  rule_status!=${ruleStatus}) t,t_lj_rule_range re
+        where t.id=re.rule_id )dp where s.dept_id=dp.dporus_id
+    </select>
+
+
+
+    <insert id="insertTLjRule" parameterType="TLjRule" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lj_rule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ruleCode != null  and ruleCode != ''">rule_code,</if>
+            <if test="ruleStatus != null  and ruleStatus != ''">rule_status,</if>
+            <if test="onthejobStatus != null  and onthejobStatus != ''">onthejob_status,</if>
+            <if test="ruleType != null  and ruleType != ''">rule_type,</if>
+            <if test="ruleName != null  and ruleName != ''">rule_name,</if>
+            <if test="startTime != null ">start_time,</if>
+            <if test="endTime != null ">end_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="orgId != null ">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ruleCode != null  and ruleCode != ''">#{ruleCode},</if>
+            <if test="ruleStatus != null  and ruleStatus != ''">#{ruleStatus},</if>
+            <if test="onthejobStatus != null  and onthejobStatus != ''">#{onthejobStatus},</if>
+            <if test="ruleType != null  and ruleType != ''">#{ruleType},</if>
+            <if test="ruleName != null  and ruleName != ''">#{ruleName},</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="endTime != null ">#{endTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="orgId != null ">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLjRule" parameterType="TLjRule">
+        update t_lj_rule
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ruleCode != null  and ruleCode != ''">rule_code = #{ruleCode},</if>
+            <if test="ruleStatus != null  and ruleStatus != ''">rule_status = #{ruleStatus},</if>
+            <if test="onthejobStatus != null  and onthejobStatus != ''">onthejob_status = #{onthejobStatus},</if>
+            <if test="ruleType != null  and ruleType != ''">rule_type = #{ruleType},</if>
+            <if test="ruleName != null  and ruleName != ''">rule_name = #{ruleName},</if>
+            <if test="startTime != null ">start_time = #{startTime},</if>
+            <if test="endTime != null ">end_time = #{endTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="orgId != null ">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLjRuleById" parameterType="Long">
+        delete from t_lj_rule where id = #{id}
+    </delete>
+
+    <delete id="deleteTLjRuleByIds" parameterType="String">
+        delete from t_lj_rule where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

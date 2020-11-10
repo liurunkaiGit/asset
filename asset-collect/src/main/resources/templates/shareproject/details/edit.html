@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-details-edit" th:object="${tLjRuleDetails}">
+            <input name="id" id="id" th:value="*{id}" type="hidden">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">时间段：</label>
+                <div class="col-sm-8">
+                    <input name="startTime" id="startTime"  th:field="*{startTime}"  class="time-input"  data-type="time" style="width: 70px; float:left;" maxlength="8"  type="text" required><span style=" float:left;">--</span>
+                    <input name="endTime" id="endTime" th:field="*{endTime}"  class="time-input" data-type="time" style="width: 70px; float:left;"  maxlength="8"  type="text" required>
+                    <input name="endTimeHm" id="endTimeHm" type="hidden" th:value="*{endTimeHm}" >
+                    <input name="startTimeHm" id="startTimeHm" type="hidden" th:value="*{startTimeHm}" >
+                </div>
+            </div>
+            <div class="form-group" style="200px;">
+                <label class="col-sm-3 control-label">登录：</label>
+                <input type="checkbox"  name="onlineTime" errmsg="在线时长" th:value="*{onlineTime}"  th:checked="*{onlineTime == '1'}"  >在线时长&nbsp;&nbsp;
+                条件
+                <select  name="onlineCondition"  required>
+                    <option value="0" th:selected="*{onlineCondition == 0}">范围</option>
+                    <option value="1" th:selected="*{onlineCondition == 1}">大于</option>
+                    <option value="2" th:selected="*{onlineCondition == 2}">小于</option>
+                </select>
+                <input name="onlineOne" id="onlineTimeOne" style="width: 70px;" th:field="*{onlineOne}"  type="text" maxlength="8">---<input id="onlineTimeTwo" name="onlineTwo" th:field="*{onlineTwo}" style="width: 70px;"   type="text" maxlength="8">分钟
+            </div>
+            <div class="form-group" style="200px;">
+                <label class="col-sm-3 control-label"></label>
+                <input type="checkbox"  name="outTime" errmsg="退出次数" th:value="*{outTime}"  th:checked="*{outTime == '1'}" >退出次数&nbsp;&nbsp;
+                条件
+                <select  name="outCondition"   required>
+                    <option value="0" th:selected="*{outCondition == 0}">范围</option>
+                    <option value="1" th:selected="*{outCondition == 1}">大于</option>
+                    <option value="2" th:selected="*{outCondition == 2}">小于</option>
+                </select>
+                <input name="outOne" id="outTimeOne" style="width: 70px;" th:field="*{outOne}"  type="text" maxlength="8">---<input id="outTimeTwo" name="outTwo" th:field="*{outTwo}"  style="width: 70px;"   type="text" maxlength="8">次
+            </div>
+            <div class="form-group" style="200px;">
+                <label class="col-sm-3 control-label"></label>
+                <input type="checkbox"  name="intervals" errmsg="间隔时长" th:value="*{intervals}" th:checked="*{intervals == '1'}">间隔时长&nbsp;&nbsp;
+                条件
+                <select  name="intervalsCondition"  required>
+                    <option value="0" th:selected="*{intervalsCondition == 0}">范围</option>
+                    <option value="1" th:selected="*{intervalsCondition == 1}">大于</option>
+                    <option value="2" th:selected="*{intervalsCondition == 2}">小于</option>
+                </select>
+                <input name="intervalsOne" id="intervalsOne"  style="width: 70px;" th:field="*{intervalsOne}"  type="text" maxlength="8">---<input id="intervalsTwo" name="intervalsTwo" th:field="*{intervalsTwo}"  style="width: 70px;"   type="text" maxlength="8">分钟
+            </div>
+
+            <div class="form-group" style="200px;">
+                <label class="col-sm-3 control-label">通话</label>
+                <input type="checkbox"  name="conversationTime" th:value="*{conversationTime}" errmsg="通话时长" th:checked="*{conversationTime == '1'}" >通话时长&nbsp;&nbsp;
+                条件
+                <select  name="conversationCondition"   required>
+                    <option value="0" th:selected="*{conversationCondition == 0}">范围</option>
+                    <option value="1" th:selected="*{conversationCondition == 1}">大于</option>
+                    <option value="2" th:selected="*{conversationCondition == 2}">小于</option>
+                </select>
+                <input name="conversationOne" id="conversationTimeOne" th:field="*{conversationOne}"   style="width: 70px;"  type="text" maxlength="8">---<input id="conversationTimeTwo" name="conversationTwo" th:field="*{conversationTwo}" style="width: 70px;"   type="text" maxlength="8">分钟
+            </div>
+            <div class="form-group" style="200px;">
+                <label class="col-sm-3 control-label"></label>
+                <input type="checkbox"  name="conversationCishu" th:value="*{conversationCishu}" errmsg="通话次数" th:checked="*{conversationCishu == '1'}">通话次数&nbsp;&nbsp;
+                条件
+                <select  name="conversationCishuCondition"  required>
+                    <option value="0" th:selected="*{conversationCishuCondition == 0}">范围</option>
+                    <option value="1" th:selected="*{conversationCishuCondition == 1}">大于</option>
+                    <option value="2" th:selected="*{conversationCishuCondition == 2}">小于</option>
+                </select>
+                <input name="conversationCishuOne" id="conversationCishuOne" th:field="*{conversationCishuOne}"  style="width: 70px;"  type="text" maxlength="8">---<input id="conversationCishuTwo" name="conversationCishuTwo" th:field="*{conversationCishuTwo}"  style="width: 70px;"   type="text" maxlength="8">次
+            </div>
+            <div class="form-group" style="200px;">
+                <label class="col-sm-3 control-label"></label>
+                <input type="checkbox"  name="engRate" errmsg="接通率" th:value="*{engRate}" th:checked="*{engRate == '1'}">接通率&nbsp;&nbsp;
+                条件
+                <select  name="engRateCondition"  required>
+                    <option value="0" th:selected="*{engRateCondition == 0}">范围</option>
+                    <option value="1" th:selected="*{engRateCondition == 1}">大于</option>
+                    <option value="2" th:selected="*{engRateCondition == 2}">小于</option>
+                </select>
+                <input name="engRateOne" id="engRateOne" th:field="*{engRateOne}"  style="width: 70px;"  type="text" maxlength="8">---<input id="engRateTwo" name="engRateTwo" th:field="*{engRateTwo}" style="width: 70px;"   type="text" maxlength="8">%
+            </div>
+
+
+            <div class="form-group" style="200px;">
+                <label class="col-sm-3 control-label">案件</label>
+                <input type="checkbox"  name="caseNumbers" errmsg="案件处理量" th:value="*{caseNumbers}" th:checked="*{caseNumbers == '1'}">案件处理量&nbsp;&nbsp;
+                条件
+                <select  name="caseNumbersCondition"   required>
+                    <option value="0" th:selected="*{caseNumbersCondition == 0}">范围</option>
+                    <option value="1" th:selected="*{caseNumbersCondition == 1}">大于</option>
+                    <option value="2" th:selected="*{caseNumbersCondition == 2}">小于</option>
+                </select>
+                <input name="caseNumbersOne" id="caseNumbersOne" th:field="*{caseNumbersOne}"  style="width: 70px;"  type="text" maxlength="8">---<input id="caseNumbersTwo" name="caseNumbersTwo" th:field="*{caseNumbersTwo}" style="width: 70px;"   type="text" maxlength="8">件
+            </div>
+            <div class="form-group" style="200px;">
+                <label class="col-sm-3 control-label"></label>
+                <input type="checkbox"  name="caseRate" errmsg="案件处理率" th:value="*{caseRate}" th:checked="*{caseRate == '1'}">案件处理率&nbsp;&nbsp;
+                条件
+                <select  name="caseRateCondition"  required>
+                    <option value="0" th:selected="*{caseRateCondition == 0}">范围</option>
+                    <option value="1" th:selected="*{caseRateCondition == 1}">大于</option>
+                    <option value="2" th:selected="*{caseRateCondition == 2}">小于</option>
+                </select>
+                <input name="caseRateOne" id="caseRateOne" th:field="*{caseRateOne}"  style="width: 70px;"  type="text" maxlength="8">---<input id="caseRatTwo" name="caseRateTwo" th:field="*{caseRateTwo}" style="width: 70px;"   type="text" maxlength="8">%
+            </div>
+
+            <div class="form-group" style="200px;">
+                <label class="col-sm-3 control-label">还款达成</label>
+                <input type="checkbox"  name="sjRepayment" th:value="*{sjRepayment}" errmsg="实际还款" th:checked="*{sjRepayment == '1'}">实际还款&nbsp;&nbsp;
+                条件
+                <select  name="sjRepaymentCondition"  required>
+                    <option value="0" th:selected="*{sjRepaymentCondition == 0}">范围</option>
+                    <option value="1" th:selected="*{sjRepaymentCondition == 1}">大于</option>
+                    <option value="2" th:selected="*{sjRepaymentCondition == 2}">小于</option>
+                </select>
+                <input name="sjRepaymentOne" id="sjRepaymentOne" th:field="*{sjRepaymentOne}"  style="width: 70px;"  type="text" maxlength="8">---<input id="sjRepaymentTwo" name="sjRepaymentTwo" th:field="*{sjRepaymentTwo}" style="width: 70px;"   type="text" maxlength="8">元
+            </div>
+            <div class="form-group" style="200px;">
+                <label class="col-sm-3 control-label"></label>
+                <input type="checkbox"  name="sjRepaymentRate" th:value="*{sjRepaymentRate}" errmsg="实际还款">实际还款率&nbsp;&nbsp;
+                条件
+                <select  name="sjRepaymentRateCondition"  th:checked="*{sjRepaymentRateCondition == '1'}"  required>
+                    <option value="0" th:selected="*{sjRepaymentRateCondition == 0}">范围</option>
+                    <option value="1" th:selected="*{sjRepaymentRateCondition == 1}">大于</option>
+                    <option value="2" th:selected="*{sjRepaymentRateCondition == 2}">小于</option>
+                </select>
+                <input name="sjRepaymentRateOne" id="sjRepaymentRateOne" th:field="*{sjRepaymentRateOne}"  style="width: 70px;"  type="text" maxlength="8">---<input id="sjRepaymentRateTwo"  name="sjRepaymentRateTwo" th:field="*{sjRepaymentRateTwo}"  style="width: 70px;"   type="text" maxlength="8">%
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "shareproject/details";
+        $("#form-details-edit").validate({
+            focusCleanup: true
+        });
+        function isPInt(str) {
+            var g = /^[1-9]*[1-9][0-9]*$/;
+            return g.test(str);
+        }
+        function submitHandler() {
+            if ($.validate.form()) {
+                var stps = $("#startTime").val().split(":");
+                var stpL = stps[0]*60*60*1000+stps[1]*60*1000+stps[2]*1000;
+                $("#startTimeHm").val(stpL);
+                var edps = $("#endTime").val().split(":");
+                var edpL = edps[0]*60*60*1000+edps[1]*60*1000+edps[2]*1000;
+                $("#endTimeHm").val(edpL);
+                if(edpL<=stpL){
+                    $.modal.alertWarning("时间段不正确");
+                    return;
+                }
+                var sign = 0;
+                var sel = 0;
+                $("input[type='checkbox']").each(function (index, item) {
+                    var bt = $(this);
+                    var sl = bt.val();
+                    if(sl == 1){
+                        sel=1;
+                        var names = bt.attr("name");
+                        var errmsg = bt.attr("errmsg");
+                        var one = $("#"+names+"One").val();
+                        var two = $("#"+names+"Two").val();
+                        if(one == '' || ''==two){
+                            $.modal.alertWarning("请填写"+errmsg);
+                            sign=1;
+                            return;
+                        }
+                        if(!isPInt(one) || !isPInt(two)){
+                            $.modal.alertWarning("请正确填写(正整数)"+errmsg);
+                            sign=1;
+                            return;
+                        }
+                        if(one <= 0 || two <= 0 || two == one || two < one ){
+                            $.modal.alertWarning("请正确填写"+errmsg);
+                            sign=1
+                            return;
+                        }
+                    }
+                });
+                if( sign==1)return;
+                if(sel == 0){
+                    $.modal.alertWarning("请至少勾选一个规则");
+                    return;
+                }
+                $.ajax({
+                    url: prefix + "/tmisuse",    //请求的url地址
+                    dataType: "json",   //返回格式为json
+                    async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+                    data:
+                        {
+                            "startTimeHm": stpL,
+                            "id":  $("#id").val(),
+                            "endTimeHm": edpL,
+                            "ruleId": $("#ruleId").val()
+                        },    //参数值
+                    type: "POST",   //请求方式
+                    success: function(req) {
+                        //请求成功时处理
+                        if(req.code != 0){
+                            $.modal.alertWarning("时间段已使用,请重新选择");
+                        }else{
+                            $.operate.save(prefix + "/edit", $('#form-details-edit').serialize());
+                        }
+                    },
+                    error: function(e) {
+                        //请求出错处理
+                    }
+                });
+            }
+        }
+
+        $(document).ready(function(){
+            $("input[type='checkbox']").change(function() {
+                if ($(this).prop('checked')) {
+                    $(this).val(1);
+                }else{
+                    $(this).val(0);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

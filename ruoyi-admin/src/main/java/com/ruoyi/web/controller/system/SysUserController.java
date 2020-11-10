@@ -92,6 +92,23 @@ public class SysUserController extends BaseController {
         return AjaxResult.success(message);
     }
 
+    @RequiresPermissions("system:user:sel")
+    @GetMapping("/authUser/selectUser")
+    public String authUser(ModelMap mmap)
+    {
+        return prefix + "/selectUser";
+    }
+
+
+    @RequiresPermissions("system:user:listsel")
+    @PostMapping("/listsel")
+    @ResponseBody
+    public TableDataInfo listsel(SysUser user) {
+        startPage();
+        List<SysUser> list = userService.selectUserList(user);
+        return getDataTable(list);
+    }
+
     @RequiresPermissions("system:user:view")
     @GetMapping("/importTemplate")
     @ResponseBody

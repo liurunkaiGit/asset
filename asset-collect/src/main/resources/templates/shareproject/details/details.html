@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('【规则详情】列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="addFun()" shiro:hasPermission="shareproject:details:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="shareproject:details:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="shareproject:details:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+     <input name="ruleId" id="ruleId" th:value="${ruleId}" type="hidden">
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('shareproject:details:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('shareproject:details:remove')}]];
+        var prefix = ctx + "shareproject/details";
+
+        function addFun(){
+            $.modal.open("添加",  prefix + "/add?id="+$("#ruleId").val());
+        }
+
+        $(document).ready(function(){
+            var options = {
+                url: prefix + "/list?ruleId="+$("#ruleId").val(),
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "【规则详情】",
+                columns: [{
+                    checkbox: true
+                },
+                    {
+                        field : 'id',
+                        title : '机构名称',
+                        visible: false
+                    },
+                    {
+                        field : 'startTime',
+                        title : '开始'
+                    },
+                    {
+                        field : 'endTime',
+                        title : '结束时间'
+                    },
+                    {
+                        field : 'onlineTime',
+                        title : '在线时长'
+                    },
+                    {
+                        field : 'onlineCondition',
+                        title : '在线时长',
+                        formatter: function(value, row, index) {
+                            if(value ==0)return "范围";
+                            else if(value ==1)return "大于";
+                            else {
+                                return "小于";
+                            }
+                        }
+                    },
+                    {
+                        field : 'onlineOne',
+                        title : '在线时长-条件'
+                    },
+                    {
+                        field : 'onlineTwo',
+                        title : '在线时长-条件'
+                    }]
+            };
+            $.table.init(options);
+        });
+
+    </script>
+</body>
+</html>

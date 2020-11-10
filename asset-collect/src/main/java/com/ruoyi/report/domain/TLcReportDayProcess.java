@@ -153,4 +153,14 @@ public class TLcReportDayProcess extends BaseEntity {
      * 机构名称
      */
     private String orgName;
+
+    /**
+     * 应还金额总
+     */
+    private BigDecimal amountDueSum;
+    /**
+     * 实际还金额总
+     */
+    private BigDecimal amountActualSum;
+
 }
