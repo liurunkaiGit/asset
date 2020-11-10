@@ -91,6 +91,7 @@ public class TLcStationLetterAgentController extends BaseController {
     @GetMapping("/toGetAllStationLetter")
     public String toGetAllStationLetter(ModelMap modelMap) {
         modelMap.put("userId", ShiroUtils.getSysUser().getUserId());
+        modelMap.put("orgId", ShiroUtils.getSysUser().getOrgId());
         return prefix + "/userLetter";
     }
 
