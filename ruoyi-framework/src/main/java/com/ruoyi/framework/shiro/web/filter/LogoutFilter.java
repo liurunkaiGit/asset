@@ -6,6 +6,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import com.ruoyi.common.utils.spring.SpringUtils;
+import com.ruoyi.system.service.ISysLoginStatusService;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.session.SessionException;
@@ -65,7 +67,10 @@ public class LogoutFilter extends org.apache.shiro.web.filter.authc.LogoutFilter
                     HttpServletRequest req = (HttpServletRequest) request;
                     Object obj = req.getSession().getAttribute("loginStatusId");
                     String loginStatusId = (obj != null && obj instanceof String) ? (String) obj : "";
-                    AsyncManager.me().execute(AsyncFactory.logoutStatus(loginStatusId,loginName));
+                    ISysLoginStatusService sysLoginStatusService = SpringUtils.getBean(ISysLoginStatusService.class);
+                    Integer logoutNum = sysLoginStatusService.selectMaxLogoutCount(String.valueOf(user.getOrgId()), loginName);//当天最大的退出次数
+                    logoutNum = logoutNum + 1;
+                    AsyncManager.me().execute(AsyncFactory.logoutStatus(loginStatusId,loginName, logoutNum));
                     // 清理缓存
                     cache.remove(loginName);
                 }
