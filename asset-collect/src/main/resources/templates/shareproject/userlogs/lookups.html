@@ -105,7 +105,7 @@
             </div>
             <div class="layui-col-md2">
                 <div class="layui-card">
-                    <div class="layui-card-header">实际还款(元)<span th:text="*{yinghuan}" ></span></div>
+                    <div class="layui-card-header">实际还款(元)<span th:text="*{shiji}" ></span></div>
                     <div class="layui-card-body">
                         <span th:if="*{yinghuanZhibiao eq   1}" style="color: red"><span  th:text="*{yinghuanBaifen}"></span>高于指标</span>
                         <span th:if="*{yinghuanZhibiao eq   -1}" style="color: green"><span  th:text="*{yinghuanBaifen}"></span>低于指标</span>
