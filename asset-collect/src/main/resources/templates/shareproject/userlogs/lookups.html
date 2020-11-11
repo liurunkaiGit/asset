@@ -2,120 +2,201 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <th:block th:include="include :: header('查看')" />
-    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: layui-css" />
+  <style>
+      .layui-card-body{
+          height: 80px;
+      }
+      .layui-col-md2{
+          width:200px;
+      }
+      .layui-card-body span{
+          font-size: 17px;
+      }
+  </style>
 </head>
-<body class="white-bg">
-    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-logs-edit" th:object="${tLjRuleUserLogs}">
+<body >
+<form class="form-horizontal m" id="form-logs-edit" th:object="${tLjRuleUserLogs}">
+<div class="layui-container">
+    <div class="layui-row" style="font-size: 20px;">
+        <div class="layui-col-md4">
+            <div class="grid-demo grid-demo-bg1">
+                项目名称：<span th:text="*{userName}" ></span>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            日期：<span th:text="${#dates.format(tLjRuleUserLogs.days, 'yyyy-MM-dd')}" ></span>
+        </div>
+        <div class="layui-col-md4">
+            <div class="grid-demo grid-demo-bg1">
+                规则作用时间：<span th:text="*{startTime}" ></span>-<span th:text="*{endTime}" ></span>
+            </div>
+        </div>
+    </div>
+</div>
 
-            <div class="row">
-                <div  style="width: 20%;float: left">
-                        项目名称：<span th:text="*{userName}" ></span>
-                </div>
-                <div  style="width: 20%;float: left">
-                        日期：<span th:text="${#dates.format(tLjRuleUserLogs.days, 'yyyy-MM-dd')}" ></span>
-                </div>
-                <div style="width: 60%;float: left">
-                        规则作用时间：<span th:text="*{startTime}" ></span>-<span th:text="*{endTime}" ></span>
+
+    <div style="padding: 10px; background-color: #A9CFEE;">
+        <div class="layui-row layui-col-space15 ">
+            <div class="layui-col-md2" >
+                <div class="layui-card">
+                    <div class="layui-card-header">当日异常数</div>
+                    <div class="layui-card-body " >
+                        <span style="font-size: 30px" th:text="*{errors}" ></span>
+                    </div>
                 </div>
             </div>
-
-            <div class="row">
-                    <div  style="width: 20%;float: left">
-                        <label class="col-sm-4 control-label">当日异常数：<span th:text="*{errors}" ></span></label>
+            <div class="layui-col-md2" >
+                <div class="layui-card">
+                    <div class="layui-card-header">案件异常</div>
+                    <div class="layui-card-body ">
+                       <span style="font-size: 30px" th:text="*{anjianZong}" ></span>
                     </div>
-
-                     <div  style="width: 20%;float: left">
-                         <label class="col-sm-4 control-label">案件异常：<span th:text="*{anjianZong}" ></span></label>
-                    </div>
-
-                    <div style="width: 20%;float: left">
-                        <label class="col-sm-4 control-label">还款达成异常：<span th:text="*{huankuanZong}" ></span></label>
-                    </div>
-
-                    <div style="width: 20%;float: left">
-                        <label class="col-sm-4 control-label">通话异常：<span th:text="*{tonghuaZong}" ></span></label>
-                    </div>
-                    <div style="width: 20%;float: left">
-                        <label class="col-sm-4 control-label">登录异常：<span th:text="*{loginZong}" ></span></label>
-                    </div>
+                </div>
             </div>
+            <div class="layui-col-md2" >
+                <div class="layui-card">
+                    <div class="layui-card-header">还款达成异常</div>
+                    <div class="layui-card-body " >
+                        <span style="font-size: 30px" th:text="*{huankuanZong}" ></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md2" >
+                <div class="layui-card">
+                    <div class="layui-card-header">通话异常</div>
+                    <div class="layui-card-body ">
+                        <span style="font-size: 30px" th:text="*{tonghuaZong}" ></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md2" >
+                <div class="layui-card">
+                    <div class="layui-card-header">登录异常</div>
+                    <div class="layui-card-body " >
+                        <span style="font-size: 30px" th:text="*{loginZong}" ></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            <div class="row">
-                    <div style="width: 25%;float: left">
-                        <label class="col-sm-4 control-label">案件处理量(件)：<span th:text="*{anjianDuration}" ></span></label>
+    <div style="padding: 10px; background-color: #A9CFEE;">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md2">
+                <div class="layui-card">
+                    <div class="layui-card-header">案件处理量(件):<span th:text="*{anjianDuration}" ></span></div>
+                    <div class="layui-card-body">
                         <span th:if="*{anjianDurationZhibiao eq   1}" style="color: red"><span  th:text="*{anjianDurationBaifen}"></span>高于指标</span>
                         <span th:if="*{anjianDurationZhibiao eq   -1}" style="color: green"><span  th:text="*{anjianDurationBaifen}"></span>低于指标</span>
                         <span th:if="*{anjianDurationZhibiao eq   0}" style="color: green"><span  th:text="*{anjianDurationBaifen}"></span>正常</span>
                     </div>
-                    <div style="width: 25%;float: left">
-                        <label class="col-sm-4 control-label">案件处理率(%)：<span th:text="*{anjianyichuli}" ></span></label>
+                </div>
+            </div>
+            <div class="layui-col-md2">
+                <div class="layui-card">
+                    <div class="layui-card-header">案件处理率(%):<span th:text="*{anjianyichuli}" ></span></div>
+                    <div class="layui-card-body">
                         <span th:if="*{anjianyichuliZhibiao eq   1}" style="color: red"><span  th:text="*{anjianyichuliBaifen}"></span>高于指标</span>
                         <span th:if="*{anjianyichuliZhibiao eq   -1}" style="color: green"><span  th:text="*{anjianyichuliBaifen}"></span>低于指标</span>
                         <span th:if="*{anjianyichuliZhibiao eq   0}" style="color: green"><span  th:text="*{anjianyichuliBaifen}"></span>正常</span>
                     </div>
-                    <div style="width: 25%;float: left">
-                        <label class="col-sm-4 control-label">实际还款(元)：<span th:text="*{yinghuan}" ></span></label>
+                </div>
+            </div>
+            <div class="layui-col-md2">
+                <div class="layui-card">
+                    <div class="layui-card-header">实际还款(元)<span th:text="*{yinghuan}" ></span></div>
+                    <div class="layui-card-body">
                         <span th:if="*{yinghuanZhibiao eq   1}" style="color: red"><span  th:text="*{yinghuanBaifen}"></span>高于指标</span>
                         <span th:if="*{yinghuanZhibiao eq   -1}" style="color: green"><span  th:text="*{yinghuanBaifen}"></span>低于指标</span>
                         <span th:if="*{yinghuanZhibiao eq   0}" style="color: green"><span  th:text="*{yinghuanBaifen}"></span>正常</span>
                     </div>
-                    <div style="width: 25%;float: left">
-                        <label class="col-sm-4 control-label">实际还款率(%)：<span th:text="*{shiji}" ></span></label>
+                </div>
+            </div>
+            <div class="layui-col-md2">
+                <div class="layui-card">
+                    <div class="layui-card-header">实际还款率(%):<span th:text="*{shiji}" ></span></div>
+                    <div class="layui-card-body">
                         <span th:if="*{shijiZhibiao eq   1}" style="color: red"><span  th:text="*{shijiBaifen}"></span>高于指标</span>
                         <span th:if="*{shijiZhibiao eq   -1}" style="color: green"><span  th:text="*{shijiBaifen}"></span>低于指标</span>
                         <span th:if="*{shijiZhibiao eq   0}" style="color: green"><span  th:text="*{shijiBaifen}"></span>正常</span>
                     </div>
+                </div>
             </div>
+        </div>
+    </div>
 
-            <div class="row">
-                    <div style="width: 30%;float: left">
-                        <label class="col-sm-4 control-label">通话时长(分)：<span th:text="*{tonghuaDuration}" ></span></label>
+    <div style="padding: 10px; background-color: #A9CFEE;">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md2">
+                <div class="layui-card">
+                    <div class="layui-card-header">通话时长(分):<span th:text="*{tonghuaDuration}" ></span></div>
+                    <div class="layui-card-body">
                         <span th:if="*{tonghuaDurationZhibiao eq   1}" style="color: red"><span  th:text="*{tonghuaDurationBaifen}"></span>高于指标</span>
                         <span th:if="*{tonghuaDurationZhibiao eq   -1}" style="color: green"><span  th:text="*{tonghuaDurationBaifen}"></span>低于指标</span>
                         <span th:if="*{tonghuaDurationZhibiao eq   0}" style="color: green"><span  th:text="*{tonghuaDurationBaifen}"></span>正常</span>
                     </div>
-                    <div style="width: 30%;float: left">
-                        <label class="col-sm-4 control-label">通话次数(次)：<span th:text="*{tonghuacs}" ></span></label>
+                </div>
+            </div>
+            <div class="layui-col-md2">
+                <div class="layui-card">
+                    <div class="layui-card-header">通话次数(次):<span th:text="*{tonghuacs}" ></span></div>
+                    <div class="layui-card-body">
                         <span th:if="*{tonghuacsZhibiao eq   1}" style="color: red"><span  th:text="*{tonghuacsBaifen}"></span>高于指标</span>
                         <span th:if="*{tonghuacsZhibiao eq   -1}" style="color: green"><span  th:text="*{tonghuacsBaifen}"></span>低于指标</span>
                         <span th:if="*{tonghuacsZhibiao eq   0}" style="color: green"><span  th:text="*{tonghuacsBaifen}"></span>正常</span>
                     </div>
-                    <div style="width: 40%;float: left">
-                        <label class="col-sm-4 control-label">接通率(%)：<span th:text="*{jietongcs}" ></span></label>
-                        <span th:if="*{jietongcsZhibiao eq   1}" style="color: red"><span  th:text="*{jietongcsBaifen}"></span>高于指标</span>
-                        <span th:if="*{jietongcsZhibiao eq   -1}" style="color: green"><span  th:text="*{jietongcsBaifen}"></span>低于指标</span>
-                        <span th:if="*{jietongcsZhibiao eq   0}" style="color: green"><span  th:text="*{jietongcsBaifen}"></span>正常</span>
-                    </div>
+                </div>
             </div>
+            <div class="layui-col-md2">
+                <div class="layui-card">
+                    <div class="layui-card-header">接通率(%):<span th:text="*{yinghuan}" ></span></div>
+                    <div class="layui-card-body">
+                        <span th:if="*{yinghuanZhibiao eq   1}" style="color: red"><span  th:text="*{yinghuanBaifen}"></span>高于指标</span>
+                        <span th:if="*{yinghuanZhibiao eq   -1}" style="color: green"><span  th:text="*{yinghuanBaifen}"></span>低于指标</span>
+                        <span th:if="*{yinghuanZhibiao eq   0}" style="color: green"><span  th:text="*{yinghuanBaifen}"></span>正常</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-
-            <div class="row">
-                    <div style="width: 30%;float: left">
-                        <label class="col-sm-4 control-label">在线时长(分)：<span th:text="*{onlineTime}" ></span></label>
+    <div style="padding: 10px; background-color: #A9CFEE;">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md2">
+                <div class="layui-card">
+                    <div class="layui-card-header">在线时长(分):<span th:text="*{onlineTime}" ></span></div>
+                    <div class="layui-card-body">
                         <span th:if="*{onlineZhibiao eq   1}" style="color: red"><span  th:text="*{onlineBaifen}"></span>高于指标</span>
                         <span th:if="*{onlineZhibiao eq   -1}" style="color: green"><span  th:text="*{onlineBaifen}"></span>低于指标</span>
                         <span th:if="*{onlineZhibiao eq   0}" style="color: green"><span  th:text="*{onlineBaifen}"></span>正常</span>
                     </div>
-                    <div style="width: 30%;float: left">
-                        <label class="col-sm-4 control-label">退出次数(次)：<span th:text="*{outCishu}" ></span></label>
+                </div>
+            </div>
+            <div class="layui-col-md2">
+                <div class="layui-card">
+                    <div class="layui-card-header">退出次数(次):<span th:text="*{outCishu}" ></span></div>
+                    <div class="layui-card-body">
                         <span th:if="*{outCishuZhibiao eq   1}" style="color: red"><span  th:text="*{outCishuBaifen}"></span>高于指标</span>
                         <span th:if="*{outCishuZhibiao eq   -1}" style="color: green"><span  th:text="*{outCishuBaifen}"></span>低于指标</span>
                         <span th:if="*{outCishuZhibiao eq   0}" style="color: green"><span  th:text="*{outCishuBaifen}"></span>正常</span>
                     </div>
-                    <div style="width: 40%;float: left">
-                        <label class="col-sm-4 control-label">间隔时长(分)：<span th:text="*{jiange}" ></span></label>
+                </div>
+            </div>
+            <div class="layui-col-md2">
+                <div class="layui-card">
+                    <div class="layui-card-header">间隔时长(分):<span th:text="*{jiange}" ></span></div>
+                    <div class="layui-card-body">
                         <span th:if="*{jiangeZhibiao eq   1}" style="color: red"><span  th:text="*{jiangeBaifen}"></span>高于指标</span>
                         <span th:if="*{jiangeZhibiao eq   -1}" style="color: green"><span  th:text="*{jiangeBaifen}"></span>低于指标</span>
                         <span th:if="*{jiangeZhibiao eq   0}" style="color: green"><span  th:text="*{jiangeBaifen}"></span>正常</span>
                     </div>
+                </div>
             </div>
-
-
-        </form>
+        </div>
     </div>
+</form>
     <th:block th:include="include :: footer" />
-    <th:block th:include="include :: datetimepicker-js" />
     <script type="text/javascript">
         var prefix = ctx + "ruoyi/logs";
         $("#form-logs-edit").validate({
@@ -128,11 +209,6 @@
             }
         }
 
-        $("input[name='days']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
     </script>
 </body>
 </html>

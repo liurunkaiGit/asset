@@ -33,10 +33,10 @@ public class OnlineCheckHandler extends CheckHandler{
     public void checkWarning(TLjRule tLjRule, SysUser user, TLjRuleDetails tLjRuleDetails, TLjRuleUserLogs userLog) {
         SysLoginStatus sysLoginStatus = new SysLoginStatus();
         sysLoginStatus.setLoginName(user.getLoginName());
-//        sysLoginStatus.setStartCensusDate(zhixingTime(tLjRuleDetails.getStartTime()));
-//        sysLoginStatus.setEndCensusDate(zhixingTime(tLjRuleDetails.getEndTime()));
-        sysLoginStatus.setStartCensusDate(zhixingTimeLL("2020-11-06 00:00:00"));
-        sysLoginStatus.setEndCensusDate(zhixingTimeLL("2020-11-07 00:00:00"));
+        sysLoginStatus.setStartCensusDate(zhixingTime(tLjRuleDetails.getStartTime()));
+        sysLoginStatus.setEndCensusDate(zhixingTime(tLjRuleDetails.getEndTime()));
+//        sysLoginStatus.setStartCensusDate(zhixingTimeLL("2020-11-06 00:00:00"));
+//        sysLoginStatus.setEndCensusDate(zhixingTimeLL("2020-11-07 00:00:00"));
         SysLoginStatusMapper sysLoginStatusMapper = ApplicationUtils.getBean(SysLoginStatusMapper.class);
         List<SysLoginStatus> list = sysLoginStatusMapper.selectSysLoginStatusListTask(sysLoginStatus);
         BigDecimal online = new BigDecimal(0);
