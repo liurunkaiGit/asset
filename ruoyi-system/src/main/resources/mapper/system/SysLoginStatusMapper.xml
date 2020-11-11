@@ -111,15 +111,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select
         count(1) as loginNum,
         sum(t.online_len) as online_len,
-        max(t.logout_num) as logout_num,
         sum(t.interval_time) as interval_time
         from sys_login_status t
         WHERE 1=1
         <if test="loginName != null and loginName != ''">
             AND t.login_name = #{loginName}
-        </if>
-        <if test="status != null and status != ''">
-            AND t.status = #{status}
         </if>
         <if test="startCensusDate != null">
             AND  date_format(t.create_time,'%Y-%m-%d %H:%i:%s') >= date_format(#{startCensusDate},'%Y-%m-%d %H:%i:%s')
@@ -127,7 +123,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="endCensusDate != null">
             AND  date_format(t.create_time,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{endCensusDate},'%Y-%m-%d %H:%i:%s')
         </if>
-        group by DATE_FORMAT(t.create_time,'%Y-%m-%d'),t.login_name
     </select>
     
     <select id="selectSysLoginStatusById" parameterType="String" resultMap="SysLoginStatusResult">

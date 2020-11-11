@@ -57,7 +57,7 @@ public class OnlineCheckHandler extends CheckHandler{
                 userLog.setOnlineError(tiaojian(tLjRuleDetails.getOnlineCondition(),tLjRuleDetails.getOnlineOne()*1000L,tLjRuleDetails.getOnlineTwo()*1000L,ol));
             }
             //退出次数
-            outCishu  = ss.getLogoutNum()==null?0:ss.getLogoutNum();
+            outCishu  = ss.getLoginNum()==null?0:ss.getLoginNum();
             //判断退出次数是否勾选
             if("1".equals(tLjRuleDetails.getOutTime())){
                 userLog.setOutError(tiaojian(tLjRuleDetails.getOutCondition(),tLjRuleDetails.getOutOne(),tLjRuleDetails.getOutTwo(),Double.valueOf(outCishu)));

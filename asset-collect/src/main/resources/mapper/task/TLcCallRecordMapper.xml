@@ -418,7 +418,7 @@
 
     <select id="selectUserTotal" parameterType="TLcCallRecord" resultType="TlcCallRecordTotal">
         select count(1) as frequencys ,sum(call_len) as durations,count(call_len)as connections from t_lc_call_record
-        where  create_time <![CDATA[>=]]> '2020-10-14 00:00:00' and create_time <![CDATA[<=]]> '2020-10-15'  and create_by=${createBy}
+        where  create_time <![CDATA[>=]]> date_format(#{startCallStartTime},'%Y-%m-%d %H:%i:%s') and create_time <![CDATA[<=]]> date_format(#{endCallStartTime},'%Y-%m-%d %H:%i:%s')   and create_by=${createBy}
     </select>
 
     <select id="findListenCallRecord" parameterType="com.ruoyi.task.domain.TLcCallRecord" resultMap="TLcCallRecordResult">
