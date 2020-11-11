@@ -1,3 +1,4 @@
+update t_lc_inforeporting_set set from_column='jjh' where from_column='email';
 -- 菜单 SQL
 insert into sys_menu (menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
 values('预警规则', (select t.menu_id from sys_menu t where t.menu_name = '系统监控'), '1', '/shareproject/hmrule', 'C', '0', 'shareproject:rule:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '【预警规则】菜单');

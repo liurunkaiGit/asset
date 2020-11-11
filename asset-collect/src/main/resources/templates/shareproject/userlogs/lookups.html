@@ -95,7 +95,7 @@
             </div>
             <div class="layui-col-md2">
                 <div class="layui-card">
-                    <div class="layui-card-header">案件处理率(%):<span th:text="*{anjianyichuli}" ></span></div>
+                    <div class="layui-card-header">案件处理率(%):<span th:text="*{anjianlv}" ></span></div>
                     <div class="layui-card-body">
                         <span th:if="*{anjianyichuliZhibiao eq   1}" style="color: red"><span  th:text="*{anjianyichuliBaifen}"></span>高于指标</span>
                         <span th:if="*{anjianyichuliZhibiao eq   -1}" style="color: green"><span  th:text="*{anjianyichuliBaifen}"></span>低于指标</span>
@@ -105,7 +105,7 @@
             </div>
             <div class="layui-col-md2">
                 <div class="layui-card">
-                    <div class="layui-card-header">实际还款(元)<span th:text="*{yinghuan}" ></span></div>
+                    <div class="layui-card-header">实际还款(元)<span th:text="*{shiji}" ></span></div>
                     <div class="layui-card-body">
                         <span th:if="*{yinghuanZhibiao eq   1}" style="color: red"><span  th:text="*{yinghuanBaifen}"></span>高于指标</span>
                         <span th:if="*{yinghuanZhibiao eq   -1}" style="color: green"><span  th:text="*{yinghuanBaifen}"></span>低于指标</span>
@@ -115,7 +115,7 @@
             </div>
             <div class="layui-col-md2">
                 <div class="layui-card">
-                    <div class="layui-card-header">实际还款率(%):<span th:text="*{shiji}" ></span></div>
+                    <div class="layui-card-header">实际还款率(%):<span th:text="*{shijilv}" ></span></div>
                     <div class="layui-card-body">
                         <span th:if="*{shijiZhibiao eq   1}" style="color: red"><span  th:text="*{shijiBaifen}"></span>高于指标</span>
                         <span th:if="*{shijiZhibiao eq   -1}" style="color: green"><span  th:text="*{shijiBaifen}"></span>低于指标</span>
@@ -150,7 +150,7 @@
             </div>
             <div class="layui-col-md2">
                 <div class="layui-card">
-                    <div class="layui-card-header">接通率(%):<span th:text="*{yinghuan}" ></span></div>
+                    <div class="layui-card-header">接通率(%):<span th:text="*{jietonglv}" ></span></div>
                     <div class="layui-card-body">
                         <span th:if="*{jietongcsZhibiao eq   1}" style="color: red"><span  th:text="*{jietongcsBaifen}"></span>高于指标</span>
                         <span th:if="*{jietongcsZhibiao eq   -1}" style="color: green"><span  th:text="*{jietongcsBaifen}"></span>低于指标</span>
