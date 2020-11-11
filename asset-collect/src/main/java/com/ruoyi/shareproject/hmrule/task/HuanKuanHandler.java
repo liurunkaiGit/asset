@@ -26,7 +26,7 @@ public class HuanKuanHandler extends  CheckHandler{
         TLcReportDayProcessMapper tLcReportDayProcessMapper = (TLcReportDayProcessMapper) ApplicationUtils.getBean(TLcReportDayProcessMapper.class);
         Map<String, Object> param = new HashMap<>();
         param.put("userId",user.getUserId());
-        List<TLcReportDayProcess>  list = tLcReportDayProcessMapper.selectDayProcessTask(param);
+        List<TLcReportDayProcess>  list = tLcReportDayProcessMapper.selectTaskReach(param);
         userLog.setShijiError(0);
         userLog.setShijilvError(0);
         userLog.setShijilv(BigDecimal.valueOf(0));
