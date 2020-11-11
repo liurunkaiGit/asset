@@ -3512,8 +3512,10 @@
             $('#callResult').val(text);
             if("承诺还款"== text || "称已还" == text){
                 $("#cnjeDiv").css("display","block");
+                $("#cnje").val("");
             }else{
                 $("#cnjeDiv").css("display","none");
+                $("#cnje").val("");
             }
         }else{
             $('#callRemarkAdd').val("");
