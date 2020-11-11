@@ -369,6 +369,7 @@
             <if test="findDate != null  and findDate != ''">find_date = #{findDate},</if>
             <if test="remark != null ">remark = #{remark},</if>
             <if test="actionCode != null and actionCode != ''">action_code = #{actionCode},</if>
+            <if test="cnje != null">cnje = #{cnje},</if>
         </trim>
         where id = #{id}
     </update>
