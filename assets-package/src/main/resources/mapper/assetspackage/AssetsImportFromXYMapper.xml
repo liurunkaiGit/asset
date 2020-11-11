@@ -455,6 +455,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         dzhxrq,
         customer_no,
         sjrq,
+        jjh,
         package_id
         )
         VALUES
@@ -571,6 +572,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{item.dzhxrq},
             #{item.customerNo},
             #{item.sjrq},
+            #{item.jjh},
             #{item.packageId}
             )
         </foreach>

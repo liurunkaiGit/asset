@@ -13,6 +13,7 @@ import com.ruoyi.common.utils.RestTemplateUtil;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.DataPermissionUtils;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.service.ISysConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,8 @@ public class AssetsRepaymentFromXYController extends BaseController {
     private ITLcImportFlowService tlcImportFlowService;
     @Autowired
     private DataPermissionUtils dataPermissionUtils;
+    @Autowired
+    private ISysConfigService sysConfigService;
 
     @RequiresPermissions("assetspackage:xyRepayment:view")
     @GetMapping()
@@ -205,8 +208,14 @@ public class AssetsRepaymentFromXYController extends BaseController {
                     .setCreateBy(String.valueOf(ShiroUtils.getUserId()));
             this.tlcImportFlowService.insertTLcImportFlow(tLcImportFlow);
             //结案操作
-            AjaxResult result = this.curAssetsRepaymentPackageService.callRemote2(repaymentList, importBatchNo);
-            return result;
+            String xyOrgId = this.sysConfigService.selectConfigByKey("xyOrgId");
+            String orgId = repaymentList.get(0).getOrgId();
+            if(!xyOrgId.equals(orgId)){
+                AjaxResult result = this.curAssetsRepaymentPackageService.callRemote2(repaymentList, importBatchNo);
+                return result;
+            }else{
+                return AjaxResult.success();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("添加失败"+e.getMessage(),e);

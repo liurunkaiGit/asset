@@ -458,6 +458,10 @@ public class DataImportUtil {
                 if (key.equals(sjrq)) {
                     map.put("数据日期", value);
                 }
+                String jjh = bean.getJjh();
+                if (key.equals(jjh)) {
+                    map.put("借据号", value);
+                }
             }
 
             result.add(map);
@@ -883,6 +887,10 @@ public class DataImportUtil {
                     String sjrq = bean.getSjrq();
                     if (key.equals(sjrq)) {
                         map.put("数据日期", value);
+                    }
+                    String jjh = bean.getJjh();
+                    if (key.equals(jjh)) {
+                        map.put("借据号", value);
                     }
                     if(freeRelations.size()>0){
                         for (String freeRelation : freeRelations) {//客户模板头
@@ -2886,6 +2894,12 @@ public class DataImportUtil {
                 if ("数据日期".equals(entry.getKey())) {
                     if (entry.getValue() != null && !"".equals(entry.getValue())) {
                         dto.setSjrq(entry.getValue());
+                    }
+                    continue;
+                }
+                if ("借据号".equals(entry.getKey())) {
+                    if (entry.getValue() != null && !"".equals(entry.getValue())) {
+                        dto.setJjh(entry.getValue());
                     }
                     continue;
                 }

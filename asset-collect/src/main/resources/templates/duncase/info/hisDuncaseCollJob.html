@@ -154,6 +154,7 @@
                                 <label>借款笔数：</label><span id="jkbs"></span><br/>
                                 <label>还款方式：</label><span id="hkType"></span><br/>
                                 <label>首付金额：</label><span id="sfje"></span><br/>
+                                <label>借据号：</label><label id="jjh"></label><br/>
                                 <label>分期期数：</label><span id="fz"></span><br/>
                                 <label>年利率：</label><span id="yearRates"></span><br/>
                                 <label>日利率：</label><span id="dayRates" style="text-align: left;"></span><br/>
@@ -572,6 +573,7 @@
                         $("#dzhxrq").text(data.assets.dzhxrq);//呆账核销日期
                         $("#customerNo").text(data.assets.customerNo);//客户号
                         $("#sjrq").text(data.assets.sjrq);//数据日期
+                        $("#jjh").text(data.assets.jjh);//借据号
                     }
                 }
             }

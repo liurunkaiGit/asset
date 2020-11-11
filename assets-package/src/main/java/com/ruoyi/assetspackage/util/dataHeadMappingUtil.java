@@ -119,6 +119,7 @@ public class dataHeadMappingUtil {
         String dzhxrq = dataHeadMapping.getDzhxrq();
         String customer_no = dataHeadMapping.getCustomer_no();
         String sjrq = dataHeadMapping.getSjrq();
+        String jjh = dataHeadMapping.getJjh();
 
 
 //        String	work_postcode=dataHeadMapping.getWork_postcode();
@@ -418,6 +419,7 @@ public class dataHeadMappingUtil {
         list.add(dzhxrq);
         list.add(customer_no);
         list.add(sjrq);
+        list.add(jjh);
 
 //        list.add(org);
 

@@ -214,7 +214,8 @@ public class SystemHeadMapping {
     private String customer_no;
     @Value("${sjrq}")
     private String sjrq;
-
+    @Value("${jjh}")
+    private String jjh ;
 
 
     /*@Value("${org}")

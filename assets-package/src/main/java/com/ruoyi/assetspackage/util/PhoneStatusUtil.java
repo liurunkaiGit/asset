@@ -25,9 +25,9 @@ public class PhoneStatusUtil {
         reqData.put("cell", data.getCell());
         reqData.put("name", data.getName());
         jso.put("reqData", reqData);
-        log.info("startTime="+System.currentTimeMillis()+"百融电话虫请求数据{}",jso.toString());
+        log.error("startTime="+System.currentTimeMillis()+"百融电话虫请求数据{}",jso.toString());
         String result = ms.getApiData(jso.toString());
-        log.info("endTime="+System.currentTimeMillis()+"百融电话虫返回结果{}",result);
+        log.error("endTime="+System.currentTimeMillis()+"百融电话虫返回结果{}",result);
         PhoneStatusResponse response = JSON.parseObject(result, PhoneStatusResponse.class);
         return response;
     }

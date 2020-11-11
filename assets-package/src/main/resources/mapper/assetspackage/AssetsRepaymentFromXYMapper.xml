@@ -229,6 +229,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         limit 1
     </select>
 
+    <select id="findOwnerNameByAssign3" parameterType="java.util.Map" resultType="java.lang.String">
+        SELECT owner_name as ownerName
+        from t_lc_task
+        where org_id=#{orgId} and case_no=#{orgCasNo}
+        and task_status != 3
+    </select>
+
     <select id="findOwnerNameByTask" parameterType="java.util.Map" resultType="java.lang.String">
       SELECT DISTINCT owner_name as ownerName
       from t_lc_task  where org_id=#{orgId} and case_no=#{orgCasNo}

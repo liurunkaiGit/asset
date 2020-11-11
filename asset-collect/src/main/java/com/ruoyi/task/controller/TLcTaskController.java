@@ -71,6 +71,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -1555,7 +1557,10 @@ public class TLcTaskController extends BaseController {
     @ResponseBody
     public AjaxResult selectPhoneStatus(String caseNo, String phoneStatus) {
         try {
-            Map<String, Integer> map = this.tLcTaskService.selectPhoneStatus(caseNo, phoneStatus);
+            String orgId = String.valueOf(ShiroUtils.getSysUser().getOrgId());
+            String orgName = ShiroUtils.getSysUser().getOrgName();
+            String loginName = ShiroUtils.getSysUser().getLoginName();
+            Map<String, Integer> map = this.tLcTaskService.selectPhoneStatus(caseNo, phoneStatus, orgId, orgName, loginName);
             String result = JSON.toJSONString(map);
             return AjaxResult.success("成功",result);
         } catch (Exception e) {

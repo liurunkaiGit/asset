@@ -20,6 +20,7 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.RestTemplateUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.service.ISysConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,8 @@ public class AssetsRepaymentFromXYServiceImpl implements IAssetsRepaymenFromXYSe
     protected final Logger logger = LoggerFactory.getLogger(AssetsRepaymentFromXYServiceImpl.class);
     @Autowired
     private AssetsRepaymentFromXYMapper assetsRepaymentFromXYMapper;
+    @Autowired
+    private ISysConfigService sysConfigService;
 
 
 
@@ -101,12 +104,20 @@ public class AssetsRepaymentFromXYServiceImpl implements IAssetsRepaymenFromXYSe
                 }
             }
         }
+        //兴业消金匹配任务表当前业务归属人
+        String orgId = param.get("orgId");
+        String xyOrgId = this.sysConfigService.selectConfigByKey("xyOrgId");
+        if("".equals(ownerName) && xyOrgId.equals(orgId)){
+            String ownerNameByAssign3 = this.assetsRepaymentFromXYMapper.findOwnerNameByAssign3(param);
+            if(ownerNameByAssign3 != null && !"".equals(ownerNameByAssign3)){
+                ownerName = ownerName + ","+ownerNameByAssign3;
+            }
+        }
         if(!"".equals(ownerName)){
             ownerName = ownerName.substring(1);
         }
         return ownerName;
     }
-
 
 
     /**

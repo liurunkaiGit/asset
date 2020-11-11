@@ -1537,14 +1537,14 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
      */
     @Override
     @Transactional
-    public Map<String, Integer> selectPhoneStatus(String caseNos, String phoneStatus) {
+    public Map<String, Integer> selectPhoneStatus(String caseNos, String phoneStatus, String orgId, String orgName, String loginName) {
         Map<String, Integer> result = new HashMap<String, Integer>();
         int successFlag = 0;
         int errorFlag = 0;
         //根据条件查询联系人信息
         TLcCustContact tLcCustContact = new TLcCustContact();
         tLcCustContact.setCaseNoList(Arrays.asList(caseNos.split(",")));
-        tLcCustContact.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
+        tLcCustContact.setOrgId(orgId);
         if ("1".equals(phoneStatus)) {
             tLcCustContact.setRelation(Integer.valueOf(phoneStatus));//本人
         }
@@ -1563,7 +1563,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 reqData.setName(contactName);
                 reqData.setCell(phone);
                 PhoneStatusResponse response = PhoneStatusUtil.getPhoneStatus(reqData);
-                Map<String, Integer> map = this.responseHandler(response, custContact, successFlag, errorFlag);
+                Map<String, Integer> map = this.responseHandler(response, custContact, successFlag, errorFlag, orgId, orgName, loginName);
                 successFlag = map.get("successFlag");
                 errorFlag = map.get("errorFlag");
             }
@@ -1664,7 +1664,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         return taskList;
     }
 
-    private Map<String, Integer> responseHandler(PhoneStatusResponse response, TLcCustContact custContact, int successFlag, int errorFlag) {
+    private Map<String, Integer> responseHandler(PhoneStatusResponse response, TLcCustContact custContact, int successFlag, int errorFlag, String orgId, String orgName, String loginName) {
         Date curDate = new Date();
         Map<String, Integer> map = new HashMap<>();
         String swift_number = response.getSwift_number();
@@ -1686,9 +1686,9 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             insertParam.setPhone(custContact.getPhone());
             insertParam.setRelation(custContact.getRelation());
             insertParam.setPhonestatus(phoneStaus);
-            insertParam.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
-            insertParam.setOrgName(ShiroUtils.getSysUser().getOrgName());
-            insertParam.setCreateBy(ShiroUtils.getLoginName());
+            insertParam.setOrgId(orgId);
+            insertParam.setOrgName(orgName);
+            insertParam.setCreateBy(loginName);
             insertParam.setCreateTime(curDate);
             insertParam.setFlowNo(swift_number);
             this.phoneStatusMapper.insertPhoneStatus(insertParam);
@@ -1696,7 +1696,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             if ("2".equals(phoneStaus) || "31".equals(phoneStaus) || "32".equals(phoneStaus) || "33".equals(phoneStaus)) {
                 TLcTask param = new TLcTask();
                 param.setCaseNo(custContact.getCaseNo());
-                param.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
+                param.setOrgId(orgId);
                 param.setPhoneStatus("1");//0不可联,1可联
                 this.tLcTaskMapper.updatePhoneStatus(param);
             }
@@ -1715,9 +1715,9 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             insertParam.setPhone(custContact.getPhone());
             insertParam.setRelation(custContact.getRelation());
             insertParam.setPhonestatus("-1");//失败
-            insertParam.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
-            insertParam.setOrgName(ShiroUtils.getSysUser().getOrgName());
-            insertParam.setCreateBy(ShiroUtils.getLoginName());
+            insertParam.setOrgId(orgId);
+            insertParam.setOrgName(orgName);
+            insertParam.setCreateBy(loginName);
             insertParam.setCreateTime(curDate);
             insertParam.setFlowNo(swift_number);
             this.phoneStatusMapper.insertPhoneStatus(insertParam);

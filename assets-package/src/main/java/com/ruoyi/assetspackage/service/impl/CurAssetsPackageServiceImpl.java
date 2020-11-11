@@ -1779,6 +1779,9 @@ public class CurAssetsPackageServiceImpl extends BaseController implements ICurA
             if ("数据日期".equals(systemTemplateName)) {
                 bean.setSjrq(customerTemplateName);
                 continue;}
+            if ("借据号".equals(systemTemplateName)) {
+                bean.setJjh(customerTemplateName);
+                continue;}
         }
         return bean;
     }

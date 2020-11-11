@@ -116,6 +116,7 @@ public class ImportDataMapping {
     private String dzhxrq;//呆账核销日期
     private String customerNo;//客户号
     private String sjrq;//数据日期
+    private String jjh;//借据号
 
     private String headRowNum; //表头行
     private String dataRowNum; //数据起始行

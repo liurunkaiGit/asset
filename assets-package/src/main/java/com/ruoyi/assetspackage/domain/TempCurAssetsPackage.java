@@ -489,6 +489,9 @@ public class TempCurAssetsPackage extends BaseEntity {
     private String customerNo;//客户号
     private String sjrq;//数据日期
 
+    //兴业新增
+    private String jjh; //借据号
+
 
     @Override
     public String getCreateBy() {
