@@ -51,20 +51,21 @@
 			clickToSelect:true,
 			 columns: [{
 				// radio: true
-				checkbox:true
+				checkbox:true,
+				 formatter:function(value,row,index){
+					var userIds = $("#userIds").val();
+					if (userIds.split(",").indexOf(row.userId.toString()) != -1) {
+						return {
+							checked : true
+						};
+					}
+					return value;
+				 }
 			},
 				{
 					field : 'userId',
 					title : '用户ID',
-					visible: false,
-					formatter: function (value, row, index) {
-						// var val = $("#userIds").val();
-						// parent.Attr("class","selected");
-						// alert($("[btSelectItem]").html());
-						// $("p[btSelectItem]").attr("checked","true");
-						alert(JSON.stringify($(".btSelectItem")))
-						$(".btSelectItem").parent().parent().addClass('bcd');
-					}
+					visible: true
 				},
 				{
 					title: "序号",

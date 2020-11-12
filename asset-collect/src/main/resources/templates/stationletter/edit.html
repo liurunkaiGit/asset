@@ -103,10 +103,10 @@
         });
 
         $("input[id=selectUser]").click(function(){
-            $("#selectUserIds").val("");
-            $.modal.open("选择用户", prefix + "/toSelectUser");
-            // var userIds = $("#selectUserIds").val();
-            // $.modal.open("选择用户", prefix + "/toSelectUser?userIds="+userIds);
+            // $("#selectUserIds").val("");
+            // $.modal.open("选择用户", prefix + "/toSelectUser");
+            var userIds = $("#selectUserIds").val();
+            $.modal.open("选择用户", prefix + "/toSelectUser?userIds="+userIds);
         });
 
         // 点击全部用户时清空选择的用户

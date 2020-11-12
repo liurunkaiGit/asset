@@ -156,8 +156,7 @@ public class TLcStationLetterController extends BaseController {
         TableDataInfo rspData = new TableDataInfo();
         sysUser.setDeptId(orgId);
         List<SysUser> userList = this.tLcStationLetterService.selectSendLetterUser(sysUser);
-
-        rspData.setRows(userList.subList(0,1));
+        rspData.setRows(userList);
         return  rspData;
     }
 }
