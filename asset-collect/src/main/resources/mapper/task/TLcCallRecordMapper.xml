@@ -203,7 +203,8 @@
             '华道数据' AS wbjb,
             '电催' AS csdz,
             re.call_result,
-            re.cnje
+            re.cnje,
+            re.action_code
             FROM
             t_lc_call_record re,
             cur_assets_package cap

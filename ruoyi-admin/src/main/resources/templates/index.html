@@ -26,8 +26,8 @@
 
         .ci-count {
             position: absolute;
-            top: 1px;
-            left: 10px;
+            top: 15px;
+            left: 25px;
             right: auto;
             display: inline-block;
             padding: 1px 3px;
@@ -129,9 +129,9 @@
                 </div>
 
                 <ul class="nav navbar-top-links navbar-right welcome-message">
-                    <li><img src="/img/letter.png" style="width:18px;height: 15px;" onclick="showLetter()" /><span class="ci-count" id="stationLetterNum" onclick="showLetter()" style="color: white">0</span></li>
-                    <li><a title="全屏显示" href="javascript:void(0)" id="fullScreen"><i class="fa fa-arrows-alt"></i> 全屏显示&nbsp;&nbsp;&nbsp;&nbsp;|</a></li>
-                    <li><a title="" href="javascript:void(0)" id=""><i class="fa fa-database"></i> [[${user.orgName}]]&nbsp;&nbsp;&nbsp;&nbsp;|</a></li>
+                    <li ><a href="javascript:showLetter()" > <img src="/img/letter.png" style="width:18px;height: 15px;" /><span class="ci-count" id="stationLetterNum" style="color: white">0</span></a></li>
+                    <!--<li><a title="全屏显示" href="javascript:void(0)" id="fullScreen"><i class="fa fa-arrows-alt"></i> 全屏显示&nbsp;&nbsp;&nbsp;&nbsp;|</a></li>-->
+                    <li><a title="" href="javascript:void(0)" id="">|&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-database"></i> [[${user.orgName}]]&nbsp;&nbsp;&nbsp;&nbsp;|</a></li>
                     <li class="dropdown user-menu">
 						<a href="javascript:void(0)" class="dropdown-toggle" data-hover="dropdown">
 							<img src="/img/person-s.png" class="imgso" width="18px"  height="18px"  />
