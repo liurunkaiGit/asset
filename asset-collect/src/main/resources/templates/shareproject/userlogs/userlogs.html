@@ -29,11 +29,11 @@
                 </form>
             </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="lookups()" shiro:hasPermission="shareproject:userlogs:add">
-                    <i class="fa fa-search"></i> 查看
-                </a>
-            </div>
+<!--            <div class="btn-group-sm" id="toolbar" role="group">-->
+<!--                <a class="btn btn-success" onclick="lookups()" shiro:hasPermission="shareproject:userlogs:add">-->
+<!--                    <i class="fa fa-search"></i> 查看-->
+<!--                </a>-->
+<!--            </div>-->
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
             </div>
@@ -79,9 +79,9 @@
                         if(value =='' || null == value)return'';
                         value = value*1;
                         if(value>0){
-                            return "<span style='color: red'>"+value+"</span>";
+                            return "<a href='javascript:void(0)' onclick='errUrl(\""+row.id+"\")'><span style='color: red' >"+value+"</span></a>";
                         }else{
-                            return "<span style='color: green'>"+value+"</span>";
+                            return "<a href='javascript:void(0)' onclick='errUrl(\""+row.id+"\")'><span style='color: green' onclick='errUrl(\""+row.id+"\")'>"+value+"</span></a>";
                         }
                     }
                 },
@@ -92,6 +92,19 @@
             };
             $.table.init(options);
         });
+        function errUrl(objId) {
+            layer.open({
+                type: 2,
+                area: [$(window).width() + 'px', $(window).height() + 'px'],
+                fix: false,
+                //不固定
+                maxmin: true,
+                shade: 0.3,
+                title: "查看",
+                content: prefix+"/lookups/"+objId
+            });
+        }
+
         function lookups() {
             var taskIdRows = $.table.selectColumns("id");
             if (taskIdRows.length == 0) {
