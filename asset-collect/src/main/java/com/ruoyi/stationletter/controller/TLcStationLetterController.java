@@ -10,6 +10,7 @@ import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.stationletter.domain.TLcStationLetter;
 import com.ruoyi.stationletter.service.ITLcStationLetterService;
 import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.task.domain.TLcTask;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -19,8 +20,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Size;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 站内信Controller
@@ -36,6 +39,8 @@ public class TLcStationLetterController extends BaseController {
 
     @Autowired
     private ITLcStationLetterService tLcStationLetterService;
+    @Autowired
+    private ISysUserService sysUserService;
 
     @RequiresPermissions("station:letter:view")
     @GetMapping()
@@ -104,6 +109,12 @@ public class TLcStationLetterController extends BaseController {
     public String detail(@PathVariable("id") Long id, ModelMap mmap) {
         TLcStationLetter tLcStationLetter = tLcStationLetterService.selectTLcStationLetterById(id);
         mmap.put("tLcStationLetter", tLcStationLetter);
+        if (StringUtils.isNotBlank(tLcStationLetter.getUserIds())) {
+            List<String> userIds = Arrays.asList(tLcStationLetter.getUserIds().split(","));
+            List<SysUser> sysUsers = this.sysUserService.selectUserListByUserIds(userIds);
+            String userNameList = sysUsers.stream().map(sysUser -> sysUser.getUserName()).collect(Collectors.joining(","));
+            mmap.put("userNameList", userNameList);
+        }
         return prefix + "/detail";
     }
 
@@ -130,8 +141,9 @@ public class TLcStationLetterController extends BaseController {
     }
 
     @GetMapping("/toSelectUser")
-    public String toSelectUser(ModelMap modelMap) {
+    public String toSelectUser(ModelMap modelMap, String userIds) {
         modelMap.put("orgId", ShiroUtils.getSysUser().getOrgId());
+        modelMap.put("userIds",userIds);
         return prefix + "/selectUser";
     }
 
@@ -140,11 +152,12 @@ public class TLcStationLetterController extends BaseController {
      */
     @ResponseBody
     @PostMapping("/selectSendLetterUser")
-    public TableDataInfo selectSendLetterUser(SysUser sysUser, Long orgId) {
+    public TableDataInfo selectSendLetterUser(SysUser sysUser, Long orgId, String userIds) {
         TableDataInfo rspData = new TableDataInfo();
         sysUser.setDeptId(orgId);
         List<SysUser> userList = this.tLcStationLetterService.selectSendLetterUser(sysUser);
-        rspData.setRows(userList);
+
+        rspData.setRows(userList.subList(0,1));
         return  rspData;
     }
 }

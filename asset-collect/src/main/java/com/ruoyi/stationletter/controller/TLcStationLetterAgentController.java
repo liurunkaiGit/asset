@@ -51,6 +51,15 @@ public class TLcStationLetterAgentController extends BaseController {
     }
 
     /**
+     * 查看未读站内信数量
+     */
+    @GetMapping("/getWaitReadNum")
+    @ResponseBody
+    public Response getWaitReadNum() {
+        return this.tLcStationLetterAgentService.getWaitReadNum();
+    }
+
+    /**
      * 查看鼠标悬浮站内信
      */
     @GetMapping("/getStationLetterDetail")

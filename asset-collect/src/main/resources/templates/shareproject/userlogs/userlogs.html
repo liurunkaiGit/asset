@@ -84,8 +84,15 @@
                 $.modal.alertWarning("请至少选择一条记录");
                 return;
             }
-            $.modal.open("查看",prefix+"/lookups/"+taskIdRows[0],$(window).width(),$(window).height(),function (index, layero) {
-                layer.close(index);
+            layer.open({
+                type: 2,
+                area: [$(window).width() + 'px', $(window).height() + 'px'],
+                fix: false,
+                //不固定
+                maxmin: true,
+                shade: 0.3,
+                title: "查看",
+                content: prefix+"/lookups/"+taskIdRows[0]
             });
         }
     </script>

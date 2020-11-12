@@ -34,6 +34,17 @@
         }
 
         $(document).ready(function(){
+            function tiaojian(con,conone,contwo) {
+                conone = conone==null?'':conone;
+                contwo = contwo==null?'':contwo;
+             if("0" == con){
+                 return '范围:'+conone+'--'+contwo;
+             }else if("1" == con){
+                 return '大于:'+conone+'--'+contwo;
+             }else if("2" == con){
+                 return '小于:'+conone+'--'+contwo;
+             }
+            }
             var options = {
                 url: prefix + "/list?ruleId="+$("#ruleId").val(),
                 createUrl: prefix + "/add",
@@ -58,34 +69,48 @@
                     },
                     {
                         field : 'startTime',
-                        title : '开始'
-                    },
-                    {
-                        field : 'endTime',
-                        title : '结束时间'
-                    },
-                    {
-                        field : 'onlineTime',
-                        title : '在线时长'
-                    },
-                    {
-                        field : 'onlineCondition',
-                        title : '在线时长',
+                        title : '时间段',
                         formatter: function(value, row, index) {
-                            if(value ==0)return "范围";
-                            else if(value ==1)return "大于";
-                            else {
-                                return "小于";
-                            }
+                            return value +'--'+ row.endTime;
                         }
                     },
                     {
-                        field : 'onlineOne',
-                        title : '在线时长-条件'
+                        field : 'onlineTime',
+                        title : '登录',
+                        formatter: function(value, row, index) {
+                            var infos = "在线时长 "+tiaojian(row.onlineCondition,row.onlineOne,row.onlineTwo);
+                            infos += "<br/>退出次数 "+tiaojian(row.outCondition,row.outOne,row.outTwo);
+                            infos += "<br/>间隔时长 "+tiaojian(row.intervalsCondition,row.intervalsOne,row.intervalsTwo);
+                            return infos;
+                        }
                     },
                     {
-                        field : 'onlineTwo',
-                        title : '在线时长-条件'
+                        field : 'onlineTime',
+                        title : '通话',
+                        formatter: function(value, row, index) {
+                            var infos = "通话时长 "+tiaojian(row.conversationCondition,row.conversationOne,row.conversationTwo);
+                            infos += "<br/>通话次数 "+tiaojian(row.conversationCishuCondition,row.conversationCishuOne,row.conversationCishuTwo);
+                            infos += "<br/>接通率 "+tiaojian(row.engRateCondition,row.engRateOne,row.engRateTwo);
+                            return infos;
+                        }
+                    },
+                    {
+                        field : 'onlineTime',
+                        title : '案件',
+                        formatter: function(value, row, index) {
+                            var infos = "案件处理量 "+tiaojian(row.caseNumbersCondition,row.caseNumbersOne,row.caseNumbersTwo);
+                            infos += "<br/>案件处理率 "+tiaojian(row.caseRateCondition,row.caseRateOne,row.caseRateTwo);
+                            return infos;
+                        }
+                    },
+                    {
+                        field : 'onlineTime',
+                        title : '还款达成',
+                        formatter: function(value, row, index) {
+                            var infos = "案件处理量 "+tiaojian(row.sjRepaymentCondition,row.sjRepaymentOne,row.sjRepaymentTwo);
+                            infos += "<br/>案件处理率 "+tiaojian(row.sjRepaymentRateCondition,row.sjRepaymentRateOne,row.sjRepaymentRateTwo);
+                            return infos;
+                        }
                     }]
             };
             $.table.init(options);

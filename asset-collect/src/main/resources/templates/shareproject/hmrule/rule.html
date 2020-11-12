@@ -21,6 +21,7 @@
                             <li>
                                 <p>规则状态：</p>
                                 <select th:required="required" name="ruleStatus" id="ruleStatus"  class="form-control m-b" th:with="type=${@dict.getType('rule_status')}" required>
+                                    <option value="">全部</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
@@ -125,7 +126,7 @@
                 },
                 {
                     field : 'updateTime',
-                    title : '机构名称'
+                    title : '操作时间'
                 }]
             };
             $.table.init(options);
@@ -137,8 +138,15 @@
                 $.modal.alertWarning("请至少选择一条记录");
                 return;
             }
-            $.modal.open("条件",ctx+"shareproject/details/view/"+taskIdRows[0],$(window).width(),$(window).height(),function (index, layero) {
-                layer.close(index);
+            layer.open({
+                type: 2,
+                area: [$(window).width() + 'px', $(window).height() + 'px'],
+                fix: false,
+                //不固定
+                maxmin: true,
+                shade: 0.3,
+                title: "条件",
+                content: ctx+"shareproject/details/view/"+taskIdRows[0]
             });
         }
     </script>

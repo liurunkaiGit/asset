@@ -16,6 +16,7 @@
 				<div class="select-list">
 					<ul>
 						<input type="hidden" name="orgId" id="orgId" th:value="${orgId}">
+						<input type="hidden" name="userIds" id="userIds" th:value="${userIds}">
 						<li>
 							登录名称：<input type="text" name="loginName"/>
 						</li>
@@ -42,20 +43,28 @@
 
 	$(function() {
 		var options = {
-			url: prefix + "/selectSendLetterUser?orgId="+$("#orgId").val(),
+			url: prefix + "/selectSendLetterUser?orgId="+$("#orgId").val()+"&userIds="+$("#userIds").val(),
 			showSearch: false,
 			showRefresh: false,
 			showToggle: false,
 			showColumns: false,
 			clickToSelect:true,
-			columns: [{
-				//radio: true
+			 columns: [{
+				// radio: true
 				checkbox:true
 			},
 				{
 					field : 'userId',
 					title : '用户ID',
-					visible: false
+					visible: false,
+					formatter: function (value, row, index) {
+						// var val = $("#userIds").val();
+						// parent.Attr("class","selected");
+						// alert($("[btSelectItem]").html());
+						// $("p[btSelectItem]").attr("checked","true");
+						alert(JSON.stringify($(".btSelectItem")))
+						$(".btSelectItem").parent().parent().addClass('bcd');
+					}
 				},
 				{
 					title: "序号",
@@ -73,6 +82,7 @@
 				}]
 		};
 		$.table.init(options);
+
 	});
 
 	/* 添加用户-选择用户-提交 */
