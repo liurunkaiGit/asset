@@ -75,6 +75,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where t.send_by = su.user_id and t.agent_id = #{agentId} and t.read_status = 2 and t.send_time <![CDATA[<=]]> now() and t.org_id = #{orgId}
     </select>
 
+    <select id="getWaitReadNum" parameterType="com.ruoyi.stationletter.domain.TLcStationLetterAgent" resultType="java.lang.Long">
+        select count(1) from t_lc_station_letter_agent t
+        where t.agent_id = #{agentId} and t.read_status = 2 and t.send_time <![CDATA[<=]]> now() and t.org_id = #{orgId}
+    </select>
+
     <insert id="insertTLcStationLetterAgent" parameterType="com.ruoyi.stationletter.domain.TLcStationLetterAgent" useGeneratedKeys="true" keyProperty="id">
         insert into t_lc_station_letter_agent
         <trim prefix="(" suffix=")" suffixOverrides=",">

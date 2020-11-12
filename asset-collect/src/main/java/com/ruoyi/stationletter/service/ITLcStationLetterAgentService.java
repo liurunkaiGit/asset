@@ -69,4 +69,6 @@ public interface ITLcStationLetterAgentService {
     List<TLcStationLetterAgent> getStationLetterDetail();
 
     void updateReadStatus(Long id);
+
+    Response getWaitReadNum();
 }

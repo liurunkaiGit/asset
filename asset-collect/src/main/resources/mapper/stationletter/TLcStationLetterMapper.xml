@@ -58,6 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and t.create_time <![CDATA[<=]]> #{endCreateTime}
             </if>
         </where>
+        order by t.create_time desc
     </select>
     
     <select id="selectTLcStationLetterById" parameterType="Long" resultMap="TLcStationLetterResult">

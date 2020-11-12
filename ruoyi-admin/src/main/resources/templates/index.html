@@ -129,7 +129,7 @@
                 </div>
 
                 <ul class="nav navbar-top-links navbar-right welcome-message">
-                    <li><img src="/img/letter.png" style="width:18px;height: 15px;" onclick="showLetter()" /><span class="ci-count" id="stationLetterNum" style="color: white">0</span></li>
+                    <li><img src="/img/letter.png" style="width:18px;height: 15px;" onclick="showLetter()" /><span class="ci-count" id="stationLetterNum" onclick="showLetter()" style="color: white">0</span></li>
                     <li><a title="全屏显示" href="javascript:void(0)" id="fullScreen"><i class="fa fa-arrows-alt"></i> 全屏显示&nbsp;&nbsp;&nbsp;&nbsp;|</a></li>
                     <li><a title="" href="javascript:void(0)" id=""><i class="fa fa-database"></i> [[${user.orgName}]]&nbsp;&nbsp;&nbsp;&nbsp;|</a></li>
                     <li class="dropdown user-menu">
@@ -223,7 +223,7 @@
                     <div class="modal-header" style="text-align: center">
                         <!--<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
                         </button>-->
-                        <p style="font-size: 28px;color:black; text-align: center; display: inline-block; vertical-align: middle; margin: 0px" id="title"></p>
+                        <p style="font-size: 18px;color:black; text-align: center; display: inline-block; vertical-align: middle; margin: 0px" id="title"></p>
                         <div style="float: right; width: 200px" >
                             <span style="font-size: 15px;color:black; float: right " id="sendBy"></span>
                             <span style="font-size: 15px;color:black; float: right; white-space: pre-wrap" id="sendTime"></span>
@@ -309,8 +309,8 @@ function applyPath(url) {
 }
 
 function getStationLetter() {
-    $.get(ctx + "station/letter/agent/getStationLetter",function (data) {
-        $("#stationLetterNum").html(data.result.length);
+    $.get(ctx + "station/letter/agent/getWaitReadNum",function (data) {
+        $("#stationLetterNum").html(data.result);
     })
 }
 
@@ -374,11 +374,10 @@ function showLetter() {
         // }
         $.each(letterList, function (i, n) {
             if (n.readStatus == 2) {
-                tp.append("<tr><td rowspan='2' style='border-bottom: 1px solid; border-color: #cccccc'><a href='javascript:void(0)' onclick='showDetail(\""+n.id + "\")'><img src='/img/waitRead.png' style='width:18px;height: 15px;' /></a></td><td rowspan='2' style='padding: 0px 0px 0px 15px; border-bottom: 1px solid; border-color: #cccccc'>"+n.sendUserName+"</td><td style='padding: 0px 0px 0px 15px; width: 375px'>"+n.title+"</td><td rowspan='2' style='border-bottom: 1px solid; border-color: #cccccc'>"+n.sendTime+"</td></tr><tr><td style='padding: 0px 0px 0px 15px; border-bottom: 1px solid; border-color: #cccccc; width: 375px'>"+subContent(n.content)+"</td></tr>");
+                tp.append("<tr onclick='showDetail(\""+n.id + "\")'><td rowspan='2' style='border-bottom: 1px solid; border-color: #cccccc'><a href='javascript:void(0)' ><img src='/img/waitRead.png'/></a></td><td rowspan='2' style='padding: 0px 0px 0px 15px; border-bottom: 1px solid; border-color: #cccccc'>"+n.sendUserName+"</td><td style='padding: 0px 0px 0px 15px; width: 375px; font-size: 14px; font-weight: bold'>"+n.title+"</td><td rowspan='2' style='border-bottom: 1px solid; border-color: #cccccc'>"+n.sendTime+"</td></tr><tr onclick='showDetail(\""+n.id + "\")'><td style='padding: 0px 0px 0px 15px; border-bottom: 1px solid; border-color: #cccccc; width: 375px'>"+subContent(n.content)+"</td></tr>");
             } else {
-                tp.append("<tr><td rowspan='2' style='border-bottom: 1px solid; border-color: #cccccc'><a href='javascript:void(0)' onclick='showDetail(\""+n.id + "\")'><img src='/img/havaRead.png' style='width:18px;height: 15px;' /></a></td><td rowspan='2' style='padding: 0px 0px 0px 15px; border-bottom: 1px solid; border-color: #cccccc'>"+n.sendUserName+"</td><td style='padding: 0px 0px 0px 15px; width: 375px'>"+n.title+"</td><td rowspan='2' style='border-bottom: 1px solid; border-color: #cccccc'>"+n.sendTime+"</td></tr><tr><td style='padding: 0px 0px 0px 15px; border-bottom: 1px solid; border-color: #cccccc; width: 375px'>"+subContent(n.content)+"</td></tr>");
+                tp.append("<tr onclick='showDetail(\""+n.id + "\")'><td rowspan='2' style='border-bottom: 1px solid; border-color: #cccccc'><a href='javascript:void(0)' ><img src='/img/havaRead.png'/></a></td><td rowspan='2' style='padding: 0px 0px 0px 15px; border-bottom: 1px solid; border-color: #cccccc'>"+n.sendUserName+"</td><td style='padding: 0px 0px 0px 15px; width: 375px; font-size: 14px; font-weight: bold'>"+n.title+"</td><td rowspan='2' style='border-bottom: 1px solid; border-color: #cccccc'>"+n.sendTime+"</td></tr><tr onclick='showDetail(\""+n.id + "\")'><td style='padding: 0px 0px 0px 15px; border-bottom: 1px solid; border-color: #cccccc; width: 375px'>"+subContent(n.content)+"</td></tr>");
             }
-
         });
     })
     $("#waitReadLetter").modal('show');
@@ -417,6 +416,8 @@ function showDetail(id) {
 
 function ok() {
     $("#letterDetail").modal('hide');
+    showLetter();
+    getStationLetter();
 }
 </script>
 </body>

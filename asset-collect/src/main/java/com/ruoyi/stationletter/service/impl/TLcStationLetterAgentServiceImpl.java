@@ -132,4 +132,13 @@ public class TLcStationLetterAgentServiceImpl implements ITLcStationLetterAgentS
     public void updateReadStatus(Long id) {
         this.tLcStationLetterAgentMapper.updateReadStatus(id);
     }
+
+    @Override
+    public Response getWaitReadNum() {
+        TLcStationLetterAgent tLcStationLetterAgent = new TLcStationLetterAgent();
+        tLcStationLetterAgent.setAgentId(ShiroUtils.getSysUser().getUserId().toString());
+        tLcStationLetterAgent.setOrgId(ShiroUtils.getSysUser().getOrgId());
+        Long watiReadNum = this.tLcStationLetterAgentMapper.getWaitReadNum(tLcStationLetterAgent);
+        return Response.success(watiReadNum);
+    }
 }

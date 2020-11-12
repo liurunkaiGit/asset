@@ -67,4 +67,6 @@ public interface TLcStationLetterAgentMapper {
     List<TLcStationLetterAgent> selectWaitSendLetterAgentList(TLcStationLetterAgent tLcStationLetterAgent);
 
     void updateReadStatus(@Param("id") Long id);
+
+    Long getWaitReadNum(TLcStationLetterAgent tLcStationLetterAgent);
 }
