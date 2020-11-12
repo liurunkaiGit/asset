@@ -64,7 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{idsz}
         </foreach>
         ) s , (select re.dporus_id from
-        (select id from t_lj_rule where ( (#{startTime} <![CDATA[start_time>=]]>  and #{startTime} <![CDATA[<=]]> end_time) or  (#{endTime}<![CDATA[>=]]> start_time and #{endTime} <![CDATA[<=]]> end_time) )  and rule_type=${ruleType} and  rule_status=${ruleStatus}) t,t_lj_rule_range re
+        (select id from t_lj_rule where ( (#{startTime} <![CDATA[>=]]> start_time and #{startTime} <![CDATA[<=]]> end_time) or  (#{endTime}<![CDATA[>=]]> start_time and #{endTime} <![CDATA[<=]]> end_time) )  and rule_type=${ruleType} and  rule_status=${ruleStatus}) t,t_lj_rule_range re
         where t.id=re.rule_id )dp where s.dept_id=dp.dporus_id
     </select>
 

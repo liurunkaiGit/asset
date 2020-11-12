@@ -54,6 +54,7 @@ public class TLjRuleUserLogs extends BaseEntity
 
     /** 时间-天 */
     @Excel(name = "时间-天", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date days;
 
     /** 在线时长异常 */
