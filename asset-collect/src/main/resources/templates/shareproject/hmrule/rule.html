@@ -80,9 +80,16 @@
                     visible: false
                 },
                 {
-                    field : 'ruleCode', 
-                    title : '规则编码'
+                    title: "序号",
+                    field:"",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
                 },
+                // {
+                //     field : 'ruleCode',
+                //     title : '规则编码'
+                // },
                 {
                     field : 'ruleName',
                     title : '规则名称'

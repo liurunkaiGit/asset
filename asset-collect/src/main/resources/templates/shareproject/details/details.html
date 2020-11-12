@@ -50,6 +50,13 @@
                         visible: false
                     },
                     {
+                        title: "序号",
+                        field:"",
+                        formatter: function (value, row, index) {
+                            return $.table.serialNumber(index);
+                        }
+                    },
+                    {
                         field : 'startTime',
                         title : '开始'
                     },
