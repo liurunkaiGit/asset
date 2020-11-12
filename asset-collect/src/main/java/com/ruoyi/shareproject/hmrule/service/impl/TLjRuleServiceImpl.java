@@ -67,13 +67,13 @@ public class TLjRuleServiceImpl implements ITLjRuleService
         if("1".equals(tLjRule.getRuleType())){
             //是部门
             tLjRule.setArray(tLjRule.getIds().split(","));
-            tLjRule.setRuleStatus("3");
+            tLjRule.setRuleStatus("2");
             List<TLjRule> list = tLjRuleMapper.selectTLjRuleListIsUse(tLjRule);
             //如果不为空 则说明已经存在范围内 不能添加规则
             if(null != list && !list.isEmpty())return -1;
         }else if("2".equals(tLjRule.getRuleType())){
             tLjRule.setArray(tLjRule.getIds().split(","));
-            tLjRule.setRuleStatus("3");
+            tLjRule.setRuleStatus("2");
             //检测规则范围表中用户是否存在
             List<TLjRule> list = tLjRuleMapper.selectTLjRuleListIsUse(tLjRule);
             //如果不为空 则说明已经存在范围内 不能添加规则

@@ -64,7 +64,7 @@
                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>规则有效开始时间：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
-                        <input name="startTime" readonly class="form-control " th:value="${#dates.format(tLjRule.startTime, 'yyyy-MM-dd HH:mm:ss')}" data-format="yyyy-MM-dd HH:mm:ss" data-type="datetime"   type="text" required>
+                        <input name="startTime" id="startTime" readonly class="form-control " th:value="${#dates.format(tLjRule.startTime, 'yyyy-MM-dd HH:mm:ss')}" data-format="yyyy-MM-dd HH:mm:ss" data-type="datetime"   type="text" required>
                     </div>
                 </div>
             </div>
@@ -72,7 +72,7 @@
                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>规则有效结束时间：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
-                        <input name="endTime" class="form-control " readonly th:value="${#dates.format(tLjRule.endTime, 'yyyy-MM-dd HH:mm:ss')}" data-format="yyyy-MM-dd HH:mm:ss" data-type="datetime"  type="text" required>
+                        <input name="endTime" id="endTime" class="form-control " readonly th:value="${#dates.format(tLjRule.endTime, 'yyyy-MM-dd HH:mm:ss')}" data-format="yyyy-MM-dd HH:mm:ss" data-type="datetime"  type="text" required>
                     </div>
                 </div>
             </div>
@@ -95,19 +95,53 @@
         });
 
         function submitHandler() {
-            if($("#ruleType").val()=='1'){
-                if($("#deptNames").val()==''){
-                    $.modal.alertWarning('请选择部门');
-                    return;
-                }
-            }else{
-                if($("#userNames").val()==''){
-                    $.modal.alertWarning('请选择人员');
-                    return;
-                }
-            }
             if ($.validate.form()) {
-                $.operate.save(prefix + "/edit", $('#form-rule-edit').serialize());
+                var ids ;
+                if($("#ruleType").val()=='1'){
+                    if($("#deptNames").val()==''){
+                        $.modal.alertWarning('请选择部门');
+                        return;
+                    }
+                    ids = $("#deptIds").val();
+                }else{
+                    if($("#userNames").val()==''){
+                        $.modal.alertWarning('请选择人员');
+                        return;
+                    }
+                    ids = $("#userIds").val();
+                }
+
+                var ruleStatus = $("#ruleStatus").val();
+                //增加有效数据才会检索
+                if(ruleStatus == 2){
+                    $.ajax({
+                        url: prefix + "/guizeuse",    //请求的url地址
+                        dataType: "json",   //返回格式为json
+                        async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+                        data:
+                            {
+                                "ruleType": $("#ruleType").val(),
+                                "ids": ids,
+                                "startTime":$("#startTime").val(),
+                                "endTime":$("#endTime").val()
+                            },    //参数值
+                        type: "POST",   //请求方式
+                        success: function(req) {
+                            //请求成功时处理
+                            if(req.code != 0){
+                                $.modal.alertWarning("时间段已使用,请重新选择");
+                            }else{
+                                $.operate.save(prefix + "/edit", $('#form-rule-edit').serialize());
+                            }
+                        },
+                        error: function(e) {
+                            //请求出错处理
+                        }
+                    });
+                }else{
+                    //增加草稿或失效数据
+                    $.operate.save(prefix + "/edit", $('#form-rule-edit').serialize());
+                }
             }
         }
 
