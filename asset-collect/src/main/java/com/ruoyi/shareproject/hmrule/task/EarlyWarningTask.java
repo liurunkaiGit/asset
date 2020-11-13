@@ -106,37 +106,38 @@ public class EarlyWarningTask {
            //动态检索用户是居家还是职场
             String pz = tr.getOnthejobStatus();
             List<SysUser> curr = new ArrayList<>(curUserInfos.size());
-            for(SysUser sr: curUserInfos){
-                List<SysLoginStatus> ls = sysLoginStatusMapper.selIpByLoginName(sr.getLoginName());
-                //如果没有获取到则将用户加入到检测队列中
-                if(null == ls || ls.isEmpty()){
-                    curr.add(sr);
-                }else{
-                    SysLoginStatus ss = ls.get(0);
-                    if(ss == null || null == ss.getIpAddr() || "".equals(ss.getIpAddr())){
-                        curr.add(sr);
-                        continue;
-                    }
-                    String postStatus =  "1";
-                    String ipAddr = ss.getIpAddr();//最后一次登录的ip
-                    String [] arr = new String[3];
-                    String[] split = ipAddr.split("\\.");
-                    arr[0]=split[0];
-                    arr[1]=split[1];
-                    arr[2]=split[2];
-                    String ipAddrPart = StringUtils.join(arr, ".");//最后一次登录的ip段
-                    for (String confIp : ipList) {
-                        if(confIp.equals(ipAddrPart)){
-                            postStatus = "2";//职场
-                            break;
-                        }
-                    }
-                    //用户最新状态与配置的相同则加入队列
-                    if(pz.equals(postStatus)){
-                        curr.add(sr);
-                    }
-                }
-            }
+            curr.addAll(curUserInfos);
+//            for(SysUser sr: curUserInfos){
+//                List<SysLoginStatus> ls = sysLoginStatusMapper.selIpByLoginName(sr.getLoginName());
+//                //如果没有获取到则将用户加入到检测队列中
+//                if(null == ls || ls.isEmpty()){
+//                    curr.add(sr);
+//                }else{
+//                    SysLoginStatus ss = ls.get(0);
+//                    if(ss == null || null == ss.getIpAddr() || "".equals(ss.getIpAddr())){
+//                        curr.add(sr);
+//                        continue;
+//                    }
+//                    String postStatus =  "1";
+//                    String ipAddr = ss.getIpAddr();//最后一次登录的ip
+//                    String [] arr = new String[3];
+//                    String[] split = ipAddr.split("\\.");
+//                    arr[0]=split[0];
+//                    arr[1]=split[1];
+//                    arr[2]=split[2];
+//                    String ipAddrPart = StringUtils.join(arr, ".");//最后一次登录的ip段
+//                    for (String confIp : ipList) {
+//                        if(confIp.equals(ipAddrPart)){
+//                            postStatus = "2";//职场
+//                            break;
+//                        }
+//                    }
+//                    //用户最新状态与配置的相同则加入队列
+//                    if(pz.equals(postStatus)){
+//                        curr.add(sr);
+//                    }
+//                }
+//            }
             if(curr.isEmpty()){
                 log.debug("任务最新ip匹配 未找到到相关人员--任务id===="+tr.getId()+"--名字=="+tr.getRuleName());
                 return;

@@ -54,20 +54,20 @@ public class OnlineCheckHandler extends CheckHandler{
             online = BigDecimal.valueOf(Double.parseDouble(sl));
             //判断登录时长是否勾选
             if("1".equals(tLjRuleDetails.getOnlineTime())){
-                userLog.setOnlineError(tiaojian(tLjRuleDetails.getOnlineCondition(),tLjRuleDetails.getOnlineOne()*1000L,tLjRuleDetails.getOnlineTwo()*1000L,ol));
+                userLog.setOnlineError(tiaojian(tLjRuleDetails.getOnlineCondition(),tLjRuleDetails.getOnlineOne()*1000L,getTiaojianTwo(tLjRuleDetails.getOnlineTwo())*1000L,ol));
             }
             //退出次数
             outCishu  = ss.getLoginNum()==null?0:ss.getLoginNum();
             //判断退出次数是否勾选
             if("1".equals(tLjRuleDetails.getOutTime())){
-                userLog.setOutError(tiaojian(tLjRuleDetails.getOutCondition(),tLjRuleDetails.getOutOne(),tLjRuleDetails.getOutTwo(),Double.valueOf(outCishu)));
+                userLog.setOutError(tiaojian(tLjRuleDetails.getOutCondition(),tLjRuleDetails.getOutOne(),getTiaojianTwo(tLjRuleDetails.getOutTwo()),Double.valueOf(outCishu)));
             }
             //间隔时长
             String jg = ss.getIntervalTime()==null || "".equals(ss.getIntervalTime())?"0":ss.getIntervalTime();
             Double jgd = Double.parseDouble(jg);
             jiange =  BigDecimal.valueOf(Double.parseDouble(jg));
             if("1".equals(tLjRuleDetails.getIntervals())){
-                userLog.setJiangeError(tiaojian(tLjRuleDetails.getIntervalsCondition(),tLjRuleDetails.getIntervalsOne()*1000L,tLjRuleDetails.getIntervalsTwo()*1000L,jgd));
+                userLog.setJiangeError(tiaojian(tLjRuleDetails.getIntervalsCondition(),tLjRuleDetails.getIntervalsOne()*1000L,getTiaojianTwo(tLjRuleDetails.getIntervalsTwo())*1000L,jgd));
             }
         }else{
             userLog.setJiangeError(1);

@@ -37,12 +37,12 @@ public class HuanKuanHandler extends  CheckHandler{
             userLog.setYinghuan(yinghuan);
             userLog.setShiji(shiji);
             if("1".equals(tLjRuleDetails.getSjRepayment())){
-                userLog.setShijiError(tiaojian(tLjRuleDetails.getSjRepaymentCondition(),tLjRuleDetails.getSjRepaymentOne(),tLjRuleDetails.getSjRepaymentTwo(),shiji.doubleValue()));
+                userLog.setShijiError(tiaojian(tLjRuleDetails.getSjRepaymentCondition(),tLjRuleDetails.getSjRepaymentOne(),getTiaojianTwo(tLjRuleDetails.getSjRepaymentTwo()),shiji.doubleValue()));
             }
             Double sjl = getLv(shiji.doubleValue(),yinghuan.doubleValue());
             userLog.setShijilv(BigDecimal.valueOf(sjl));
             if("1".equals(tLjRuleDetails.getSjRepaymentRate())){
-                userLog.setShijilvError(tiaojian(tLjRuleDetails.getSjRepaymentRateCondition(),tLjRuleDetails.getSjRepaymentRateOne(),tLjRuleDetails.getSjRepaymentRateTwo(),sjl));
+                userLog.setShijilvError(tiaojian(tLjRuleDetails.getSjRepaymentRateCondition(),tLjRuleDetails.getSjRepaymentRateOne(),getTiaojianTwo(tLjRuleDetails.getSjRepaymentRateTwo()),sjl));
             }
         }else{
             userLog.setShijiError(1);

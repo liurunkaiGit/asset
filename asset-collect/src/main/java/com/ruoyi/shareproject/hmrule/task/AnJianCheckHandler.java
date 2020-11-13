@@ -40,12 +40,12 @@ public class AnJianCheckHandler extends  CheckHandler{
             userLog.setAnjianyichuli(ycl);
             //是否勾选案件处理量
             if("1".equals(tLjRuleDetails.getCaseNumbers())){
-                userLog.setAnjianError(tiaojian(tLjRuleDetails.getCaseNumbersCondition(),tLjRuleDetails.getCaseNumbersOne(),tLjRuleDetails.getCaseNumbersTwo(),ajl.doubleValue()));
+                userLog.setAnjianError(tiaojian(tLjRuleDetails.getCaseNumbersCondition(),tLjRuleDetails.getCaseNumbersOne(),getTiaojianTwo(tLjRuleDetails.getCaseNumbersTwo()),ajl.doubleValue()));
             }
             Double clv = getLv(ycl.doubleValue(),ajl.doubleValue());
             userLog.setAnjianlv(BigDecimal.valueOf(clv));
             if("1".equals(tLjRuleDetails.getCaseRate())){
-                userLog.setAnjianlvError(tiaojian(tLjRuleDetails.getCaseRateCondition(),tLjRuleDetails.getCaseRateOne(),tLjRuleDetails.getCaseRateTwo(),clv));
+                userLog.setAnjianlvError(tiaojian(tLjRuleDetails.getCaseRateCondition(),tLjRuleDetails.getCaseRateOne(),getTiaojianTwo(tLjRuleDetails.getCaseRateTwo()),clv));
             }
         }else{
             userLog.setAnjianDuration(0);

@@ -77,7 +77,10 @@ public abstract  class CheckHandler {
         String result = numberFormat.format(min /  max * 100);
         return new Double(result);
     }
-
+    public static Integer getTiaojianTwo(Integer two){
+        if(null == two)return 0;
+        return two;
+    }
    public static double load(Double ir){
         if(null == ir)return 0;
         return ir;

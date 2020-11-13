@@ -44,18 +44,18 @@ public class TonghuaTimeCheckHandler extends CheckHandler{
         userLog.setTonghuacsError(0);
         userLog.setJietonglvError(0);
         if("1".equals(tLjRuleDetails.getConversationTime())){
-            userLog.setTonghuaError(tiaojian(tLjRuleDetails.getConversationCondition(),tLjRuleDetails.getConversationOne()*1000L,tLjRuleDetails.getConversationTwo()*1000L,mm.getDurations()));
+            userLog.setTonghuaError(tiaojian(tLjRuleDetails.getConversationCondition(),tLjRuleDetails.getConversationOne()*1000L,getTiaojianTwo(tLjRuleDetails.getConversationTwo())*1000L,mm.getDurations()));
         }
         userLog.setTonghuacs(mm.getFrequencys().intValue());
 
         if("1".equals(tLjRuleDetails.getConversationCishu())){
-            userLog.setTonghuacsError(tiaojian(tLjRuleDetails.getConversationCishuCondition(),tLjRuleDetails.getConversationCishuOne(),tLjRuleDetails.getConversationCishuTwo(),mm.getFrequencys().doubleValue()));
+            userLog.setTonghuacsError(tiaojian(tLjRuleDetails.getConversationCishuCondition(),tLjRuleDetails.getConversationCishuOne(),getTiaojianTwo(tLjRuleDetails.getConversationCishuTwo()),mm.getFrequencys().doubleValue()));
         }
         userLog.setJietongcs(mm.getConnections().intValue());
         Double jtl =getLv(mm.getConnections().doubleValue(),mm.getFrequencys().doubleValue());
         userLog.setJietonglv(BigDecimal.valueOf(jtl));
         if("1".equals(tLjRuleDetails.getEngRate())){
-            userLog.setJietonglvError(tiaojian(tLjRuleDetails.getEngRateCondition(),tLjRuleDetails.getEngRateOne(),tLjRuleDetails.getEngRateTwo(),jtl));
+            userLog.setJietonglvError(tiaojian(tLjRuleDetails.getEngRateCondition(),tLjRuleDetails.getEngRateOne(),getTiaojianTwo(tLjRuleDetails.getEngRateTwo()),jtl));
         }
         userLog.setTonghuaZong(userLog.getTonghuaError()+userLog.getTonghuacsError()+userLog.getJietonglvError());
         if(getNextCheckHandler() != null)getNextCheckHandler().checkWarning(tLjRule,user,tLjRuleDetails,userLog);
