@@ -90,7 +90,7 @@ VALUES ('居家运行-预警规则', 'DEFAULT', 'earlyWarningTask.findEwInfo', '
 DROP TABLE IF EXISTS `t_lj_rule`;
 CREATE TABLE `t_lj_rule` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `rule_code` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规则编码',
+  `rule_code` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '规则编码',
   `rule_status` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规则状态',
   `onthejob_status` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '在岗状态',
   `rule_type` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '规则种类0=部门 1=人员',
