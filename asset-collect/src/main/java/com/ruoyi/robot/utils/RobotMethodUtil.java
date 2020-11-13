@@ -704,12 +704,13 @@ public class RobotMethodUtil {
         long createRobotTaskStartTime = System.currentTimeMillis();
         log.info("创建机器人任务开始时间：{}", createRobotTaskStartTime);
         RobotResponse createTaskResponse = aiccHttpUtils.sendPost(robotAppConfig.getCreateTask(), createTaskParamVO);
+        log.error("创建机器人任务参数：{}", JSON.toJSONString(createTaskParamVO));
         if (createTaskResponse.getCode() != HttpStatus.OK.value()) {
             log.error("调用创建任务接口错误，error is {}", createTaskResponse.getResultMsg());
             throw new BusinessException(String.format("调用创建任务接口错误:%s", createTaskResponse.getResultMsg()));
         }
-        log.info("创建机器人任务耗时：{}", System.currentTimeMillis() - createRobotTaskStartTime);
         Integer robotTaskId = (Integer) createTaskResponse.getData();
+        log.error("创建机器人任务成功，机器人任务id：{}，耗时：{}", robotTaskId, System.currentTimeMillis() - createRobotTaskStartTime);
         // 获取话术变量
         List<String> sceneVariables = getSceneVariables(tLcCallStrategyConfig, orgSpeechcraftConf);
         // 封装客户信息
@@ -740,7 +741,7 @@ public class RobotMethodUtil {
         log.info("向任务中导入客户信息开始时间：{}", importCustomerStartTime);
         importTaskCustomerVO.setCustomerInfoList(customerInfoList);
         aiccHttpUtils.sendPost(robotAppConfig.getImportTaskCustomer(), importTaskCustomerVO);
-        log.info("任务{}导入客户成功{}", robotTaskId, customerInfoList);
+        log.error("任务{}导入客户成功{}", robotTaskId, customerInfoList);
         log.info("向任务中导入客户信息耗时：{}", System.currentTimeMillis() - importCustomerStartTime);
         long optDBStartTime = System.currentTimeMillis();
         log.info("操作数据库(批量添加机器人任务明细、将该任务添加到机器人任务总览表、修改任务表)开始时间：{}", optDBStartTime);
@@ -754,7 +755,7 @@ public class RobotMethodUtil {
         log.info("操作数据库(批量添加机器人任务明细、将该任务添加到机器人任务总览表、修改任务表)耗时：{}", System.currentTimeMillis() - optDBStartTime);
         // 启动机器人任务
         startTask(robotTaskId);
-        log.info("任务启动成功，robotTaskId is {}", robotTaskId);
+        log.error("任务启动成功，robotTaskId is {}", robotTaskId);
         return robotTaskId;
     }
 

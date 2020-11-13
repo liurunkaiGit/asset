@@ -540,7 +540,7 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
                     .setRepayStatus(callSign.equalsIgnoreCase("CYH")?"称已还":null)
                     .setActualRepayAmount(callRecord.getCnje())
                     .setContactRelation(callRecord.getContactRelation())
-                    .setAgentName("-1".equals(callRecord.getAgentName())?"机器人":callRecord.getAgentName())
+                    .setAgentName(callRecord.getAgentName())
                     .setCallSign(callRecord.getCallSign())
                     .setCollRecord(callRecord.getRemark())
                     .setRmbYe(callRecord.getArrearsTotal())

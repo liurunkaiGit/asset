@@ -134,8 +134,9 @@ public class TLcSendRadioQcRecordServiceImpl implements ITLcSendRadioQcRecordSer
             // 通话录音地址不为空并且通话录音是否推送到质检系统
             if (orgPackage != null && orgPackage.getSendRadioQc().equals(IsNoEnum.IS.getCode())) {
                 RadioQualityCheck radioQualityCheck = createRadioQualityCheck(tLcCallRecord, orgPackage, jobNo, loginName);
+                log.error("推送语音质检参数：{}", JSON.toJSONString(radioQualityCheck));
                 ResponseEntity<QualityCheckResponse> qualityCheckResponse = restTemplateUtil.getRestTemplate().postForEntity(sendRadioQualityCheck, radioQualityCheck, QualityCheckResponse.class);
-                log.info("推送语音质检返回的结果数据：{}", JSON.toJSONString(qualityCheckResponse));
+                log.error("推送语音质检返回的结果数据：{}", JSON.toJSONString(qualityCheckResponse));
                 if (qualityCheckResponse.getStatusCodeValue() == HttpStatus.OK.value() && qualityCheckResponse.getBody().getCode() == 0) {
 //            QualityCheckResponse checkResponseBody = qualityCheckResponse.getBody();
 //            TLcSendRadioQcRecord tLcSendRadioQcRecord = TLcSendRadioQcRecord.builder()
