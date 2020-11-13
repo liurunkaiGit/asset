@@ -1,5 +1,6 @@
 package com.ruoyi.shareproject.hmuserst.service.impl;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -45,11 +46,19 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
         ts.setOutCishuBaifen(outm.get("baifen").toString());
         ts.setOutCishuZhibiao(Integer.parseInt(outm.get("zhibiao").toString()));
         //间隔时长
+        if(ts.getJiange()!=null && ts.getJiange().floatValue()>0){
+            //将毫秒转化分
+            ts.setJiange(ts.getJiange().divide(new BigDecimal(1000),2,BigDecimal.ROUND_HALF_UP));
+        }
         Map<String,Object> jianm = loadBaifen(ts.getIntervalsCondition(),ts.getIntervalsOne(),ts.getIntervalsTwo(),ts.getJiange().doubleValue());
         ts.setJiangeBaifen(jianm.get("baifen").toString());
         ts.setJiangeZhibiao(Integer.parseInt(jianm.get("zhibiao").toString()));
 
         //通话时长
+        if(ts.getTonghuaDuration()!=null && ts.getTonghuaDuration().floatValue()>0){
+            //将毫秒转化分
+            ts.setTonghuaDuration(ts.getTonghuaDuration().divide(new BigDecimal(1000),2,BigDecimal.ROUND_HALF_UP));
+        }
         Map<String,Object> thm = loadBaifen(ts.getConversationCondition(),ts.getConversationOne(),ts.getConversationTwo(),ts.getTonghuaDuration().doubleValue());
         ts.setTonghuaDurationBaifen(thm.get("baifen").toString());
         ts.setTonghuaDurationZhibiao(Integer.parseInt(thm.get("zhibiao").toString()));
