@@ -3,7 +3,6 @@ package com.ruoyi.shareproject.hmrule.task;
 import com.ruoyi.assetspackage.mapper.SysIpConfigMapper;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.shareproject.hmrule.domain.TLjRule;
 import com.ruoyi.shareproject.hmrule.domain.TLjRuleDetails;
 import com.ruoyi.shareproject.hmrule.domain.TLjRuleRange;
@@ -15,20 +14,17 @@ import com.ruoyi.shareproject.hmuserst.mapper.TLjRuleUserLogsMapper;
 import com.ruoyi.system.domain.SysLoginStatus;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.mapper.SysLoginStatusMapper;
+import com.ruoyi.system.mapper.SysUserMapper;
 import com.ruoyi.system.service.ISysLoginStatusService;
-import com.ruoyi.system.service.ISysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.unit.DataUnit;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -45,12 +41,15 @@ public class EarlyWarningTask {
     private TLjRuleUserLogsMapper tLjRuleUserLogsMapper;
     @Autowired
     private ISysLoginStatusService sysLoginStatusService;
-    @Autowired
-    private ISysUserService iSysUserService;
+//    @Autowired
+//    private ISysUserService iSysUserService;
     @Autowired
     private SysIpConfigMapper sysIpConfigMapper;
     @Autowired
     private SysLoginStatusMapper sysLoginStatusMapper;
+
+    @Autowired
+    private SysUserMapper userMapper;
 
     public void findEwInfo(){
         log.info("开始执行居家规则预警，时间：{}", LocalDateTime.now(ZoneId.systemDefault()));
@@ -95,11 +94,11 @@ public class EarlyWarningTask {
                     //1=部门
                     SysUser sr = new SysUser();
                     sr.setDeptId(Long.parseLong(tee.getDporusId()));
-                    List<SysUser> uList = iSysUserService.selectUserList(sr);
+                    List<SysUser> uList = userMapper.selectUserList(sr);
                     curUserInfos.addAll(uList);
                 }else if("2".equals(tee.getTypes())){
                     //2=人员
-                    curUserInfos.add(iSysUserService.selectUserByLoginName(tee.getDporusId()));
+                    curUserInfos.add(userMapper.selectUserByLoginName(tee.getDporusId()));
                 }
             }
             //tr.setRrList(dpOrUsLt);
