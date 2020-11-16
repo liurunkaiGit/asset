@@ -187,60 +187,61 @@
         </div>-->
     </div>
 
-    <div class="col-sm-12">
-        <div class="modal" id="waitReadLetter" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content animated bounceInRight">
-                    <div class="modal-header">
-                        <span>您有<b id="waitReadNum"></b>条未读消息</span>
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
-                        </button>
-                    </div>
-                    <div class="modal-body" style="height: 250px;padding: 0px 10px 10px 10px;" >
-                        <!--<div class="form-group">
-                            <span style="font-size: 15px;color:black;" id="readStatus"></span>
-                            <span style="font-size: 15px;color:black;" id="sendBy"></span>
-                            <span style="font-size: 15px;color:black;" id="title"></span>
-                            <span style="font-size: 15px;color:black;" id="content"></span>
-                            <span style="font-size: 15px;color:black;" id="sendTime"></span>
-                        </div>-->
-                        <table style="border-collapse:separate; border-spacing:0px 5px;" cellspacing="0">
-                            <tbody id="letterTr"></tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer" style="text-align: center">
-                        <button type="button" class="btn btn-primary" onclick="showAllLetter();" style="text-align: center">查看全部消息</button>
-                    </div>
+    <div class="modal" id="waitReadLetter" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content animated bounceInRight">
+                <div class="modal-header">
+                    <span>您有<b id="waitReadNum"></b>条未读消息</span>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">关闭</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="height: 250px;padding: 0px 10px 10px 10px;">
+                    <!--<div class="form-group">
+                        <span style="font-size: 15px;color:black;" id="readStatus"></span>
+                        <span style="font-size: 15px;color:black;" id="sendBy"></span>
+                        <span style="font-size: 15px;color:black;" id="title"></span>
+                        <span style="font-size: 15px;color:black;" id="content"></span>
+                        <span style="font-size: 15px;color:black;" id="sendTime"></span>
+                    </div>-->
+                    <table style="border-collapse:separate; border-spacing:0px 5px;" cellspacing="0">
+                        <tbody id="letterTr"></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer" style="text-align: center">
+                    <button type="button" class="btn btn-primary" onclick="showAllLetter();" style="text-align: center">
+                        查看全部消息
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="col-sm-12">
-        <div class="modal" id="letterDetail" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content animated bounceInRight" style="height: 370px">
-                    <div class="modal-header" style="text-align: center">
-                        <!--<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
-                        </button>-->
-                        <p style="font-size: 18px;color:black; text-align: center; display: inline-block; vertical-align: middle; margin: 0px" id="title"></p>
-                        <div style="float: right; width: 200px" >
-                            <span style="font-size: 15px;color:black; float: right " id="sendBy"></span>
-                            <span style="font-size: 15px;color:black; float: right; white-space: pre-wrap" id="sendTime"></span>
-                        </div>
+    <div class="modal" id="letterDetail" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content animated bounceInRight" style="height: 370px">
+                <div class="modal-header" style="text-align: center">
+                    <!--<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
+                    </button>-->
+                    <p style="font-size: 18px;color:black; text-align: center; display: inline-block; vertical-align: middle; margin: 0px"
+                       id="title"></p>
+                    <div style="float: right; width: 200px">
+                        <span style="font-size: 15px;color:black; float: right " id="sendBy"></span>
+                        <span style="font-size: 15px;color:black; float: right; white-space: pre-wrap"
+                              id="sendTime"></span>
                     </div>
-                    <div class="modal-body" style="height: 230px;" >
-                        <div class="form-group">
+                </div>
+                <div class="modal-body" style="height: 230px;">
+                    <div class="form-group">
 
-                            <span style="font-size: 15px;color:black;" id="content"></span>
-                        </div>
-                        <!--<table style="border-collapse:separate; border-spacing:0px 10px;" cellspacing="10">
-                            <tbody id="letterTr"></tbody>
-                        </table>-->
+                        <span style="font-size: 15px;color:black;" id="content"></span>
                     </div>
-                    <div class="modal-footer" style="text-align: center">
-                        <button type="button" class="btn btn-primary" onclick="ok();" style="text-align: center">确定</button>
-                    </div>
+                    <!--<table style="border-collapse:separate; border-spacing:0px 10px;" cellspacing="10">
+                        <tbody id="letterTr"></tbody>
+                    </table>-->
+                </div>
+                <div class="modal-footer" style="text-align: center">
+                    <button type="button" class="btn btn-primary" onclick="ok();" style="text-align: center">确定</button>
                 </div>
             </div>
         </div>
