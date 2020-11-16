@@ -123,6 +123,17 @@
                     </select>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>脱敏范围</label>
+                <div class="col-sm-8">
+                    <select name="isDesensitization" class="form-control" onfocus="statusChange4();" id="isDesensitization" th:switch="${orgPackage.isDesensitization}" required>
+                        <option th:case="0" th:text="不脱敏" selected></option>
+                        <option th:case="1" th:text="全部脱敏" selected></option>
+                        <option th:case="2" th:text="仅职场脱敏" selected></option>
+                        <option th:case="3" th:text="职场外脱敏" selected></option>
+                    </select>
+                </div>
+            </div>
             <!--<div class="form-group">
                 <label class="col-sm-3 control-label">项目名称：</label>
                 <div class="col-sm-8">
@@ -251,7 +262,8 @@
                     // isAutoSendSms:isAutoSendSms,
                     // smsTemplateName:$("#smsTemplateName").val(),
                     isSameCaseDeal:$("#isSameCaseDeal").val(),
-                    isExpireAutoBackCase:$("#isExpireAutoBackCase").val()
+                    isExpireAutoBackCase:$("#isExpireAutoBackCase").val(),
+                    isDesensitization:$("#isDesensitization").val()
                     // allocatTaskStartegy:allocatTaskStartegy
                 },
                 function(data) {
@@ -316,6 +328,14 @@
             $("#isAutoSendSms").append("<option value=''>请选择</option>");
             $("#isAutoSendSms").append("<option value='1'>是</option>");
             $("#isAutoSendSms").append("<option value='2'>否</option>");
+        }
+
+        function statusChange4() {
+            $("#isDesensitization").find("option").remove();
+            $("#isDesensitization").append("<option value='0'>不脱敏</option>");
+            $("#isDesensitization").append("<option value='1'>全部脱敏</option>");
+            $("#isDesensitization").append("<option value='2'>仅职场脱敏</option>");
+            $("#isDesensitization").append("<option value='3'>职场外脱敏</option>");
         }
 
         function initIsNo() {

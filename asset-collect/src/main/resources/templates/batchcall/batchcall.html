@@ -8,6 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <link th:href="@{/css/agentcss/bootstrap.min.css}" rel="stylesheet"/>
     <link th:href="@{/css/agentcss/agent-toolbar.css}" rel="stylesheet"/>
+    <script th:src="@{/assets/js/desensitization.js}"></script>
 
     <!--[if lt IE 9]>
     <script th:src="@{/ajax/libs/agentjs/html5shiv.min.js}"></script>
@@ -41,6 +42,7 @@
                             <input type="hidden" id="isCanAutoCall" name="isCanAutoCall" th:value="${isCanAutoCall}">
                             <!--<input type="hidden" id="agentId" name="agentId" th:value="${extPhone.agentid}">-->
                             <input type="hidden" id="callPlatform" name="callPlatform" th:value="${callPlatform}">
+                            <input type="hidden" id="desensitization" name="desensitization" th:value="${desensitization}">
                             <input type="hidden" id="exonNum" name="exonNum" value="">
 
                             <!--<input type="hidden" id="currentPhone" name="curentPhone" value="">
@@ -242,7 +244,14 @@
                 },
                 {
                     field : 'phone', 
-                    title : '电话号码'
+                    title : '电话号码',
+                    formatter: function(value, row, index) {
+                        var desensitization = $("#desensitization").val();
+                        if("true" == desensitization){
+                            return tellToMd5(value);
+                        }
+                        return value;
+                    }
                 },
                 {
                     field : 'contactName', 

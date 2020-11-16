@@ -167,4 +167,9 @@ public class OrgPackage extends BaseEntity {
     @Excel(name = "是否到期自动退案，1：是，2：否")
     private Integer isExpireAutoBackCase;
 
+    /**
+     * 是否脱敏：0不脱敏,1全部脱敏,2仅职场脱敏,3职场外脱敏
+     */
+    private String isDesensitization;
+
 }

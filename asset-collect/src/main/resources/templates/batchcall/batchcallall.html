@@ -2,10 +2,12 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('批量外呼任务查询列表')" />
+    <script th:src="@{/assets/js/desensitization.js}"></script>
 </head>
 <body class="gray-bg">
      <div class="container-div">
         <div class="row">
+            <input type="hidden" id="desensitization" name="desensitization" th:value="${desensitization}">
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
                     <div class="select-list">
@@ -93,7 +95,14 @@
                 },
                 {
                     field : 'phone', 
-                    title : '电话号码'
+                    title : '电话号码',
+                    formatter: function(value, row, index) {
+                        var desensitization = $("#desensitization").val();
+                        if("true" == desensitization){
+                            return tellToMd5(value);
+                        }
+                        return value;
+                    }
                 },
                 {
                     field : 'contactName', 

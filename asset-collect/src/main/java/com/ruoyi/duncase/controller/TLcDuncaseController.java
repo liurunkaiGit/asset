@@ -25,6 +25,7 @@ import com.ruoyi.duncase.service.ITLcDuncaseService;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.task.domain.CollJob;
 import com.ruoyi.task.domain.TLcTask;
+import com.ruoyi.utils.DesensitizationUtil;
 import com.ruoyi.utils.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -61,11 +62,16 @@ public class TLcDuncaseController extends BaseController {
     private ICurAssetsPackageService curAssetsPackageService;
     @Autowired
     private ITLcScoreService tLcScoreService;
+    @Autowired
+    private DesensitizationUtil desensitizationUtil;
 
     @RequiresPermissions("collect:duncase:view")
     @GetMapping(value = "/view")
     public String duncase(HttpServletRequest request, ModelMap modelMap) {
         modelMap.put("orgId", ShiroUtils.getSysUser().getOrgId());
+        //查询是否脱敏
+        boolean desensitization = desensitizationUtil.isDesensitization(String.valueOf(ShiroUtils.getSysUser().getOrgId()), ShiroUtils.getLoginName());
+        modelMap.put("desensitization", desensitization);
         return prefix + "/duncase";
     }
 

@@ -51,10 +51,7 @@ import com.ruoyi.task.domain.TLcTask;
 import com.ruoyi.task.service.ITLcCallRecordService;
 import com.ruoyi.task.service.ITLcSelectRecordService;
 import com.ruoyi.task.service.ITLcTaskService;
-import com.ruoyi.utils.CloseCaseUser;
-import com.ruoyi.utils.DataPermissionUtil;
-import com.ruoyi.utils.DuyanUtil;
-import com.ruoyi.utils.Response;
+import com.ruoyi.utils.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -122,6 +119,8 @@ public class TLcTaskController extends BaseController {
     private ITLcRobotBlackService robotBlackService;
     @Autowired
     private DuYanConfig duYanConfig;
+    @Autowired
+    private DesensitizationUtil desensitizationUtil;
 
 
     @RequiresPermissions("collect:task:myTask")
@@ -152,6 +151,9 @@ public class TLcTaskController extends BaseController {
         modelMap.put("orgId", ShiroUtils.getSysUser().getOrgId());
         modelMap.put("callPlatform", ShiroUtils.getSysUser().getPlatform());
 
+        //查询是否脱敏
+        boolean desensitization = desensitizationUtil.isDesensitization(String.valueOf(ShiroUtils.getSysUser().getOrgId()), ShiroUtils.getLoginName());
+        modelMap.put("desensitization", desensitization);
         return prefix + "/myTask";
     }
 
@@ -162,6 +164,9 @@ public class TLcTaskController extends BaseController {
 //        List<TLcColumnQuery> columnQueryList = this.columnQueryService.selectTLcColumnQueryList(tLcColumnQuery);
 //        modelMap.put("columnQueryList", JSON.toJSONString(columnQueryList));
         modelMap.put("orgId", ShiroUtils.getSysUser().getOrgId());
+        //查询是否脱敏
+        boolean desensitization = desensitizationUtil.isDesensitization(String.valueOf(ShiroUtils.getSysUser().getOrgId()), ShiroUtils.getLoginName());
+        modelMap.put("desensitization", desensitization);
         return prefix + "/task";
     }
 
@@ -228,6 +233,9 @@ public class TLcTaskController extends BaseController {
         Map<String, BigDecimal> resultMap = this.tLcTaskService.selectTotalCountMoney2(tLcTask);
         modelMap.put("totalCaseNum", resultMap.get("totalCaseNum"));
         modelMap.put("totalArrears", resultMap.get("totalArrears"));
+        //查询是否脱敏
+        boolean desensitization = desensitizationUtil.isDesensitization(String.valueOf(ShiroUtils.getSysUser().getOrgId()), ShiroUtils.getLoginName());
+        modelMap.put("desensitization", desensitization);
         return prefix + "/collJobHis2";
     }
 
@@ -311,6 +319,9 @@ public class TLcTaskController extends BaseController {
                 }
             }
         }
+
+        boolean desensitization = desensitizationUtil.isDesensitization(String.valueOf(ShiroUtils.getSysUser().getOrgId()), ShiroUtils.getLoginName());
+        modelMap.put("desensitization",desensitization);
         logger.info("催收作业页面查询数据结束、进入页面sessionId="+sessionId);
         return prefix + "/collJob";
     }

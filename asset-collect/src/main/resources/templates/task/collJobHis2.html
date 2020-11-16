@@ -35,6 +35,7 @@
     <th:block th:include="include :: ztree-css"/>
 
     <th:block th:include="include :: datetimepicker-css" />
+    <script th:src="@{/assets/js/desensitization.js}"></script>
 
     <style type="text/css">
         .sameCaseInfoDetail {
@@ -96,6 +97,7 @@
     <input type="hidden" id="phoneStatus" name="phoneStatus" th:value="${tLcTask.phoneStatus}">
     <input type="hidden" id="totalCaseNum" name="totalCaseNum" th:value="${totalCaseNum}">
     <input type="hidden" id="totalArrears" name="totalArrears" th:value="${totalArrears}">
+    <input type="hidden" id="desensitization" name="desensitization" th:value="${desensitization}">
     <input type="hidden" id="startNum" name="startNum" value="1">
 
     <div class="box box-main">
@@ -584,11 +586,16 @@
                     $("#callContactTrNew").html("");
                     var tp = $("#callContactTrNew");
                     $.each(data, function (i, n) {
+                        var desensitization = $("#desensitization").val();
+                        var phone = n.phone;
+                        if("true" == desensitization){
+                            phone = tellToMd5(phone);
+                        }
                         if (n.callRadioLocation != null && n.callRadioLocation != '') {
-                            tp.append("<tr ondblclick='hiddenTr(this)'><td>"+nullToEmpty(n.contactName)+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.id,n.callSign,n.dictLabel)+"</td><td>"+nullToEmpty(n.actionCode)+"</td><td>"+nullToEmpty(n.findDate)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>" +revert(nullToEmpty(n.callLen))+"</td>" +
+                            tp.append("<tr ondblclick='hiddenTr(this)'><td>"+nullToEmpty(n.contactName)+"</td><td>"+phone+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.id,n.callSign,n.dictLabel)+"</td><td>"+nullToEmpty(n.actionCode)+"</td><td>"+nullToEmpty(n.findDate)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>" +revert(nullToEmpty(n.callLen))+"</td>" +
                                 "<td><a href='javascript:void(0)' onclick='listen("+n.id+")'><img src='/img/speaker.png'  class='imgso' width='20px' height='25px' alt='收听' title='收听'/></a>&nbsp;&nbsp;<a href='javascript:void(0)' onclick='downLoad("+n.id+")'><img src='/img/download.png'  class='imgso' width='20px' height='25px' alt='下载' title='下载'/></a></td></tr>");
                         } else {
-                            tp.append("<tr ondblclick='hiddenTr(this)'><td>"+nullToEmpty(n.contactName)+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.id,n.callSign,n.dictLabel)+"</td><td>"+nullToEmpty(n.actionCode)+"</td><td>"+nullToEmpty(n.findDate)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>"+nullToEmpty(n.callLen)+"</td>"+"<td></td></tr>");
+                            tp.append("<tr ondblclick='hiddenTr(this)'><td>"+nullToEmpty(n.contactName)+"</td><td>"+phone+"</td><td>"+getRelaByCode(n.contactRelation)+"</td><td>"+getCallSign(n.id,n.callSign,n.dictLabel)+"</td><td>"+nullToEmpty(n.actionCode)+"</td><td>"+nullToEmpty(n.findDate)+"</td><td>"+getCallRecordRemark(n.remark,n.createBy,n.id,n.agentName)+"</td><td>"+n.agentName+"</td><td>"+nullToEmpty(n.callStartTime)+"</td><td>"+nullToEmpty(n.makeCallTime)+"</td><td>"+nullToEmpty(n.callLen)+"</td>"+"<td></td></tr>");
                         }
                     });
                 }
@@ -908,9 +915,15 @@
                 }
                 if(data != null) {
                     if(data.assets != null){ //通过接口查询资产信息
+                        var desensitization = $("#desensitization").val();
                         $("#customName").text(data.assets.curName);//客户姓名
                         currentCertificateNo = data.assets.certificateNo;
-                        $("#customCertificateNo").text(data.assets.certificateNo);//证件号码
+                        var cerNo = credentialToMd5(data.assets.certificateNo);
+                        if("true" == desensitization){
+                            $("#customCertificateNo").text(cerNo);//证件号码
+                        }else{
+                            $("#customCertificateNo").text(currentCertificateNo);//证件号码
+                        }
                         $("#sex").text(getSexByCode(data.assets.curSex));//客户性别
                         $("#age").text(getAgeByCertificateNo(data.assets.certificateNo)+"岁");//年龄
                         $("#marrageStatus").text(getMarrageByCode(data.assets.marriage));//婚姻状况
@@ -941,16 +954,25 @@
                         $("#ykqs").html(data.assets.ykqs);//已还期数
                         $("#rmbYhfxzje").text(data.assets.rmbYhfxzje == null ? data.assets.rmbYhfxzje : data.assets.rmbYhfxzje.toFixed(2));//应还罚息
                         $("#znj").text(data.assets.znj == null ? data.assets.znj : data.assets.znj.toFixed(2));//滞纳金
-                        $("#borrowNo").text(data.assets.borrowNo);//借款卡号
                         $("#borrowBlank").text(data.assets.borrowBlank);//借款卡银行
                         $("#workName").text(data.assets.workName);//单位名称
                         $("#workDept").html(data.assets.workDept);//工作部门
                         $("#email").text(data.assets.email);//电子邮箱
-                        $("#workAddress").text(data.assets.workAddress);//单位地址
-                        $("#customerHomeAddress").text(data.assets.customerHomeAddress);//住宅地址
-                        $("#registAddress").text(data.assets.registAddress);//户籍地址
-                        $("#certificateAddress").text(data.assets.certificateAddress);//身份证地址
-                        $("#billAddress").text(data.assets.billAddress);//账单地址
+                        if("true" == desensitization){
+                            $("#borrowNo").text(cardToMd5(data.assets.borrowNo));//借款卡号
+                            $("#workAddress").text(addrToMd5(data.assets.workAddress));//单位地址
+                            $("#customerHomeAddress").text(addrToMd5(data.assets.customerHomeAddress));//住宅地址
+                            $("#registAddress").text(addrToMd5(data.assets.registAddress));//户籍地址
+                            $("#certificateAddress").text(addrToMd5(data.assets.certificateAddress));//身份证地址
+                            $("#billAddress").text(addrToMd5(data.assets.billAddress));//账单地址
+                        }else{
+                            $("#borrowNo").text(data.assets.borrowNo);//借款卡号
+                            $("#workAddress").text(data.assets.workAddress);//单位地址
+                            $("#customerHomeAddress").text(data.assets.customerHomeAddress);//住宅地址
+                            $("#registAddress").text(data.assets.registAddress);//户籍地址
+                            $("#certificateAddress").text(data.assets.certificateAddress);//身份证地址
+                            $("#billAddress").text(data.assets.billAddress);//账单地址
+                        }
                         $("#assetsRemark").html(data.assets.remark);//备注
                         $("#tjFirm").text(data.assets.tjFirm);//推荐商户
                         $("#spxx").html(data.assets.spxx);//商品信息
@@ -1329,24 +1351,24 @@
         $.modal.open("通话内容", viewCallContentUrl);
     }
 
-    //电话号码脱敏
-    function tellToMd5(tell){
-        if(tell != null && tell != ""){
-            // tell = tell.substring(0,3) + "****" + tell.substring(7);
-        }else{
-            tell = "";
-        }
-        return tell;
-    }
-    //银行卡、身份证脱敏
-    function cardToMd5(cardno){
-        if(cardno != null && cardno != ""){
-            // cardno = cardno.substring(0,2) + "************" + cardno.substring(14);
-        }else {
-            cardno ="";
-        }
-        return cardno;
-    }
+    // //电话号码脱敏
+    // function tellToMd5(tell){
+    //     if(tell != null && tell != ""){
+    //         // tell = tell.substring(0,3) + "****" + tell.substring(7);
+    //     }else{
+    //         tell = "";
+    //     }
+    //     return tell;
+    // }
+    // //银行卡、身份证脱敏
+    // function cardToMd5(cardno){
+    //     if(cardno != null && cardno != ""){
+    //         // cardno = cardno.substring(0,2) + "************" + cardno.substring(14);
+    //     }else {
+    //         cardno ="";
+    //     }
+    //     return cardno;
+    // }
 
 
     function getFormatDate(str) {

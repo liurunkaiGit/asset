@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('案件列表')"/>
+    <script th:src="@{/assets/js/desensitization.js}"></script>
     <style type="text/css">
         .time-input{
             display: inline;
@@ -22,6 +23,7 @@
                 <div class="select-list">
                     <ul>
                         <input type="hidden" id="orgId" name="orgId" th:value="${orgId}">
+                        <input type="hidden" id="desensitization" name="desensitization" th:value="${desensitization}">
                         <input id="currentPageUrl" name="currentPageUrl" class="form-control" type="hidden">
                         <li>
                             <p>机构案件号：</p>
@@ -403,11 +405,25 @@
                 },
                 {
                     field : 'phone',
-                    title : '联系方式'
+                    title : '联系方式',
+                    formatter: function(value, row, index) {
+                        var desensitization = $("#desensitization").val();
+                        if("true" == desensitization){
+                            return tellToMd5(value);
+                        }
+                        return value;
+                    }
                 },
                 {
                     field : 'certificateNo',
-                    title : '证号号码'
+                    title : '证号号码',
+                    formatter: function(value, row, index) {
+                        var desensitization = $("#desensitization").val();
+                        if("true" == desensitization){
+                            return credentialToMd5(value);
+                        }
+                        return value;
+                    }
                 },
                 {
                     field : 'backCaseDate',

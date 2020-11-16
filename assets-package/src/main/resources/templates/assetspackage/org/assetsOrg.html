@@ -297,6 +297,24 @@
                     }
                 }*/,
                     {
+                        field : 'isDesensitization',
+                        title : '脱敏范围',
+                        formatter: function (value, row, index) {
+                            if (value == 0) {
+                                return '不脱敏';
+                            }
+                            if (value == 1) {
+                                return '全部脱敏';
+                            }
+                            if (value == 2) {
+                                return '仅职场脱敏';
+                            }
+                            if (value == 3) {
+                                return '职场外脱敏';
+                            }
+                        }
+                    },
+                    {
                         field : 'createBy',
                         title : '创建人',
                         visible: false

@@ -3,6 +3,7 @@
 <head>
     <th:block th:include="include :: header('我的任务列表')" />
     <link th:href="@{/ajax/libs/bootstrap-select/bootstrap-select.css}" rel="stylesheet"/>
+    <script th:src="@{/assets/js/desensitization.js}"></script>
     <style type="text/css">
         .time-input{
             display: inline;
@@ -38,6 +39,7 @@
                             <input type="hidden" id="ownerId" name="ownerId" th:value="${ownerId}">
                             <input type="hidden" id="callPlatform" name="callPlatform" th:value="${callPlatform}">
                             <input type="hidden" id="agentId" name="agentId" th:value="${extPhone}">
+                            <input type="hidden" id="desensitization" name="desensitization" th:value="${desensitization}">
                             <input type="hidden" id="dataId">
                             <li>
                                 <p>机构案件号：</p>
@@ -513,11 +515,25 @@
                 },
                 {
                     field : 'phone',
-                    title : '联系方式'
+                    title : '联系方式',
+                    formatter: function(value, row, index) {
+                        var desensitization = $("#desensitization").val();
+                        if("true" == desensitization){
+                            return tellToMd5(value);
+                        }
+                        return value;
+                    }
                 },
                 {
                     field : 'certificateNo',
-                    title : '证号号码'
+                    title : '证号号码',
+                    formatter: function(value, row, index) {
+                        var desensitization = $("#desensitization").val();
+                        if("true" == desensitization){
+                            return credentialToMd5(value);
+                        }
+                        return value;
+                    }
                 },
                     {
                         field : 'enterCollDate',

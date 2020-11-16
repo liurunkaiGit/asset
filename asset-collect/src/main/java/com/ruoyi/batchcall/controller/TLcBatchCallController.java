@@ -17,6 +17,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.utils.DesensitizationUtil;
 import com.ruoyi.utils.DuyanUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,8 @@ public class TLcBatchCallController extends BaseController
     private IExtPhoneService extPhoneService;
     @Autowired
     private DuYanConfig duYanConfig;
+    @Autowired
+    private DesensitizationUtil desensitizationUtil;
 
     @RequiresPermissions("ruoyi:batchcall:view")
     @GetMapping()
@@ -95,6 +98,9 @@ public class TLcBatchCallController extends BaseController
                 e.printStackTrace();;
             }
         }
+        //查询是否脱敏
+        boolean desensitization = desensitizationUtil.isDesensitization(String.valueOf(ShiroUtils.getSysUser().getOrgId()), ShiroUtils.getLoginName());
+        modelMap.put("desensitization", desensitization);
         return prefix + "/batchcall";
     }
 
@@ -119,6 +125,9 @@ public class TLcBatchCallController extends BaseController
     @GetMapping("/all")
     public String batchcallAll(ModelMap modelMap)
     {
+        //查询是否脱敏
+        boolean desensitization = desensitizationUtil.isDesensitization(String.valueOf(ShiroUtils.getSysUser().getOrgId()), ShiroUtils.getLoginName());
+        modelMap.put("desensitization", desensitization);
         return prefix + "/batchcallall";
     }
 
@@ -378,6 +387,9 @@ public class TLcBatchCallController extends BaseController
         TLcBatchCall tLcBatchCall = this.tLcBatchCallService.selectTLcBatchCallById(Long.parseLong(id));
         modelMap.put("batchCall", tLcBatchCall);
         modelMap.put("callPlatform", ShiroUtils.getSysUser().getPlatform());
+        //查询是否脱敏
+        boolean desensitization = desensitizationUtil.isDesensitization(String.valueOf(ShiroUtils.getSysUser().getOrgId()), ShiroUtils.getLoginName());
+        modelMap.put("desensitization", desensitization);
         return prefix + "/autoCollJob";
     }
 }
