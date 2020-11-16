@@ -12,6 +12,7 @@ import com.ruoyi.shareproject.hmrule.mapper.TLjRuleDetailsMapper;
 import com.ruoyi.shareproject.hmrule.mapper.TLjRuleMapper;
 import com.ruoyi.shareproject.hmrule.mapper.TLjRuleRangeMapper;
 import com.ruoyi.shareproject.hmrule.service.ITLjRuleService;
+import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.mapper.SysUserMapper;
 import net.sf.json.JSONArray;
 import org.springframework.beans.BeanUtils;
@@ -64,15 +65,38 @@ public class TLjRuleServiceImpl implements ITLjRuleService
 
     @Override
     public int guizeuse(TLjRule tLjRule) {
+        String [] ids = tLjRule.getIds().split(",");
         if("1".equals(tLjRule.getRuleType())){
             //是部门
-            tLjRule.setArray(tLjRule.getIds().split(","));
+            tLjRule.setArray(ids);
             tLjRule.setRuleStatus("2");
             List<TLjRule> list = tLjRuleMapper.selectTLjRuleListIsUse(tLjRule);
             //如果不为空 则说明已经存在范围内 不能添加规则
             if(null != list && !list.isEmpty())return -1;
+            //检测部门下员工是否已经存在有效规则内
+            SysUser sr = new SysUser();
+            //目前允许选择一个部门
+            for(String id:ids){
+                sr.setDeptId(Long.parseLong(id));
+                List<SysUser> userList = userMapper.searchUserByDept(sr);
+                if(null!=userList){
+                    List<String> userIds = new ArrayList<String>();
+                    for(SysUser dur:userList){
+                        userIds.add(dur.getLoginName());
+                    }
+                    String[] idas =userIds.toArray(ids);
+                    tLjRule.setArray(idas);
+                    tLjRule.setRuleStatus("2");
+                    tLjRule.setRuleType("2");
+                    //检测规则范围表中用户是否存在
+                    List<TLjRule> listt = tLjRuleMapper.selectTLjRuleListIsUse(tLjRule);
+                    //如果不为空 则说明已经存在范围内 不能添加规则
+                    if(null != listt && !listt.isEmpty())return -1;
+                }
+            }
+
         }else if("2".equals(tLjRule.getRuleType())){
-            tLjRule.setArray(tLjRule.getIds().split(","));
+            tLjRule.setArray(ids);
             tLjRule.setRuleStatus("2");
             //检测规则范围表中用户是否存在
             List<TLjRule> list = tLjRuleMapper.selectTLjRuleListIsUse(tLjRule);
