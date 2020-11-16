@@ -25,7 +25,7 @@
                     <option value="1">大于</option>
                     <option value="2">小于</option>
                 </select>
-                <input name="onlineOne" id="onlineTimeOne" style="width: 70px;"  type="text" positiveinteger="true"  maxlength="8"><span id="onlineTimesp">---<input id="onlineTimeTwo" name="onlineTwo" style="width: 70px;"   type="number" maxlength="8"></span>分钟
+                <input name="onlineOne"  id="onlineTimeOne" style="width: 70px;"  type="number" positiveinteger="true"  maxlength="8"><span id="onlineTimesp">---<input id="onlineTimeTwo" name="onlineTwo" style="width: 70px;"   type="number" maxlength="8"></span>分钟
             </div>
             <div class="form-group" style="200px;">
                 <label class="col-sm-3 control-label"></label>
@@ -105,7 +105,7 @@
                     <option value="1">大于</option>
                     <option value="2">小于</option>
                 </select>
-                <input name="caseRateOne" id="caseRateOne"  style="width: 70px;"  type="number" maxlength="8"><span id="caseRatesp">---<input id="caseRateTwo" name="caseRateTwo" style="width: 70px;"   type="number" maxlength="8"></span>%
+                <input name="caseRateOne" isxs="true" id="caseRateOne"  style="width: 70px;"  type="text" maxlength="8"><span id="caseRatesp">---<input id="caseRateTwo" name="caseRateTwo" style="width: 70px;"   type="text" maxlength="8"></span>%
             </div>
 
             <div class="form-group" style="200px;">
@@ -117,7 +117,7 @@
                     <option value="1">大于</option>
                     <option value="2">小于</option>
                 </select>
-                <input name="sjRepaymentOne" id="sjRepaymentOne"  style="width: 70px;"  type="number" maxlength="8"><span id="sjRepaymentsp">---<input id="sjRepaymentTwo" name="sjRepaymentTwo" style="width: 70px;"   type="number" maxlength="8"></span>元
+                <input name="sjRepaymentOne" isxs="true" id="sjRepaymentOne"  style="width: 70px;"  type="number" maxlength="10"><span id="sjRepaymentsp">---<input id="sjRepaymentTwo" name="sjRepaymentTwo" style="width: 70px;"   type="number" maxlength="10"></span>元
             </div>
             <div class="form-group" style="200px;">
                 <label class="col-sm-3 control-label"></label>
@@ -128,7 +128,7 @@
                     <option value="1">大于</option>
                     <option value="2">小于</option>
                 </select>
-                <input name="sjRepaymentRateOne" id="sjRepaymentRateOne"  style="width: 70px;"  type="number" maxlength="8"><span id="sjRepaymentRatesp">---<input id="sjRepaymentRateTwo" name="sjRepaymentRateTwo" style="width: 70px;"   type="number" maxlength="8"></span>%
+                <input name="sjRepaymentRateOne" id="sjRepaymentRateOne" isxs="true"  style="width: 70px;"  type="text" maxlength="8"><span id="sjRepaymentRatesp">---<input  id="sjRepaymentRateTwo" name="sjRepaymentRateTwo" style="width: 70px;"   type="text" maxlength="8"></span>%
             </div>
         </form>
     </div>
@@ -153,6 +153,14 @@
 
         }
 
+        function xiaoshu(value) {
+            var gz = /^([1-9]{1}[0-9]{0,3}(\,[0-9]{3,4})*(\.[0-9]{0,2})?|[1-9]{1}\d*(\.[0-9]{0,2})?|0(\.[0-9]{0,2})?|(\.[0-9]{1,2})?)$/.test(value);
+            if(!gz){
+                return false;
+            }
+            return true;
+        }
+
         function submitHandler() {
             if ($.validate.form()) {
                 var stps = $("#startTime").val().split(":");
@@ -168,7 +176,6 @@
                 var sign = 0;
                 var sel = 0;
                 $("input[type='checkbox']").each(function (index, item) {
-                    debugger;
                     var bt = $(this);
                     var sl = bt.val();
                     if(sl == 1){
@@ -177,17 +184,27 @@
                         var errmsg = bt.attr("errmsg");
                         var selxz = $("#"+names+"Sel").val();
                         var one = $("#"+names+"One").val();
+                        var isxs = $("#"+names+"One").attr("isxs");
                         var two = $("#"+names+"Two").val();
+                        debugger;
                         if(selxz == "0"){
                             if(one == '' || ''==two){
                                 $.modal.alertWarning("请填写"+errmsg);
                                 sign=1;
                                 return false;
                             }
-                            if(!isPInt(one) || !isPInt(two)){
-                                $.modal.alertWarning("请正确填写(正整数)"+errmsg);
-                                sign=1;
-                                return false;
+                            if(isxs){
+                                if(!xiaoshu(one) || !xiaoshu(two)){
+                                    $.modal.alertWarning("请输入两位小数"+errmsg);
+                                    sign=1;
+                                    return false;
+                                }
+                            }else{
+                                if(!isPInt(one) || !isPInt(two)){
+                                    $.modal.alertWarning("请正确填写(正整数)"+errmsg);
+                                    sign=1;
+                                    return false;
+                                }
                             }
                         }else{
                             if(one == '' ){
@@ -195,10 +212,18 @@
                                 sign=1;
                                 return false;
                             }
-                            if(!isPInt(one)){
-                                $.modal.alertWarning("请正确填写(正整数)"+errmsg);
-                                sign=1;
-                                return false;
+                            if(isxs){
+                                if(!xiaoshu(one)){
+                                    $.modal.alertWarning("请输入两位小数"+errmsg);
+                                    sign=1;
+                                    return false;
+                                }
+                            }else{
+                                if(!isPInt(one)){
+                                    $.modal.alertWarning("请正确填写(正整数)"+errmsg);
+                                    sign=1;
+                                    return false;
+                                }
                             }
                         }
                     }

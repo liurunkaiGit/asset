@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
@@ -155,11 +156,11 @@ public class TLjRuleDetails extends BaseEntity
 
     /** 案件处理率条件1 */
     @Excel(name = "案件处理率条件1")
-    private Integer caseRateOne;
+    private BigDecimal caseRateOne;
 
     /** 案件处理率条件2 */
     @Excel(name = "案件处理率条件2")
-    private Integer caseRateTwo;
+    private BigDecimal caseRateTwo;
 
     /** 实际还款 */
     @Excel(name = "实际还款")
@@ -171,11 +172,11 @@ public class TLjRuleDetails extends BaseEntity
 
     /** 实际还款条件1 */
     @Excel(name = "实际还款条件1")
-    private Integer sjRepaymentOne;
+    private BigDecimal sjRepaymentOne;
 
     /** 实际还款条件2 */
     @Excel(name = "实际还款条件2")
-    private Integer sjRepaymentTwo;
+    private BigDecimal sjRepaymentTwo;
 
     /** 实际还款率 */
     @Excel(name = "实际还款率")
@@ -187,11 +188,11 @@ public class TLjRuleDetails extends BaseEntity
 
     /** 实际还款率条件1 */
     @Excel(name = "实际还款率条件1")
-    private Integer sjRepaymentRateOne;
+    private BigDecimal sjRepaymentRateOne;
 
     /** 实际还款率条件2 */
     @Excel(name = "实际还款率条件2")
-    private Integer sjRepaymentRateTwo;
+    private BigDecimal sjRepaymentRateTwo;
 
     /** 机构id */
     @Excel(name = "机构id")

@@ -6,6 +6,7 @@ import com.ruoyi.shareproject.hmrule.domain.TLjRuleDetails;
 import com.ruoyi.shareproject.hmuserst.domain.TLjRuleUserLogs;
 import com.ruoyi.system.domain.SysUser;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Date;
 
@@ -68,6 +69,27 @@ public abstract  class CheckHandler {
         return 0;
     }
 
+    public static int tiaojian(String tiaoJian, BigDecimal one, BigDecimal two, Double biaozhun){
+        if(biaozhun==null)return 1;
+        if("0".equals(tiaoJian)){
+            if(one == null || null == two){
+                return 0;
+            }
+            if(biaozhun.doubleValue() < one.doubleValue() || biaozhun> two.doubleValue()){
+                return 1;
+            }
+        }else if("1".equals(tiaoJian)){
+            if(biaozhun < one.doubleValue()){
+                return 1;
+            }
+        }else if("2".equals(tiaoJian)){
+            if(biaozhun > one.doubleValue()){
+                return 1;
+            }
+        }
+        return 0;
+    }
+
 
     public static Double getLv(Double min,Double max){
         if(null == min || null == max ||0 == min || 0 == max )return new Double(0);
@@ -79,6 +101,10 @@ public abstract  class CheckHandler {
     }
     public static Integer getTiaojianTwo(Integer two){
         if(null == two)return 0;
+        return two;
+    }
+    public static BigDecimal getTiaojianTwo(BigDecimal two){
+        if(null == two)return new BigDecimal(0);
         return two;
     }
    public static double load(Double ir){
