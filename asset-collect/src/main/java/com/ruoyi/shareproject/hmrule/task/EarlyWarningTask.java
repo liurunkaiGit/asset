@@ -183,17 +183,24 @@ public class EarlyWarningTask {
         //记录当前规则
         BeanUtils.copyProperties(tLjRuleDetails,userLog);
         //记录规则id
+        userLog.setRuleId(null);
         userLog.setDetailsId(tLjRuleDetails.getId());
         userLog.setDays(DateUtils.getNowDate());
         userLog.setCreateTime(DateUtils.getNowDate());
         userLog.setUpdateTime(DateUtils.getNowDate());
         //根据人逐条检索数据并 检测是否异常
+        int i=0;
         for(SysUser user:tLjRule.getUserInfos()){
+            //检测到最后一个用户的时候将主规则id填写上去
+            if(i == (tLjRule.getUserInfos().size()-1)){
+                userLog.setRuleId(tLjRuleDetails.getRuleId());
+            }
             cr.checkWarning(tLjRule,user,tLjRuleDetails,userLog);
             userLog.setLoginName(user.getLoginName());
             userLog.setUserName(user.getUserName());
             userLog.setErrors(loadZong(userLog.getLoginZong())+loadZong(userLog.getAnjianZong())+loadZong(userLog.getTonghuaZong())+loadZong(userLog.getHuankuanZong()));
             tLjRuleUserLogsMapper.insertTLjRuleUserLogs(userLog);
+            i++;
         }
     }
 

@@ -32,8 +32,8 @@ public class HuanKuanHandler extends  CheckHandler{
         userLog.setShijilv(BigDecimal.valueOf(0));
         if(null !=list && !list.isEmpty()){
             TLcReportDayProcess ps = list.get(0);
-            BigDecimal yinghuan = ps.getAmountDueSum()==null?BigDecimal.valueOf(0):ps.getAmountDueSum();
-            BigDecimal shiji = ps.getAmountActualSum()==null?BigDecimal.valueOf(0):ps.getAmountActualSum();
+            BigDecimal yinghuan = ps==null||ps.getAmountDueSum()==null?new BigDecimal(0):ps.getAmountDueSum();
+            BigDecimal shiji = ps==null|| ps.getAmountActualSum()==null?new BigDecimal(0):ps.getAmountActualSum();
             userLog.setYinghuan(yinghuan);
             userLog.setShiji(shiji);
             if("1".equals(tLjRuleDetails.getSjRepayment())){

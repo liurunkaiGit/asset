@@ -34,8 +34,8 @@ public class AnJianCheckHandler extends  CheckHandler{
         userLog.setAnjianlvError(0);
         if(null != list && !list.isEmpty()){
             TLcReportDayProcess tps = list.get(0);
-            Integer ajl = tps.getDealWithConsumerCount()==null?0:tps.getDealWithConsumerCount();
-            Integer ycl = tps.getUserCoverNum()==null?0:tps.getUserCoverNum();
+            Integer ajl = tps==null || tps.getDealWithConsumerCount()==null?0:tps.getDealWithConsumerCount();
+            Integer ycl = tps==null || tps.getUserCoverNum()==null?0:tps.getUserCoverNum();
             userLog.setAnjianDuration(ajl);
             userLog.setAnjianyichuli(ycl);
             //是否勾选案件处理量
