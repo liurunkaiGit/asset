@@ -7,6 +7,7 @@
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-details-edit" th:object="${tLjRuleDetails}">
         <input name="id" id="id" th:value="*{id}" type="hidden">
+        <input name="ruleId" id="ruleId" th:value="*{ruleId}" type="hidden">
         <div class="form-group">
             <label class="col-sm-3 control-label">时间段：</label>
             <div class="col-sm-8">
