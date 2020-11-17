@@ -160,6 +160,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and date_format(days,'%Y-%m-%d') &lt;= date_format(#{params.endTime},'%Y-%m-%d')
             </if>
         </where>
+        order by update_time desc
     </select>
 
     <select id="selectTLjRuleUserLogsByRuleIdAnddetailsId" parameterType="TLjRuleUserLogs" resultType="java.lang.Long">
