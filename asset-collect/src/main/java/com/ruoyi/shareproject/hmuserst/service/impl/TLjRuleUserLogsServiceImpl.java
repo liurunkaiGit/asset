@@ -94,9 +94,9 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
 
     private static Map<String,Object> loadBaifen(String tiaoJian, Integer one, Integer two, Double zhibiao){
         Map<String,Object>  m = new HashMap<String,Object>();
-        if(zhibiao==null){
-            m.put("zhibiao",0);
-            m.put("baifen",0);
+        if(zhibiao==null){//指标为空或0则置为低于指标
+            m.put("zhibiao",-1);
+            m.put("baifen",100);
             return m;
         }
         if("0".equals(tiaoJian)){
@@ -136,6 +136,58 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
             }else{
                 m.put("zhibiao",-1);
                 m.put("baifen",baifen(one-zhibiao,one.doubleValue()));
+                return m;
+            }
+        }
+        m.put("zhibiao",0);
+        m.put("baifen",0);
+        return m;
+    }
+
+    private static Map<String,Object> loadBaifen(String tiaoJian, BigDecimal one, BigDecimal two, Double zhibiao){
+        Map<String,Object>  m = new HashMap<String,Object>();
+        if(zhibiao==null){//指标为空或0则置为低于指标
+            m.put("zhibiao",-1);
+            m.put("baifen",100);
+            return m;
+        }
+        if("0".equals(tiaoJian)){
+            if(one == null || null == two){
+                m.put("zhibiao",0);
+                m.put("baifen",0);
+                return m;
+            }
+            if(zhibiao < one.doubleValue() ){
+                //低于指标
+                m.put("zhibiao",-1);
+                m.put("baifen",baifen(one.doubleValue()-zhibiao,one.doubleValue()));
+                return m;
+            }
+            if(zhibiao> two.doubleValue()){
+                //高于指标
+                m.put("zhibiao",1);
+                String d = baifen(zhibiao-two.doubleValue(),two.doubleValue());
+                m.put("baifen",d);
+                return m;
+            }
+        }else if("1".equals(tiaoJian)){
+            if(zhibiao < one.doubleValue()){
+                m.put("zhibiao",-1);
+                m.put("baifen",baifen(one.doubleValue()-zhibiao,one.doubleValue()));
+                return m;
+            }else{
+                m.put("zhibiao",1);
+                m.put("baifen",baifen(zhibiao-one.doubleValue(),one.doubleValue()));
+                return m;
+            }
+        }else if("2".equals(tiaoJian)){
+            if(zhibiao > one.doubleValue()){
+                m.put("zhibiao",1);
+                m.put("baifen",baifen(zhibiao-one.doubleValue(),one.doubleValue()));
+                return m;
+            }else{
+                m.put("zhibiao",-1);
+                m.put("baifen",baifen(one.doubleValue()-zhibiao,one.doubleValue()));
                 return m;
             }
         }

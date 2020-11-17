@@ -68,10 +68,10 @@ public class EarlyWarningTask {
             //如果任务过时 则将任务状态置为失效
             if(nowtime > etime) {
                 //任务超时 40 分钟就不会执行
-                if((nowtime-etime) < 40*60*1000L ){
+//                if((nowtime-etime) < 40*60*1000L ){
                     //执行
                     zhixing(tr,hm,ipList);
-                }
+//                }
                 tr.setRuleStatus("3");
                 iTLjRuleService.updateTLjRuleStatus(tr);
            }else{
