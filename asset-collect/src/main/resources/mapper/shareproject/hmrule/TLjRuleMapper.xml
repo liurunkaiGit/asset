@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectTLjRuleList" parameterType="TLjRule" resultMap="TLjRuleResult">
         <include refid="selectTLjRuleVo"/>
-        <where>  
+        <where>
             <if test="ruleCode != null  and ruleCode != ''"> and rule_code = #{ruleCode}</if>
             <if test="ruleStatus != null  and ruleStatus != ''"> and rule_status = #{ruleStatus}</if>
             <if test="onthejobStatus != null  and onthejobStatus != ''"> and onthejob_status = #{onthejobStatus}</if>
@@ -45,7 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order  by update_time desc
     </select>
-    
+
     <select id="selectTLjRuleById" parameterType="Long" resultMap="TLjRuleResult">
         <include refid="selectTLjRuleVo"/>
         where id = #{id}
@@ -153,6 +153,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">update_time = #{updateTime},</if>
             <if test="orgId != null ">org_id = #{orgId},</if>
             <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateTLjRuleStatus" parameterType="TLjRule">
+        update t_lj_rule
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ruleStatus != null  and ruleStatus != ''">rule_status = #{ruleStatus},</if>
         </trim>
         where id = #{id}
     </update>

@@ -106,7 +106,7 @@ public class TLjRuleUserLogs extends BaseEntity
     @Excel(name = "通话次数")
     private Integer tonghuacs;
     private Integer tonghuacsZhibiao;
-    private Double tonghuacsBaifen;
+    private String tonghuacsBaifen;
     /** 接通率 */
     @Excel(name = "接通率")
     private Integer jietonglvError;

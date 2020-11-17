@@ -63,6 +63,12 @@ public interface TLjRuleMapper
      */
     public int updateTLjRule(TLjRule tLjRule);
 
+    /**修改状态
+     * @param tLjRule
+     * @return
+     */
+    public int updateTLjRuleStatus(TLjRule tLjRule);
+
     /**
      * 删除【居家规则】
      * 

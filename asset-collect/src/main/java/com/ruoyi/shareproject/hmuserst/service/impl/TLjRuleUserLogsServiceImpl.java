@@ -64,7 +64,7 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
         ts.setTonghuaDurationZhibiao(Integer.parseInt(thm.get("zhibiao").toString()));
         //通话次数
         Map<String,Object> csm = loadBaifen(ts.getConversationCishuCondition(),ts.getConversationCishuOne(),ts.getConversationCishuTwo(),ts.getTonghuacs().doubleValue());
-        ts.setTonghuacsBaifen(Double.parseDouble(csm.get("baifen").toString()));
+        ts.setTonghuacsBaifen(csm.get("baifen").toString());
         ts.setTonghuacsZhibiao(Integer.parseInt(csm.get("zhibiao").toString()));
         //接通率
         Map<String,Object> jsm = loadBaifen(ts.getEngRateCondition(),ts.getEngRateOne(),ts.getEngRateTwo(),ts.getJietonglv().doubleValue());
