@@ -105,7 +105,7 @@
                             <div style="margin-top:15px;float: left"> <img th:src="@{/img/hm_2.png}"   style="width: 50px;height: 50px;float: left"></div>
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">案件处理量(件)</div>
-                                <div style="font-size:20px;font-weight:bold" th:text="*{anjianDuration}"></div>
+                                <div style="font-size:20px;font-weight:bold" th:text="*{anjianyichuli}"></div>
                                 <div style="font-size:5px;" >
                                     <span th:if="*{anjianDurationZhibiao eq   1}" style="color: red"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{anjianDurationBaifen}"></span>%高于指标</span>
                                     <span th:if="*{anjianDurationZhibiao eq   -1}" style="color: red"><img th:src="@{/img/hms1.png}" style="width: 7px;height: 7px;" ></img>&nbsp;<span  th:text="*{anjianDurationBaifen}"></span>%低于指标</span>

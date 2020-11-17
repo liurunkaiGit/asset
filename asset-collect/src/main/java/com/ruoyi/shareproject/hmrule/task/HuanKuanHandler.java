@@ -26,14 +26,24 @@ public class HuanKuanHandler extends  CheckHandler{
         TLcReportDayProcessMapper tLcReportDayProcessMapper = (TLcReportDayProcessMapper) ApplicationUtils.getBean(TLcReportDayProcessMapper.class);
         Map<String, Object> param = new HashMap<>();
         param.put("userId",user.getUserId());
-        List<TLcReportDayProcess>  list = tLcReportDayProcessMapper.selectTaskReach(param);
+        //应该还款总额
+        List<TLcReportDayProcess>  list = tLcReportDayProcessMapper.selectTaskHuankuanZong(param);
+        //已还款总额
+        param.put("endDate",zhixingTime(tLjRuleDetails.getEndTime()));
+        param.put("startDate",zhixingTime(tLjRuleDetails.getStartTime()));
+        List<TLcReportDayProcess>  listY = tLcReportDayProcessMapper.selectTaskYiHuankuanZong(param);
         userLog.setShijiError(0);
         userLog.setShijilvError(0);
         userLog.setShijilv(BigDecimal.valueOf(0));
         if(null !=list && !list.isEmpty()){
             TLcReportDayProcess ps = list.get(0);
-            BigDecimal yinghuan = ps==null||ps.getAmountDueSum()==null?new BigDecimal(0):ps.getAmountDueSum();
-            BigDecimal shiji = ps==null|| ps.getAmountActualSum()==null?new BigDecimal(0):ps.getAmountActualSum();
+            BigDecimal yinghuan = ps==null||ps.getAmountActualSum()==null?new BigDecimal(0):ps.getAmountActualSum();
+            BigDecimal shiji = new BigDecimal(0);
+            if(null !=listY && !listY.isEmpty()){
+                TLcReportDayProcess pps = listY.get(0);
+                shiji  = pps==null || pps.getAmountDueSum()==null?new BigDecimal(0):pps.getAmountDueSum();
+            }
+            //BigDecimal shiji = ps==null|| ps.getAmountActualSum()==null?new BigDecimal(0):ps.getAmountActualSum();
             userLog.setYinghuan(yinghuan);
             userLog.setShiji(shiji);
             if("1".equals(tLjRuleDetails.getSjRepayment())){

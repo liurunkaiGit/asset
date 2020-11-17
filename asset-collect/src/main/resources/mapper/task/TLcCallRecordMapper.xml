@@ -422,8 +422,14 @@
     </select>
 
     <select id="selectUserTotal" parameterType="TLcCallRecord" resultType="TlcCallRecordTotal">
-        select count(1) as frequencys ,sum(call_len) as durations,count(call_len)as connections from t_lc_call_record
-        where  create_time <![CDATA[>=]]> date_format(#{startCallStartTime},'%Y-%m-%d %H:%i:%s') and create_time <![CDATA[<=]]> date_format(#{endCallStartTime},'%Y-%m-%d %H:%i:%s')   and create_by=${createBy}
+        select count(1) as frequencys ,sum(call_len) as durations,
+        (select COUNT(1) from  t_lc_call_record a where
+        a.create_time <![CDATA[>=]]> date_format(#{startCallStartTime}, '%Y-%m-%d %H:%i:%s')
+        AND a.create_time  <![CDATA[<=]]> date_format(#{endCallStartTime}, '%Y-%m-%d %H:%i:%s')
+        AND a.create_by = ${createBy} and call_len!='')as connections
+        from t_lc_call_record b
+        where  b.create_time <![CDATA[>=]]> date_format(#{startCallStartTime},'%Y-%m-%d %H:%i:%s')
+        and b.create_time <![CDATA[<=]]> date_format(#{endCallStartTime},'%Y-%m-%d %H:%i:%s')   and b.create_by=${createBy}
     </select>
 
     <select id="findListenCallRecord" parameterType="com.ruoyi.task.domain.TLcCallRecord" resultMap="TLcCallRecordResult">

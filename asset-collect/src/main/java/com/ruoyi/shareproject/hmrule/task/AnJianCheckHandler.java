@@ -26,16 +26,26 @@ public class AnJianCheckHandler extends  CheckHandler{
     public void checkWarning(TLjRule tLjRule, SysUser user, TLjRuleDetails tLjRuleDetails, TLjRuleUserLogs userLog) {
         TLcReportDayProcessMapper tLcReportDayProcessMapper = (TLcReportDayProcessMapper) ApplicationUtils.getBean(TLcReportDayProcessMapper.class);
         Map<String, Object> param = new HashMap<>();
-        param.put("startDate",zhixingTime(tLjRuleDetails.getStartTime()));
-        param.put("endDate",zhixingTime(tLjRuleDetails.getEndTime()));
         param.put("createBy",user.getUserId());
-        List<TLcReportDayProcess>  list = tLcReportDayProcessMapper.selectDayProcessTask(param);
+        //总案件
+        List<TLcReportDayProcess>  listZong = tLcReportDayProcessMapper.selectDayProcessTask(param);
+        //已处理的案件
+        param.put("endDate",zhixingTime(tLjRuleDetails.getEndTime()));
+        param.put("startDate",zhixingTime(tLjRuleDetails.getStartTime()));
+        List<TLcReportDayProcess>  listYcl = tLcReportDayProcessMapper.selectDayProcessTask(param);
+
         userLog.setAnjianError(0);
         userLog.setAnjianlvError(0);
-        if(null != list && !list.isEmpty()){
-            TLcReportDayProcess tps = list.get(0);
+        if(null != listZong && !listZong.isEmpty()){
+            TLcReportDayProcess tps = listZong.get(0);
+            ///总
             Integer ajl = tps==null || tps.getDealWithConsumerCount()==null?0:tps.getDealWithConsumerCount();
-            Integer ycl = tps==null || tps.getUserCoverNum()==null?0:tps.getUserCoverNum();
+            //已处理
+            Integer ycl = 0;
+            if(listYcl != null &&  !listYcl.isEmpty()){
+                TLcReportDayProcess yclO = listYcl.get(0);
+                ycl = yclO.getDealWithConsumerCount()==null?0:yclO.getDealWithConsumerCount();
+            }
             userLog.setAnjianDuration(ajl);
             userLog.setAnjianyichuli(ycl);
             //是否勾选案件处理量

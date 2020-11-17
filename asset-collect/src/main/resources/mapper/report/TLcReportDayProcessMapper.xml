@@ -422,70 +422,33 @@
 
 
     <select id="selectDayProcessTask" parameterType="java.util.Map" resultMap="TLcReportDayProcessResult">
-        SELECT
-        t2.user_group AS seat_group,
-        t2.login_name AS seat_num,
-        t2.owner_name AS seat_name,
-        t2.org_id AS org_id,
-        t2.org_id AS deal_with_consumer_count,
-        t9.user_cover_num
-        FROM
-        (
-        SELECT
-        count(1) AS deal_with_consumer_count,
-        sum(t.arrears_total) AS collecting_total_money,
-        t.owner_id,
-        t.owner_name,
-        su.user_group,
-        t.org_id,
-        su.login_name
-        FROM
-        t_lc_task t,sys_user su
-        WHERE
-        t.owner_id = su.user_id
-        AND t.allot_type = 1
-        AND t.task_status = 2
+        SELECT count(1) as deal_with_consumer_count
+          from t_lc_task where   allot_type = 1   AND task_status = 2
         <if test="startDate != null">
-            AND t.create_time <![CDATA[>=]]> #{startDate}
+            AND recently_follow_up_date <![CDATA[>=]]> date_format(#{startDate},'%Y-%m-%d %H:%i:%s')
         </if>
         <if test="endDate != null">
-            AND t.create_time <![CDATA[<=]]> #{endDate}
+            AND recently_follow_up_date <![CDATA[<=]]> date_format(#{endDate},'%Y-%m-%d %H:%i:%s')
         </if>
         <if test="createBy != null">
-            AND t.owner_id=#{createBy}
+            AND owner_id=#{createBy}
         </if>
-        GROUP BY
-        t.owner_id,
-        t.org_id
-        ) t2
-        LEFT JOIN (
-        select count(user_cover_num) AS user_cover_num,tb.create_by from (
-        SELECT
-        count(1) AS user_cover_num,
-        t.create_by
-        FROM
-        t_lc_call_record t,t_lc_task t2
-        WHERE 1=1 and t2.case_no = t.case_no
-        and t2.task_status != 3
-        <if test="startDate != null">
-            AND t.create_time <![CDATA[>=]]> #{startDate}
-        </if>
-        <if test="endDate != null">
-            AND t.create_time <![CDATA[<=]]> #{endDate}
-        </if>
-        <if test="createBy != null">
-            AND t.create_by=#{createBy}
-        </if>
-        GROUP BY
-        t.create_by,
-        t.case_no
-        ) tb group by tb.create_by
-        ) t9 ON t2.owner_id = t9.create_by
     </select>
 
     <select id="selectTaskReach" parameterType="java.util.Map" resultMap="TLcReportDayProcessResult">
         select sum(arrears_total)amount_due_sum,sum(dqyhje)as amount_actual_sum from t_lc_task
         where owner_id=${userId} and task_status=2
+    </select>
+
+    <select id="selectTaskHuankuanZong" parameterType="java.util.Map" resultMap="TLcReportDayProcessResult">
+      select sum(b.too) as amount_actual_sum  from (select max(arrears_total) as too,case_no from t_lc_task where owner_id = ${userId} GROUP BY case_no) b
+    </select>
+
+    <select id="selectTaskYiHuankuanZong" parameterType="java.util.Map" resultMap="TLcReportDayProcessResult">
+      select sum(a.hkje) as amount_due_sum from cur_assets_repayment_package a,sys_user b where
+       a.owner_name=b.user_name and b.user_id=${userId}
+       and a.hkrq <![CDATA[>=]]> date_format(#{startDate},'%Y-%m-%d %H:%i:%s')
+       and a.hkrq <![CDATA[<=]]> date_format(#{endDate},'%Y-%m-%d %H:%i:%s')
     </select>
 
 

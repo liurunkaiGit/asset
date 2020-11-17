@@ -76,4 +76,16 @@ public interface TLcReportDayProcessMapper {
      */
     List<TLcReportDayProcess> selectTaskReach(Map<String, Object> param);
 
+    /** 用户还款总额
+     * @param param
+     * @return
+     */
+    List<TLcReportDayProcess> selectTaskHuankuanZong(Map<String, Object> param);
+
+    /**
+     * @param param
+     * @return
+     */
+    List<TLcReportDayProcess> selectTaskYiHuankuanZong(Map<String, Object> param);
+
 }
