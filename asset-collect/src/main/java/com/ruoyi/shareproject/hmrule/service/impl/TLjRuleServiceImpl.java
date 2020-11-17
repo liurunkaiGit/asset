@@ -74,27 +74,8 @@ public class TLjRuleServiceImpl implements ITLjRuleService
             //如果不为空 则说明已经存在范围内 不能添加规则
             if(null != list && !list.isEmpty())return -1;
             //检测部门下员工是否已经存在有效规则内
-            SysUser sr = new SysUser();
-            //目前允许选择一个部门
-            for(String id:ids){
-                sr.setDeptId(Long.parseLong(id));
-                List<SysUser> userList = userMapper.searchUserByDept(sr);
-                if(null!=userList){
-                    List<String> userIds = new ArrayList<String>();
-                    for(SysUser dur:userList){
-                        userIds.add(dur.getLoginName());
-                    }
-                    String[] idas =userIds.toArray(ids);
-                    tLjRule.setArray(idas);
-                    tLjRule.setRuleStatus("2");
-                    tLjRule.setRuleType("2");
-                    //检测规则范围表中用户是否存在
-                    List<TLjRule> listt = tLjRuleMapper.selectTLjRuleListIsUse(tLjRule);
-                    //如果不为空 则说明已经存在范围内 不能添加规则
-                    if(null != listt && !listt.isEmpty())return -1;
-                }
-            }
-
+            List<TLjRule> dpUsrList =  tLjRuleMapper.selectDeptIncludeUser(tLjRule);
+            if(null != dpUsrList && !dpUsrList.isEmpty())return -1;
         }else if("2".equals(tLjRule.getRuleType())){
             tLjRule.setArray(ids);
             tLjRule.setRuleStatus("2");

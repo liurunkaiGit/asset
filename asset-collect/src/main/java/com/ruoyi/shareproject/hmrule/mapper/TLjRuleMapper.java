@@ -29,6 +29,13 @@ public interface TLjRuleMapper
     public List<TLjRule> selectTLjRuleList(TLjRule tLjRule);
 
     /**
+     * 查询 部门包含的人员是否已经 有规则
+     * @param tLjRule
+     * @return
+     */
+    public List<TLjRule> selectDeptIncludeUser(TLjRule tLjRule);
+
+    /**
      * 根据部门检测是否可用
      * @param tLjRule
      * @return
