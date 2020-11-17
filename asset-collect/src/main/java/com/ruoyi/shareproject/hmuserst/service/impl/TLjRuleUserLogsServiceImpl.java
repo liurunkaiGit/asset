@@ -27,6 +27,14 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
     @Autowired
     private TLjRuleUserLogsMapper tLjRuleUserLogsMapper;
 
+
+    private String loadFen(Double miao,Double m){
+        if(miao == null || 0 == miao)return "0";
+        NumberFormat numberFormat = NumberFormat.getInstance();
+        // 设置精确到小数点后2位
+        numberFormat.setMaximumFractionDigits(2);
+        return  numberFormat.format(miao /  m );
+    }
     /**
      * 查询【员工状态】
      * 
@@ -37,6 +45,10 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
     public TLjRuleUserLogs selectTLjRuleUserLogsById(Long id)
     {
         TLjRuleUserLogs ts = tLjRuleUserLogsMapper.selectTLjRuleUserLogsById(id);
+        //在线时长 秒转化分
+        ts.setOnlineTimeStr(loadFen(ts.getOnlineTime().doubleValue(),60D));
+        ts.setTonghuaDurationStr(loadFen(ts.getTonghuaDuration().doubleValue(),1000D*60D));
+        ts.setJiangeStr(loadFen(ts.getJiange().doubleValue(),60D));
         //在线时长
         Map<String,Object> anjm = loadBaifen(ts.getOnlineCondition(),ts.getOnlineOne(),ts.getOnlineTwo(),ts.getOnlineTime().doubleValue());
         ts.setOnlineBaifen(anjm.get("baifen").toString());

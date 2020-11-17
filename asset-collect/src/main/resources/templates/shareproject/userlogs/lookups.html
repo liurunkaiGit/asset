@@ -189,7 +189,7 @@
                             <div style="margin-top:15px;float: left"> <img th:src="@{/img/hm_3.png}"   style="width: 50px;height: 50px;float: left"></div>
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">通话时长(分)</div>
-                                <div style="font-size:20px;font-weight:bold" th:text="*{tonghuaDuration}"></div>
+                                <div style="font-size:20px;font-weight:bold" th:text="*{tonghuaDurationStr}"></div>
                                 <div style="font-size:5px;" >
                                     <span th:if="*{tonghuaDurationZhibiao eq   1}" style="color: red"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuaDurationBaifen}"></span>%高于指标</span>
                                     <span th:if="*{tonghuaDurationZhibiao eq   -1}" style="color: red"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuaDurationBaifen}"></span>%低于指标</span>
@@ -254,7 +254,7 @@
                             <div style="margin-top:15px;float: left"> <img th:src="@{/img/hm_6.png}"   style="width: 50px;height: 50px;float: left"></div>
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;"><img th:src="@{/img/hm_61.png}" style="width: 12px;height: 12px;" >在线时长(分)</div>
-                                <div style="font-size:20px;font-weight:bold" th:text="*{onlineTime}"></div>
+                                <div style="font-size:20px;font-weight:bold" th:text="*{onlineTimeStr}"></div>
                                 <div style="font-size:5px;" >
                                     <span th:if="*{onlineZhibiao eq   1}" style="color: red"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{onlineBaifen}"></span>%高于指标</span>
                                     <span th:if="*{onlineZhibiao eq   -1}" style="color: red"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{onlineBaifen}"></span>%低于指标</span>
@@ -291,7 +291,7 @@
                         <div style="width: 200px;height:80px;">
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;"><img th:src="@{/img/hm_62.png}" style="width: 12px;height: 12px;" >间隔时长(分)</div>
-                                <div style="font-size:20px;font-weight:bold" th:text="*{jiange}"></div>
+                                <div style="font-size:20px;font-weight:bold" th:text="*{jiangeStr}"></div>
                                 <div style="font-size:5px;" >
                                     <span th:if="*{jiangeZhibiao eq   1}" style="color: red"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jiangeBaifen}"></span>%高于指标</span>
                                     <span th:if="*{jiangeZhibiao eq   -1}" style="color: red"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jiangeBaifen}"></span>%低于指标</span>

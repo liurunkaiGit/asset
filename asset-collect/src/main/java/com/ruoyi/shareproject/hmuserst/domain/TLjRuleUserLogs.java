@@ -64,6 +64,7 @@ public class TLjRuleUserLogs extends BaseEntity
     /** 在线时长 */
     @Excel(name = "在线时长")
     private BigDecimal onlineTime;
+    private String onlineTimeStr;
 
     private Integer onlineZhibiao;
     private String onlineBaifen;
@@ -85,6 +86,7 @@ public class TLjRuleUserLogs extends BaseEntity
     /** $column.columnComment */
     @Excel(name = "间隔时长")
     private BigDecimal jiange;
+    private String jiangeStr;
     private Integer jiangeZhibiao;
     private String jiangeBaifen;
 
@@ -95,6 +97,7 @@ public class TLjRuleUserLogs extends BaseEntity
     /** $column.columnComment */
     @Excel(name = "通话时长")
     private BigDecimal tonghuaDuration;
+    private String tonghuaDurationStr;
     private Integer tonghuaDurationZhibiao;
     private String tonghuaDurationBaifen;
 

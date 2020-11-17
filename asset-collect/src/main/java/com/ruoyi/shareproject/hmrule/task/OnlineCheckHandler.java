@@ -54,7 +54,7 @@ public class OnlineCheckHandler extends CheckHandler{
             online = BigDecimal.valueOf(Double.parseDouble(sl));
             //判断登录时长是否勾选
             if("1".equals(tLjRuleDetails.getOnlineTime())){
-                userLog.setOnlineError(tiaojian(tLjRuleDetails.getOnlineCondition(),tLjRuleDetails.getOnlineOne()*1000L,getTiaojianTwo(tLjRuleDetails.getOnlineTwo())*1000L,ol));
+                userLog.setOnlineError(tiaojian(tLjRuleDetails.getOnlineCondition(),tLjRuleDetails.getOnlineOne()*60L,getTiaojianTwo(tLjRuleDetails.getOnlineTwo())*60L,ol));
             }
             //退出次数
             outCishu  = ss.getLoginNum()==null?0:ss.getLoginNum();
@@ -67,7 +67,7 @@ public class OnlineCheckHandler extends CheckHandler{
             Double jgd = Double.parseDouble(jg);
             jiange =  BigDecimal.valueOf(Double.parseDouble(jg));
             if("1".equals(tLjRuleDetails.getIntervals())){
-                userLog.setJiangeError(tiaojian(tLjRuleDetails.getIntervalsCondition(),tLjRuleDetails.getIntervalsOne()*1000L,getTiaojianTwo(tLjRuleDetails.getIntervalsTwo())*1000L,jgd));
+                userLog.setJiangeError(tiaojian(tLjRuleDetails.getIntervalsCondition(),tLjRuleDetails.getIntervalsOne()*60L,getTiaojianTwo(tLjRuleDetails.getIntervalsTwo())*60L,jgd));
             }
         }else{
             userLog.setJiangeError(1);
