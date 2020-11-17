@@ -73,7 +73,7 @@ public class EarlyWarningTask {
                     zhixing(tr,hm,ipList);
                 }
                 tr.setRuleStatus("3");
-                iTLjRuleService.updateTLjRule(tr);
+                iTLjRuleService.updateTLjRuleStatus(tr);
            }else{
                 zhixing(tr,hm,ipList);
             }

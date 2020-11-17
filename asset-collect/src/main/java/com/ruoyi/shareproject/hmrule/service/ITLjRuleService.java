@@ -53,6 +53,12 @@ public interface ITLjRuleService
     public int updateTLjRule(TLjRule tLjRule);
 
     /**
+     * 更新状态
+     * @param tLjRule
+     * @return
+     */
+    public int updateTLjRuleStatus(TLjRule tLjRule);
+    /**
      * 批量删除【居家规则】
      * 
      * @param ids 需要删除的数据ID

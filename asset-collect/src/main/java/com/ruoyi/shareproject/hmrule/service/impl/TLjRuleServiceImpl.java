@@ -165,6 +165,12 @@ public class TLjRuleServiceImpl implements ITLjRuleService
         return tLjRuleMapper.updateTLjRule(tLjRule);
     }
 
+    @Override
+    public int updateTLjRuleStatus(TLjRule tLjRule) {
+        return tLjRuleMapper.updateTLjRule(tLjRule);
+    }
+
+
     /**
      * 删除【居家规则】对象
      * 
