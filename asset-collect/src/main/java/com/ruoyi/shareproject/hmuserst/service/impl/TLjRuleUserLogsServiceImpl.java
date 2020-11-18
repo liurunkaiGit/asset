@@ -131,6 +131,11 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
                 return m;
             }
         }else if("1".equals(tiaoJian)){
+            if(one == null ){
+                m.put("zhibiao",0);
+                m.put("baifen",0);
+                return m;
+            }
             if(zhibiao < one){
                 m.put("zhibiao",-1);
                 m.put("baifen",baifen(one-zhibiao,one.doubleValue()));
@@ -141,6 +146,11 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
                 return m;
             }
         }else if("2".equals(tiaoJian)){
+            if(one == null ){
+                m.put("zhibiao",0);
+                m.put("baifen",0);
+                return m;
+            }
             if(zhibiao > one){
                 m.put("zhibiao",1);
                 m.put("baifen",baifen(zhibiao-one,one.doubleValue()));
