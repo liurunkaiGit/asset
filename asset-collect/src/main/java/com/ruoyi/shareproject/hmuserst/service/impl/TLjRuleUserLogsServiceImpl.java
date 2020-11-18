@@ -59,8 +59,8 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
         ts.setOutCishuZhibiao(Integer.parseInt(outm.get("zhibiao").toString()));
         //间隔时长
         if(ts.getJiange()!=null && ts.getJiange().floatValue()>0){
-            //将毫秒转化分
-            ts.setJiange(ts.getJiange().divide(new BigDecimal(1000),2,BigDecimal.ROUND_HALF_UP));
+            //将秒转化分
+            ts.setJiange(ts.getJiange().divide(new BigDecimal(60D),2,BigDecimal.ROUND_HALF_UP));
         }
         Map<String,Object> jianm = loadBaifen(ts.getIntervalsCondition(),ts.getIntervalsOne(),ts.getIntervalsTwo(),ts.getJiange().doubleValue());
         ts.setJiangeBaifen(jianm.get("baifen").toString());
@@ -69,7 +69,7 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
         //通话时长
         if(ts.getTonghuaDuration()!=null && ts.getTonghuaDuration().floatValue()>0){
             //将毫秒转化分
-            ts.setTonghuaDuration(ts.getTonghuaDuration().divide(new BigDecimal(1000),2,BigDecimal.ROUND_HALF_UP));
+            ts.setTonghuaDuration(ts.getTonghuaDuration().divide(new BigDecimal(1000*60),2,BigDecimal.ROUND_HALF_UP));
         }
         Map<String,Object> thm = loadBaifen(ts.getConversationCondition(),ts.getConversationOne(),ts.getConversationTwo(),ts.getTonghuaDuration().doubleValue());
         ts.setTonghuaDurationBaifen(thm.get("baifen").toString());
@@ -84,7 +84,7 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
         ts.setJietongcsZhibiao(Integer.parseInt(jsm.get("zhibiao").toString()));
 
         //案件处理
-        Map<String,Object> ajm = loadBaifen(ts.getCaseNumbersCondition(),ts.getCaseNumbersOne(),ts.getCaseNumbersTwo(),ts.getAnjianDuration().doubleValue());
+        Map<String,Object> ajm = loadBaifen(ts.getCaseNumbersCondition(),ts.getCaseNumbersOne(),ts.getCaseNumbersTwo(),ts.getAnjianyichuli().doubleValue());
         ts.setAnjianDurationBaifen(ajm.get("baifen").toString());
         ts.setAnjianDurationZhibiao(Integer.parseInt(ajm.get("zhibiao").toString()));
         //案件处理率
