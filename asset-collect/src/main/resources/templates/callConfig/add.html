@@ -270,7 +270,7 @@
                     // console.log(data);
                     if (data.code == 0) {//请求成功
                         for (var i = 0; i < data.rows.length; i++) {
-                            var opt = "<option value='"+data.rows[i].userPhoneId+","+data.rows[i].phone+"'>"+data.rows[i].phone+"</option>";
+                            var opt = "<option value='"+data.rows[i].userPhoneId+","+data.rows[i].phone+","+data.rows[i].phoneType+"'>"+data.rows[i].phone+"</option>";
                             $("#callLineId").append(opt);
                         }
                     }

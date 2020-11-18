@@ -87,7 +87,8 @@
 						callCodeHistoryListStr: $("#callCodeHistoryListStr").val(),
 						freeSQL:$("#freeSQL").val(),
 						speechcraftIdAndSceneDefId:speechcraftId,
-						callLineId:callLineId,
+						callLineId:callLineId.split(",")[0],
+						callType:callLineId.split(",")[1],
                         province: $("#province").val(),
                         city: $("#city").val()
 					},
@@ -109,7 +110,7 @@
 						// console.log(data);
 						if (data.code == 0) {//请求成功
 							for (var i = 0; i < data.rows.length; i++) {
-								var opt = "<option value='"+data.rows[i].userPhoneId+"'>"+data.rows[i].phone+"</option>";
+								var opt = "<option value='"+data.rows[i].userPhoneId+","+data.rows[i].phoneType+"'>"+data.rows[i].phone+"</option>";
 								$("#callLineId").append(opt);
 							}
 						}

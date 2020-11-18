@@ -308,9 +308,9 @@
                         var callLineIdValue = $("#callLineIdValue").val();
                         for (var i = 0; i < data.rows.length; i++) {
                             if(callLineIdValue == data.rows[i].userPhoneId) {
-                                var opt = "<option value='" + data.rows[i].userPhoneId + ","+data.rows[i].phone+"' selected>" + data.rows[i].phone + "</option>";
+                                var opt = "<option value='" + data.rows[i].userPhoneId + ","+data.rows[i].phone+","+data.rows[i].phoneType+"' selected>" + data.rows[i].phone + "</option>";
                             } else {
-                                var opt = "<option value='" + data.rows[i].userPhoneId + ","+data.rows[i].phone+"'>" + data.rows[i].phone + "</option>";
+                                var opt = "<option value='" + data.rows[i].userPhoneId + ","+data.rows[i].phone+","+data.rows[i].phoneType+"'>" + data.rows[i].phone + "</option>";
                             }
                             $("#callLineId").append(opt);
                         }

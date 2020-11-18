@@ -67,7 +67,7 @@
 				$.modal.alertWarning("请选择线路");
 				return;
 			}
-			var data = {"taskIds": $("#taskIds").val(),"speechcraftIdAndSceneDefId":speechcraftId, "callLineId":callLineId, "orgId":$("#orgId").val(), "sendRobotBatchNos":$("#sendRobotBatchNos").val()};
+			var data = {"taskIds": $("#taskIds").val(),"speechcraftIdAndSceneDefId":speechcraftId, "callLineId":callLineId.split(",")[0], "callType":callLineId.split(",")[1], "orgId":$("#orgId").val(), "sendRobotBatchNos":$("#sendRobotBatchNos").val()};
 			//$.operate.submit(prefix + "/sendRobot", "post", "json", data);
 			window.$.modal.loading("请稍后...");
 			$.post(
@@ -106,7 +106,7 @@
 						// console.log(data);
 						if (data.code == 0) {//请求成功
 							for (var i = 0; i < data.rows.length; i++) {
-								var opt = "<option value='"+data.rows[i].userPhoneId+"'>"+data.rows[i].phone+"</option>";
+								var opt = "<option value='"+data.rows[i].userPhoneId+","+data.rows[i].phoneType+"'>"+data.rows[i].phone+"</option>";
 								$("#callLineId").append(opt);
 							}
 						}

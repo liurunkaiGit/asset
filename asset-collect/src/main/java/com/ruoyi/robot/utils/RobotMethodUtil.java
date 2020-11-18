@@ -701,10 +701,10 @@ public class RobotMethodUtil {
     public Integer createTask(List<TLcTask> taskList, TLcCallStrategyConfig tLcCallStrategyConfig, Integer continueCallDays, Integer continueCallFrequency, TLcOrgSpeechcraftConf orgSpeechcraftConf, String taskName) {
         Integer companyId = orgSpeechcraftConf.getCompanyId();
         CreateTaskParamVO createTaskParamVO = createRobotTask(companyId, tLcCallStrategyConfig, orgSpeechcraftConf.getConcurrentValue());
+        log.error("创建机器人任务参数：{}", JSON.toJSONString(createTaskParamVO));
         long createRobotTaskStartTime = System.currentTimeMillis();
         log.info("创建机器人任务开始时间：{}", createRobotTaskStartTime);
         RobotResponse createTaskResponse = aiccHttpUtils.sendPost(robotAppConfig.getCreateTask(), createTaskParamVO);
-        log.error("创建机器人任务参数：{}", JSON.toJSONString(createTaskParamVO));
         if (createTaskResponse.getCode() != HttpStatus.OK.value()) {
             log.error("调用创建任务接口错误，error is {}", createTaskResponse.getResultMsg());
             throw new BusinessException(String.format("调用创建任务接口错误:%s", createTaskResponse.getResultMsg()));
@@ -850,9 +850,9 @@ public class RobotMethodUtil {
         String[] callLineList = tLcCallStrategyConfig.getCallLineId().split(",");
         Arrays.stream(callLineList).forEach(callLine -> userPhoneIds.add(Integer.valueOf(callLine)));
         createTaskParamVO.setUserPhoneIds(userPhoneIds); // 主叫号码 Id,获取主叫电话列表接口可获取到
-        createTaskParamVO.setCallType(CallLine.PHONE.getCode()); // 外呼方式， 对应主叫号码(线路)类型：2、1、0
+        createTaskParamVO.setCallType(tLcCallStrategyConfig.getPhoneType()); // 外呼方式， 对应主叫号码(线路)类型：2、1、0
         createTaskParamVO.setConcurrencyQuota(robotNum); // ai 坐席数,默认 1,一个坐席对应一个机器人
-        createTaskParamVO.setStartDate(DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS, new Date())); // 任务开始日期（定时任务必填）
+//        createTaskParamVO.setStartDate(DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS, new Date())); // 任务开始日期（定时任务必填）
         createTaskParamVO.setWorkingStartTime(tLcCallStrategyConfig.getStartCallDate());// 可拨打开始时间
         createTaskParamVO.setWorkingEndTime(StringUtils.isNoneBlank(tLcCallStrategyConfig.getStopCallDate()) ? tLcCallStrategyConfig.getStopCallDate() : null); // 可拨打结束时间
         createTaskParamVO.setBreakStartTime(null);//暂时停止开始时间

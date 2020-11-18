@@ -23,10 +23,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="callLineId"    column="call_line_id"    />
         <result property="callLineName"    column="call_line_name"    />
         <result property="sceneDefId"    column="scene_def_id"    />
+        <result property="phoneType"    column="phone_type"    />
     </resultMap>
 
     <sql id="selectTLcCallStrategyConfigVo">
-        select id, business_scene, call_frequency_day, continue_call_days, stop_call_cur_day_condition, stop_call_condition, start_call_date, stop_call_date, status, org_id, org_name, speechcraft_id, speechcraft_name, call_interval_time_id, call_interval_time, call_line_id, call_line_name, scene_def_id from t_lc_call_strategy_config
+        select id, business_scene, call_frequency_day, continue_call_days, stop_call_cur_day_condition, stop_call_condition, start_call_date, stop_call_date, status, org_id, org_name, speechcraft_id, speechcraft_name, call_interval_time_id, call_interval_time, call_line_id, call_line_name, scene_def_id, phone_type from t_lc_call_strategy_config
     </sql>
 
     <select id="selectTLcCallStrategyConfigList" parameterType="com.ruoyi.callConfig.domain.TLcCallStrategyConfig" resultMap="TLcCallStrategyConfigResult">
@@ -60,6 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into t_lc_call_strategy_config
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="businessScene != null ">business_scene,</if>
+            <if test="phoneType != null ">phone_type,</if>
             <if test="callFrequencyDay != null ">call_frequency_day,</if>
             <if test="continueCallDays != null ">continue_call_days,</if>
             <if test="stopCallCurDayCondition != null  and stopCallCurDayCondition != ''">stop_call_cur_day_condition,</if>
@@ -79,6 +81,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="businessScene != null ">#{businessScene},</if>
+            <if test="phoneType != null ">#{phoneType},</if>
             <if test="callFrequencyDay != null ">#{callFrequencyDay},</if>
             <if test="continueCallDays != null ">#{continueCallDays},</if>
             <if test="stopCallCurDayCondition != null  and stopCallCurDayCondition != ''">#{stopCallCurDayCondition},</if>
@@ -102,6 +105,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update t_lc_call_strategy_config
         <trim prefix="SET" suffixOverrides=",">
             <if test="businessScene != null ">business_scene = #{businessScene},</if>
+            <if test="phoneType != null ">phone_type = #{phoneType},</if>
             <if test="callFrequencyDay != null ">call_frequency_day = #{callFrequencyDay},</if>
             <if test="continueCallDays != null ">continue_call_days = #{continueCallDays},</if>
             <if test="stopCallCurDayCondition != null  and stopCallCurDayCondition != ''">stop_call_cur_day_condition = #{stopCallCurDayCondition},</if>

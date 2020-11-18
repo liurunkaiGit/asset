@@ -1029,9 +1029,9 @@ public class TLcTaskController extends BaseController {
      */
     @ResponseBody
     @PostMapping("/sendRobot")
-    public AjaxResult sendRobot(String taskIds, String orgId, String speechcraftIdAndSceneDefId, Integer callLineId, String sendRobotBatchNos) {
+    public AjaxResult sendRobot(String taskIds, String orgId, String speechcraftIdAndSceneDefId, Integer callLineId, Integer callType, String sendRobotBatchNos) {
         try {
-            return this.tLcTaskService.sendRobot(taskIds, ShiroUtils.getSysUser().getOrgId().toString(), speechcraftIdAndSceneDefId, callLineId, sendRobotBatchNos);
+            return this.tLcTaskService.sendRobot(taskIds, ShiroUtils.getSysUser().getOrgId().toString(), speechcraftIdAndSceneDefId, callLineId, sendRobotBatchNos, callType);
         } catch (Exception e) {
             log.error("推送到机器人失败，error is {}", e);
             return AjaxResult.success(AjaxResult.Type.ERROR, "推送失败", null);
@@ -1045,7 +1045,7 @@ public class TLcTaskController extends BaseController {
      */
     @ResponseBody
     @PostMapping("/allDataSendRobot")
-    public AjaxResult allDataSendRobot(String speechcraftIdAndSceneDefId, TLcTask tLcTask, Integer callLineId, HttpServletRequest request) {
+    public AjaxResult allDataSendRobot(String speechcraftIdAndSceneDefId, TLcTask tLcTask, Integer callLineId, HttpServletRequest request, Integer callType) {
         String callCodeHistoryListStr = request.getParameter("callCodeHistoryListStr");//历史电话码
         if(StringUtils.isNotEmpty(callCodeHistoryListStr) && !"null".equals(callCodeHistoryListStr)){
             tLcTask.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
@@ -1054,7 +1054,7 @@ public class TLcTaskController extends BaseController {
         if(city != null && !"".equals(city)){
             tLcTask.setProvince(null);
         }
-        return this.tLcTaskService.allDataSendRobot(speechcraftIdAndSceneDefId, tLcTask, callLineId);
+        return this.tLcTaskService.allDataSendRobot(speechcraftIdAndSceneDefId, tLcTask, callLineId, callType);
     }
 
     /**

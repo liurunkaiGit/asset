@@ -145,4 +145,6 @@ public class TLcCallStrategyConfig extends BaseEntity {
      */
     private String speechcraftIdAndSceneDefId;
 
+    private Integer phoneType;
+
 }

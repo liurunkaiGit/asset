@@ -77,6 +77,7 @@ public class TLcCallStrategyConfigServiceImpl implements ITLcCallStrategyConfigS
         tLcCallStrategyConfig.setStatus(IsNoEnum.IS.getCode());
         tLcCallStrategyConfig.setCallLineId(tLcCallStrategyConfig.getCallLineIdAndName().split(",")[0]);
         tLcCallStrategyConfig.setCallLineName(tLcCallStrategyConfig.getCallLineIdAndName().split(",")[1]);
+        tLcCallStrategyConfig.setPhoneType(Integer.valueOf(tLcCallStrategyConfig.getCallLineIdAndName().split(",")[2]));
         return tLcCallStrategyConfigMapper.insertTLcCallStrategyConfig(tLcCallStrategyConfig);
     }
 
@@ -100,6 +101,7 @@ public class TLcCallStrategyConfigServiceImpl implements ITLcCallStrategyConfigS
         tLcCallStrategyConfig.setSpeechcraftName(speechcraftIdAndSceneDefId[2]);
         tLcCallStrategyConfig.setCallLineId(tLcCallStrategyConfig.getCallLineIdAndName().split(",")[0]);
         tLcCallStrategyConfig.setCallLineName(tLcCallStrategyConfig.getCallLineIdAndName().split(",")[1]);
+        tLcCallStrategyConfig.setPhoneType(Integer.valueOf(tLcCallStrategyConfig.getCallLineIdAndName().split(",")[2]));
         return tLcCallStrategyConfigMapper.updateTLcCallStrategyConfig(tLcCallStrategyConfig);
     }
 

@@ -1035,6 +1035,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         ArrayList<TLcTask> taskList = new ArrayList<>(1);
         taskList.add(tLcTask);
         insertDuncaseAssign(taskList, ShiroUtils.getSysUser());
+        // 给拥有停催审批的用户发送站内信，先查拥有停催审批功能的角色
     }
 
     @Override
@@ -1079,12 +1080,12 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
 
     @Override
     @Transactional
-    public AjaxResult sendRobot(String taskIds, String orgId, String speechcraftIdAndSceneDefId, Integer callLineId, String sendRobotBatchNos) {
+    public AjaxResult sendRobot(String taskIds, String orgId, String speechcraftIdAndSceneDefId, Integer callLineId, String sendRobotBatchNos, Integer callType) {
         if (StringUtils.isNotBlank(taskIds)) {
             List<TLcTask> taskList = this.tLcTaskMapper.selectTLcTaskByIdsNotExistRobotBlack(taskIds.split(","));
             // 查询机器人在黑名单数量
             Long blackCount = this.tLcTaskMapper.selectCountByIdsNotExistRobotBlack(taskIds.split(","));
-            sendRobotByList(orgId, speechcraftIdAndSceneDefId, callLineId, taskList, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS, new Date()));
+            sendRobotByList(orgId, speechcraftIdAndSceneDefId, callLineId, taskList, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS, new Date()), callType);
             return AjaxResult.success(AjaxResult.Type.SUCCESS, "推送成功", taskList.size() + "," + blackCount);
         } else {
             String successCount = "";
@@ -1092,7 +1093,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 successCount = String.valueOf(sendRobotBatchNos.split(",").length);
                 Arrays.stream(sendRobotBatchNos.split(",")).forEach(sendRobotBatchNo -> {
                     List<TLcTask> taskList = this.tLcTaskMapper.selectTaskListBySendRobotBatchNo(sendRobotBatchNo);
-                    sendRobotByList(orgId, speechcraftIdAndSceneDefId, callLineId, taskList, sendRobotBatchNo.split("_")[0]);
+                    sendRobotByList(orgId, speechcraftIdAndSceneDefId, callLineId, taskList, sendRobotBatchNo.split("_")[0], callType);
                     // 修改推送机器人申请状态为已审批、任务状态并插入案件历史轨迹
                     updateSendRobotStatusTaskType(sendRobotBatchNo, taskList);
                 });
@@ -1102,7 +1103,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 successCount = String.valueOf(sendRobotApplyList.size());
                 sendRobotApplyList.stream().forEach(sendRobotApply -> {
                     List<TLcTask> taskList = this.tLcTaskMapper.selectTaskListBySendRobotBatchNo(sendRobotApply.getSendRobotBatchNo());
-                    sendRobotByList(orgId, speechcraftIdAndSceneDefId, callLineId, taskList, sendRobotApply.getSendRobotBatchNo().split("_")[0]);
+                    sendRobotByList(orgId, speechcraftIdAndSceneDefId, callLineId, taskList, sendRobotApply.getSendRobotBatchNo().split("_")[0], callType);
                     // 修改推送机器人申请状态为已审批、任务状态并插入案件历史轨迹
                     updateSendRobotStatusTaskType(sendRobotApply.getSendRobotBatchNo(), taskList);
                 });
@@ -1126,7 +1127,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         }
     }
 
-    private void sendRobotByList(String orgId, String speechcraftIdAndSceneDefId, Integer callLineId, List<TLcTask> taskList, String taskName) {
+    private void sendRobotByList(String orgId, String speechcraftIdAndSceneDefId, Integer callLineId, List<TLcTask> taskList, String taskName, Integer callType) {
         if (taskList != null && taskList.size() > 0) {
             // 推送到机器人
             TLcOrgSpeechcraftConf orgSpeechcraftConf = this.orgSpeechcraftConfService.selectTLcOrgSpeechcraftConfByOrgId(Long.valueOf(orgId));
@@ -1138,7 +1139,9 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                     .speechcraftId(Integer.valueOf(speechcraftIdAndSceneDefIds[0]))
                     .sceneDefId(Integer.valueOf(speechcraftIdAndSceneDefIds[1]))
                     .speechcraftName(speechcraftIdAndSceneDefIds[2])
-                    .callLineId(String.valueOf(callLineId)).build();
+                    .callLineId(String.valueOf(callLineId))
+                    .phoneType(callType)
+                    .build();
             TLcAllocatCaseConfig caseConfig = this.caseConfigService.selectTLcAllocatCaseConfigByOrgId(orgId);
             // 获取单次推送到机器人的号码数
             String taskCallNum = this.sysDictDataService.selectDictLabel("robot_call_config", "task_call_num");
@@ -1210,13 +1213,13 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     }
 
     @Override
-    public AjaxResult allDataSendRobot(String speechcraftIdAndSceneDefId, TLcTask tLcTask, Integer callLineId) {
+    public AjaxResult allDataSendRobot(String speechcraftIdAndSceneDefId, TLcTask tLcTask, Integer callLineId, Integer callType) {
 //        setCustomSql(tLcTask, request);
 //        List<TLcTask> taskList = this.tLcTaskMapper.selectTaskList(tLcTask);
         List<TLcTask> taskList = this.tLcTaskMapper.selectTaskListNotExistRobotBlack(tLcTask);
         // 查询在黑名单里的任务数量
         Long blackCount = this.tLcTaskMapper.selectCountExistRobotBlack(tLcTask);
-        sendRobotByList(tLcTask.getOrgId(), speechcraftIdAndSceneDefId, callLineId, taskList, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS, new Date()));
+        sendRobotByList(tLcTask.getOrgId(), speechcraftIdAndSceneDefId, callLineId, taskList, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS, new Date()), callType);
         return AjaxResult.success(AjaxResult.Type.SUCCESS, "推送成功", taskList.size() + "," + blackCount);
     }
 

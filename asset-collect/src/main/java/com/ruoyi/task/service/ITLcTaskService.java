@@ -251,7 +251,7 @@ public interface ITLcTaskService {
      *
      * @param taskIds
      */
-    AjaxResult sendRobot(String taskIds, String orgId, String speechcraftId, Integer callLineId, String sendRobotBatchNos);
+    AjaxResult sendRobot(String taskIds, String orgId, String speechcraftId, Integer callLineId, String sendRobotBatchNos, Integer callType);
 
     CollJob collJobDetail(String caseNo, String orgId, String importBatchNo);
 
@@ -279,7 +279,7 @@ public interface ITLcTaskService {
 
     Integer isHasCloseCaseTask(TLcTask tLcTask, HttpServletRequest request);
 
-    AjaxResult allDataSendRobot(String speechcraftIdAndSceneDefId, TLcTask tLcTask, Integer callLineId);
+    AjaxResult allDataSendRobot(String speechcraftIdAndSceneDefId, TLcTask tLcTask, Integer callLineId, Integer callType);
 
     Integer isHasCTSTask(TLcTask tLcTask);
 
