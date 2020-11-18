@@ -124,6 +124,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             AND  date_format(t.create_time,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{endCensusDate},'%Y-%m-%d %H:%i:%s')
         </if>
     </select>
+
+    <select id="selectSysLoginStatusListTaskOne" parameterType="SysLoginStatus" resultMap="SysLoginStatusResult">
+        <include refid="selectSysLoginStatusVo"/>
+        WHERE 1=1
+        <if test="loginName != null and loginName != ''">
+            AND login_name = #{loginName}
+        </if>
+        <if test="startCensusDate != null">
+            AND  date_format(create_time,'%Y-%m-%d %H:%i:%s') >= date_format(#{startCensusDate},'%Y-%m-%d %H:%i:%s')
+        </if>
+        <if test="endCensusDate != null">
+            AND  date_format(create_time,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{endCensusDate},'%Y-%m-%d %H:%i:%s')
+        </if>
+        order by create_time desc limit 1
+    </select>
     
     <select id="selectSysLoginStatusById" parameterType="String" resultMap="SysLoginStatusResult">
         <include refid="selectSysLoginStatusVo"/>

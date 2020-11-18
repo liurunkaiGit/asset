@@ -43,6 +43,14 @@ public interface SysLoginStatusMapper
      * @return 登录状态集合
      */
     public List<SysLoginStatus> selectSysLoginStatusListTask(SysLoginStatus sysLoginStatus);
+
+    /**
+     * 时间段 查询用户 最新一条数据
+     * @param sysLoginStatus
+     * @return
+     */
+    public List<SysLoginStatus> selectSysLoginStatusListTaskOne(SysLoginStatus sysLoginStatus);
+
     /**
      * 新增登录状态
      * 
