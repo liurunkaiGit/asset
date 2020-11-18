@@ -108,36 +108,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
      </select>
 
     <select id="selectSysLoginStatusListTask" parameterType="SysLoginStatus" resultMap="SysLoginStatusResult">
-        select
-        count(1) as loginNum,
-        sum(t.online_len) as online_len,
-        sum(t.interval_time) as interval_time
-        from sys_login_status t
-        WHERE 1=1
-        <if test="loginName != null and loginName != ''">
-            AND t.login_name = #{loginName}
-        </if>
-        <if test="startCensusDate != null">
-            AND  date_format(t.create_time,'%Y-%m-%d %H:%i:%s') >= date_format(#{startCensusDate},'%Y-%m-%d %H:%i:%s')
-        </if>
-        <if test="endCensusDate != null">
-            AND  date_format(t.create_time,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{endCensusDate},'%Y-%m-%d %H:%i:%s')
-        </if>
-    </select>
-
-    <select id="selectSysLoginStatusListTaskOne" parameterType="SysLoginStatus" resultMap="SysLoginStatusResult">
         <include refid="selectSysLoginStatusVo"/>
         WHERE 1=1
         <if test="loginName != null and loginName != ''">
             AND login_name = #{loginName}
         </if>
         <if test="startCensusDate != null">
-            AND  date_format(create_time,'%Y-%m-%d %H:%i:%s') >= date_format(#{startCensusDate},'%Y-%m-%d %H:%i:%s')
+            AND  date_format(create_time,'%Y-%m-%d') = date_format(#{startCensusDate},'%Y-%m-%d')
+        </if>
+        order by start_time
+    </select>
+
+    <select id="selectSysLoginStatusListTaskOne" parameterType="SysLoginStatus" resultMap="SysLoginStatusResult">
+        select
+        count(1) as loginNum,
+        sum(interval_time) as interval_time from sys_login_status
+        WHERE 1=1
+        <if test="loginName != null and loginName != ''">
+            AND login_name = #{loginName}
+        </if>
+        <if test="startCensusDate != null">
+            AND  date_format(end_time,'%Y-%m-%d %H:%i:%s') <![CDATA[>=]]> date_format(#{startCensusDate},'%Y-%m-%d %H:%i:%s')
         </if>
         <if test="endCensusDate != null">
-            AND  date_format(create_time,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{endCensusDate},'%Y-%m-%d %H:%i:%s')
+            AND  date_format(end_time,'%Y-%m-%d %H:%i:%s') <![CDATA[<=]]> date_format(#{endCensusDate},'%Y-%m-%d %H:%i:%s')
         </if>
-        order by create_time desc limit 1
     </select>
     
     <select id="selectSysLoginStatusById" parameterType="String" resultMap="SysLoginStatusResult">

@@ -76,7 +76,9 @@
                     field : 'errors', 
                     title : '当日异常(次)',
                     formatter:function (value, row, index) {
-                        if(value =='' || null == value)return'';
+                        if(value =='' || null == value){
+                            return "<a href='javascript:void(0)' onclick='errUrl(\""+row.id+"\")'><span style='color: red' >"+0+"</span></a>";
+                        }
                         value = value*1;
                         if(value>0){
                             return "<a href='javascript:void(0)' onclick='errUrl(\""+row.id+"\")'><span style='color: red' >"+value+"</span></a>";
