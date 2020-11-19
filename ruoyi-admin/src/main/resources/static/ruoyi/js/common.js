@@ -84,6 +84,9 @@ $(function() {
 				var type = time.attr("data-type") || 'date';
 				// 控制回显格式
 				var format = time.attr("data-format") || 'yyyy-MM-dd';
+				//限制输入日期
+				var min = time.attr("datamin") || '';
+				var max = time.attr("datamax") || '';
 				// 控制日期控件按钮
 				var buttons = time.attr("data-btn") || 'clear|now|confirm', newBtnArr = [];
 				// 日期控件选择完成后回调处理
@@ -104,7 +107,8 @@ $(function() {
 				} else {
 					newBtnArr = ['clear', 'now', 'confirm'];
 				}
-				com.render({
+
+				var configDatas = {
 					elem: item,
 					theme: 'molv',
 					trigger: 'click',
@@ -117,7 +121,14 @@ $(function() {
 							window[callback](value, data);
 						}
 					}
-				});
+				};
+				if(min!=''){
+					configDatas.min=min;
+				}
+				if(max!=''){
+					configDatas.max=max;
+				}
+				com.render(configDatas);
 			});
 		});
 	}

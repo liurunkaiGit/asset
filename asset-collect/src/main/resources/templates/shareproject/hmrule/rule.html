@@ -108,10 +108,11 @@
                 },
                 {
                     field : 'startTime', 
-                    title : '规则有效时间',
-                    formatter: function(value, row, index) {
-                        return value +'--'+ row.endTime;
-                    }
+                    title : '有效日期'
+                },
+                {
+                    field : 'endTime',
+                    title : '失效日期'
                 },
                 {
                     field : 'ruleStatus',

@@ -1,5 +1,6 @@
 package com.ruoyi.shareproject.hmrule.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.system.domain.SysUser;
 import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -46,10 +47,12 @@ public class TLjRule extends BaseEntity
 
     /** 规则有效开始时间 */
     @Excel(name = "规则有效开始时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date startTime;
 
     /** 规则有效结束时间 */
     @Excel(name = "规则有效结束时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date endTime;
 
     /** 机构id */

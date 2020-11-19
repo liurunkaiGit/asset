@@ -83,8 +83,9 @@ public class TLjRuleController extends BaseController
      * 新增【居家规则】
      */
     @GetMapping("/add")
-    public String add()
+    public String add(ModelMap mmap)
     {
+        mmap.put("datamin",DateUtils.getDate());
         return prefix + "/add";
     }
 
