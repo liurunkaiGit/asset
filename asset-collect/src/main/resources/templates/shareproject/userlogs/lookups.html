@@ -221,9 +221,9 @@
                 <div class="layui-card">
                     <div class="layui-card-body" >
                         <div style="width: 200px;height:100px;">
-                            <div style="margin-top:15px;float: left"> <img th:src="@{/img/hm_3.png}"   style="width: 50px;height: 50px;float: left"></div>
+                            <div style="margin-top:25px;float: left"> <img th:src="@{/img/hm_3.png}"   style="width: 50px;height: 50px;float: left"></div>
                             <div style="float: left;margin-left:10px;margin-top:5px;">
-                                <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">通话时长(分)</div>
+                                <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">通话时长(分钟)</div>
                                 <div style="font-size:20px;font-weight:bold" th:text="*{tonghuaDurationStr}"></div>
                                 <div style="font-size:5px;color: green" th:if="*{tonghuacsError eq 0}">
                                     <span th:if="*{tonghuaDurationZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuaDurationBaifen}"></span>%高于指标</span>
@@ -251,7 +251,7 @@
                 <div class="layui-card">
                     <div class="layui-card-body" >
                         <div style="width: 200px;height:100px;">
-                            <div style="margin-top:15px;float: left"> <img th:src="@{/img/hm_4.png}"   style="width: 50px;height: 50px;float: left"></div>
+                            <div style="margin-top:25px;float: left"> <img th:src="@{/img/hm_4.png}"   style="width: 50px;height: 50px;float: left"></div>
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">拨打次数(次)</div>
                                 <div style="font-size:20px;font-weight:bold" th:text="*{tonghuacs}"></div>
@@ -281,7 +281,7 @@
                 <div class="layui-card">
                     <div class="layui-card-body" >
                         <div style="width: 200px;height:100px;">
-                            <div style="margin-top:15px;float: left"> <img th:src="@{/img/hm_5.png}"   style="width: 50px;height: 50px;float: left"></div>
+                            <div style="margin-top:25px;float: left"> <img th:src="@{/img/hm_5.png}"   style="width: 50px;height: 50px;float: left"></div>
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">接通率(%)</div>
                                 <div style="font-size:20px;font-weight:bold" th:text="*{jietonglv}"></div>
@@ -316,9 +316,9 @@
                 <div class="layui-card">
                     <div class="layui-card-body" >
                         <div style="width: 200px;height:100px;">
-                            <div style="margin-top:15px;float: left"> <img th:src="@{/img/hm_6.png}"   style="width: 50px;height: 50px;float: left"></div>
+                            <div style="margin-top:25px;float: left"> <img th:src="@{/img/hm_6.png}"   style="width: 50px;height: 50px;float: left"></div>
                             <div style="float: left;margin-left:10px;margin-top:5px;">
-                                <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;"><img th:src="@{/img/hm_61.png}" style="width: 12px;height: 12px;" >在线时长(分)</div>
+                                <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;"><img th:src="@{/img/hm_61.png}" style="width: 12px;height: 12px;" >在线时长(分钟)</div>
                                 <div style="font-size:20px;font-weight:bold" th:text="*{onlineTimeStr}"></div>
                                 <div style="font-size:5px;color: green" th:if="*{onlineError eq 0}" >
                                     <span th:if="*{onlineZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{onlineBaifen}"></span>%高于指标</span>
@@ -375,7 +375,7 @@
                     <div class="layui-card-body" >
                         <div style="width: 200px;height:100px;">
                             <div style="float: left;margin-left:10px;margin-top:5px;">
-                                <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;"><img th:src="@{/img/hm_62.png}" style="width: 12px;height: 12px;" >间隔时长(分)</div>
+                                <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;"><img th:src="@{/img/hm_62.png}" style="width: 12px;height: 12px;" >间隔时长(分钟)</div>
                                 <div style="font-size:20px;font-weight:bold" th:text="*{jiangeStr}"></div>
                                 <div style="font-size:5px;color: green" th:if="*{jiangeError eq 0}" >
                                     <span th:if="*{jiangeZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jiangeBaifen}"></span>%高于指标</span>
