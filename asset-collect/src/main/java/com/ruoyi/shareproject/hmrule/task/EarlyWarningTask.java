@@ -184,6 +184,7 @@ public class EarlyWarningTask {
         BeanUtils.copyProperties(tLjRuleDetails,userLog);
         //记录规则id
         userLog.setRuleId(null);
+        userLog.setRuleName(tLjRule.getRuleName());
         userLog.setDetailsId(tLjRuleDetails.getId());
         userLog.setDays(DateUtils.getNowDate());
         userLog.setCreateTime(DateUtils.getNowDate());
