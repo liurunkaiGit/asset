@@ -198,7 +198,8 @@ public class EarlyWarningTask {
             cr.checkWarning(tLjRule,user,tLjRuleDetails,userLog);
             userLog.setLoginName(user.getLoginName());
             userLog.setUserName(user.getUserName());
-            userLog.setErrors(loadZong(userLog.getLoginZong())+loadZong(userLog.getAnjianZong())+loadZong(userLog.getTonghuaZong())+loadZong(userLog.getHuankuanZong()));
+            //userLog.setErrors(loadZong(userLog.getLoginZong())+loadZong(userLog.getAnjianZong())+loadZong(userLog.getTonghuaZong())+loadZong(userLog.getHuankuanZong()));
+            userLog.setErrors(loadZong(userLog.getLoginZong())+loadZong(userLog.getAnjianZong())+loadZong(userLog.getTonghuaZong()));
             tLjRuleUserLogsMapper.insertTLjRuleUserLogs(userLog);
             i++;
         }
@@ -215,7 +216,7 @@ public class EarlyWarningTask {
             list.add(new OnlineCheckHandler());
             list.add(new TonghuaTimeCheckHandler());
             list.add(new AnJianCheckHandler());
-            list.add(new HuanKuanHandler());
+            //list.add(new HuanKuanHandler());
             return loadHandle(list);
         }
         static CheckHandler loadHandle(List<CheckHandler> list){

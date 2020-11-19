@@ -147,55 +147,55 @@
 
             </div>
 
-            <div class="layui-col-md2">
+<!--            <div class="layui-col-md2">-->
 
-                <div class="layui-card">
-                    <div class="layui-card-body" >
-                        <div style="width: 200px;height:80px;">
-                            <div style="float: left;margin-left:10px;margin-top:5px;">
-                                <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">实际还款(元)</div>
-                                <div style="font-size:20px;font-weight:bold" th:text="*{shiji}"></div>
-                                <div style="font-size:5px;color: green" th:if="*{shijiError eq 0}">
-                                    <span th:if="*{yinghuanZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{yinghuanBaifen}"></span>%高于指标</span>
-                                    <span th:if="*{yinghuanZhibiao eq   -1}" ><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{yinghuanBaifen}"></span>%低于指标</span>
-                                    <span th:if="*{yinghuanZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{yinghuanBaifen}"></span>%正常</span>
-                                </div>
-                                <div style="font-size:5px;color: red" th:if="*{shijiError ne 0}">
-                                    <span th:if="*{yinghuanZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{yinghuanBaifen}"></span>%高于指标</span>
-                                    <span th:if="*{yinghuanZhibiao eq   -1}" ><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{yinghuanBaifen}"></span>%低于指标</span>
-                                    <span th:if="*{yinghuanZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{yinghuanBaifen}"></span>%正常</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<!--                <div class="layui-card">-->
+<!--                    <div class="layui-card-body" >-->
+<!--                        <div style="width: 200px;height:80px;">-->
+<!--                            <div style="float: left;margin-left:10px;margin-top:5px;">-->
+<!--                                <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">实际还款(元)</div>-->
+<!--                                <div style="font-size:20px;font-weight:bold" th:text="*{shiji}"></div>-->
+<!--                                <div style="font-size:5px;color: green" th:if="*{shijiError eq 0}">-->
+<!--                                    <span th:if="*{yinghuanZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{yinghuanBaifen}"></span>%高于指标</span>-->
+<!--                                    <span th:if="*{yinghuanZhibiao eq   -1}" ><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{yinghuanBaifen}"></span>%低于指标</span>-->
+<!--                                    <span th:if="*{yinghuanZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{yinghuanBaifen}"></span>%正常</span>-->
+<!--                                </div>-->
+<!--                                <div style="font-size:5px;color: red" th:if="*{shijiError ne 0}">-->
+<!--                                    <span th:if="*{yinghuanZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{yinghuanBaifen}"></span>%高于指标</span>-->
+<!--                                    <span th:if="*{yinghuanZhibiao eq   -1}" ><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{yinghuanBaifen}"></span>%低于指标</span>-->
+<!--                                    <span th:if="*{yinghuanZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{yinghuanBaifen}"></span>%正常</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
 
-            </div>
+<!--            </div>-->
 
-            <div class="layui-col-md2">
+<!--            <div class="layui-col-md2">-->
 
-                <div class="layui-card">
-                    <div class="layui-card-body" >
-                        <div style="width: 200px;height:80px;">
-                            <div style="float: left;margin-left:10px;margin-top:5px;">
-                                <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">实际还款率(%)</div>
-                                <div style="font-size:20px;font-weight:bold" th:text="*{shijilv}"></div>
-                                <div style="font-size:5px;color: green" th:if="*{shijilvError eq 0}">
-                                    <span th:if="*{shijiZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{shijiBaifen}"></span>%高于指标</span>
-                                    <span th:if="*{shijiZhibiao eq   -1}"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{shijiBaifen}"></span>%低于指标</span>
-                                    <span th:if="*{shijiZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{shijiBaifen}"></span>%正常</span>
-                                </div>
-                                <div style="font-size:5px;color: red" th:if="*{shijilvError ne 0}">
-                                    <span th:if="*{shijiZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{shijiBaifen}"></span>%高于指标</span>
-                                    <span th:if="*{shijiZhibiao eq   -1}"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{shijiBaifen}"></span>%低于指标</span>
-                                    <span th:if="*{shijiZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{shijiBaifen}"></span>%正常</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<!--                <div class="layui-card">-->
+<!--                    <div class="layui-card-body" >-->
+<!--                        <div style="width: 200px;height:80px;">-->
+<!--                            <div style="float: left;margin-left:10px;margin-top:5px;">-->
+<!--                                <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">实际还款率(%)</div>-->
+<!--                                <div style="font-size:20px;font-weight:bold" th:text="*{shijilv}"></div>-->
+<!--                                <div style="font-size:5px;color: green" th:if="*{shijilvError eq 0}">-->
+<!--                                    <span th:if="*{shijiZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{shijiBaifen}"></span>%高于指标</span>-->
+<!--                                    <span th:if="*{shijiZhibiao eq   -1}"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{shijiBaifen}"></span>%低于指标</span>-->
+<!--                                    <span th:if="*{shijiZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{shijiBaifen}"></span>%正常</span>-->
+<!--                                </div>-->
+<!--                                <div style="font-size:5px;color: red" th:if="*{shijilvError ne 0}">-->
+<!--                                    <span th:if="*{shijiZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{shijiBaifen}"></span>%高于指标</span>-->
+<!--                                    <span th:if="*{shijiZhibiao eq   -1}"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{shijiBaifen}"></span>%低于指标</span>-->
+<!--                                    <span th:if="*{shijiZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{shijiBaifen}"></span>%正常</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
 
-            </div>
+<!--            </div>-->
         </div>
     </div>
 

@@ -102,16 +102,17 @@
                             infos += "<br/>案件处理率 "+tiaojian(row.caseRateCondition,row.caseRateOne,row.caseRateTwo);
                             return infos;
                         }
-                    },
-                    {
-                        field : 'onlineTime',
-                        title : '还款达成',
-                        formatter: function(value, row, index) {
-                            var infos = "实际还款 "+tiaojian(row.sjRepaymentCondition,row.sjRepaymentOne,row.sjRepaymentTwo);
-                            infos += "<br/>实际还款率 "+tiaojian(row.sjRepaymentRateCondition,row.sjRepaymentRateOne,row.sjRepaymentRateTwo);
-                            return infos;
-                        }
-                    }]
+                    }
+                    // {
+                    //     field : 'onlineTime',
+                    //     title : '还款达成',
+                    //     formatter: function(value, row, index) {
+                    //         var infos = "实际还款 "+tiaojian(row.sjRepaymentCondition,row.sjRepaymentOne,row.sjRepaymentTwo);
+                    //         infos += "<br/>实际还款率 "+tiaojian(row.sjRepaymentRateCondition,row.sjRepaymentRateOne,row.sjRepaymentRateTwo);
+                    //         return infos;
+                    //     }
+                    // }
+                    ]
             };
             $.table.init(options);
         });

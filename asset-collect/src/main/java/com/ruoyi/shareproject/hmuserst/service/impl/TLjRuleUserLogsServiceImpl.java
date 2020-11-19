@@ -92,14 +92,14 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
         ts.setAnjianyichuliBaifen(ajlm.get("baifen").toString());
         ts.setAnjianyichuliZhibiao(Integer.parseInt(ajlm.get("zhibiao").toString()));
 
-        //实际还款
-        Map<String,Object> sjm = loadBaifen(ts.getSjRepaymentCondition(),ts.getSjRepaymentOne(),ts.getSjRepaymentTwo(),ts.getShiji().doubleValue());
-        ts.setYinghuanBaifen(sjm.get("baifen").toString());
-        ts.setYinghuanZhibiao(Integer.parseInt(sjm.get("zhibiao").toString()));
-        //实际还款率
-        Map<String,Object> sjlm = loadBaifen(ts.getSjRepaymentRateCondition(),ts.getSjRepaymentRateOne(),ts.getSjRepaymentRateTwo(),ts.getShijilv().doubleValue());
-        ts.setShijiBaifen(sjlm.get("baifen").toString());
-        ts.setShijiZhibiao(Integer.parseInt(sjlm.get("zhibiao").toString()));
+//        //实际还款
+//        Map<String,Object> sjm = loadBaifen(ts.getSjRepaymentCondition(),ts.getSjRepaymentOne(),ts.getSjRepaymentTwo(),ts.getShiji().doubleValue());
+//        ts.setYinghuanBaifen(sjm.get("baifen").toString());
+//        ts.setYinghuanZhibiao(Integer.parseInt(sjm.get("zhibiao").toString()));
+//        //实际还款率
+//        Map<String,Object> sjlm = loadBaifen(ts.getSjRepaymentRateCondition(),ts.getSjRepaymentRateOne(),ts.getSjRepaymentRateTwo(),ts.getShijilv().doubleValue());
+//        ts.setShijiBaifen(sjlm.get("baifen").toString());
+//        ts.setShijiZhibiao(Integer.parseInt(sjlm.get("zhibiao").toString()));
 
         return ts;
     }

@@ -133,35 +133,37 @@
             %
         </div>
 
-        <div class="form-group" style="200px;">
-            <label class="col-sm-3 control-label">还款达成</label>
-            <input type="checkbox"  name="sjRepayment" th:value="*{sjRepayment}" errmsg="实际还款" th:checked="*{sjRepayment == '1'}">实际还款&nbsp;&nbsp;
-            条件
-            <select  name="sjRepaymentCondition" th:field="*{sjRepaymentCondition}" id="sjRepaymentSel" required>
-                <option value="0" >范围</option>
-                <option value="1" >大于</option>
-                <option value="2" >小于</option>
-            </select>
-            <input name="sjRepaymentOne" isxs="true" id="sjRepaymentOne" th:field="*{sjRepaymentOne}"  style="width: 70px;"  type="text" maxlength="8">
-            <span id="sjRepaymentsp" th:if="*{sjRepaymentCondition eq '0'}">---<input id="sjRepaymentTwo" name="sjRepaymentTwo" th:field="*{sjRepaymentTwo}" style="width: 70px;"   type="text" maxlength="8"></span>
-            <span id="sjRepaymentsp" th:if="*{sjRepaymentCondition ne '0'}" style="display: none">---<input id="sjRepaymentTwo" name="sjRepaymentTwo" th:field="*{sjRepaymentTwo}" style="width: 70px;"   type="text" maxlength="8"></span>
-            元
-        </div>
-        <div class="form-group" style="200px;">
-            <label class="col-sm-3 control-label"></label>
-            <input type="checkbox"  name="sjRepaymentRate" th:value="*{sjRepaymentRate}" th:checked="*{sjRepaymentRate == '1'}" errmsg="实际还款率">实际还款率&nbsp;&nbsp;
-            条件
-            <select  name="sjRepaymentRateCondition" th:field="*{sjRepaymentRateCondition}" id="sjRepaymentRateSel" onchange="fanwei('sjRepaymentRate',this)"  required>
-                <option value="0" >范围</option>
-                <option value="1" >大于</option>
-                <option value="2" >小于</option>
-            </select>
-            <input name="sjRepaymentRateOne" isxs="true" id="sjRepaymentRateOne" th:field="*{sjRepaymentRateOne}"  style="width: 70px;"  type="text" maxlength="8">
-            <span id="sjRepaymentRatesp" th:if="*{sjRepaymentRateCondition eq '0'}" >---<input id="sjRepaymentRateTwo"  name="sjRepaymentRateTwo" th:field="*{sjRepaymentRateTwo}"  style="width: 70px;"   type="text" maxlength="8"></span>
-            <span id="sjRepaymentRatesp" th:if="*{sjRepaymentRateCondition ne '0'}" style="display: none">---<input id="sjRepaymentRateTwo"  name="sjRepaymentRateTwo" th:field="*{sjRepaymentRateTwo}"  style="width: 70px;"   type="text" maxlength="8"></span>
-            %
-        </div>
+
     </form>
+
+<!--    <div class="form-group" style="200px;">-->
+<!--        <label class="col-sm-3 control-label">还款达成</label>-->
+<!--        <input type="checkbox"  name="sjRepayment" th:value="*{sjRepayment}" errmsg="实际还款" th:checked="*{sjRepayment == '1'}">实际还款&nbsp;&nbsp;-->
+<!--        条件-->
+<!--        <select  name="sjRepaymentCondition" th:field="*{sjRepaymentCondition}" id="sjRepaymentSel" required>-->
+<!--            <option value="0" >范围</option>-->
+<!--            <option value="1" >大于</option>-->
+<!--            <option value="2" >小于</option>-->
+<!--        </select>-->
+<!--        <input name="sjRepaymentOne" isxs="true" id="sjRepaymentOne" th:field="*{sjRepaymentOne}"  style="width: 70px;"  type="text" maxlength="8">-->
+<!--        <span id="sjRepaymentsp" th:if="*{sjRepaymentCondition eq '0'}">-&#45;&#45;<input id="sjRepaymentTwo" name="sjRepaymentTwo" th:field="*{sjRepaymentTwo}" style="width: 70px;"   type="text" maxlength="8"></span>-->
+<!--        <span id="sjRepaymentsp" th:if="*{sjRepaymentCondition ne '0'}" style="display: none">-&#45;&#45;<input id="sjRepaymentTwo" name="sjRepaymentTwo" th:field="*{sjRepaymentTwo}" style="width: 70px;"   type="text" maxlength="8"></span>-->
+<!--        元-->
+<!--    </div>-->
+<!--    <div class="form-group" style="200px;">-->
+<!--        <label class="col-sm-3 control-label"></label>-->
+<!--        <input type="checkbox"  name="sjRepaymentRate" th:value="*{sjRepaymentRate}" th:checked="*{sjRepaymentRate == '1'}" errmsg="实际还款率">实际还款率&nbsp;&nbsp;-->
+<!--        条件-->
+<!--        <select  name="sjRepaymentRateCondition" th:field="*{sjRepaymentRateCondition}" id="sjRepaymentRateSel" onchange="fanwei('sjRepaymentRate',this)"  required>-->
+<!--            <option value="0" >范围</option>-->
+<!--            <option value="1" >大于</option>-->
+<!--            <option value="2" >小于</option>-->
+<!--        </select>-->
+<!--        <input name="sjRepaymentRateOne" isxs="true" id="sjRepaymentRateOne" th:field="*{sjRepaymentRateOne}"  style="width: 70px;"  type="text" maxlength="8">-->
+<!--        <span id="sjRepaymentRatesp" th:if="*{sjRepaymentRateCondition eq '0'}" >-&#45;&#45;<input id="sjRepaymentRateTwo"  name="sjRepaymentRateTwo" th:field="*{sjRepaymentRateTwo}"  style="width: 70px;"   type="text" maxlength="8"></span>-->
+<!--        <span id="sjRepaymentRatesp" th:if="*{sjRepaymentRateCondition ne '0'}" style="display: none">-&#45;&#45;<input id="sjRepaymentRateTwo"  name="sjRepaymentRateTwo" th:field="*{sjRepaymentRateTwo}"  style="width: 70px;"   type="text" maxlength="8"></span>-->
+<!--        %-->
+<!--    </div>-->
 </div>
 <th:block th:include="include :: footer" />
 <script type="text/javascript">
