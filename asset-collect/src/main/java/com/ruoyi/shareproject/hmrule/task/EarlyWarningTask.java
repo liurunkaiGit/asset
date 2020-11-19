@@ -64,7 +64,8 @@ public class EarlyWarningTask {
         int miao = now.get(Calendar.SECOND);
         long hm = hour*60*60*1000L+fen*60*1000L+miao*1000L;
         for(TLjRule tr: lt){
-            long etime =  tr.getEndTime().getTime();
+            //修改 有效时间日为单位
+            long etime =  tr.getEndTime().getTime()+23*60L*60L*1000L+59*60*1000L+59*1000L;
             //如果任务过时 则将任务状态置为失效
             if(nowtime > etime) {
                 //任务超时 40 分钟就不会执行

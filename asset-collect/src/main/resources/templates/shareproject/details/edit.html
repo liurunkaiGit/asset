@@ -11,8 +11,12 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">时间段：</label>
             <div class="col-sm-8">
-                <input name="startTime" id="startTime"  th:field="*{startTime}"  class="time-input"  data-type="time" style="width: 70px; float:left;" maxlength="8"  type="text" required><span style=" float:left;">--</span>
-                <input name="endTime" id="endTime" th:field="*{endTime}"  class="time-input" data-type="time" style="width: 70px; float:left;"  maxlength="8"  type="text" required>
+<!--                <input name="startTime" id="startTime"  th:field="*{startTime}"  class="time-input"  data-type="time" style="width: 70px; float:left;" maxlength="8"  type="text" required><span style=" float:left;">&#45;&#45;</span>-->
+                <select  name="startTime" id="startTime" required>
+                </select>
+<!--                <input name="endTime" id="endTime" th:field="*{endTime}"  class="time-input" data-type="time" style="width: 70px; float:left;"  maxlength="8"  type="text" required>-->
+                <select  name="endTime" id="endTime" required>
+                </select>
                 <input name="endTimeHm" id="endTimeHm" type="hidden" th:value="*{endTimeHm}" >
                 <input name="startTimeHm" id="startTimeHm" type="hidden" th:value="*{startTimeHm}" >
             </div>
@@ -135,7 +139,8 @@
 
 
     </form>
-
+    <input type="hidden" id="startTimeSh"  th:value="${tLjRuleDetails.startTime}">
+    <input type="hidden" id="endTimeSh"  th:value="${tLjRuleDetails.endTime}">
 <!--    <div class="form-group" style="200px;">-->
 <!--        <label class="col-sm-3 control-label">还款达成</label>-->
 <!--        <input type="checkbox"  name="sjRepayment" th:value="*{sjRepayment}" errmsg="实际还款" th:checked="*{sjRepayment == '1'}">实际还款&nbsp;&nbsp;-->
@@ -195,10 +200,12 @@
     function submitHandler() {
         if ($.validate.form()) {
             var stps = $("#startTime").val().split(":");
-            var stpL = stps[0]*60*60*1000+stps[1]*60*1000+stps[2]*1000;
+            ///var stpL = stps[0]*60*60*1000+stps[1]*60*1000+stps[2]*1000;
+            var stpL = stps[0]*60*60*1000;
             $("#startTimeHm").val(stpL);
             var edps = $("#endTime").val().split(":");
-            var edpL = edps[0]*60*60*1000+edps[1]*60*1000+edps[2]*1000;
+            // var edpL = edps[0]*60*60*1000+edps[1]*60*1000+edps[2]*1000;
+            var edpL = edps[0]*60*60*1000;
             $("#endTimeHm").val(edpL);
             if(edpL<=stpL){
                 $.modal.alertWarning("时间段不正确");
@@ -298,6 +305,40 @@
                 $(this).val(0);
             }
         });
+
+        var startTimeSh = $("#startTimeSh").val();
+        var endTimeSh = $("#endTimeSh").val();
+        var startTime = $("#startTime");
+        var endTime = $("#endTime");
+
+        for (var i=1;i<25;i++){
+            var selSt='';
+            var seled='';
+            if(i<10){
+                if(("0"+i+":00") == startTimeSh){
+                    selSt = "selected";
+                }
+                if(("0"+i+":00") == endTimeSh){
+                    seled = "selected";
+                }
+                var hms = "<option  "+selSt+" value='0" + i + ":00'>0" + i + ":00</option>";
+                startTime.append(hms);
+                var hme = "<option  "+seled+" value='0" + i + ":00'>0" + i + ":00</option>";
+                endTime.append(hme);
+            }else{
+                if((""+i+":00") == startTimeSh){
+                    selSt = "selected";
+                }
+                if((""+i+":00") == endTimeSh){
+                    seled = "selected";
+                }
+                var hms = "<option  "+selSt+" value='" + i + ":00'>" + i + ":00</option>";
+                startTime.append(hms);
+                var hme = "<option  "+seled+" value='" + i + ":00'>" + i + ":00</option>";
+                endTime.append(hme);
+            }
+
+        }
     });
 </script>
 </body>

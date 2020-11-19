@@ -10,8 +10,12 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">时间段：</label>
                 <div class="col-sm-8">
-                    <input name="startTime" id="startTime" class="time-input"  data-type="time"  style="width: 70px; float:left;" maxlength="8"  type="text" required><span style=" float:left;">--</span>
-                    <input name="endTime" id="endTime" class="time-input" data-type="time"  style="width: 70px;float:left;"  maxlength="8"  type="text" required>
+<!--                    <input name="startTime" id="startTime"   data-type="time"  style="width: 70px; float:left;" maxlength="8"  type="text" required><span style=" float:left;">&#45;&#45;</span>-->
+                    <select  name="startTime" id="startTime" required>
+                    </select>
+<!--                    <input name="endTime" id="endTime" class="time-input" data-type="time"  style="width: 70px;float:left;"  maxlength="8"  type="text" required>-->
+                    <select  name="endTime" id="endTime" required>
+                    </select>
                     <input name="endTimeHm" id="endTimeHm" type="hidden">
                     <input name="startTimeHm" id="startTimeHm" type="hidden">
                 </div>
@@ -165,12 +169,14 @@
         function submitHandler() {
             if ($.validate.form()) {
                 var stps = $("#startTime").val().split(":");
-                var stpL = stps[0]*60*60*1000+stps[1]*60*1000+stps[2]*1000;
+                // var stpL = stps[0]*60*60*1000+stps[1]*60*1000+stps[2]*1000;
+                var stpL = stps[0]*60*60*1000;
                 $("#startTimeHm").val(stpL);
                 var edps = $("#endTime").val().split(":");
-                var edpL = edps[0]*60*60*1000+edps[1]*60*1000+edps[2]*1000;
+                // var edpL = edps[0]*60*60*1000+edps[1]*60*1000+edps[2]*1000;
+                var edpL = edps[0]*60*60*1000;
                 $("#endTimeHm").val(edpL);
-                if(edpL<=stpL){
+                if(edpL<stpL){
                     $.modal.alertWarning("时间段不正确");
                     return;
                 }
@@ -267,6 +273,23 @@
                     $(this).val(0);
                 }
             });
+            var startTime = $("#startTime");
+            var endTime = $("#endTime");
+            var df = "<option value=''>请选择</option>";
+            startTime.append(df);
+            endTime.append(df);
+            for (var i=1;i<25;i++){
+                if(i<10){
+                    var hm = "<option value='0" + i + ":00'>0" + i + ":00</option>";
+                    startTime.append(hm);
+                    endTime.append(hm);
+                }else{
+                    var hm = "<option value='" + i + ":00'>" + i + ":00</option>";
+                    startTime.append(hm);
+                    endTime.append(hm);
+                }
+
+            }
         });
     </script>
 </body>
