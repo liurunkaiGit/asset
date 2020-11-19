@@ -35,6 +35,7 @@ public class TLjRuleUserLogs extends BaseEntity
     /** 规则id */
     @Excel(name = "规则id")
     private Long ruleId;
+    private String ruleName;
 
     /** $column.columnComment */
     @Excel(name = "规则id")
