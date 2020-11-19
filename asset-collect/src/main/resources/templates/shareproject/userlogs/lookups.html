@@ -12,15 +12,20 @@
 <form class="form-horizontal m" id="form-logs-edit" th:object="${tLjRuleUserLogs}">
 <div class="layui-container">
     <div class="layui-row" style="font-size: 14px;">
-        <div class="layui-col-md4">
+        <div class="layui-col-md3">
+            <div class="grid-demo grid-demo-bg1">
+                主规则名称：<span th:text="*{ruleName}" ></span>
+            </div>
+        </div>
+        <div class="layui-col-md3">
             <div class="grid-demo grid-demo-bg1">
                 员工姓名：<span th:text="*{userName}" ></span>
             </div>
         </div>
-        <div class="layui-col-md4">
+        <div class="layui-col-md3">
             日期：<span th:text="${#dates.format(tLjRuleUserLogs.days, 'yyyy-MM-dd')}" ></span>
         </div>
-        <div class="layui-col-md4">
+        <div class="layui-col-md3">
             <div class="grid-demo grid-demo-bg1">
                 规则作用时间：<span th:text="*{startTime}" ></span>-<span th:text="*{endTime}" ></span>
             </div>
@@ -101,8 +106,8 @@
             <div class="layui-col-md2">
                 <div class="layui-card">
                     <div class="layui-card-body" >
-                        <div style="width: 200px;height:80px;">
-                            <div style="margin-top:15px;float: left"> <img th:src="@{/img/hm_2.png}"   style="width: 50px;height: 50px;float: left"></div>
+                        <div style="width: 200px;height:100px;">
+                            <div style="margin-top:25px;float: left"> <img th:src="@{/img/hm_2.png}"   style="width: 50px;height: 50px;float: left"></div>
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">案件处理量(件)</div>
                                 <div style="font-size:20px;font-weight:bold" th:text="*{anjianyichuli}"></div>
@@ -116,6 +121,11 @@
                                     <span th:if="*{anjianDurationZhibiao eq   -1}"><img th:src="@{/img/hms1.png}" style="width: 7px;height: 7px;" ></img>&nbsp;<span  th:text="*{anjianDurationBaifen}"></span>%低于指标</span>
                                     <span th:if="*{anjianDurationZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height: 7px;" ></img>&nbsp;<span  th:text="*{anjianDurationBaifen}"></span>%正常</span>
                                 </div>
+                                <div style="font-size:5px;" th:if="*{caseNumbersOne != null && caseNumbersOne ne ''}">
+                                    <span th:if="*{caseNumbersCondition eq   '0'}">范围&nbsp;<span th:text="*{caseNumbersOne}"></span>--<span th:text="*{caseNumbersTwo}"></span> </span>
+                                    <span th:if="*{caseNumbersCondition eq   '1'}">大于&nbsp;<span th:text="*{caseNumbersOne}"></span> </span>
+                                    <span th:if="*{caseNumbersCondition eq   '2'}">小于&nbsp;<span th:text="*{caseNumbersOne}"></span> </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -126,7 +136,7 @@
             <div class="layui-col-md2">
                 <div class="layui-card">
                     <div class="layui-card-body" >
-                        <div style="width: 200px;height:80px;">
+                        <div style="width: 200px;height:100px;">
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">案件处理率(%)</div>
                                 <div style="font-size:20px;font-weight:bold" th:text="*{anjianlv}"></div>
@@ -140,6 +150,11 @@
                                     <span th:if="*{anjianyichuliZhibiao eq   -1}"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{anjianyichuliBaifen}"></span>%低于指标</span>
                                     <span th:if="*{anjianyichuliZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{anjianyichuliBaifen}"></span>%正常</span>
                                 </div>
+                                <div style="font-size:5px;" th:if="*{caseRateOne != null && caseRateOne ne ''}">
+                                    <span th:if="*{caseRateCondition eq   '0'}">范围&nbsp;<span th:text="*{caseRateOne}"></span>--<span th:text="*{caseRateTwo}"></span> </span>
+                                    <span th:if="*{caseRateCondition eq   '1'}">大于&nbsp;<span th:text="*{caseRateOne}"></span></span>
+                                    <span th:if="*{caseRateCondition eq   '2'}">小于&nbsp;<span th:text="*{caseRateOne}"></span></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -151,7 +166,7 @@
 
 <!--                <div class="layui-card">-->
 <!--                    <div class="layui-card-body" >-->
-<!--                        <div style="width: 200px;height:80px;">-->
+<!--                        <div style="width: 200px;height:100px;">-->
 <!--                            <div style="float: left;margin-left:10px;margin-top:5px;">-->
 <!--                                <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">实际还款(元)</div>-->
 <!--                                <div style="font-size:20px;font-weight:bold" th:text="*{shiji}"></div>-->
@@ -176,7 +191,7 @@
 
 <!--                <div class="layui-card">-->
 <!--                    <div class="layui-card-body" >-->
-<!--                        <div style="width: 200px;height:80px;">-->
+<!--                        <div style="width: 200px;height:100px;">-->
 <!--                            <div style="float: left;margin-left:10px;margin-top:5px;">-->
 <!--                                <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">实际还款率(%)</div>-->
 <!--                                <div style="font-size:20px;font-weight:bold" th:text="*{shijilv}"></div>-->
@@ -205,7 +220,7 @@
 
                 <div class="layui-card">
                     <div class="layui-card-body" >
-                        <div style="width: 200px;height:80px;">
+                        <div style="width: 200px;height:100px;">
                             <div style="margin-top:15px;float: left"> <img th:src="@{/img/hm_3.png}"   style="width: 50px;height: 50px;float: left"></div>
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">通话时长(分)</div>
@@ -220,6 +235,11 @@
                                     <span th:if="*{tonghuaDurationZhibiao eq   -1}" ><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuaDurationBaifen}"></span>%低于指标</span>
                                     <span th:if="*{tonghuaDurationZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuaDurationBaifen}"></span>%正常</span>
                                 </div>
+                                <div style="font-size:5px;" th:if="*{conversationOne != null && conversationOne ne ''}">
+                                    <span th:if="*{conversationCondition eq   '0'}">范围&nbsp;<span th:text="*{conversationOne}"></span>--<span th:text="*{conversationTwo}"></span> </span>
+                                    <span th:if="*{conversationCondition eq   '1'}">大于&nbsp;<span th:text="*{conversationOne}"></span></span>
+                                    <span th:if="*{conversationCondition eq   '2'}">小于&nbsp;<span th:text="*{conversationOne}"></span></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -230,7 +250,7 @@
 
                 <div class="layui-card">
                     <div class="layui-card-body" >
-                        <div style="width: 200px;height:80px;">
+                        <div style="width: 200px;height:100px;">
                             <div style="margin-top:15px;float: left"> <img th:src="@{/img/hm_4.png}"   style="width: 50px;height: 50px;float: left"></div>
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">拨打次数(次)</div>
@@ -245,6 +265,11 @@
                                     <span th:if="*{tonghuacsZhibiao eq   -1}" ><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuacsBaifen}"></span>%低于指标</span>
                                     <span th:if="*{tonghuacsZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuacsBaifen}"></span>%正常</span>
                                 </div>
+                                <div style="font-size:5px;" th:if="*{conversationCishuOne != null && conversationCishuOne ne ''}">
+                                    <span th:if="*{conversationCishuCondition eq   '0'}">范围&nbsp;<span th:text="*{conversationCishuOne}"></span>--<span th:text="*{conversationCishuTwo}"></span> </span>
+                                    <span th:if="*{conversationCishuCondition eq   '1'}">大于&nbsp;<span th:text="*{conversationCishuOne}"></span></span>
+                                    <span th:if="*{conversationCishuCondition eq   '2'}">小于&nbsp;<span th:text="*{conversationCishuOne}"></span></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -255,7 +280,7 @@
 
                 <div class="layui-card">
                     <div class="layui-card-body" >
-                        <div style="width: 200px;height:80px;">
+                        <div style="width: 200px;height:100px;">
                             <div style="margin-top:15px;float: left"> <img th:src="@{/img/hm_5.png}"   style="width: 50px;height: 50px;float: left"></div>
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">接通率(%)</div>
@@ -269,6 +294,11 @@
                                     <span th:if="*{jietongcsZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jietongcsBaifen}"></span>%高于指标</span>
                                     <span th:if="*{jietongcsZhibiao eq   -1}"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jietongcsBaifen}"></span>%低于指标</span>
                                     <span th:if="*{jietongcsZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jietongcsBaifen}"></span>%正常</span>
+                                </div>
+                                <div style="font-size:5px;" th:if="*{engRateOne != null && engRateOne ne ''}">
+                                    <span th:if="*{engRateCondition eq   '0'}">范围&nbsp;<span th:text="*{engRateOne}"></span>--<span th:text="*{engRateTwo}"></span> </span>
+                                    <span th:if="*{engRateCondition eq   '1'}">大于&nbsp;<span th:text="*{engRateOne}"></span></span>
+                                    <span th:if="*{engRateCondition eq   '2'}">小于&nbsp;<span th:text="*{engRateOne}"></span></span>
                                 </div>
                             </div>
                         </div>
@@ -285,7 +315,7 @@
 
                 <div class="layui-card">
                     <div class="layui-card-body" >
-                        <div style="width: 200px;height:80px;">
+                        <div style="width: 200px;height:100px;">
                             <div style="margin-top:15px;float: left"> <img th:src="@{/img/hm_6.png}"   style="width: 50px;height: 50px;float: left"></div>
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;"><img th:src="@{/img/hm_61.png}" style="width: 12px;height: 12px;" >在线时长(分)</div>
@@ -300,6 +330,11 @@
                                     <span th:if="*{onlineZhibiao eq   -1}" ><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{onlineBaifen}"></span>%低于指标</span>
                                     <span th:if="*{onlineZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{onlineBaifen}"></span>%正常</span>
                                 </div>
+                                <div style="font-size:5px;" th:if="*{onlineOne != null && onlineOne ne ''}">
+                                    <span th:if="*{onlineCondition eq   '0'}">范围&nbsp;<span th:text="*{onlineOne}"></span>--<span th:text="*{onlineTwo}"></span> </span>
+                                    <span th:if="*{onlineCondition eq   '1'}">大于&nbsp;<span th:text="*{onlineOne}"></span></span>
+                                    <span th:if="*{onlineCondition eq   '2'}">小于&nbsp;<span th:text="*{onlineOne}"></span></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -310,7 +345,7 @@
 
                 <div class="layui-card">
                     <div class="layui-card-body" >
-                        <div style="width: 200px;height:80px;">
+                        <div style="width: 200px;height:100px;">
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;"><img th:src="@{/img/hm_12.png}" style="width: 12px;height: 12px;" >退出次数(次)</div>
                                 <div style="font-size:20px;font-weight:bold" th:text="*{outCishu}"></div>
@@ -324,6 +359,11 @@
                                     <span th:if="*{outCishuZhibiao eq   -1}" ><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{outCishuBaifen}"></span>%低于指标</span>
                                     <span th:if="*{outCishuZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{outCishuBaifen}"></span>%正常</span>
                                 </div>
+                                <div style="font-size:5px;" th:if="*{outOne != null && outOne ne ''}">
+                                    <span th:if="*{outCondition eq   '0'}">范围&nbsp;<span th:text="*{outOne}"></span>--<span th:text="*{outTwo}"></span> </span>
+                                    <span th:if="*{outCondition eq   '1'}">大于&nbsp;<span th:text="*{outOne}"></span></span>
+                                    <span th:if="*{outCondition eq   '2'}">小于&nbsp;<span th:text="*{outOne}"></span></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -333,7 +373,7 @@
             <div class="layui-col-md2">
                 <div class="layui-card">
                     <div class="layui-card-body" >
-                        <div style="width: 200px;height:80px;">
+                        <div style="width: 200px;height:100px;">
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;"><img th:src="@{/img/hm_62.png}" style="width: 12px;height: 12px;" >间隔时长(分)</div>
                                 <div style="font-size:20px;font-weight:bold" th:text="*{jiangeStr}"></div>
@@ -346,6 +386,11 @@
                                     <span th:if="*{jiangeZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jiangeBaifen}"></span>%高于指标</span>
                                     <span th:if="*{jiangeZhibiao eq   -1}" ><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jiangeBaifen}"></span>%低于指标</span>
                                     <span th:if="*{jiangeZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jiangeBaifen}"></span>%正常</span>
+                                </div>
+                                <div style="font-size:5px;" th:if="*{outOne != null && outOne ne ''}">
+                                    <span th:if="*{intervalsCondition eq   '0'}">范围&nbsp;<span th:text="*{intervalsOne}"></span>--<span th:text="*{intervalsTwo}"></span> </span>
+                                    <span th:if="*{intervalsCondition eq   '1'}">大于&nbsp;<span th:text="*{intervalsOne}"></span></span>
+                                    <span th:if="*{intervalsCondition eq   '2'}">小于&nbsp;<span th:text="*{intervalsOne}"></span></span>
                                 </div>
                             </div>
                         </div>
