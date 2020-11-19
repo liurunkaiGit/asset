@@ -28,7 +28,7 @@ public abstract  class CheckHandler {
     }
 
     public static int tiaojian(String tiaoJian, Integer one, Integer two, Double biaozhun){
-        if(biaozhun==null)return 1;
+        if(biaozhun==null)biaozhun = new Double(0);
         if("0".equals(tiaoJian)){
             if(one == null || null == two){
                 return 0;
@@ -49,7 +49,7 @@ public abstract  class CheckHandler {
     }
 
     public static int tiaojian(String tiaoJian, Long one, Long two, Double biaozhun){
-        if(biaozhun==null)return 1;
+        if(null == biaozhun)biaozhun = new Double(0);
         if("0".equals(tiaoJian)){
             if(one == null || null == two){
                 return 0;
@@ -70,7 +70,7 @@ public abstract  class CheckHandler {
     }
 
     public static int tiaojian(String tiaoJian, BigDecimal one, BigDecimal two, Double biaozhun){
-        if(biaozhun==null)return 1;
+        if(biaozhun==null)biaozhun = new Double(0);
         if("0".equals(tiaoJian)){
             if(one == null || null == two){
                 return 0;
