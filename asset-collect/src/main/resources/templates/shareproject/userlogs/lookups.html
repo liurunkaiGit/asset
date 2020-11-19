@@ -106,10 +106,15 @@
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">案件处理量(件)</div>
                                 <div style="font-size:20px;font-weight:bold" th:text="*{anjianyichuli}"></div>
-                                <div style="font-size:5px;" >
-                                    <span th:if="*{anjianDurationZhibiao eq   1}" style="color: green"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{anjianDurationBaifen}"></span>%高于指标</span>
-                                    <span th:if="*{anjianDurationZhibiao eq   -1}" style="color: red"><img th:src="@{/img/hms1.png}" style="width: 7px;height: 7px;" ></img>&nbsp;<span  th:text="*{anjianDurationBaifen}"></span>%低于指标</span>
-                                    <span th:if="*{anjianDurationZhibiao eq   0}" style="color: green"><img th:src="@{/img/hms2.png}" style="width: 7px;height: 7px;" ></img>&nbsp;<span  th:text="*{anjianDurationBaifen}"></span>%正常</span>
+                                <div style="font-size:5px;color: green" th:if="*{anjianError eq 0}" >
+                                    <span th:if="*{anjianDurationZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{anjianDurationBaifen}"></span>%高于指标</span>
+                                    <span th:if="*{anjianDurationZhibiao eq   -1}"><img th:src="@{/img/hms1.png}" style="width: 7px;height: 7px;" ></img>&nbsp;<span  th:text="*{anjianDurationBaifen}"></span>%低于指标</span>
+                                    <span th:if="*{anjianDurationZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height: 7px;" ></img>&nbsp;<span  th:text="*{anjianDurationBaifen}"></span>%正常</span>
+                                </div>
+                                <div style="font-size:5px;color: red" th:if="*{anjianError ne 0}" >
+                                    <span th:if="*{anjianDurationZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{anjianDurationBaifen}"></span>%高于指标</span>
+                                    <span th:if="*{anjianDurationZhibiao eq   -1}"><img th:src="@{/img/hms1.png}" style="width: 7px;height: 7px;" ></img>&nbsp;<span  th:text="*{anjianDurationBaifen}"></span>%低于指标</span>
+                                    <span th:if="*{anjianDurationZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height: 7px;" ></img>&nbsp;<span  th:text="*{anjianDurationBaifen}"></span>%正常</span>
                                 </div>
                             </div>
                         </div>
@@ -125,10 +130,15 @@
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">案件处理率(%)</div>
                                 <div style="font-size:20px;font-weight:bold" th:text="*{anjianlv}"></div>
-                                <div style="font-size:5px;" >
-                                    <span th:if="*{anjianyichuliZhibiao eq   1}" style="color: green"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{anjianyichuliBaifen}"></span>%高于指标</span>
-                                    <span th:if="*{anjianyichuliZhibiao eq   -1}" style="color: red"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{anjianyichuliBaifen}"></span>%低于指标</span>
-                                    <span th:if="*{anjianyichuliZhibiao eq   0}" style="color: green"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{anjianyichuliBaifen}"></span>%正常</span>
+                                <div style="font-size:5px;color: green" th:if="*{anjianlvError eq 0}">
+                                    <span th:if="*{anjianyichuliZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{anjianyichuliBaifen}"></span>%高于指标</span>
+                                    <span th:if="*{anjianyichuliZhibiao eq   -1}"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{anjianyichuliBaifen}"></span>%低于指标</span>
+                                    <span th:if="*{anjianyichuliZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{anjianyichuliBaifen}"></span>%正常</span>
+                                </div>
+                                <div style="font-size:5px;color: red" th:if="*{anjianlvError ne 0}">
+                                    <span th:if="*{anjianyichuliZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{anjianyichuliBaifen}"></span>%高于指标</span>
+                                    <span th:if="*{anjianyichuliZhibiao eq   -1}"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{anjianyichuliBaifen}"></span>%低于指标</span>
+                                    <span th:if="*{anjianyichuliZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{anjianyichuliBaifen}"></span>%正常</span>
                                 </div>
                             </div>
                         </div>
@@ -145,10 +155,15 @@
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">实际还款(元)</div>
                                 <div style="font-size:20px;font-weight:bold" th:text="*{shiji}"></div>
-                                <div style="font-size:5px;" >
-                                    <span th:if="*{yinghuanZhibiao eq   1}" style="color: green"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{yinghuanBaifen}"></span>%高于指标</span>
-                                    <span th:if="*{yinghuanZhibiao eq   -1}" style="color: red"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{yinghuanBaifen}"></span>%低于指标</span>
-                                    <span th:if="*{yinghuanZhibiao eq   0}" style="color: green"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{yinghuanBaifen}"></span>%正常</span>
+                                <div style="font-size:5px;color: green" th:if="*{shijiError eq 0}">
+                                    <span th:if="*{yinghuanZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{yinghuanBaifen}"></span>%高于指标</span>
+                                    <span th:if="*{yinghuanZhibiao eq   -1}" ><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{yinghuanBaifen}"></span>%低于指标</span>
+                                    <span th:if="*{yinghuanZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{yinghuanBaifen}"></span>%正常</span>
+                                </div>
+                                <div style="font-size:5px;color: red" th:if="*{shijiError ne 0}">
+                                    <span th:if="*{yinghuanZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{yinghuanBaifen}"></span>%高于指标</span>
+                                    <span th:if="*{yinghuanZhibiao eq   -1}" ><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{yinghuanBaifen}"></span>%低于指标</span>
+                                    <span th:if="*{yinghuanZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{yinghuanBaifen}"></span>%正常</span>
                                 </div>
                             </div>
                         </div>
@@ -165,10 +180,15 @@
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">实际还款率(%)</div>
                                 <div style="font-size:20px;font-weight:bold" th:text="*{shijilv}"></div>
-                                <div style="font-size:5px;" >
-                                    <span th:if="*{shijiZhibiao eq   1}" style="color: green"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{shijiBaifen}"></span>%高于指标</span>
-                                    <span th:if="*{shijiZhibiao eq   -1}" style="color: red"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{shijiBaifen}"></span>%低于指标</span>
-                                    <span th:if="*{shijiZhibiao eq   0}" style="color: green"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{shijiBaifen}"></span>%正常</span>
+                                <div style="font-size:5px;color: green" th:if="*{shijilvError eq 0}">
+                                    <span th:if="*{shijiZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{shijiBaifen}"></span>%高于指标</span>
+                                    <span th:if="*{shijiZhibiao eq   -1}"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{shijiBaifen}"></span>%低于指标</span>
+                                    <span th:if="*{shijiZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{shijiBaifen}"></span>%正常</span>
+                                </div>
+                                <div style="font-size:5px;color: red" th:if="*{shijilvError ne 0}">
+                                    <span th:if="*{shijiZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{shijiBaifen}"></span>%高于指标</span>
+                                    <span th:if="*{shijiZhibiao eq   -1}"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{shijiBaifen}"></span>%低于指标</span>
+                                    <span th:if="*{shijiZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{shijiBaifen}"></span>%正常</span>
                                 </div>
                             </div>
                         </div>
@@ -190,10 +210,15 @@
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">通话时长(分)</div>
                                 <div style="font-size:20px;font-weight:bold" th:text="*{tonghuaDurationStr}"></div>
-                                <div style="font-size:5px;" >
-                                    <span th:if="*{tonghuaDurationZhibiao eq   1}" style="color: green"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuaDurationBaifen}"></span>%高于指标</span>
-                                    <span th:if="*{tonghuaDurationZhibiao eq   -1}" style="color: red"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuaDurationBaifen}"></span>%低于指标</span>
-                                    <span th:if="*{tonghuaDurationZhibiao eq   0}" style="color: green"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuaDurationBaifen}"></span>%正常</span>
+                                <div style="font-size:5px;color: green" th:if="*{tonghuacsError eq 0}">
+                                    <span th:if="*{tonghuaDurationZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuaDurationBaifen}"></span>%高于指标</span>
+                                    <span th:if="*{tonghuaDurationZhibiao eq   -1}" ><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuaDurationBaifen}"></span>%低于指标</span>
+                                    <span th:if="*{tonghuaDurationZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuaDurationBaifen}"></span>%正常</span>
+                                </div>
+                                <div style="font-size:5px;color: red" th:if="*{tonghuacsError ne 0}">
+                                    <span th:if="*{tonghuaDurationZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuaDurationBaifen}"></span>%高于指标</span>
+                                    <span th:if="*{tonghuaDurationZhibiao eq   -1}" ><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuaDurationBaifen}"></span>%低于指标</span>
+                                    <span th:if="*{tonghuaDurationZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuaDurationBaifen}"></span>%正常</span>
                                 </div>
                             </div>
                         </div>
@@ -210,10 +235,15 @@
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">通话次数(次)</div>
                                 <div style="font-size:20px;font-weight:bold" th:text="*{tonghuacs}"></div>
-                                <div style="font-size:5px;" >
-                                    <span th:if="*{tonghuacsZhibiao eq   1}" style="color: green"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuacsBaifen}"></span>%高于指标</span>
-                                    <span th:if="*{tonghuacsZhibiao eq   -1}" style="color: red"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuacsBaifen}"></span>%低于指标</span>
-                                    <span th:if="*{tonghuacsZhibiao eq   0}" style="color: green"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuacsBaifen}"></span>%正常</span>
+                                <div style="font-size:5px;color: green" th:if="*{tonghuacsError eq 0}">
+                                    <span th:if="*{tonghuacsZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuacsBaifen}"></span>%高于指标</span>
+                                    <span th:if="*{tonghuacsZhibiao eq   -1}" ><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuacsBaifen}"></span>%低于指标</span>
+                                    <span th:if="*{tonghuacsZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuacsBaifen}"></span>%正常</span>
+                                </div>
+                                <div style="font-size:5px;color: red" th:if="*{tonghuacsError ne 0}">
+                                    <span th:if="*{tonghuacsZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuacsBaifen}"></span>%高于指标</span>
+                                    <span th:if="*{tonghuacsZhibiao eq   -1}" ><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuacsBaifen}"></span>%低于指标</span>
+                                    <span th:if="*{tonghuacsZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{tonghuacsBaifen}"></span>%正常</span>
                                 </div>
                             </div>
                         </div>
@@ -230,10 +260,15 @@
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;">接通率(%)</div>
                                 <div style="font-size:20px;font-weight:bold" th:text="*{jietonglv}"></div>
-                                <div style="font-size:5px;" >
-                                    <span th:if="*{jietongcsZhibiao eq   1}" style="color: green"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jietongcsBaifen}"></span>%高于指标</span>
-                                    <span th:if="*{jietongcsZhibiao eq   -1}" style="color: red"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jietongcsBaifen}"></span>%低于指标</span>
-                                    <span th:if="*{jietongcsZhibiao eq   0}" style="color: green"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jietongcsBaifen}"></span>%正常</span>
+                                <div style="font-size:5px;color: green" th:if="*{jietonglvError eq 0}">
+                                    <span th:if="*{jietongcsZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jietongcsBaifen}"></span>%高于指标</span>
+                                    <span th:if="*{jietongcsZhibiao eq   -1}"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jietongcsBaifen}"></span>%低于指标</span>
+                                    <span th:if="*{jietongcsZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jietongcsBaifen}"></span>%正常</span>
+                                </div>
+                                <div style="font-size:5px;color: red" th:if="*{jietonglvError ne 0}">
+                                    <span th:if="*{jietongcsZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jietongcsBaifen}"></span>%高于指标</span>
+                                    <span th:if="*{jietongcsZhibiao eq   -1}"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jietongcsBaifen}"></span>%低于指标</span>
+                                    <span th:if="*{jietongcsZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jietongcsBaifen}"></span>%正常</span>
                                 </div>
                             </div>
                         </div>
@@ -255,10 +290,15 @@
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;"><img th:src="@{/img/hm_61.png}" style="width: 12px;height: 12px;" >在线时长(分)</div>
                                 <div style="font-size:20px;font-weight:bold" th:text="*{onlineTimeStr}"></div>
-                                <div style="font-size:5px;" >
-                                    <span th:if="*{onlineZhibiao eq   1}" style="color: green"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{onlineBaifen}"></span>%高于指标</span>
-                                    <span th:if="*{onlineZhibiao eq   -1}" style="color: red"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{onlineBaifen}"></span>%低于指标</span>
-                                    <span th:if="*{onlineZhibiao eq   0}" style="color: green"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{onlineBaifen}"></span>%正常</span>
+                                <div style="font-size:5px;color: green" th:if="*{onlineError eq 0}" >
+                                    <span th:if="*{onlineZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{onlineBaifen}"></span>%高于指标</span>
+                                    <span th:if="*{onlineZhibiao eq   -1}" ><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{onlineBaifen}"></span>%低于指标</span>
+                                    <span th:if="*{onlineZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{onlineBaifen}"></span>%正常</span>
+                                </div>
+                                <div style="font-size:5px;color: red" th:if="*{onlineError ne 0}" >
+                                    <span th:if="*{onlineZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{onlineBaifen}"></span>%高于指标</span>
+                                    <span th:if="*{onlineZhibiao eq   -1}" ><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{onlineBaifen}"></span>%低于指标</span>
+                                    <span th:if="*{onlineZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{onlineBaifen}"></span>%正常</span>
                                 </div>
                             </div>
                         </div>
@@ -274,10 +314,15 @@
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;"><img th:src="@{/img/hm_12.png}" style="width: 12px;height: 12px;" >退出次数(次)</div>
                                 <div style="font-size:20px;font-weight:bold" th:text="*{outCishu}"></div>
-                                <div style="font-size:5px;" >
-                                    <span th:if="*{outCishuZhibiao eq   1}" style="color: green"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{outCishuBaifen}"></span>%高于指标</span>
-                                    <span th:if="*{outCishuZhibiao eq   -1}" style="color: red"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{outCishuBaifen}"></span>%低于指标</span>
-                                    <span th:if="*{outCishuZhibiao eq   0}" style="color: green"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{outCishuBaifen}"></span>%正常</span>
+                                <div style="font-size:5px;color: green" th:if="*{outError eq 0}" >
+                                    <span th:if="*{outCishuZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{outCishuBaifen}"></span>%高于指标</span>
+                                    <span th:if="*{outCishuZhibiao eq   -1}" ><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{outCishuBaifen}"></span>%低于指标</span>
+                                    <span th:if="*{outCishuZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{outCishuBaifen}"></span>%正常</span>
+                                </div>
+                                <div style="font-size:5px;color: red" th:if="*{outError ne 0}" >
+                                    <span th:if="*{outCishuZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{outCishuBaifen}"></span>%高于指标</span>
+                                    <span th:if="*{outCishuZhibiao eq   -1}" ><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{outCishuBaifen}"></span>%低于指标</span>
+                                    <span th:if="*{outCishuZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{outCishuBaifen}"></span>%正常</span>
                                 </div>
                             </div>
                         </div>
@@ -292,10 +337,15 @@
                             <div style="float: left;margin-left:10px;margin-top:5px;">
                                 <div style="width:130px;height:8px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:12.5px;height:30px;"><img th:src="@{/img/hm_62.png}" style="width: 12px;height: 12px;" >间隔时长(分)</div>
                                 <div style="font-size:20px;font-weight:bold" th:text="*{jiangeStr}"></div>
-                                <div style="font-size:5px;" >
-                                    <span th:if="*{jiangeZhibiao eq   1}" style="color: green"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jiangeBaifen}"></span>%高于指标</span>
-                                    <span th:if="*{jiangeZhibiao eq   -1}" style="color: red"><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jiangeBaifen}"></span>%低于指标</span>
-                                    <span th:if="*{jiangeZhibiao eq   0}" style="color: green"><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jiangeBaifen}"></span>%正常</span>
+                                <div style="font-size:5px;color: green" th:if="*{jiangeError eq 0}" >
+                                    <span th:if="*{jiangeZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jiangeBaifen}"></span>%高于指标</span>
+                                    <span th:if="*{jiangeZhibiao eq   -1}" ><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jiangeBaifen}"></span>%低于指标</span>
+                                    <span th:if="*{jiangeZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jiangeBaifen}"></span>%正常</span>
+                                </div>
+                                <div style="font-size:5px;color: red" th:if="*{jiangeError ne 0}" >
+                                    <span th:if="*{jiangeZhibiao eq   1}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jiangeBaifen}"></span>%高于指标</span>
+                                    <span th:if="*{jiangeZhibiao eq   -1}" ><img th:src="@{/img/hms1.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jiangeBaifen}"></span>%低于指标</span>
+                                    <span th:if="*{jiangeZhibiao eq   0}" ><img th:src="@{/img/hms2.png}" style="width: 7px;height:7px;" ></img>&nbsp;<span  th:text="*{jiangeBaifen}"></span>%正常</span>
                                 </div>
                             </div>
                         </div>

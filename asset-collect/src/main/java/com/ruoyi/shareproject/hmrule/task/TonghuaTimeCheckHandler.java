@@ -44,7 +44,7 @@ public class TonghuaTimeCheckHandler extends CheckHandler{
         userLog.setTonghuacsError(0);
         userLog.setJietonglvError(0);
         if("1".equals(tLjRuleDetails.getConversationTime())){
-            userLog.setTonghuaError(tiaojian(tLjRuleDetails.getConversationCondition(),tLjRuleDetails.getConversationOne()*1000L,getTiaojianTwo(tLjRuleDetails.getConversationTwo())*1000L,mm.getDurations()));
+            userLog.setTonghuaError(tiaojian(tLjRuleDetails.getConversationCondition(),tLjRuleDetails.getConversationOne()*1000L*60L,getTiaojianTwo(tLjRuleDetails.getConversationTwo())*1000L*60L,mm.getDurations()));
         }
         userLog.setTonghuacs(mm.getFrequencys().intValue());
 

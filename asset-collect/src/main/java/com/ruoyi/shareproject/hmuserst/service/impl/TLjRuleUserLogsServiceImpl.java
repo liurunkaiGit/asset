@@ -140,11 +140,14 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
                 m.put("zhibiao",-1);
                 m.put("baifen",baifen(one-zhibiao,one.doubleValue()));
                 return m;
-            }else{
-                m.put("zhibiao",1);
-                m.put("baifen",baifen(zhibiao-one,one.doubleValue()));
-                return m;
             }
+//            else{
+////                m.put("zhibiao",1);
+////                m.put("baifen",baifen(zhibiao-one,one.doubleValue()));
+//                m.put("zhibiao",0);
+//                m.put("baifen",0);
+//                return m;
+//            }
         }else if("2".equals(tiaoJian)){
             if(one == null ){
                 m.put("zhibiao",0);
@@ -152,14 +155,17 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
                 return m;
             }
             if(zhibiao > one){
-                m.put("zhibiao",1);
+                m.put("zhibiao",-1);
                 m.put("baifen",baifen(zhibiao-one,one.doubleValue()));
                 return m;
-            }else{
-                m.put("zhibiao",-1);
-                m.put("baifen",baifen(one-zhibiao,one.doubleValue()));
-                return m;
             }
+//            else{
+////                m.put("zhibiao",-1);
+////                m.put("baifen",baifen(one-zhibiao,one.doubleValue()));
+//                m.put("zhibiao",0);
+//                m.put("baifen",0);
+//                return m;
+//            }
         }
         m.put("zhibiao",0);
         m.put("baifen",0);
