@@ -187,6 +187,7 @@ CREATE TABLE `t_lj_rule_user_logs` (
   `login_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '登录id',
   `user_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户昵称',
   `rule_id` bigint(20) DEFAULT NULL COMMENT '规则id',
+  `rule_name` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '主规则名称',
   `details_id` bigint(20) NOT NULL,
   `start_time` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '开始时间段',
   `end_time` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '结束时间段',
