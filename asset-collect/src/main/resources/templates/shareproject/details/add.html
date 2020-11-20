@@ -8,7 +8,7 @@
         <form class="form-horizontal m" id="form-details-add">
             <input name="ruleId" id="ruleId" th:value="${ruleId}" type="hidden">
             <div class="form-group">
-                <label class="col-sm-3 control-label">时间段：</label>
+                <label class="col-sm-3 control-label">时间段:</label>
                 <div class="col-sm-8">
 <!--                    <input name="startTime" id="startTime"   data-type="time"  style="width: 70px; float:left;" maxlength="8"  type="text" required><span style=" float:left;">&#45;&#45;</span>-->
                     <select  name="startTime" id="startTime" required>
@@ -21,8 +21,8 @@
                 </div>
             </div>
             <div class="form-group" style="200px;">
-                <label class="col-sm-3 control-label">登录：</label>
-                <input type="checkbox"  name="onlineTime" errmsg="在线时长"  value="0">在线时长&nbsp;&nbsp;
+                <label class="col-sm-3 control-label">登录:</label>
+                <input type="checkbox"  name="onlineTime" errmsg="在线时长"  value="0"><label style="width: 70px;">在线时长</label>&nbsp;
                 条件
                 <select  name="onlineCondition" id="onlineTimeSel"  onchange="fanwei('onlineTime',this)">
                     <option value="0">范围</option>
@@ -33,7 +33,7 @@
             </div>
             <div class="form-group" style="200px;">
                 <label class="col-sm-3 control-label"></label>
-                <input type="checkbox"  name="outTime" errmsg="退出次数" value="0">退出次数&nbsp;&nbsp;
+                <input type="checkbox"  name="outTime" errmsg="退出次数" value="0"><label style="width: 70px;">退出次数</label>&nbsp;
                 条件
                 <select  name="outCondition" id="outTimeSel"  onchange="fanwei('outTime',this)"  required>
                     <option value="0">范围</option>
@@ -44,7 +44,7 @@
             </div>
             <div class="form-group" style="200px;">
                 <label class="col-sm-3 control-label"></label>
-                <input type="checkbox"  name="intervals" errmsg="间隔时长" value="0">间隔时长&nbsp;&nbsp;
+                <input type="checkbox"  name="intervals" errmsg="间隔时长" value="0"><label style="width: 70px;">间隔时长</label>&nbsp;
                 条件
                 <select  name="intervalsCondition" id="intervalsSel"  onchange="fanwei('intervals',this)" required>
                     <option value="0">范围</option>
@@ -55,8 +55,8 @@
             </div>
 
             <div class="form-group" style="200px;">
-                <label class="col-sm-3 control-label">通话</label>
-                <input type="checkbox"  name="conversationTime" errmsg="通话时长" value="0">通话时长&nbsp;&nbsp;
+                <label class="col-sm-3 control-label">通话:</label>
+                <input type="checkbox"  name="conversationTime" errmsg="通话时长" value="0"><label style="width: 70px;">通话时长</label>&nbsp;
                 条件
                 <select  name="conversationCondition" id="conversationTimeSel"   onchange="fanwei('conversationTime',this)"  required>
                     <option value="0">范围</option>
@@ -67,7 +67,7 @@
             </div>
             <div class="form-group" style="200px;">
                 <label class="col-sm-3 control-label"></label>
-                <input type="checkbox"  name="conversationCishu" errmsg="拨打次数" value="0">拨打次数&nbsp;&nbsp;
+                <input type="checkbox"  name="conversationCishu" errmsg="拨打次数" value="0"><label style="width: 70px;">拨打次数</label>&nbsp;
                 条件
                 <select  name="conversationCishuCondition" id="conversationCishuSel" onchange="fanwei('conversationCishu',this)" required>
                     <option value="0">范围</option>
@@ -78,7 +78,7 @@
             </div>
             <div class="form-group" style="200px;">
                 <label class="col-sm-3 control-label"></label>
-                <input type="checkbox"  name="engRate" errmsg="接通率" value="0">接通率&nbsp;&nbsp;
+                <input type="checkbox"  name="engRate" errmsg="接通率" value="0"><label style="width: 70px;">接通率</label>&nbsp;
                 条件
                 <select  name="engRateCondition" id="engRateSel" onchange="fanwei('engRate',this)"  required>
                     <option value="0">范围</option>
@@ -90,8 +90,8 @@
 
 
             <div class="form-group" style="200px;">
-                <label class="col-sm-3 control-label">案件</label>
-                <input type="checkbox"  name="caseNumbers" errmsg="案件处理量" value="0">案件处理量&nbsp;&nbsp;
+                <label class="col-sm-3 control-label">案件:</label>
+                <input type="checkbox"  name="caseNumbers" errmsg="案件处理量" value="0"><label style="width: 70px;">案件处理量</label>&nbsp;
                 条件
                 <select  name="caseNumbersCondition" id="caseNumbersSel" onchange="fanwei('caseNumbers',this)"  required>
                     <option value="0">范围</option>
@@ -102,7 +102,7 @@
             </div>
             <div class="form-group" style="200px;">
                 <label class="col-sm-3 control-label"></label>
-                <input type="checkbox"  name="caseRate" errmsg="案件处理率" value="0">案件处理率&nbsp;&nbsp;
+                <input type="checkbox"  name="caseRate" errmsg="案件处理率" value="0"><label style="width: 70px;">案件处理率</label>&nbsp;
                 条件
                 <select  name="caseRateCondition" id="caseRateSel" onchange="fanwei('caseRate',this)" required>
                     <option value="0">范围</option>
@@ -176,8 +176,8 @@
                 // var edpL = edps[0]*60*60*1000+edps[1]*60*1000+edps[2]*1000;
                 var edpL = edps[0]*60*60*1000;
                 $("#endTimeHm").val(edpL);
-                if(edpL<stpL){
-                    $.modal.alertWarning("时间段不正确");
+                if(edpL<=stpL){
+                    $.modal.alertWarning("时间段设置不正确,终止时间不能早于或等于开始时间");
                     return;
                 }
                 var sign = 0;

@@ -89,7 +89,7 @@
                         title : '通话',
                         formatter: function(value, row, index) {
                             var infos = "通话时长 "+tiaojian(row.conversationCondition,row.conversationOne,row.conversationTwo);
-                            infos += "<br/>拨打次数（次） "+tiaojian(row.conversationCishuCondition,row.conversationCishuOne,row.conversationCishuTwo);
+                            infos += "<br/>拨打次数"+tiaojian(row.conversationCishuCondition,row.conversationCishuOne,row.conversationCishuTwo);
                             infos += "<br/>接通率 "+tiaojian(row.engRateCondition,row.engRateOne,row.engRateTwo);
                             return infos;
                         }
