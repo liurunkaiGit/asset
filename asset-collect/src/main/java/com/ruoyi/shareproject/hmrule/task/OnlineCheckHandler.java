@@ -93,27 +93,30 @@ public class OnlineCheckHandler extends CheckHandler{
 
     private long onlineTime( List<SysLoginStatus> list,Long taskStart,Long taskEnd){
         long fen = 0;
+        int i = 0;
+        int size = list.size();
         for(SysLoginStatus login:list){
             long logst = login.getStartTime().getTime();
             if(logst >= taskStart && logst < taskEnd){
                 //此种情况 正常数据 直接获取时长字段
                 if(null != login.getEndTime() && login.getEndTime().getTime() < taskEnd){
                     fen+=Long.parseLong(login.getOnlineLen());
-                }else if(null==login.getEndTime() || login.getEndTime().getTime() >= taskEnd){
+                }else if( (null==login.getEndTime() && i==(size-1)) || login.getEndTime().getTime() >= taskEnd){
                     fen+=(taskEnd - logst)/1000L;
                     break;
                 }
             }else if(logst < taskStart ){
                 //此种情况 登录时间没有在范围内 但是登录出时间在范围内
-                if(null == login.getEndTime() || (null!=login.getEndTime() && login.getEndTime().getTime() >=taskEnd) ){
+                if( (null == login.getEndTime() && i==(size-1) ) || (null!=login.getEndTime() && login.getEndTime().getTime() >=taskEnd) ){
                     fen+=(taskEnd - taskStart)/1000L;
                     break;
                 }else  {
-                    if(login.getEndTime().getTime() > taskStart){
+                    if(null != login.getEndTime() && login.getEndTime().getTime() > taskStart){
                         fen+=(login.getEndTime().getTime() - taskStart)/1000L;
                     }
                 }
             }
+            i++;
         }
         return fen;
     }
