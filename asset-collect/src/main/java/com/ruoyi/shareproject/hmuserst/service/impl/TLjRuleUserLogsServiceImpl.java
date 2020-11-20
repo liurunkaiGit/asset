@@ -46,11 +46,12 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
     {
         TLjRuleUserLogs ts = tLjRuleUserLogsMapper.selectTLjRuleUserLogsById(id);
         //在线时长 秒转化分
-        ts.setOnlineTimeStr(loadFen(ts.getOnlineTime().doubleValue(),60D));
+        String fen = loadFen(ts.getOnlineTime().doubleValue(),60D);
+        ts.setOnlineTimeStr(fen);
         ts.setTonghuaDurationStr(loadFen(ts.getTonghuaDuration().doubleValue(),1000D*60D));
         ts.setJiangeStr(loadFen(ts.getJiange().doubleValue(),60D));
         //在线时长
-        Map<String,Object> anjm = loadBaifen(ts.getOnlineCondition(),ts.getOnlineOne(),ts.getOnlineTwo(),ts.getOnlineTime().doubleValue());
+        Map<String,Object> anjm = loadBaifen(ts.getOnlineCondition(),ts.getOnlineOne(),ts.getOnlineTwo(),Double.parseDouble(fen));
         ts.setOnlineBaifen(anjm.get("baifen").toString());
         ts.setOnlineZhibiao(Integer.parseInt(anjm.get("zhibiao").toString()));
         //退出次数
