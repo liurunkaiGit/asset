@@ -4,12 +4,10 @@ import com.ruoyi.assetspackage.util.ApplicationUtils;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.shareproject.hmrule.domain.TLjRule;
 import com.ruoyi.shareproject.hmrule.domain.TLjRuleDetails;
-import com.ruoyi.shareproject.hmrule.domain.TLjRuleRange;
 import com.ruoyi.shareproject.hmuserst.domain.TLjRuleUserLogs;
 import com.ruoyi.system.domain.SysLoginStatus;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.mapper.SysLoginStatusMapper;
-import com.ruoyi.system.service.ISysLoginStatusService;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -23,7 +21,7 @@ import java.util.List;
 public class OnlineCheckHandler extends CheckHandler{
     protected Date zhixingTimeLL(String hour){
        // String datestr = DateUtils.getDate()+" "+hour;
-        return DateUtils.dateTime("yyyy-MM-dd hh:mm:ss",hour);
+        return DateUtils.dateTime("yyyy-MM-dd HH:mm:ss",hour);
     }
 
     public static void main(String[] args) {

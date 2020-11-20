@@ -24,7 +24,7 @@ public abstract  class CheckHandler {
     }
     protected  Date zhixingTime(String hour){
         String datestr = DateUtils.getDate()+" "+hour+":00";
-        return DateUtils.dateTime("yyyy-MM-dd hh:mm:ss",datestr);
+        return DateUtils.dateTime("yyyy-MM-dd HH:mm:ss",datestr);
     }
 
     public static int tiaojian(String tiaoJian, Integer one, Integer two, Double biaozhun){
