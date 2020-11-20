@@ -22,8 +22,8 @@ public abstract  class CheckHandler {
     public CheckHandler getNextCheckHandler(){
         return nextCheckHandler;
     }
-    protected Date zhixingTime(String hour){
-        String datestr = DateUtils.getDate()+" "+hour;
+    protected  Date zhixingTime(String hour){
+        String datestr = DateUtils.getDate()+" "+hour+":00";
         return DateUtils.dateTime("yyyy-MM-dd hh:mm:ss",datestr);
     }
 
