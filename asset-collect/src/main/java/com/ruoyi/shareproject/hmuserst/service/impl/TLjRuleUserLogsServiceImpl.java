@@ -109,11 +109,7 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
 
     private static Map<String,Object> loadBaifen(String tiaoJian, Integer one, Integer two, Double zhibiao){
         Map<String,Object>  m = new HashMap<String,Object>();
-        if(zhibiao==null){//指标为空或0则置为低于指标
-            m.put("zhibiao",-1);
-            m.put("baifen",100);
-            return m;
-        }
+        if(zhibiao==null)zhibiao = new Double(0);
         if("0".equals(tiaoJian)){
             if(one == null || null == two){
                 m.put("zhibiao",0);
@@ -151,7 +147,7 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
                 return m;
             }
             if(zhibiao > one){
-                m.put("zhibiao",-1);
+                m.put("zhibiao",1);
                 m.put("baifen",baifen(zhibiao-one,one.doubleValue()));
                 return m;
             }
@@ -163,11 +159,7 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
 
     private static Map<String,Object> loadBaifen(String tiaoJian, BigDecimal one, BigDecimal two, Double zhibiao){
         Map<String,Object>  m = new HashMap<String,Object>();
-        if(zhibiao==null){//指标为空或0则置为低于指标
-            m.put("zhibiao",-1);
-            m.put("baifen",100);
-            return m;
-        }
+        if(zhibiao==null)zhibiao = new Double(0);
         if("0".equals(tiaoJian)){
             if(one == null || null == two){
                 m.put("zhibiao",0);
@@ -217,11 +209,7 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
 
     private static Map<String,Object> loadBaifenLv(String tiaoJian, BigDecimal one, BigDecimal two, Double zhibiao){
         Map<String,Object>  m = new HashMap<String,Object>();
-        if(zhibiao==null){//指标为空或0则置为低于指标
-            m.put("zhibiao",-1);
-            m.put("baifen",100);
-            return m;
-        }
+        if(zhibiao==null)zhibiao = new Double(0);
         if("0".equals(tiaoJian)){
             if(one == null || null == two){
                 m.put("zhibiao",0);
