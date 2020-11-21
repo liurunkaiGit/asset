@@ -23,7 +23,7 @@
         </div>
         <div class="form-group" style="200px;">
             <label class="col-sm-3 control-label">登录:</label>
-            <input type="checkbox"  name="onlineTime" errmsg="在线时长" th:value="*{onlineTime}"  th:checked="*{onlineTime == '1'}"  ><label style="width: 70px;">在线时长</label>&nbsp;&nbsp;
+            <input type="checkbox"  name="onlineTime"  errmsg="在线时长" th:value="*{onlineTime}"  th:checked="*{onlineTime == '1'}"  ><label style="width: 70px;">在线时长</label>&nbsp;&nbsp;
             条件
             <select  name="onlineCondition" id="onlineTimeSel"  th:field="*{onlineCondition}" onchange="fanwei('onlineTime',this)" required>
                 <option value="0" >范围</option>
@@ -213,12 +213,13 @@
             }
             var sign = 0;
             var sel = 0;
+            var selPam = "";
             $("input[type='checkbox']").each(function (index, item) {
                 var bt = $(this);
                 var sl = bt.val();
+                var names = bt.attr("name");
                 if(sl == 1){
                     sel=1;
-                    var names = bt.attr("name");
                     var errmsg = bt.attr("errmsg");
                     var selxz = $("#"+names+"Sel").val();
                     var isxs = $("#"+names+"One").attr("isxs");
@@ -263,6 +264,8 @@
                             }
                         }
                     }
+                }else{
+                    selPam+="&"+names+"="+sl;
                 }
             });
             if( sign==1)return;
@@ -287,7 +290,7 @@
                     if(req.code != 0){
                         $.modal.alertWarning("时间段已使用,请重新选择");
                     }else{
-                        $.operate.save(prefix + "/edit", $('#form-details-edit').serialize());
+                        $.operate.save(prefix + "/edit", $('#form-details-edit').serialize()+selPam);
                     }
                 },
                 error: function(e) {

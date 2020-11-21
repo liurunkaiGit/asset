@@ -12,7 +12,7 @@ import java.util.Date;
 
 /**
  * 【员工状态】对象 t_lj_rule_user_logs
- * 
+ *
  * @author gaohg
  * @date 2020-11-05
  */
@@ -186,8 +186,14 @@ public class TLjRuleUserLogs extends BaseEntity
     @Excel(name = "机构名称")
     private String orgName;
 
-    @Excel(name = "在线时长条件")
+    /** 在线时长0=不选择1=选择 */
+    @Excel(name = "在线时长0=不选择1=选择")
+    private String onlineTimeo;
+
+    /** $column.columnComment */
+    @Excel(name = "在线时长0=不选择1=选择")
     private String onlineCondition;
+
     /** 在线时长-条件1 */
     @Excel(name = "在线时长-条件1")
     private Integer onlineOne;
@@ -195,6 +201,10 @@ public class TLjRuleUserLogs extends BaseEntity
     /** 在线时长-条件2 */
     @Excel(name = "在线时长-条件2")
     private Integer onlineTwo;
+
+    /** 退出次数 */
+    @Excel(name = "退出次数")
+    private String outTime;
 
     /** 退出条件 */
     @Excel(name = "退出条件")
@@ -208,6 +218,10 @@ public class TLjRuleUserLogs extends BaseEntity
     @Excel(name = "退出条件2")
     private Integer outTwo;
 
+    /** 时间间隔 */
+    @Excel(name = "时间间隔")
+    private String intervals;
+
     /** 间隔条件 */
     @Excel(name = "间隔条件")
     private String intervalsCondition;
@@ -219,6 +233,10 @@ public class TLjRuleUserLogs extends BaseEntity
     /** 间隔条件2 */
     @Excel(name = "间隔条件2")
     private Integer intervalsTwo;
+
+    /** 通话时长 */
+    @Excel(name = "通话时长")
+    private String conversationTime;
 
     /** 通话时长条件 */
     @Excel(name = "通话时长条件")
@@ -232,6 +250,10 @@ public class TLjRuleUserLogs extends BaseEntity
     @Excel(name = "通话条件2")
     private Integer conversationTwo;
 
+    /** 通话次数 */
+    @Excel(name = "通话次数")
+    private String conversationCishu;
+
     /** 通话次数条件 */
     @Excel(name = "通话次数条件")
     private String conversationCishuCondition;
@@ -243,6 +265,10 @@ public class TLjRuleUserLogs extends BaseEntity
     /** 通话次数2 */
     @Excel(name = "通话次数2")
     private Integer conversationCishuTwo;
+
+    /** 接通率 */
+    @Excel(name = "接通率")
+    private String engRate;
 
     /** 接通条件 */
     @Excel(name = "接通条件")
@@ -256,6 +282,10 @@ public class TLjRuleUserLogs extends BaseEntity
     @Excel(name = "接通率条件2")
     private Integer engRateTwo;
 
+    /** 案件数量 */
+    @Excel(name = "案件数量")
+    private String caseNumbers;
+
     /** 案件处理量条件 */
     @Excel(name = "案件处理量条件")
     private String caseNumbersCondition;
@@ -267,6 +297,10 @@ public class TLjRuleUserLogs extends BaseEntity
     /** 案件数量条件2 */
     @Excel(name = "案件数量条件2")
     private Integer caseNumbersTwo;
+
+    /** 案件处理率 */
+    @Excel(name = "案件处理率")
+    private String caseRate;
 
     /** 案件处理率条件 */
     @Excel(name = "案件处理率条件")
@@ -280,6 +314,10 @@ public class TLjRuleUserLogs extends BaseEntity
     @Excel(name = "案件处理率条件2")
     private BigDecimal caseRateTwo;
 
+    /** 实际还款 */
+    @Excel(name = "实际还款")
+    private String sjRepayment;
+
     /** 实际还款条件 */
     @Excel(name = "实际还款条件")
     private String sjRepaymentCondition;
@@ -291,6 +329,10 @@ public class TLjRuleUserLogs extends BaseEntity
     /** 实际还款条件2 */
     @Excel(name = "实际还款条件2")
     private BigDecimal sjRepaymentTwo;
+
+    /** 实际还款率 */
+    @Excel(name = "实际还款率")
+    private String sjRepaymentRate;
 
     /** 实际还款率条件 */
     @Excel(name = "实际还款率条件")

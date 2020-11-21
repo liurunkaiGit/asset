@@ -41,7 +41,7 @@ public class EarlyWarningTask {
     private TLjRuleUserLogsMapper tLjRuleUserLogsMapper;
     @Autowired
     private ISysLoginStatusService sysLoginStatusService;
-//    @Autowired
+    //    @Autowired
 //    private ISysUserService iSysUserService;
     @Autowired
     private SysIpConfigMapper sysIpConfigMapper;
@@ -70,12 +70,12 @@ public class EarlyWarningTask {
             if(nowtime > etime) {
                 //任务超时 40 分钟就不会执行
 //                if((nowtime-etime) < 40*60*1000L ){
-                    //执行
-                    zhixing(tr,hm,ipList);
+                //执行
+                zhixing(tr,hm,ipList);
 //                }
                 tr.setRuleStatus("3");
                 iTLjRuleService.updateTLjRuleStatus(tr);
-           }else{
+            }else{
                 zhixing(tr,hm,ipList);
             }
         }
@@ -103,7 +103,7 @@ public class EarlyWarningTask {
                 }
             }
             //tr.setRrList(dpOrUsLt);
-           //动态检索用户是居家还是职场
+            //动态检索用户是居家还是职场
             String pz = tr.getOnthejobStatus();
             List<SysUser> curr = new ArrayList<>(curUserInfos.size());
             for(SysUser sr: curUserInfos){
@@ -154,19 +154,19 @@ public class EarlyWarningTask {
         List<TLjRuleDetails> dlt = tLjRuleDetailsMapper.selectTLjRuleDetailsList(ts);
         for(TLjRuleDetails tsOne: dlt){
             //判断是否到任务结束时间，任务超时在25分钟以内才会执行
-          // if(nowHourhm > tsOne.getEndTimeHm() && (nowHourhm-tsOne.getEndTimeHm()) <= 25*60*1000){
+            // if(nowHourhm > tsOne.getEndTimeHm() && (nowHourhm-tsOne.getEndTimeHm()) <= 25*60*1000){
             if(nowHourhm > tsOne.getEndTimeHm()){
-               //查找任务日志表是否已经被执行
-               TLjRuleUserLogs lls = new TLjRuleUserLogs();
-               lls.setRuleId(tr.getId());
-               lls.setDetailsId(tsOne.getId());
-               lls.setDays(DateUtils.getNowDate());
-               Long ct = tLjRuleUserLogsMapper.selectTLjRuleUserLogsByRuleIdAnddetailsId(lls);
-               //如果存在记录说明已经被执行，执行下个子任务
-               if(null != ct)continue;
-               //检测在线时长 规则是否超标
-               checkErrors(tr,tsOne);
-           }
+                //查找任务日志表是否已经被执行
+                TLjRuleUserLogs lls = new TLjRuleUserLogs();
+                lls.setRuleId(tr.getId());
+                lls.setDetailsId(tsOne.getId());
+                lls.setDays(DateUtils.getNowDate());
+                Long ct = tLjRuleUserLogsMapper.selectTLjRuleUserLogsByRuleIdAnddetailsId(lls);
+                //如果存在记录说明已经被执行，执行下个子任务
+                if(null != ct)continue;
+                //检测在线时长 规则是否超标
+                checkErrors(tr,tsOne);
+            }
         }
 
     }
@@ -183,6 +183,7 @@ public class EarlyWarningTask {
         TLjRuleUserLogs userLog = new TLjRuleUserLogs();
         //记录当前规则
         BeanUtils.copyProperties(tLjRuleDetails,userLog);
+        userLog.setOnlineTimeo(tLjRuleDetails.getOnlineTime());
         //记录规则id
         userLog.setRuleId(null);
         userLog.setRuleName(tLjRule.getRuleName());
@@ -207,7 +208,7 @@ public class EarlyWarningTask {
         }
     }
 
-   private static int loadZong(Integer ir){
+    private static int loadZong(Integer ir){
         if(null == ir)return 0;
         return ir;
     }
