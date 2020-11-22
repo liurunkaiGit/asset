@@ -24,9 +24,6 @@ public class OnlineCheckHandler extends CheckHandler{
         return DateUtils.dateTime("yyyy-MM-dd HH:mm:ss",hour);
     }
 
-    public static void main(String[] args) {
-        DateUtils.dateTime("yyyy-MM-dd hh:mm:ss","2020-11-06 00:00:00");
-    }
     @Override
     public void checkWarning(TLjRule tLjRule, SysUser user, TLjRuleDetails tLjRuleDetails, TLjRuleUserLogs userLog) {
         SysLoginStatus sysLoginStatus = new SysLoginStatus();
@@ -62,11 +59,18 @@ public class OnlineCheckHandler extends CheckHandler{
                 userLog.setOnlineError(tiaojian(tLjRuleDetails.getOnlineCondition(),tLjRuleDetails.getOnlineOne()*60L,getTiaojianTwo(tLjRuleDetails.getOnlineTwo())*60L,ol));
             }
         }else{
-            userLog.setOnlineError(1);
+            if("1".equals(tLjRuleDetails.getOnlineTime())) {
+                userLog.setOnlineError(tiaojian(tLjRuleDetails.getOnlineCondition(), tLjRuleDetails.getOnlineOne() * 60L, getTiaojianTwo(tLjRuleDetails.getOnlineTwo()) * 60L, 0D));
+            }
         }
 
         if(null != listOne && !listOne.isEmpty()){
             SysLoginStatus ss = listOne.get(0);
+            if(null == ss){
+                ss = new SysLoginStatus();
+                ss.setLoginNum(0);
+                ss.setIntervalTime("0");
+            }
             //退出次数
             outCishu  = ss.getLoginNum()==null || "".equals(ss.getLoginNum()) ? 0:ss.getLoginNum();
             //判断退出次数是否勾选
@@ -81,8 +85,12 @@ public class OnlineCheckHandler extends CheckHandler{
                 userLog.setJiangeError(tiaojian(tLjRuleDetails.getIntervalsCondition(),tLjRuleDetails.getIntervalsOne()*60L,getTiaojianTwo(tLjRuleDetails.getIntervalsTwo())*60L,jgd));
             }
         }else{
-            userLog.setJiangeError(1);
-            userLog.setOutError(1);
+            if("1".equals(tLjRuleDetails.getOutTime())){
+                userLog.setOutError(tiaojian(tLjRuleDetails.getOutCondition(),tLjRuleDetails.getOutOne(),getTiaojianTwo(tLjRuleDetails.getOutTwo()),0D));
+            }
+            if("1".equals(tLjRuleDetails.getIntervals())) {
+                userLog.setJiangeError(tiaojian(tLjRuleDetails.getIntervalsCondition(), tLjRuleDetails.getIntervalsOne() * 60L, getTiaojianTwo(tLjRuleDetails.getIntervalsTwo()) * 60L, 0D));
+            }
         }
         userLog.setOnlineTime(online);
         userLog.setOutCishu(outCishu);
@@ -100,7 +108,7 @@ public class OnlineCheckHandler extends CheckHandler{
             if(logst >= taskStart && logst < taskEnd){
                 //此种情况 正常数据 直接获取时长字段
                 if(null != login.getEndTime() && login.getEndTime().getTime() < taskEnd){
-                    fen+=Long.parseLong(login.getOnlineLen());
+                    fen+=Long.parseLong(login.getOnlineLen()==null ? "0":login.getOnlineLen());
                 }else if( (null==login.getEndTime() && i==(size-1)) || login.getEndTime().getTime() >= taskEnd){
                     fen+=(taskEnd - logst)/1000L;
                     break;

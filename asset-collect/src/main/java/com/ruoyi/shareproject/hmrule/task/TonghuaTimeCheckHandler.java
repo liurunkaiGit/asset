@@ -38,6 +38,16 @@ public class TonghuaTimeCheckHandler extends CheckHandler{
         td.setCreateBy(user.getUserId().toString());
         //根据配置的时间、用户id统计通话 数据
         TlcCallRecordTotal mm = tr.selectUserTotal(td);
+        if(null == mm){
+            mm = new TlcCallRecordTotal();
+            mm.setConnections(0L);
+            mm.setDurations(0D);
+            mm.setFrequencys(0L);
+        }else{
+            if(null == mm.getConnections())mm.setConnections(0L);
+            if(null == mm.getDurations())mm.setDurations(0D);
+            if(null == mm.getFrequencys())mm.setFrequencys(0L);
+        }
         userLog.setTonghuaDuration(BigDecimal.valueOf(load(mm.getDurations())));
         //通话时长勾选了 就判断是否存在异常
         userLog.setTonghuaError(0);

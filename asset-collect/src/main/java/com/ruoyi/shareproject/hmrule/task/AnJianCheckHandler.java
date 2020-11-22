@@ -44,7 +44,7 @@ public class AnJianCheckHandler extends  CheckHandler{
             Integer ycl = 0;
             if(listYcl != null &&  !listYcl.isEmpty()){
                 TLcReportDayProcess yclO = listYcl.get(0);
-                ycl = yclO.getDealWithConsumerCount()==null?0:yclO.getDealWithConsumerCount();
+                ycl = (null == yclO  || yclO.getDealWithConsumerCount()==null)?0:yclO.getDealWithConsumerCount();
             }
             userLog.setAnjianDuration(ajl);
             userLog.setAnjianyichuli(ycl);
@@ -62,10 +62,10 @@ public class AnJianCheckHandler extends  CheckHandler{
             userLog.setAnjianyichuli(0);
             userLog.setAnjianlv(BigDecimal.valueOf(0));
             if("1".equals(tLjRuleDetails.getCaseNumbers())){
-                userLog.setAnjianError(1);
+                userLog.setAnjianError(tiaojian(tLjRuleDetails.getCaseNumbersCondition(),tLjRuleDetails.getCaseNumbersOne(),getTiaojianTwo(tLjRuleDetails.getCaseNumbersTwo()),0D));
             }
             if("1".equals(tLjRuleDetails.getCaseRate())){
-                userLog.setAnjianlvError(1);
+                userLog.setAnjianlvError(tiaojian(tLjRuleDetails.getCaseRateCondition(),tLjRuleDetails.getCaseRateOne(),getTiaojianTwo(tLjRuleDetails.getCaseRateTwo()),0D));
             }
         }
         userLog.setAnjianZong(userLog.getAnjianError()+userLog.getAnjianlvError());
