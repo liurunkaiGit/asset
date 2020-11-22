@@ -1,19 +1,19 @@
 package com.ruoyi.shareproject.hmuserst.service.impl;
 
-import java.math.BigDecimal;
-import java.text.NumberFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.shareproject.hmrule.task.CheckHandler;
 import com.ruoyi.shareproject.hmuserst.domain.TLjRuleUserLogs;
 import com.ruoyi.shareproject.hmuserst.mapper.TLjRuleUserLogsMapper;
 import com.ruoyi.shareproject.hmuserst.service.ITLjRuleUserLogsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.common.core.text.Convert;
+
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 【员工状态】Service业务层处理
@@ -208,6 +208,7 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
     }
 
     private static Map<String,Object> loadBaifenLv(String tiaoJian, BigDecimal one, BigDecimal two, Double zhibiao){
+        DecimalFormat df = new DecimalFormat("#.00");
         Map<String,Object>  m = new HashMap<String,Object>();
         if(zhibiao==null)zhibiao = new Double(0);
         if("0".equals(tiaoJian)){
@@ -219,13 +220,13 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
             if(zhibiao < one.doubleValue() ){
                 //低于指标
                 m.put("zhibiao",-1);
-                m.put("baifen",one.doubleValue()-zhibiao);
+                m.put("baifen",String.format("%.2f",one.doubleValue()-zhibiao));
                 return m;
             }
             if(zhibiao> two.doubleValue()){
                 //高于指标
                 m.put("zhibiao",1);
-                m.put("baifen",zhibiao-two.doubleValue());
+                m.put("baifen",String.format("%.2f",zhibiao-two.doubleValue()));
                 return m;
             }
         }else if("1".equals(tiaoJian)){
@@ -237,7 +238,7 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
             //低于指标
             if(zhibiao < one.doubleValue()){
                 m.put("zhibiao",-1);
-                m.put("baifen",one.doubleValue()-zhibiao);
+                m.put("baifen",String.format("%.2f",one.doubleValue()-zhibiao));
                 return m;
             }
         }else if("2".equals(tiaoJian)){
@@ -249,7 +250,7 @@ public class TLjRuleUserLogsServiceImpl implements ITLjRuleUserLogsService
             //高于指标
             if(zhibiao > one.doubleValue()){
                 m.put("zhibiao",1);
-                m.put("baifen",zhibiao-one.doubleValue());
+                m.put("baifen", String.format("%.2f", zhibiao-one.doubleValue()));
                 return m;
             }
         }
