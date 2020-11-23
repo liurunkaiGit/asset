@@ -83,26 +83,25 @@ public class LoginAspect {
         String userName = sysUser.getUserName();
         String intervalTime = null;
 
-        SysLoginStatus uploginInfo = sysLoginStatusService.selectSysLoginStatus(String.valueOf(orgId), loginName);//此用户当天是否登录
+        SysLoginStatus uploginInfo = sysLoginStatusService.selectSysLoginStatus(loginName);//此用户当天是否登录
         Date upEndTime = null;
-        if(uploginInfo != null){
-            upEndTime = uploginInfo.getEndTime();
-            if(upEndTime == null){//上次没有退出 -> 把上次退出
-                Integer logoutNum = sysLoginStatusService.selectMaxLogoutCount(String.valueOf(orgId), loginName);//当天最大的退出次数
-                OnlineWebSessionManager bean = SpringUtils.getBean(OnlineWebSessionManager.class);
-                try {
-                    OnlineSession session = bean.getOnlineSession(new DefaultSessionKey(uploginInfo.getSessionId()));
-                    upEndTime = session.getLastAccessTime();
-                } catch (Exception e) {
-                    //服务器宕机或关闭 使会话失效 上次退出时间取当前登录时间
-                    upEndTime = curTime;
-                }
-                this.updateLogout(uploginInfo,upEndTime,logoutNum,loginName,curTime);//把上次退出
+        if(uploginInfo != null){//当天已登录
+            SysLoginStatus upNotLogout = sysLoginStatusService.selectNotLogout(loginName);//当天未退出的记录
+            if(upNotLogout != null){//当天有未退出的
+                //把上次退出
+                Integer logoutNum = sysLoginStatusService.selectMaxLogoutCount(upNotLogout.getOrgId(), loginName);//当天最大的退出次数
+                upEndTime = curTime;
+                this.updateLogout(upNotLogout, upEndTime, logoutNum, loginName, curTime);//把上次退出
             }
         }
-        //不是当天第一次登录的 计算间隔时间
-        if(upEndTime != null){
+        //计算间隔时间
+        if(upEndTime != null){//上次有未退出
             intervalTime = String.valueOf( (curTime.getTime() - upEndTime.getTime()) / 1000 );
+        }else{//上次没有未退出
+            SysLoginStatus lastLogin = sysLoginStatusService.selectLastLogin(String.valueOf(orgId), loginName);
+            if(lastLogin != null && lastLogin.getEndTime() != null){
+                intervalTime = String.valueOf( (curTime.getTime() - lastLogin.getEndTime().getTime()) / 1000 );
+            }
         }
         SysLoginStatus sysLoginStatus = SysLoginStatus.builder()
                 .id(uuid)
@@ -123,13 +122,13 @@ public class LoginAspect {
         request.getSession().setAttribute("loginStatusId",uuid);
     }
 
-    private void updateLogout(SysLoginStatus sysLoginStatus, Date lastAccessTime, Integer logoutNum, String loginName, Date curTime){
+    private void updateLogout(SysLoginStatus sysLoginStatus, Date upEndTime, Integer logoutNum, String loginName, Date curTime){
         long startTime = sysLoginStatus.getStartTime().getTime();
-        long length = lastAccessTime.getTime() - startTime;
+        long length = upEndTime.getTime() - startTime;
         logoutNum = logoutNum + 1;
 
         SysLoginStatus updateParam = new SysLoginStatus();
-        updateParam.setEndTime(lastAccessTime);
+        updateParam.setEndTime(upEndTime);
         updateParam.setLogoutNum(logoutNum);
         updateParam.setOnlineLen(String.valueOf(length/1000));
         updateParam.setStatus(LoginStatusEnum.off.getCode());

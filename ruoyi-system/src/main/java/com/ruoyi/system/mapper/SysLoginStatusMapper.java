@@ -71,7 +71,22 @@ public interface SysLoginStatusMapper
      * 查询用户当天最后一次登录信息
      * @return
      */
-    public SysLoginStatus selectSysLoginStatus(@Param("orgId")String orgId, @Param("loginName")String loginName);
+    public SysLoginStatus selectSysLoginStatus(@Param("loginName")String loginName);
+
+    /**
+     * 查询未退出的用户
+     * @param loginName
+     * @return
+     */
+    public SysLoginStatus selectNotLogout(@Param("loginName")String loginName);
+
+    /**
+     * 查询最后一次登录的用户
+     * @param orgId
+     * @param loginName
+     * @return
+     */
+    public SysLoginStatus selectLastLogin(@Param("orgId")String orgId, @Param("loginName")String loginName);
 
     /**
      * 查询用户当天最大的退出次数

@@ -199,6 +199,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectSysLoginStatus" resultMap="SysLoginStatusResult">
         <include refid="selectSysLoginStatusVo"/>
+        where login_name = #{loginName} and DATE_FORMAT(start_time,'%Y-%m-%d') = DATE_FORMAT(now(),'%Y-%m-%d')
+        order by create_time desc
+        limit 1
+    </select>
+
+    <select id="selectNotLogout" resultMap="SysLoginStatusResult">
+        <include refid="selectSysLoginStatusVo"/>
+        where login_name = #{loginName} and DATE_FORMAT(start_time,'%Y-%m-%d') = DATE_FORMAT(now(),'%Y-%m-%d')
+        and end_time is null
+    </select>
+
+    <select id="selectLastLogin" resultMap="SysLoginStatusResult">
+        <include refid="selectSysLoginStatusVo"/>
         where org_id = #{orgId} and login_name = #{loginName} and DATE_FORMAT(start_time,'%Y-%m-%d') = DATE_FORMAT(now(),'%Y-%m-%d')
         order by create_time desc
         limit 1

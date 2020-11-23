@@ -2,6 +2,7 @@ package com.ruoyi.system.service;
 
 
 import com.ruoyi.system.domain.SysLoginStatus;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -49,7 +50,22 @@ public interface ISysLoginStatusService
      * 查询用户当天最后一次登录信息
      * @return
      */
-    public SysLoginStatus selectSysLoginStatus(String orgId, String loginName);
+    public SysLoginStatus selectSysLoginStatus(String loginName);
+
+    /**
+     * 查询未退出的用户
+     * @param loginName
+     * @return
+     */
+    public SysLoginStatus selectNotLogout(String loginName);
+
+    /**
+     * 查询最后一次登录的用户
+     * @param orgId
+     * @param loginName
+     * @return
+     */
+    public SysLoginStatus selectLastLogin(@Param("orgId")String orgId, @Param("loginName")String loginName);
 
     /**
      * 查询用户当天最大的退出次数

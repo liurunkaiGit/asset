@@ -163,8 +163,29 @@ public class SysLoginStatusServiceImpl implements ISysLoginStatusService
      * @return
      */
     @Override
-    public SysLoginStatus selectSysLoginStatus(String orgId,String loginName) {
-        return sysLoginStatusMapper.selectSysLoginStatus(orgId,loginName);
+    public SysLoginStatus selectSysLoginStatus(String loginName) {
+        return sysLoginStatusMapper.selectSysLoginStatus(loginName);
+    }
+
+    /**
+     * 查询未退出的用户
+     * @param loginName
+     * @return
+     */
+    @Override
+    public SysLoginStatus selectNotLogout(String loginName) {
+        return sysLoginStatusMapper.selectNotLogout(loginName);
+    }
+
+    /**
+     * 查询最后一次登录的用户
+     * @param orgId
+     * @param loginName
+     * @return
+     */
+    @Override
+    public SysLoginStatus selectLastLogin(String orgId, String loginName) {
+        return sysLoginStatusMapper.selectLastLogin(orgId,loginName);
     }
 
     /**
