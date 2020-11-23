@@ -379,4 +379,10 @@
         </where>
     </update>
 
+    <select id="selectAreaCodes" resultType="java.util.Map">
+        SET SESSION group_concat_max_len = 10240;
+        select GROUP_CONCAT(area_code) as areaCodes from area_code_config;
+    </select>
+
+
 </mapper>

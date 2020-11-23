@@ -8,6 +8,7 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.custom.domain.TLcCustContact;
 import com.ruoyi.custom.service.ITLcCustContactService;
 import com.ruoyi.enums.ContactOriginEnum;
+import com.ruoyi.utils.CustContactRuleUtil;
 import com.ruoyi.utils.Response;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,9 @@ public class TLcCustContactController extends BaseController {
 
     @Autowired
     private ITLcCustContactService tLcCustContactService;
+
+    @Autowired
+    private CustContactRuleUtil custContactRuleUtil;
 
     @RequiresPermissions("system:contact:view")
     @GetMapping()
@@ -161,6 +165,7 @@ public class TLcCustContactController extends BaseController {
                 }
             }*/
         }
-        return AjaxResult.success(list.size());
+        List<TLcCustContact> tLcCustContacts = custContactRuleUtil.custContactRule(list);
+        return AjaxResult.success(tLcCustContacts.size());
     }
 }

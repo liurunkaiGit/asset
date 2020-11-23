@@ -9,6 +9,7 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.custom.domain.TLcCustContact;
 import com.ruoyi.custom.service.ITLcCustContactService;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.utils.CustContactRuleUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,9 @@ public class TLcBatchCallServiceImpl implements ITLcBatchCallService
     private TLcBatchCallMapper tLcBatchCallMapper;
     @Autowired
     private ITLcCustContactService tLcCustContactService;
+
+    @Autowired
+    private CustContactRuleUtil custContactRuleUtil;
 
     /**
      * 查询批量外呼任务管理
@@ -128,7 +132,8 @@ public class TLcBatchCallServiceImpl implements ITLcBatchCallService
             if("0".equals(isCallOther)){//只有本人
                 tcc.setRelation(1);
             }
-            totalCustContactList = this.tLcCustContactService.selectTLcCustContactList(tcc);
+            List<TLcCustContact> tLcCustContacts = this.tLcCustContactService.selectTLcCustContactList(tcc);
+            totalCustContactList = custContactRuleUtil.custContactRule(tLcCustContacts);//过滤手机号
             /*TLcCustContact tLcCustContact = null;
             for(int i = 0;i < caseNoArray.length; i ++){
                 tLcCustContact = new TLcCustContact();

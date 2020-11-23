@@ -17,6 +17,8 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.task.domain.TLcTask;
+import com.ruoyi.task.service.ITLcTaskService;
 import com.ruoyi.utils.DesensitizationUtil;
 import com.ruoyi.utils.DuyanUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -51,6 +53,8 @@ public class TLcBatchCallController extends BaseController
     private DuYanConfig duYanConfig;
     @Autowired
     private DesensitizationUtil desensitizationUtil;
+    @Autowired
+    private ITLcTaskService tLcTaskService;
 
     @RequiresPermissions("ruoyi:batchcall:view")
     @GetMapping()
@@ -390,6 +394,22 @@ public class TLcBatchCallController extends BaseController
         //查询是否脱敏
         boolean desensitization = desensitizationUtil.isDesensitization(String.valueOf(ShiroUtils.getSysUser().getOrgId()), ShiroUtils.getLoginName());
         modelMap.put("desensitization", desensitization);
+        TLcTask tLcTask = this.tLcTaskService.selectTaskByCaseNo(caseNo,orgId,importBatchNo);
+        modelMap.put("curActionCode", tLcTask.getActionCode());
         return prefix + "/autoCollJob";
+    }
+
+    /**
+     * 获取案件当前行动码
+     * @param importBatchNo
+     * @param caseNo
+     * @param orgId
+     * @return
+     */
+    @PostMapping("/getCurActionCode")
+    @ResponseBody
+    public AjaxResult getCurActionCode(String importBatchNo, String caseNo, String orgId){
+        TLcTask tLcTask = this.tLcTaskService.selectTaskByCaseNo(caseNo,orgId,importBatchNo);
+        return AjaxResult.success("成功",tLcTask.getActionCode());
     }
 }

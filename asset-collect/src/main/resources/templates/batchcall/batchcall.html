@@ -345,7 +345,14 @@
                     var orgId = currentCall.orgId;
                     var exonNum = currentCall.exonNum;
                     var id = currentCall.id;
-                    openAutoCollJob(caseNo,importBatchNo,orgId,exonNum,id);
+                    window.parent.parent.$.modal.loading("通话中，请挂断电话后再进行其它操作");
+                    $('#leftNav',window.parent.document).css('z-index','1');
+                    if(childObj == null || childObj == undefined || nextFlag == false){
+                        openAutoCollJob(caseNo,importBatchNo,orgId,exonNum,id);
+                    }
+                    if(childObj != null && childObj != undefined){
+                        childObj.start();
+                    }
                 }
                 if(type == "EVENT_OUTBOUND_CUSTOMER_HANGUP" || type == "EVENT_HUNGUP_SUCCESS" || type=="EVENT_OUTBOUND_AGNET_HANGUP"){//客户挂机 或者 坐席挂机
                     if(isWjt == ""){
@@ -358,6 +365,8 @@
                     console.log('hangup' + type,JSON.stringify(data));
                     if(childObj != null && childObj != undefined){
                         childObj.resetTiming();
+                        window.parent.parent.$.modal.closeLoading();
+                        $('#leftNav',window.parent.document).css('z-index','2001');
                         // 直接保存点催记录
                         console.log("通话记录id：" + callRecordId + "，通话开始时间：" + data[0].BAnswerStamp + "，通话结束时间：" + data[0].BEndStamp + "，通话录音：" + data[0].RecordingFile);
                         var callSign = 'R02';
@@ -366,50 +375,83 @@
                             callSign = 'R01';
                             callResult = '已接听';
                         }
-                        $.post(
-                            collectPrefix + "/addCallRecord",
-                            {
-                                id:callRecordId,
-                                // certificateNo:val.find("[name='hideCerNo']").html(),
-                                contactName:currentCall.contactName,
-                                phone:currentCall.phone,
-                                contactRelation:currentCall.contactRelation,
-                                callSign:callSign,
-                                callResult:callResult,
-                                callStartTime:data[0].BAnswerStamp,
-                                callEndTime:data[0].BEndStamp,
-                                callLen:data[0].Mduration,
-                                callRadioLocation:data[0].RecordingFile,
-                                caseNo:currentCall.caseNo,
-                                remark:callResult,
-                                importBatchNo:currentCall.importBatchNo,
-                                orgId:currentCall.orgId,
-                                // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
-                                sendRadioCheck:1,
-                                type:1,
-                                platform: "ZJ",
-                                actionCode: "Fresh-新任务"
-                            },
-                            function(data) {
-                                // alert(JSON.stringify(data));
-                                if (data.status == 200) {//请求成功
-                                    // $.modal.alertSuccess("保存成功");
-                                    //collJobDetail(data.result);
-                                    $("#callStartTime").val("");
-                                    $("#callEndTime").val("");
-                                    $("#callLen").val("");
-                                    $("#callRadioLocation").val("");
-                                    $("#callCode").val("");
-                                    $("#callRemarkAdd").val("");
-                                    callRecordId = data.result;
-                                }
-                            }
-                        );
-                    }
 
+                        var contactName,phone,contactRelation;
+                        if(childObj != null && childObj != undefined && childObj.callRecordId != null && childObj.callRecordId != undefined){//子页面打过电话
+                            callRecordId = childObj.callRecordId;
+                            contactName = childObj.contactName;
+                            phone = childObj.phone;
+                            contactRelation = childObj.contactRelation;
+                        }else{
+                            contactName = currentCall.contactName;
+                            phone = currentCall.phone;
+                            contactRelation = currentCall.contactRelation;
+                        }
+
+                        $.ajax({
+                            url: prefix+"/getCurActionCode",
+                            dataType: "json",
+                            async : false,
+                            type: "post",
+                            data:{
+                                importBatchNo:currentCall.importBatchNo,
+                                caseNo:currentCall.caseNo,
+                                orgId:currentCall.orgId
+                            },
+                            success:function(data){
+                                var actionCode = data.data;
+                                if(actionCode == "Fresh-新任务" || actionCode == "Search2-联系方式无效"){
+                                    actionCode = "Search1-联系方式有效";
+                                }
+
+                                $.post(
+                                    collectPrefix + "/addCallRecord",
+                                    {
+                                        id:callRecordId,
+                                        // certificateNo:val.find("[name='hideCerNo']").html(),
+                                        contactName:contactName,
+                                        phone:phone,
+                                        contactRelation:contactRelation,
+                                        callSign:callSign,
+                                        callResult:callResult,
+                                        callStartTime:data[0].BAnswerStamp,
+                                        callEndTime:data[0].BEndStamp,
+                                        callLen:data[0].Mduration,
+                                        callRadioLocation:data[0].RecordingFile,
+                                        caseNo:currentCall.caseNo,
+                                        remark:callResult,
+                                        importBatchNo:currentCall.importBatchNo,
+                                        orgId:currentCall.orgId,
+                                        // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
+                                        sendRadioCheck:1,
+                                        type:1,
+                                        platform: "ZJ",
+                                        actionCode: actionCode
+                                    },
+                                    function(data) {
+                                        // alert(JSON.stringify(data));
+                                        if (data.status == 200) {//请求成功
+                                            // $.modal.alertSuccess("保存成功");
+                                            //collJobDetail(data.result);
+                                            $("#callStartTime").val("");
+                                            $("#callEndTime").val("");
+                                            $("#callLen").val("");
+                                            $("#callRadioLocation").val("");
+                                            $("#callCode").val("");
+                                            $("#callRemarkAdd").val("");
+                                            callRecordId = data.result;
+                                            childObj.echoActionCode(actionCode);
+                                        }
+                                    }
+                                );
+                            }
+                        });
+
+                    }
                 }
             }};
 
+        var nextFlag = false;//子页面是否打开(true:打开，false:关闭)
         function openAutoCollJob(caseNo,importBatchNo,orgId,exonNum,id,zIndex) {
             var toAutoCollJobUrl = prefix + '/toAutoCollJob?orgId='+orgId +'&caseNo='+caseNo +'&importBatchNo='+importBatchNo+'&exonNum='+exonNum+'&id='+id;
             var width = $(window).width();
@@ -432,18 +474,21 @@
                     // toNextCall();
                     hangUp();//挂断电话
                     updateStatus(currentCall.id,4,currentCall.remark,"1","");//已完成
+                    nextFlag = false;
                 },
                 cancel: function (index, layero) {//点击右上角 X 关闭
                     layer.close(index);
                     // toNextCall();
                     hangUp();//挂断电话
                     updateStatus(currentCall.id,4,currentCall.remark,"1","");//已完成
+                    nextFlag = false;
                 },
                 success: function(layero, index){
                     var body = layer.getChildFrame('body', index);//获取子页面内容
                     var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
                     // iframeWin.test2();//执行子页面的方法
                     childObj = iframeWin;
+                    nextFlag = true;
                     /*body.find("#transmit").click();//执行子页面的方法
                     body.find('input').val('Hi，我是从父页来的')
                     $(".but_par").click(function(){
@@ -525,7 +570,14 @@
             var orgId = currentCall.orgId;
             var exonNum = currentCall.exonNum;
             var id = currentCall.id;
-            openAutoCollJob(caseNo,importBatchNo,orgId,exonNum,id,1);
+            window.parent.parent.$.modal.loading("通话中，请挂断电话后再进行其它操作");
+            $('#leftNav',window.parent.document).css('z-index','1');
+            if(childObj == null || childObj == undefined || nextFlag == false){
+                openAutoCollJob(caseNo,importBatchNo,orgId,exonNum,id,1);
+            }
+            if(childObj != null && childObj != undefined){
+                childObj.start();
+            }
         }
         //度言自动拨打电话 弹出框
         function  duyaAuto(phone)
@@ -605,7 +657,14 @@
                 var orgId = currentCall.orgId;
                 var exonNum = currentCall.exonNum;
                 var id = currentCall.id;
-                openAutoCollJob(caseNo,importBatchNo,orgId,exonNum,id);
+                window.parent.parent.$.modal.loading("通话中，请挂断电话后再进行其它操作");
+                $('#leftNav',window.parent.document).css('z-index','1');
+                if(childObj == null || childObj == undefined || nextFlag == false){
+                    openAutoCollJob(caseNo,importBatchNo,orgId,exonNum,id);
+                }
+                if(childObj != null && childObj != undefined){
+                    childObj.start();
+                }
             };
 
             agentClient.onReleased = function(event) {//电话未接通
@@ -622,56 +681,91 @@
                 agentIsCalling = false;
                 console.log("通话结束，agentIsCalling=false");
                 childObj.resetTiming();//调用子页面的方法
+                window.parent.parent.$.modal.closeLoading();
+                $('#leftNav',window.parent.document).css('z-index','2001');
                 // resetTiming();
                 printEvent('onRecordEnd', event);
                 recordFile = event.recordFile;
                 startTime = event.recordTime;
                 endTime = event.startTime;
                 recordDuration = String(event.recordDuration);
-                $.post(
-                    collectPrefix + "/addCallRecord",
-                    {
-                        id:callRecordId,
-                        // certificateNo:val.find("[name='hideCerNo']").html(),
-                        contactName:currentCall.contactName,
-                        phone:currentCall.phone,
-                        contactRelation:currentCall.contactRelation,
-                        callSign:'R01',
-                        callResult:'已接听',
-                        callStartTime:startTime,
-                        callEndTime:endTime,
-                        callLen:recordDuration,
-                        callRadioLocation:recordFile,
-                        caseNo:currentCall.caseNo,
-                        remark:'已接听',
+
+                var contactName,phone,contactRelation;
+                if(childObj != null && childObj != undefined && childObj.callRecordId != null && childObj.callRecordId != undefined){//子页面打过电话
+                    callRecordId = childObj.callRecordId;
+                    contactName = childObj.contactName;
+                    phone = childObj.phone;
+                    contactRelation = childObj.contactRelation;
+                }else{
+                    contactName = currentCall.contactName;
+                    phone = currentCall.phone;
+                    contactRelation = currentCall.contactRelation;
+                }
+
+                $.ajax({
+                    url: prefix+"/getCurActionCode",
+                    dataType: "json",
+                    async : false,
+                    type: "post",
+                    data:{
                         importBatchNo:currentCall.importBatchNo,
-                        orgId:currentCall.orgId,
-                        // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
-                        sendRadioCheck:1,
-                        type:1,
-                        platform: 'PA',
-                        actionCode:"Fresh-新任务"
+                        caseNo:currentCall.caseNo,
+                        orgId:currentCall.orgId
                     },
-                    function(data) {
-                        // alert(JSON.stringify(data));
-                        if (data.status == 200) {//请求成功
-                            // $.modal.alertSuccess("保存成功");
-                            $("#callStartTime").val("");
-                            $("#callEndTime").val("");
-                            $("#callLen").val("");
-                            $("#callRadioLocation").val("");
-                            $("#callCode").val("");
-                            $("#callRemarkAdd").val("");
-                            // $("#callRecordId").val(data.result);
-                            callRecordId = data.result;
-                            /*if($('#call').val() == '1') {
-                                callRecordList(currentCaseNo);
-                            }*/
-                        }else if (data.code == 1) {
-                            window.location.href="/login";
+                    success:function(data){
+                        var actionCode = data.data;
+                        if(actionCode == "Fresh-新任务" || actionCode == "Search2-联系方式无效"){
+                            actionCode = "Search1-联系方式有效";
                         }
+
+                        $.post(
+                            collectPrefix + "/addCallRecord",
+                            {
+                                id:callRecordId,
+                                // certificateNo:val.find("[name='hideCerNo']").html(),
+                                contactName:contactName,
+                                phone:phone,
+                                contactRelation:contactRelation,
+                                callSign:'R01',
+                                callResult:'已接听',
+                                callStartTime:startTime,
+                                callEndTime:endTime,
+                                callLen:recordDuration,
+                                callRadioLocation:recordFile,
+                                caseNo:currentCall.caseNo,
+                                remark:'已接听',
+                                importBatchNo:currentCall.importBatchNo,
+                                orgId:currentCall.orgId,
+                                // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
+                                sendRadioCheck:1,
+                                type:1,
+                                platform: 'PA',
+                                actionCode:actionCode
+                            },
+                            function(data) {
+                                // alert(JSON.stringify(data));
+                                if (data.status == 200) {//请求成功
+                                    // $.modal.alertSuccess("保存成功");
+                                    $("#callStartTime").val("");
+                                    $("#callEndTime").val("");
+                                    $("#callLen").val("");
+                                    $("#callRadioLocation").val("");
+                                    $("#callCode").val("");
+                                    $("#callRemarkAdd").val("");
+                                    // $("#callRecordId").val(data.result);
+                                    callRecordId = data.result;
+                                    childObj.echoActionCode(actionCode);
+                                    /*if($('#call').val() == '1') {
+                                        callRecordList(currentCaseNo);
+                                    }*/
+                                }else if (data.code == 1) {
+                                    window.location.href="/login";
+                                }
+                            }
+                        );
                     }
-                );
+                });
+
             };
 
             agentClient.onError = function(event) {
@@ -747,45 +841,66 @@
             } else if(callPlatform == 'DY') {
                 duyaAuto(phone);
             }
-            // start();
-            // var val = $('input[name="radioChoose"]:checked').parents("tr");
-            var callStartTime = $("#callStartTime").val();
-            var callEndTime = $("#callEndTime").val();
-            var callLen = $("#callLen").val();
-            var callRadioLocation = $("#callRadioLocation").val();
-            var callRemark = $("#callRemarkAdd").val();
-            // var callRecordId = $("#callRecordId").val();
-            //更改状态,外呼中
-            updateStatus(batchCall.id,0,"开始拨打电话，外呼中",'0','1');//只更新状态
-            $.post(
-                collectPrefix + "/addCallRecord",
-                {
-                    contactName:contactName,
-                    phone:phone,
-                    contactRelation:contactRelation,
-                    callSign:'R02',
-                    callResult:'无法接通',
-                    callStartTime:callStartTime,
-                    callEndTime:callEndTime,
-                    callLen:callLen,
-                    callRadioLocation:callRadioLocation,
-                    caseNo:currentCaseNo,
-                    remark:'无法接通',
+
+            $.ajax({
+                url: prefix+"/getCurActionCode",
+                dataType: "json",
+                async : false,
+                type: "post",
+                data:{
                     importBatchNo:currentImportBatchNo,
-                    orgId:currentOrgId,
-                    type:1,
-                    platform: callPlatform,
-                    actionCode: "Fresh-新任务"
+                    caseNo:currentCaseNo,
+                    orgId:currentOrgId
                 },
-                function(data) {
-                    // alert(JSON.stringify(data));
-                    if (data.status == 200) {//请求成功
-                        callRecordId = data.result;
-                    }else if (data.code == 1) {
-                        window.location.href="/login";
+                success:function(data){
+                    var actionCode = data.data;
+                    if(actionCode == "Fresh-新任务"){
+                        actionCode = "Search2-联系方式无效";
                     }
+
+                    // start();
+                    // var val = $('input[name="radioChoose"]:checked').parents("tr");
+                    var callStartTime = $("#callStartTime").val();
+                    var callEndTime = $("#callEndTime").val();
+                    var callLen = $("#callLen").val();
+                    var callRadioLocation = $("#callRadioLocation").val();
+                    var callRemark = $("#callRemarkAdd").val();
+                    // var callRecordId = $("#callRecordId").val();
+                    //更改状态,外呼中
+                    updateStatus(batchCall.id,0,"开始拨打电话，外呼中",'0','1');//只更新状态
+                    $.post(
+                        collectPrefix + "/addCallRecord",
+                        {
+                            contactName:contactName,
+                            phone:phone,
+                            contactRelation:contactRelation,
+                            callSign:'R02',
+                            callResult:'无法接通',
+                            callStartTime:callStartTime,
+                            callEndTime:callEndTime,
+                            callLen:callLen,
+                            callRadioLocation:callRadioLocation,
+                            caseNo:currentCaseNo,
+                            remark:'无法接通',
+                            importBatchNo:currentImportBatchNo,
+                            orgId:currentOrgId,
+                            type:1,
+                            platform: callPlatform,
+                            actionCode: actionCode
+                        },
+                        function(data) {
+                            // alert(JSON.stringify(data));
+                            if (data.status == 200) {//请求成功
+                                callRecordId = data.result;
+                            }else if (data.code == 1) {
+                                window.location.href="/login";
+                            }
+                        }
+                    );
+
                 }
-            );
+            });
+
         }
 
         /**
@@ -1006,6 +1121,32 @@
 
             return true;
         }
+
+        /**
+         * 获取案件当前行动码
+         * @param importBatchNo
+         * @param caseNo
+         * @param orgId
+         */
+        // function getActionCode(importBatchNo,caseNo,orgId) {
+        //     var curActionCode = "Fresh-新任务";
+        //     $.ajax({
+        //         url: prefix+"/getCurActionCode",
+        //         dataType: "json",
+        //         async : false,
+        //         type: "post",
+        //         data:{
+        //             importBatchNo:importBatchNo,
+        //             caseNo:caseNo,
+        //             orgId:orgId
+        //         },
+        //         success:function(data){
+        //             curActionCode = data.data;
+        //         }
+        //     });
+        //     return curActionCode;
+        // }
+
     </script>
 </body>
 </html>

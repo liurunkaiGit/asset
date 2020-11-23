@@ -47,6 +47,8 @@
 <input type="hidden" id="firstImportBatchNo" name="firstImportBatchNo" th:value="${currentImportBatchNo}">
 <input type="hidden" id="callPlatform" name="callPlatform" th:value="${callPlatform}">
 <input type="hidden" id="desensitization" name="desensitization" th:value="${desensitization}">
+<input type="hidden" id="curActionCode" name="curActionCode" th:value="${curActionCode}">
+<input type="hidden" id="allActionCode" name="allActionCode" value="Fresh-新任务,Search1-联系方式有效,Search2-联系方式无效,Found1-找到本人,Found2-找到联系人,PTP-承诺还款,Check-检查付款,TS-投诉,Transfer-建议转移,talking-谈判中,QT-其它">
 
 <div class="ui-layout-center" >
     <div class="container-div" style="overflow: hidden">
@@ -343,7 +345,7 @@
                     <tr onclick="changeFinalColor(this);">
                         <td style='display: none'><input id="finalId" type='radio' name='radioChoose'/></td>
                         <td style='padding-left: 5px;'><input id='freeCall' type='text' name='freeCall' style='width:120px;'/>&nbsp;&nbsp;<a data-toggle='modal' title="新增电话" class="btn btn-primary" style="height: 25px;padding: 3px;font-size: 12px;" onclick='addPhone();' >新增电话</a></td>
-                        <td class='disclass' style="width: 30px;"><a href='javascript:void(0)' onclick='freeCall()'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a></td>
+                        <td class='disclass' style="width: 30px;"><!--<a href='javascript:void(0)' onclick='freeCall()'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>--></td>
                         <td  style="width: 30px;"  ><a th:if="${callPlatform} ne 'DY'"  href='javascript:void(0)' onclick='hangUp()'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a></td>
                     </tr>
                     </tbody>
@@ -404,8 +406,8 @@
                                         <li class="select-time">
                                             <label class="labelInfo">行动码：</label>
                                             <select class="form-control" name="actionCode" id="actionCode" style="width: 180px; height: 30px">
-                                                <option value="" selected>请选择</option>
-                                               <!-- <option value="Fresh-新任务" >Fresh-新任务</option>-->
+                                                <!--<option value="" selected>请选择</option>
+                                                <option value="Fresh-新任务" >Fresh-新任务</option>
                                                 <option value="Search1-联系方式有效">Search1-联系方式有效</option>
                                                 <option value="Search2-联系方式无效">Search2-联系方式无效</option>
                                                 <option value="Found1-找到本人">Found1-找到本人</option>
@@ -414,7 +416,7 @@
                                                 <option value="Check-检查付款">Check-检查付款</option>
                                                 <option value="TS-投诉">TS-投诉</option>
                                                 <option value="Transfer-建议转移">Transfer-建议转移</option>
-                                                <option value="QT-其它">QT-其它</option>
+                                                <option value="QT-其它">QT-其它</option>-->
                                             </select>
                                         </li>
                                     </ul>
@@ -924,8 +926,22 @@
         window.parent.parent.$("#exonNum").append("<option value='"+exonNum+"'>"+exonNum+"</option>");
         // initial2();
         start();//启动计时
+        echoActionCode($("#curActionCode").val());
     });
 
+    //行动码回显
+    function echoActionCode(curActionCode){
+        var allActionCode = $("#allActionCode").val().split(",");
+        $("#actionCode").empty();
+        $("#actionCode").append("<option value=''>请选择</option>");
+        $.each(allActionCode,function (i,n){
+            if(curActionCode == n){
+                $("#actionCode").append("<option selected value='"+n+"'>"+n+"</option>");
+            }else{
+                $("#actionCode").append("<option value='"+n+"'>"+n+"</option>");
+            }
+        })
+    }
 
     // 点击事件change
     $('input[type=radio][name=radioChoose]').change(function () {
@@ -1090,7 +1106,7 @@
                                 if(n.phone == batchCall.phone ){//当前拨打的联系人记录
                                     var htm = "<tr onclick='changeColor(this);' style='background:rgb(169,169,169)'>" +
                                         "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose' checked/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+phone+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
-                                        "<td class='disclass'  style='width: 30px;'></td>";
+                                        "<td class='disclass'  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='call("+JSON.stringify(n.contactName)+","+n.id+","+n.relation+",\""+n.phone+"\",this)'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>"+"</td>";
                                     htm += "<td  style='width: 30px;'>";
                                     if('DY' != platform){
                                         htm += "<a href='javascript:void(0)' onclick='hangUp("+n.phone+")'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
@@ -1107,7 +1123,7 @@
                                 if(n.tel == batchCall.phone ) {//当前拨打的联系人记录
                                     var htm1 = "<tr onclick='changeColor(this);' style='background:rgb(169,169,169)'>" +
                                         "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose' checked/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+tel+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
-                                        "<td class='disclass'  style='width: 30px;'></td>";
+                                        "<td class='disclass'  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='call("+JSON.stringify(n.contactName)+","+n.id+","+n.relation+",\""+n.phone+"\",this)'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>"+"</td>";
                                     htm1 += "<td  style='width: 30px;'>";
                                     if('DY' != platform){
                                         htm1 += "<a href='javascript:void(0)' onclick='hangUp("+n.tel+")'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
@@ -1738,6 +1754,8 @@
                         callRecordList(currentCaseNo);
                     }
                     $("#actionCode").val("");
+                    $("#curActionCode").val("");
+                    echoActionCode(actionCode);//回显
                 }else{
                     $.modal.alertSuccess("保存失败:"+data.message);
                 }
@@ -2003,7 +2021,7 @@
      * @description CallOut(外呼):座席主动出局语音呼叫
      * @param pnumber:被叫号码
      */
-    function call(contactName,id,contactRelation,phone) {
+    /*function call(contactName,id,contactRelation,phone) {
         if (parent.agentIsCalling) {
             $.modal.alertError("正在通话中，请先挂断当前通话再拨打");
             return;
@@ -2012,11 +2030,11 @@
         var callEndTime = $("#callEndTime").val();
         var callLen = $("#callLen").val();
         var callRadioLocation = $("#callRadioLocation").val();
-        /*var isRadio = $('input[name="radioChoose"]:checked').val();
+        /!*var isRadio = $('input[name="radioChoose"]:checked').val();
         if (isRadio == null || isRadio == 'undefined' || isRadio == '') {
             $.modal.alert("请选择通话的联系人");
             return;
-        }*/
+        }*!/
         if(callRadioLocation!=""&&callRadioLocation!=null){
             $.modal.alert("请保存通话记录再拨打电话");
             return;
@@ -2104,6 +2122,128 @@
                 }
             }
         );
+    }*/
+    var temp_phone = null;
+    var callRecordId = null;
+    var contactName = null;
+    var contactRelation = null;
+    var phone = null;
+    function call(contactName1,id,contactRelation1,phone1,obj) {
+        contactName = contactName1;
+        contactRelation = contactRelation1;
+        phone = phone1;
+        var callRadioLocation = $("#callRadioLocation").val();
+        /*var isRadio = $('input[name="radioChoose"]:checked').val();
+        if (isRadio == null || isRadio == 'undefined' || isRadio == '') {
+            $.modal.alert("请选择通话的联系人");
+            return;
+        }*/
+        if(callRadioLocation!=""&&callRadioLocation!=null){
+            $.modal.alert("请保存通话记录再拨打电话");
+            return;
+        }
+        var agentId = window.parent.$("#agentId").val();
+        if (agentId == null || agentId == '') {
+            $.modal.alert("分机号码为空，请先绑定坐席");
+            return;
+        }
+        var exonNum = window.parent.$("#exonNum").val();
+        if (exonNum == null || exonNum == '') {
+            $.modal.alert("请选择外显号码");
+            return;
+        }
+        var callPlatform = window.parent.$("#callPlatform").val();
+        if (callPlatform == null || callPlatform == '') {
+            $.modal.alert("请配置当前机构的话务平台");
+            return;
+        }
+
+        $("#"+id).attr("checked","checked");
+        $(".disclass").attr('disabled',true);
+        $(".disclass").css('pointer-events','none');
+        $(".disclass").css('background','rgb(169,169,169)');
+        window.setTimeout(function() {
+            $(".disclass").attr('disabled',false);
+            $(".disclass").css('pointer-events','');
+            $(".disclass").css('background','');
+        },10000);
+        var callStartTime = $("#callStartTime").val();
+        var callEndTime = $("#callEndTime").val();
+        var callLen = $("#callLen").val();
+        var callRadioLocation = $("#callRadioLocation").val();
+        var callRemark = $("#callRemarkAdd").val();
+        // var callRecordId = $("#callRecordId").val();
+
+        $.ajax({
+            url: window.parent.ctx + "batchcall/getCurActionCode",
+            dataType: "json",
+            async : false,
+            type: "post",
+            data:{
+                importBatchNo:currentImportBatchNo,
+                caseNo:currentCaseNo,
+                orgId:currentOrgId
+            },
+            success:function(data){
+                var actionCode = data.data;
+                if(actionCode == "Fresh-新任务"){
+                    actionCode = "Search2-联系方式无效";
+                }
+
+                $.post(
+                    prefix + "/addCallRecord",
+                    {
+                        contactName:contactName,
+                        phone:phone,
+                        contactRelation:contactRelation,
+                        callSign:'R02',
+                        callResult:'无法接通',
+                        callStartTime:callStartTime,
+                        callEndTime:callEndTime,
+                        callLen:callLen,
+                        callRadioLocation:callRadioLocation,
+                        caseNo:currentCaseNo,
+                        remark:'无法接通',
+                        importBatchNo:currentImportBatchNo,
+                        orgId:currentOrgId,
+                        type:1,
+                        platform: callPlatform,
+                        actionCode: actionCode
+                    },
+                    function(data) {
+                        if (data.status == 200) {//请求成功
+                            $("#actionCode").val("");
+                            $("#callRecordId").val(data.result);
+                            callRecordId = data.result;
+                            parent.callRecordId = "";
+                            if($('#call').val() == '1') {
+                                callRecordList(currentCaseNo);
+                            }
+                            var val = $('input[name="radioChoose"]:checked').parents("tr");
+                            val.css('background','#dddada');
+                            var destDesc = "0"+phone;
+                            temp_phone=phone;
+                            // start();
+                            if(callPlatform == 'PA') {
+                                if (destDesc) {
+                                    window.parent.agentClient.makeCall(getDestType(destDesc), destDesc);
+                                }
+                            } else if(callPlatform == 'ZJ') {
+                                // 第一个参数是呼叫号码，第二个参数是外显号码
+                                window.parent.uKeFuSoftPhone.CallOut(phone,window.parent.$('#exonNum').val());
+                            }else if(callPlatform == 'DY') {
+                                // 度言拨打电话
+                                window.parent.duyaAuto(phone);
+                            }
+                        }else if (data.code == 1) {
+                            window.location.href="/login";
+                            return;
+                        }
+                    }
+                );
+            }
+        });
+
     }
 
     /**

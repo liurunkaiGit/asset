@@ -84,6 +84,8 @@
         });
         // 电话结束的回调函数，返回电话号码等信息
         DYSDK.callEnd(function (data) {
+            window.parent.parent.$.modal.closeLoading();
+            $('#leftNav',window.parent.document).css('z-index','2001');
             console.log(data)
             if (!data.uuid) {
                 alert("度言平台拨打记录ID不存在。");
@@ -121,46 +123,80 @@
             var currentCall = window.parent.currentCall;
             var soundRecordingUrl = $("#soundRecordingUrl").val();
             var apikey = $("#apikey").val();
-            $.ajax
-            (
-                {
-                    url: window.parent.ctx + "collect/task/addCallRecord",    //请求的url地址
-                    dataType: "json",   //返回格式为json
-                    async: false, //请求是否异步，默认为异步，这也是ajax重要特性
-                    type: "post",   //请求方式
-                    data:
-                        {
-                            id: callRecordId,
-                            contactName: currentCall.contactName,
-                            phone: $("#phone").val(),
-                            contactRelation: currentCall.contactRelation,
-                            callSign: 'R01',
-                            callResult: '已接听',
-                            callStartTime: startTime,
-                            callEndTime: endTime,
-                            callLen: recordDuration,
-                            callRadioLocation: soundRecordingUrl+'?apikey='+apikey+'&call_uuid=' + data.uuid+"&/"+data.uuid+".wav",
-                            caseNo: currentCall.caseNo,
-                            remark: '已接听',
-                            importBatchNo: currentCall.importBatchNo,
-                            orgId: currentCall.orgId,
-                            // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
-                            sendRadioCheck: 1,
-                            platform: 'DY'
-                        },
-                    success: function (data) {
-                        //请求成功
-                        if (data.status != 200) {
-                            layer.msg('更新电催记录失败', { icon: 5 });
-                        }
-                    },
-                    error: function (e) {
-                        //请求出错处理
-                        layer.msg('更新电催记录失败', { icon: 5 });
+
+            var contactName,phone,contactRelation;
+            if( window.parent.childObj != null &&  window.parent.childObj != undefined &&  window.parent.childObj.callRecordId != null &&  window.parent.childObj.callRecordId != undefined){
+                callRecordId =  window.parent.childObj.callRecordId;//子页面打过电话
+                contactName = window.parent.childObj.contactName;
+                phone = window.parent.childObj.phone;
+                contactRelation = window.parent.childObj.contactRelation;
+            }else{
+                contactName = currentCall.contactName;
+                phone = $("#phone").val();
+                contactRelation = currentCall.contactRelation;
+            }
+
+            $.ajax({
+                url: window.parent.ctx + "batchcall/getCurActionCode",
+                dataType: "json",
+                async : false,
+                type: "post",
+                data:{
+                    importBatchNo:currentCall.importBatchNo,
+                    caseNo:currentCall.caseNo,
+                    orgId:currentCall.orgId
+                },
+                success:function(data){
+                    var actionCode = data.data;
+                    if(actionCode == "Fresh-新任务" || actionCode == "Search2-联系方式无效"){
+                        actionCode = "Search1-联系方式有效";
                     }
+
+                    $.ajax
+                    (
+                        {
+                            url: window.parent.ctx + "collect/task/addCallRecord",    //请求的url地址
+                            dataType: "json",   //返回格式为json
+                            async: false, //请求是否异步，默认为异步，这也是ajax重要特性
+                            type: "post",   //请求方式
+                            data:
+                                {
+                                    id: callRecordId,
+                                    contactName: contactName,
+                                    phone: phone,
+                                    contactRelation: contactRelation,
+                                    callSign: 'R01',
+                                    callResult: '已接听',
+                                    callStartTime: startTime,
+                                    callEndTime: endTime,
+                                    callLen: recordDuration,
+                                    callRadioLocation: soundRecordingUrl+'?apikey='+apikey+'&call_uuid=' + data.uuid+"&/"+data.uuid+".wav",
+                                    caseNo: currentCall.caseNo,
+                                    remark: '已接听',
+                                    importBatchNo: currentCall.importBatchNo,
+                                    orgId: currentCall.orgId,
+                                    // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
+                                    sendRadioCheck: 1,
+                                    platform: 'DY',
+                                    actionCode: actionCode
+                                },
+                            success: function (data) {
+                                //请求成功
+                                if (data.status != 200) {
+                                    layer.msg('更新电催记录失败', { icon: 5 });
+                                    window.parent.childObj.echoActionCode(actionCode);
+                                }
+                            },
+                            error: function (e) {
+                                //请求出错处理
+                                layer.msg('更新电催记录失败', { icon: 5 });
+                            }
+                        }
+                    );
+                    window.parent.duyanNo("1");
                 }
-            );
-            window.parent.duyanNo("1");
+            });
+
         });
     }
     //调用 度言初始化函数

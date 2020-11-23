@@ -104,5 +104,7 @@ public interface TLcCustContactMapper {
 
     public int updatePhoneStatus(TLcCustContact tLcCustContact);
 
+    public Map<String,String> selectAreaCodes();
+
 
 }
