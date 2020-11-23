@@ -119,6 +119,7 @@ public class DuncaseServiceImpl implements IDuncaseService {
         Duncase tLcDuncase = Duncase.builder()
                 .caseNo(assetsPackage.getOrgCasno()) //案件号
                 .customName(assetsPackage.getCurName())   //客户姓名
+                .customNo(assetsPackage.getCustomerNo())//客户号
                 .certificateNo(assetsPackage.getCertificateNo()) //身份证号
                 .customPhone(assetsPackage.getCustomerMobile()) //客户手机号
                 .monthRepayDay(stringConverLong(assetsPackage.getAccountDate())) //账单日
