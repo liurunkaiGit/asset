@@ -175,6 +175,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sjRepaymentRateCondition != null  and sjRepaymentRateCondition != ''"> and sj_repayment_rate_condition = #{sjRepaymentRateCondition}</if>
             <if test="sjRepaymentRateOne != null "> and sj_repayment_rate_one = #{sjRepaymentRateOne}</if>
             <if test="sjRepaymentRateTwo != null "> and sj_repayment_rate_two = #{sjRepaymentRateTwo}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and date_format(days,'%Y-%m-%d') &gt;= date_format(#{params.beginTime},'%Y-%m-%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and date_format(days,'%Y-%m-%d') &lt;= date_format(#{params.endTime},'%Y-%m-%d')
+            </if>
         </where>
         order by update_time desc
     </select>
