@@ -16,9 +16,9 @@
                             </li>
                             <li class="select-time">
                                 <p>日期：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+                                <input type="text" class="time-input" id="startTime" th:value="${datamin}" placeholder="开始时间"  name="params[beginTime]"/>
                                 <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+                                <input type="text" class="time-input" id="endTime" th:value="${datamin}" placeholder="结束时间" name="params[endTime]"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>

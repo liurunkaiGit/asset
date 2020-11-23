@@ -2,6 +2,7 @@ package com.ruoyi.shareproject.hmuserst.controller;
 
 import java.util.List;
 
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.shareproject.hmuserst.domain.TLjRuleUserLogs;
 import com.ruoyi.shareproject.hmuserst.service.ITLjRuleUserLogsService;
 import com.ruoyi.shareproject.projectinformation.domain.TLpProjectInformation;
@@ -38,8 +39,9 @@ public class TLjRuleUserLogsController extends BaseController
 
     @RequiresPermissions("shareproject:userlogs:view")
     @GetMapping()
-    public String logs()
+    public String logs(ModelMap mmap)
     {
+        mmap.put("datamin", DateUtils.getDate());
         return prefix + "/userlogs";
     }
 
