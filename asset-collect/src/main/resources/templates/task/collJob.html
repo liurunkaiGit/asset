@@ -96,7 +96,7 @@
     <input type="hidden" id="totalArrears" name="totalArrears" th:value="${totalArrears}">
     <input type="hidden" id="desensitization" name="desensitization" th:value="${desensitization}">
     <input type="hidden" id="curActionCode" name="curActionCode" th:value="${curActionCode}">
-    <input type="hidden" id="allActionCode" name="allActionCode" value="Fresh-新任务,Search1-联系方式有效,Search2-联系方式无效,Found1-找到本人,Found2-找到联系人,PTP-承诺还款,Check-检查付款,TS-投诉,Transfer-建议转移,talking-谈判中,QT-其它">
+    <input type="hidden" id="allActionCode" name="allActionCode" value="Fresh-新任务,Search1-联系方式有效,Search2-联系方式无效,Found1-找到本人,Found2-找到联系人,Talking-谈判中,PTP-承诺还款,Check-检查付款,TS-投诉,Transfer-建议转移,QT-其它">
    <!-- <input type="hidden" id="extNum" name="extNum" th:value="${extNumList}">-->
     <input type="hidden" id="startNum" name="startNum" value="1">
 
@@ -1776,6 +1776,8 @@
                         currentTaskId = data.tlcTask.id;
                         currentDuncaseNo = data.tlcTask.caseNo;
                         $("#notebook").text(subNotebook(data.tlcTask.notebook));
+                        $("#curActionCode").val(data.tlcTask.actionCode);
+                        echoActionCode(data.tlcTask.actionCode);
                     }
                     if(data.assets != null){ //通过接口查询资产信息
                         var desensitization = $("#desensitization").val();
@@ -3537,55 +3539,76 @@
         var callRadioLocation = $("#callRadioLocation").val();
         var callRemark = $("#callRemarkAdd").val();
         // var callRecordId = $("#callRecordId").val();
-        $.post(
-            prefix + "/addCallRecord",
-            {
-                // id:callRecordId,
-                phone:phone,
-                callSign:'R02',
-                callResult:'无法接通',
-                callStartTime:callStartTime,
-                callEndTime:callEndTime,
-                callLen:callLen,
-                callRadioLocation:callRadioLocation,
-                caseNo:currentCaseNo,
-                remark:'无法接通',
+
+        $.ajax({
+            url: prefix + "/getCurActionCode",
+            dataType: "json",
+            async : false,
+            type: "post",
+            data:{
                 importBatchNo:currentImportBatchNo,
-                orgId:currentOrgId,
-                platform: callPlatform,
-                actionCode: "Fresh-新任务",
-                type: 1
+                caseNo:currentCaseNo,
+                orgId:currentOrgId
             },
-            function(data) {
-                // alert(JSON.stringify(data));
-                if (data.status == 200) {//请求成功
-                    // $.modal.alertSuccess("保存成功");
-                    //collJobDetail(data.result);
-                    $("#callRecordId").val(data.result);
-                    if($('#call').val() == '1') {
-                        callRecordList(currentCaseNo);
-                    }
-                    var phone = $("#freeCall").val();
-                    var destDesc = "0"+phone;
-                    start();
-                    if(callPlatform == 'PA') {
-                        if (destDesc) {
-                            agentClient.makeCall(getDestType(destDesc), destDesc);
-                        }
-                    } else if(callPlatform == 'ZJ') {
-                        // 第一个参数是呼叫号码，第二个参数是外显号码
-                        uKeFuSoftPhone.CallOut($("#freeCall").val(),window.parent.parent.$('#exonNum').val());
-                    }else if(callPlatform == 'DY') {
-                        // 度言拨打电话
-                        duyanSdk.callme(phone);
-                        agentIsCalling = false;
-                    }
-                }else if (data.code == 1) {
-                    window.location.href="/login";
-                    return;
+            success:function(data){
+                var actionCode = data.data;
+                if(actionCode == "Fresh-新任务"){
+                    actionCode = "Search2-联系方式无效";
                 }
+
+                $.post(
+                    prefix + "/addCallRecord",
+                    {
+                        // id:callRecordId,
+                        phone:phone,
+                        callSign:'R02',
+                        callResult:'无法接通',
+                        callStartTime:callStartTime,
+                        callEndTime:callEndTime,
+                        callLen:callLen,
+                        callRadioLocation:callRadioLocation,
+                        caseNo:currentCaseNo,
+                        remark:'无法接通',
+                        importBatchNo:currentImportBatchNo,
+                        orgId:currentOrgId,
+                        platform: callPlatform,
+                        actionCode: actionCode,
+                        type: 1
+                    },
+                    function(data) {
+                        // alert(JSON.stringify(data));
+                        if (data.status == 200) {//请求成功
+                            // $.modal.alertSuccess("保存成功");
+                            //collJobDetail(data.result);
+                            $("#callRecordId").val(data.result);
+                            if($('#call').val() == '1') {
+                                callRecordList(currentCaseNo);
+                            }
+                            var phone = $("#freeCall").val();
+                            var destDesc = "0"+phone;
+                            start();
+                            if(callPlatform == 'PA') {
+                                if (destDesc) {
+                                    agentClient.makeCall(getDestType(destDesc), destDesc);
+                                }
+                            } else if(callPlatform == 'ZJ') {
+                                // 第一个参数是呼叫号码，第二个参数是外显号码
+                                uKeFuSoftPhone.CallOut($("#freeCall").val(),window.parent.parent.$('#exonNum').val());
+                            }else if(callPlatform == 'DY') {
+                                // 度言拨打电话
+                                duyanSdk.callme(phone);
+                                agentIsCalling = false;
+                            }
+                        }else if (data.code == 1) {
+                            window.location.href="/login";
+                            return;
+                        }
+                    }
+                );
             }
-        );
+        });
+
+
     }
 
 
