@@ -75,6 +75,9 @@ public class CustContactRuleUtil {
                 return this.checkTel(phone);
             }
         }
+        if(length == 13){//座机
+            return this.checkTel(phone);
+        }
         return false;
     }
 
