@@ -103,7 +103,7 @@ public class TLpMonthlyTargetController extends BaseController
             return toAjax(tLpMonthlyTargetService.insertTLpMonthlyTarget(tLpMonthlyTarget));
         }catch (Exception e) {
             if(e instanceof DuplicateKeyException){
-                throw new DuplicateKeyException("年、月、项目和账龄(不能重复)已经存在");
+                throw new DuplicateKeyException("该条数据已存在，日期+项目+账龄不能重复");
             }else{
                 throw e;
             }
@@ -150,7 +150,7 @@ public class TLpMonthlyTargetController extends BaseController
             return toAjax(tLpMonthlyTargetService.updateTLpMonthlyTarget(tLpMonthlyTarget));
         }catch (Exception e) {
             if(e instanceof DuplicateKeyException){
-                throw new DuplicateKeyException("年、月、项目和账龄(不能重复)已经存在");
+                throw new DuplicateKeyException("该条数据已存在，日期+项目+账龄不能重复");
             }else{
                 throw e;
             }

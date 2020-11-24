@@ -48,6 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and date_format(attendance_date,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{params.endTime},'%Y-%m-%d %H:%i:%s')
             </if>
         </where>
+        order by update_time desc
     </select>
     
     <select id="selectTLpAttendanceById" parameterType="Long" resultMap="TLpAttendanceResult">

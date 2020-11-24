@@ -95,11 +95,11 @@ public class TLpProjectInformation extends BaseEntity {
 
     /** 人均委案量 */
     @Excel(name = "人均委案量")
-    private BigDecimal casesNumber;
+    private String casesNumber;
 
     /** 户均金额 */
     @Excel(name = "户均金额")
-    private BigDecimal perHousehold;
+    private String perHousehold;
 
     /** 项目开始时间 */
     private Date startTime;

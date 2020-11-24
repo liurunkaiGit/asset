@@ -43,7 +43,7 @@ public class TLpMonthlyTarget extends BaseEntity
 
     /** 委案批次 */
     @Excel(name = "委案批次")
-    private Integer commissionBatch;
+    private String commissionBatch;
 
     /** 委案件数 */
     @Excel(name = "委案件数")

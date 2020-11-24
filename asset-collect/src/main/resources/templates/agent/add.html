@@ -99,31 +99,31 @@
         var taskPrefix = ctx + "collect/task";
 
         $("#form-phone-add").validate({
-            onkeyup: false,
-            rules:{
-                agentid:{
-                    remote: {
-                        url: prefix + "/selectExtPhoneByAgent",
-                        type: "post",
-                        dataType: "json",
-                        data: {"agentid": function() {
-                                var agentId = $.common.trim($("#agentid").val());
-                                if (agentId == null || agentId == '') {
-                                    agentId = $.common.trim($("#duyanAgentid").val());
-                                }
-                                return agentId;
-                            }},
-                        dataFilter: function(data, type) {
-                            return $.validate.unique(data);
-                        }
-                    }
-                }
-            },
-            messages: {
-                "agentid": {
-                    remote: "分机号码已经存在"
-                }
-            },
+            // onkeyup: false,
+            // rules:{
+            //     agentid:{
+            //         remote: {
+            //             url: prefix + "/selectExtPhoneByAgent",
+            //             type: "post",
+            //             dataType: "json",
+            //             data: {"agentid": function() {
+            //                     var agentId = $.common.trim($("#agentid").val());
+            //                     if (agentId == null || agentId == '') {
+            //                         agentId = $.common.trim($("#duyanAgentid").val());
+            //                     }
+            //                     return agentId;
+            //                 }},
+            //             dataFilter: function(data, type) {
+            //                 return $.validate.unique(data);
+            //             }
+            //         }
+            //     }
+            // },
+            // messages: {
+            //     "agentid": {
+            //         remote: "分机号码已经存在"
+            //     }
+            // },
             focusCleanup: true
         });
 
@@ -138,9 +138,25 @@
                 $.modal.alertWarning("分机号码不能为空");
                 return;
             }*/
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/add", $('#form-phone-add').serialize());
+            var agentId = $.common.trim($("#agentid").val());
+            if (agentId == null || agentId == '') {
+                agentId = $.common.trim($("#duyanAgentid").val());
             }
+            $.post(
+                prefix + "/selectExtPhoneByAgent",
+                {
+                    agentid: agentId
+                },
+                function(data) {
+                    if(data == 1){
+                        $.modal.alertError("分机号码已经存在");
+                    } else {
+                        if ($.validate.form()) {
+                            $.operate.save(prefix + "/add", $('#form-phone-add').serialize());
+                        }
+                    }
+                }
+            );
         }
 
         function initExon() {

@@ -49,9 +49,9 @@
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" >
                     <i class="fa fa-download"></i> 导出
                  </a>
-                <a class="btn btn-success" onclick="copy()" >
+                <!--<a class="btn btn-success" onclick="copy()" >
                     <i class="fa fa-plus"></i> 复制
-                </a>
+                </a>-->
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -154,11 +154,7 @@
                 },
                 {
                     field : 'perHousehold', 
-                    title : '户均金额',
-                    formatter:function (value, row, index) {
-                        if(value =='' || null ==  value)return'';
-                        return  parseFloat(value).toFixed(2) ;
-                    }
+                    title : '户均金额'
                 }
                 ]
             };

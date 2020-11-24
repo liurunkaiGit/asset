@@ -1047,7 +1047,14 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         // 发送站内信
 //        TLcTaskServiceImpl tLcTaskServiceImpl = (TLcTaskServiceImpl) AopContext.currentProxy();
 //        tLcTaskServiceImpl.sendStationLetter(userIds);
-        sendStationLetter("停催申请", "停催申请", userIds);
+        StringBuffer stringBuffer = new StringBuffer("催收员");
+        StringBuffer content = stringBuffer.append(tLcTask.getOwnerName())
+                .append("申请对案件编号为")
+                .append(tLcTask.getCaseNo())
+                .append("，客户姓名为")
+                .append(tLcTask.getCustomName())
+                .append("的案件停催，请查阅审批！");
+        sendStationLetter("停催申请", content.toString(), userIds);
     }
 
     /**
@@ -1072,9 +1079,9 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     @Transactional
     public void approveStopColl(String taskIds, Integer status) {
         List<TLcTask> taskList = this.tLcTaskMapper.selectTaskByIds(Arrays.asList(taskIds.split(",")));
-        List<String> userIds = new ArrayList<>();
         taskList = taskList.stream()
                 .map(tLcTask -> {
+                    List<String> userIds = new ArrayList<>();
                     if (status == 1) {//同意
                         tLcTask.setTaskType(TaskTypeEnum.STOP_COLLECT.getCode());
                         userIds.add(tLcTask.getOwnerId().toString());
@@ -1090,15 +1097,24 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                         TLcRobotBlack robotBlack = TLcRobotBlack.builder().caseNo(tLcTask.getCaseNo()).importBatchNo(tLcTask.getImportBatchNo()).phone(tLcTask.getPhone()).reason(RobotBlackReasonEnum.STOP_APPLY.getReason()).build();
                         this.robotBlackService.deleteobotBlackByCaseReason(robotBlack);
                     }
+                    if (userIds != null && userIds.size() > 0) {
+                        // 发送站内信
+                        String result = status == 1?"同意":status == 2?"拒绝":"";
+                        StringBuffer stringBuffer = new StringBuffer("案件号");
+                        StringBuffer content = stringBuffer.append(tLcTask.getCaseNo())
+                                .append("停催审批-")
+                                .append(result);
+                        sendStationLetter("停催审批-" + result,content.toString(),userIds);
+                    }
                     return tLcTask;
                 }).collect(Collectors.toList());
         this.tLcTaskMapper.batchUpdateTask(taskList);
         insertDuncaseAssign(taskList, ShiroUtils.getSysUser());
-        if (userIds != null && userIds.size() > 0) {
-            // 发送站内信
-            String content = status == 1?"同意":status == 2?"拒绝":"";
-            sendStationLetter("停催审批-" + content,"停催审批-" + content,userIds);
-        }
+//        if (userIds != null && userIds.size() > 0) {
+//            // 发送站内信
+//            String content = status == 1?"同意":status == 2?"拒绝":"";
+//            sendStationLetter("停催审批-" + content,"停催审批-" + content,userIds);
+//        }
     }
 
     @Override
