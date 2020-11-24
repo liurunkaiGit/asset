@@ -400,8 +400,10 @@
                             },
                             success:function(data){
                                 var actionCode = data.data;
-                                if(actionCode == "Fresh-新任务" || actionCode == "Search2-联系方式无效"){
+                                if(callSign == 'R01' && (actionCode == "Fresh-新任务" || actionCode == "Search2-联系方式无效")){
                                     actionCode = "Search1-联系方式有效";
+                                }else if(callSign == 'R02' && actionCode == "Fresh-新任务"){
+                                    actionCode = "Search2-联系方式无效";
                                 }
 
                                 $.post(

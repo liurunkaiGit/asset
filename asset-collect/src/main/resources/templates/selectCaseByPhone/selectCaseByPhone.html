@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('根据手机号查询案件')" />
+    <script th:src="@{/assets/js/desensitization.js}"></script>
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <input type="hidden" id="orgId" name="orgId" th:value="${orgId}">
+                            <input type="hidden" id="desensitization" name="desensitization" th:value="${desensitization}">
+                            <input id="currentPageUrl" name="currentPageUrl" class="form-control" type="hidden">
+                            <li>
+                                <p style="width: 120px;">新案下电话号码：</p>
+                                <input type="text" name="phone" id="phone"/>
+                            </li>
+
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+           <!-- <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="ruoyi:config:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="ruoyi:config:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="ruoyi:config:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="ruoyi:config:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>-->
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "collect/selectCaseByPhone";
+        var taskPrefix = ctx + "collect/task";
+        var caseStatusDatas = [[${@dict.getType('sys_case_status')}]];
+        var taskTypeDatas = [[${@dict.getType('sys_task_type')}]];
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                modalName: "根据手机号查询案件",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '主键',
+                    visible: false
+                },
+                    {
+                        field: 'caseNo',
+                        title: '案件编号',
+                        formatter: function(value, row, index) {
+                            // return value;
+                            // alert(JSON.stringify(row))
+                            return "<a href='javascript:void(0)' onclick='detail(\""+value + "\",\""+row.orgId + "\",\""+row.importBatchNo+ "\",\""+row.certificateNo+ "\")'>"+value+"</a>";
+                        },
+                        footerFormatter:function (value) {
+                            return "<font color=\"black\"> <b>合计</b></font>";
+                        }
+                    },
+                    {
+                        field: 'customName',
+                        title: '客户姓名'
+                    },
+                    {
+                        field: 'transferType',
+                        title: '手别'
+                    },
+
+                    {
+                        field: 'enterCollDate',
+                        sortable: true,
+                        title: '入催日'
+                    },
+                    {
+                        field: 'appointCaseBalance',
+                        title: '委案金额',
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                sumBalance += parseFloat(value[i].appointCaseBalance);
+                            }
+                            return "<font color=\"#8b0000\"><b>" + sumBalance.toFixed(2) + "</b></font>";
+                        }
+                    },
+                    {
+                        field: 'closeCaseYhje',
+                        title: '结案应还金额',
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                if(value[i].closeCaseYhje != null && value[i].closeCaseYhje != "") {
+                                    sumBalance += parseFloat(value[i].closeCaseYhje);
+                                }
+                            }
+                            return "<font color=\"#ff8c00\"> <b>" + sumBalance.toFixed(2) + "</b></font>";
+                        }
+                    },
+                    {
+                        field: 'dqyhje',
+                        title: '当前已还金额',
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                if(value[i].dqyhje != null && value[i].dqyhje != "") {
+                                    sumBalance += parseFloat(value[i].dqyhje);
+                                }
+                            }
+                            return "<font color=\"#006400\"><b>" + sumBalance.toFixed(2) + "</b></font>";
+                        }
+
+                    },
+                    {
+                        field: 'callSign',
+                        title: '最近电话码',
+                        formatter: function(value, row, index) {
+                            return getCallCode(value,row.callSignValue);
+                        }
+                    },
+                    {
+                        field: 'actionCode',
+                        title: '最近行动码',
+                        formatter: function(value, row, index) {
+                            return getActionCode(value,row.actionCodeValue);
+                        }
+                    },
+                    {
+                        field : 'recentlyAllotDate',
+                        title : '最近分配日期'
+                    },
+                    {
+                        field : 'recentlyFollowUpDate',
+                        title : '最近跟进日期'
+                    },
+                    {
+                        field : 'ownerName',
+                        title : '业务归属人'
+                    },
+                    {
+                        field : 'userGroup',
+                        title : '组别'
+                    },
+                    {
+                        field : 'taskType',
+                        title : '任务类型',
+                        formatter: function(value, row, index) {
+                            return $.table.selectDictLabel(taskTypeDatas, value);
+                        }
+                    },
+                    {
+                        field: 'taskStatus',
+                        title: '任务状态',
+                        formatter: function (value, row, index) {
+                            return $.table.selectDictLabel(caseStatusDatas, value);
+                        }
+                    },
+                    {
+                        field : 'productName',
+                        title : '产品名称'
+                    },
+                    {
+                        field : 'closeType',
+                        title : '是否出催',
+                        formatter: function (value, row, index) {
+                            if(value=="1"){
+                                value="出催结案"
+                            }else if(value=="2"){
+                                value="未出催"
+                            }
+                            return value;
+                        }
+                    },
+                    {
+                        field : 'closeDate',
+                        title : '结案时间'
+                    },
+                    {
+                        field: 'score',
+                        title: '催收评分'
+                    },
+                    {
+                        field : 'overdueDays',
+                        title : '逾期天数'
+                    },
+                    {
+                        field : 'phone',
+                        title : '联系方式',
+                        formatter: function(value, row, index) {
+                            var desensitization = $("#desensitization").val();
+                            if("true" == desensitization){
+                                return tellToMd5(value);
+                            }
+                            return value;
+                        }
+                    },
+                    {
+                        field : 'certificateNo',
+                        title : '证号号码',
+                        formatter: function(value, row, index) {
+                            var desensitization = $("#desensitization").val();
+                            if("true" == desensitization){
+                                return credentialToMd5(value);
+                            }
+                            return value;
+                        }
+                    },
+                    {
+                        field : 'backCaseDate',
+                        sortable: true,
+                        title : '退案日'
+                    },
+                    {
+                        field : 'remark',
+                        title : '备注'
+                    }]
+            };
+            $.table.init(options);
+        });
+
+
+        function detail(currentCaseNo,orgId,currentImportBatchNo,certificateNo) {
+            var orgId = $("#orgId").val();
+            var phone = $("#phone").val();
+            // var collHisUrl = taskPrefix + '/collJobHis?orgId='+orgId
+            var collHisUrl = prefix + '/collJobHisDetail?orgId='+orgId+'&phone='+phone
+                +'&currentCaseNo='+currentCaseNo +'&currentImportBatchNo='+currentImportBatchNo;
+
+            if ($("#currentPageUrl").val() != null && $("#currentPageUrl").val() != '' && $("#currentPageUrl").val() != collHisUrl) {
+                $.modal.closeTab($("#currentPageUrl").val());
+            }
+            $.modal.openTab("案件信息", collHisUrl);
+            $("#currentPageUrl").val(collHisUrl);
+        }
+
+        function getCallCode(callCode, dictLabel) {
+            if (dictLabel != null && dictLabel != '') {
+                return callCode + "(" + dictLabel + ")";
+            }
+            return callCode;
+        }
+
+        function getActionCode(actionCode, dictLabel) {
+            if (dictLabel != null && dictLabel != '') {
+                return actionCode + "(" + dictLabel + ")";
+            }
+            return actionCode;
+        }
+    </script>
+</body>
+</html>
