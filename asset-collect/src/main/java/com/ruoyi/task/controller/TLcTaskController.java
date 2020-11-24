@@ -322,6 +322,8 @@ public class TLcTaskController extends BaseController {
 
         boolean desensitization = desensitizationUtil.isDesensitization(String.valueOf(ShiroUtils.getSysUser().getOrgId()), ShiroUtils.getLoginName());
         modelMap.put("desensitization",desensitization);
+        TLcTask task = this.tLcTaskService.selectTaskByCaseNo(currentCaseNo,String.valueOf(ShiroUtils.getSysUser().getOrgId()),currentImportBatchNo);
+        modelMap.put("curActionCode", task.getActionCode());
         logger.info("催收作业页面查询数据结束、进入页面sessionId="+sessionId);
         return prefix + "/collJob";
     }
@@ -1656,6 +1658,20 @@ public class TLcTaskController extends BaseController {
             log.error("颜色保存失败{}",e);
             return AjaxResult.error();
         }
+    }
+
+    /**
+     * 获取案件当前行动码
+     * @param importBatchNo
+     * @param caseNo
+     * @param orgId
+     * @return
+     */
+    @PostMapping("/getCurActionCode")
+    @ResponseBody
+    public AjaxResult getCurActionCode(String importBatchNo, String caseNo, String orgId){
+        TLcTask tLcTask = this.tLcTaskService.selectTaskByCaseNo(caseNo,orgId,importBatchNo);
+        return AjaxResult.success("成功",tLcTask.getActionCode());
     }
 
 }
