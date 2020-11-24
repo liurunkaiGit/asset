@@ -118,4 +118,5 @@ public class TLcExonNumController extends BaseController {
         List<TLcExonNum> exonNumList = this.tLcExonNumService.selectTLcExonNumList(tLcExonNum);
         return getDataTable(exonNumList);
     }
+
 }

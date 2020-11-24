@@ -1,5 +1,7 @@
 package com.ruoyi;
 
+import com.alibaba.fastjson.JSON;
+import com.ruoyi.bean.DuYanUser;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.RestTemplateUtil;
 import com.ruoyi.duncase.domain.AllocatTaskInvokeRuleEngin;
@@ -17,6 +19,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -119,5 +123,35 @@ public class RestTemplateTest {
                 .setOrganAddr("")
                 .setBillAddr("");
         return caseInfoDTO;
+    }
+
+    @Test
+    public void testDuYan() {
+        // apikey=CzTAfTCxNdBUUXw7ZvpzwB48NxCBkO54&page_num=1&page_size=10
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("apikey", "CzTAfTCxNdBUUXw7ZvpzwB48NxCBkO54");
+//        map.put("page_num", 1);
+//        map.put("page_size", 10);
+//        DuYanUser forObject = restTemplateUtil.getRestTemplate().getForObject("https://open.duyansoft.com/api/v1/account?apikey=CzTAfTCxNdBUUXw7ZvpzwB48NxCBkO54&page_num=1&page_size=10", DuYanUser.class);
+//        System.out.println(JSON.toJSONString(forObject));
+        Integer pageNum = 1;
+        Integer pageSize = 3;
+        ArrayList<DuYanUser.DataBean.AccountsBean> allDuYanUserList = new ArrayList<>();
+        while (true) {
+            DuYanUser duYanUser = restTemplateUtil.getRestTemplate().getForObject("https://open.duyansoft.com/api/v1/account?apikey=CzTAfTCxNdBUUXw7ZvpzwB48NxCBkO54&page_num="+pageNum+"&page_size="+pageSize, DuYanUser.class);
+            if (duYanUser != null && 1 == duYanUser.getStatus()) {
+                List<DuYanUser.DataBean.AccountsBean> accountsBeanList = duYanUser.getData().getAccounts();
+                allDuYanUserList.addAll(accountsBeanList);
+                log.info("第{}页查询完成，有{}条数据", pageNum, accountsBeanList.size());
+                if (accountsBeanList != null && accountsBeanList.size() >= pageSize) {
+                    pageNum++;
+                } else {
+                    break;
+                }
+            } else {
+                log.error("获取度言接口异常，status is {}", duYanUser.getStatus());
+            }
+        }
+        System.out.println(JSON.toJSONString(allDuYanUserList));
     }
 }

@@ -168,4 +168,15 @@ public class TLpAttendanceController extends BaseController {
     {
         return toAjax(tLpAttendanceService.deleteTLpAttendanceByIds(ids));
     }
+
+    /**
+     * 复制新增
+     */
+    @GetMapping("/copy")
+    public String copyone(Long id, ModelMap mmap)
+    {
+        TLpAttendance tLpAttendance = this.tLpAttendanceService.selectTLpAttendanceById(id);
+        mmap.put("tLpAttendance", tLpAttendance);
+        return prefix + "/copy";
+    }
 }

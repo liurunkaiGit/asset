@@ -6,6 +6,7 @@ import java.util.List;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.shareproject.monthlytarget.domain.TLpMonthlyTarget;
 import com.ruoyi.shareproject.monthlytarget.service.ITLpMonthlyTargetService;
+import com.ruoyi.task.domain.TlcCallRecordTotal;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -97,10 +98,12 @@ public class TLpMonthlyTargetController extends BaseController
             tLpMonthlyTarget.setUpdateTime(new Date());
             tLpMonthlyTarget.setOrgId(ShiroUtils.getSysUser().getOrgId());
             tLpMonthlyTarget.setOrgName(ShiroUtils.getSysUser().getOrgName());
+            tLpMonthlyTarget.setProId(Long.valueOf(tLpMonthlyTarget.getProIdName().split(",")[0]));
+            tLpMonthlyTarget.setProName(tLpMonthlyTarget.getProIdName().split(",")[1]);
             return toAjax(tLpMonthlyTargetService.insertTLpMonthlyTarget(tLpMonthlyTarget));
         }catch (Exception e) {
             if(e instanceof DuplicateKeyException){
-                throw new DuplicateKeyException("年、月和项目(不能重复)已经存在");
+                throw new DuplicateKeyException("年、月、项目和账龄(不能重复)已经存在");
             }else{
                 throw e;
             }
@@ -115,6 +118,7 @@ public class TLpMonthlyTargetController extends BaseController
     {
         TLpMonthlyTarget tLpMonthlyTarget = tLpMonthlyTargetService.selectTLpMonthlyTargetById(id);
         mmap.put("tLpMonthlyTarget", tLpMonthlyTarget);
+        mmap.put("transferTypeValue", tLpMonthlyTarget.getTransferType());
         return prefix + "/edit";
     }
 
@@ -127,6 +131,7 @@ public class TLpMonthlyTargetController extends BaseController
     {
         TLpMonthlyTarget tLpMonthlyTarget = tLpMonthlyTargetService.selectTLpMonthlyTargetById(id);
         mmap.put("tLpMonthlyTarget", tLpMonthlyTarget);
+        mmap.put("transferTypeValue", tLpMonthlyTarget.getTransferType());
         return prefix + "/copyone";
     }
 
@@ -145,7 +150,7 @@ public class TLpMonthlyTargetController extends BaseController
             return toAjax(tLpMonthlyTargetService.updateTLpMonthlyTarget(tLpMonthlyTarget));
         }catch (Exception e) {
             if(e instanceof DuplicateKeyException){
-                throw new DuplicateKeyException("年、月和项目(不能重复)已经存在");
+                throw new DuplicateKeyException("年、月、项目和账龄(不能重复)已经存在");
             }else{
                 throw e;
             }

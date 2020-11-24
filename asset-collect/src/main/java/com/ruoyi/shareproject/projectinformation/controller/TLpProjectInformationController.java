@@ -9,6 +9,7 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.shareproject.projectinformation.domain.TLpProjectInformation;
 import com.ruoyi.shareproject.projectinformation.service.ITLpProjectInformationService;
+import com.ruoyi.shareproject.result.domain.TLpResult;
 import com.ruoyi.system.domain.SysDictData;
 import com.ruoyi.system.service.ISysDictDataService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -36,8 +37,10 @@ public class TLpProjectInformationController extends BaseController {
     private ITLpProjectInformationService tLpProjectInformationService;
 
     @GetMapping()
-    public String information()
+    public String information(ModelMap modelMap)
     {
+        List<TLpProjectInformation> projectList = this.tLpProjectInformationService.selectTLpProjectInformationList(new TLpProjectInformation());
+        modelMap.put("projectList", projectList);
         return prefix + "/projectinformation";
     }
 
@@ -197,4 +200,5 @@ public class TLpProjectInformationController extends BaseController {
     {
         return toAjax(tLpProjectInformationService.deleteTLpProjectInformationByIds(ids));
     }
+
 }

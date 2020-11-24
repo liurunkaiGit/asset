@@ -3,7 +3,9 @@ package com.ruoyi.stationletter.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -16,6 +18,8 @@ import java.util.Date;
  * @date 2020-10-30
  */
 @Data
+@Accessors(chain = true)
+@Builder(toBuilder = true)
 public class TLcStationLetter extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
@@ -86,5 +90,4 @@ public class TLcStationLetter extends BaseEntity {
 
     private Date startCreateTime;
     private Date endCreateTime;
-
 }

@@ -3,9 +3,13 @@ package com.ruoyi.agent.service.impl;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.alibaba.fastjson.JSON;
+import com.ruoyi.agent.domain.DuYanUser;
 import com.ruoyi.assetspackage.domain.OrgPackage;
 import com.ruoyi.assetspackage.service.IOrgPackageService;
+import com.ruoyi.common.config.DuYanConfig;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.RestTemplateUtil;
 import com.ruoyi.exonNum.domain.TLcExonNum;
 import com.ruoyi.exonNum.service.ITLcExonNumService;
 import com.ruoyi.system.domain.SysDept;
@@ -13,6 +17,7 @@ import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.agent.mapper.ExtPhoneMapper;
@@ -26,8 +31,11 @@ import com.ruoyi.common.core.text.Convert;
  * @author guozeqi
  * @date 2020-03-02
  */
+@Slf4j
 @Service
 public class ExtPhoneServiceImpl implements IExtPhoneService {
+    @Autowired
+    private DuYanConfig duYanConfig;
     @Autowired
     private ExtPhoneMapper extPhoneMapper;
     @Autowired
@@ -40,6 +48,8 @@ public class ExtPhoneServiceImpl implements IExtPhoneService {
     private ISysDeptService sysDeptService;
     @Autowired
     private IOrgPackageService orgPackageService;
+    @Autowired
+    private RestTemplateUtil restTemplateUtil;
 
     /**
      * 查询分机号码
@@ -86,6 +96,13 @@ public class ExtPhoneServiceImpl implements IExtPhoneService {
 //            extPhone.setOrgName(orgPackage.getOrgName());
         }
         extPhone.setExonNumGroup(this.exonNumService.selectTLcExonNumById(Long.valueOf(extPhone.getExonNumGroupId())).getExonNumGroup());
+        String agentid = extPhone.getAgentid();
+        if (agentid.startsWith(",")) {
+            agentid = agentid.split(",")[1];
+        } else if (agentid.endsWith(",")){
+            agentid = agentid.split(",")[0];
+        }
+        extPhone.setAgentid(agentid);
         return extPhoneMapper.insertExtPhone(extPhone);
     }
 
@@ -191,5 +208,29 @@ public class ExtPhoneServiceImpl implements IExtPhoneService {
     @Override
     public ExtPhone selectExtPhoneByAgent(ExtPhone extPhone) {
         return this.extPhoneMapper.selectExtPhoneByAgent(extPhone);
+    }
+
+    @Override
+    public List<DuYanUser.DataBean.AccountsBean> selectDyAccount() {
+        Integer pageNum = 1;
+        Integer pageSize = 100;
+        ArrayList<DuYanUser.DataBean.AccountsBean> allDuYanUserList = new ArrayList<>();
+        while (true) {
+            DuYanUser duYanUser = restTemplateUtil.getRestTemplate().getForObject("https://open.duyansoft.com/api/v1/account?apikey="+duYanConfig.getApikey()+"&page_num="+pageNum+"&page_size="+pageSize, DuYanUser.class);
+            if (duYanUser != null && 1 == duYanUser.getStatus()) {
+                List<DuYanUser.DataBean.AccountsBean> accountsBeanList = duYanUser.getData().getAccounts();
+                allDuYanUserList.addAll(accountsBeanList);
+                log.info("第{}页查询完成，有{}条数据", pageNum, accountsBeanList.size());
+                if (accountsBeanList != null && accountsBeanList.size() >= pageSize) {
+                    pageNum++;
+                } else {
+                    break;
+                }
+            } else {
+                log.error("获取度言接口异常，status is {}", duYanUser.getStatus());
+            }
+        }
+        log.info("度言用户是：{}", JSON.toJSONString(allDuYanUserList));
+        return allDuYanUserList;
     }
 }

@@ -1773,6 +1773,16 @@
         ORDER BY caseNum
     </select>
 
+    <select id="selectTaskByIds" parameterType="java.util.List" resultMap="TLcTaskResult">
+        select
+        <include refid="SELECT_T_LC_TASK"/>
+        from t_lc_task t
+        where t.id in
+        <foreach collection="taskIdList" separator="," open="(" close=")" item="id">
+            #{id}
+        </foreach>
+    </select>
+
     <update id="updateNotebook" parameterType="com.ruoyi.task.domain.TLcTask">
         UPDATE t_lc_task set notebook = #{notebook} WHERE id = #{id}
     </update>

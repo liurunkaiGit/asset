@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">项目名称：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>项目名称：</label>
                     <div class="col-sm-8">
                         <input name="names" class="form-control" type="text" maxlength="25" th:field="*{names}" required>
                     </div>
@@ -38,7 +38,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label">归属中心：</label>
                     <div class="col-sm-8">
-                        <select class="form-control" name="belongingCenterId"  id="belongingCenterId" >
+                        <select class="form-control" name="belongingCenterId"  id="belongingCenterId" required>
                             <option value="0">请选择</option>
                         </select>
                         <input name="belongingCenterName" id="belongingCenterName"  class="form-control" type="hidden" th:field="*{belongingCenterName}" >
@@ -47,7 +47,7 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">项目经理：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>项目经理：</label>
                     <div class="col-sm-8">
                         <input name="projectManager" class="form-control" th:field="*{projectManager}" maxlength="50" type="text" required>
                     </div>
@@ -58,7 +58,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">项目主管：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>项目主管：</label>
                     <div class="col-sm-8">
                         <input name="projectDirector" class="form-control" th:field="*{projectDirector}" maxlength="50" type="text" required>
                     </div>
@@ -66,7 +66,7 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">坐席数量：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>坐席数量：</label>
                     <div class="col-sm-8">
                         <input name="seatsNumber" class="form-control" maxlength="9" type="number" th:field="*{seatsNumber}" required>
                     </div>
@@ -77,7 +77,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">甲方名称：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>甲方名称：</label>
                     <div class="col-sm-8">
                         <input name="partyName" class="form-control" th:field="*{partyName}" maxlength="50" type="text" required>
                     </div>
@@ -117,7 +117,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">产品名称：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>产品名称：</label>
                     <div class="col-sm-8">
                         <input name="productName" class="form-control" maxlength="50" th:field="*{productName}" type="text" required>
                     </div>
@@ -148,7 +148,7 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">分案逻辑：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>分案逻辑：</label>
                     <div class="col-sm-8">
                         <input name="divisionLogic" class="form-control" maxlength="50" th:field="*{divisionLogic}" type="text" required>
                     </div>
@@ -159,7 +159,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">撤案：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>撤案：</label>
                     <div class="col-sm-8">
                         <input name="withdrawCase" class="form-control" maxlength="50" th:field="*{withdrawCase}" type="text" required>
                     </div>
@@ -169,7 +169,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label">费率：</label>
                     <div class="col-sm-8">
-                        <input name="rates" class="form-control" th:field="*{rates}"  maxlength="10" type="text" required>
+                        <input name="rates" class="form-control" th:field="*{rates}"  maxlength="10" type="text">
                     </div>
                 </div>
             </div>
@@ -209,9 +209,9 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">人均委案量：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>人均委案量：</label>
                     <div class="col-sm-8">
-                        <input name="casesNumber" class="form-control" maxlength="9" th:field="*{casesNumber}" type="text" required>
+                        <input name="casesNumber" class="form-control" maxlength="9" th:field="*{casesNumber}" ismoney="true" type="text" required>
                     </div>
                 </div>
             </div>
@@ -220,7 +220,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">开始时间：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>开始时间：</label>
                     <div class="col-sm-8">
                         <div class="input-group date">
                             <input name="startTime" th:value="${#dates.format(tLpProjectInformation.startTime, 'yyyy-MM-dd')}" class="form-control time-input" placeholder="yyyy-MM-dd" type="text">
@@ -243,7 +243,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">委案账龄：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>委案账龄：</label>
                     <div id="dvct" class="col-sm-8" style="float: left">
                     </div>
                 </div>
@@ -300,10 +300,10 @@
             }
         );
         function submitHandler() {
-            if($("#belongingCenterId").val() == 0){
+            /*if($("#belongingCenterId").val() == 0){
                 $.modal.alertWarning('请选择归属中心');
                 return;
-            }
+            }*/
             if(!$("#trafficPlatformdv input[type='checkbox']").is(':checked')){
                 $.modal.alertWarning('请选择话务平台');
                 return;

@@ -140,4 +140,7 @@ public interface SysUserMapper
     List<SysUser> selectUserListByUserIds(@Param("userIds") List<String> userIds);
 
     List<String> searchUserIdByDeptAndHaveDept(@Param("deptId") Long deptId);
+
+    List<String> selectHavaStopCollApprovePermUser();
+
 }

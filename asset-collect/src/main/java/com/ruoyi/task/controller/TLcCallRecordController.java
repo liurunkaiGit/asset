@@ -18,6 +18,7 @@ import com.ruoyi.task.domain.TLcCallRecordForJX;
 import com.ruoyi.task.domain.TLcCallRecordForXY;
 import com.ruoyi.task.service.ITLcCallRecordService;
 import com.ruoyi.utils.CSVUtils;
+import com.ruoyi.utils.Response;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,6 +50,17 @@ public class TLcCallRecordController extends BaseController {
 
     @Autowired
     private ISysConfigService sysConfigService;
+
+    /**
+     * 查看录音
+     * @return
+     */
+    @PostMapping("/selectCallRadioByOrgId")
+    @ResponseBody
+    public Response selectCallRadioByOrgId(@RequestBody TLcCallRecord callRecord) {
+        List<TLcCallRecord> callRecordList = this.tLcCallRecordService.selectCallRecordListByOrgIdAndTime(callRecord);
+        return Response.success(callRecordList);
+    }
 
     @RequiresPermissions("call:record:view")
     @GetMapping()

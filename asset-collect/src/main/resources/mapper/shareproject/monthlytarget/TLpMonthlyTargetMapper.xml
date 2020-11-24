@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.shareproject.monthlytarget.mapper.TLpMonthlyTargetMapper">
     
-    <resultMap type="TLpMonthlyTarget" id="TLpMonthlyTargetResult">
+    <resultMap type="com.ruoyi.shareproject.monthlytarget.domain.TLpMonthlyTarget" id="TLpMonthlyTargetResult">
         <result property="id"    column="id"    />
         <result property="particularYear"    column="particular_year"    />
         <result property="particularMonth"    column="particular_month"    />
@@ -26,10 +26,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="orgId"    column="org_id"    />
         <result property="orgName"    column="org_name"    />
+        <result property="transferType"    column="transfer_type"    />
     </resultMap>
 
     <sql id="selectTLpMonthlyTargetVo">
-        select id, particular_year, particular_month, pro_id, pro_name, allocation_of_seats, commission_batch, number_of_commission, commission_amount, amount_received, amount_created, inflowrate_of_lastmonth, inflowrate_of_month, target_ranking, remark, create_by, create_time, update_by, update_time, org_id, org_name from t_lp_monthly_target
+        select id, particular_year, particular_month, pro_id, pro_name, allocation_of_seats, commission_batch, number_of_commission, commission_amount, amount_received, amount_created, inflowrate_of_lastmonth, inflowrate_of_month, target_ranking, remark, create_by, create_time, update_by, update_time, org_id, org_name, transfer_type from t_lp_monthly_target
     </sql>
 
     <select id="selectTLpMonthlyTargetList" parameterType="TLpMonthlyTarget" resultMap="TLpMonthlyTargetResult">
@@ -50,6 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="targetRanking != null  and targetRanking != ''"> and target_ranking = #{targetRanking}</if>
             <if test="orgId != null "> and org_id = #{orgId}</if>
             <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+            <if test="transferType != null  and transferType != ''">  and transfer_type = #{transferType}</if>
         </where>
     </select>
     
@@ -81,6 +83,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">update_time,</if>
             <if test="orgId != null ">org_id,</if>
             <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="transferType != null  and transferType != ''">transfer_type,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="particularYear != null ">#{particularYear},</if>
@@ -103,6 +106,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">#{updateTime},</if>
             <if test="orgId != null ">#{orgId},</if>
             <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="transferType != null  and transferType != ''">#{transferType},</if>
          </trim>
     </insert>
 
@@ -129,6 +133,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">update_time = #{updateTime},</if>
             <if test="orgId != null ">org_id = #{orgId},</if>
             <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            transfer_type = #{transferType},
         </trim>
         where id = #{id}
     </update>

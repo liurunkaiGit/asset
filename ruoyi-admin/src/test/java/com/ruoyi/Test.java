@@ -3,6 +3,7 @@ package com.ruoyi;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.jcraft.jsch.*;
 import com.ruoyi.callConfig.domain.TLcCallStrategyConfig;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.enums.StopCallConditionEnum;
@@ -709,5 +710,42 @@ public class Test {
         String endTimeStr = df.format(endTime);
         System.out.println(startTimeStr);
         System.out.println(endTimeStr);
+    }
+
+    @org.junit.Test
+    public void sftpTest()  throws Exception{
+        String hostName= "192.168.37.129";
+        String username="sftp";
+        String password="sftp";
+        String srcFilePath="/mydata/sftp/upload";
+        String targetFilePath="C:/Users/liurunkai/Desktop/a.txt";
+
+        downloadFileBySftp(hostName,username,password,srcFilePath,targetFilePath);
+    }
+
+    public void downloadFileBySftp(String remoteServerIp,
+                                          String username,
+                                          String password,
+                                          String remoteFilePath,
+                                          String localFilePath) throws Exception{
+        JSch jsch = new JSch();
+        try {
+            Session session = jsch.getSession(username, remoteServerIp, 2222);
+            session.setConfig("StrictHostKeyChecking", "no");
+            session.setPassword(password);
+            session.connect();
+
+            Channel channel = session.openChannel("sftp");
+            channel.connect();
+            ChannelSftp sftpChannel = (ChannelSftp) channel;
+            sftpChannel.get(remoteFilePath, localFilePath);
+            sftpChannel.exit();
+            session.disconnect();
+        } catch (JSchException e) {
+            //To change body of catch statement use File | Settings | File Templates.
+            log.error(e.getMessage(),e);
+        } catch (SftpException e) {
+            log.error(e.getMessage(),e);
+        }
     }
 }

@@ -92,6 +92,8 @@ public class TLpResult extends BaseEntity {
     @Excel(name = "目标排名")
     private String targetRank;
 
+    private String remark;
+
     private Date startReportDate;
     private Date endReportDate;
 

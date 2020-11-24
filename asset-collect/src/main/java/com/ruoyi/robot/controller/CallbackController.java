@@ -34,9 +34,9 @@ public class CallbackController {
      */
     @PostMapping(value = "/call", consumes = "text/plain;charset=UTF-8")
     public String callCallback(@RequestBody String params) {
-        log.info("呼入回调参数是{}", params);
+        log.error("呼入回调参数是{}", params);
         CallCallback callCallback = JSONObject.parseObject(params, CallCallback.class);
-        log.info("进入了呼入回调接口，机器人任务id{}，手机号是{}", callCallback.getData().getData().getSceneInstance().getCallJobId(), callCallback.getData().getData().getSceneInstance().getCustomerTelephone());
+        log.error("进入了呼入回调接口，机器人任务id{}，手机号是{}", callCallback.getData().getData().getSceneInstance().getCallJobId(), callCallback.getData().getData().getSceneInstance().getCustomerTelephone());
         return this.callbackService.callCallback(callCallback);
     }
 
@@ -50,9 +50,9 @@ public class CallbackController {
     public String taskStatusCallback(@RequestBody String params) throws InterruptedException {
         // 休眠5秒，为了防止任务状态回调早于呼入回调
         TimeUnit.SECONDS.sleep(5);
-        log.info("任务状态回调参数是{}", params);
+        log.error("任务状态回调参数是{}", params);
         TaskStatusCallback taskStatusCallback = JSONObject.parseObject(params, TaskStatusCallback.class);
-        log.info("进入了任务状态回调接口，任务id{}，任务状态是{}", taskStatusCallback.getData().getData().getCallJobId(), taskStatusCallback.getData().getData().getStatus());
+        log.error("进入了任务状态回调接口，任务id{}，任务状态是{}", taskStatusCallback.getData().getData().getCallJobId(), taskStatusCallback.getData().getData().getStatus());
         return this.callbackService.taskStatusCallback(taskStatusCallback);
     }
 }

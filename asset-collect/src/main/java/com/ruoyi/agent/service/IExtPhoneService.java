@@ -1,5 +1,6 @@
 package com.ruoyi.agent.service;
 
+import com.ruoyi.agent.domain.DuYanUser;
 import com.ruoyi.agent.domain.ExtPhone;
 import com.ruoyi.system.domain.SysUser;
 
@@ -71,4 +72,7 @@ public interface IExtPhoneService
     List<String> selectExtNumBySeat(String seatId, String agentId, String callPlatform);
 
     ExtPhone selectExtPhoneByAgent(ExtPhone extPhone);
+
+    List<DuYanUser.DataBean.AccountsBean> selectDyAccount();
+
 }
