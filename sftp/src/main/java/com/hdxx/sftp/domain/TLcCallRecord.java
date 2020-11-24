@@ -165,6 +165,8 @@ public class TLcCallRecord implements Serializable {
 
     private String orgName;
 
+    private String areaCenter;
+
     private Integer star;
 
     /**

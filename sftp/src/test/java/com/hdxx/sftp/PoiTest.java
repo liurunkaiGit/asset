@@ -23,20 +23,18 @@ public class PoiTest {
 
         SXSSFWorkbook wb = new SXSSFWorkbook(1024); // 这里1024是在内存中的数量，如果大于此数量时，会写到硬盘，以避免在内存导致内存溢出
         Sheet sh = wb.createSheet();
-        for (int i = 0; i < 3 + 1; i++) {
+        Row row = sh.createRow(0);
+        row.createCell(0).setCellValue("xxxx");
+        row.createCell(1).setCellValue("aaaa");
+        row.createCell(2).setCellValue("bbbb");
+        row.createCell(3).setCellValue("cccc");
+        for (int i = 0; i < 3; i++) {
             sh.setColumnWidth(i, 4500);
-            Row row = sh.createRow(i);
-            if (i == 0) {
-                row.createCell(0).setCellValue("xxxx");
-                row.createCell(1).setCellValue("aaaa");
-                row.createCell(2).setCellValue("bbbb");
-                row.createCell(3).setCellValue("cccc");
-            } else {
-                row.createCell(0).setCellValue("belong");
-                row.createCell(1).setCellValue("dqbj");
-                row.createCell(2).setCellValue("datasource");
-                row.createCell(3).setCellValue("tablename");
-            }
+            Row row1 = sh.createRow(i+1);
+            row1.createCell(0).setCellValue("belong");
+            row1.createCell(1).setCellValue("dqbj");
+            row1.createCell(2).setCellValue("datasource");
+            row1.createCell(3).setCellValue("tablename");
         }
         FileOutputStream output = new FileOutputStream(rpathfinal);
         wb.write(output);

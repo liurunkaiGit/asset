@@ -21,3 +21,5 @@ ALTER TABLE t_lc_call_strategy_config add COLUMN `phone_type` TINYINT(1) DEFAULT
 
 INSERT INTO `sys_dict_data` (`dict_sort`, `dict_label`, `dict_value`, `dict_type`, `css_class`, `list_class`, `is_default`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
 VALUES ('4', '甲方话务', 'JFHW', 'call_platform', NULL, NULL, 'Y', '0', 'zhang', '2020-11-17 15:20:01', '', NULL, '甲方话务');
+
+ALTER TABLE t_lc_robot_task add COLUMN `action_code` varchar(100) DEFAULT NULL COMMENT '行动码';

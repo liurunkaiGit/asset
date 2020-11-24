@@ -8,6 +8,9 @@ import com.hdxx.sftp.config.RestTemplateUtil;
 import com.hdxx.sftp.domain.TLcCallRecord;
 import com.hdxx.sftp.utils.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +21,7 @@ import org.springframework.web.client.RestClientException;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,7 +46,7 @@ public class DqCallRadioUpload {
     private String getCallRecordListUrl;
 
     @Scheduled(cron = "${dq.uploadRadio.timer}")
-    public void dqCallRadioUpload() {
+    public void dqCallRadioUpload() throws Exception {
         log.info("东乔录音上传sftp定时任务开始....{}", LocalDateTime.now(ZoneId.systemDefault()));
         // 调用掘金系统接口获取东乔录音地址
         List<TLcCallRecord> callRecordList = getCallRecordList();
@@ -51,7 +55,7 @@ public class DqCallRadioUpload {
             String callFilePath = dqPropertiesConfig.getCallRadioPath() + callFilePathSuffix;
             // 录音下载
             downLoadCallRadio(callRecordList, callFilePath);
-            log.info("录音下载成功");
+            log.info("录音下载并生成清单成功");
             // 录音打包、压缩文件
             zip(callFilePath);
             log.info("录音打包压缩成功");
@@ -100,8 +104,21 @@ public class DqCallRadioUpload {
      *
      * @param callRecordList
      */
-    private void downLoadCallRadio(List<TLcCallRecord> callRecordList, String callFilePath) {
-        for (TLcCallRecord tmpTLcCallRecord : callRecordList) {
+    private void downLoadCallRadio(List<TLcCallRecord> callRecordList, String callFilePath) throws Exception {
+        String fileName = LocalDate.now() + "录音清单.xlsx"; //创建名称
+        String rpathfinal = callFilePath + "/" + fileName;//路径
+        SXSSFWorkbook wb = new SXSSFWorkbook(1024); // 这里1024是在内存中的数量，如果大于此数量时，会写到硬盘，以避免在内存导致内存溢出
+        Sheet sh = wb.createSheet();
+        // 生成第一行表头
+        Row row = sh.createRow(0);
+        row.createCell(0).setCellValue("机构案件号");
+        row.createCell(1).setCellValue("客户姓名");
+        row.createCell(2).setCellValue("所属区域");
+        row.createCell(3).setCellValue("拨打时间");
+        row.createCell(4).setCellValue("电话号码");
+        row.createCell(5).setCellValue("录音名称");
+        for (int i = 0; i < callRecordList.size(); i++) {
+            TLcCallRecord tmpTLcCallRecord = callRecordList.get(i);
             String[] str = tmpTLcCallRecord.getCallRadioLocation().split("/");
             if (tmpTLcCallRecord.getCallRadioLocation().startsWith("https")) {
                 try {
@@ -118,7 +135,18 @@ public class DqCallRadioUpload {
                     log.error("下载http语音文件异常={}", e);
                 }
             }
+            // 生成excel文件内容
+            Row row1 = sh.createRow(i + 1);
+            row1.createCell(0).setCellValue(tmpTLcCallRecord.getCaseNo());
+            row1.createCell(1).setCellValue(tmpTLcCallRecord.getCustomName());
+            row1.createCell(2).setCellValue(tmpTLcCallRecord.getAreaCenter());
+            row1.createCell(3).setCellValue(DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS, tmpTLcCallRecord.getCreateTime()));
+            row1.createCell(4).setCellValue(tmpTLcCallRecord.getPhone());
+            row1.createCell(5).setCellValue(tmpTLcCallRecord.getCallRadioLocation().substring(tmpTLcCallRecord.getCallRadioLocation().lastIndexOf("/") + 1));
         }
+        FileOutputStream output = new FileOutputStream(rpathfinal);
+        wb.write(output);
+        output.close();
     }
 
     /**

@@ -304,7 +304,8 @@ public class CallbackServiceImpl implements CallbackService {
                 .setCallBackTime(new Date())
                 .setCallLen(String.valueOf(sceneInstance.getDuration()))
                 .setCallContent(callContentJsonArray.toJSONString())
-                .setCallRadio(sceneInstance.getLuyinOssUrl());
+                .setCallRadio(sceneInstance.getLuyinOssUrl())
+                .setActionCode(FinishedCallStatus.getActionCodeByCode(sceneInstance.getFinishStatus()));
         this.tLcRobotTaskService.updateTLcRobotTaskByRobotTaskIdAndPhone(tLcRobotTask);
     }
 

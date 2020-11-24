@@ -255,4 +255,6 @@ public class TLcRobotTask extends BaseEntity {
 //    private String 	speech_craft_name;
 //    private String 	cur_name;
 //    private String 	sql;
+
+    private String actionCode;
 }

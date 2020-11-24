@@ -1545,7 +1545,7 @@
 
     <update id="updateTaskFromRobotTask" parameterType="java.lang.Integer">
         UPDATE t_lc_task t,t_lc_robot_task rt
-        SET t.call_sign = rt.call_sign,t.call_sign_value = rt.call_sign_value,t.recently_follow_up_date = rt.call_back_time
+        SET t.call_sign = rt.call_sign,t.call_sign_value = rt.call_sign_value,t.recently_follow_up_date = rt.call_back_time,t.action_code = rt.action_code
         WHERE rt.task_id = t.id and rt.robot_tast_id = #{robotTaskId} and rt.call_status is not null
     </update>
 

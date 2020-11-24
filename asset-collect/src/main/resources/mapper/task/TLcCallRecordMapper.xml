@@ -593,7 +593,9 @@
     </select>
 
     <select id="selectCallRecordListByOrgIdAndTime" parameterType="com.ruoyi.task.domain.TLcCallRecord" resultMap="TLcCallRecordResult">
-        <include refid="selectTLcCallRecordVo"/>
-        where org_id = #{orgId} and call_radio_location is not null and create_time between #{startCreateTime} and #{endCreateTime}
+        select distinct cap.cur_name as customName,cap.area_center AS areaCenter,
+        <include refid="SELECT_CALL_RECORD"/>
+        from t_lc_call_record t,cur_assets_package cap
+        where t.case_no = cap.org_casNo and t.org_id = #{orgId} and t.call_radio_location is not null and t.create_time between #{startCreateTime} and #{endCreateTime}
     </select>
 </mapper>

@@ -143,8 +143,8 @@ xss:
 http:
   ruleEngineUrl: http://106.15.60.221:8081
   assetUrl: http://localhost:8080
-  robotUrl: http://p5-crm.indata.cc
-#  robotUrl: http://pre-crm.indata.cc
+#  robotUrl: http://p5-crm.indata.cc
+  robotUrl: http://pre-crm.indata.cc
   # 生产
 #  robotUrl: https://base-crm.indata.cc
   radioQualityCheckUrl: http://172.167.1.106:8380
@@ -159,10 +159,10 @@ asset:
   closeCaseUrl: ${http.assetUrl}/import/assets/closeCase
   getAssetsUrl: ${http.assetUrl}/assetspackage/remote/selectOneAsset
 robot:
-  appKey: Op6vmcwAWfkA6fZo
-  appSecret: 4sl40P7BLcdXiTTZNrhdlfpegv5nSI
-#  appKey: N1q1UvrrrHh53koJ
-#  appSecret: eI2IwDBklMfWbEj8B8rKvwkXPmlTwQ
+#  appKey: Op6vmcwAWfkA6fZo
+#  appSecret: 4sl40P7BLcdXiTTZNrhdlfpegv5nSI
+  appKey: N1q1UvrrrHh53koJ
+  appSecret: eI2IwDBklMfWbEj8B8rKvwkXPmlTwQ
   # 生产
 #  appKey: BB1w85jIgRA52nSp
 #  appSecret: sxJTHsBDPPpFqaW3rj31yMWoX9vW8u
