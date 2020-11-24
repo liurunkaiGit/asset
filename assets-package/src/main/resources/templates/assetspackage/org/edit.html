@@ -127,10 +127,10 @@
                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>脱敏范围</label>
                 <div class="col-sm-8">
                     <select name="isDesensitization" class="form-control" onfocus="statusChange4();" id="isDesensitization" th:switch="${orgPackage.isDesensitization}" required>
-                        <option th:case="0" th:text="不脱敏" selected></option>
-                        <option th:case="1" th:text="全部脱敏" selected></option>
-                        <option th:case="2" th:text="仅职场脱敏" selected></option>
-                        <option th:case="3" th:text="职场外脱敏" selected></option>
+                        <option th:case="0" value="0" th:text="不脱敏" selected></option>
+                        <option th:case="1" value="0" th:text="全部脱敏" selected></option>
+                        <option th:case="2" value="0" th:text="仅职场脱敏" selected></option>
+                        <option th:case="3" value="0" th:text="职场外脱敏" selected></option>
                     </select>
                 </div>
             </div>
