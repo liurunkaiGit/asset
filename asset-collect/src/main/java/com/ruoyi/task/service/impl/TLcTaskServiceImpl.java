@@ -32,7 +32,6 @@ import com.ruoyi.duncase.mapper.TLcDuncaseAssignMapper;
 import com.ruoyi.duncase.mapper.TLcDuncaseMapper;
 import com.ruoyi.duncase.service.AsyncITLcDuncaseService;
 import com.ruoyi.duncase.service.ITLcDuncaseAssignService;
-import com.ruoyi.duncase.service.impl.AsyncTLcDuncaseServiceImpl;
 import com.ruoyi.enums.*;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.orgSpeechConf.domain.TLcOrgSpeechcraftConf;
@@ -45,6 +44,9 @@ import com.ruoyi.robot.enums.RobotBlackReasonEnum;
 import com.ruoyi.robot.service.ITLcRobotBlackService;
 import com.ruoyi.robot.service.ITLcSendRobotApplyService;
 import com.ruoyi.robot.utils.RobotMethodUtil;
+import com.ruoyi.stationletter.domain.TLcStationLetter;
+import com.ruoyi.stationletter.service.ITLcStationLetterAgentService;
+import com.ruoyi.stationletter.service.ITLcStationLetterService;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.mapper.SysUserMapper;
 import com.ruoyi.system.service.ISysDictDataService;
@@ -68,12 +70,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.Size;
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -144,6 +143,10 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     private ThreadPoolExecutor threadPoolExecutor;
     @Autowired
     private AsyncITLcDuncaseService asyncITLcDuncaseService;
+    @Autowired
+    private ITLcStationLetterService stationLetterService;
+    @Autowired
+    private ITLcStationLetterAgentService stationLetterAgentService;
 
 
     /**
@@ -1025,6 +1028,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     }
 
     @Override
+    @Transactional
     public void stopCollApply(String taskId) {
         TLcTask tLcTask = this.tLcTaskMapper.selectTLcTaskById(Long.valueOf(taskId));
         tLcTask.setTaskType(TaskTypeEnum.STOP_COLLECT_APPLY.getCode());
@@ -1035,22 +1039,51 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         ArrayList<TLcTask> taskList = new ArrayList<>(1);
         taskList.add(tLcTask);
         insertDuncaseAssign(taskList, ShiroUtils.getSysUser());
-        // 给拥有停催审批的用户发送站内信，先查拥有停催审批功能的角色
+        // 给拥有停催审批的用户发送站内信，先查拥有停催审批功能的角色的用户
+        List<String> userIds = this.sysUserService.selectHavaStopCollApprovePermUser();
+        // 查询拥有此部门权限的人
+        List<String> haveDeptPermUserList = this.sysUserMapper.searchUserIdByDeptAndHaveDept(ShiroUtils.getSysUser().getOrgId());
+        userIds.retainAll(haveDeptPermUserList);
+        // 发送站内信
+//        TLcTaskServiceImpl tLcTaskServiceImpl = (TLcTaskServiceImpl) AopContext.currentProxy();
+//        tLcTaskServiceImpl.sendStationLetter(userIds);
+        sendStationLetter("停催申请", "停催申请", userIds);
+    }
+
+    /**
+     * 发送站内信
+     * @param title
+     * @param content
+     * @param userIds
+     */
+    private void sendStationLetter(String title, String content, List<String> userIds) {
+        // 构建站内信
+        TLcStationLetter stationLetter = TLcStationLetter.builder()
+                .title(title)
+                .content(content)
+                .sendRange(IsNoEnum.NO.getCode())
+                .userIds(StringUtils.join(userIds.toArray(), ","))
+                .sendType(IsNoEnum.IS.getCode())
+                .build();
+        this.stationLetterService.insertTLcStationLetter(stationLetter);
     }
 
     @Override
+    @Transactional
     public void approveStopColl(String taskIds, Integer status) {
-        List<TLcTask> taskList = Arrays.stream(taskIds.split(","))
-                .map(taskId -> {
-                    TLcTask tLcTask = this.tLcTaskMapper.selectTLcTaskById(Long.valueOf(taskId));
-//                    TLcDuncase duncase = this.tLcDuncaseService.findDuncaseByCaseNoAndImportBatchNo(tLcTask.getCaseNo(), tLcTask.getOrgId(), tLcTask.getImportBatchNo());
+        List<TLcTask> taskList = this.tLcTaskMapper.selectTaskByIds(Arrays.asList(taskIds.split(",")));
+        List<String> userIds = new ArrayList<>();
+        taskList = taskList.stream()
+                .map(tLcTask -> {
                     if (status == 1) {//同意
                         tLcTask.setTaskType(TaskTypeEnum.STOP_COLLECT.getCode());
+                        userIds.add(tLcTask.getOwnerId().toString());
                     } else if (status == 2) {//拒绝
                         tLcTask.setTaskType(TaskTypeEnum.STOP_COLLECT_REFUSE.getCode());
                         //从机器人黑名单管理移除
                         TLcRobotBlack robotBlack = TLcRobotBlack.builder().caseNo(tLcTask.getCaseNo()).importBatchNo(tLcTask.getImportBatchNo()).phone(tLcTask.getPhone()).reason(RobotBlackReasonEnum.STOP_APPLY.getReason()).build();
                         this.robotBlackService.deleteobotBlackByCaseReason(robotBlack);
+                        userIds.add(tLcTask.getOwnerId().toString());
                     } else if (status == 3) {//激活
                         tLcTask.setTaskType(TaskTypeEnum.STOP_COLLECT_LIVE.getCode());
                         //从机器人黑名单管理移除
@@ -1061,6 +1094,11 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                 }).collect(Collectors.toList());
         this.tLcTaskMapper.batchUpdateTask(taskList);
         insertDuncaseAssign(taskList, ShiroUtils.getSysUser());
+        if (userIds != null && userIds.size() > 0) {
+            // 发送站内信
+            String content = status == 1?"同意":status == 2?"拒绝":"";
+            sendStationLetter("停催审批-" + content,"停催审批-" + content,userIds);
+        }
     }
 
     @Override

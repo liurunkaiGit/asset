@@ -39,7 +39,7 @@ public class TLpMonthlyTarget extends BaseEntity
 
     /** 分配席位 */
     @Excel(name = "分配席位")
-    private Integer allocationOfSeats;
+    private BigDecimal allocationOfSeats;
 
     /** 委案批次 */
     @Excel(name = "委案批次")
@@ -80,5 +80,13 @@ public class TLpMonthlyTarget extends BaseEntity
     /** 机构名称 */
     @Excel(name = "机构名称")
     private String orgName;
+
+    /**
+     * 账龄
+     */
+    @Excel(name = "账龄")
+    private String transferType;
+
+    private String proIdName;
 
 }

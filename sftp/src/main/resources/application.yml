@@ -1,0 +1,28 @@
+server:
+  port: 8888
+
+dq:
+  uploadsftp:
+    # host: stgw.ifincar.dongqiaokeji.com
+    host: 139.224.189.191
+    # port: 22
+    port: 22
+    # username: risk
+    username: mysftp
+    # password: Dqkjfk_2020
+    password: HD123456
+    uploadPath: upload
+    orgId: 214
+    callRadioPath: /home/callFile/dq/
+  uploadRadio:
+    # timer: 0 0 23 * * ?
+    timer: 0 0/1 * * * ?
+
+http:
+  # assetUrl: http://127.0.0.1:8080
+  assetUrl: http://127.0.0.1:8080
+
+asset:
+  getCallRecordListUrl: ${http.assetUrl}/call/record/selectCallRadioByOrgId
+
+

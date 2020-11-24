@@ -12,7 +12,9 @@
                         <ul>
                             <li>
                                 <p>项目名称：</p>
-                                <input type="text" name="names"/>
+                                <select name="id" id="orgId">
+                                    <option value="">所有</option>
+                                </select>
                             </li>
                             <li>
                                 <p>项目经理：</p>
@@ -47,6 +49,9 @@
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" >
                     <i class="fa fa-download"></i> 导出
                  </a>
+                <a class="btn btn-success" onclick="copy()" >
+                    <i class="fa fa-plus"></i> 复制
+                </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -61,6 +66,7 @@
         var datas = [[${@dict.getType('type_of_party')}]];
         var dataSys = [[${@dict.getType('operating_system')}]];
         var dataHw = [[${@dict.getType('call_platform')}]];
+        var projectList = [[${projectList}]];
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -157,6 +163,7 @@
                 ]
             };
             $.table.init(options);
+            initProject();
         });
         $(document).ready(function(){
             $.post(
@@ -181,6 +188,13 @@
             $.modal.open("查看【项目信息管理】",prefix+"/lookups/"+taskIdRows[0],'','',function (index, layero) {
                layer.close(index);
             });
+        }
+
+        function initProject() {
+            for (var i = 0; i < projectList.length; i++) {
+                var opt = "<option value='"+projectList[i].id+"'>"+projectList[i].names+"</option>";
+                $("#orgId").append(opt);
+            }
         }
 
     </script>

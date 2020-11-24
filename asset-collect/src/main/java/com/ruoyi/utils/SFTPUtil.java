@@ -142,6 +142,7 @@ public class SFTPUtil {
             sftp.cd(directory);
             log.info("上传文件进入目录成功");
         } catch (SftpException e) {
+            log.info("",e);
             log.warn("directory is not exist");
             //本来这里可以在没有目录的时候创建目录的，但是由于会多次调用该方法，导致会重复创建目录，导致出现了 upload/upload/upload 这样的情况，所以注释掉了，只要在第一次调用的时候保证 目录传进来就可以了
             /*sftp.mkdir(directory);
@@ -253,6 +254,7 @@ public class SFTPUtil {
      * 上传测试
      * sftp 文件上传到服务器出错(Permission denied) 解决：chmod 777 * 文件夹下面的所有文件
      * 报no such file错误  参照：https://www.cnblogs.com/sjs355/p/11992632.html
+     * 如果上传文件的时候，报错：main 3：permission denied
      * @param args
      * @throws SftpException
      * @throws IOException
@@ -262,10 +264,11 @@ public class SFTPUtil {
         sftp.login();
         //byte[] buff = sftp.download("/opt", "start.sh");
         //System.out.println(Arrays.toString(buff));
-        File file = new File("E:\\hhzy-@-sys_user-@-20200623-@-001.log");
+        File file = new File("D:\\a.txt");
         InputStream is = new FileInputStream(file);
 
-        sftp.upload("upload", "hhzy-@-sys_user-@-20200623-@-001.log", is);
+        // directory路径必须存在
+        sftp.upload("upload", "b.txt", is);
         sftp.logout();
     }
 }

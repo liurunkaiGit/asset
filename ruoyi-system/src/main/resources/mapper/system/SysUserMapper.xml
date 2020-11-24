@@ -372,4 +372,19 @@
         AND u.dept_id != d.dept_id
     </select>
 
+    <select id="selectHavaStopCollApprovePermUser" resultType="java.lang.String">
+        SELECT
+            DISTINCT su.user_id as userId
+        FROM
+            sys_menu sm,
+            sys_role_menu srm,
+            sys_user_role sur,
+            sys_user su
+        WHERE
+            sm.menu_name = '停催审批'
+        AND sm.menu_id = srm.menu_id
+        AND srm.role_id = sur.role_id
+        AND sur.user_id = su.user_id
+    </select>
+
 </mapper> 

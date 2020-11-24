@@ -527,6 +527,11 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
         return dqList;
     }
 
+    @Override
+    public List<TLcCallRecord> selectCallRecordListByOrgIdAndTime(TLcCallRecord callRecord) {
+        return this.tLcCallRecordMapper.selectCallRecordListByOrgIdAndTime(callRecord);
+    }
+
     private List<TLcCallRecordForDQ> ConvertDQList(List<TLcCallRecord> list) {
         List<TLcCallRecordForDQ> dqList = list.stream().map(callRecord -> {
             TLcCallRecordForDQ tLcCallRecordForDQ = new TLcCallRecordForDQ();

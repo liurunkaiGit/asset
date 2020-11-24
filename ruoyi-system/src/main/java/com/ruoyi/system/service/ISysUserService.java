@@ -190,4 +190,11 @@ public interface ISysUserService {
     public List<Map<String,Object>> selectUserByTime(SysUser user);
 
     List<SysUser> selectUserListByUserIds(List<String> userIds);
+
+    /**
+     * 查询拥有停催审批权限的用户
+     * @return
+     */
+    List<String> selectHavaStopCollApprovePermUser();
+
 }

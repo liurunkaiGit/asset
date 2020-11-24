@@ -14,6 +14,7 @@ import com.ruoyi.system.mapper.SysUserMapper;
 import com.ruoyi.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,6 +68,7 @@ public class TLcStationLetterServiceImpl implements ITLcStationLetterService {
      * @return 结果
      */
     @Override
+    @Transactional
     public int insertTLcStationLetter(TLcStationLetter tLcStationLetter) {
         Long orgId = ShiroUtils.getSysUser().getOrgId();
         String orgName = ShiroUtils.getSysUser().getOrgName();
@@ -137,6 +139,7 @@ public class TLcStationLetterServiceImpl implements ITLcStationLetterService {
      * @return 结果
      */
     @Override
+    @Transactional
     public int updateTLcStationLetter(TLcStationLetter tLcStationLetter) {
         Long orgId = ShiroUtils.getSysUser().getOrgId();
         String orgName = ShiroUtils.getSysUser().getOrgName();

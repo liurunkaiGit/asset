@@ -57,7 +57,7 @@
 
 
     <sql id="selectTLcCallRecordVo">
-        select id, case_no,  contact_name, phone, contact_relation, call_start_time, call_end_time, call_len, call_sign, call_result, call_radio_location, call_radio, create_time, create_by, remark, platform, star, type from t_lc_call_record
+        select id, case_no,  contact_name, phone, contact_relation, call_start_time, call_end_time, call_len, call_sign, call_result, call_radio_location, call_radio, create_time, create_by, remark, platform, star, type, org_id from t_lc_call_record
     </sql>
 
     <sql id="selectTLcHisCallRecordVo">
@@ -590,5 +590,10 @@
 
     <select id="selectCountByTimePeriod" resultType="java.lang.Long">
         select count(1) from t_lc_call_record where create_time between #{startTimePeriod} and #{endTimePeriod}
+    </select>
+
+    <select id="selectCallRecordListByOrgIdAndTime" parameterType="com.ruoyi.task.domain.TLcCallRecord" resultMap="TLcCallRecordResult">
+        <include refid="selectTLcCallRecordVo"/>
+        where org_id = #{orgId} and call_radio_location is not null and create_time between #{startCreateTime} and #{endCreateTime}
     </select>
 </mapper>

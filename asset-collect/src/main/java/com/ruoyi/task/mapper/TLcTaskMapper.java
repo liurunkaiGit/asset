@@ -242,4 +242,6 @@ public interface TLcTaskMapper {
     void batchUpdateAllotTask(@Param("allotTaskList") List<TLcTask> allotTaskList);
 
     List<SysUser> selectCaseRecycleSelectAgent(TLcTask tLcTask);
+
+    List<TLcTask> selectTaskByIds(@Param("taskIdList") List<String> taskIdList);
 }

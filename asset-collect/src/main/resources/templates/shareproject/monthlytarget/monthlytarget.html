@@ -61,6 +61,7 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
+                clickToSelect: true,
                 modalName: "【项目月度指标】",
                 columns: [{
                     checkbox: true
@@ -88,6 +89,10 @@
                 {
                     field : 'proName', 
                     title : '项目'
+                },
+                {
+                    field : 'transferType',
+                    title : '账龄'
                 },
                 {
                     field : 'allocationOfSeats', 

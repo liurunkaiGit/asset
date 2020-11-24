@@ -2,6 +2,7 @@ package com.ruoyi.agent.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.ruoyi.agent.domain.DuYanUser;
 import com.ruoyi.agent.domain.ExtPhone;
 import com.ruoyi.agent.service.IExtPhoneService;
 import com.ruoyi.assetspackage.domain.RemoteConfigure;
@@ -14,6 +15,7 @@ import com.ruoyi.common.core.page.TableSupport;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.RestTemplateUtil;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.exonNum.domain.TLcExonNum;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysUserService;
@@ -211,6 +213,17 @@ public class ExtPhoneController extends BaseController {
 //        rspData.setRows(userList.subList(pageNum, pageSize));
 //        rspData.setTotal(userList.size());
 //        return rspData;
+    }
+
+    /**
+     * 当话务平台选择度言时，获取用户
+     * @return
+     */
+    @PostMapping(value = "/selectDyAccount")
+    @ResponseBody
+    public TableDataInfo selectDyAccount() {
+        List<DuYanUser.DataBean.AccountsBean> dyAccountList = this.extPhoneService.selectDyAccount();
+        return getDataTable(dyAccountList);
     }
 
 

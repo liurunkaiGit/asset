@@ -1,5 +1,6 @@
 package com.ruoyi;
 
+import com.alibaba.fastjson.JSON;
 import com.ruoyi.callConfig.domain.TLcCallStrategyConfig;
 import com.ruoyi.robot.domain.*;
 import com.ruoyi.robot.utils.RobotMethodUtil;
@@ -39,9 +40,10 @@ public class RobotTest {
 //        this.robotMethodUtil.getRobots();
 //        RobotTask robotTask = new RobotTask();
 //        RobotTaskDto robotTaskList = this.robotMethodUtil.getRobotTaskList(robotTask);
-        RobotTask taskDetail = this.robotMethodUtil.getTaskDetail(966);
-        System.out.println(taskDetail);
-//        RobotPhone phones = this.robotMethodUtil.getPhones();
+//        RobotTask taskDetail = this.robotMethodUtil.getTaskDetail(966);
+//        System.out.println(taskDetail);
+        List<RobotPhone> phones = this.robotMethodUtil.getPhones();
+        phones.stream().forEach(phone -> System.out.println(JSON.toJSONString(phone)));
 //        TLcCallStrategyConfig tLcCallStrategyConfig = new TLcCallStrategyConfig();
 //        tLcCallStrategyConfig.setSpeechcraftId(129);
 //        List<String> sceneVariables = this.robotMethodUtil.getSceneVariables(tLcCallStrategyConfig);

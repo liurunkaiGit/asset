@@ -1,0 +1,128 @@
+2020-11-19 18:24:30.779 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp connect by host:192.168.37.129 userName:sftp
+2020-11-19 18:24:30.844 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is build
+2020-11-19 18:24:33.538 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is connected
+2020-11-19 18:24:34.225 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -channel is connected
+2020-11-19 18:24:34.226 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp server host:[192.168.37.129] port:[2222] is connect successfull
+2020-11-19 18:24:34.227 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -上传文件进入目录：upload
+2020-11-19 18:24:34.229 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -上传文件进入目录成功
+2020-11-19 18:24:34.231 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -file:a.txt is upload successful
+2020-11-19 18:24:34.232 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp is closed already
+2020-11-19 18:24:34.234 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sshSession is closed already
+2020-11-19 18:25:03.375 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp connect by host:192.168.37.129 userName:sftp
+2020-11-19 18:25:03.393 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is build
+2020-11-19 18:25:05.892 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is connected
+2020-11-19 18:25:06.468 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -channel is connected
+2020-11-19 18:25:06.469 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp server host:[192.168.37.129] port:[2222] is connect successfull
+2020-11-19 18:25:06.470 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -上传文件进入目录：/mydata/sftp/upload
+2020-11-19 18:25:06.471 [brCommonApi] [main] WARN  [com.ruoyi.utils.SFTPUtil] -directory is not exist
+2020-11-19 18:26:48.542 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp connect by host:192.168.37.129 userName:sftp
+2020-11-19 18:26:48.559 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is build
+2020-11-19 18:26:50.578 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is connected
+2020-11-19 18:26:51.138 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -channel is connected
+2020-11-19 18:26:51.139 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp server host:[192.168.37.129] port:[2222] is connect successfull
+2020-11-19 18:26:51.140 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -上传文件进入目录：upload
+2020-11-19 18:26:51.141 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -上传文件进入目录成功
+2020-11-19 18:26:51.143 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -file:a.txt is upload successful
+2020-11-19 18:26:51.143 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp is closed already
+2020-11-19 18:26:51.145 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sshSession is closed already
+2020-11-19 18:43:01.620 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp connect by host:192.168.37.129 userName:sftp
+2020-11-19 18:43:01.630 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is build
+2020-11-19 18:43:03.690 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is connected
+2020-11-19 18:43:04.314 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -channel is connected
+2020-11-19 18:43:04.316 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp server host:[192.168.37.129] port:[2222] is connect successfull
+2020-11-19 18:43:04.316 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -上传文件进入目录：/mydata/sftp/upload
+2020-11-19 18:43:04.316 [brCommonApi] [main] WARN  [com.ruoyi.utils.SFTPUtil] -directory is not exist
+2020-11-19 18:44:09.715 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp connect by host:192.168.37.129 userName:sftp
+2020-11-19 18:44:09.725 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is build
+2020-11-19 18:44:11.764 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is connected
+2020-11-19 18:44:12.390 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -channel is connected
+2020-11-19 18:44:12.392 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp server host:[192.168.37.129] port:[2222] is connect successfull
+2020-11-19 18:44:12.392 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -上传文件进入目录：/home/foo/upload
+2020-11-19 18:44:12.393 [brCommonApi] [main] WARN  [com.ruoyi.utils.SFTPUtil] -directory is not exist
+2020-11-19 18:45:09.102 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp connect by host:192.168.37.129 userName:sftp
+2020-11-19 18:45:09.120 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is build
+2020-11-19 18:45:11.137 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is connected
+2020-11-19 18:45:11.692 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -channel is connected
+2020-11-19 18:45:11.693 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp server host:[192.168.37.129] port:[2222] is connect successfull
+2020-11-19 18:45:11.694 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -上传文件进入目录：/home/foo/upload
+2020-11-19 18:45:45.878 [brCommonApi] [main] WARN  [com.ruoyi.utils.SFTPUtil] -directory is not exist
+2020-11-19 18:46:04.472 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp connect by host:192.168.37.129 userName:sftp
+2020-11-19 18:46:04.485 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is build
+2020-11-19 18:46:06.541 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is connected
+2020-11-19 18:46:07.046 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -channel is connected
+2020-11-19 18:46:07.047 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp server host:[192.168.37.129] port:[2222] is connect successfull
+2020-11-19 18:46:07.048 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -上传文件进入目录：/home/foo/upload/
+2020-11-19 18:46:07.048 [brCommonApi] [main] WARN  [com.ruoyi.utils.SFTPUtil] -directory is not exist
+2020-11-19 18:46:58.748 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp connect by host:192.168.37.129 userName:sftp
+2020-11-19 18:46:58.759 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is build
+2020-11-19 18:47:00.816 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is connected
+2020-11-19 18:47:01.377 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -channel is connected
+2020-11-19 18:47:01.378 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp server host:[192.168.37.129] port:[2222] is connect successfull
+2020-11-19 18:47:01.378 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -上传文件进入目录：/home/foo/upload/
+2020-11-19 18:47:01.379 [brCommonApi] [main] WARN  [com.ruoyi.utils.SFTPUtil] -directory is not exist
+2020-11-19 18:53:52.188 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp connect by host:192.168.37.129 userName:sftp
+2020-11-19 18:53:52.202 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is build
+2020-11-19 18:53:54.328 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is connected
+2020-11-19 18:53:54.863 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -channel is connected
+2020-11-19 18:53:54.865 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp server host:[192.168.37.129] port:[2222] is connect successfull
+2020-11-19 18:53:54.865 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -上传文件进入目录：/home/foo/upload/
+2020-11-19 18:53:54.868 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -
+com.jcraft.jsch.SftpException: No such file
+	at com.jcraft.jsch.ChannelSftp.throwStatusError(ChannelSftp.java:2491)
+	at com.jcraft.jsch.ChannelSftp._realpath(ChannelSftp.java:2022)
+	at com.jcraft.jsch.ChannelSftp.cd(ChannelSftp.java:300)
+	at com.ruoyi.utils.SFTPUtil.upload(SFTPUtil.java:142)
+	at com.ruoyi.utils.SFTPUtil.main(SFTPUtil.java:269)
+2020-11-19 18:53:54.868 [brCommonApi] [main] WARN  [com.ruoyi.utils.SFTPUtil] -directory is not exist
+2020-11-19 18:54:18.234 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp connect by host:192.168.37.129 userName:sftp
+2020-11-19 18:54:18.248 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is build
+2020-11-19 18:54:20.289 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is connected
+2020-11-19 18:54:20.825 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -channel is connected
+2020-11-19 18:54:20.826 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp server host:[192.168.37.129] port:[2222] is connect successfull
+2020-11-19 18:54:20.826 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -上传文件进入目录：/home/foo/upload/
+2020-11-19 18:54:20.828 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -
+com.jcraft.jsch.SftpException: No such file
+	at com.jcraft.jsch.ChannelSftp.throwStatusError(ChannelSftp.java:2491)
+	at com.jcraft.jsch.ChannelSftp._realpath(ChannelSftp.java:2022)
+	at com.jcraft.jsch.ChannelSftp.cd(ChannelSftp.java:300)
+	at com.ruoyi.utils.SFTPUtil.upload(SFTPUtil.java:142)
+	at com.ruoyi.utils.SFTPUtil.main(SFTPUtil.java:269)
+2020-11-19 18:54:20.829 [brCommonApi] [main] WARN  [com.ruoyi.utils.SFTPUtil] -directory is not exist
+2020-11-19 18:55:46.512 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp connect by host:192.168.37.129 userName:sftp
+2020-11-19 18:55:46.525 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is build
+2020-11-19 18:55:48.607 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is connected
+2020-11-19 18:55:49.150 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -channel is connected
+2020-11-19 18:55:49.151 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp server host:[192.168.37.129] port:[2222] is connect successfull
+2020-11-19 18:55:49.151 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -上传文件进入目录：/home
+2020-11-19 18:55:49.154 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -
+com.jcraft.jsch.SftpException: No such file
+	at com.jcraft.jsch.ChannelSftp.throwStatusError(ChannelSftp.java:2491)
+	at com.jcraft.jsch.ChannelSftp._stat(ChannelSftp.java:1940)
+	at com.jcraft.jsch.ChannelSftp.cd(ChannelSftp.java:301)
+	at com.ruoyi.utils.SFTPUtil.upload(SFTPUtil.java:142)
+	at com.ruoyi.utils.SFTPUtil.main(SFTPUtil.java:269)
+2020-11-19 18:55:49.155 [brCommonApi] [main] WARN  [com.ruoyi.utils.SFTPUtil] -directory is not exist
+2020-11-19 18:56:09.497 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp connect by host:192.168.37.129 userName:sftp
+2020-11-19 18:56:09.509 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is build
+2020-11-19 18:56:11.622 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is connected
+2020-11-19 18:56:12.173 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -channel is connected
+2020-11-19 18:56:12.175 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp server host:[192.168.37.129] port:[2222] is connect successfull
+2020-11-19 18:56:12.175 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -上传文件进入目录：home
+2020-11-19 18:56:12.178 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -
+com.jcraft.jsch.SftpException: No such file
+	at com.jcraft.jsch.ChannelSftp.throwStatusError(ChannelSftp.java:2491)
+	at com.jcraft.jsch.ChannelSftp._stat(ChannelSftp.java:1940)
+	at com.jcraft.jsch.ChannelSftp.cd(ChannelSftp.java:301)
+	at com.ruoyi.utils.SFTPUtil.upload(SFTPUtil.java:142)
+	at com.ruoyi.utils.SFTPUtil.main(SFTPUtil.java:269)
+2020-11-19 18:56:12.179 [brCommonApi] [main] WARN  [com.ruoyi.utils.SFTPUtil] -directory is not exist
+2020-11-19 18:56:54.091 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp connect by host:192.168.37.129 userName:sftp
+2020-11-19 18:56:54.104 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is build
+2020-11-19 18:56:56.159 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -Session is connected
+2020-11-19 18:56:56.727 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -channel is connected
+2020-11-19 18:56:56.729 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp server host:[192.168.37.129] port:[2222] is connect successfull
+2020-11-19 18:56:56.729 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -上传文件进入目录：upload
+2020-11-19 18:56:56.731 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -上传文件进入目录成功
+2020-11-19 18:56:56.733 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -file:a.txt is upload successful
+2020-11-19 18:56:56.733 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sftp is closed already
+2020-11-19 18:56:56.735 [brCommonApi] [main] INFO  [com.ruoyi.utils.SFTPUtil] -sshSession is closed already

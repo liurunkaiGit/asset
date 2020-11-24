@@ -7,48 +7,56 @@
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-target-add">
             <div class="form-group">    
-                <label class="col-sm-3 control-label">年份：</label>
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>年份：</label>
                 <div class="col-sm-8">
                     <input name="particularYear" class="form-control time-input" data-type="year"  maxlength="5" type="text" required>
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">月份：</label>
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>月份：</label>
                 <div class="col-sm-8">
                     <input name="particularMonth" class="form-control time-input" data-type="month" data-format="MM"  maxlength="2" type="text" required>
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">项目：</label>
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>项目：</label>
                 <div class="col-sm-8">
-                    <select class="form-control" name="proId"  id="proId" >
+                    <select class="form-control" name="proIdName"  id="proId" onchange="selectTransferTypeByProject()" required>
                         <option value="">请选择</option>
                     </select>
-                    <input name="proName" id="proName"  class="form-control" type="hidden" value="">
+                    <!--<input name="proName" id="proName"  class="form-control" type="hidden" value="">-->
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">分配席位：</label>
+                <label class="col-sm-3 control-label">账龄：</label>
                 <div class="col-sm-8">
-                    <input name="allocationOfSeats" class="form-control" maxlength="9" type="number">
+                    <select name="transferType" id="transferType" class="form-control">
+                        <option value="">所有</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">月初分配席位：</label>
+                <div class="col-sm-8">
+                    <input name="allocationOfSeats" id="allocationOfSeats" class="form-control" maxlength="9" type="text">
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">委案批次：</label>
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>委案批次：</label>
                 <div class="col-sm-8">
-                    <input name="commissionBatch" class="form-control" maxlength="9" type="number" required>
+                    <input name="commissionBatch" class="form-control" maxlength="9" type="text" required>
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">委案件数：</label>
+                <label class="col-sm-3 control-label">月初委案件数：</label>
                 <div class="col-sm-8">
-                    <input name="numberOfCommission" class="form-control" maxlength="9" type="number" required>
+                    <input name="numberOfCommission" class="form-control" maxlength="9" type="number">
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">委案金额：</label>
+                <label class="col-sm-3 control-label">月初委案金额：</label>
                 <div class="col-sm-8">
-                    <input name="commissionAmount" class="form-control" maxlengthzd="13" ismoney="true" type="text" required>
+                    <input name="commissionAmount" class="form-control" maxlengthzd="13" ismoney="true" type="text">
                 </div>
             </div>
             <div class="form-group">    
@@ -58,7 +66,7 @@
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">创佣金额：</label>
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>创佣金额：</label>
                 <div class="col-sm-8">
                     <input name="amountCreated" class="form-control" maxlengthzd="13"  ismoney="true" type="text" required>
                 </div>
@@ -91,7 +99,8 @@
     </div>
     <th:block th:include="include :: footer" />
     <script type="text/javascript" th:inline="javascript">
-        var prefix = ctx + "shareproject/monthlytarget"
+        var prefix = ctx + "shareproject/monthlytarget";
+        var resultPrefix = ctx + "project/result";
         $("#form-target-add").validate({
             focusCleanup: true
         });
@@ -120,13 +129,48 @@
             }
         );
         function submitHandler() {
-            if($("#proId").val() == ''){
+            /*if($("#proId").val() == ''){
                 $.modal.alertWarning('请选择项目');
                 return;
+            }*/
+            var IntOrDecimalReg = /^[0-9][0-9]*([\.][0-9]{1,2})?$/; //整数或者小数的正则表达式
+            var allocationOfSeats = $("#allocationOfSeats").val();
+            if(allocationOfSeats != null && allocationOfSeats != '') {
+                if (!IntOrDecimalReg.test(allocationOfSeats)) {
+                    $.modal.alert("分配席位必须是整数或者两位小数");
+                    return;
+                }
             }
             if ($.validate.form()) {
                 $.operate.save(prefix + "/add", $('#form-target-add').serialize());
             }
+        }
+
+        /**
+         * 根据项目获取相应账龄
+         */
+        function selectTransferTypeByProject() {
+            var obj=document.getElementById('transferType');
+            obj.options.length=0;
+            var projectId = $("#proId").val().split(",")[0];
+            $.post(
+                resultPrefix + "/selectById",
+                {
+                    id: projectId
+                },
+                function(data) {
+                    if(data.status == 200){
+                        var opt = "<option value=''>请选择</option>";
+                        $("#transferType").append(opt);
+                        var accountAges = data.result.accountAge.split(",")
+                        for (var i = 0; i < accountAges.length; i++) {
+                            var ob = accountAges[i];
+                            var opt = "<option value='"+ob+"'>"+ob+"</option>";
+                            $("#transferType").append(opt);
+                        }
+                    }
+                }
+            );
         }
 
         $(document).ready(function(){
@@ -136,7 +180,7 @@
                     if(data){
                         for (var i = 0; i < data.length; i++) {
                             var ob = data[i];
-                            var opt = "<option value='"+ob.id+"'>"+ob.names+"</option>";
+                            var opt = "<option value='"+ob.id+","+ob.names+"'>"+ob.names+"</option>";
                             $("#proId").append(opt);
                         }
                     }

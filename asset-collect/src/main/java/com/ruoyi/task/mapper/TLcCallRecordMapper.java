@@ -120,4 +120,6 @@ public interface TLcCallRecordMapper {
     List<TLcCallRecord> findZjCallRecordListByDate(TLcCallRecord tLcCallRecord);
 
     Long selectCountByTimePeriod(Map<String, Object> param);
+
+    List<TLcCallRecord> selectCallRecordListByOrgIdAndTime(TLcCallRecord callRecord);
 }

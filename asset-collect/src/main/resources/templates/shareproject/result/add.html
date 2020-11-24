@@ -2,7 +2,6 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <th:block th:include="include :: header('新增【请填写功能名称】')" />
-    <th:block th:include="include :: datetimepicker-css" />
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
@@ -11,8 +10,7 @@
                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>日期：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
-                        <!--<span class="input-group-addon"><i class="fa fa-calendar"></i></span>-->
-                        <input name="reportDate" id="reportDate" class="form-control time-input" placeholder="yyyy-MM-dd" type="text" required>
+                        <input name="reportDate" id="reportDate" class="form-control time-input" placeholder="yyyy-MM-dd" th:value="${tdate}" type="text" required>
                     </div>
                 </div>
             </div>
@@ -51,9 +49,9 @@
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>预计佣金(元)：</label>
+                <label class="col-sm-3 control-label">预计佣金(元)：</label>
                 <div class="col-sm-8">
-                    <input name="predictCommission" id="predictCommission" class="form-control" type="text" required>
+                    <input name="predictCommission" id="predictCommission" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
@@ -68,10 +66,15 @@
                     <input name="targetRank" id="targetRank" class="form-control">
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-9">
+                    <textarea id="remark" name="remark" rows="3" style="width: 205px;" maxlength="500" class="form-control"></textarea>
+                </div>
+            </div>
         </form>
     </div>
     <th:block th:include="include :: footer" />
-    <th:block th:include="include :: datetimepicker-js" />
     <script type="text/javascript">
         // var projectList = [[${projectList}]];
         var prefix = ctx + "project/result"
@@ -116,12 +119,6 @@
                 }
             );
         }
-
-        /*$("input[name='reportDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });*/
 
         $(function () {
             initProject();
