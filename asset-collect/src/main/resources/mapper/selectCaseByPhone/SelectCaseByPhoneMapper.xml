@@ -84,6 +84,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="remark" column="remark" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <select id="selectCaseNoByPhone" parameterType="java.lang.String" resultType="java.lang.String">
+        select case_no from t_lc_call_record re where re.phone = #{phone} group by case_no
+    </select>
+
 
     <select id="selectCaseByPhoneList" parameterType="SelectCaseByPhone" resultMap="selectCaseByPhoneResult">
         SELECT
@@ -119,9 +123,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         FROM t_lc_duncase d, t_lc_task t
         WHERE d.case_no = t.case_no AND d.import_batch_no = t.import_batch_no
               and d.org_id = #{orgId}
-              and exists (select 1 from (select case_no from t_lc_call_record re where re.phone = #{phone} group by case_no) tt
-                where d.case_no = tt.case_no
-              )
+          <if test="caseNoList != null and caseNoList.size() > 0">
+              and d.case_no in
+                  <foreach collection="caseNoList" index="index" item="item" open="(" separator="," close=")">
+                      #{item}
+                  </foreach>
+          </if>
     </select>
 
     <select id="selectTotalCountMoney" parameterType="com.ruoyi.task.domain.TLcTask" resultType="java.util.Map">
@@ -132,9 +139,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         FROM  t_lc_task t,t_lc_duncase d
         WHERE t.case_no = d.case_no AND t.import_batch_no = d.import_batch_no
         and d.org_id = #{orgId}
-        and exists (select 1 from (select case_no from t_lc_call_record re where re.phone = #{phone} group by case_no) tt
-                where d.case_no = tt.case_no
-              )
+        <if test="caseNoList != null and caseNoList.size() > 0">
+            and d.case_no in
+            <foreach collection="caseNoList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
         ORDER BY t.task_status ASC,t.create_time DESC,t.recently_allot_date ASC,t.enter_coll_date ASC,t.case_no ASC
     </select>
 
@@ -187,9 +197,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         FROM t_lc_task t,t_lc_duncase d
         WHERE t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no
         and d.org_id = #{orgId}
-        and exists (select 1 from (select case_no from t_lc_call_record re where re.phone = #{phone} group by case_no) tt
-                where d.case_no = tt.case_no
-              )
+        <if test="caseNoList != null and caseNoList.size() > 0">
+            and d.case_no in
+            <foreach collection="caseNoList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
         ORDER BY t.task_status ASC,t.create_time DESC,t.recently_allot_date ASC,t.enter_coll_date ASC,t.case_no ASC
     </select>
 </mapper>

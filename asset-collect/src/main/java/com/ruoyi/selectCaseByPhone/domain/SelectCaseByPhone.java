@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author guozeqi
@@ -169,6 +170,8 @@ public class SelectCaseByPhone {
     private String orgName;
 
     private String importBatchNo;
+
+    private List<String> caseNoList;
 
 
 }

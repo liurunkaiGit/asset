@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,17 +35,38 @@ public class SelectCaseByPhoneServiceImpl implements ISelectCaseByPhoneService
     @Override
     public List<SelectCaseByPhone> selectCaseByPhoneList(SelectCaseByPhone selectCaseByPhone)
     {
-        return selectCaseByPhoneMapper.selectCaseByPhoneList(selectCaseByPhone);
+        String phone = selectCaseByPhone.getPhone();
+        if(phone != null && !"".equals(phone)){
+            List<String> caseNOList = selectCaseByPhoneMapper.selectCaseNoByPhone(phone);
+            selectCaseByPhone.setCaseNoList(caseNOList);
+            return selectCaseByPhoneMapper.selectCaseByPhoneList(selectCaseByPhone);
+        }else{
+            return new ArrayList<SelectCaseByPhone>();
+        }
     }
 
     @Override
     public Map<String, BigDecimal> selectTotalCountMoney(TLcTask tLcTask) {
-        return selectCaseByPhoneMapper.selectTotalCountMoney(tLcTask);
+        String phone = tLcTask.getPhone();
+        if(phone != null && !"".equals(phone)){
+            List<String> caseNOList = selectCaseByPhoneMapper.selectCaseNoByPhone(phone);
+            tLcTask.setCaseNoList(caseNOList);
+            return selectCaseByPhoneMapper.selectTotalCountMoney(tLcTask);
+        }else{
+            return new HashMap<String, BigDecimal>();
+        }
     }
 
     @Override
     public List<TLcTask> selectMyTaskList(TLcTask tLcTask) {
-        return selectCaseByPhoneMapper.selectMyTaskList(tLcTask);
+        String phone = tLcTask.getPhone();
+        if(phone != null && !"".equals(phone)){
+            List<String> caseNOList = selectCaseByPhoneMapper.selectCaseNoByPhone(phone);
+            tLcTask.setCaseNoList(caseNOList);
+            return selectCaseByPhoneMapper.selectMyTaskList(tLcTask);
+        }else{
+            return new ArrayList<TLcTask>();
+        }
     }
 
 

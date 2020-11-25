@@ -18,10 +18,12 @@ public interface SelectCaseByPhoneMapper
 
     /**
      * 根据手机号查詢案件
-     * 
-     * @param selectCaseByPhone
+     *
+     * @param phone
      * @return
      */
+    public List<String> selectCaseNoByPhone(String phone);
+
     public List<SelectCaseByPhone> selectCaseByPhoneList(SelectCaseByPhone selectCaseByPhone);
 
     Map<String, BigDecimal> selectTotalCountMoney(TLcTask tLcTask);
