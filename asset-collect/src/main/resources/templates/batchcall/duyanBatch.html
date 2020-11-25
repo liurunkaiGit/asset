@@ -84,8 +84,8 @@
         });
         // 电话结束的回调函数，返回电话号码等信息
         DYSDK.callEnd(function (data) {
-            window.parent.parent.$.modal.closeLoading();
-            $('#leftNav',window.parent.document).css('z-index','2001');
+            // window.parent.parent.$.modal.closeLoading();
+            // $('#leftNav',window.parent.document).css('z-index','2001');
             console.log(data)
             if (!data.uuid) {
                 alert("度言平台拨打记录ID不存在。");

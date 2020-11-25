@@ -345,8 +345,8 @@
                     var orgId = currentCall.orgId;
                     var exonNum = currentCall.exonNum;
                     var id = currentCall.id;
-                    window.parent.parent.$.modal.loading("通话中，请挂断电话后再进行其它操作");
-                    $('#leftNav',window.parent.document).css('z-index','1');
+                    // window.parent.parent.$.modal.loading("通话中，请挂断电话后再进行其它操作");
+                    // $('#leftNav',window.parent.document).css('z-index','1');
                     if(childObj == null || childObj == undefined || nextFlag == false){
                         openAutoCollJob(caseNo,importBatchNo,orgId,exonNum,id);
                     }
@@ -365,8 +365,8 @@
                     console.log('hangup' + type,JSON.stringify(data));
                     if(childObj != null && childObj != undefined){
                         childObj.resetTiming();
-                        window.parent.parent.$.modal.closeLoading();
-                        $('#leftNav',window.parent.document).css('z-index','2001');
+                        // window.parent.parent.$.modal.closeLoading();
+                        // $('#leftNav',window.parent.document).css('z-index','2001');
                         // 直接保存点催记录
                         console.log("通话记录id：" + callRecordId + "，通话开始时间：" + data[0].BAnswerStamp + "，通话结束时间：" + data[0].BEndStamp + "，通话录音：" + data[0].RecordingFile);
                         var callSign = 'R02';
@@ -572,8 +572,8 @@
             var orgId = currentCall.orgId;
             var exonNum = currentCall.exonNum;
             var id = currentCall.id;
-            window.parent.parent.$.modal.loading("通话中，请挂断电话后再进行其它操作");
-            $('#leftNav',window.parent.document).css('z-index','1');
+            // window.parent.parent.$.modal.loading("通话中，请挂断电话后再进行其它操作");
+            // $('#leftNav',window.parent.document).css('z-index','1');
             if(childObj == null || childObj == undefined || nextFlag == false){
                 openAutoCollJob(caseNo,importBatchNo,orgId,exonNum,id,1);
             }
@@ -659,8 +659,8 @@
                 var orgId = currentCall.orgId;
                 var exonNum = currentCall.exonNum;
                 var id = currentCall.id;
-                window.parent.parent.$.modal.loading("通话中，请挂断电话后再进行其它操作");
-                $('#leftNav',window.parent.document).css('z-index','1');
+                // window.parent.parent.$.modal.loading("通话中，请挂断电话后再进行其它操作");
+                // $('#leftNav',window.parent.document).css('z-index','1');
                 if(childObj == null || childObj == undefined || nextFlag == false){
                     openAutoCollJob(caseNo,importBatchNo,orgId,exonNum,id);
                 }
@@ -683,8 +683,9 @@
                 agentIsCalling = false;
                 console.log("通话结束，agentIsCalling=false");
                 childObj.resetTiming();//调用子页面的方法
-                window.parent.parent.$.modal.closeLoading();
-                $('#leftNav',window.parent.document).css('z-index','2001');
+                // window.parent.parent.$.modal.closeLoading();
+                // $('#leftNav',window.parent.document).css('z-index','2001');
+
                 // resetTiming();
                 printEvent('onRecordEnd', event);
                 recordFile = event.recordFile;
