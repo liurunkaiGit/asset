@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('录音查听')" />
+    <script th:src="@{/assets/js/desensitization.js}"></script>
     <style type="text/css">
         .time-input{
             display: inline;
@@ -14,6 +15,7 @@
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
                     <div class="select-list">
+                        <input type="hidden" id="desensitization" name="desensitization" th:value="${desensitization}">
                         <ul>
                             <li>
                                 <p>员工姓名：</p>
@@ -118,7 +120,14 @@
                 },
                 {
                     field : 'phone',
-                    title : '联络电话'
+                    title : '联络电话',
+                    formatter: function(value, row, index) {
+                        var desensitization = $("#desensitization").val();
+                        if("true" == desensitization){
+                            return tellToMd5(value);
+                        }
+                        return value;
+                    }
                 },
                 {
                     field : 'callStartTime',

@@ -6,8 +6,10 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.robot.domain.TLcRobotBlack;
 import com.ruoyi.robot.service.ITLcRobotBlackService;
+import com.ruoyi.utils.DesensitizationUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,9 +32,15 @@ public class TLcRobotBlackController extends BaseController {
     @Autowired
     private ITLcRobotBlackService tLcRobotBlackService;
 
+    @Autowired
+    private DesensitizationUtil desensitizationUtil;
+
     @RequiresPermissions("robot:black:view")
     @GetMapping("/view")
-    public String black() {
+    public String black(ModelMap modelMap) {
+        //查询是否脱敏
+        boolean desensitization = desensitizationUtil.isDesensitization(String.valueOf(ShiroUtils.getSysUser().getOrgId()), ShiroUtils.getLoginName());
+        modelMap.put("desensitization", desensitization);
         return prefix + "/black" ;
     }
 

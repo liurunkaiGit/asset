@@ -18,6 +18,7 @@ import com.ruoyi.task.domain.TLcCallRecordForJX;
 import com.ruoyi.task.domain.TLcCallRecordForXY;
 import com.ruoyi.task.service.ITLcCallRecordService;
 import com.ruoyi.utils.CSVUtils;
+import com.ruoyi.utils.DesensitizationUtil;
 import com.ruoyi.utils.Response;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,9 @@ public class TLcCallRecordController extends BaseController {
     @Autowired
     private ISysConfigService sysConfigService;
 
+    @Autowired
+    private DesensitizationUtil desensitizationUtil;
+
     /**
      * 查看录音
      * @return
@@ -81,7 +85,10 @@ public class TLcCallRecordController extends BaseController {
 
     @RequiresPermissions("call:record:view")
     @GetMapping("/listenRecord")
-    public String listenRecord() {
+    public String listenRecord(ModelMap modelMap) {
+        //查询是否脱敏
+        boolean desensitization = desensitizationUtil.isDesensitization(String.valueOf(ShiroUtils.getSysUser().getOrgId()), ShiroUtils.getLoginName());
+        modelMap.put("desensitization", desensitization);
         return monitorPrefix + "/listenRecord";
     }
 

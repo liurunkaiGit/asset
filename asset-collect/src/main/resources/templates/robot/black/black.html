@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('机器人黑名单管理列表')" />
+    <script th:src="@{/assets/js/desensitization.js}"></script>
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -9,6 +10,7 @@
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
                     <div class="select-list">
+                        <input type="hidden" id="desensitization" name="desensitization" th:value="${desensitization}">
                         <ul>
                             <li>
                                 <p>案件编号：</p>
@@ -94,7 +96,14 @@
                 },
                 {
                     field : 'phone', 
-                    title : '手机号'
+                    title : '手机号',
+                    formatter: function(value, row, index) {
+                        var desensitization = $("#desensitization").val();
+                        if("true" == desensitization){
+                            return tellToMd5(value);
+                        }
+                        return value;
+                    }
                 },
                 {
                     field : 'reason', 

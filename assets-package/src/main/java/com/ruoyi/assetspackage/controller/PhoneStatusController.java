@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.ruoyi.assetspackage.domain.phoneStatus.PhoneStatus;
 import com.ruoyi.assetspackage.service.IPhoneStatusService;
+import com.ruoyi.assetspackage.util.DesensitizationUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +39,15 @@ public class PhoneStatusController extends BaseController
     @Autowired
     private IPhoneStatusService phoneStatusService;
 
+    @Autowired
+    private DesensitizationUtils desensitizationUtil;
+
     @RequiresPermissions("phone:status:view")
     @GetMapping()
-    public String status()
+    public String status(ModelMap modelMap)
     {
+        boolean desensitization = desensitizationUtil.isDesensitization(String.valueOf(ShiroUtils.getSysUser().getOrgId()), ShiroUtils.getLoginName());
+        modelMap.put("desensitization", desensitization);
         return prefix + "/status";
     }
 
