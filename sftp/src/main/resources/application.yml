@@ -13,10 +13,10 @@ dq:
     password: HD123456
     uploadPath: upload
     orgId: 2131
-    callRadioPath: /home/callFile/dq/
+    callRadioPath: D:/callFile/dq/
   uploadRadio:
     timer: 0 0 23 * * ?
-    # timer: 0 0/1 * * * ?
+#    timer: 0 0/1 * * * ?
 
 http:
   # assetUrl: http://127.0.0.1:8080

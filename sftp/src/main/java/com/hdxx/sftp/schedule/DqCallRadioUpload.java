@@ -8,6 +8,7 @@ import com.hdxx.sftp.config.RestTemplateUtil;
 import com.hdxx.sftp.domain.TLcCallRecord;
 import com.hdxx.sftp.utils.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -113,24 +114,28 @@ public class DqCallRadioUpload {
         Row row = sh.createRow(0);
         row.createCell(0).setCellValue("机构案件号");
         row.createCell(1).setCellValue("客户姓名");
-        row.createCell(2).setCellValue("所属区域");
-        row.createCell(3).setCellValue("拨打时间");
-        row.createCell(4).setCellValue("电话号码");
-        row.createCell(5).setCellValue("录音名称");
+        row.createCell(2).setCellValue("拨打时间");
+        row.createCell(3).setCellValue("电话号码");
+        row.createCell(4).setCellValue("录音名称");
         for (int i = 0; i < callRecordList.size(); i++) {
             TLcCallRecord tmpTLcCallRecord = callRecordList.get(i);
-            String[] str = tmpTLcCallRecord.getCallRadioLocation().split("/");
+            String phone = tmpTLcCallRecord.getPhone();
+            if (StringUtils.isNotBlank(phone)) {
+                phone = phone.replaceAll("\\*","_");
+            }
+            String suffix = tmpTLcCallRecord.getCallRadioLocation().substring(tmpTLcCallRecord.getCallRadioLocation().lastIndexOf(".") + 1);
+            String name = DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS, tmpTLcCallRecord.getCreateTime()) + "_" + phone + "_" + tmpTLcCallRecord.getCaseNo() + "." + suffix;
             if (tmpTLcCallRecord.getCallRadioLocation().startsWith("https")) {
                 try {
                     log.info("下载https语音文件保存目录为，filePath={}", callFilePath);
-                    DownLoadFromHttpsUtil.downloadFileForHttps(tmpTLcCallRecord.getCallRadioLocation(), callFilePath, str[str.length - 1]);
+                    DownLoadFromHttpsUtil.downloadFileForHttps(tmpTLcCallRecord.getCallRadioLocation(), callFilePath, name);
                 } catch (Exception e) {
                     log.error("下载https语音文件异常={}", e);
                 }
             } else if (tmpTLcCallRecord.getCallRadioLocation().startsWith("http")) {
                 try {
                     log.info("下载http语音文件保存目录为，filePath={}", callFilePath);
-                    DownLoadFromHttpsUtil.downLoadFromUrlHttp(tmpTLcCallRecord.getCallRadioLocation(), callFilePath, str[str.length - 1]);
+                    DownLoadFromHttpsUtil.downLoadFromUrlHttp(tmpTLcCallRecord.getCallRadioLocation(), callFilePath, name);
                 } catch (Exception e) {
                     log.error("下载http语音文件异常={}", e);
                 }
@@ -139,10 +144,9 @@ public class DqCallRadioUpload {
             Row row1 = sh.createRow(i + 1);
             row1.createCell(0).setCellValue(tmpTLcCallRecord.getCaseNo());
             row1.createCell(1).setCellValue(tmpTLcCallRecord.getCustomName());
-            row1.createCell(2).setCellValue(tmpTLcCallRecord.getAreaCenter());
-            row1.createCell(3).setCellValue(DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS, tmpTLcCallRecord.getCreateTime()));
-            row1.createCell(4).setCellValue(tmpTLcCallRecord.getPhone());
-            row1.createCell(5).setCellValue(tmpTLcCallRecord.getCallRadioLocation().substring(tmpTLcCallRecord.getCallRadioLocation().lastIndexOf("/") + 1));
+            row1.createCell(2).setCellValue(DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS, tmpTLcCallRecord.getCreateTime()));
+            row1.createCell(3).setCellValue(phone);
+            row1.createCell(4).setCellValue(name);
         }
         FileOutputStream output = new FileOutputStream(rpathfinal);
         wb.write(output);
@@ -174,6 +178,12 @@ public class DqCallRadioUpload {
             log.error("调用掘金系统获取东乔录音地址接口错误，error is：{}", e);
         }
         return callRecordList;
+    }
+
+    public static void main(String[] args) {
+        String s = "a**n";
+        s = s.replaceAll("\\*","_");
+        System.out.println(s);
     }
 
 }

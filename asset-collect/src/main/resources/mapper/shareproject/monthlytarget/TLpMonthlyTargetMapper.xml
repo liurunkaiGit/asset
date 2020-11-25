@@ -53,6 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
             <if test="transferType != null  and transferType != ''">  and transfer_type = #{transferType}</if>
         </where>
+        order by update_time desc
     </select>
     
     <select id="selectTLpMonthlyTargetById" parameterType="Long" resultMap="TLpMonthlyTargetResult">
