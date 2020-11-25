@@ -43,37 +43,41 @@ public class DesensitizationUtil {
      */
     public boolean isDesensitization(String orgId,String loginName){
         OrgPackage orgPackage = orgPackageService.selectOrgPackageByOrgId(orgId);
-        String isDesensitization = orgPackage.getIsDesensitization();
-        if("1".equals(isDesensitization)){//全部脱敏
-            //判断是否配置此用户
-            if(this.isContainsUser(loginName)){
-                return false;
-            }
-            return true;
-        }else if("2".equals(isDesensitization)){//仅职场脱敏
-            //判断此用户当前是否在职场
-            if(this.isWorkplace(loginName)){
+        if(orgPackage != null){
+            String isDesensitization = orgPackage.getIsDesensitization();
+            if("1".equals(isDesensitization)){//全部脱敏
                 //判断是否配置此用户
                 if(this.isContainsUser(loginName)){
                     return false;
                 }
                 return true;
-            }else{
-                return false;
-            }
-        }else if("3".equals(isDesensitization)){//职场外脱敏
-            //判断此用户当前是否不在职场
-            if(!this.isWorkplace(loginName)){
-                //判断是否配置此用户
-                if(this.isContainsUser(loginName)){
+            }else if("2".equals(isDesensitization)){//仅职场脱敏
+                //判断此用户当前是否在职场
+                if(this.isWorkplace(loginName)){
+                    //判断是否配置此用户
+                    if(this.isContainsUser(loginName)){
+                        return false;
+                    }
+                    return true;
+                }else{
                     return false;
                 }
-                return true;
+            }else if("3".equals(isDesensitization)){//职场外脱敏
+                //判断此用户当前是否不在职场
+                if(!this.isWorkplace(loginName)){
+                    //判断是否配置此用户
+                    if(this.isContainsUser(loginName)){
+                        return false;
+                    }
+                    return true;
+                }else{
+                    return false;
+                }
             }else{
+                //不脱敏
                 return false;
             }
-        }else{
-            //不脱敏
+        }else {
             return false;
         }
     }
