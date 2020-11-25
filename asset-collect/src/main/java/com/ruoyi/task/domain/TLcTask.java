@@ -511,4 +511,8 @@ public class TLcTask extends BaseEntity {
 
     private List<String> taskIdList;
 
+    private List<String> caseNoList;
+
+
+
 }
