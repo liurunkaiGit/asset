@@ -412,6 +412,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         transferType,
         rmb_ye,
         owner_name,
+        job_no,
         asset_batch_no)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
@@ -465,6 +466,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{item.transferType},
             #{item.rmbYe},
             #{item.ownerName},
+            #{item.jobNo},
             #{item.assetBatchNO})
         </foreach>
     </insert>
@@ -674,6 +676,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         org_name,
         transferType,
         owner_name,
+        job_no,
         rmb_ye,
         asset_batch_no
         )
@@ -726,6 +729,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         org_name,
         transferType,
         owner_name,
+        job_no,
         rmb_ye,
         asset_batch_no
         FROM cur_assets_repayment_package_temp WHERE import_batch_no=#{importBatchNo} AND is_exception='0'

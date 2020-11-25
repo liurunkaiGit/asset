@@ -1111,42 +1111,42 @@
                                     if('DY' != platform){
                                         htm += "<a href='javascript:void(0)' onclick='hangUp("+n.phone+")'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
                                     }
-                                    htm += "</td></tr>";
+                                    htm += "</td><td name='phoneShow' style='display: none;'>"+n.phone+"</td></tr>";
                                     tp.append(htm);
                                 }else{
                                     tp.append("<tr >" +
                                         "<td style='display: none'></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+phone+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
-                                        "<td  style='width: 30px;'></td><td style='width: 30px;'></td></tr>");
+                                        "<td  style='width: 30px;'></td><td style='width: 30px;'></td><td name='phoneShow' style='display: none;'>"+n.phone+"</td></tr>");
                                 }
                             }
-                            if (n.tel != null && n.phone != 'null' && n.tel.length > 4) {
-                                if(n.tel == batchCall.phone ) {//当前拨打的联系人记录
-                                    var htm1 = "<tr onclick='changeColor(this);' style='background:rgb(169,169,169)'>" +
-                                        "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose' checked/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+tel+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
-                                        "<td class='disclass'  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='call("+JSON.stringify(n.contactName)+","+n.id+","+n.relation+",\""+n.phone+"\",this)'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>"+"</td>";
-                                    htm1 += "<td  style='width: 30px;'>";
-                                    if('DY' != platform){
-                                        htm1 += "<a href='javascript:void(0)' onclick='hangUp("+n.tel+")'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
-                                    }
-                                    htm1 += "</td></tr>";
-                                    tp.append(htm1);
-                                }else{
-                                    tp.append("<tr >" +
-                                        "<td style='display: none'></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+phone+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
-                                        "<td  style='width: 30px;'></td><td style='width: 30px;'></td></tr>");
-                                }
-                            }
+                            // if (n.tel != null && n.phone != 'null' && n.tel.length > 4) {
+                            //     if(n.tel == batchCall.phone ) {//当前拨打的联系人记录
+                            //         var htm1 = "<tr onclick='changeColor(this);' style='background:rgb(169,169,169)'>" +
+                            //             "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose' checked/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+tel+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
+                            //             "<td class='disclass'  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='call("+JSON.stringify(n.contactName)+","+n.id+","+n.relation+",\""+n.phone+"\",this)'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>"+"</td>";
+                            //         htm1 += "<td  style='width: 30px;'>";
+                            //         if('DY' != platform){
+                            //             htm1 += "<a href='javascript:void(0)' onclick='hangUp("+n.tel+")'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
+                            //         }
+                            //         htm1 += "</td></tr>";
+                            //         tp.append(htm1);
+                            //     }else{
+                            //         tp.append("<tr >" +
+                            //             "<td style='display: none'></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+phone+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
+                            //             "<td  style='width: 30px;'></td><td style='width: 30px;'></td></tr>");
+                            //     }
+                            // }
                         }else if(n.isClose != null  && n.isClose == '1'){
                             if (n.phone != null && n.phone.length > 4) {
                                 tp.append("<tr onclick='changeColor(this);'>" +
                                     "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose'/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+phone+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
-                                    "<td  style='width: 30px;'></td><td style='width: 30px;'></td></tr>");
+                                    "<td  style='width: 30px;'></td><td style='width: 30px;'></td><td name='phoneShow' style='display: none;'>"+n.phone+"</td></tr>");
                             }
-                            if (n.tel != null && n.tel.length > 4) {
-                                tp.append("<tr onclick='changeColor(this);'>" +
-                                    "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose'/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+tel+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
-                                    "<td style='width: 30px;'></td><td style='width: 30px;'></td></tr>");
-                            }
+                            // if (n.tel != null && n.tel.length > 4) {
+                            //     tp.append("<tr onclick='changeColor(this);'>" +
+                            //         "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose'/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+tel+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
+                            //         "<td style='width: 30px;'></td><td style='width: 30px;'></td></tr>");
+                            // }
                         }
                     });
                 }
@@ -1694,7 +1694,7 @@
         var callLen = $("#callLen").val();
         var callRadioLocation = $("#callRadioLocation").val();
         var callRemark = $("#callRemarkAdd").val();
-        var addPhone = val.find("[name='phone']").html();
+        var addPhone = val.find("[name='phoneShow']").html();
         if($("#finalId").prop("checked")){
             addPhone = $("#freeCall").val();
         }

@@ -37,6 +37,6 @@ public interface IAssetsRepaymenFromXYService
      * 查询业务归属人
      *
      */
-    public String findOwnerName(Map<String,String> param);
+    public Map<String,String> findOwnerName(Map<String,String> param);
 
 }

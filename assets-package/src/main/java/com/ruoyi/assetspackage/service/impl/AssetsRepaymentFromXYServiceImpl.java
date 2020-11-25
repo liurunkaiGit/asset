@@ -80,14 +80,20 @@ public class AssetsRepaymentFromXYServiceImpl implements IAssetsRepaymenFromXYSe
      *
      */
     @Override
-    public String findOwnerName(Map<String, String> param) {
+    public Map<String,String> findOwnerName(Map<String, String> param) {
+        Map ownerNameAndJobNo = new HashMap();
         String ownerName = "";
+        String jobNo = "";
         //匹配当天的
-        List<String> ownerNameByAssign = this.assetsRepaymentFromXYMapper.findOwnerNameByAssign(param);
+//        List<String> ownerNameByAssign = this.assetsRepaymentFromXYMapper.findOwnerNameByAssign(param);
+        List<Map<String, String>> ownerNameByAssign = this.assetsRepaymentFromXYMapper.findOwnerNameByAssign(param);
         if(ownerNameByAssign.size() > 0){
-            for (String name : ownerNameByAssign) {
+            for (Map<String, String> map : ownerNameByAssign) {
+                String name = map.get("ownerName");
+                String no = map.get("jobNo");
                 if(name != null && !"".equals(name)){
                     ownerName = ownerName + ","+name;
+                    jobNo = jobNo + ","+no;
                 }
             }
         }
@@ -98,8 +104,10 @@ public class AssetsRepaymentFromXYServiceImpl implements IAssetsRepaymenFromXYSe
                 Integer taskType = (Integer)resultMap.get("taskType");
                 if(taskType != 7){
                     String name = (String)resultMap.get("ownerName");
+                    String no = (String)resultMap.get("jobNo");
                     if(name != null && !"".equals(name)){
                         ownerName = ownerName + ","+name;
+                        jobNo = jobNo + ","+no;
                     }
                 }
             }
@@ -108,15 +116,25 @@ public class AssetsRepaymentFromXYServiceImpl implements IAssetsRepaymenFromXYSe
         String orgId = param.get("orgId");
         String xyOrgId = this.sysConfigService.selectConfigByKey("xyOrgId");
         if("".equals(ownerName) && xyOrgId.equals(orgId)){
-            String ownerNameByAssign3 = this.assetsRepaymentFromXYMapper.findOwnerNameByAssign3(param);
-            if(ownerNameByAssign3 != null && !"".equals(ownerNameByAssign3)){
-                ownerName = ownerName + ","+ownerNameByAssign3;
+//            String ownerNameByAssign3 = this.assetsRepaymentFromXYMapper.findOwnerNameByAssign3(param);
+            Map<String, String> map = this.assetsRepaymentFromXYMapper.findOwnerNameByAssign3(param);
+            if(map != null){
+                String name = map.get("ownerName");
+                String no = map.get("jobNo");
+                if(name != null && !"".equals(name)){
+                    ownerName = ownerName + ","+name;
+                    jobNo = jobNo + ","+no;
+                }
             }
         }
         if(!"".equals(ownerName)){
             ownerName = ownerName.substring(1);
+            jobNo = jobNo.substring(1);
         }
-        return ownerName;
+
+        ownerNameAndJobNo.put("ownerName",ownerName);
+        ownerNameAndJobNo.put("jobNo",jobNo);
+        return ownerNameAndJobNo;
     }
 
 

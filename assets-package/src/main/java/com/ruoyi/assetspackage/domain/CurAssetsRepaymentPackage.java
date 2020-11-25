@@ -326,4 +326,6 @@ public class CurAssetsRepaymentPackage extends BaseEntity {
      * 资产批次号
      */
     private String assetBatchNO;
+
+    private String jobNo;
 }

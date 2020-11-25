@@ -29,9 +29,9 @@ public interface AssetsRepaymentFromXYMapper
      * 查询业务归属人
      *
      */
-    public List<String> findOwnerNameByAssign(Map<String,String> param);
+    public List<Map<String,String>> findOwnerNameByAssign(Map<String,String> param);
     public Map<String,Object> findOwnerNameByAssign2(Map<String,String> param);
-    public String findOwnerNameByAssign3(Map<String,String> param);
+    public Map<String,String> findOwnerNameByAssign3(Map<String,String> param);
 
     /**
      * 查询还款明细

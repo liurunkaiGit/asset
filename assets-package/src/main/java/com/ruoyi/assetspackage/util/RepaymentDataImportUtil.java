@@ -929,8 +929,15 @@ public class RepaymentDataImportUtil {
                 }
                 if("是否出催".equals(entry.getKey())){
                     if(entry.getValue() != null && !"".equals(entry.getValue())) {
-                        dto.setSfjq(entry.getValue());//是否出催
-                        dto.setIsExitCollect(String.valueOf(IsNoEnum.getCodeByDes(entry.getValue())));
+                        String val  = entry.getValue();
+                        if("已结清".equals(val)){
+                            val = "是";
+                        }
+                        if("未结清".equals(val)){
+                            val = "否";
+                        }
+                        dto.setSfjq(val);//是否出催
+                        dto.setIsExitCollect(String.valueOf(IsNoEnum.getCodeByDes(val)));
                     } else {
                         dto.setIsExitCollect(IsNoEnum.NO.getCode().toString());
                     }
@@ -1016,14 +1023,16 @@ public class RepaymentDataImportUtil {
             param.put("orgCasNo", dto.getOrgCasno());
             param.put("hkrq", dto.getHkrq());
             CurAssetsPackage assetsInfo = service.findAssetsInfo(param);
-            String ownerName = service.findOwnerName(param);
+//            String ownerName = service.findOwnerName(param);
+            Map<String, String> nameAndJob = service.findOwnerName(param);
             if (assetsInfo != null) {
                 dto.setRmbYe(assetsInfo.getRmbYe());
                 dto.setTransferType(assetsInfo.getTransfertype());
                 dto.setAssetBatchNO(assetsInfo.getImportBatchNo());
                 dto.setCurName(assetsInfo.getCurName());//以资产为准(还款导入不算)
             }
-            dto.setOwnerName(ownerName);
+            dto.setOwnerName(nameAndJob.get("ownerName"));
+            dto.setJobNo(nameAndJob.get("jobNo"));
 //            }
 
             list.add(dto);

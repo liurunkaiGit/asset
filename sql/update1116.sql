@@ -357,3 +357,7 @@ INSERT INTO `area_code_config` VALUES (335, '0909', '博尔塔拉蒙古自治州
 -- 查询条件
 update t_lc_column_query set column_value='Fresh-新任务|Search1-联系方式有效|Search2-联系方式无效|Found1-找到本人|Found2-找到联系人|Talking-谈判中|PTP-承诺还款|Check-检查付款|TS-投诉|Transfer-建议转移|QT-其它' where table_name = 't_lc_task' and column_name = 'action_code' and column_type = 'dict';
 update t_lc_column_query set column_value='Fresh-新任务|Search1-联系方式有效|Search2-联系方式无效|Found1-找到本人|Found2-找到联系人|Talking-谈判中|PTP-承诺还款|Check-检查付款|TS-投诉|Transfer-建议转移|QT-其它' where table_name = 't_lc_duncase' and column_name = 'action_code' and column_type = 'dict';
+
+-- 回款导入新增员工工号
+alter TABLE cur_assets_repayment_package_temp add COLUMN job_no varchar(64) DEFAULT NULL COMMENT '员工工牌号';
+alter TABLE cur_assets_repayment_package add COLUMN job_no varchar(64) DEFAULT NULL COMMENT '员工工牌号';

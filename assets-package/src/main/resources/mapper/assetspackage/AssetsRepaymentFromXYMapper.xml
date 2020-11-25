@@ -52,6 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="orgName"    column="org_name"    />
         <result property="transferType"    column="transferType"    />
         <result property="ownerName"    column="owner_name"    />
+        <result property="jobNo"    column="job_no"    />
         <result property="rmbYe"    column="rmb_ye"    />
         <result property="assetBatchNO"    column="asset_batch_no"    />
         <result property="sque"    column="sque"    />
@@ -178,7 +179,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <select id="findCurAssetsRepaymentList" parameterType="CurAssetsRepaymentPackage" resultMap="CurAssetsRepaymentPackageResult">
-        SELECT (@a :=@a + 1) as sque,t.id,t.org_casNo,t.org_name,t.transferType,t.hksyqqs,t.cur_name,t.rmb_ye,t.hkje,t.hkrq,t.create_time,t.owner_name
+        SELECT (@a :=@a + 1) as sque,t.id,t.org_casNo,t.org_name,t.transferType,t.hksyqqs,t.cur_name,t.rmb_ye,t.hkje,t.hkrq,t.create_time,t.owner_name,t.job_no
         from cur_assets_repayment_package t,(SELECT @a := 0) t1
         <where>
             <if test="orgCasno != null  and orgCasno != ''"> and t.org_casNo = #{orgCasno}</if>
@@ -212,28 +213,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         limit 1
     </select>
 
-    <select id="findOwnerNameByAssign" parameterType="java.util.Map" resultType="java.lang.String">
-       SELECT owner_name as ownerName
-       from t_lc_duncase_assign  where org_id=#{orgId} and case_no=#{orgCasNo}
-       and (date_format(create_time, '%Y-%m-%d')= date_format(#{hkrq}, '%Y-%m-%d') or date_format(create_time, '%Y/%m/%d')= date_format(#{hkrq}, '%Y-%m-%d'))
-       group by owner_name
+    <select id="findOwnerNameByAssign" parameterType="java.util.Map" resultType="java.util.Map">
+       SELECT t.owner_name as ownerName,
+        (select u.job_no from sys_user u where t.owner_id = u.user_id) as jobNo
+       from t_lc_duncase_assign t  where t.org_id=#{orgId} and t.case_no=#{orgCasNo}
+       and (date_format(t.create_time, '%Y-%m-%d')= date_format(#{hkrq}, '%Y-%m-%d') or date_format(t.create_time, '%Y/%m/%d')= date_format(#{hkrq}, '%Y-%m-%d'))
+       group by t.owner_name
     </select>
 
     <select id="findOwnerNameByAssign2" parameterType="java.util.Map" resultType="java.util.Map">
-        SELECT owner_name as ownerName,transfer_type as taskType
-        from t_lc_duncase_assign
-        where org_id=#{orgId} and case_no=#{orgCasNo}
-        and (date_format(create_time, '%Y-%m-%d') <![CDATA[<]]> date_format(#{hkrq}, '%Y-%m-%d') or date_format(create_time, '%Y/%m/%d') <![CDATA[<]]> date_format(#{hkrq}, '%Y-%m-%d'))
-        and owner_name is not null
-        order by create_time desc
+        SELECT t.owner_name as ownerName,t.transfer_type as taskType,
+        (select u.job_no from sys_user u where t.owner_id = u.user_id) as jobNo
+        from t_lc_duncase_assign t
+        where t.org_id=#{orgId} and t.case_no=#{orgCasNo}
+        and (date_format(t.create_time, '%Y-%m-%d') <![CDATA[<]]> date_format(#{hkrq}, '%Y-%m-%d') or date_format(t.create_time, '%Y/%m/%d') <![CDATA[<]]> date_format(#{hkrq}, '%Y-%m-%d'))
+        and t.owner_name is not null
+        order by t.create_time desc
         limit 1
     </select>
 
-    <select id="findOwnerNameByAssign3" parameterType="java.util.Map" resultType="java.lang.String">
-        SELECT owner_name as ownerName
-        from t_lc_task
-        where org_id=#{orgId} and case_no=#{orgCasNo}
-        and task_status != 3
+    <select id="findOwnerNameByAssign3" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT t.owner_name as ownerName,
+        (select u.job_no from sys_user u where t.owner_id = u.user_id) as jobNo
+        from t_lc_task t
+        where t.org_id=#{orgId} and t.case_no=#{orgCasNo}
+        and t.task_status != 3
     </select>
 
     <select id="findOwnerNameByTask" parameterType="java.util.Map" resultType="java.lang.String">
