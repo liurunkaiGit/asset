@@ -1,4 +1,8 @@
 update t_lc_inforeporting_set set from_column='jjh' where from_column='email';
+ALTER TABLE t_lp_project_information MODIFY COLUMN belonging_center_id int(11) DEFAULT NULL COMMENT '归属中心id';
+ALTER TABLE t_lp_project_information MODIFY COLUMN belonging_center_name VARCHAR(60) DEFAULT NULL COMMENT '归属中心名字';
+ALTER TABLE t_lp_project_information_daily MODIFY COLUMN belonging_center_id int(11) DEFAULT NULL COMMENT '归属中心id';
+ALTER TABLE t_lp_project_information_daily MODIFY COLUMN belonging_center_name VARCHAR(60) DEFAULT NULL COMMENT '归属中心名字';
 -- 菜单 SQL
 insert into sys_menu (menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
 values('预警规则', (select t.menu_id from sys_menu t where t.menu_name = '系统监控'), '1', '/shareproject/hmrule', 'C', '0', 'shareproject:rule:view', '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '【预警规则】菜单');
@@ -8,16 +12,16 @@ SELECT @parentId := LAST_INSERT_ID();
 
 -- 按钮 SQL
 insert into sys_menu  (menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
-values('【预警规则】查询', @parentId, '1',  '#',  'F', '0', 'shareproject:rule:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+values('【预警规则】查询', @parentId, '1',  '#',  'F', '0', 'shareproject:rule:list',   '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
 
 insert into sys_menu  (menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
-values('【预警规则】新增', @parentId, '2',  '#',  'F', '0', 'shareproject:rule:add',          '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+values('【预警规则】新增', @parentId, '2',  '#',  'F', '0', 'shareproject:rule:add',  '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
 
 insert into sys_menu  (menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
-values('【预警规则】修改', @parentId, '3',  '#',  'F', '0', 'shareproject:rule:edit',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+values('【预警规则】修改', @parentId, '3',  '#',  'F', '0', 'shareproject:rule:edit',   '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
 
 insert into sys_menu  (menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
-values('【预警规则】删除', @parentId, '4',  '#',  'F', '0', 'shareproject:rule:remove',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+values('【预警规则】删除', @parentId, '4',  '#',  'F', '0', 'shareproject:rule:remove',   '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
 
 INSERT INTO sys_menu (menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
 VALUES ( '【预警规则具体规则】查询', @parentId, '5', '#',  'F', '0', 'shareproject:details:list', '#', 'admin', '2018-03-01 00:00:00', 'ry', '2020-11-03 09:20:17', '');
@@ -50,16 +54,16 @@ SELECT @parentId := LAST_INSERT_ID();
 
 -- 按钮 SQL
 insert into sys_menu  (menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
-values('【员工状态】查询', @parentId, '1',  '#',  'F', '0', 'shareproject:userlogs:list',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+values('【员工状态】查询', @parentId, '1',  '#',  'F', '0', 'shareproject:userlogs:list',   '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
 
 insert into sys_menu  (menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
-values('【员工状态】新增', @parentId, '2',  '#',  'F', '0', 'shareproject:userlogs:add',          '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+values('【员工状态】新增', @parentId, '2',  '#',  'F', '0', 'shareproject:userlogs:add',  '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
 
 insert into sys_menu  (menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
-values('【员工状态】修改', @parentId, '3',  '#',  'F', '0', 'shareproject:userlogs:edit',         '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+values('【员工状态】修改', @parentId, '3',  '#',  'F', '0', 'shareproject:userlogs:edit',   '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
 
 insert into sys_menu  (menu_name, parent_id, order_num, url, menu_type, visible, perms, icon, create_by, create_time, update_by, update_time, remark)
-values('【员工状态】删除', @parentId, '4',  '#',  'F', '0', 'shareproject:userlogs:remove',       '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
+values('【员工状态】删除', @parentId, '4',  '#',  'F', '0', 'shareproject:userlogs:remove',   '#', 'admin', '2018-03-01', 'ry', '2018-03-01', '');
 
 INSERT INTO `sys_dict_type`  (`dict_name`, `dict_type`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
 VALUES ('规则状态', 'rule_status', '0', 'admin', '2020-11-02 09:32:44', 'zhang', '2020-11-02 10:30:02', '');
@@ -105,62 +109,62 @@ CREATE TABLE `t_lj_rule` (
   `org_id` bigint(20) DEFAULT NULL COMMENT '机构id',
   `org_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '机构名称',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `t_lj_rule_details`;
 CREATE TABLE `t_lj_rule_details` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `rule_id` bigint(20) NOT NULL COMMENT '规则主键',
-  `start_time` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '开始',
-  `start_time_hm` bigint(20) DEFAULT NULL COMMENT '开始时间毫秒数',
-  `end_time` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '结束时间',
-  `end_time_hm` bigint(20) DEFAULT NULL COMMENT '结束时间',
-  `online_time` varchar(10) DEFAULT NULL COMMENT '在线时长0=不选择1=选择',
-  `online_condition` varchar(150) DEFAULT NULL,
-  `online_one` int(9) DEFAULT NULL COMMENT '在线时长-条件1',
-  `online_two` int(9) DEFAULT NULL COMMENT '在线时长-条件2',
-  `out_time` varchar(10) DEFAULT NULL COMMENT '退出次数',
-  `out_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '退出条件',
-  `out_one` int(9) DEFAULT NULL COMMENT '退出条件1',
-  `out_two` int(9) DEFAULT NULL COMMENT '退出条件2',
-  `intervals` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '时间间隔',
-  `intervals_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '间隔条件',
-  `intervals_one` int(9) DEFAULT NULL COMMENT '间隔条件1',
-  `intervals_two` int(9) DEFAULT NULL COMMENT '间隔条件2',
-  `conversation_time` varchar(10) DEFAULT NULL COMMENT '通话时长',
-  `conversation_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '通话时长条件',
-  `conversation_one` int(9) DEFAULT NULL COMMENT '通过条件1',
-  `conversation_two` int(9) DEFAULT NULL COMMENT '通话条件2',
-  `conversation_cishu` varchar(10) DEFAULT NULL COMMENT '通话次数',
-  `conversation_cishu_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '通话次数条件',
-  `conversation_cishu_one` int(9) DEFAULT NULL COMMENT '通话次数1',
-  `conversation_cishu_two` int(9) DEFAULT NULL COMMENT '通话次数2',
-  `eng_rate` varchar(10) DEFAULT NULL COMMENT '接通率',
-  `eng_rate_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '接通条件',
-  `eng_rate_one` int(9) DEFAULT NULL COMMENT '接通率条件1',
-  `eng_rate_two` int(9) DEFAULT NULL COMMENT '接通率条件2',
-  `case_numbers` varchar(10) DEFAULT NULL COMMENT '案件数量',
-  `case_numbers_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '案件处理量条件',
-  `case_numbers_one` int(9) DEFAULT NULL COMMENT '案件数量条件1',
-  `case_numbers_two` int(9) DEFAULT NULL COMMENT '案件数量条件2',
-  `case_rate` varchar(10) DEFAULT NULL COMMENT '案件处理率',
-  `case_rate_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '案件处理率条件',
-  `case_rate_one` decimal(13,2) DEFAULT NULL COMMENT '案件处理率条件1',
-  `case_rate_two` decimal(13,2) DEFAULT NULL COMMENT '案件处理率条件2',
-  `sj_repayment` varchar(10) DEFAULT NULL COMMENT '实际还款',
-  `sj_repayment_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '实际还款条件',
-  `sj_repayment_one` decimal(15,2) DEFAULT NULL COMMENT '实际还款条件1',
-  `sj_repayment_two` decimal(15,2) DEFAULT NULL COMMENT '实际还款条件2',
-  `sj_repayment_rate` varchar(10) DEFAULT NULL COMMENT '实际还款率',
-  `sj_repayment_rate_condition` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '实际还款率条件',
-  `sj_repayment_rate_one` decimal(13,2) DEFAULT NULL COMMENT '实际还款率条件1',
-  `sj_repayment_rate_two` decimal(13,2) DEFAULT NULL COMMENT '实际还款率条件2',
-  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '更新人',
-  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `org_id` bigint(20) DEFAULT NULL COMMENT '机构id',
-  `org_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '机构名称',
+ `id` bigint(20) NOT NULL AUTO_INCREMENT,
+ `rule_id` bigint(20) NOT NULL COMMENT '规则主键',
+ `start_time` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '开始',
+ `start_time_hm` bigint(20) DEFAULT NULL COMMENT '开始时间毫秒数',
+ `end_time` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '结束时间',
+ `end_time_hm` bigint(20) DEFAULT NULL COMMENT '结束时间',
+ `online_time` varchar(10) DEFAULT NULL COMMENT '在线时长0=不选择1=选择',
+ `online_condition` varchar(150) DEFAULT NULL,
+ `online_one` int(9) DEFAULT NULL COMMENT '在线时长-条件1',
+ `online_two` int(9) DEFAULT NULL COMMENT '在线时长-条件2',
+ `out_time` varchar(10) DEFAULT NULL COMMENT '退出次数',
+ `out_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '退出条件',
+ `out_one` int(9) DEFAULT NULL COMMENT '退出条件1',
+ `out_two` int(9) DEFAULT NULL COMMENT '退出条件2',
+ `intervals` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '时间间隔',
+ `intervals_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '间隔条件',
+ `intervals_one` int(9) DEFAULT NULL COMMENT '间隔条件1',
+ `intervals_two` int(9) DEFAULT NULL COMMENT '间隔条件2',
+ `conversation_time` varchar(10) DEFAULT NULL COMMENT '通话时长',
+ `conversation_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '通话时长条件',
+ `conversation_one` int(9) DEFAULT NULL COMMENT '通过条件1',
+ `conversation_two` int(9) DEFAULT NULL COMMENT '通话条件2',
+ `conversation_cishu` varchar(10) DEFAULT NULL COMMENT '通话次数',
+ `conversation_cishu_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '通话次数条件',
+ `conversation_cishu_one` int(9) DEFAULT NULL COMMENT '通话次数1',
+ `conversation_cishu_two` int(9) DEFAULT NULL COMMENT '通话次数2',
+ `eng_rate` varchar(10) DEFAULT NULL COMMENT '接通率',
+ `eng_rate_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '接通条件',
+ `eng_rate_one` int(9) DEFAULT NULL COMMENT '接通率条件1',
+ `eng_rate_two` int(9) DEFAULT NULL COMMENT '接通率条件2',
+ `case_numbers` varchar(10) DEFAULT NULL COMMENT '案件数量',
+ `case_numbers_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '案件处理量条件',
+ `case_numbers_one` int(9) DEFAULT NULL COMMENT '案件数量条件1',
+ `case_numbers_two` int(9) DEFAULT NULL COMMENT '案件数量条件2',
+ `case_rate` varchar(10) DEFAULT NULL COMMENT '案件处理率',
+ `case_rate_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '案件处理率条件',
+ `case_rate_one` decimal(13,2) DEFAULT NULL COMMENT '案件处理率条件1',
+ `case_rate_two` decimal(13,2) DEFAULT NULL COMMENT '案件处理率条件2',
+ `sj_repayment` varchar(10) DEFAULT NULL COMMENT '实际还款',
+ `sj_repayment_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '实际还款条件',
+ `sj_repayment_one` decimal(15,2) DEFAULT NULL COMMENT '实际还款条件1',
+ `sj_repayment_two` decimal(15,2) DEFAULT NULL COMMENT '实际还款条件2',
+ `sj_repayment_rate` varchar(10) DEFAULT NULL COMMENT '实际还款率',
+ `sj_repayment_rate_condition` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '实际还款率条件',
+ `sj_repayment_rate_one` decimal(13,2) DEFAULT NULL COMMENT '实际还款率条件1',
+ `sj_repayment_rate_two` decimal(13,2) DEFAULT NULL COMMENT '实际还款率条件2',
+ `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '创建人',
+ `create_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
+ `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '更新人',
+ `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+ `org_id` bigint(20) DEFAULT NULL COMMENT '机构id',
+ `org_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '机构名称',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
@@ -226,36 +230,46 @@ CREATE TABLE `t_lj_rule_user_logs` (
   `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `org_id` bigint(20) DEFAULT NULL COMMENT '机构id',
   `org_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '机构名称',
+  `online_timeo` varchar(10) DEFAULT NULL COMMENT '在线时长0=不选择1=选择',
   `online_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `online_one` int(9) DEFAULT NULL COMMENT '在线时长-条件1',
   `online_two` int(9) DEFAULT NULL COMMENT '在线时长-条件2',
+  `out_time` varchar(10) DEFAULT NULL COMMENT '退出次数',
   `out_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '退出条件',
   `out_one` int(9) DEFAULT NULL COMMENT '退出条件1',
   `out_two` int(9) DEFAULT NULL COMMENT '退出条件2',
+  `intervals` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '时间间隔',
   `intervals_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '间隔条件',
   `intervals_one` int(9) DEFAULT NULL COMMENT '间隔条件1',
   `intervals_two` int(9) DEFAULT NULL COMMENT '间隔条件2',
+  `conversation_time` varchar(10) DEFAULT NULL COMMENT '通话时长',
   `conversation_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '通话时长条件',
   `conversation_one` int(9) DEFAULT NULL COMMENT '通过条件1',
   `conversation_two` int(9) DEFAULT NULL COMMENT '通话条件2',
+  `conversation_cishu` varchar(10) DEFAULT NULL COMMENT '通话次数',
   `conversation_cishu_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '通话次数条件',
   `conversation_cishu_one` int(9) DEFAULT NULL COMMENT '通话次数1',
   `conversation_cishu_two` int(9) DEFAULT NULL COMMENT '通话次数2',
+  `eng_rate` varchar(10) DEFAULT NULL COMMENT '接通率',
   `eng_rate_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '接通条件',
   `eng_rate_one` int(9) DEFAULT NULL COMMENT '接通率条件1',
   `eng_rate_two` int(9) DEFAULT NULL COMMENT '接通率条件2',
+  `case_numbers` varchar(10) DEFAULT NULL COMMENT '案件数量',
   `case_numbers_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '案件处理量条件',
   `case_numbers_one` int(9) DEFAULT NULL COMMENT '案件数量条件1',
   `case_numbers_two` int(9) DEFAULT NULL COMMENT '案件数量条件2',
+  `case_rate` varchar(10) DEFAULT NULL COMMENT '案件处理率',
   `case_rate_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '案件处理率条件',
-  `case_rate_one` int(9) DEFAULT NULL COMMENT '案件处理率条件1',
-  `case_rate_two` int(9) DEFAULT NULL COMMENT '案件处理率条件2',
+  `case_rate_one` decimal(13,2) DEFAULT NULL COMMENT '案件处理率条件1',
+  `case_rate_two` decimal(13,2) DEFAULT NULL COMMENT '案件处理率条件2',
+  `sj_repayment` varchar(10) DEFAULT NULL COMMENT '实际还款',
   `sj_repayment_condition` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '实际还款条件',
-  `sj_repayment_one` int(9) DEFAULT NULL COMMENT '实际还款条件1',
-  `sj_repayment_two` int(9) DEFAULT NULL COMMENT '实际还款条件2',
+  `sj_repayment_one` decimal(15,2) DEFAULT NULL COMMENT '实际还款条件1',
+  `sj_repayment_two` decimal(15,2) DEFAULT NULL COMMENT '实际还款条件2',
+  `sj_repayment_rate` varchar(10) DEFAULT NULL COMMENT '实际还款率',
   `sj_repayment_rate_condition` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '实际还款率条件',
-  `sj_repayment_rate_one` int(9) DEFAULT NULL COMMENT '实际还款率条件1',
-  `sj_repayment_rate_two` int(9) DEFAULT NULL COMMENT '实际还款率条件2',
+  `sj_repayment_rate_one` decimal(13,2) DEFAULT NULL COMMENT '实际还款率条件1',
+  `sj_repayment_rate_two` decimal(13,2) DEFAULT NULL COMMENT '实际还款率条件2',
   PRIMARY KEY (`id`),
   UNIQUE KEY `ud` (`rule_id`,`details_id`,`days`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
