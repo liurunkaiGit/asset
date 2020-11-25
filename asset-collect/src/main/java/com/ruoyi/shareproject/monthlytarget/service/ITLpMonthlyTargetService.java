@@ -59,4 +59,6 @@ public interface ITLpMonthlyTargetService
      * @return 结果
      */
     public int deleteTLpMonthlyTargetById(Long id);
+
+    Integer selectMonthlyTargetUnique(TLpMonthlyTarget tLpMonthlyTarget);
 }

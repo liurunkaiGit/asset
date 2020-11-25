@@ -51,37 +51,37 @@
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">月初委案件数：</label>
+                <label class="col-sm-3 control-label">月初委案件数(件)：</label>
                 <div class="col-sm-8">
                     <input name="numberOfCommission" th:field="*{numberOfCommission}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">月初委案金额：</label>
+                <label class="col-sm-3 control-label">月初委案金额(元)：</label>
                 <div class="col-sm-8">
                     <input name="commissionAmount" th:field="*{commissionAmount}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">目标回款金额：</label>
+                <label class="col-sm-3 control-label">目标回款金额(元)：</label>
                 <div class="col-sm-8">
                     <input name="amountReceived" th:field="*{amountReceived}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>目标创佣金额：</label>
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>目标创佣金额(元)：</label>
                 <div class="col-sm-8">
                     <input name="amountCreated" th:field="*{amountCreated}" class="form-control" type="text" required>
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">上月流入率：</label>
+                <label class="col-sm-3 control-label">上月流入率(%)：</label>
                 <div class="col-sm-8">
                     <input name="inflowrateOfLastmonth" th:field="*{inflowrateOfLastmonth}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">本月目标流入率：</label>
+                <label class="col-sm-3 control-label">本月目标流入率(%)：</label>
                 <div class="col-sm-8">
                     <input name="inflowrateOfMonth" th:field="*{inflowrateOfMonth}" class="form-control" type="text">
                 </div>
@@ -127,9 +127,27 @@
                     return;
                 }
             }
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/add", $('#form-target-edit').serialize());
-            }
+            $.post(
+                prefix + "/selectMonthlyTargetUnique",
+                {
+                    particularYear: $("#particularYear").val(),
+                    particularMonth: $("#particularMonth").val(),
+                    proId: $("#proId").val().split(",")[0],
+                    transferType: $("#transferType").val()
+                },
+                function(data) {
+                    if(data.status == 200){
+                        if (data.result > 0) {
+                            $.modal.alertError("该条数据已存在，日期+项目+账龄不能重复");
+                        } else {
+                            if ($.validate.form()) {
+                                $.operate.save(prefix + "/add", $('#form-target-edit').serialize());
+                            }
+                        }
+                    }
+                }
+            );
+
         }
         $(document).ready(function(){
             $.post(

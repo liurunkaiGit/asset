@@ -6,6 +6,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.enums.IsNoEnum;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.stationletter.domain.TLcStationLetter;
 import com.ruoyi.stationletter.service.ITLcStationLetterService;
@@ -21,6 +22,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -89,6 +91,14 @@ public class TLcStationLetterController extends BaseController {
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(TLcStationLetter tLcStationLetter) {
+        // 指定用户的时候如果没有选择自己需要将自己添加上
+        if (tLcStationLetter.getSendRange().equals(IsNoEnum.NO.getCode())) {
+            List<String> userIds = new ArrayList(Arrays.asList(tLcStationLetter.getUserIds().split(",")));
+            if (!userIds.contains(ShiroUtils.getSysUser().getUserId().toString())) {
+                userIds.add(ShiroUtils.getSysUser().getUserId().toString());
+                tLcStationLetter.setUserIds(userIds.stream().collect(Collectors.joining(",")));
+            }
+        }
         return toAjax(tLcStationLetterService.insertTLcStationLetter(tLcStationLetter));
     }
 

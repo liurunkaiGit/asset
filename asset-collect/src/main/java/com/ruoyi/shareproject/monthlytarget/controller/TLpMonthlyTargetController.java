@@ -3,10 +3,13 @@ package com.ruoyi.shareproject.monthlytarget.controller;
 import java.util.Date;
 import java.util.List;
 
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.shareproject.monthlytarget.domain.TLpMonthlyTarget;
 import com.ruoyi.shareproject.monthlytarget.service.ITLpMonthlyTargetService;
+import com.ruoyi.shareproject.result.domain.TLpResult;
 import com.ruoyi.task.domain.TlcCallRecordTotal;
+import com.ruoyi.utils.Response;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -103,7 +106,7 @@ public class TLpMonthlyTargetController extends BaseController
             return toAjax(tLpMonthlyTargetService.insertTLpMonthlyTarget(tLpMonthlyTarget));
         }catch (Exception e) {
             if(e instanceof DuplicateKeyException){
-                throw new DuplicateKeyException("该条数据已存在，日期+项目+账龄不能重复");
+                throw new BusinessException("该条数据已存在，日期+项目+账龄不能重复");
             }else{
                 throw e;
             }
@@ -150,12 +153,22 @@ public class TLpMonthlyTargetController extends BaseController
             return toAjax(tLpMonthlyTargetService.updateTLpMonthlyTarget(tLpMonthlyTarget));
         }catch (Exception e) {
             if(e instanceof DuplicateKeyException){
-                throw new DuplicateKeyException("该条数据已存在，日期+项目+账龄不能重复");
+                throw new BusinessException("该条数据已存在，日期+项目+账龄不能重复");
             }else{
                 throw e;
             }
         }
 
+    }
+
+    /**
+     * 查找唯一
+     */
+    @PostMapping("selectMonthlyTargetUnique")
+    @ResponseBody
+    public Response selectMonthlyTargetUnique(TLpMonthlyTarget tLpMonthlyTarget) {
+        Integer count = this.tLpMonthlyTargetService.selectMonthlyTargetUnique(tLpMonthlyTarget);
+        return Response.success(count);
     }
 
     /**

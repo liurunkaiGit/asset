@@ -85,14 +85,6 @@ public class TLcStationLetterServiceImpl implements ITLcStationLetterService {
         } else {
             tLcStationLetter.setSendStatus(IsNoEnum.NO.getCode());
         }
-        // 指定用户的时候如果没有选择自己需要将自己添加上
-        if (tLcStationLetter.getSendRange().equals(IsNoEnum.NO.getCode())) {
-            List<String> userIds = new ArrayList(Arrays.asList(tLcStationLetter.getUserIds().split(",")));
-            if (!userIds.contains(ShiroUtils.getSysUser().getUserId().toString())) {
-                userIds.add(ShiroUtils.getSysUser().getUserId().toString());
-                tLcStationLetter.setUserIds(userIds.stream().collect(Collectors.joining(",")));
-            }
-        }
         int i = tLcStationLetterMapper.insertTLcStationLetter(tLcStationLetter);
         // 将站内信添加到用户
         addLetterToUser(tLcStationLetter, orgId, orgName);

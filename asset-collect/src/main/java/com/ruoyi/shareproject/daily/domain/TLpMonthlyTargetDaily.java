@@ -40,11 +40,11 @@ public class TLpMonthlyTargetDaily extends BaseEntity
 
     /** 分配席位 */
     @Excel(name = "分配席位")
-    private Integer allocationOfSeats;
+    private BigDecimal allocationOfSeats;
 
     /** 委案批次 */
     @Excel(name = "委案批次")
-    private Integer commissionBatch;
+    private String commissionBatch;
 
     /** 委案件数 */
     @Excel(name = "委案件数")

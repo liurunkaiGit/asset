@@ -59,4 +59,7 @@ public interface TLpMonthlyTargetMapper
      * @return 结果
      */
     public int deleteTLpMonthlyTargetByIds(String[] ids);
+
+    Integer selectMonthlyTargetUnique(TLpMonthlyTarget tLpMonthlyTarget);
+
 }

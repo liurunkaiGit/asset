@@ -3,6 +3,7 @@ package com.ruoyi.shareproject.daily.controller;
 import java.util.Date;
 import java.util.List;
 
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.shareproject.daily.domain.*;
@@ -175,7 +176,7 @@ public class TLpProjectDailyController extends BaseController
             return toAjax(tLpProjectDailyService.insertTLpProjectDaily(tLpProjectDaily));
         }catch (Exception e) {
             if(e instanceof DuplicateKeyException){
-                throw new DuplicateKeyException("项目名称和日期(不能重复)已经存在");
+                throw new BusinessException("项目名称和日期(不能重复)已经存在");
             }else{
                 throw e;
             }
@@ -219,7 +220,7 @@ public class TLpProjectDailyController extends BaseController
             return toAjax(tLpProjectDailyService.updateTLpProjectDaily(tLpProjectDaily));
         }catch (Exception e) {
             if(e instanceof DuplicateKeyException){
-                throw new DuplicateKeyException("项目名称和日期(不能重复)已经存在");
+                throw new BusinessException("项目名称和日期(不能重复)已经存在");
             }else{
                 throw e;
             }

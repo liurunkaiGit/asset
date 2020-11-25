@@ -101,4 +101,9 @@ public class TLpMonthlyTargetServiceImpl implements ITLpMonthlyTargetService
         return tLpMonthlyTargetMapper.deleteTLpMonthlyTargetById(id);
     }
 
+    @Override
+    public Integer selectMonthlyTargetUnique(TLpMonthlyTarget tLpMonthlyTarget) {
+        return this.tLpMonthlyTargetMapper.selectMonthlyTargetUnique(tLpMonthlyTarget);
+    }
+
 }

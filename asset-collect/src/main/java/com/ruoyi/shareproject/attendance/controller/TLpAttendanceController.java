@@ -5,6 +5,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.shareproject.attendance.domain.TLpAttendance;
@@ -103,7 +104,7 @@ public class TLpAttendanceController extends BaseController {
             return toAjax(tLpAttendanceService.insertTLpAttendance(tLpAttendance));
         }catch (Exception e) {
             if(e instanceof DuplicateKeyException){
-                throw new DuplicateKeyException("项目名称和日期(不能重复)已经存在");
+                throw new BusinessException("项目名称和日期(不能重复)已经存在");
             }else{
                 throw e;
             }
@@ -150,7 +151,7 @@ public class TLpAttendanceController extends BaseController {
             return toAjax(tLpAttendanceService.updateTLpAttendance(tLpAttendance));
         }catch (Exception e) {
             if(e instanceof DuplicateKeyException){
-                throw new DuplicateKeyException("项目名称和日期(不能重复)已经存在");
+                throw new BusinessException("项目名称和日期(不能重复)已经存在");
             }else{
                 throw e;
             }

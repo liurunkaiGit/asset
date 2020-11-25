@@ -115,29 +115,14 @@
                     title : '坐席数量'
                 },
                 {
-                    field : 'partyName', 
-                    title : '甲方名称'
-                },
-                {
-                    field : 'partyType', 
-                    title : '甲方类型',
-                    formatter: function(value, row, index) {
-                        return $.table.selectDictLabel(datas, value);
-                    }
-                },
-                {
-                    field : 'productName', 
-                    title : '产品名称'
-                },
-                {
-                    field : 'operatingSystem', 
+                    field : 'operatingSystem',
                     title : '作业系统',
                     formatter: function(value, row, index) {
                         return $.table.selectDictLabel(dataSys, value);
                     }
                 },
                 {
-                    field : 'trafficPlatform', 
+                    field : 'trafficPlatform',
                     title : '话务平台',
                     formatter: function(value, row, index) {
                         var trafficPlatformHSP = value.split(',');
@@ -153,8 +138,23 @@
                     title : '人均委案量'
                 },
                 {
-                    field : 'perHousehold', 
+                    field : 'perHousehold',
                     title : '户均金额'
+                },
+                {
+                    field : 'partyName', 
+                    title : '甲方名称'
+                },
+                {
+                    field : 'partyType', 
+                    title : '甲方类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(datas, value);
+                    }
+                },
+                {
+                    field : 'productName', 
+                    title : '产品名称'
                 }
                 ]
             };

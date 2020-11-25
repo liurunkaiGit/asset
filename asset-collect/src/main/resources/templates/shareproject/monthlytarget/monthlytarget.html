@@ -95,8 +95,8 @@
                     title : '账龄'
                 },
                 {
-                    field : 'allocationOfSeats', 
-                    title : '分配席位'
+                    field : 'allocationOfSeats',
+                    title : '月初分配席位'
                 },
                 {
                     field : 'commissionBatch', 
@@ -104,11 +104,11 @@
                 },
                 {
                     field : 'numberOfCommission', 
-                    title : '委案件数(件)'
+                    title : '月初委案件数(件)'
                 },
                 {
                     field : 'commissionAmount', 
-                    title : '委案金额(元)',
+                    title : '月初委案金额(元)',
                     formatter:function (value, row, index) {
                         if(value =='' || null == value)return'';
                         return  parseFloat(value).toFixed(2) ;

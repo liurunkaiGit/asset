@@ -59,7 +59,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectTLpMonthlyTargetVo"/>
         where id = #{id}
     </select>
-        
+
+    <select id="selectMonthlyTargetUnique" resultType="java.lang.Integer" parameterType="TLpMonthlyTarget">
+        select count(1) from t_lp_monthly_target
+        <where>
+            <if test="particularYear != null "> and particular_year = #{particularYear}</if>
+            <if test="particularMonth != null "> and particular_month = #{particularMonth}</if>
+            <if test="proId != null "> and pro_id = #{proId}</if>
+            <if test="transferType != null  and transferType != ''"> and transfer_type = #{transferType}</if>
+            <if test="transferType == null  or transferType == ''"> and transfer_type is null</if>
+            <if test="id != null"> and id != #{id}</if>
+        </where>
+    </select>
+
     <insert id="insertTLpMonthlyTarget" parameterType="TLpMonthlyTarget" useGeneratedKeys="true" keyProperty="id">
         insert into t_lp_monthly_target
         <trim prefix="(" suffix=")" suffixOverrides=",">
