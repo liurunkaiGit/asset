@@ -327,5 +327,6 @@ public class CurAssetsRepaymentPackage extends BaseEntity {
      */
     private String assetBatchNO;
 
+    @Excel(name = "归属人工号")
     private String jobNo;
 }
