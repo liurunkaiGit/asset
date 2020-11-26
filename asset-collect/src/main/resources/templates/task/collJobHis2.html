@@ -636,8 +636,17 @@
                     // 添加table数据
                     var tp = $("#custContactTbody");
                     $.each(data, function (i, n) {
+                        var desensitization = $("#desensitization").val();
+                        var phone = n.phone;
+                        var tel = n.tel;
+                        var certificateNo = n.certificateNo;
+                        if("true" == desensitization){
+                            phone = tellToMd5(phone);
+                            tel = tellToMd5(tel);
+                            certificateNo = cardToMd5(certificateNo);
+                        }
                         if(n.phone != null && n.phone != ""){
-                            tp.append("<tr><td>"+n.contactName+"</td><td>"+tellToMd5(n.phone)+"</td><td>"+tellToMd5(n.tel)+"</td><td>"+cardToMd5(n.certificateNo)+"</td><td>"+getRelaByCode(n.relation)+"</td><td>"+convertStatus(n.phoneStatus)+"</td></tr>");
+                            tp.append("<tr><td>"+n.contactName+"</td><td>"+phone+"</td><td>"+tel+"</td><td>"+certificateNo+"</td><td>"+getRelaByCode(n.relation)+"</td><td>"+convertStatus(n.phoneStatus)+"</td></tr>");
                         }
                     });
                }

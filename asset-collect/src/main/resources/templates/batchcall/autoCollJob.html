@@ -2783,7 +2783,7 @@
             dataType: "json",
             data: {
                 caseNo:currentCaseNo,
-                phone:$(tr.parentElement.parentElement.children[2]).text()
+                phone:$(tr.parentElement.parentElement.lastElementChild).text()
             },
             success: function(data){
                 //console.log(data.msg);
