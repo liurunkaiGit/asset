@@ -726,7 +726,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="transfertype != null and transfertype != ''"> and transferType = #{transfertype}</if>
             <if test="loginName != null and loginName != ''"> and login_name = #{loginName}</if>
         </where>
-        order by import_batch_no desc,create_time desc
+        order by import_batch_no desc,create_time desc,id
     </select>
 
     <select id="findXyFlow" parameterType="java.util.Map" resultType="java.lang.Long">
