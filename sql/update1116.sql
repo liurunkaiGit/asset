@@ -361,3 +361,5 @@ update t_lc_column_query set column_value='Fresh-新任务|Search1-联系方式�
 -- 回款导入新增员工工号
 alter TABLE cur_assets_repayment_package_temp add COLUMN job_no varchar(64) DEFAULT NULL COMMENT '员工工牌号';
 alter TABLE cur_assets_repayment_package add COLUMN job_no varchar(64) DEFAULT NULL COMMENT '员工工牌号';
+
+alter TABLE  t_lc_robot_black modify COLUMN phone varchar(50) DEFAULT NULL COMMENT '手机号';

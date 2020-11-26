@@ -637,13 +637,13 @@
                     var tp = $("#custContactTbody");
                     $.each(data, function (i, n) {
                         var desensitization = $("#desensitization").val();
-                        var phone = n.phone;
-                        var tel = n.tel;
-                        var certificateNo = n.certificateNo;
+                        var phone = nullToEmpty(n.phone);
+                        var tel = nullToEmpty(n.tel);
+                        var certificateNo = nullToEmpty(n.certificateNo);
                         if("true" == desensitization){
-                            phone = tellToMd5(phone);
-                            tel = tellToMd5(tel);
-                            certificateNo = cardToMd5(certificateNo);
+                            phone = phone != "_" ?tellToMd5(phone) :phone;
+                            // tel = tellToMd5(tel);
+                            certificateNo = certificateNo!= "_" ?cardToMd5(certificateNo) :certificateNo;
                         }
                         if(n.phone != null && n.phone != ""){
                             tp.append("<tr><td>"+n.contactName+"</td><td>"+phone+"</td><td>"+tel+"</td><td>"+certificateNo+"</td><td>"+getRelaByCode(n.relation)+"</td><td>"+convertStatus(n.phoneStatus)+"</td></tr>");
