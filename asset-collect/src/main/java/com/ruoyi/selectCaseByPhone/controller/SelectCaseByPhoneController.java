@@ -65,7 +65,7 @@ public class SelectCaseByPhoneController extends BaseController
     @ResponseBody
     public TableDataInfo list(SelectCaseByPhone selectCaseByPhone)
     {
-        startPage();
+//        startPage();
         List<SelectCaseByPhone> list = selectCaseByPhoneService.selectCaseByPhoneList(selectCaseByPhone);
         return getDataTable(list);
     }

@@ -3,6 +3,11 @@
 <head>
     <th:block th:include="include :: header('根据手机号查询案件')" />
     <script th:src="@{/assets/js/desensitization.js}"></script>
+    <style type="text/css">
+        .fixed-table-pagination .pagination-detail, .fixed-table-pagination div.pagination{
+            display: none;
+        }
+    </style>
 </head>
 <body class="gray-bg">
      <div class="container-div">
