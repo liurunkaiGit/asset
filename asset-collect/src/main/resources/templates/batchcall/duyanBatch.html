@@ -83,11 +83,11 @@
             window.parent.duyanNo("");
         });
         // 电话结束的回调函数，返回电话号码等信息
-        DYSDK.callEnd(function (data) {
+        DYSDK.callEnd(function (dataDY) {
             // window.parent.parent.$.modal.closeLoading();
             // $('#leftNav',window.parent.document).css('z-index','2001');
-            console.log(data)
-            if (!data.uuid) {
+            console.log(dataDY)
+            if (!dataDY.uuid) {
                 alert("度言平台拨打记录ID不存在。");
             }
             window.parent.agentIsCalling = false;
@@ -104,7 +104,7 @@
                     type: "post",   //请求方式
                     data:
                         {
-                            uuid: data.uuid
+                            uuid: dataDY.uuid
                         },
                     success: function (req) {
                         //请求成功时处理
@@ -170,7 +170,7 @@
                                     callStartTime: startTime,
                                     callEndTime: endTime,
                                     callLen: recordDuration,
-                                    callRadioLocation: soundRecordingUrl+'?apikey='+apikey+'&call_uuid=' + data.uuid+"&/"+data.uuid+".wav",
+                                    callRadioLocation: soundRecordingUrl+'?apikey='+apikey+'&call_uuid=' + dataDY.uuid+"&/"+dataDY.uuid+".wav",
                                     caseNo: currentCall.caseNo,
                                     remark: '已接听',
                                     importBatchNo: currentCall.importBatchNo,
