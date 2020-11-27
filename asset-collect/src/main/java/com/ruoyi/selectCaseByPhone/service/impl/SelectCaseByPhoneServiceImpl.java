@@ -38,8 +38,12 @@ public class SelectCaseByPhoneServiceImpl implements ISelectCaseByPhoneService
         String phone = selectCaseByPhone.getPhone();
         if(phone != null && !"".equals(phone)){
             List<String> caseNOList = selectCaseByPhoneMapper.selectCaseNoByPhone(phone);
-            selectCaseByPhone.setCaseNoList(caseNOList);
-            return selectCaseByPhoneMapper.selectCaseByPhoneList(selectCaseByPhone);
+            if(caseNOList != null && caseNOList.size() > 0){
+                selectCaseByPhone.setCaseNoList(caseNOList);
+                return selectCaseByPhoneMapper.selectCaseByPhoneList(selectCaseByPhone);
+            }else{
+                return new ArrayList<SelectCaseByPhone>();
+            }
         }else{
             return new ArrayList<SelectCaseByPhone>();
         }
@@ -50,8 +54,12 @@ public class SelectCaseByPhoneServiceImpl implements ISelectCaseByPhoneService
         String phone = tLcTask.getPhone();
         if(phone != null && !"".equals(phone)){
             List<String> caseNOList = selectCaseByPhoneMapper.selectCaseNoByPhone(phone);
-            tLcTask.setCaseNoList(caseNOList);
-            return selectCaseByPhoneMapper.selectTotalCountMoney(tLcTask);
+            if(caseNOList != null && caseNOList.size() > 0){
+                tLcTask.setCaseNoList(caseNOList);
+                return selectCaseByPhoneMapper.selectTotalCountMoney(tLcTask);
+            }else {
+                return new HashMap<String, BigDecimal>();
+            }
         }else{
             return new HashMap<String, BigDecimal>();
         }
@@ -62,8 +70,12 @@ public class SelectCaseByPhoneServiceImpl implements ISelectCaseByPhoneService
         String phone = tLcTask.getPhone();
         if(phone != null && !"".equals(phone)){
             List<String> caseNOList = selectCaseByPhoneMapper.selectCaseNoByPhone(phone);
-            tLcTask.setCaseNoList(caseNOList);
-            return selectCaseByPhoneMapper.selectMyTaskList(tLcTask);
+            if(caseNOList != null && caseNOList.size() > 0){
+                tLcTask.setCaseNoList(caseNOList);
+                return selectCaseByPhoneMapper.selectMyTaskList(tLcTask);
+            }else{
+                return new ArrayList<TLcTask>();
+            }
         }else{
             return new ArrayList<TLcTask>();
         }
