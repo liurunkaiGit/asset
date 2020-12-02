@@ -1111,6 +1111,13 @@ public class TLcTaskController extends BaseController {
     }
 
     @ResponseBody
+    @PostMapping("/orgList")
+    public List<OrgPackage> initOrgpc() {
+        List<OrgPackage> sysDeptList = this.orgPackageService.selectOrgPackageList(null);
+        return sysDeptList;
+    }
+
+    @ResponseBody
     @PostMapping("/initCallRecordCode")
     public TableDataInfo initCallRecordCode() {
         List<SysDictData> sysDictDataList = this.sysDictDataService.selectDictDataByType("call_record_code");

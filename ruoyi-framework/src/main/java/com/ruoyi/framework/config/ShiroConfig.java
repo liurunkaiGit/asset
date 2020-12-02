@@ -252,6 +252,7 @@ public class ShiroConfig
         filterChainDefinitionMap.put("/druid/**", "anon");
         filterChainDefinitionMap.put("/collect/duncase/acceptDuncase/**", "anon");
         filterChainDefinitionMap.put("/collect/duncase/acceptDuncaseUpdate/**", "anon");
+        filterChainDefinitionMap.put("/collect/task/orgList", "anon");
         filterChainDefinitionMap.put("/callback/**", "anon");
         filterChainDefinitionMap.put("/assetspackage/remote/**", "anon");
         filterChainDefinitionMap.put("/import/assets/**", "anon");
