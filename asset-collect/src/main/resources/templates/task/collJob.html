@@ -2651,15 +2651,19 @@
             //         });
             //     }
             // });
+            DYSDK.callConnecting(function(data){
+                console.log("当电话在拨打中的时候被触发：" + JSON.stringify(data));
+            });
             // 接通电话的回调函数，返回电话号码等信息
             DYSDK.callConfirm(function(data){
-                console.log(data)
+                console.log("当电话在成功接通之后被触发" + JSON.stringify(data))
                 if(!data.uuid){
                     alert("度言平台ID不存在，请稍候重试。");
                 }
             });
             // 拨打电话失败的回调函数，返回电话号码等信息
             DYSDK.callFail(function(data){
+                console.log("电话拨打失败之后被触发" + JSON.stringify(data))
                 if(!data.uuid){
                     alert("电话号码有误或不支持此种类型电话，请稍候重试");
                 }
@@ -2668,6 +2672,7 @@
             });
             // 电话结束的回调函数，返回电话号码等信息
             DYSDK.callEnd(function(data){
+                console.log("当电话挂断之后被触发" + JSON.stringify(data))
                 hangUp();
                 console.log(data)
                 if(!data.uuid){
@@ -2707,6 +2712,7 @@
                 obj.callRadioLocation = soundRecordingUrl+'?apikey='+apikey+'&call_uuid='+data.uuid+"&/"+data.uuid+".wav";
                 obj.remark = '已接听';
                 obj.platform = 'DY';
+                obj.uuid = data.uuid;
                 pubAddCallRecord(obj);
             });
         }
@@ -2748,7 +2754,8 @@
                        // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
                        sendRadioCheck:1,
                        platform: objCall.platform,
-                       actionCode: actionCode
+                       actionCode: actionCode,
+                       ucid: objCall.uuid
                    },
                    function(data) {
                        if (data.status == 200) {//请求成功
@@ -2879,7 +2886,9 @@
                             sendRadioCheck:1,
                             type:1,
                             platform: 'PA',
-                            actionCode:actionCode
+                            actionCode:actionCode,
+                            isHangUp: 1, // 是否挂断
+                            ucid: event.ucid
                         },
                         function(data) {
                             // alert(JSON.stringify(data));
@@ -3045,6 +3054,38 @@
         var callRadioLocation = $("#callRadioLocation").val();
         var callRemark = $("#callRemarkAdd").val();
         // var callRecordId = $("#callRecordId").val();
+        var destDesc = "0"+phone;
+        temp_phone=phone;
+        start();
+        var ucid;
+        if(callPlatform == 'PA') {
+            if (destDesc) {
+                agentClient.makeCall(getDestType(destDesc), destDesc);
+                agentClient.onStatusChanged = function(event) {
+                    if (event.lastStatus == 21) {
+                        console.log('onStatusChanged' + ': ' + JSON.stringify(event, null, 4) + '\n\n');
+                        ucid = event.ucid;
+                        callAddCallRecord(contactName,id,contactRelation,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
+                    }
+                };
+            }
+        } else if(callPlatform == 'ZJ') {
+            // 第一个参数是呼叫号码，第二个参数是外显号码
+            uKeFuSoftPhone.CallOut(phone,window.parent.parent.$('#exonNum').val());
+            callAddCallRecord(contactName,id,contactRelation,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
+        }else if(callPlatform == 'DY') {
+            // 度言拨打电话
+            duyanSdk.callme(phone);
+            agentIsCalling = false;
+            DYSDK.callConnecting(function(data){
+                console.log("当电话在拨打中的时候被触发：" + JSON.stringify(data));
+                ucid = data.uuid;
+                callAddCallRecord(contactName,id,contactRelation,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
+            });
+        }
+    }
+
+    function callAddCallRecord(contactName,id,contactRelation,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation) {
         $.ajax({
             url: prefix + "/getCurActionCode",
             dataType: "json",
@@ -3060,7 +3101,6 @@
                 if(actionCode == "Fresh-新任务"){
                     actionCode = "Search2-联系方式无效";
                 }
-
                 $.post(
                     prefix + "/addCallRecord",
                     {
@@ -3079,7 +3119,8 @@
                         orgId:currentOrgId,
                         type:1,
                         platform: callPlatform,
-                        actionCode: actionCode
+                        actionCode: actionCode,
+                        ucid: ucid
                     },
                     function(data) {
                         if (data.status == 200) {//请求成功
@@ -3096,31 +3137,14 @@
                             var val = $('input[name="radioChoose"]:checked').parents("tr");
                             val.css('background','#dddada');
                             // var phone = val.find("[name='phone']").html();
-                            var destDesc = "0"+phone;
-                            temp_phone=phone;
-                            start();
-                            if(callPlatform == 'PA') {
-                                if (destDesc) {
-                                    agentClient.makeCall(getDestType(destDesc), destDesc);
-                                }
-                            } else if(callPlatform == 'ZJ') {
-                                // 第一个参数是呼叫号码，第二个参数是外显号码
-                                uKeFuSoftPhone.CallOut(phone,window.parent.parent.$('#exonNum').val());
-                            }else if(callPlatform == 'DY') {
-                                // 度言拨打电话
-                                duyanSdk.callme(phone);
-                                agentIsCalling = false;
-                            }
                         }else if (data.code == 1) {
                             window.location.href="/login";
                             return;
                         }
                     }
                 );
-
             }
         });
-
     }
 
     /**
@@ -3539,76 +3563,35 @@
         var callRadioLocation = $("#callRadioLocation").val();
         var callRemark = $("#callRemarkAdd").val();
         // var callRecordId = $("#callRecordId").val();
-
-        $.ajax({
-            url: prefix + "/getCurActionCode",
-            dataType: "json",
-            async : false,
-            type: "post",
-            data:{
-                importBatchNo:currentImportBatchNo,
-                caseNo:currentCaseNo,
-                orgId:currentOrgId
-            },
-            success:function(data){
-                var actionCode = data.data;
-                if(actionCode == "Fresh-新任务"){
-                    actionCode = "Search2-联系方式无效";
-                }
-
-                $.post(
-                    prefix + "/addCallRecord",
-                    {
-                        // id:callRecordId,
-                        phone:phone,
-                        callSign:'R02',
-                        callResult:'无法接通',
-                        callStartTime:callStartTime,
-                        callEndTime:callEndTime,
-                        callLen:callLen,
-                        callRadioLocation:callRadioLocation,
-                        caseNo:currentCaseNo,
-                        remark:'无法接通',
-                        importBatchNo:currentImportBatchNo,
-                        orgId:currentOrgId,
-                        platform: callPlatform,
-                        actionCode: actionCode,
-                        type: 1
-                    },
-                    function(data) {
-                        // alert(JSON.stringify(data));
-                        if (data.status == 200) {//请求成功
-                            // $.modal.alertSuccess("保存成功");
-                            //collJobDetail(data.result);
-                            $("#callRecordId").val(data.result);
-                            if($('#call').val() == '1') {
-                                callRecordList(currentCaseNo);
-                            }
-                            var phone = $("#freeCall").val();
-                            var destDesc = "0"+phone;
-                            start();
-                            if(callPlatform == 'PA') {
-                                if (destDesc) {
-                                    agentClient.makeCall(getDestType(destDesc), destDesc);
-                                }
-                            } else if(callPlatform == 'ZJ') {
-                                // 第一个参数是呼叫号码，第二个参数是外显号码
-                                uKeFuSoftPhone.CallOut($("#freeCall").val(),window.parent.parent.$('#exonNum').val());
-                            }else if(callPlatform == 'DY') {
-                                // 度言拨打电话
-                                duyanSdk.callme(phone);
-                                agentIsCalling = false;
-                            }
-                        }else if (data.code == 1) {
-                            window.location.href="/login";
-                            return;
-                        }
+        var destDesc = "0"+phone;
+        temp_phone=phone;
+        start();
+        var ucid;
+        if(callPlatform == 'PA') {
+            if (destDesc) {
+                agentClient.makeCall(getDestType(destDesc), destDesc);
+                agentClient.onStatusChanged = function(event) {
+                    if (event.lastStatus == 21) {
+                        console.log('onStatusChanged' + ': ' + JSON.stringify(event, null, 4) + '\n\n');
+                        ucid = event.ucid;
+                        callAddCallRecord(contactName,id,contactRelation,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
                     }
-                );
+                };
             }
-        });
-
-
+        } else if(callPlatform == 'ZJ') {
+            // 第一个参数是呼叫号码，第二个参数是外显号码
+            uKeFuSoftPhone.CallOut(phone,window.parent.parent.$('#exonNum').val());
+            callAddCallRecord(contactName,id,contactRelation,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
+        }else if(callPlatform == 'DY') {
+            // 度言拨打电话
+            duyanSdk.callme(phone);
+            agentIsCalling = false;
+            DYSDK.callConnecting(function(data){
+                console.log("当电话在拨打中的时候被触发：" + JSON.stringify(data));
+                ucid = data.uuid;
+                callAddCallRecord(contactName,id,contactRelation,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
+            });
+        }
     }
 
 

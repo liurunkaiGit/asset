@@ -274,6 +274,7 @@ public class TLcCallRecord extends BaseEntity {
     private Integer pNum;
     private Integer pSize;
 
-
+    private Integer isHangUp;
+    private String ucid;
 
 }

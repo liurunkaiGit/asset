@@ -2173,7 +2173,41 @@
         var callRadioLocation = $("#callRadioLocation").val();
         var callRemark = $("#callRemarkAdd").val();
         // var callRecordId = $("#callRecordId").val();
+        var destDesc = "0"+phone;
+        temp_phone=phone;
+        start();
+        var ucid;
+        if(callPlatform == 'PA') {
+            if (destDesc) {
+                window.parent.agentClient.makeCall(getDestType(destDesc), destDesc);
+                // agentClient.makeCall(getDestType(destDesc), destDesc);
+                window.parent.agentClient.onStatusChanged = function(event) {
+                    if (event.lastStatus == 21) {
+                        console.log('onStatusChanged' + ': ' + JSON.stringify(event, null, 4) + '\n\n');
+                        ucid = event.ucid;
+                        batchCallAddCallRecord(contactName,id,contactRelation,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
+                    }
+                };
+            }
+        } else if(callPlatform == 'ZJ') {
+            // 第一个参数是呼叫号码，第二个参数是外显号码
+            window.parent.uKeFuSoftPhone.CallOut(phone,window.parent.parent.$('#exonNum').val());
+            batchCallAddCallRecord(contactName,id,contactRelation,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
+        }else if(callPlatform == 'DY') {
+            // 度言拨打电话
+            window.parent.duyaAuto(phone);
+            batchCallAddCallRecord(contactName,id,contactRelation,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
+            // duyanSdk.callme(phone);
+            // agentIsCalling = false;
+            // DYSDK.callConnecting(function(data){
+            //     console.log("当电话在拨打中的时候被触发：" + JSON.stringify(data));
+            //     ucid = data.uuid;
+            //     batchCallAddCallRecord(contactName,id,contactRelation,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
+            // });
+        }
+    }
 
+    function batchCallAddCallRecord(contactName,id,contactRelation,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation) {
         $.ajax({
             url: window.parent.ctx + "batchcall/getCurActionCode",
             dataType: "json",
@@ -2208,7 +2242,8 @@
                         orgId:currentOrgId,
                         type:1,
                         platform: callPlatform,
-                        actionCode: actionCode
+                        actionCode: actionCode,
+                        ucid: ucid
                     },
                     function(data) {
                         if (data.status == 200) {//请求成功
@@ -2221,20 +2256,20 @@
                             }
                             var val = $('input[name="radioChoose"]:checked').parents("tr");
                             val.css('background','#dddada');
-                            var destDesc = "0"+phone;
-                            temp_phone=phone;
-                            // start();
-                            if(callPlatform == 'PA') {
-                                if (destDesc) {
-                                    window.parent.agentClient.makeCall(getDestType(destDesc), destDesc);
-                                }
-                            } else if(callPlatform == 'ZJ') {
-                                // 第一个参数是呼叫号码，第二个参数是外显号码
-                                window.parent.uKeFuSoftPhone.CallOut(phone,window.parent.$('#exonNum').val());
-                            }else if(callPlatform == 'DY') {
-                                // 度言拨打电话
-                                window.parent.duyaAuto(phone);
-                            }
+                            // var destDesc = "0"+phone;
+                            // temp_phone=phone;
+                            // // start();
+                            // if(callPlatform == 'PA') {
+                            //     if (destDesc) {
+                            //         window.parent.agentClient.makeCall(getDestType(destDesc), destDesc);
+                            //     }
+                            // } else if(callPlatform == 'ZJ') {
+                            //     // 第一个参数是呼叫号码，第二个参数是外显号码
+                            //     window.parent.uKeFuSoftPhone.CallOut(phone,window.parent.$('#exonNum').val());
+                            // }else if(callPlatform == 'DY') {
+                            //     // 度言拨打电话
+                            //     window.parent.duyaAuto(phone);
+                            // }
                         }else if (data.code == 1) {
                             window.location.href="/login";
                             return;
@@ -2243,7 +2278,6 @@
                 );
             }
         });
-
     }
 
     /**

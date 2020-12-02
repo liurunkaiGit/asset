@@ -3,24 +3,26 @@ server:
 
 dq:
   uploadsftp:
-    # host: stgw.ifincar.dongqiaokeji.com
+#    host: stgw.ifincar.dongqiaokeji.com
     host: 139.224.189.191
-    # port: 22
     port: 22
-    # username: risk
+#    port: 22
+#    username: risk
     username: mysftp
-    # password: Dqkjfk_2020
+#    password: Dqkjfk_2020
     password: HD123456
     uploadPath: upload
-    orgId: 2131
-    callRadioPath: D:/callFile/dq/
+    orgId: 206
+#    orgId: 217
+    callRadioPath: C:\callFile\dq\
   uploadRadio:
-    timer: 0 0 23 * * ?
-#    timer: 0 0/1 * * * ?
+#    timer: 0 0 23 * * ?
+    timer: 0 0/1 * * * ?
 
 http:
   # assetUrl: http://127.0.0.1:8080
   assetUrl: https://www.hdnuggets.cn:7443
+#  assetUrl: https://www.hdnuggets.cn
 
 asset:
   getCallRecordListUrl: ${http.assetUrl}/call/record/selectCallRadioByOrgId

@@ -178,7 +178,10 @@
                                     // 推送到语音质检，只有在挂断电话的时候才会推送语音质检
                                     sendRadioCheck: 1,
                                     platform: 'DY',
-                                    actionCode: actionCode
+                                    actionCode: actionCode,
+                                    // 是否挂断
+                                    isHangUp: 1,
+                                    ucid: data.uuid
                                 },
                             success: function (data) {
                                 //请求成功

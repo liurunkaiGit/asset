@@ -1370,7 +1370,19 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                     log.error("案件编号：{},获取orgId异常", tLcCallRecord.getCaseNo());
                     tLcCallRecord.setOrgId("-1");
                 }
-                tLcCallRecordService.insertTLcCallRecord(tLcCallRecord);
+                if (tLcCallRecord.getIsHangUp() != null && tLcCallRecord.getIsHangUp() == 1) {
+                    // 电话挂断
+                    if (StringUtils.isBlank(tLcCallRecord.getCallRadioLocation())) {
+                        // 录音为空，直接返回
+                        log.info("电话挂断，isHangUp={}，id={}空，录音为空=：{}，不做任何处理直接返回", tLcCallRecord.getIsHangUp(), tLcCallRecord.getId(), tLcCallRecord.getCallRadioLocation());
+                        return Response.success(null);
+                    } else {
+                        // 根据话务平台uuid修改
+                        this.tLcCallRecordService.updateTLcCallRecordByUcid(tLcCallRecord);
+                    }
+                } else {
+                    tLcCallRecordService.insertTLcCallRecord(tLcCallRecord);
+                }
             } else {
                 log.info("通话记录id不为空：{},话务平台：{},案件编号：{},录音地址：{},联系人手机号：{}",
                         tLcCallRecord.getId(), tLcCallRecord.getPlatform(), tLcCallRecord.getCaseNo(), tLcCallRecord.getCallRadioLocation(), tLcCallRecord.getPhone());

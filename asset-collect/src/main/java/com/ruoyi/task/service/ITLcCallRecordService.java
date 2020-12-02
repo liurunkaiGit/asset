@@ -136,4 +136,6 @@ public interface ITLcCallRecordService {
     List<TLcCallRecordForDQ> selectTLcCallRecordListForDQ(TLcCallRecord tLcCallRecord);
 
     List<TLcCallRecord> selectCallRecordListByOrgIdAndTime(TLcCallRecord callRecord);
+
+    void updateTLcCallRecordByUcid(TLcCallRecord tLcCallRecord);
 }

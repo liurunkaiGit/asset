@@ -743,7 +743,10 @@
                                 sendRadioCheck:1,
                                 type:1,
                                 platform: 'PA',
-                                actionCode:actionCode
+                                actionCode:actionCode,
+                                // 是否挂断
+                                isHangUp: 1,
+                                ucid: event.ucid
                             },
                             function(data) {
                                 // alert(JSON.stringify(data));
@@ -834,17 +837,29 @@
             agentIsCalling = true;
             callRecordId= "";//每次拨打之前清空电催记录id
             var destDesc = "0"+phone;
+            var ucid;
             if(callPlatform == 'PA') {
                 if (destDesc) {
                     agentClient.makeCall(getDestType(destDesc), destDesc);
+                    agentClient.onStatusChanged = function(event) {
+                        if (event.lastStatus == 21) {
+                            console.log('onStatusChanged' + ': ' + JSON.stringify(event, null, 4) + '\n\n');
+                            ucid = event.ucid;
+                            firstBatchCallAddCallRecord(batchCall.id,callPlatform, ucid, contactName,contactRelation,phone,currentCaseNo,currentImportBatchNo,currentOrgId);
+                        }
+                    };
                 }
             } else if(callPlatform == 'ZJ') {
                 // 第一个参数是呼叫号码，第二个参数是外显号码
                 uKeFuSoftPhone.CallOut(phone,$('#exonNum').val());
+                firstBatchCallAddCallRecord(batchCall.id,callPlatform, ucid, contactName,contactRelation,phone,currentCaseNo,currentImportBatchNo,currentOrgId);
             } else if(callPlatform == 'DY') {
                 duyaAuto(phone);
+                firstBatchCallAddCallRecord(batchCall.id,callPlatform, ucid, contactName,contactRelation,phone,currentCaseNo,currentImportBatchNo,currentOrgId);
             }
+        }
 
+        function firstBatchCallAddCallRecord(id,callPlatform, ucid, contactName,contactRelation,phone,currentCaseNo,currentImportBatchNo,currentOrgId) {
             $.ajax({
                 url: prefix+"/getCurActionCode",
                 dataType: "json",
@@ -870,7 +885,7 @@
                     var callRemark = $("#callRemarkAdd").val();
                     // var callRecordId = $("#callRecordId").val();
                     //更改状态,外呼中
-                    updateStatus(batchCall.id,0,"开始拨打电话，外呼中",'0','1');//只更新状态
+                    updateStatus(id,0,"开始拨打电话，外呼中",'0','1');//只更新状态
                     $.post(
                         collectPrefix + "/addCallRecord",
                         {
@@ -889,7 +904,8 @@
                             orgId:currentOrgId,
                             type:1,
                             platform: callPlatform,
-                            actionCode: actionCode
+                            actionCode: actionCode,
+                            ucid: ucid
                         },
                         function(data) {
                             // alert(JSON.stringify(data));
@@ -904,7 +920,6 @@
 
                 }
             });
-
         }
 
         /**

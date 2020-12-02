@@ -122,4 +122,6 @@ public interface TLcCallRecordMapper {
     Long selectCountByTimePeriod(Map<String, Object> param);
 
     List<TLcCallRecord> selectCallRecordListByOrgIdAndTime(TLcCallRecord callRecord);
+
+    void updateTLcCallRecordByUcid(TLcCallRecord tLcCallRecord);
 }

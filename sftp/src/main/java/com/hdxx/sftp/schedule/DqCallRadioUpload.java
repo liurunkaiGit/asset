@@ -20,10 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.client.RestClientException;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -84,7 +81,7 @@ public class DqCallRadioUpload {
             sftp.logout();
         } catch (Exception e) {
             log.error("上传sftp失败，error is：{}", e);
-            throw new RuntimeException("上传sftp失败");
+//            throw new RuntimeException("上传sftp失败");
         }
     }
 
@@ -96,7 +93,7 @@ public class DqCallRadioUpload {
             ZipUtil.zipFile(new File(callFilePath), callFilePath, "zip");
         } catch (Exception e) {
             log.error("打包失败，error is：{}", e);
-            throw new RuntimeException("打包失败");
+//            throw new RuntimeException("打包失败");
         }
     }
 
@@ -148,9 +145,13 @@ public class DqCallRadioUpload {
             row1.createCell(3).setCellValue(phone);
             row1.createCell(4).setCellValue(name);
         }
-        FileOutputStream output = new FileOutputStream(rpathfinal);
-        wb.write(output);
-        output.close();
+        try {
+            FileOutputStream output = new FileOutputStream(rpathfinal);
+            wb.write(output);
+            output.close();
+        } catch (IOException e) {
+            log.error("路径是：{}，读写excel文件异常：{}", rpathfinal, e);
+        }
     }
 
     /**

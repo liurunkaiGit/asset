@@ -130,7 +130,8 @@ public class DownLoadFromHttpsUtil implements X509TrustManager {
         urlCon.setReadTimeout(6000);
         int code = urlCon.getResponseCode();
         if (code != HttpURLConnection.HTTP_OK) {
-            throw new Exception("文件读取失败");
+//            throw new Exception("文件读取失败");
+            log.error("文件读取失败");
         }
 
         // 得到输入流

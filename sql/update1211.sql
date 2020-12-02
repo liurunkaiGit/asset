@@ -1,0 +1,1 @@
+ALTER TABLE t_lc_call_record add COLUMN `ucid` varchar(64) DEFAULT NULL COMMENT '话务平台返回唯一id';

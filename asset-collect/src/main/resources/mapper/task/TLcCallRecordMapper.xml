@@ -39,6 +39,7 @@
         <result property="csdz" column="csdz"/>
         <result property="recommendVendor" column="recommend_vendor"/>
         <result property="actionCode" column="action_code"/>
+        <result property="ucid" column="ucid"/>
     </resultMap>
 
     <resultMap id="JxphCallRecordResult" type="com.ruoyi.task.domain.JxphCallRecord">
@@ -57,11 +58,11 @@
 
 
     <sql id="selectTLcCallRecordVo">
-        select id, case_no,  contact_name, phone, contact_relation, call_start_time, call_end_time, call_len, call_sign, call_result, call_radio_location, call_radio, create_time, create_by, remark, platform, star, type, org_id from t_lc_call_record
+        select id, case_no,  contact_name, phone, contact_relation, call_start_time, call_end_time, call_len, call_sign, call_result, call_radio_location, call_radio, create_time, create_by, remark, platform, star, type, org_id, ucid from t_lc_call_record
     </sql>
 
     <sql id="selectTLcHisCallRecordVo">
-        select id, case_no,  contact_name, phone, contact_relation, call_start_time, call_end_time, call_len, call_sign, call_result, call_radio_location, call_radio, create_time, create_by, remark, platform, star, type from t_lc_call_record_his
+        select id, case_no,  contact_name, phone, contact_relation, call_start_time, call_end_time, call_len, call_sign, call_result, call_radio_location, call_radio, create_time, create_by, remark, platform, star, type, ucid from t_lc_call_record_his
     </sql>
 
     <sql id="SELECT_CALL_RECORD">
@@ -86,7 +87,8 @@
         t.platform,
         t.star,
         t.make_call_time,
-        t.action_code
+        t.action_code,
+        t.ucid
     </sql>
 
     <!--<select id="selectTLcCallRecordList" parameterType="com.ruoyi.task.domain.TLcCallRecord" resultMap="TLcCallRecordResult">
@@ -332,6 +334,7 @@
             <if test="agentName != null and agentName != ''">agent_name,</if>
             <if test="makeCallTime != null">make_call_time,</if>
             <if test="actionCode != null and actionCode != ''">action_code,</if>
+            <if test="ucid != null and ucid != ''">ucid,</if>
             <if test="cnje != null">cnje,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -356,6 +359,7 @@
             <if test="agentName != null and agentName != ''">#{agentName},</if>
             <if test="makeCallTime != null">#{makeCallTime},</if>
             <if test="actionCode != null and actionCode != ''">#{actionCode},</if>
+            <if test="ucid != null and ucid != ''">#{ucid},</if>
             <if test="cnje != null">#{cnje},</if>
         </trim>
     </insert>
@@ -376,6 +380,24 @@
             <if test="cnje != null">cnje = #{cnje},</if>
         </trim>
         where id = #{id}
+    </update>
+
+    <update id="updateTLcCallRecordByUcid" parameterType="com.ruoyi.task.domain.TLcCallRecord">
+        update t_lc_call_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="callStartTime != null ">call_start_time = #{callStartTime},</if>
+            <if test="callEndTime != null ">call_end_time = #{callEndTime},</if>
+            <if test="callLen != null and callLen != ''">call_len = #{callLen},</if>
+            <if test="callSign != null ">call_sign = #{callSign},</if>
+            <if test="callResult != null  and callResult != ''">call_result = #{callResult},</if>
+            <if test="callRadioLocation != null  and callRadioLocation != ''">call_radio_location = #{callRadioLocation},</if>
+            <if test="callRadio != null  and callRadio != ''">call_radio = #{callRadio},</if>
+            <if test="findDate != null  and findDate != ''">find_date = #{findDate},</if>
+            <if test="remark != null ">remark = #{remark},</if>
+            <if test="actionCode != null and actionCode != ''">action_code = #{actionCode},</if>
+            <if test="cnje != null">cnje = #{cnje},</if>
+        </trim>
+        where ucid = #{ucid}
     </update>
 
     <delete id="deleteTLcCallRecordById" parameterType="Long">
