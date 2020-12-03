@@ -195,6 +195,9 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
             if(recommendVendor != null) {
                 xyEntity.setYwdetp(getYwDetp(recommendVendor.trim()));
             }
+            if (tLcCallRecord.getProductName().equals("小鲨分期（ML）")) {
+                xyEntity.setYwdetp("驻店业务部");
+            }
 
             String callRecord = tLcCallRecord.getCallResult();//电话码中文
             if(callRecord != null) {

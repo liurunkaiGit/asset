@@ -103,8 +103,14 @@ public class ExtPhoneController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(ExtPhone extPhone) {
         //获取代理地址
-        String agentId = extPhone.getAgentid();
-        String url = remoteConfigure.getTelphoneProxyUrl() + "/config/agent?agentId=" + agentId;
+        String agentid = extPhone.getAgentid();
+        if (agentid.startsWith(",")) {
+            agentid = agentid.split(",")[1];
+        } else if (agentid.endsWith(",")){
+            agentid = agentid.split(",")[0];
+        }
+        extPhone.setAgentid(agentid);
+        String url = remoteConfigure.getTelphoneProxyUrl() + "/config/agent?agentId=" + agentid;
         String forObject = restTemplateUtil.getRestTemplate().getForObject(url, String.class);
         JSONObject remoteReslut = JSON.parseObject(forObject);
         String proxyUrl = (String) remoteReslut.get("proxyUrl");

@@ -96,13 +96,6 @@ public class ExtPhoneServiceImpl implements IExtPhoneService {
 //            extPhone.setOrgName(orgPackage.getOrgName());
         }
         extPhone.setExonNumGroup(this.exonNumService.selectTLcExonNumById(Long.valueOf(extPhone.getExonNumGroupId())).getExonNumGroup());
-        String agentid = extPhone.getAgentid();
-        if (agentid.startsWith(",")) {
-            agentid = agentid.split(",")[1];
-        } else if (agentid.endsWith(",")){
-            agentid = agentid.split(",")[0];
-        }
-        extPhone.setAgentid(agentid);
         return extPhoneMapper.insertExtPhone(extPhone);
     }
 
