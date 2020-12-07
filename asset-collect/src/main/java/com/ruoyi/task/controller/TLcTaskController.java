@@ -1580,9 +1580,11 @@ public class TLcTaskController extends BaseController {
             String orgId = String.valueOf(ShiroUtils.getSysUser().getOrgId());
             String orgName = ShiroUtils.getSysUser().getOrgName();
             String loginName = ShiroUtils.getSysUser().getLoginName();
-            Map<String, Integer> map = this.tLcTaskService.selectPhoneStatus(caseNo, phoneStatus, orgId, orgName, loginName);
-            String result = JSON.toJSONString(map);
-            return AjaxResult.success("成功",result);
+//            Map<String, Integer> map = this.tLcTaskService.selectPhoneStatus(caseNo, phoneStatus, orgId, orgName, loginName);
+//            String result = JSON.toJSONString(map);
+//            return AjaxResult.success("成功",result);
+            this.tLcTaskService.selectPhoneStatus(caseNo, phoneStatus, orgId, orgName, loginName);
+            return AjaxResult.success("成功");
         } catch (Exception e) {
             e.printStackTrace();
             log.error("获取号码状态异常{}",e);

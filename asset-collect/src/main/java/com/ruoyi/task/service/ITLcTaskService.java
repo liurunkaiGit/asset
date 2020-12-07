@@ -328,7 +328,8 @@ public interface ITLcTaskService {
 
     Response updateNotebook(TLcTask tLcTask);
 
-    public Map<String,Integer> selectPhoneStatus(String caseNo, String phoneStatus, String orgId, String orgName, String loginName);
+//    public Map<String,Integer> selectPhoneStatus(String caseNo, String phoneStatus, String orgId, String orgName, String loginName);
+    public void selectPhoneStatus(String caseNo, String phoneStatus, String orgId, String orgName, String loginName);
 
     AjaxResult caseRecyle(String taskIds, String certificateNos, Integer caseRecycleNum, String agentIds);
 

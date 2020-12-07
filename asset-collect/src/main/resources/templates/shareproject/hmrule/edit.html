@@ -63,17 +63,19 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>生效日期：</label>
                 <div class="col-sm-8">
-                    <div class="input-group date">
+                  <!--  <div class="input-group date">
                         <input name="startTime" id="startTime" readonly class="form-control " th:value="${#dates.format(tLjRule.startTime, 'yyyy-MM-dd')}"    type="text" required>
-                    </div>
+                    </div>-->
+                    <input type="text" class="time-input" id="startTime" placeholder="生效日期" name="startTime" th:value="${#dates.format(tLjRule.startTime, 'yyyy-MM-dd')}" style="border: 1px solid #dadbdb;height: 33px;"/>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>失效日期：</label>
                 <div class="col-sm-8">
-                    <div class="input-group date">
+                   <!-- <div class="input-group date">
                         <input name="endTime" id="endTime" class="form-control " readonly th:value="${#dates.format(tLjRule.endTime, 'yyyy-MM-dd')}"  type="text" required>
-                    </div>
+                    </div>-->
+                    <input type="text" class="time-input" id="endTime" placeholder="失效日期" name="endTime" th:value="${#dates.format(tLjRule.endTime, 'yyyy-MM-dd')}" style="border: 1px solid #dadbdb;height: 33px;"/>
                 </div>
             </div>
             <div class="form-group">
@@ -95,6 +97,12 @@
         });
 
         function submitHandler() {
+            var startTime = (new Date($("#startTime").val())).getTime();
+            var endTime = (new Date($("#endTime").val())).getTime();
+            if(startTime > endTime){
+                $.modal.alertWarning('开始时间大于结束时间，请重新选择');
+                return;
+            }
             if ($.validate.form()) {
                 var ids ;
                 if($("#ruleType").val()=='1'){

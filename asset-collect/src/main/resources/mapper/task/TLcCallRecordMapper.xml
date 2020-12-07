@@ -445,11 +445,11 @@
 
     <select id="selectUserTotal" parameterType="TLcCallRecord" resultType="TlcCallRecordTotal">
         select count(1) as frequencys ,sum(call_len) as durations,
-        (select COUNT(1) from  t_lc_call_record a where
+        (select COUNT(1) from  t_lc_call_record_view a where
         a.create_time <![CDATA[>=]]> date_format(#{startCallStartTime}, '%Y-%m-%d %H:%i:%s')
         AND a.create_time  <![CDATA[<=]]> date_format(#{endCallStartTime}, '%Y-%m-%d %H:%i:%s')
         AND a.create_by = ${createBy} and call_len!='')as connections
-        from t_lc_call_record b
+        from t_lc_call_record_view b
         where  b.create_time <![CDATA[>=]]> date_format(#{startCallStartTime},'%Y-%m-%d %H:%i:%s')
         and b.create_time <![CDATA[<=]]> date_format(#{endCallStartTime},'%Y-%m-%d %H:%i:%s')   and b.create_by=${createBy}
     </select>
@@ -620,4 +620,9 @@
         from t_lc_call_record t,cur_assets_package cap
         where t.case_no = cap.org_casNo and t.org_id = #{orgId} and t.call_radio_location is not null and t.create_time between #{startCreateTime} and #{endCreateTime}
     </select>
+
+    <insert id="createView">
+       CREATE OR REPLACE VIEW t_lc_call_record_view AS select * from t_lc_call_record where date_format(create_time,'%Y-%m-%d') = CURRENT_DATE WITH CHECK OPTION;
+    </insert>
+
 </mapper>

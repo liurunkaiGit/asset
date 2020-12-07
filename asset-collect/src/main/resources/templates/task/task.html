@@ -1588,9 +1588,10 @@
                     $('input:radio[name="phoneStatus"]').prop('checked',false);
                     $("#myModal1").modal('hide');
                     if(msg=="成功"){
-                        var errorFlag = JSON.parse(data.data).errorFlag;
-                        var successFlag = JSON.parse(data.data).successFlag;
-                        $.modal.alertSuccess("操作成功，成功"+successFlag+"条"+"，失败"+errorFlag+"条");
+                        // var errorFlag = JSON.parse(data.data).errorFlag;
+                        // var successFlag = JSON.parse(data.data).successFlag;
+                        // $.modal.alertSuccess("操作成功，成功"+successFlag+"条"+"，失败"+errorFlag+"条");
+                        $.modal.alertSuccess("号码状态查询成功");
                     }else{
                         $.modal.alertSuccess("号码状态查询失败");
                     }

@@ -124,4 +124,6 @@ public interface TLcCallRecordMapper {
     List<TLcCallRecord> selectCallRecordListByOrgIdAndTime(TLcCallRecord callRecord);
 
     void updateTLcCallRecordByUcid(TLcCallRecord tLcCallRecord);
+
+    public void createView();
 }

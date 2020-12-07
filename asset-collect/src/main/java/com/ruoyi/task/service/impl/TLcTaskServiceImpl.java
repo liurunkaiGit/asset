@@ -56,6 +56,7 @@ import com.ruoyi.task.domain.TLcCallRecord;
 import com.ruoyi.task.domain.TLcTask;
 import com.ruoyi.task.mapper.TLcTaskMapper;
 import com.ruoyi.task.service.AsyncTaskService;
+import com.ruoyi.task.service.IAsyncSelectPhoneStatus;
 import com.ruoyi.task.service.ITLcCallRecordService;
 import com.ruoyi.task.service.ITLcTaskService;
 import com.ruoyi.utils.AllocatRuleUtil;
@@ -147,6 +148,8 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     private ITLcStationLetterService stationLetterService;
     @Autowired
     private ITLcStationLetterAgentService stationLetterAgentService;
+    @Autowired
+    private IAsyncSelectPhoneStatus asyncSelectPhoneStatus;
 
 
     /**
@@ -1608,12 +1611,47 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
      * @param phoneStatus
      * @return
      */
+//    @Override
+//    @Transactional
+//    public Map<String, Integer> selectPhoneStatus(String caseNos, String phoneStatus, String orgId, String orgName, String loginName) {
+//        Map<String, Integer> result = new HashMap<String, Integer>();
+//        int successFlag = 0;
+//        int errorFlag = 0;
+//        //根据条件查询联系人信息
+//        TLcCustContact tLcCustContact = new TLcCustContact();
+//        tLcCustContact.setCaseNoList(Arrays.asList(caseNos.split(",")));
+//        tLcCustContact.setOrgId(orgId);
+//        if ("1".equals(phoneStatus)) {
+//            tLcCustContact.setRelation(Integer.valueOf(phoneStatus));//本人
+//        }
+//        List<TLcCustContact> custContactList = tLcCustContactMapper.findCustContactList(tLcCustContact);
+//        //获取号码状态
+//        if (custContactList.size() > 0) {
+//            for (TLcCustContact custContact : custContactList) {
+//                PhoneStatusRequestData reqData = new PhoneStatusRequestData();
+//                String certificateNo = custContact.getCertificateNo();
+//                String contactName = custContact.getContactName();
+//                String phone = custContact.getPhone();
+//                if (!checkPhone(phone)) {//去除非手机号
+//                    continue;
+//                }
+//                reqData.setId(certificateNo);
+//                reqData.setName(contactName);
+//                reqData.setCell(phone);
+//                PhoneStatusResponse response = PhoneStatusUtil.getPhoneStatus(reqData);
+//                Map<String, Integer> map = this.responseHandler(response, custContact, successFlag, errorFlag, orgId, orgName, loginName);
+//                successFlag = map.get("successFlag");
+//                errorFlag = map.get("errorFlag");
+//            }
+//        }
+//        result.put("successFlag", successFlag);
+//        result.put("errorFlag", errorFlag);
+//        return result;
+//
+//    }
     @Override
     @Transactional
-    public Map<String, Integer> selectPhoneStatus(String caseNos, String phoneStatus, String orgId, String orgName, String loginName) {
-        Map<String, Integer> result = new HashMap<String, Integer>();
-        int successFlag = 0;
-        int errorFlag = 0;
+    public void selectPhoneStatus(String caseNos, String phoneStatus, String orgId, String orgName, String loginName) {
         //根据条件查询联系人信息
         TLcCustContact tLcCustContact = new TLcCustContact();
         tLcCustContact.setCaseNoList(Arrays.asList(caseNos.split(",")));
@@ -1624,26 +1662,8 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         List<TLcCustContact> custContactList = tLcCustContactMapper.findCustContactList(tLcCustContact);
         //获取号码状态
         if (custContactList.size() > 0) {
-            for (TLcCustContact custContact : custContactList) {
-                PhoneStatusRequestData reqData = new PhoneStatusRequestData();
-                String certificateNo = custContact.getCertificateNo();
-                String contactName = custContact.getContactName();
-                String phone = custContact.getPhone();
-                if (!checkPhone(phone)) {//去除非手机号
-                    continue;
-                }
-                reqData.setId(certificateNo);
-                reqData.setName(contactName);
-                reqData.setCell(phone);
-                PhoneStatusResponse response = PhoneStatusUtil.getPhoneStatus(reqData);
-                Map<String, Integer> map = this.responseHandler(response, custContact, successFlag, errorFlag, orgId, orgName, loginName);
-                successFlag = map.get("successFlag");
-                errorFlag = map.get("errorFlag");
-            }
+            asyncSelectPhoneStatus.selectPhoneStatus(custContactList,orgId,orgName,loginName);
         }
-        result.put("successFlag", successFlag);
-        result.put("errorFlag", errorFlag);
-        return result;
 
     }
 
