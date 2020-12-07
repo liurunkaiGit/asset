@@ -1585,6 +1585,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 <if test="TempCurAssets.dzhxrq != null  and TempCurAssets.dzhxrq != ''">dzhxrq = #{TempCurAssets.dzhxrq},</if>
                 <if test="TempCurAssets.customerNo != null  and TempCurAssets.customerNo != ''">customer_no = #{TempCurAssets.customerNo},</if>
                 <if test="TempCurAssets.sjrq != null  and TempCurAssets.sjrq != ''">sjrq = #{TempCurAssets.sjrq},</if>
+                <if test="TempCurAssets.jjh != null  and TempCurAssets.jjh != ''">jjh = #{TempCurAssets.jjh},</if>
                 update_time = now()
                 <!--<if test="TempCurAssets.freeImport != null  and TempCurAssets.freeImport != ''">free_import = #{TempCurAssets.freeImport},</if>-->
             </trim>
