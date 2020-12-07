@@ -109,7 +109,7 @@
             t.task_status AS taskStatus,
             t.dqyhje,
             d.score,
-            d.back_case_date
+            t.back_case_date
             FROM t_lc_duncase_his d, t_lc_task_his t
             WHERE d.case_no = t.case_no AND d.import_batch_no = t.import_batch_no
             <if test="orgId != null  and orgId != ''">

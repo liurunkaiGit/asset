@@ -191,6 +191,10 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         if (city != null && !"".equals(city)) {
             tLcTask.setProvince(null);
         }
+        if(StringUtils.isNotBlank(tLcTask.getCaseNo())) {
+            String[] caseNos = tLcTask.getCaseNo().split(",");
+            tLcTask.setCaseNoList(Arrays.asList(caseNos));
+        }
         return tLcTaskMapper.selectTLcTaskByPage(tLcTask);
     }
 

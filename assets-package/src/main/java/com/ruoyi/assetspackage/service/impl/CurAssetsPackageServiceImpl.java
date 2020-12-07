@@ -393,6 +393,7 @@ public class CurAssetsPackageServiceImpl extends BaseController implements ICurA
                 .importBatchNo(duncase.getImportBatchNo())
                 .phone(duncase.getCustomPhone())
                 .actionCode(CollActionCodeEnum.FRESH.getMessage())
+                .backCaseDate(duncase.getBackCaseDate())
                 .build();
         task.setCreateBy(duncase.getCreateBy());
         return task;

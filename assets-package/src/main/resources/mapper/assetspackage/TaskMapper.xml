@@ -44,6 +44,7 @@
         <result property="callSign" column="call_sign" jdbcType="VARCHAR"/>
         <result property="callSignValue" column="call_sign_value" jdbcType="VARCHAR"/>
         <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="backCaseDate" column="back_case_date" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="SELECT_T_LC_TASK">
@@ -85,7 +86,8 @@
         t.action_code_value,
         t.call_sign,
         t.call_sign_value,
-        t.phone
+        t.phone,
+        t.back_case_date
     </sql>
 
     <sql id="SELECT_TASK_WHERE">
@@ -400,7 +402,8 @@
         action_code_value,
         call_sign,
         call_sign_value,
-        phone
+        phone,
+        back_case_date
         ) VALUES (
             #{caseNo},
             #{certificateNo},
@@ -439,7 +442,8 @@
             #{actionCodeValue},
             #{callSign},
             #{callSignValue},
-            #{phone}
+            #{phone},
+            #{backCaseDate}
         )
     </insert>
 
@@ -485,6 +489,7 @@
             <if test="closeCaseYhje != null ">close_case_yhje = #{closeCaseYhje},</if>
             <if test="recentlyAllotDate != null ">recently_allot_date = #{recentlyAllotDate},</if>
             <if test="recentlyFollowUpDate != null ">recently_follow_up_date = #{recentlyFollowUpDate},</if>
+            <if test="backCaseDate != null ">back_case_date = #{backCaseDate},</if>
             <if test="hitRule != null  and hitRule != ''">hit_rule = #{hitRule},</if>
             <if test="hitRuleDesc != null  and hitRuleDesc != ''">hit_rule_desc = #{hitRuleDesc},</if>
             <if test="distributionStrategy != null  and distributionStrategy != ''">distribution_strategy =
@@ -550,7 +555,8 @@
         action_code_value,
         call_sign,
         call_sign_value,
-        phone
+        phone,
+        back_case_date
         ) VALUES
         <foreach collection="taskList" item="task" separator=",">
             (
@@ -591,7 +597,8 @@
             #{task.actionCodeValue},
             #{task.callSign},
             #{task.callSignValue},
-            #{task.phone}
+            #{task.phone},
+            #{task.backCaseDate},
             )
         </foreach>
     </insert>
@@ -646,6 +653,7 @@
                 <if test="task.phone != null  and task.phone != ''">phone = #{task.phone},</if>
                 <if test="task.dqyhje != null  and task.dqyhje != ''">dqyhje = #{task.dqyhje},</if>
                 <if test="task.closeType != null">close_type = #{task.closeType},</if>
+                <if test="task.backCaseDate != null">back_case_date = #{task.backCaseDate},</if>
             </trim>
             WHERE case_no = #{task.caseNo} and task_status !=3
         </foreach>

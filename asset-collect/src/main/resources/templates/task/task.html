@@ -28,7 +28,18 @@
                             <input id="currentPageUrl" name="currentPageUrl" class="form-control" type="hidden">
                             <li>
                                 <p>机构案件号：</p>
-                                <input type="text" name="caseNo" id="caseNo"/>
+                                <input type="text" name="caseNo" placeholder="多案件用英文“,”分隔" id="caseNo" ondblclick="showCaseNo()"/>
+                                <!--div style="display: none" id="caseNosDiv">
+                                    <div class="modal-body" style="height: 600px;">
+                                        <div class="form-group">
+                                            <textarea name="caseNos" id="caseNos" class="form-control" rows="30" style="width:200px"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-white" data-dismiss="modal" onclick="closeDiv()">关闭</button>
+                                        <button type="button" class="btn btn-primary" onclick="saveCaseNo();">保存</button>
+                                    </div>
+                                </div>-->
                             </li>
                             <li>
                                 <p>姓名：</p>
@@ -328,6 +339,28 @@
                  </div>
              </div>
          </div>
+
+         <!--<div class="col-sm-12">
+             <div class="modal" id="showCaseNoModal" tabindex="-1" role="dialog" aria-hidden="true" >
+                 <div class="modal-dialog">
+                     <div class="modal-content animated bounceInRight" style="left: -75%; top: 5px; width: 250px">
+                         &lt;!&ndash;<div class="modal-header">
+                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
+                             </button>
+                         </div>&ndash;&gt;
+                         <div class="modal-body" style="height: 600px;">
+                             <div class="form-group">
+                                 <textarea name="caseNos" id="caseNos" class="form-control" rows="30" style="width:200px"></textarea>
+                             </div>
+                         </div>
+                         <div class="modal-footer">
+                             <button type="button" class="btn btn-white" data-dismiss="modal" onclick="closeDiv()">关闭</button>
+                             <button type="button" class="btn btn-primary" onclick="saveCaseNo();">保存</button>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>-->
     </div>
 
 
@@ -785,6 +818,15 @@
         }
 
         function selectSearch(){
+            var caseNos = $("#caseNo").val();
+            if (caseNos != null && caseNos != '') {
+                if (caseNos.split(",").length > 100) {
+                    $.modal.alertError("机构案件号单次最大查询个数不能超过100");
+                    return;
+                }
+            }
+            caseNos = caseNos.replaceAll(" ",",");
+            $("#caseNo").val(caseNos);
             $("#selectAll").prop("checked",false);
             initFreeSearch();
             $.table.search();
@@ -1562,6 +1604,73 @@
             var url = $("#caseRecycleSelectAgentUrl").val();
             $.modal.open("选择用户", url);
         });
+
+        function showCaseNo() {
+            // var caseNo = $("#caseNo").val();
+            // caseNo = caseNo.replaceAll(" ",",");
+            // $("#caseNos").val(caseNo);
+            // // $("#caseNosDiv").css("display", "block");
+            // $("#showCaseNoModal").show();
+
+            // $("#dataId").val(obj);
+            /*layer.open({
+                type : 4,
+                closeBtn : 1,
+                content: ['<div class="col-sm-12">\n' +
+                '    <div id="aaa" style="height: 62px;width: 275px;">\n' +
+                '        <div class="form-group">\n' +
+        '                   <textarea name="caseNos" id="caseNos" class="form-control" rows="30" style="width:200px"></textarea>\n' +
+        '                </div>\n' +
+                '    </div>\n' +
+                '</div>']
+                ,success: function(layero, index){
+                    $("i[class='layui-layer-TipsG layui-layer-TipsR']").remove();
+                    $("div[class='layui-layer-content']").attr('style','height: 79px;background: #fff;');
+                    $(".layui-layer-tips .layui-layer-close").attr('style','top:-10px;right: -10px;');
+                }
+            });*/
+            layer.open({
+                type: 0,
+                title: false,
+                content: '<div class="col-sm-12">\n' +
+                '    <div id="showCaseNosLayer">\n' +
+                '        <div class="form-group">\n' +
+                '                   <textarea name="caseNos" id="caseNos" class="form-control" rows="30" style="width:200px"></textarea>\n' +
+                '                </div>\n' +
+                '    </div>\n' +
+                '</div>',
+                btn: ['确定', '关闭'],
+                yes: function (index, layero) {
+                    var caseNos = $("#caseNos").val();
+                    caseNos = caseNos.replaceAll("\n",",");
+                    $("#caseNo").val(caseNos);
+                    layer.close(index);
+                },
+                cancel: function() {
+
+                },
+                success: function(layero, index){
+                    // $("i[class='layui-layer-TipsG layui-layer-TipsR']").remove();
+                    // $("div[class='layui-layer-content']").attr('style','height: 79px;background: #fff;');
+                    // $(".layui-layer-tips .layui-layer-close").attr('style','top:-10px;right: -10px;');
+                    $(".layui-layer .layui-layer-dialog .layer-ext-moon").attr('style','top:35px;left: 110px;');
+                }
+            });
+            var caseNo = $("#caseNo").val();
+            caseNo = caseNo.replaceAll(" ",",");
+            $("#caseNos").val(caseNo);
+        }
+
+        /*function closeDiv() {
+            $("#showCaseNoModal").hide();
+        }
+
+        function saveCaseNo() {
+            var caseNos = $("#caseNos").val();
+            caseNos = caseNos.replaceAll("\n",",");
+            $("#caseNo").val(caseNos);
+            $("#showCaseNoModal").hide();
+        }*/
     </script>
 </body>
 </html>

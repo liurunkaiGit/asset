@@ -119,7 +119,7 @@
             t.certificate_no,
             t.phone,
             d.remark,
-            d.back_case_date
+            t.back_case_date
             FROM t_lc_duncase d, t_lc_task t
             WHERE d.case_no = t.case_no AND d.import_batch_no = t.import_batch_no
             <if test="orgId != null  and orgId != ''">

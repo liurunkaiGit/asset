@@ -93,6 +93,7 @@ public class DuncaseServiceImpl implements IDuncaseService {
                 .setTransferType(duncase.getTransferType()) //手别
                 .setEnterCollDate(duncase.getEnterCollDate()) // 入催日
                 .setCloseCaseYhje(duncase.getCloseCaseYhje()) // 结案应还金额
+                .setBackCaseDate(duncase.getBackCaseDate())
                 /*.setImportBatchNo(duncase.getImportBatchNo())*/
                 .setUpdateBy(duncase.getCreateBy());
         return tLcTask;

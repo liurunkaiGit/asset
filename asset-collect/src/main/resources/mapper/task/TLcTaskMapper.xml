@@ -341,7 +341,7 @@
         t.notebook,
         t.phone,
         d.remark,
-        d.back_case_date as backCaseDate,
+        t.back_case_date as backCaseDate,
         CONCAT_WS('@',t.id,t.case_no,t.certificate_no,t.owner_id) AS idCaseNoCertificateNo
         FROM t_lc_task t,t_lc_duncase d
         WHERE t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no
@@ -356,8 +356,11 @@
             </foreach>
         </if>
         and (1=1
-        <if test="caseNo != null  and caseNo != ''">
-            and t.case_no = #{caseNo}
+        <if test="caseNoList != null">
+            and t.case_no in
+            <foreach collection="caseNoList" item="caseNo" open="(" close=")" separator="," >
+                #{caseNo}
+            </foreach>
         </if>
         <if test="customName != null  and customName != ''">
             and t.custom_name like concat('%', #{customName}, '%')

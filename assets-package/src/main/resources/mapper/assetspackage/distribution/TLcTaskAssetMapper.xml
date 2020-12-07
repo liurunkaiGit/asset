@@ -35,6 +35,7 @@
         <result property="closeCaseYhje" column="close_case_yhje" jdbcType="DECIMAL"/>
         <result property="recentlyAllotDate" column="recently_allot_date" jdbcType="TIMESTAMP"/>
         <result property="recentlyFollowUpDate" column="recently_follow_up_date" jdbcType="TIMESTAMP"/>
+        <result property="backCaseDate" column="back_case_date" jdbcType="TIMESTAMP"/>
         <result property="hitRule" column="hit_rule" jdbcType="VARCHAR"/>
         <result property="hitRuleDesc" column="hit_rule_desc" jdbcType="VARCHAR"/>
         <result property="distributionStrategy" column="distribution_strategy" jdbcType="VARCHAR"/>
@@ -95,7 +96,8 @@
         t.phone,
         t.dqyhje,
         t.send_robot_batch_no,
-        t.notebook
+        t.notebook,
+        t.back_case_date
     </sql>
 
     <sql id="SELECT_SAME_TASK">
@@ -390,7 +392,8 @@
         action_code_value,
         call_sign,
         call_sign_value,
-        phone
+        phone,
+        back_case_date
         ) VALUES
         <foreach collection="taskList" item="task" separator=",">
             (
@@ -431,7 +434,8 @@
             #{task.actionCodeValue},
             #{task.callSign},
             #{task.callSignValue},
-            #{task.phone}
+            #{task.phone},
+            #{task.backCaseDate}
             )
         </foreach>
     </insert>

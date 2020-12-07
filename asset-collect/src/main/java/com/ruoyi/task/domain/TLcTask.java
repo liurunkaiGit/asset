@@ -513,6 +513,4 @@ public class TLcTask extends BaseEntity {
 
     private List<String> caseNoList;
 
-
-
 }
