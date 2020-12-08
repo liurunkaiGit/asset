@@ -2061,6 +2061,66 @@ public class DataImportUtil {
         return list;
     }
 
+
+    public static List<Map<String, String>> checkData3(List<TempCurAssetsPackage> dataList) throws Exception {
+        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+        for (TempCurAssetsPackage tempCurAssetsPackage : dataList) {
+            Map<String, String> map = new HashMap<String, String>();
+            String orgCasno = tempCurAssetsPackage.getOrgCasno();
+            String id = tempCurAssetsPackage.getId();
+
+//            String waje = tempCurAssetsPackage.getRmbYe();
+//            if(waje==null || "".equals(waje)){
+//                String msg = "委案金额为空";
+//                map.put("orgCasno", orgCasno);
+//                map.put("msg", msg);
+//                map.put("id", id);
+//                list.add(map);
+//                continue;
+//            }else{
+//                if(!checkJE(waje)) {
+//                    String msg = "委案金额的格式不正确";
+//                    map.put("orgCasno", orgCasno);
+//                    map.put("msg", msg);
+//                    map.put("id", id);
+//                    list.add(map);
+//                    continue;
+//                }
+//            }
+            String jayhje = tempCurAssetsPackage.getWaYe();
+            if(jayhje==null || "".equals(jayhje)){
+                String msg = "结案应还金额为空";
+                map.put("orgCasno", orgCasno);
+                map.put("msg", msg);
+                map.put("id", id);
+                list.add(map);
+                continue;
+            }else{
+                if(!checkJE(jayhje)) {
+                    String msg = "结案应还金额的格式不正确";
+                    map.put("orgCasno", orgCasno);
+                    map.put("msg", msg);
+                    map.put("id", id);
+                    list.add(map);
+                    continue;
+                }
+            }
+
+            String curName = tempCurAssetsPackage.getCurName();
+            if(curName==null || "".equals(curName)){
+                String msg = "姓名为空";
+                map.put("orgCasno", orgCasno);
+                map.put("msg", msg);
+                map.put("id", id);
+                list.add(map);
+                continue;
+            }
+
+
+        }
+        return list;
+    }
+
     public static List<Map<String, String>> checkUpdateData(List<TempCurAssetsPackage> dataList) throws Exception {
         List<Map<String, String>> list = new ArrayList<Map<String, String>>();
         for (TempCurAssetsPackage tempCurAssetsPackage : dataList) {

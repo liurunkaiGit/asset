@@ -129,7 +129,7 @@ public class AssetsImportFromXYController extends BaseController {
         Map<String, String> map = new HashMap<String, String>();
         //查询所有的资产模板
         TemplatesPackage param = new TemplatesPackage();
-        param.setType("1");//资产模板
+        param.setType("4");//资产模板(兴业导入改为余额表，导入模板字段少于资产表字段，必输项校验不通过，改为更新模板)
         param.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
         List<TemplatesPackage> templatesList = this.templatesPackageService.selectTemplatesPackageList(param);
         for (TemplatesPackage templateInfo : templatesList) {

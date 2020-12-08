@@ -163,7 +163,7 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
         param.setImportBatchNo(importBatchNo);
         List<TempCurAssetsPackage> tempCurAssetList = this.curAssetsPackageMapper.selectTempCurAssetsPackageList(param);
         //规则校验
-        exectionList = DataImportUtil.checkData2(tempCurAssetList);
+        exectionList = DataImportUtil.checkData3(tempCurAssetList);
         //去除异常数据
         if(exectionList.size() > 0) {
             for (Map<String, String> exceptionidmap : exectionList) {
@@ -637,6 +637,7 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
      * @param createTime 临时表的创建时间
      * @throws Exception
      */
+    @Transactional
     public void updateCloseCase(List<CurAssetsPackage> paramList,Date createTime,String isExitCollect) throws Exception{
         if(paramList != null && paramList.size() >0) {
             List<CloseCase> remoteList = new ArrayList<>();

@@ -3,6 +3,7 @@ package com.ruoyi.assetspackage.service.impl;
 import com.ruoyi.assetspackage.domain.*;
 import com.ruoyi.assetspackage.mapper.IcollectionRecordImprotMapper;
 import com.ruoyi.assetspackage.service.*;
+import com.ruoyi.assetspackage.util.ExcelParser;
 import com.ruoyi.assetspackage.util.ParseExcelUtil;
 import com.ruoyi.assetspackage.util.RecordDataImportUtil;
 import com.ruoyi.common.config.Global;
@@ -41,6 +42,9 @@ public class CollectionRecordImprotServiceImpl implements IcollectionRecordImpro
 
     @Autowired
     private IcollectionRecordImprotAsyncService collectionRecordImprotAsyncService;
+
+    @Autowired
+    private ExcelParser excelParser;
 
     @Autowired
     private ITemplatesPackageService templatesPackageService;
@@ -198,7 +202,12 @@ public class CollectionRecordImprotServiceImpl implements IcollectionRecordImpro
             recordImportDataMapping = this.voluation(recordImportDataMapping, templateId);
             int headNum = Integer.valueOf(recordImportDataMapping.getHeadRowNum());
             int dataNum = Integer.valueOf(recordImportDataMapping.getDataRowNum());
-            List<Map<String, String>> datas = ParseExcelUtil.resolveExcel(fileNameFull, headNum, dataNum);
+            List<Map<String, String>> datas = null;
+            if("xlsx".equals(extension)){
+                datas = ParseExcelUtil.resolveExcel2(fileNameFull,headNum,dataNum,excelParser);
+            }else{
+                datas = ParseExcelUtil.resolveExcel(fileNameFull, headNum, dataNum);
+            }
             datas = RecordDataImportUtil.dataReplace(datas, recordImportDataMapping);
             importBatchNo = DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS, new Date());// 生成导入批次号年月日时分秒
             OrgPackage orgPackage = this.orgPackageService.selectOrgPackageByDeptId(orgId);

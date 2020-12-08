@@ -129,6 +129,8 @@ public class AssetsRepaymentFromXYServiceImpl implements IAssetsRepaymenFromXYSe
         }
         if(!"".equals(ownerName)){
             ownerName = ownerName.substring(1);
+        }
+        if(!"".equals(jobNo)){
             jobNo = jobNo.substring(1);
         }
 

@@ -9,6 +9,7 @@ import com.ruoyi.assetspackage.exception.ImportDataExcepion;
 import com.ruoyi.assetspackage.mapper.CurAssetsRepaymentPackageMapper;
 import com.ruoyi.assetspackage.mapper.TaskMapper;
 import com.ruoyi.assetspackage.service.*;
+import com.ruoyi.assetspackage.util.ExcelParser;
 import com.ruoyi.assetspackage.util.ParseExcelUtil;
 import com.ruoyi.assetspackage.util.RepaymentDataImportUtil;
 import com.ruoyi.assetspackage.util.Response;
@@ -57,6 +58,8 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
     private ICurAssetsPackageService curAssetsPackageService;
     @Autowired
     private IOrgPackageService orgPackageService;
+    @Autowired
+    private ExcelParser excelParser;
     @Autowired
     private ITemplatesPackageService templatesPackageService;
     @Autowired
@@ -346,7 +349,12 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
             repaymentImportDataMapping = this.voluation(repaymentImportDataMapping, templateId);
             int headNum = Integer.valueOf(repaymentImportDataMapping.getHeadRowNum());
             int dataNum = Integer.valueOf(repaymentImportDataMapping.getDataRowNum());
-            List<Map<String, String>> datas = ParseExcelUtil.resolveExcel(fileNameFull, headNum, dataNum);
+            List<Map<String, String>> datas = null;
+            if("xlsx".equals(extension)){
+                datas = ParseExcelUtil.resolveExcel2(fileNameFull,headNum,dataNum,excelParser);
+            }else{
+                datas = ParseExcelUtil.resolveExcel(fileNameFull, headNum, dataNum);
+            }
             datas = RepaymentDataImportUtil.dataReplace(datas, repaymentImportDataMapping);
             importBatchNo = DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS, new Date());// 生成导入批次号年月日时分秒
             OrgPackage orgPackage = this.orgPackageService.selectOrgPackageByDeptId(orgId);

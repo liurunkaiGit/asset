@@ -208,16 +208,16 @@ public class AssetsRepaymentFromXYController extends BaseController {
                     .setCreateBy(String.valueOf(ShiroUtils.getUserId()));
             this.tlcImportFlowService.insertTLcImportFlow(tLcImportFlow);
             //结案操作
-//            String xyOrgId = this.sysConfigService.selectConfigByKey("xyOrgId");
-//            String orgId = repaymentList.get(0).getOrgId();
-//            if(!xyOrgId.equals(orgId)){
-//                AjaxResult result = this.curAssetsRepaymentPackageService.callRemote2(repaymentList, importBatchNo);
-//                return result;
-//            }else{
-//                return AjaxResult.success();
-//            }
-            AjaxResult result = this.curAssetsRepaymentPackageService.callRemote2(repaymentList, importBatchNo);
-            return result;
+            String xyOrgId = this.sysConfigService.selectConfigByKey("xyOrgId");
+            String orgId = repaymentList.get(0).getOrgId();
+            if(!xyOrgId.equals(orgId)){
+                AjaxResult result = this.curAssetsRepaymentPackageService.callRemote2(repaymentList, importBatchNo);
+                return result;
+            }else{
+                return AjaxResult.success();
+            }
+//            AjaxResult result = this.curAssetsRepaymentPackageService.callRemote2(repaymentList, importBatchNo);
+//            return result;
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("添加失败"+e.getMessage(),e);
