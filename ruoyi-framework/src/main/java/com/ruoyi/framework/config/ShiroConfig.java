@@ -260,6 +260,8 @@ public class ShiroConfig
         filterChainDefinitionMap.put("/findPermission/**", "anon");
         filterChainDefinitionMap.put("/findPlatform/**", "anon");
         filterChainDefinitionMap.put("/captcha/captchaImage**", "anon");
+        filterChainDefinitionMap.put("/report/platform/list/share/**", "anon");
+        filterChainDefinitionMap.put("/report/personal/list/share/**", "anon");
         filterChainDefinitionMap.put("/call/record/selectCallRadioByOrgId/**", "anon");
         // 退出 logout地址，shiro去清除session
         filterChainDefinitionMap.put("/logout", "logout");

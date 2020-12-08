@@ -9,15 +9,13 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.report.domain.TLcReportPlatform;
 import com.ruoyi.report.service.ITLcReportPlatformService;
+import com.ruoyi.utils.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -53,6 +51,17 @@ public class TLcReportPlatformController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(TLcReportPlatform tLcReportPlatform) {
+//        startPage();
+        List<TLcReportPlatform> list = tLcReportPlatformService.selectTLcReportPlatformList(tLcReportPlatform);
+        return getDataTable(list);
+    }
+
+    /**
+     * 查询通时通次报表接口，共享管理
+     */
+    @PostMapping("/list/share")
+    @ResponseBody
+    public TableDataInfo listShare(@RequestBody TLcReportPlatform tLcReportPlatform) {
 //        startPage();
         List<TLcReportPlatform> list = tLcReportPlatformService.selectTLcReportPlatformList(tLcReportPlatform);
         return getDataTable(list);

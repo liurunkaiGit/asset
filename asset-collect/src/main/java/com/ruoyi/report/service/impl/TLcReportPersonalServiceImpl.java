@@ -192,4 +192,9 @@ public class TLcReportPersonalServiceImpl implements ITLcReportPersonalService {
         return tLcReportPersonalMapper.insertTLcReportPersonal(tLcReportPersonal);
     }
 
+    @Override
+    public List<TLcReportPersonal> selectReportPersonalList(TLcReportPersonal tLcReportPersonal) {
+        return this.tLcReportPersonalMapper.selectTLcReportPersonalList(tLcReportPersonal);
+    }
+
 }

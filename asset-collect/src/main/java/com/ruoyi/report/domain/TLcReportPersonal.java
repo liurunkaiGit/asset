@@ -130,4 +130,10 @@ public class TLcReportPersonal extends BaseEntity {
     @Excel(name = "全部拨打次数")
     private Integer totalCallNum;
 
+
+    /** 当前记录起始索引 */
+    private Integer pageNum;
+    /** 每页显示记录数 */
+    private Integer pageSize;
+
 }

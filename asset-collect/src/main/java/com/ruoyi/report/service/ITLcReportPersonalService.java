@@ -29,4 +29,5 @@ public interface ITLcReportPersonalService {
      */
     public int insertTLcReportPersonal(TLcReportPersonal tLcReportPersonal);
 
+    List<TLcReportPersonal> selectReportPersonalList(TLcReportPersonal tLcReportPersonal);
 }

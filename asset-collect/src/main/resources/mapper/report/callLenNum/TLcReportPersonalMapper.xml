@@ -102,6 +102,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="zjCalledNum != null ">zj_called_num,</if>
             <if test="zjCallLen != null  and zjCallLen != ''">zj_call_len,</if>
             <if test="zjCallNum != null ">zj_call_num,</if>
+            <if test="dyCalledNum != null ">dy_called_num,</if>
+            <if test="dyCallLen != null  and dyCallLen != ''">dy_call_len,</if>
+            <if test="dyCallNum != null ">dy_call_num,</if>
             <if test="totalCalledNum != null ">total_called_num,</if>
             <if test="totalCallLen != null  and totalCallLen != ''">total_call_len,</if>
             <if test="totalCallNum != null ">total_call_num,</if>
@@ -118,6 +121,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="zjCalledNum != null ">#{zjCalledNum},</if>
             <if test="zjCallLen != null  and zjCallLen != ''">#{zjCallLen},</if>
             <if test="zjCallNum != null ">#{zjCallNum},</if>
+            <if test="dyCalledNum != null ">#{dyCalledNum},</if>
+            <if test="dyCallLen != null  and dyCallLen != ''">#{dyCallLen},</if>
+            <if test="dyCallNum != null ">#{dyCallNum},</if>
             <if test="totalCalledNum != null ">#{totalCalledNum},</if>
             <if test="totalCallLen != null  and totalCallLen != ''">#{totalCallLen},</if>
             <if test="totalCallNum != null ">#{totalCallNum},</if>

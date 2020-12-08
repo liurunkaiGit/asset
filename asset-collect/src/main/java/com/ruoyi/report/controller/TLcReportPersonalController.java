@@ -17,10 +17,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -56,24 +53,36 @@ public class TLcReportPersonalController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(TLcReportPersonal tLcReportPersonal) {
-//        startPage();
-        TableDataInfo rspData = new TableDataInfo();
-        List<TLcReportPersonal> list = tLcReportPersonalService.selectTLcReportPersonalList(tLcReportPersonal);
-        PageDomain pageDomain = TableSupport.buildPageRequest();
-        if (null == pageDomain.getPageNum() || null == pageDomain.getPageSize()) {
-            rspData.setRows(list);
-            rspData.setTotal(list.size());
-            return rspData;
-        }
-        Integer pageNum = (pageDomain.getPageNum() - 1) * pageDomain.getPageSize();
-        Integer pageSize = pageDomain.getPageNum() * pageDomain.getPageSize();
-        if (pageSize > list.size()) {
-            pageSize = list.size();
-        }
-        rspData.setRows(list.subList(pageNum, pageSize));
-        rspData.setTotal(list.size());
-        return rspData;
-//        return getDataTable(list);
+        startPage();
+        List<TLcReportPersonal> list = this.tLcReportPersonalService.selectReportPersonalList(tLcReportPersonal);
+//        TableDataInfo rspData = new TableDataInfo();
+//        List<TLcReportPersonal> list = tLcReportPersonalService.selectTLcReportPersonalList(tLcReportPersonal);
+//        PageDomain pageDomain = TableSupport.buildPageRequest();
+//        if (null == pageDomain.getPageNum() || null == pageDomain.getPageSize()) {
+//            rspData.setRows(list);
+//            rspData.setTotal(list.size());
+//            return rspData;
+//        }
+//        Integer pageNum = (pageDomain.getPageNum() - 1) * pageDomain.getPageSize();
+//        Integer pageSize = pageDomain.getPageNum() * pageDomain.getPageSize();
+//        if (pageSize > list.size()) {
+//            pageSize = list.size();
+//        }
+//        rspData.setRows(list.subList(pageNum, pageSize));
+//        rspData.setTotal(list.size());
+//        return rspData;
+        return getDataTable(list);
+    }
+
+    /**
+     * 查询通时通次个人明细汇总报列表，共享管理
+     */
+    @PostMapping("/list/share")
+    @ResponseBody
+    public TableDataInfo listShare(@RequestBody TLcReportPersonal tLcReportPersonal) {
+        startPage();
+        List<TLcReportPersonal> list = this.tLcReportPersonalService.selectReportPersonalList(tLcReportPersonal);
+        return getDataTable(list);
     }
 
     /**
