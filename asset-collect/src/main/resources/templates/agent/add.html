@@ -30,7 +30,7 @@
                     <input name="agentid" id="agentid" class="form-control" type="text" required>
                 </div>
                 <div class="col-sm-8" style="display: none" id="duyanAgentDiv">
-                    <select  class="form-control"  name="agentid" id="duyanAgentid" required>
+                    <select  class="form-control" id="duyanAgentid" required>
                         <option value="">请选择</option>
                     </select>
                 </div>
@@ -142,6 +142,7 @@
             if (agentId == null || agentId == '') {
                 agentId = $.common.trim($("#duyanAgentid").val());
             }
+            $("#agentid").val(agentId);
             $.post(
                 prefix + "/selectExtPhoneByAgent",
                 {

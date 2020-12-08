@@ -339,28 +339,6 @@
                  </div>
              </div>
          </div>
-
-         <!--<div class="col-sm-12">
-             <div class="modal" id="showCaseNoModal" tabindex="-1" role="dialog" aria-hidden="true" >
-                 <div class="modal-dialog">
-                     <div class="modal-content animated bounceInRight" style="left: -75%; top: 5px; width: 250px">
-                         &lt;!&ndash;<div class="modal-header">
-                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
-                             </button>
-                         </div>&ndash;&gt;
-                         <div class="modal-body" style="height: 600px;">
-                             <div class="form-group">
-                                 <textarea name="caseNos" id="caseNos" class="form-control" rows="30" style="width:200px"></textarea>
-                             </div>
-                         </div>
-                         <div class="modal-footer">
-                             <button type="button" class="btn btn-white" data-dismiss="modal" onclick="closeDiv()">关闭</button>
-                             <button type="button" class="btn btn-primary" onclick="saveCaseNo();">保存</button>
-                         </div>
-                     </div>
-                 </div>
-             </div>
-         </div>-->
     </div>
 
 
@@ -825,7 +803,8 @@
                     return;
                 }
             }
-            caseNos = caseNos.replaceAll(" ",",");
+            // caseNos = caseNos.replaceAll(" ",",");
+            caseNos = caseNos.replace(new RegExp(" ","gm"),",");
             $("#caseNo").val(caseNos);
             $("#selectAll").prop("checked",false);
             initFreeSearch();
@@ -1634,16 +1613,15 @@
                 type: 0,
                 title: false,
                 content: '<div class="col-sm-12">\n' +
-                '    <div id="showCaseNosLayer">\n' +
-                '        <div class="form-group">\n' +
-                '                   <textarea name="caseNos" id="caseNos" class="form-control" rows="30" style="width:200px"></textarea>\n' +
-                '                </div>\n' +
-                '    </div>\n' +
+                '           <div class="form-group">\n' +
+                '               <textarea name="caseNos" id="caseNos" placeholder="手动输入案件号需要加英文“，”分隔；可从EXCEL中直接粘多行过来，无需手动添加分隔符" class="form-control" rows="30" style="width:280px"></textarea>\n' +
+                '           </div>\n' +
                 '</div>',
                 btn: ['确定', '关闭'],
                 yes: function (index, layero) {
                     var caseNos = $("#caseNos").val();
-                    caseNos = caseNos.replaceAll("\n",",");
+                    // caseNos = caseNos.replaceAll("\n",",");
+                    caseNos = caseNos.replace(new RegExp("\n","gm"),",");
                     $("#caseNo").val(caseNos);
                     layer.close(index);
                 },
@@ -1654,24 +1632,14 @@
                     // $("i[class='layui-layer-TipsG layui-layer-TipsR']").remove();
                     // $("div[class='layui-layer-content']").attr('style','height: 79px;background: #fff;');
                     // $(".layui-layer-tips .layui-layer-close").attr('style','top:-10px;right: -10px;');
-                    $(".layui-layer .layui-layer-dialog .layer-ext-moon").attr('style','top:35px;left: 110px;');
+                    // $(".layui-layer .layui-layer-dialog .layer-ext-moon").attr('style','top:35px;left: 110px;');
                 }
             });
             var caseNo = $("#caseNo").val();
-            caseNo = caseNo.replaceAll(" ",",");
+            // caseNo = caseNo.replaceAll(" ",",");
+            caseNo = caseNo.replace(new RegExp(" ","gm"),",");
             $("#caseNos").val(caseNo);
         }
-
-        /*function closeDiv() {
-            $("#showCaseNoModal").hide();
-        }
-
-        function saveCaseNo() {
-            var caseNos = $("#caseNos").val();
-            caseNos = caseNos.replaceAll("\n",",");
-            $("#caseNo").val(caseNos);
-            $("#showCaseNoModal").hide();
-        }*/
     </script>
 </body>
 </html>
