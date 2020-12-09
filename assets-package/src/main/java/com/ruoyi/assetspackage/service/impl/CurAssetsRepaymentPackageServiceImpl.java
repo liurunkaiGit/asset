@@ -814,6 +814,7 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
 
 
 
+    @Transactional
     public void closeCase2(List<CloseCase> remoteList) {
         List<String> caseNoList = new ArrayList<>();
         List<Task> closeList = new ArrayList<>();
@@ -859,6 +860,7 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
      * 定时结案使用(去掉shiro)
      * @param remoteList
      */
+    @Transactional
     public void closeCase3(List<CloseCase> remoteList) {
         List<String> caseNoList = new ArrayList<>();
         List<Task> closeList = new ArrayList<>();
