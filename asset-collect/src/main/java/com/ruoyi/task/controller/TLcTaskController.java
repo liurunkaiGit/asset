@@ -219,6 +219,10 @@ public class TLcTaskController extends BaseController {
         if(StringUtils.isNotEmpty(callCodeHistoryListStr)&& !"null".equals(callCodeHistoryListStr)){
             tLcTask.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
         }
+        if(StringUtils.isNotBlank(tLcTask.getCaseNo())) {
+            String[] caseNos = tLcTask.getCaseNo().split(",");
+            tLcTask.setCaseNoList(Arrays.asList(caseNos));
+        }
         modelMap.put("tLcTask", tLcTask);
         modelMap.put("currentCaseNo", currentCaseNo);
         modelMap.put("currentImportBatchNo", currentImportBatchNo);
@@ -403,6 +407,10 @@ public class TLcTaskController extends BaseController {
             tLcTask.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
         }
         tLcTask.setOrgId(ShiroUtils.getSysUser().getOrgId().toString());
+        if(StringUtils.isNotBlank(tLcTask.getCaseNo())) {
+            String[] caseNos = tLcTask.getCaseNo().split(",");
+            tLcTask.setCaseNoList(Arrays.asList(caseNos));
+        }
         Map<String, BigDecimal> resultMap = this.tLcTaskService.searchAllTaskTotalMoney(tLcTask);
         return resultMap;
     }
@@ -541,6 +549,10 @@ public class TLcTaskController extends BaseController {
             }
         } else {
             tLcTask.setTaskStatusList(null);
+        }
+        if(StringUtils.isNotBlank(tLcTask.getCaseNo())) {
+            String[] caseNos = tLcTask.getCaseNo().split(",");
+            tLcTask.setCaseNoList(Arrays.asList(caseNos));
         }
         List<TLcTask> list = tLcTaskService.selectMyTaskList2(tLcTask);
         logger.info("查询客户列表结束ownerId="+tLcTask.getOwnerId());
@@ -780,6 +792,10 @@ public class TLcTaskController extends BaseController {
 //                result.add(task.getId());
 //            }
 //        }
+        if(StringUtils.isNotBlank(tLcTask.getCaseNo())) {
+            String[] caseNos = tLcTask.getCaseNo().split(",");
+            tLcTask.setCaseNoList(Arrays.asList(caseNos));
+        }
         Long allocatedCount = this.tLcTaskService.selectAllocatedCount(tLcTask);
         return AjaxResult.success(allocatedCount);
     }

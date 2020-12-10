@@ -543,8 +543,11 @@
             and t.org_id = #{orgId}
         </if>
         and (1=1
-        <if test="caseNo != null  and caseNo != ''">
-            and t.case_no = #{caseNo}
+        <if test="caseNoList != null">
+            and t.case_no in
+            <foreach collection="caseNoList" item="caseNo" open="(" close=")" separator="," >
+                #{caseNo}
+            </foreach>
         </if>
         <if test="customName != null  and customName != ''">
             and t.custom_name like concat('%', #{customName}, '%')
@@ -1500,8 +1503,11 @@
             and d.org_id = #{orgId}
         </if>
         and (1=1
-        <if test="caseNo != null  and caseNo != ''">
-            and t.case_no = #{caseNo}
+        <if test="caseNoList != null">
+            and t.case_no in
+            <foreach collection="caseNoList" item="caseNo" open="(" close=")" separator="," >
+                #{caseNo}
+            </foreach>
         </if>
         <if test="customName != null  and customName != ''">
             and t.custom_name like concat('%', #{customName}, '%')
@@ -1579,8 +1585,11 @@
             and t.org_id = #{orgId}
         </if>
         and (1=1
-        <if test="caseNo != null  and caseNo != ''">
-            and t.case_no = #{caseNo}
+        <if test="caseNoList != null">
+            and t.case_no in
+            <foreach collection="caseNoList" item="caseNo" open="(" close=")" separator="," >
+                #{caseNo}
+            </foreach>
         </if>
         <if test="customName != null  and customName != ''">
             and t.custom_name like concat('%', #{customName}, '%')
@@ -1640,8 +1649,11 @@
             and t.org_id = #{orgId}
         </if>
         and (1=1
-        <if test="caseNo != null  and caseNo != ''">
-            and t.case_no = #{caseNo}
+        <if test="caseNoList != null">
+            and t.case_no in
+            <foreach collection="caseNoList" item="caseNo" open="(" close=")" separator="," >
+                #{caseNo}
+            </foreach>
         </if>
         <if test="customName != null  and customName != ''">
             and t.custom_name like concat('%', #{customName}, '%')
