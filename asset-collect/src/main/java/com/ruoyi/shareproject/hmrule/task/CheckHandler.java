@@ -37,11 +37,11 @@ public abstract  class CheckHandler {
                 return 1;
             }
         }else if("1".equals(tiaoJian)){
-            if(biaozhun < one){
+            if(biaozhun <= one){
                 return 1;
             }
         }else if("2".equals(tiaoJian)){
-            if(biaozhun > one){
+            if(biaozhun >= one){
                 return 1;
             }
         }
@@ -58,11 +58,11 @@ public abstract  class CheckHandler {
                 return 1;
             }
         }else if("1".equals(tiaoJian)){
-            if(biaozhun < one){
+            if(biaozhun <= one){
                 return 1;
             }
         }else if("2".equals(tiaoJian)){
-            if(biaozhun > one){
+            if(biaozhun >= one){
                 return 1;
             }
         }
@@ -79,11 +79,11 @@ public abstract  class CheckHandler {
                 return 1;
             }
         }else if("1".equals(tiaoJian)){
-            if(biaozhun < one.doubleValue()){
+            if(biaozhun <= one.doubleValue()){
                 return 1;
             }
         }else if("2".equals(tiaoJian)){
-            if(biaozhun > one.doubleValue()){
+            if(biaozhun >= one.doubleValue()){
                 return 1;
             }
         }
