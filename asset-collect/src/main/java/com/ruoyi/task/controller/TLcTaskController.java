@@ -532,11 +532,11 @@ public class TLcTaskController extends BaseController {
         if (tLcTask.getTaskStatus() == null) {
             if (tLcTask.getToType().equals("1")) {
                 // 在催
-                String str = "1,2";
+                String str = "1,2,4";
                 tLcTask.setTaskStatusList(Arrays.asList(str.split(",")));
             } else {
-                // 在催
-                String str = "1,2,3";
+                // 综合
+                String str = "1,2,3,4";
                 tLcTask.setTaskStatusList(Arrays.asList(str.split(",")));
             }
         } else {
