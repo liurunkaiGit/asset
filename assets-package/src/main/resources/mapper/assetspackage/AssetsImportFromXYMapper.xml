@@ -593,12 +593,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="findPartRepaymentList" resultMap="CurAssetsPackageResult">
         select t.id, t.org_casNo, t.org, t.transferType, t.rmb_ye, t.rmb_yhfxzje, t.rmb_yhlizje, t.rmb_yhbjzje, t.rmb_yhfyzje, t.rmb_zdyhje, t.rmb_qkzje, t.borrow_no, t.borrow_blank, t.borrow_ed, t.rcr, t.fz, t.area_center, t.max_yqts_his, t.sum_yqts_his, t.sum_yqcs_his, t.ww_city_name, t.wa_ye, t.bill_address, t.year_rates, t.tj_firm, t.tj_wd, t.day_rates, t.account_date, t.overdue_days, t.first_yq_date, t.first_yqjc_date, t.first_yq_flag, t.cur_name, t.cur_sex, t.certificate_no, t.certificate_address, t.regist_address, t.email, t.marriage, t.education, t.customer_mobile, t.customer_home_tel, t.customer_home_address, t.work_name, t.work_address, t.work_tel, t.first_liaison_name, t.first_liaison_relation, t.first_liaison_mobile, t.first_liaison_tel, t.second_liaison_name, t.second_liaison_relation, t.second_liaison_mobile, t.second_liaison_tel, t.three_liaison_name, t.three_liaison_relation, t.three_liaison_mobile, t.three_liaison_tel, t.cpmc, t.hk_type, t.znj, t.ajhssj, t.org_id, t.package_flag, t.create_by, t.create_time, t.close_case, t.is_exit_collect, t.import_batch_no, t.close_case_date, t.package_id, t.account_age, t.la_flag, t.fx_flag, t.htlx, t.jmbq, t.fcbq, t.fxsfbh, t.remark, t.tar, t.jkrq, t.zhychkr, t.mqhkje, t.dqqkje, t.ljyhje, t.sfje, t.zdhkzh1, t.zdhkzh2, t.zdhkzhhm1, t.zdhkzhhm2, t.zdhkqd1, t.zdhkqd2, t.khmb, t.spjg, t.dklx, t.jkbs, t.spxx, t.wacs, t.ykqs, t.work_dept, t.customer_mobile2, t.customer_mobile3, t.customer_mobile4, t.fourth_liaison_name, t.fourth_liaison_relation, t.fourth_liaison_mobile, t.fifth_liaison_name, t.fifth_liaison_relation, t.fifth_liaison_mobile,
-              (t.rmb_ye-a.rmb_ye) as dqyhje
+              (t.wa_ye-a.wa_ye) as dqyhje
         from cur_assets_package t,cur_assets_package_temp a
         WHERE t.org_casNo= a.org_casNo and t.org_id = a.org_id
         and t.org_id=#{orgId} and a.import_batch_no=#{importBatchNo}
         and t.close_case !=1
-        and a.rmb_ye <![CDATA[<]]> t.rmb_ye
+        and a.wa_ye <![CDATA[<]]> t.wa_ye
     </select>
 
     <update id="batchUpdateCloseCase" parameterType="java.util.List">
