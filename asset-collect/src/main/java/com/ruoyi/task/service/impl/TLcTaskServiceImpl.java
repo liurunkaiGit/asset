@@ -687,6 +687,10 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         if (city != null && !"".equals(city)) {
             param.setProvince(null);
         }
+        if(StringUtils.isNotBlank(param.getCaseNo())) {
+            String[] caseNos = param.getCaseNo().split(",");
+            param.setCaseNoList(Arrays.asList(caseNos));
+        }
         Long userId = ShiroUtils.getUserId();
         List<TLcTask> tLcTaskList = this.tLcTaskMapper.selectTaskList(param);
         List<String> caseNoList = tLcTaskList.stream().map(tlcTask -> {

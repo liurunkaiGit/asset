@@ -928,6 +928,10 @@ public class TLcTaskController extends BaseController {
         if (city != null && !"".equals(city)) {
             tLcTask.setProvince(null);
         }
+        if(StringUtils.isNotBlank(tLcTask.getCaseNo())) {
+            String[] caseNos = tLcTask.getCaseNo().split(",");
+            tLcTask.setCaseNoList(Arrays.asList(caseNos));
+        }
         return this.tLcTaskService.allDataReAllocat(userId, tLcTask, allocatNum, allocatRule, sysUser);
     }
 
@@ -1055,6 +1059,10 @@ public class TLcTaskController extends BaseController {
         String city = tLcTask.getCity();
         if(city != null && !"".equals(city)){
             tLcTask.setProvince(null);
+        }
+        if(StringUtils.isNotBlank(tLcTask.getCaseNo())) {
+            String[] caseNos = tLcTask.getCaseNo().split(",");
+            tLcTask.setCaseNoList(Arrays.asList(caseNos));
         }
         return this.tLcTaskService.allDataSendRobot(speechcraftIdAndSceneDefId, tLcTask, callLineId, callType);
     }
@@ -1625,6 +1633,10 @@ public class TLcTaskController extends BaseController {
         TableDataInfo rspData = new TableDataInfo();
         if (StringUtils.isNotBlank(taskIds)) {
             tLcTask.setTaskIdList(Arrays.asList(taskIds.split(",")));
+        }
+        if(StringUtils.isNotBlank(tLcTask.getCaseNo())) {
+            String[] caseNos = tLcTask.getCaseNo().split(",");
+            tLcTask.setCaseNoList(Arrays.asList(caseNos));
         }
         List<SysUser> userList = this.tLcTaskService.selectCaseRecycleSelectAgent(tLcTask);
         rspData.setRows(userList);

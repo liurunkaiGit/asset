@@ -1151,8 +1151,11 @@
             and t.org_id = #{orgId}
         </if>
         and (1=1
-        <if test="caseNo != null  and caseNo != ''">
-            and t.case_no = #{caseNo}
+        <if test="caseNoList != null">
+            and t.case_no in
+            <foreach collection="caseNoList" item="caseNo" open="(" close=")" separator="," >
+                #{caseNo}
+            </foreach>
         </if>
         <if test="customName != null  and customName != ''">
             and t.custom_name like concat('%', #{customName}, '%')
@@ -1245,8 +1248,11 @@
             and t.org_id = #{orgId}
         </if>
         and (1=1
-        <if test="caseNo != null  and caseNo != ''">
-            and t.case_no = #{caseNo}
+        <if test="caseNoList != null">
+            and t.case_no in
+            <foreach collection="caseNoList" item="caseNo" open="(" close=")" separator="," >
+                #{caseNo}
+            </foreach>
         </if>
         <if test="customName != null  and customName != ''">
             and t.custom_name like concat('%', #{customName}, '%')
@@ -1284,14 +1290,17 @@
         t.import_batch_no = cust.import_batch_no
         AND EXISTS (select 1 from t_lc_robot_black rb where rb.case_no = t.case_no)
         AND t.allot_type = 1 AND t.task_status != 3
-        <if test="orgId != null  and orgId != ''">and t.org_id = #{orgId}
+        <if test="orgId != null  and orgId != ''">
+            and t.org_id = #{orgId}
         </if>
         and (1=1
-        <if test="
-                caseNo != null  and caseNo != ''">and t.case_no = #{caseNo}
+        <if test="caseNoList != null">
+            and t.case_no in
+            <foreach collection="caseNoList" item="caseNo" open="(" close=")" separator="," >
+                #{caseNo}
+            </foreach>
         </if>
-        <if test="
-                customName != null  and customName != ''">
+        <if test="customName != null  and customName != ''">
             and t.custom_name like concat('%', #{customName}, '%')
         </if>
         <if test="taskStatus != null ">
@@ -1683,8 +1692,11 @@
             and t.org_id = #{orgId}
         </if>
         and (1=1
-        <if test="caseNo != null  and caseNo != ''">
-            and t.case_no = #{caseNo}
+        <if test="caseNoList != null">
+            and t.case_no in
+            <foreach collection="caseNoList" item="caseNo" open="(" close=")" separator="," >
+                #{caseNo}
+            </foreach>
         </if>
         <if test="customName != null  and customName != ''">
             and t.custom_name like concat('%', #{customName}, '%')
@@ -1739,8 +1751,11 @@
             and su.user_name = #{username}
         </if>
         and (1=1
-        <if test="caseNo != null  and caseNo != ''">
-            and t.case_no = #{caseNo}
+        <if test="caseNoList != null">
+            and t.case_no in
+            <foreach collection="caseNoList" item="caseNo" open="(" close=")" separator="," >
+                #{caseNo}
+            </foreach>
         </if>
         <if test="customName != null  and customName != ''">
             and t.custom_name like concat('%', #{customName}, '%')
