@@ -68,9 +68,9 @@ public class TLcReportDayProcessController extends BaseController {
      */
     @PostMapping("/share/list")
     @ResponseBody
-    public TableDataInfo shareList(@Validated @RequestBody TLcReportDayProcess tLcReportDayProcess) {
+    public List<TLcReportDayProcess> shareList(@Validated @RequestBody TLcReportDayProcess tLcReportDayProcess) {
         List<TLcReportDayProcess> list = this.tLcReportDayProcessService.selectTLcReportDayProcessList(tLcReportDayProcess);
-        return getDataTable(list);
+        return list;
     }
 
     /**
