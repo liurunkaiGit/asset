@@ -8,6 +8,8 @@ import lombok.experimental.Accessors;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -30,6 +32,7 @@ public class TLcReportDayProcess extends BaseEntity {
     /**
      * 报表日期
      */
+    @NotNull(message = "日期不能为空")
     @Excel(name = "报表日期", width = 30, dateFormat = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date reportDate;
@@ -147,6 +150,7 @@ public class TLcReportDayProcess extends BaseEntity {
     /**
      * 所属机构
      */
+    @NotBlank(message = "机构id不能为空")
     private String orgId;
 
     /**
