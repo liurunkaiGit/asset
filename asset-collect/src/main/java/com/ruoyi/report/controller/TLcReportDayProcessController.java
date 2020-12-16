@@ -58,6 +58,7 @@ public class TLcReportDayProcessController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(TLcReportDayProcess tLcReportDayProcess) {
+        startPage();
         List<TLcReportDayProcess> list = this.tLcReportDayProcessService.selectTLcReportDayProcessList(tLcReportDayProcess);
         return getDataTable(list);
     }

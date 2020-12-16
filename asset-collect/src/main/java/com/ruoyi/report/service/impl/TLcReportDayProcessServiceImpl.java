@@ -62,10 +62,8 @@ public class TLcReportDayProcessServiceImpl extends BaseController implements IT
             param.put("endDate", DateUtils.parseDate(endDate));
             param.put("day", 0);
             param.put("orgId", tLcReportDayProcess.getOrgId());
-            startPage();
             list = selectDayProcess(param);
         } else {
-            startPage();
             list = this.tLcReportDayProcessMapper.selectTLcReportDayProcessList(tLcReportDayProcess);
         }
         return list;
@@ -119,4 +117,5 @@ public class TLcReportDayProcessServiceImpl extends BaseController implements IT
     public List<TLcReportDayProcess> selectDayProcess(Map<String, Object> param) {
         return this.tLcReportDayProcessMapper.selectDayProcess(param);
     }
+
 }
