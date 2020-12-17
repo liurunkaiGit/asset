@@ -1978,6 +1978,15 @@
             $.modal.alertError("正在通话中，请先挂断当前通话再保存电话码");
             return;
         }
+        var val = $('input[name="radioChoose"]:checked').parents("tr");
+        var addPhone = val.find("[name='phoneShow']").html();
+        if($("#finalId").prop("checked")){
+            addPhone = $("#freeCall").val();
+        }
+        if (addPhone == null || addPhone == '') {
+            $.modal.alert("电话号码不能为空");
+            return;
+        }
         if (sign == null || sign == '' || sign == 'undefined') {
             // alert($("#callRecordSelect").val())
             sign = $("#callCode").val();
@@ -2009,16 +2018,12 @@
         }
         var findDate = $("#findDate").val();
 
-        var val = $('input[name="radioChoose"]:checked').parents("tr");
+
         var callStartTime = $("#callStartTime").val();
         var callEndTime = $("#callEndTime").val();
         var callLen = $("#callLen").val();
         var callRadioLocation = $("#callRadioLocation").val();
         var callRemark = $("#callRemarkAdd").val();
-        var addPhone = val.find("[name='phoneShow']").html();
-        if($("#finalId").prop("checked")){
-            addPhone = $("#freeCall").val();
-        }
         var callRecordId = $("#callRecordId").val();
         // if(callRadioLocation=="" || callRadioLocation==null){
         //     $.modal.alertSuccess("请拨打电话后再新增");
