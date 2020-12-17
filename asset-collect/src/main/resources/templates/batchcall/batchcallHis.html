@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta http-equiv="Cache-Control" content="no-store">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link th:href="@{/css/agentcss/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/agentcss/agent-toolbar.css}" rel="stylesheet"/>
+    <script th:src="@{/assets/js/desensitization.js}"></script>
+
+    <!--[if lt IE 9]>
+    <script th:src="@{/ajax/libs/agentjs/html5shiv.min.js}"></script>
+    <script th:src="@{/ajax/libs/agentjs/respond.min.js}"></script>
+    <![endif]-->
+
+
+    <script th:src="@{/ajax/libs/agentjs/jquery.min.js}"></script>
+    <script th:src="@{/ajax/libs/agentjs/socket.io.min.js}"></script>
+    <script th:src="@{/ajax/libs/agentjs/agent-client.js}"></script>
+    <script th:src="@{/ajax/libs/agentjs/moment.min.js}"></script>
+    <script th:src="@{/ajax/libs/agentjs/agent-toolbar.js}"></script>
+
+    <!--自建话务平台需要引用的js-->
+    <script th:src="@{/assets/js/jquery-1.10.2.min.js}"></script>
+    <script th:src="@{/assets/js/layer/layer.js}"></script>
+    <script th:src="@{/assets/js/SoftPhone.js}"></script>
+
+    <script th:src="@{/assets/js/sockjs.js}"></script>
+    <script th:src="@{/assets/js/callcenter.js}"></script>
+
+    <th:block th:include="include :: header('批量外呼任务管理列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <input type="hidden" id="isCanAutoCall" name="isCanAutoCall" th:value="${isCanAutoCall}">
+                            <!--<input type="hidden" id="agentId" name="agentId" th:value="${extPhone.agentid}">-->
+                            <input type="hidden" id="callPlatform" name="callPlatform" th:value="${callPlatform}">
+                            <input type="hidden" id="desensitization" name="desensitization" th:value="${desensitization}">
+                            <input type="hidden" id="exonNum" name="exonNum" value="">
+
+                            <!--<input type="hidden" id="currentPhone" name="curentPhone" value="">
+                            <input type="hidden" id="currentContactName" name="currentContactName" value="">
+                            <input type="hidden" id="currentContactRelation" name="currentContactRelation" value="">
+
+                            <input type="hidden" id="currentCaseNo" name="currentCaseNo" value="">
+                            <input type="hidden" id="currentImportBatchNo" name="currentImportBatchNo" value="">
+                            <input type="hidden" id="currentOrgId" name="currentOrgId" value="">-->
+                            <li>
+                                <p>机构案件号：</p>
+                                <input type="text" name="caseNo"/>
+                            </li>
+                            <li>
+                                <p>电话号码：</p>
+                                <input type="text" name="phone"/>
+                            </li>
+                            <li>
+                                <p>联系人姓名：</p>
+                                <input type="text" name="contactName"/>
+                            </li>
+                            <li>
+                                <p>与本人关系：</p>
+                                <select name="contactRelation" th:with="type=${@dict.getType('sys_custom_contact_rela')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>任务状态：</p>
+                                <select name="taskStatus" th:with="type=${@dict.getType('batch_call_status')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var contactRelations = [[${@dict.getType('sys_custom_contact_rela')}]];
+        var phoneTypes = [[${@dict.getType('phone_type')}]];
+        var batchCallStatus = [[${@dict.getType('batch_call_status')}]];
+        var prefix = ctx + "batchcall";
+
+        $(function() {
+            var options = {
+                url: prefix + "/his/list",
+                modalName: "批量外呼历史任务管理",
+                uniqueId:'id',
+                columns: [
+                {
+                    field : 'id', 
+                    title : '主键ID',
+                    visible: false
+                },
+                {
+                    field : 'caseNo',
+                    title : '案件号',
+                    visible: false
+                },
+                {
+                    field : 'importBatchNo',
+                    title : '批次号',
+                    visible: false
+                },
+                {
+                    field : 'orgId',
+                    title : '委托机构ID',
+                    visible: false
+                },
+                {
+                    field : 'batchNo', 
+                    title : '批次号'
+                },
+                {
+                    field : 'caseNo', 
+                    title : '案件号'
+                },
+                {
+                    field : 'phone', 
+                    title : '电话号码',
+                    formatter: function(value, row, index) {
+                        var desensitization = $("#desensitization").val();
+                        if("true" == desensitization){
+                            return tellToMd5(value);
+                        }
+                        return value;
+                    }
+                },
+                {
+                    field : 'contactName', 
+                    title : '联系人姓名'
+                },
+                {
+                    field : 'contactRelation', 
+                    title : '与本人关系',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(contactRelations, value);
+                    }
+                },
+                {
+                    field : 'exonNum',
+                    title : '外显号码'
+                },
+                {
+                    field : 'phoneType', 
+                    title : '电话类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(phoneTypes, value);
+                    }
+                },
+                {
+                    field : 'taskStatus',
+                    title : '任务状态',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(batchCallStatus, value);
+                    }
+                },
+                {
+                    field : 'createTime',
+                    title : '创建时间'
+                }]
+            };
+            $.table.init(options);
+        });
+
+    </script>
+</body>
+</html>

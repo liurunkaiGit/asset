@@ -1103,7 +1103,7 @@
                         }
                         if(n.isClose != null  && n.isClose == '0'){
                             if (n.phone != null && n.phone != 'null' && n.phone.length >4) {
-                                if(n.phone == batchCall.phone ){//当前拨打的联系人记录
+                                // if(n.phone == batchCall.phone ){//当前拨打的联系人记录
                                     var htm = "<tr onclick='changeColor(this);' style='background:rgb(169,169,169)'>" +
                                         "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose' checked/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+phone+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
                                         "<td class='disclass'  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='call("+JSON.stringify(n.contactName)+","+n.id+","+n.relation+",\""+n.phone+"\",this)'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>"+"</td>";
@@ -1113,11 +1113,11 @@
                                     }
                                     htm += "</td><td name='phoneShow' style='display: none;'>"+n.phone+"</td></tr>";
                                     tp.append(htm);
-                                }else{
-                                    tp.append("<tr >" +
-                                        "<td style='display: none'></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+phone+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
-                                        "<td  style='width: 30px;'></td><td style='width: 30px;'></td><td name='phoneShow' style='display: none;'>"+n.phone+"</td></tr>");
-                                }
+                                // }else{
+                                //     tp.append("<tr >" +
+                                //         "<td style='display: none'></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+phone+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
+                                //         "<td  style='width: 30px;'></td><td style='width: 30px;'></td><td name='phoneShow' style='display: none;'>"+n.phone+"</td></tr>");
+                                // }
                             }
                             // if (n.tel != null && n.phone != 'null' && n.tel.length > 4) {
                             //     if(n.tel == batchCall.phone ) {//当前拨打的联系人记录
@@ -2176,6 +2176,7 @@
         var destDesc = "0"+phone;
         temp_phone=phone;
         start();
+        parent.agentIsCalling=true;
         var ucid;
         if(callPlatform == 'PA') {
             if (destDesc) {

@@ -3032,8 +3032,6 @@
             $.modal.alert("请配置当前机构的话务平台");
             return;
         }
-        agentIsCalling = true;
-        console.log("坐席开始打电话，agentIsCalling=true");
         var tr1 = obj.parentNode.parentNode;
         // alert(tr1.cells[7].innerHTML="<span class='text-success'>已授权</span>")
         if(callPlatform != 'DY') {
@@ -3057,6 +3055,8 @@
         var destDesc = "0"+phone;
         temp_phone=phone;
         start();
+        agentIsCalling = true;
+        console.log("坐席开始打电话，agentIsCalling=true");
         var ucid;
         if(callPlatform == 'PA') {
             if (destDesc) {
@@ -3076,7 +3076,7 @@
         }else if(callPlatform == 'DY') {
             // 度言拨打电话
             duyanSdk.callme(phone);
-            agentIsCalling = false;
+            // agentIsCalling = false;
             DYSDK.callConnecting(function(data){
                 console.log("当电话在拨打中的时候被触发：" + JSON.stringify(data));
                 ucid = data.uuid;
@@ -3536,8 +3536,6 @@
             $.modal.alert("请输入号码");
             return;
         }
-        agentIsCalling = true;
-        console.log("坐席开始打电话，agentIsCalling=true");
        /* var trs = $("#custContactTbody")[0].childNodes;
         $.each(trs,function (i,n) {
             if(n.firstChild.lastChild.checked){
@@ -3566,6 +3564,8 @@
         var destDesc = "0"+phone;
         temp_phone=phone;
         start();
+        agentIsCalling = true;
+        console.log("坐席开始打电话，agentIsCalling=true");
         var ucid;
         if(callPlatform == 'PA') {
             if (destDesc) {
@@ -3585,7 +3585,7 @@
         }else if(callPlatform == 'DY') {
             // 度言拨打电话
             duyanSdk.callme(phone);
-            agentIsCalling = false;
+            // agentIsCalling = false;
             DYSDK.callConnecting(function(data){
                 console.log("当电话在拨打中的时候被触发：" + JSON.stringify(data));
                 ucid = data.uuid;
