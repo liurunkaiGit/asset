@@ -320,7 +320,7 @@
                     <button class="btn btn-danger" style="height: 25px;padding: 3px;" id="letterApply" onclick="letterApply()">信函申请</button>
                 </div>-->
             </div>
-            <div class="tab-pane" style="height: 189px;overflow: auto">
+            <div class="tab-pane" style="height: 145px;overflow: auto">
                 <table id="custContactTable">
                     <tr>
                         <th>联系人</th>
@@ -337,7 +337,7 @@
             </div>
         </div>
     </div>
-    <div id="finalMidDiv" class="box box-main"  style="height: 40px;">
+    <div id="finalMidDiv" class="box box-main"  style="display: none; height: 40px;">
         <div class="box-header">
             <div class="tab-pane"  style="height: 33px;">
                 <table id="finalTable">
@@ -345,7 +345,7 @@
                     <tr onclick="changeFinalColor(this);">
                         <td style='display: none'><input id="finalId" type='radio' name='radioChoose'/></td>
                         <td style='padding-left: 5px;'><input id='freeCall' type='text' name='freeCall' style='width:120px;'/>&nbsp;&nbsp;<a data-toggle='modal' title="新增电话" class="btn btn-primary" style="height: 25px;padding: 3px;font-size: 12px;" onclick='addPhone();' >新增电话</a></td>
-                        <td class='disclass' style="width: 30px;"><!--<a href='javascript:void(0)' onclick='freeCall()'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>--></td>
+                        <td class='disclass' style="width: 30px;">&lt;!&ndash;<a href='javascript:void(0)' onclick='freeCall()'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>&ndash;&gt;</td>
                         <td  style="width: 30px;"  ><a th:if="${callPlatform} ne 'DY'"  href='javascript:void(0)' onclick='hangUp()'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a></td>
                     </tr>
                     </tbody>
@@ -354,7 +354,7 @@
         </div>
     </div>
 
-    <div class="col-sm-12 search-collapse" id="rightDetailInfoDiv"  style="height: 273px;overflow: auto;overflow-x: hidden">
+    <div class="col-sm-12 search-collapse" id="rightDetailInfoDiv"  style="height: 313px;overflow:hidden;">
         <div class="tabs-container" >
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#tab-r1" aria-expanded="true">电话</a></li>
@@ -2754,6 +2754,10 @@
     }
 
     function changeColor(obj) {
+        if (parent.agentIsCalling) {
+            $.modal.alertError("正在通话中不能切换联系人");
+            return;
+        }
         // 改变颜色前获取已选中的那一行
         var allCustContact = $("#custContactTbody").find('tr');
         var hisPhone;

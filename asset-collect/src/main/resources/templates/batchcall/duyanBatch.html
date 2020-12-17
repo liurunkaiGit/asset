@@ -70,6 +70,11 @@
             window.setTimeout(function(){
                 if(duyanSdk){
                     duyanSdk.callme($("#phone").val());
+                    // DYSDK.callConnecting(function(data){
+                    //     console.log("当电话在拨打中的时候被触发：" + JSON.stringify(data));
+                    //     alert(data.uuid)
+                    //     parent.dyuuid = data.uuid;
+                    // });
                 }else{
                     layer.msg('度言平台初始化错误', { icon: 5 });
                 }
@@ -181,7 +186,7 @@
                                     actionCode: actionCode,
                                     // 是否挂断
                                     isHangUp: 1,
-                                    ucid: data.uuid
+                                    ucid: dataDY.uuid
                                 },
                             success: function (data) {
                                 //请求成功
