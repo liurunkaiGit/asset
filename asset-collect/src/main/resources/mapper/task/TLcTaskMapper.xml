@@ -51,6 +51,7 @@
         <result property="notebook" column="notebook" jdbcType="VARCHAR"/>
         <result property="color" column="color" jdbcType="CHAR"/>
         <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="backCaseDate" column="back_case_date" jdbcType="DATE"/>
     </resultMap>
 
     <sql id="SELECT_T_LC_TASK">
@@ -95,7 +96,8 @@
         t.phone,
         t.dqyhje,
         t.send_robot_batch_no,
-        t.notebook
+        t.notebook,
+        t.back_case_date
     </sql>
 
     <sql id="SELECT_SAME_TASK">
@@ -341,7 +343,7 @@
         t.notebook,
         t.phone,
         d.remark,
-        t.back_case_date as backCaseDate,
+        t.back_case_date,
         CONCAT_WS('@',t.id,t.case_no,t.certificate_no,t.owner_id) AS idCaseNoCertificateNo
         FROM t_lc_task t,t_lc_duncase d
         WHERE t.case_no = d.case_no AND t.org_id = d.org_id AND t.import_batch_no = d.import_batch_no
@@ -502,7 +504,7 @@
 
     <select id="selectMyTaskList" parameterType="com.ruoyi.task.domain.TLcTask" resultMap="TLcTaskResult">
         SELECT
-        d.ljyhje,t.color,d.remark,d.back_case_date as backCaseDate,
+        d.ljyhje,t.color,d.remark,
         <include refid="SELECT_T_LC_TASK"/>
         FROM t_lc_task t,t_lc_duncase d
         WHERE 1=1

@@ -3574,14 +3574,14 @@
                     if (event.lastStatus == 21) {
                         console.log('onStatusChanged' + ': ' + JSON.stringify(event, null, 4) + '\n\n');
                         ucid = event.ucid;
-                        callAddCallRecord(contactName,id,contactRelation,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
+                        callAddCallRecord(null,null,null,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
                     }
                 };
             }
         } else if(callPlatform == 'ZJ') {
             // 第一个参数是呼叫号码，第二个参数是外显号码
             uKeFuSoftPhone.CallOut(phone,window.parent.parent.$('#exonNum').val());
-            callAddCallRecord(contactName,id,contactRelation,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
+            callAddCallRecord(null,null,null,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
         }else if(callPlatform == 'DY') {
             // 度言拨打电话
             duyanSdk.callme(phone);
@@ -3589,7 +3589,7 @@
             DYSDK.callConnecting(function(data){
                 console.log("当电话在拨打中的时候被触发：" + JSON.stringify(data));
                 ucid = data.uuid;
-                callAddCallRecord(contactName,id,contactRelation,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
+                callAddCallRecord(null,null,null,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
             });
         }
     }
