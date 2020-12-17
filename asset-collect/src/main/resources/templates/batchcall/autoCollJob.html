@@ -1106,8 +1106,12 @@
                                 // if(n.phone == batchCall.phone ){//当前拨打的联系人记录
                                 if(n.phone == batchCall.phone ){//当前拨打的联系人记录
                                     var htm = "<tr onclick='changeColor(this);'style='background:rgb(169,169,169)'>" +
-                                        "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose' checked/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+phone+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
-                                        "<td class='disclass'  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='call("+JSON.stringify(n.contactName)+","+n.id+","+n.relation+",\""+n.phone+"\",this)'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>"+"</td>";
+                                        "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose' checked/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+phone+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" ;
+                                    htm += "<td class='disclass'  style='width: 30px;'>";
+                                    if('DY' != platform){
+                                        htm += "<a href='javascript:void(0)' onclick='call("+JSON.stringify(n.contactName)+","+n.id+","+n.relation+",\""+n.phone+"\",this)'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>";
+                                    }
+                                    htm += "</td>";
                                     htm += "<td  style='width: 30px;'>";
                                     if('DY' != platform){
                                         htm += "<a href='javascript:void(0)' onclick='hangUp("+n.phone+")'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
@@ -1116,8 +1120,12 @@
                                     tp.append(htm);
                                 }else{
                                     var htm = "<tr onclick='changeColor(this);'>" +
-                                        "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose' checked/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+phone+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
-                                        "<td class='disclass'  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='call("+JSON.stringify(n.contactName)+","+n.id+","+n.relation+",\""+n.phone+"\",this)'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>"+"</td>";
+                                        "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose' checked/></td><td name='contactName'>"+n.contactName+"</td><td name='phone'>"+phone+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>";
+                                    htm += "<td class='disclass'  style='width: 30px;'>";
+                                    if('DY' != platform){
+                                        htm += "<a href='javascript:void(0)' onclick='call("+JSON.stringify(n.contactName)+","+n.id+","+n.relation+",\""+n.phone+"\",this)'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>";
+                                    }
+                                    htm += "</td>";
                                     htm += "<td  style='width: 30px;'>";
                                     if('DY' != platform){
                                         htm += "<a href='javascript:void(0)' onclick='hangUp("+n.phone+")'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
