@@ -3576,12 +3576,12 @@
         var destDesc = "0"+phone;
         temp_phone=phone;
         start();
-        agentIsCalling = true;
-        console.log("坐席开始打电话，agentIsCalling=true");
         var ucid;
         if(callPlatform == 'PA') {
             if (destDesc) {
                 agentClient.makeCall(getDestType(destDesc), destDesc);
+                agentIsCalling = true;
+                console.log("坐席开始打电话，agentIsCalling=true");
                 agentClient.onStatusChanged = function(event) {
                     if (event.lastStatus == 21) {
                         console.log('onStatusChanged' + ': ' + JSON.stringify(event, null, 4) + '\n\n');
@@ -3593,6 +3593,8 @@
         } else if(callPlatform == 'ZJ') {
             // 第一个参数是呼叫号码，第二个参数是外显号码
             uKeFuSoftPhone.CallOut(phone,window.parent.parent.$('#exonNum').val());
+            agentIsCalling = true;
+            console.log("坐席开始打电话，agentIsCalling=true");
             callAddCallRecord(null,null,null,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
         }else if(callPlatform == 'DY') {
             // 度言拨打电话
@@ -3602,6 +3604,10 @@
                 console.log("当电话在拨打中的时候被触发：" + JSON.stringify(data));
                 ucid = data.uuid;
                 callAddCallRecord(null,null,null,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
+            });
+            DYSDK.callConfirm(function (data) {
+                agentIsCalling = true;
+                console.log("坐席开始打电话，agentIsCalling=true");
             });
         }
     }
@@ -3614,7 +3620,10 @@
     }
 
     function changeColor(obj) {
-
+        if (agentIsCalling) {
+            $.modal.alertError("正在通话中不能切换联系人");
+            return;
+        }
         // 改变颜色前获取已选中的那一行
         var allCustContact = $("#custContactTbody").find('tr');
         var hisPhone;
