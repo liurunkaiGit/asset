@@ -3065,14 +3065,17 @@
         if(callPlatform == 'PA') {
             if (destDesc) {
                 agentClient.makeCall(getDestType(destDesc), destDesc);
-                agentIsCalling = true;
-                console.log("坐席开始打电话，agentIsCalling=true");
+
                 agentClient.onStatusChanged = function(event) {
                     if (event.lastStatus == 21) {
                         console.log('onStatusChanged' + ': ' + JSON.stringify(event, null, 4) + '\n\n');
                         ucid = event.ucid;
                         callAddCallRecord(contactName,id,contactRelation,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
                     }
+                };
+                agentClient.onConnected = function(event) {
+                    agentIsCalling = true;
+                    console.log("坐席开始打电话，agentIsCalling=true");
                 };
             }
         } else if(callPlatform == 'ZJ') {
@@ -3605,6 +3608,7 @@
                 ucid = data.uuid;
                 callAddCallRecord(null,null,null,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
             });
+            // 接通电话的回调函数，返回电话号码等信息
             DYSDK.callConfirm(function (data) {
                 agentIsCalling = true;
                 console.log("坐席开始打电话，agentIsCalling=true");
