@@ -856,6 +856,7 @@
                 firstBatchCallAddCallRecord(batchCall.id,callPlatform, ucid, contactName,contactRelation,phone,currentCaseNo,currentImportBatchNo,currentOrgId);
             } else if(callPlatform == 'DY') {
                 duyaAuto(phone);
+                parent.agentIsCalling=true;
                 // alert(dyuuid);
                 firstBatchCallAddCallRecord(batchCall.id,callPlatform, dyuuid, contactName,contactRelation,phone,currentCaseNo,currentImportBatchNo,currentOrgId);
             }

@@ -2197,7 +2197,7 @@
         var destDesc = "0"+phone;
         temp_phone=phone;
         start();
-        parent.agentIsCalling=true;
+
         var ucid;
         if(callPlatform == 'PA') {
             if (destDesc) {
@@ -2210,10 +2210,15 @@
                         batchCallAddCallRecord(contactName,id,contactRelation,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
                     }
                 };
+                window.parent.agentClient.onConnected = function(event) {
+                    parent.agentIsCalling=true;
+                    console.log("坐席开始打电话，agentIsCalling=true");
+                };
             }
         } else if(callPlatform == 'ZJ') {
             // 第一个参数是呼叫号码，第二个参数是外显号码
             window.parent.uKeFuSoftPhone.CallOut(phone,window.parent.parent.$('#exonNum').val());
+            parent.agentIsCalling=true;
             batchCallAddCallRecord(contactName,id,contactRelation,phone,callPlatform,ucid,callStartTime,callEndTime,callLen,callRadioLocation);
         }else if(callPlatform == 'DY') {
             // 度言拨打电话
