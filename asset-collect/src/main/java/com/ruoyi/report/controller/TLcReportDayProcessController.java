@@ -7,8 +7,12 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.enums.IsNoEnum;
+import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.report.domain.TLcReportDayProcess;
 import com.ruoyi.report.service.ITLcReportDayProcessService;
+import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.service.ISysUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +44,8 @@ public class TLcReportDayProcessController extends BaseController {
 
     @Autowired
     private ITLcReportDayProcessService tLcReportDayProcessService;
+    @Autowired
+    private ISysUserService sysUserService;
 
     @RequiresPermissions("report:process:view")
     @GetMapping()
@@ -48,6 +54,20 @@ public class TLcReportDayProcessController extends BaseController {
         modelMap.put("reportDate", DateUtils.parseDate(curDate));
         modelMap.put("updateTime", DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS, new Date()));
         modelMap.put("reportName", "每日过程指标");
+        // 是否组内查询：否
+        modelMap.put("isGroup", IsNoEnum.NO.getCode());
+        return prefix + "/process";
+    }
+
+    @RequiresPermissions("report:process:group:view")
+    @GetMapping(value = "/group/view")
+    public String groupProcess(ModelMap modelMap) {
+        String curDate = DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD, new Date());
+        modelMap.put("reportDate", DateUtils.parseDate(curDate));
+        modelMap.put("updateTime", DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS, new Date()));
+        modelMap.put("reportName", "组内每日过程指标");
+        // 是否组内查询：是
+        modelMap.put("isGroup", IsNoEnum.IS.getCode());
         return prefix + "/process";
     }
 

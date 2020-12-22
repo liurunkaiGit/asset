@@ -89,4 +89,6 @@ public interface TLcBatchCallMapper
      * @return
      */
     public Map<String,Object> selectMaxBatchNo(String createBy);
+
+    List<TLcBatchCall> selectBatchCallHisList(TLcBatchCall tLcBatchCall);
 }

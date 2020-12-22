@@ -754,6 +754,8 @@ public class TLcDuncase extends BaseEntity {
 
     //百融号码状态
     private String phoneStatus;
+    // 是否组内查询
+    private Integer isGroup;
 
     // 动态查询条件使用
 //    private BigDecimal start_arrears_total;

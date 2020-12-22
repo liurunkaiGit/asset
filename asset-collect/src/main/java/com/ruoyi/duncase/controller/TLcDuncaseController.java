@@ -1,5 +1,6 @@
 package com.ruoyi.duncase.controller;
 
+import com.alibaba.druid.sql.visitor.functions.Isnull;
 import com.ruoyi.assetspackage.domain.CurAssetsPackage;
 import com.ruoyi.assetspackage.domain.score.CollectionScoreRequest;
 import com.ruoyi.assetspackage.domain.score.CollectionScoreResponse;
@@ -22,6 +23,7 @@ import com.ruoyi.custom.service.ITLcCustinfoService;
 import com.ruoyi.duncase.domain.Assets;
 import com.ruoyi.duncase.domain.TLcDuncase;
 import com.ruoyi.duncase.service.ITLcDuncaseService;
+import com.ruoyi.enums.IsNoEnum;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.task.domain.CollJob;
 import com.ruoyi.task.domain.TLcTask;
@@ -57,11 +59,7 @@ public class TLcDuncaseController extends BaseController {
     @Autowired
     private ITLcCustJobService tLcCustJobService;
     @Autowired
-    private ITLcColumnQueryService columnQueryService;
-    @Autowired
     private ICurAssetsPackageService curAssetsPackageService;
-    @Autowired
-    private ITLcScoreService tLcScoreService;
     @Autowired
     private DesensitizationUtil desensitizationUtil;
 
@@ -72,6 +70,26 @@ public class TLcDuncaseController extends BaseController {
         //查询是否脱敏
         boolean desensitization = desensitizationUtil.isDesensitization(String.valueOf(ShiroUtils.getSysUser().getOrgId()), ShiroUtils.getLoginName());
         modelMap.put("desensitization", desensitization);
+        // 是否组内查询：否
+        modelMap.put("isGroup", IsNoEnum.NO.getCode());
+        return prefix + "/duncase";
+    }
+
+    /**
+     * 跳转到组内案件综合查询
+     * @param request
+     * @param modelMap
+     * @return
+     */
+    @RequiresPermissions("collect:duncase:group:view")
+    @GetMapping(value = "/group/view")
+    public String groupDuncase(HttpServletRequest request, ModelMap modelMap) {
+        modelMap.put("orgId", ShiroUtils.getSysUser().getOrgId());
+        //查询是否脱敏
+        boolean desensitization = desensitizationUtil.isDesensitization(String.valueOf(ShiroUtils.getSysUser().getOrgId()), ShiroUtils.getLoginName());
+        modelMap.put("desensitization", desensitization);
+        // 是否组内查询：是
+        modelMap.put("isGroup", IsNoEnum.IS.getCode());
         return prefix + "/duncase";
     }
 
@@ -111,6 +129,9 @@ public class TLcDuncaseController extends BaseController {
         String cityId = tLcDuncase.getCityId();
         if(cityId != null && !"".equals(cityId)){
             tLcDuncase.setProvinceId(null);
+        }
+        if (tLcDuncase.getIsGroup() != null && tLcDuncase.getIsGroup().equals(IsNoEnum.IS.getCode())) {
+            tLcDuncase.setUserGroup(ShiroUtils.getSysUser().getUserGroup());
         }
         List<TLcDuncase> list = tLcDuncaseService.selectTLcDuncaseByPage(tLcDuncase);
         return getDataTable(list);
@@ -252,6 +273,7 @@ public class TLcDuncaseController extends BaseController {
     /**
      * 查询催收评分
      */
+    @RequiresPermissions("collect:duncase:findScore")
     @PostMapping("/findScore")
     @ResponseBody
     public TableDataInfo findScore(TLcDuncase tLcDuncase, HttpServletRequest request,String ids) {
@@ -331,6 +353,9 @@ public class TLcDuncaseController extends BaseController {
         String callCodeHistoryListStr = request.getParameter("callCodeHistoryListStr");//历史电话码
         if(StringUtils.isNotEmpty(callCodeHistoryListStr)){
             tLcDuncase.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
+        }
+        if (tLcDuncase.getIsGroup() != null && tLcDuncase.getIsGroup().equals(IsNoEnum.IS.getCode())) {
+            tLcDuncase.setUserGroup(ShiroUtils.getSysUser().getUserGroup());
         }
         tLcDuncase.setOrgId(ShiroUtils.getSysUser().getOrgId().toString());
         Map<String, BigDecimal> resultMap = this.tLcDuncaseService.searchAllDuncaseTotalMoney(tLcDuncase);

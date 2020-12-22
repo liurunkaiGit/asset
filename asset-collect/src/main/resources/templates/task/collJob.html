@@ -2822,10 +2822,10 @@
             printEvent('onOffering', event);
         };
 
-        agentClient.onConnected = function(event) {
+        /*agentClient.onConnected = function(event) {
             printEvent('onConnected', event);
             window.parent.parent.$("#callstatus").html("<img style='width:30px;height: 30px;' src='/yijietong.png'/>");
-        };
+        };*/
 
         agentClient.onReleased = function(event) {
             window.parent.parent.$("#callstatus").html("<img style='width:30px;height: 30px;' src='/weijietong.png'/>");
@@ -3076,6 +3076,9 @@
                 agentClient.onConnected = function(event) {
                     agentIsCalling = true;
                     console.log("坐席开始打电话，agentIsCalling=true");
+                    // printEvent('onConnected', event);
+                    console.log('onConnected' + ': ' + JSON.stringify(event, null, 4) + '\n\n');
+                    window.parent.parent.$("#callstatus").html("<img style='width:30px;height: 30px;' src='/yijietong.png'/>");
                 };
             }
         } else if(callPlatform == 'ZJ') {

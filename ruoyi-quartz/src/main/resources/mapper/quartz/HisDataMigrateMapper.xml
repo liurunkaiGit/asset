@@ -7,4 +7,8 @@
 	<insert id="hisDataMigrate" parameterType="java.util.Map" statementType="CALLABLE">
 		{call his_data_migrate(#{days,mode=IN})}
 	</insert>
+
+	<insert id="batchCallHisDataMigrate" parameterType="java.util.Map" statementType="CALLABLE">
+		{call batch_call_his_data_migrate(#{days,mode=IN})}
+	</insert>
 </mapper>

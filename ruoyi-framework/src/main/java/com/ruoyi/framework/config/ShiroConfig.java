@@ -264,6 +264,7 @@ public class ShiroConfig
         filterChainDefinitionMap.put("/report/personal/list/share/**", "anon");
         filterChainDefinitionMap.put("/report/process/share/list/**", "anon");
         filterChainDefinitionMap.put("/call/record/selectCallRadioByOrgId/**", "anon");
+        filterChainDefinitionMap.put("/collect/task/performance/test/list/**", "anon");
         // 退出 logout地址，shiro去清除session
         filterChainDefinitionMap.put("/logout", "logout");
         // 不需要拦截的访问

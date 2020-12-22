@@ -98,4 +98,6 @@ public interface ITLcBatchCallService
      * @return
      */
     public int selectMaxBatchNo(String createBy);
+
+    List<TLcBatchCall> selectBatchCallHisList(TLcBatchCall tLcBatchCall);
 }

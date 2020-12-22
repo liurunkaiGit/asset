@@ -12,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 每日过程指标报对象 t_lc_report_day_process
@@ -166,5 +167,10 @@ public class TLcReportDayProcess extends BaseEntity {
      * 实际还金额总
      */
     private BigDecimal amountActualSum;
+
+    // 是否组内查询
+    private Integer isGroup;
+    // 组内对应的用户
+    private List<Long> userIds;
 
 }

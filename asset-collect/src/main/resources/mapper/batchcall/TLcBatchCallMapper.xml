@@ -156,5 +156,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE
             create_by = #{createBy};
     </select>
-    
+
+    <select id="selectBatchCallHisList" parameterType="com.ruoyi.batchcall.domain.TLcBatchCall" resultMap="TLcBatchCallResult">
+        select t.id, t.batch_no, t.case_no, t.phone, t.contact_name, t.contact_relation, t.exon_num, t.org_id, t.import_batch_no, t.phone_type, t.task_status, t.create_time, t.create_by, t.remark
+        from t_lc_batch_call t
+        <where>
+            <if test="orgId != null and orgId != ''"> and t.org_id = #{orgId}</if>
+            <if test="batchNo != null "> and t.batch_no = #{batchNo}</if>
+            <if test="caseNo != null  and caseNo != ''"> and t.case_no = #{caseNo}</if>
+            <if test="phone != null  and phone != ''"> and t.phone = #{phone}</if>
+            <if test="contactName != null  and contactName != ''"> and t.contact_name like concat('%', #{contactName}, '%')</if>
+            <if test="contactRelation != null "> and t.contact_relation = #{contactRelation}</if>
+            <if test="exonNum != null  and exonNum != ''"> and t.exon_num = #{exonNum}</if>
+            <if test="phoneType != null  and phoneType != ''"> and t.phone_type = #{phoneType}</if>
+            <if test="taskStatus != null "> and t.task_status = #{taskStatus}</if>
+            <if test="createBy != null "> and t.create_by = #{createBy}</if>
+            <if test="taskStatusList != null and taskStatusList.size() > 0">
+                and t.task_status in
+                <foreach collection="taskStatusList" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
 </mapper>

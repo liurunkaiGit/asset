@@ -32,5 +32,10 @@ public class HisDataMigrateServiceImpl implements HisDataMigrateService {
         String hisDataMigrateDays = this.sysConfigService.selectConfigByKey("hisDataMigrateDays");
         param.put("days", Integer.valueOf(hisDataMigrateDays));
         this.hisDataMigrateMapper.hisDataMigrate(param);
+        // 批量外呼历史数据迁移
+        Map<String, Object> batchCallParam = new HashMap<>();
+        String batchCallHisDataMigrateDays = this.sysConfigService.selectConfigByKey("batchCallHisDataMigrateDays");
+        batchCallParam.put("days", Integer.valueOf(batchCallHisDataMigrateDays));
+        this.hisDataMigrateMapper.batchCallHisDataMigrate(batchCallParam);
     }
 }

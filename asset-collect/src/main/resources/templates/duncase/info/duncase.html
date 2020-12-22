@@ -215,11 +215,11 @@
             </form>
         </div>
 
-        <div class="btn-group-sm" id="toolbar" role="group">
+        <div class="btn-group-sm" id="toolbar" role="group" th:if="${isGroup != 1}">
             <a class="btn btn-warning" onclick="exportDuncase()" shiro:hasPermission="collect:duncase:export">
                 <i class="fa fa-download"></i> 导出
             </a>
-            <a class="btn btn-primary" onclick="findScore()">
+            <a class="btn btn-primary" onclick="findScore()" shiro:hasPermission="collect:duncase:findScore">
                 <i class="glyphicon glyphicon-eye-open"></i> 查询评分
             </a>
         </div>
@@ -250,7 +250,7 @@
 
     $(function () {
         var options = {
-            url: prefix + "/list",
+            url: prefix + "/list?isGroup="+[[${isGroup}]],
             createUrl: prefix + "/add",
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
@@ -785,6 +785,7 @@
             callCodeHistoryListStr = callCodeHistoryListStr.join();
         }
         var freeSQL = $("#freeSQL").val();
+        var isGroup = [[${isGroup}]];
         // freeSQL = encodeURIComponent(freeSQL);
         $.post(
             prefix + "/searchAllDuncaseTotalMoney",
@@ -795,7 +796,8 @@
                 provinceId:provinceId,
                 cityId:cityId,
                 callCodeHistoryList:callCodeHistoryListStr,
-                freeSQL:freeSQL
+                freeSQL:freeSQL,
+                isGroup:isGroup
             },
             function(data) {
                 // alert(JSON.stringify(data));

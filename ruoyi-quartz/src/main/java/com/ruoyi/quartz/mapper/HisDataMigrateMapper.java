@@ -13,4 +13,6 @@ import java.util.Map;
 public interface HisDataMigrateMapper {
 
     void hisDataMigrate(Map<String, Object> param);
+
+    void batchCallHisDataMigrate(Map<String, Object> batchCallParam);
 }

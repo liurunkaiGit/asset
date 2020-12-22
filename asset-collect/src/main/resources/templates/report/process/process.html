@@ -33,7 +33,7 @@
                 </form>
             </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
+            <div class="btn-group-sm" id="toolbar" role="group" th:if="${isGroup != 1}">
                 <!--<label>报表名称：</label><label id="heapReportName"></label><br/>
                 <label>报表日期：</label><label id="headReportDate"></label><br/>
                 <label>更新时间：</label><label id="headUpdateTime"></label><br/>
@@ -56,7 +56,7 @@
 
         $(function() {
             var options = {
-                url: prefix + "/list",
+                url: prefix + "/list?isGroup="+[[${isGroup}]],
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",

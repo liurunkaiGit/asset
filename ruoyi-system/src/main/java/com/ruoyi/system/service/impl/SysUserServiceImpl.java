@@ -451,4 +451,9 @@ public class SysUserServiceImpl implements ISysUserService {
     public List<String> selectHavaStopCollApprovePermUser() {
         return this.userMapper.selectHavaStopCollApprovePermUser();
     }
+
+    @Override
+    public List<Long> selectUserIdList(SysUser sysUser) {
+        return this.userMapper.selectUserIdList(sysUser);
+    }
 }

@@ -196,4 +196,9 @@ public class TLcBatchCallServiceImpl implements ITLcBatchCallService
         int batchNo = Integer.parseInt(map.get("batch_no").toString());
         return batchNo;
     }
+
+    @Override
+    public List<TLcBatchCall> selectBatchCallHisList(TLcBatchCall tLcBatchCall) {
+        return tLcBatchCallMapper.selectBatchCallHisList(tLcBatchCall);
+    }
 }

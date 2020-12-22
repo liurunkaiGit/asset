@@ -90,6 +90,7 @@
     </select>
 
     <select id="selectTLcDuncaseByPage" parameterType="com.ruoyi.duncase.domain.TLcDuncase" resultMap="TLcDuncaseResult">
+        select * from (
             SELECT
             (select user_group from sys_user where user_id = t.owner_id) as userGroup,
             d.id,
@@ -156,6 +157,10 @@
             </if>
             )
             ORDER BY t.task_status ASC,d.create_time DESC,t.recently_allot_date ASC,d.enter_coll_date ASC,d.case_no ASC
+        ) t where 1 = 1
+        <if test="userGroup != null and userGroup != ''">
+            and t.userGroup = #{userGroup}
+        </if>
     </select>
 
     <sql id="SELECT_DUNCASE_WHERE_FIX_COLUMN">
@@ -838,14 +843,16 @@
         SELECT
         sum(t.arrears_total) as totalArrears,
         sum(t.dqyhje) as totalPay
-        FROM t_lc_duncase d, t_lc_task t
-        WHERE d.case_no = t.case_no AND d.import_batch_no = t.import_batch_no
+        FROM t_lc_duncase d, t_lc_task t, sys_user su WHERE t.owner_id = su.user_id and  d.case_no = t.case_no AND d.import_batch_no = t.import_batch_no
         <if test="orgId != null  and orgId != ''">
             and d.org_id = #{orgId}
         </if>
         and (1=1
         <if test="caseNo != null  and caseNo != ''">
             and d.case_no = #{caseNo}
+        </if>
+        <if test="userGroup != null and userGroup != ''">
+            and su.user_group = #{userGroup}
         </if>
         <if test="customName != null  and customName != ''">
             and d.custom_name like concat('%', #{customName}, '%')

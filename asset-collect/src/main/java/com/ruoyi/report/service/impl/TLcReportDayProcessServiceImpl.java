@@ -3,9 +3,12 @@ package com.ruoyi.report.service.impl;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.enums.IsNoEnum;
+import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.report.domain.TLcReportDayProcess;
 import com.ruoyi.report.mapper.TLcReportDayProcessMapper;
 import com.ruoyi.report.service.ITLcReportDayProcessService;
+import com.ruoyi.system.domain.SysUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,6 +65,10 @@ public class TLcReportDayProcessServiceImpl extends BaseController implements IT
             param.put("endDate", DateUtils.parseDate(endDate));
             param.put("day", 0);
             param.put("orgId", tLcReportDayProcess.getOrgId());
+            if (tLcReportDayProcess.getIsGroup() != null && tLcReportDayProcess.getIsGroup().equals(IsNoEnum.IS.getCode())) {
+                param.put("userGroup",ShiroUtils.getSysUser().getUserGroup());
+            }
+
             list = selectDayProcess(param);
         } else {
             list = this.tLcReportDayProcessMapper.selectTLcReportDayProcessList(tLcReportDayProcess);

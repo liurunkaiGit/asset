@@ -197,4 +197,5 @@ public interface ISysUserService {
      */
     List<String> selectHavaStopCollApprovePermUser();
 
+    List<Long> selectUserIdList(SysUser sysUser);
 }

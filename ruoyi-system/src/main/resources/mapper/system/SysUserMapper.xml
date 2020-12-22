@@ -387,4 +387,9 @@
         AND sur.user_id = su.user_id
     </select>
 
+    <select id="selectUserIdList" resultType="java.lang.Long" parameterType="com.ruoyi.system.domain.SysUser">
+        SELECT su.user_id as userId FROM sys_user su
+        WHERE su.user_group = #{userGroup}
+    </select>
+
 </mapper> 
