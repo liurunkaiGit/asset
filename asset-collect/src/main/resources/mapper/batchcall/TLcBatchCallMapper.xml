@@ -159,7 +159,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBatchCallHisList" parameterType="com.ruoyi.batchcall.domain.TLcBatchCall" resultMap="TLcBatchCallResult">
         select t.id, t.batch_no, t.case_no, t.phone, t.contact_name, t.contact_relation, t.exon_num, t.org_id, t.import_batch_no, t.phone_type, t.task_status, t.create_time, t.create_by, t.remark
-        from t_lc_batch_call t
+        from t_lc_batch_call_his t
         <where>
             <if test="orgId != null and orgId != ''"> and t.org_id = #{orgId}</if>
             <if test="batchNo != null "> and t.batch_no = #{batchNo}</if>
