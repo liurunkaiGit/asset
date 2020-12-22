@@ -191,14 +191,14 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
             xyEntity.setTar(tLcCallRecord.getTar());
 //            xyEntity.setCallResult(tLcCallRecord.getCallResult());
             //特殊字段处理
-            String recommendVendor = tLcCallRecord.getRecommendVendor();//推荐商户
-            if(recommendVendor != null) {
-                xyEntity.setYwdetp(getYwDetp(recommendVendor.trim()));
-            }
-            if (tLcCallRecord.getProductName().equals("小鲨分期（ML）")) {
-                xyEntity.setYwdetp("驻店业务部");
-            }
-
+//            String recommendVendor = tLcCallRecord.getRecommendVendor();//推荐商户
+//            if(recommendVendor != null) {
+//                xyEntity.setYwdetp(getYwDetp(recommendVendor.trim()));
+//            }
+//            if (tLcCallRecord.getProductName().equals("小鲨分期（ML）")) {
+//                xyEntity.setYwdetp("驻店业务部");
+//            }
+            xyEntity.setYwdetp(handleYwDept(tLcCallRecord.getProductName()));
             String callRecord = tLcCallRecord.getCallResult();//电话码中文
             if(callRecord != null) {
                 xyEntity.setCallResult(getCallResult(callRecord.trim()));
@@ -734,5 +734,56 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
         return result;
     }
 
-
+    private String handleYwDept(String productName){
+        String businessDept = null;
+        if(null != productName) {
+            switch (productName) {
+                case "51金鲨贷":
+                case "51金鲨贷（等额本息）":
+                case "电商-百融":
+                case "电商-车轮":
+                case "电商-滴滴":
+                case "电商-返利":
+                case "电商-平安":
+                case "电商-融之家":
+                case "电商-微聚未来":
+                case "电商-未来视界":
+                case "电商-小鲨快贷":
+                case "电商-新浪":
+                case "家庭消费贷-线上通用产品":
+                case "小鲨分期（浅橙）":
+                case "小鲨分期（浅橙） 等额本息":
+                case "小鲨分期（小米金融）":
+                case "兴家贷（GG）":
+                    businessDept = "电商";
+                    break;
+                case "小鲨分期":
+                    businessDept = "网商";
+                    break;
+                case "电信（橙分期）":
+                case "小鲨易贷-平安一账通":
+                case "兴业消费金融-小鲨易贷-还呗":
+                case "兴业消费金融-小鲨易贷（还呗）":
+                case "兴业消费金融-小鲨易贷-京东":
+                case "兴业消费金融-小鲨易贷（京东）":
+                case "兴业消费金融-小鲨易贷-拉卡拉":
+                case "兴业消费金融-小鲨易贷（拉卡拉）":
+                case "兴业消费金融-小鲨易贷-美团":
+                case "兴业消费金融-小鲨易贷（美团）":
+                case "兴业消费金融-小鲨易贷-携程金融":
+                case "兴业消费金融-小鲨易贷（携程金融）":
+                case "兴业消费金融-小鲨易贷-盈酷":
+                case "兴业消费金融-小鲨易贷（盈酷）":
+                case "兴业消费金融-小鲨易贷-招联":
+                case "兴业消费金融-小鲨易贷（招联）":
+                    businessDept = "高校";
+                    break;
+                case "小鲨分期（ML）":
+                    businessDept = "驻店业务部";
+                    break;
+                default: businessDept = "电商";
+            }
+        }
+        return businessDept;
+    }
 }
