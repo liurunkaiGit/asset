@@ -26,8 +26,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 批量外呼任务管理Controller
@@ -117,7 +120,16 @@ public class TLcBatchCallController extends BaseController {
         //只查询状态为 暂停、外呼中、待外呼 的数据
 //        tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.ZT,TLcBatchCall.WHZ,TLcBatchCall.DWH));
         List<TLcBatchCall> list = tLcBatchCallService.selectTLcBatchCallList(tLcBatchCall);
-        return getDataTable(list);
+        Map<String, List<TLcBatchCall>> batchCallMap = list.stream().collect(Collectors.groupingBy(TLcBatchCall::getCaseNo));
+        ArrayList<TLcBatchCall> result = new ArrayList<>();
+        for (Map.Entry<String, List<TLcBatchCall>> map : batchCallMap.entrySet()) {
+            List<TLcBatchCall> batchCallList = map.getValue();
+            List<TLcBatchCall> selfList = batchCallList.stream().filter(batchCall -> batchCall.getContactRelation() == 1).collect(Collectors.toList());
+            List<TLcBatchCall> noSelfList = batchCallList.stream().filter(batchCall -> batchCall.getContactRelation() != 1).collect(Collectors.toList());
+            result.addAll(selfList);
+            result.addAll(noSelfList);
+        }
+        return getDataTable(result);
     }
 
     @RequiresPermissions("batchcall:his:view")

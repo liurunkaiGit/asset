@@ -31,9 +31,14 @@ VALUES ('案件查询评分', (select t.menu_id from sys_menu t where t.menu_nam
 
 INSERT INTO `sys_menu` (`menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
 VALUES ('组内案件查询', (select t.menu_id from sys_menu t where t.menu_name = '催收管理'), '13', '/collect/duncase/group/view', 'menuItem', 'C', '0', 'collect:duncase:group:view', '#', 'zhang', '2020-12-17 11:10:50', '', NULL, '');
+INSERT INTO `sys_menu` (`menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES ('查询', (select t.menu_id from sys_menu t where t.menu_name = '组内案件查询'), '1', '#', '', 'F', '0', 'collect:duncase:list', '#', 'admin', '2018-03-01 00:00:00', 'ry', '2018-03-01 00:00:00', '');
 
 INSERT INTO `sys_menu` (`menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
 VALUES ('组内每日过程指标', (select t.menu_id from sys_menu t where t.menu_name = '报表管理'), '4', '/report/process/group/view', 'menuItem', 'C', '0', 'report:process:group:view', '#', 'admin', '2020-12-17 11:14:35', '', NULL, '');
+INSERT INTO `sys_menu` (`menu_name`, `parent_id`, `order_num`, `url`, `target`, `menu_type`, `visible`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
+VALUES ('查询', (select t.menu_id from sys_menu t where t.menu_name = '组内每日过程指标'), '1', '#', '', 'F', '0', 'report:process:list', '#', 'admin', '2018-03-01 00:00:00', 'ry', '2018-03-01 00:00:00', '每日过程指标报查询');
+
 
 
 
