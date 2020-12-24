@@ -364,13 +364,14 @@ public class TLcBatchCallController extends BaseController {
         TLcBatchCall tLcBatchCall = new TLcBatchCall();
         tLcBatchCall.setCreateBy(ShiroUtils.getLoginName());
         tLcBatchCall.setOrgId(ShiroUtils.getSysUser().getOrgId() + "");
-        tLcBatchCall.setIsOnlyOne("1");//查询第一条待拨电话
+//        tLcBatchCall.setIsOnlyOne("1");//查询第一条待拨电话
         //只查询状态为 待外呼、外呼中 的数据
         tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.DWH, TLcBatchCall.WHZ));
         List<TLcBatchCall> batchCallList = tLcBatchCallService.selectTLcBatchCallList(tLcBatchCall);
 
         if (batchCallList != null && batchCallList.size() > 0) {
-            return AjaxResult.success(batchCallList.get(0));
+            List<TLcBatchCall> batchCallListBySelfSort = getBatchCallListBySelfSort(batchCallList);
+            return AjaxResult.success(batchCallListBySelfSort.get(0));
         }
         logger.info("getNextBatchCall:没有下一条待拨数据了");
         return AjaxResult.success("");
