@@ -1,6 +1,7 @@
 package com.ruoyi.batchcall.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageInfo;
 import com.ruoyi.agent.domain.ExtPhone;
 import com.ruoyi.agent.service.IExtPhoneService;
 import com.ruoyi.batchcall.domain.TLcBatchCall;
@@ -121,10 +122,14 @@ public class TLcBatchCallController extends BaseController {
         tLcBatchCall.setCreateBy(ShiroUtils.getLoginName());
         tLcBatchCall.setOrgId(ShiroUtils.getSysUser().getOrgId() + "");
         //只查询状态为 暂停、外呼中、待外呼 的数据
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(0);
         tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.ZT,TLcBatchCall.WHZ,TLcBatchCall.DWH));
         List<TLcBatchCall> list = tLcBatchCallService.selectTLcBatchCallList(tLcBatchCall);
+        rspData.setTotal(new PageInfo(list).getTotal());
         List<TLcBatchCall> result = getBatchCallListBySelfSort(list);
-        return getDataTable(result);
+        rspData.setRows(result);
+        return rspData;
     }
 
     @RequiresPermissions("batchcall:his:view")

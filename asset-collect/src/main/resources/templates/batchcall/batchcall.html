@@ -1093,6 +1093,7 @@
                                 $.modal.alert("自动呼叫队列已呼叫完毕");
                             }
                         }else{//只是更新状态则寻找数据行更新 不需要刷新表格
+                           $.table.refresh();
                            var tbStatus = $.table.selectDictLabel(batchCallStatus, status);
                            $("#bootstrap-table").bootstrapTable('updateByUniqueId', {id: 6, row: {status:tbStatus}});
                         }
