@@ -43,7 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="exonNum != null  and exonNum != ''"> and t.exon_num = #{exonNum}</if>
             <if test="phoneType != null  and phoneType != ''"> and t.phone_type = #{phoneType}</if>
             <if test="taskStatus != null "> and t.task_status = #{taskStatus}</if>
-            <if test="createBy != null "> and t.create_by = #{createBy}</if>
+            <if test="createBy != null and createBy != ''"> and t.create_by = #{createBy}</if>
             <if test="taskStatusList != null and taskStatusList.size() > 0">
                 and t.task_status in
                 <foreach collection="taskStatusList" index="index" item="item" open="(" separator="," close=")">

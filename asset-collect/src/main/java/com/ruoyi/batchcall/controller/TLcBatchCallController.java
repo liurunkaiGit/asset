@@ -14,9 +14,12 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.security.PermissionUtils;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.task.domain.TLcTask;
 import com.ruoyi.task.service.ITLcTaskService;
+import com.ruoyi.utils.DataPermissionUtil;
 import com.ruoyi.utils.DesensitizationUtil;
 import com.ruoyi.utils.DuyanUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -26,10 +29,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -55,6 +55,8 @@ public class TLcBatchCallController extends BaseController {
     private DesensitizationUtil desensitizationUtil;
     @Autowired
     private ITLcTaskService tLcTaskService;
+    @Autowired
+    private DataPermissionUtil dataPermissionUtil;
 
     @RequiresPermissions("ruoyi:batchcall:view")
     @GetMapping()
@@ -84,12 +86,13 @@ public class TLcBatchCallController extends BaseController {
         TLcBatchCall tLcBatchCall = new TLcBatchCall();
         tLcBatchCall.setCreateBy(ShiroUtils.getLoginName() + "");
         tLcBatchCall.setOrgId(ShiroUtils.getSysUser().getOrgId() + "");
-        tLcBatchCall.setIsOnlyOne("1");//查询第一条待拨电话
+//        tLcBatchCall.setIsOnlyOne("1");//查询第一条待拨电话
         //只查询状态为 暂停、外呼中、待外呼 的数据
         tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.WHZ, TLcBatchCall.DWH));
         List<TLcBatchCall> batchCallList = tLcBatchCallService.selectTLcBatchCallList(tLcBatchCall);
         if (batchCallList != null && batchCallList.size() > 0) {
-            modelMap.put("batchCall", batchCallList);
+            List<TLcBatchCall> result = getBatchCallListBySelfSort(batchCallList);
+            modelMap.put("batchCall", result);
         }
         modelMap.put("callPlatform", ShiroUtils.getSysUser().getPlatform());
         if ("DY".equals(ShiroUtils.getSysUser().getPlatform())) {
@@ -118,17 +121,9 @@ public class TLcBatchCallController extends BaseController {
         tLcBatchCall.setCreateBy(ShiroUtils.getLoginName());
         tLcBatchCall.setOrgId(ShiroUtils.getSysUser().getOrgId() + "");
         //只查询状态为 暂停、外呼中、待外呼 的数据
-//        tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.ZT,TLcBatchCall.WHZ,TLcBatchCall.DWH));
+        tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.ZT,TLcBatchCall.WHZ,TLcBatchCall.DWH));
         List<TLcBatchCall> list = tLcBatchCallService.selectTLcBatchCallList(tLcBatchCall);
-        Map<String, List<TLcBatchCall>> batchCallMap = list.stream().collect(Collectors.groupingBy(TLcBatchCall::getCaseNo));
-        ArrayList<TLcBatchCall> result = new ArrayList<>();
-        for (Map.Entry<String, List<TLcBatchCall>> map : batchCallMap.entrySet()) {
-            List<TLcBatchCall> batchCallList = map.getValue();
-            List<TLcBatchCall> selfList = batchCallList.stream().filter(batchCall -> batchCall.getContactRelation() == 1).collect(Collectors.toList());
-            List<TLcBatchCall> noSelfList = batchCallList.stream().filter(batchCall -> batchCall.getContactRelation() != 1).collect(Collectors.toList());
-            result.addAll(selfList);
-            result.addAll(noSelfList);
-        }
+        List<TLcBatchCall> result = getBatchCallListBySelfSort(list);
         return getDataTable(result);
     }
 
@@ -167,11 +162,18 @@ public class TLcBatchCallController extends BaseController {
     @PostMapping("/allList")
     @ResponseBody
     public TableDataInfo allList(TLcBatchCall tLcBatchCall) {
-        startPage();
         tLcBatchCall.setOrgId(ShiroUtils.getSysUser().getOrgId() + "");
 //        tLcBatchCall.setCreateBy(ShiroUtils.getLoginName()+"");
         //只查询状态为 暂停、外呼中、待外呼 的数据
 //        tLcBatchCall.setTaskStatusList(Arrays.asList(TLcBatchCall.ZT,TLcBatchCall.WHZ,TLcBatchCall.DWH));
+        boolean allDataPermissionByUser = dataPermissionUtil.findAllDataPermissionByUser(ShiroUtils.getSysUser());
+        if (!allDataPermissionByUser) {
+            Set<Long> deptDataPermissionByUser = dataPermissionUtil.findDeptDataPermissionByUser(ShiroUtils.getSysUser());
+            if (deptDataPermissionByUser == null || deptDataPermissionByUser.size() == 0) {
+                tLcBatchCall.setCreateBy(ShiroUtils.getSysUser().getLoginName());
+            }
+        }
+        startPage();
         List<TLcBatchCall> list = tLcBatchCallService.selectTLcBatchCallList(tLcBatchCall);
         return getDataTable(list);
     }
@@ -302,19 +304,27 @@ public class TLcBatchCallController extends BaseController {
                     }
                 }
             }
-
+            TLcBatchCall batchCall1 = this.tLcBatchCallService.selectTLcBatchCallById(tLcBatchCall.getId());
             TLcBatchCall tbc = new TLcBatchCall();
             tbc.setCreateBy(ShiroUtils.getLoginName());
             tbc.setOrgId(ShiroUtils.getSysUser().getOrgId() + "");
-            tbc.setIsOnlyOne("1");//查询第一条待拨电话
+//            tbc.setIsOnlyOne("1");//查询第一条待拨电话
             //只查询状态为 待外呼 的数据
             tbc.setTaskStatusList(Arrays.asList(TLcBatchCall.DWH, TLcBatchCall.WHZ));
             List<TLcBatchCall> batchCallList = tLcBatchCallService.selectTLcBatchCallList(tbc);
             String result = "";
             if (batchCallList != null && batchCallList.size() > 0) {//有要待外呼的数据
 //                result = JSON.toJSONString(batchCallList.get(0));
-                logger.info("下一条待拨数据为：{}", JSON.toJSONString(batchCallList.get(0)));
-                return AjaxResult.success(batchCallList.get(0));
+                // 查询当前案件是否还有未拨打完的电话，如果有，优先打当前案件下未拨打完的本人电话
+                List<TLcBatchCall> resultList = new ArrayList<>();
+                List<TLcBatchCall> curCaseBatchCallList = batchCallList.stream().filter(call1 -> call1.getCaseNo().equals(batchCall1.getCaseNo())).collect(Collectors.toList());
+                if (curCaseBatchCallList != null && curCaseBatchCallList.size() > 0) {
+                    resultList = getBatchCallListBySelfSort(curCaseBatchCallList);
+                } else {
+                    resultList = getBatchCallListBySelfSort(batchCallList);
+                }
+                logger.info("下一条待拨数据为：{}", JSON.toJSONString(resultList.get(0)));
+                return AjaxResult.success(resultList.get(0));
             } else {//没有待外呼的数据
                 logger.info("没有下一条待拨数据了");
                 return AjaxResult.success(result);
@@ -323,6 +333,19 @@ public class TLcBatchCallController extends BaseController {
             return error("通话状态更新失败");
         }
 
+    }
+
+    private List<TLcBatchCall> getBatchCallListBySelfSort(List<TLcBatchCall> batchCallList) {
+        Map<String, List<TLcBatchCall>> batchCallMap = batchCallList.stream().collect(Collectors.groupingBy(TLcBatchCall::getCaseNo));
+        List<TLcBatchCall> resultList = new ArrayList<>();
+        for (Map.Entry<String, List<TLcBatchCall>> map : batchCallMap.entrySet()) {
+            List<TLcBatchCall> callList = map.getValue();
+            List<TLcBatchCall> selfList = callList.stream().filter(batchCall -> batchCall.getContactRelation() == 1).collect(Collectors.toList());
+            List<TLcBatchCall> noSelfList = callList.stream().filter(batchCall -> batchCall.getContactRelation() != 1).collect(Collectors.toList());
+            resultList.addAll(selfList);
+            resultList.addAll(noSelfList);
+        }
+        return resultList;
     }
 
     /**
