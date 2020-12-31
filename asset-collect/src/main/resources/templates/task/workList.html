@@ -370,6 +370,14 @@
         }
         function changeStatus(status){
             var planId = $("#planId").text();
+            if(planId==null || planId==""){
+                if(status=="执行中"){
+                    $.modal.alertWarning("计划为空，无法启动！");
+                }else{
+                    $.modal.alertWarning("计划为空，无法暂停！");
+                }
+                return;
+            }
             $.ajax({
                 url: prefix + "/changeStatus",
                 dataType: "json",
@@ -404,16 +412,23 @@
                 },
                 success:function(result){
                     if(result.msg == 'success'){
-                        // console.log(result.data);
-                        var finishedCount = result.data.planBaseInfo.finishedCount;
-                        var planStatus = result.data.planBaseInfo.planStatus;
-                        $("#jhzt").text(planStatus);
+                        if(result.data==null){
+                            $("#planList").empty();
+                        }else{
+                            var totalCount = result.data.planBaseInfo.totalCount;
+                            if(totalCount == "0"){
+                                $("#planList").empty();
+                            }else{
+                                var finishedCount = result.data.planBaseInfo.finishedCount;
+                                var planStatus = result.data.planBaseInfo.planStatus;
+                                $("#jhzt").text(planStatus);
 
-                        var wcd = $("#wcd").text();
-                        var split = wcd.split("/");
-                        var new_wcd = finishedCount+"/"+split[1];
-                        $("#wcd").text(new_wcd);
-
+                                var wcd = $("#wcd").text();
+                                var split = wcd.split("/");
+                                var new_wcd = finishedCount+"/"+split[1];
+                                $("#wcd").text(new_wcd);
+                            }
+                        }
                         var id = $(".bootstrap-table").find(".table").attr("id");
                         $.table.refresh(id);
                     }else{

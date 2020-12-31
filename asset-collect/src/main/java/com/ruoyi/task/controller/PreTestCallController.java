@@ -231,11 +231,16 @@ public class PreTestCallController extends BaseController {
     @ResponseBody
     public AjaxResult getBaseInfo(String planId){
         try {
+            if(planId==null || "".equals(planId)){
+                return AjaxResult.success("success",null);
+            }
             Map<String,Object> result = new HashMap<>();
             //获取基本信息
             Map<String, String> planBaseInfo = this.preTestCallService.getPlanBaseInfo(planId);
             String planStatus = ConvertUtil.convertStatus(planBaseInfo.get("planStatus"));
+            String totalCount = planBaseInfo.get("totalCount");
             planBaseInfo.put("planStatus",planStatus);
+            planBaseInfo.put("totalCount",totalCount);
 
             //获取计划的执行结果
             List<Map<String,String>> listDetail = new ArrayList<>();
