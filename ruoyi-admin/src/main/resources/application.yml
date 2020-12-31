@@ -19,6 +19,12 @@ duyan:
   tokenUrl: https://open.duyansoft.com/api/v1/account/login/cti
   logUrl: https://open.duyansoft.com/api/v1/call_log
   soundRecordingUrl: https://open.duyansoft.com/api/v1/call/recording
+  createUrl: https://open.duyansoft.com/api/v1/call/campaign/personalFifo
+  statusUrl: https://open.duyansoft.com/api/v1/call/campaign/campaign_id/status
+  selectBaseUrl: https://open.duyansoft.com/api/v1/call/campaign/campaign_id
+  selectResultUrl: https://open.duyansoft.com/api/v1/call/campaign/campaign_id/item
+  deleteUrl: https://open.duyansoft.com/api/v1/campaign/removeItem
+  selectSingleRecordUrl:  https://open.duyansoft.com/api/v1/call_log
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为80

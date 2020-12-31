@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('预测式外呼配置')" />
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<form class="form-horizontal m" id="form-config-add">
+			<input type="hidden" name="caseNoStr" id="caseNoStr" th:value="${caseNoStr}"/>
+			<input type="hidden" name="importBatchNoStr" id="importBatchNoStr" th:value="${importBatchNoStr}"/>
+			<div class="form-group">
+				<label class="col-sm-3 control-label "><span style="color: red; ">*</span>拨打号码设计：</label>
+				<div class="col-sm-8" style="height:65px;top:5px;">
+					<input type="radio" name="relation" value="1" onclick="getCustContactCount()" checked>拨打本人
+					<input type="radio" name="relation" value="2" onclick="getCustContactCount()">拨打本人+其它
+					<div style="color: #aeadad;width: 300px;">
+						(预测式外呼工作时间为8:00-21:00，若启动中的计划未在工作时间内完成，次日将自动继续执行)
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>主叫号码：</label>
+				<div class="col-sm-8">
+					<select class="form-control" name="exoNum">
+						<option th:each="exoNum : ${exoNumset}" th:value="${exoNum}" th:text="${exoNum}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">待拨打电话量：</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text"  name="callNum" id="callNum" th:value="${custContactCount}" disabled>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">号码去重：</label>
+				<div class="col-sm-8" id="filterBtn">
+					<input type="hidden" value="1" name="isFilter" id="isFilter"/>
+					<i class="fa fa-toggle-on text-info fa-2x" onclick="changeStatus()" style='margin-top: 3px;'></i>
+				</div>
+			</div>
+		</form>
+	</div>
+	<th:block th:include="include :: footer" />
+	<script type="text/javascript">
+		var prefix = ctx + "collect/pretest";
+	
+		function changeStatus(){
+		    var isFilter = $("#isFilter").val();
+		    if(isFilter == 0){
+				$("#filterBtn").empty();
+				$("#filterBtn").html("<input type='hidden' value='1' name='isFilter' id='isFilter'/>" +
+                    "<i class='fa fa-toggle-on text-info fa-2x' onclick='changeStatus()' style='margin-top: 3px;'></i>")
+			}else{
+                $("#filterBtn").empty();
+                $("#filterBtn").html("<input type='hidden' value='0' name='isFilter' id='isFilter'/>" +
+                    "<i class='fa fa-toggle-off text-info fa-2x' onclick='changeStatus()' style='margin-top: 3px;'></i>")
+			}
+		}
+
+        function getCustContactCount(){
+            var relation = $('input[name="relation"]:checked ').val();
+            $.post(
+                prefix + "/getCustContactCount",
+                {
+                    caseNoStr:$("#caseNoStr").val(),
+                    importBatchNoStr:$("#importBatchNoStr").val(),
+                    relation:relation
+                },
+                function (data) {
+                    if(data.msg == 'success'){
+                        $("#callNum").val(data.data);
+                    }
+                }
+            );
+		}
+
+		function submitHandler() {
+	        if ($.validate.form()) {
+                $.ajax({
+                    url: prefix + "/createPreTask",
+                    dataType: "json",
+                    type: "post",
+                    async: false,
+                    data:$('#form-config-add').serialize(),
+                    success:function(result){
+						var code = result.data.code;
+						if(code == "200"){
+                            $.modal.close();
+                            var planId = result.data.preTask.planId;
+                            var planStatus = result.data.preTask.status;
+                            var totalCount = result.data.preTask.total_count;
+                            var createdTime = result.data.preTask.created_time;
+                            var caller = result.data.preTask.caller;
+                            var isDistinct = result.data.preTask.is_distinct;
+							var url = prefix + "/workList"+"?planId="+planId+"&planStatus="+planStatus
+								+"&totalCount="+totalCount+"&createdTime="+createdTime+"&caller="+caller+"&isDistinct="+isDistinct;
+                            window.parent.$.modal.openTab("预测式任务列表", url);
+						}else{
+                            $.modal.alertWarning(result.data.message);
+						}
+
+                    }
+                });
+	        }
+	    }
+	</script>
+</body>
+</html>

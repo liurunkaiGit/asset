@@ -281,6 +281,7 @@
                 <button type="button" class="btn btn-success" onclick="toAutoCall()">自动拨打</button>
                 <button type="button" class="btn btn-success" onclick="sendRobotApply()">机器人外呼</button>
                 <button type="button" class="btn btn-success" onclick="infoReporting()">信息上报</button>
+                <button type="button" class="btn btn-success" onclick="toPreCallConfig()" th:if="${callPlatform}=='DY'">预测式外呼</button>
                 <input id="currentPageUrl" name="currentPageUrl" class="form-control" type="hidden">
             </div>
             <div class="col-sm-12 select-table table-bordered">
@@ -1116,6 +1117,27 @@
             $.operate.post(prefix + "/saveColor", { "color": obj, "id": id });
         }
 
+
+        function toPreCallConfig(){
+            var taskIdRows = $.table.selectFirstColumns();
+            if (taskIdRows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            var caseNoRows = $.table.selectColumns("caseNo"); //返回的是一个数组
+            var caseNoStr = "";
+            for(var i = 0; i < caseNoRows.length; i ++){
+                caseNoStr = caseNoStr + caseNoRows[i] + ",";
+            }
+            var importBatchNoRows = $.table.selectColumns("importBatchNo"); //返回的是一个数组
+            var importBatchNoStr = "";
+            for(var i = 0; i < importBatchNoRows.length; i ++){
+                importBatchNoStr = importBatchNoStr + importBatchNoRows[i] + ",";
+            }
+            var url = prefix+"/toPreCallConfig?caseNoStr="+caseNoStr+"&importBatchNoStr="+importBatchNoStr;
+            $.modal.open("预测式外呼", url);
+
+        }
 
     </script>
 

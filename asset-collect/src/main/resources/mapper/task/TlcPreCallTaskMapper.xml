@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.task.mapper.TlcPreCallTaskMapper">
+    
+    <resultMap type="com.ruoyi.task.domain.TlcPreCallTask" id="TlcPreCallTaskResult">
+        <result property="id"    column="id"    />
+        <result property="caseNo"    column="case_no"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="planId"    column="plan_id"    />
+        <result property="phone"    column="phone"    />
+        <result property="contactName"    column="contact_name"    />
+        <result property="contactRelation"    column="contact_relation"    />
+        <result property="callResult"    column="call_result"    />
+        <result property="lastCallTime"    column="last_call_time"    />
+        <result property="execStatus"    column="exec_status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="arrearsTotal"    column="arrears_total"    />
+        <result property="closeCaseYhje"    column="close_case_yhje"    />
+        <result property="dqyhje"    column="dqyhje"    />
+        <result property="caller"    column="caller"    />
+        <result property="isDistinct"    column="is_distinct"    />
+    </resultMap>
+
+    <sql id="selectTlcPreCallTaskVo">
+        select id, case_no, import_batch_no, org_id, batch_no, plan_id, phone, contact_name, contact_relation, call_result, last_call_time, exec_status, create_time, create_by, caller, is_distinct from t_lc_pre_call_task
+    </sql>
+    <sql id="selectTlcPreCallTaskVo2">
+        select t.id, t.case_no, t.import_batch_no, t.org_id, t.batch_no, t.plan_id, t.phone, t.contact_name, t.contact_relation, t.call_result, t.last_call_time, t.exec_status, t.create_time, t.create_by, t.caller, t.is_distinct
+    </sql>
+
+    <select id="selectTlcPreCallTaskList" parameterType="TlcPreCallTask" resultMap="TlcPreCallTaskResult">
+        <include refid="selectTlcPreCallTaskVo2"/>
+        ,ta.arrears_total,ta.close_case_yhje,ta.dqyhje
+        from t_lc_pre_call_task t,t_lc_task ta
+        <where>
+            and t.case_no = ta.case_no and t.import_batch_no = ta.import_batch_no
+            <if test="id != null "> and t.id = #{id}</if>
+            <if test="caseNo != null  and caseNo != ''"> and t.case_no = #{caseNo}</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and t.import_batch_no = #{importBatchNo}</if>
+            <if test="orgId != null  and orgId != ''"> and t.org_id = #{orgId}</if>
+            <if test="batchNo != null "> and t.batch_no = #{batchNo}</if>
+            <if test="planId != null  and planId != ''"> and t.plan_id = #{planId}</if>
+            <if test="phone != null  and phone != ''"> and t.phone = #{phone}</if>
+            <if test="contactName != null  and contactName != ''"> and t.contact_name like concat('%', #{contactName}, '%')</if>
+            <if test="contactRelation != null "> and t.contact_relation = #{contactRelation}</if>
+            <if test="callResult != null  and callResult != ''"> and t.call_result = #{callResult}</if>
+            <if test="lastCallTime != null  and lastCallTime != ''"> and t.last_call_time = #{lastCallTime}</if>
+            <if test="execStatus != null "> and t.exec_status = #{execStatus}</if>
+            <if test="startTime != null and startTime != ''"> and t.create_time <![CDATA[>=]]> #{startTime}</if>
+            <if test="endTime != null and endTime != ''"> and t.create_time <![CDATA[<=]]> #{endTime}</if>
+            <if test="createBy != null  and createBy != ''"> and t.create_by = #{createBy}</if>
+        </where>
+        order by t.create_time desc
+    </select>
+
+    <select id="selectTlcPreCallTaskById" parameterType="Long" resultMap="TlcPreCallTaskResult">
+        <include refid="selectTlcPreCallTaskVo"/>
+        where id = #{id}
+    </select>
+    
+    <select id="selectNotExecPlanByLoginName" parameterType="java.lang.String" resultMap="TlcPreCallTaskResult">
+        select plan_id,phone from t_lc_pre_call_task
+        where create_by = #{loginName} and exec_status in(0,2)
+    </select>
+
+    <select id="selectNotExecPlanByLoginName2" parameterType="java.lang.String" resultMap="TlcPreCallTaskResult">
+        select plan_id,
+			max(caller) as caller,
+			max(is_distinct) as is_distinct
+        from t_lc_pre_call_task
+        where create_by = #{loginName} and exec_status in(0,2)
+        GROUP BY plan_id
+    </select>
+
+    <select id="selectAllNotExecPlan" resultMap="TlcPreCallTaskResult">
+        select plan_id from t_lc_pre_call_task
+        where exec_status in(0,2) group by plan_id
+    </select>
+
+    <insert id="insertTlcPreCallTask" parameterType="TlcPreCallTask" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_pre_call_task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="caseNo != null  and caseNo != ''">case_no,</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no,</if>
+            <if test="orgId != null  and orgId != ''">org_id,</if>
+            <if test="batchNo != null ">batch_no,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="contactName != null  and contactName != ''">contact_name,</if>
+            <if test="contactRelation != null ">contact_relation,</if>
+            <if test="callResult != null  and callResult != ''">call_result,</if>
+            <if test="lastCallTime != null  and lastCallTime != ''">last_call_time,</if>
+            <if test="execStatus != null ">exec_status,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="caseNo != null  and caseNo != ''">#{caseNo},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">#{importBatchNo},</if>
+            <if test="orgId != null  and orgId != ''">#{orgId},</if>
+            <if test="batchNo != null ">#{batchNo},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="contactName != null  and contactName != ''">#{contactName},</if>
+            <if test="contactRelation != null ">#{contactRelation},</if>
+            <if test="callResult != null  and callResult != ''">#{callResult},</if>
+            <if test="lastCallTime != null  and lastCallTime != ''">#{lastCallTime},</if>
+            <if test="execStatus != null ">#{execStatus},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <insert id="batchAddPreCallTask" parameterType="java.util.List">
+        insert into t_lc_pre_call_task
+                  (case_no,import_batch_no,org_id,batch_no,plan_id,phone,
+                  contact_name,contact_relation,call_result,last_call_time,exec_status,
+                  create_time,create_by,caller,is_distinct)
+        VALUES
+        <foreach collection="list" item="task" separator=",">
+            (#{task.caseNo},#{task.importBatchNo},#{task.orgId},#{task.batchNo},#{task.planId},#{task.phone},
+             #{task.contactName},#{task.contactRelation},#{task.callResult},#{task.lastCallTime},#{task.execStatus},
+            #{task.createTime},#{task.createBy},#{task.caller},#{task.isDistinct}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateTlcPreCallTask" parameterType="TlcPreCallTask">
+        update t_lc_pre_call_task
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="caseNo != null  and caseNo != ''">case_no = #{caseNo},</if>
+            <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no = #{importBatchNo},</if>
+            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="batchNo != null ">batch_no = #{batchNo},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="contactName != null  and contactName != ''">contact_name = #{contactName},</if>
+            <if test="contactRelation != null ">contact_relation = #{contactRelation},</if>
+            <if test="callResult != null  and callResult != ''">call_result = #{callResult},</if>
+            <if test="lastCallTime != null  and lastCallTime != ''">last_call_time = #{lastCallTime},</if>
+            <if test="execStatus != null ">exec_status = #{execStatus},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateNotConnect">
+        update t_lc_pre_call_task set call_result = '未接通',exec_status = 1
+        where exec_status = 2
+    </update>
+
+    <update id="updateExecStatus" parameterType="TlcPreCallTask">
+        update t_lc_pre_call_task set exec_status = #{execStatus}
+        where plan_id = #{planId} and phone = #{phone}
+    </update>
+
+    <update id="updateExecStatus2" parameterType="TlcPreCallTask">
+        update t_lc_pre_call_task set exec_status = #{execStatus}
+        where plan_id = #{planId} and exec_status = #{statusCondition}
+    </update>
+
+    <update id="updateTlcPreCallTask2" parameterType="TlcPreCallTask">
+        update t_lc_pre_call_task
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="callResult != null  and callResult != ''">call_result = #{callResult},</if>
+            <if test="lastCallTime != null  and lastCallTime != ''">last_call_time = #{lastCallTime},</if>
+            <if test="execStatus != null ">exec_status = #{execStatus},</if>
+        </trim>
+        where plan_id = #{planId} and phone = #{phone}
+    </update>
+
+    <delete id="deleteTlcPreCallTaskById" parameterType="Long">
+        delete from t_lc_pre_call_task where id = #{id}
+    </delete>
+
+    <delete id="deleteTlcPreCallTaskByIds" parameterType="String">
+        delete from t_lc_pre_call_task where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectMaxBatchNo" resultType="java.lang.Integer">
+        SELECT
+        ( CASE WHEN MAX( batch_no ) IS NULL THEN 0 ELSE MAX( batch_no ) END ) batch_no
+        FROM
+        t_lc_pre_call_task
+    </select>
+
+</mapper>

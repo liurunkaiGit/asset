@@ -16,6 +16,13 @@ public class DuYanConfig {
     private  String logUrl;
     /** 度言 录音地址 */
     private  String soundRecordingUrl;
+    /** 预测式url */
+    private  String createUrl;
+    private  String statusUrl;
+    private  String selectBaseUrl;
+    private  String selectResultUrl;
+    private  String deleteUrl;
+    private  String selectSingleRecordUrl;
 
 
 }

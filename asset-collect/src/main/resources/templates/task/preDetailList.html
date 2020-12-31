@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('预测式外呼查询')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>机构案件号：</p>
+                                <input type="text" name="caseNo"/>
+                            </li>
+                            <li>
+                                <p>联系方式：</p>
+                                <input type="text" name="phone"/>
+                            </li>
+                            <li>
+                                <p>联系人：</p>
+                                <input type="text" name="contactName"/>
+                            </li>
+
+                            <li>
+                                <p>计划编码:</p>
+                                <input type="text" name="planId"/>
+                            </li>
+                            <li class="select-time">
+                                <p>时间：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="startTime"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="endTime"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "collect/pretest";
+        $(function() {
+            var options = {
+                url: prefix + "/selectPreTestDetailList",
+                removeUrl: prefix + "/remove",
+                modalName: "预测式外呼查询",
+                /*onLoadSuccess: function(data){
+                    var rows = $("#bootstrap-table").bootstrapTable('getData');
+                    $.each(rows,function (i,n) {
+                        if(n.execStatus == '2'){
+                            $("tr[data-index='"+i+"']").attr('style','background:#b6ece1');
+                        }
+                        if(n.callResult == '成功'){
+                            $("tr[data-index='"+i+"']").attr('style','background:#cae5a1');
+                        }
+                    });
+                },*/
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : '',
+                    title : '序号',
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                    {
+                        field : 'planId',
+                        title : '计划编码'
+                    },
+                {
+                    field : 'caseNo',
+                    title : '案件号'
+                },
+                {
+                    field : 'phone', 
+                    title : '联系方式'
+                },
+                {
+                    field : 'contactName', 
+                    title : '联系人姓名'
+                },
+                {
+                    field : 'contactRelation', 
+                    title : '与本人关系',
+                    formatter: function (value, row, index) {
+                        return getRelaByCode(value);
+                    }
+                },
+                {
+                    field : 'caller',
+                    title : '主叫号码'
+                },
+                {
+                    field : 'callResult', 
+                    title : '呼叫结果'
+                },
+                {
+                    field : 'lastCallTime', 
+                    title : '最后呼叫时间'
+                },
+                {
+                    field : 'execStatus', 
+                    title : '执行状态',
+                    formatter: function (value, row, index) {
+                        return getStatusByCode(value);
+                    }
+                },
+                {
+                    field : 'arrearsTotal',
+                    title : '委案金额'
+                },
+                {
+                    field : 'closeCaseYhje',
+                    title : '结案应还金额'
+                },
+                {
+                    field : 'dqyhje',
+                    title : '当前已还金额'
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function getRelaByCode(relaCode) {
+            var rela;
+            if(relaCode == 1){
+                rela = '本人';
+            } else if(relaCode == 2){
+                rela = '直系';
+            } else if(relaCode == 3){
+                rela = '亲戚';
+            }else if(relaCode == 4){
+                rela = '朋友';
+            } else if(relaCode == 5){
+                rela = '父母 ';
+            } else if(relaCode == 6){
+                rela = '配偶';
+            }else if(relaCode == 7){
+                rela = '兄弟';
+            } else if(relaCode == 8){
+                rela = '姐妹';
+            } else if(relaCode == 9){
+                rela = '哥哥';
+            }else if(relaCode == 10){
+                rela = '兄长';
+            } else if(relaCode == 11){
+                rela = '弟弟 ';
+            } else if(relaCode == 12){
+                rela = '姐姐';
+            }else if(relaCode == 13){
+                rela = '妹妹';
+            }else if(relaCode == 14){
+                rela = '家人';
+            } else if(relaCode == 15){
+                rela = '老公';
+            } else if(relaCode == 16){
+                rela = '老婆';
+            } else if(relaCode == 17){
+                rela = '同事';
+            }else if(relaCode == 18){
+                rela = '单位';
+            } else if(relaCode == -1){
+                rela = '其它';
+            }else {
+                rela = '-';
+            }
+            return rela;
+        }
+        function getStatusByCode(StatusCode) {
+            var status = "";
+            if(StatusCode == 0){
+                status = '已暂停';
+            } else if(StatusCode == 1){
+                status = '已完成';
+            } else if(StatusCode == 2){
+                status = '未执行';
+            }else if(StatusCode == 3){
+                status = '已取消';
+            }else{
+                status = '-';
+            }
+            return status;
+        }
+
+
+
+    </script>
+</body>
+</html>

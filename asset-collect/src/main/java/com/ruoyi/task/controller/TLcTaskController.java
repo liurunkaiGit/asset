@@ -48,6 +48,7 @@ import com.ruoyi.task.domain.CollJob;
 import com.ruoyi.task.domain.TLcCallRecord;
 import com.ruoyi.task.domain.TLcSelectRecord;
 import com.ruoyi.task.domain.TLcTask;
+import com.ruoyi.task.service.IPreTestCallService;
 import com.ruoyi.task.service.ITLcCallRecordService;
 import com.ruoyi.task.service.ITLcSelectRecordService;
 import com.ruoyi.task.service.ITLcTaskService;
@@ -121,6 +122,10 @@ public class TLcTaskController extends BaseController {
     private DuYanConfig duYanConfig;
     @Autowired
     private DesensitizationUtil desensitizationUtil;
+    @Autowired
+    private IPreTestCallService preTestCallService;
+    @Autowired
+    private ITLcExonNumService tLcExonNumService;
 
 
     @RequiresPermissions("collect:task:myTask")
@@ -1724,6 +1729,28 @@ public class TLcTaskController extends BaseController {
     public AjaxResult getCurActionCode(String importBatchNo, String caseNo, String orgId){
         TLcTask tLcTask = this.tLcTaskService.selectTaskByCaseNo(caseNo,orgId,importBatchNo);
         return AjaxResult.success("成功",tLcTask.getActionCode());
+    }
+
+    @RequiresPermissions("collect:task:myTask")
+    @GetMapping(value = "/toPreCallConfig")
+    public String toPreCallConfig(ModelMap modelMap,String caseNoStr,String importBatchNoStr) {
+        Set<String> exoNumset = new HashSet<>();
+        TLcExonNum param = new TLcExonNum();
+        param.setCallPlatform("DY");
+        List<TLcExonNum> tLcExonNums = tLcExonNumService.selectTLcExonNumList(param);
+        for (TLcExonNum tLcExonNum : tLcExonNums) {
+            String exonNum = tLcExonNum.getExonNum();
+            String[] split = exonNum.split(";");
+            for (String s : split) {
+                exoNumset.add(s);
+            }
+        }
+        List<TLcCustContact> custContactList = preTestCallService.getCustContactList(caseNoStr, importBatchNoStr, "1");
+        modelMap.put("caseNoStr",caseNoStr);
+        modelMap.put("importBatchNoStr",importBatchNoStr);
+        modelMap.put("exoNumset",exoNumset);
+        modelMap.put("custContactCount",custContactList.size());
+        return prefix + "/preCallConfig";
     }
 
 }

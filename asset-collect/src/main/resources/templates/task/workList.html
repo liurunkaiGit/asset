@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('预测式外呼任务列表')" />
+    <style type="text/css">
+        table tr th, table tr td {text-align: center}
+    </style>
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>案件号：</p>
+                                <input type="text" name="caseNo"/>
+                            </li>
+                            <li>
+                                <p>联系方式：</p>
+                                <input type="text" name="phone"/>
+                            </li>
+                            <li>
+                                <p>联系人：</p>
+                                <input type="text" name="contactName"/>
+                            </li>
+
+                            <li>
+                                <p>执行状态</p>
+                                <select name="execStatus">
+                                    <option value="">所有</option>
+                                    <option value="0">已暂停</option>
+                                    <option value="1">已完成</option>
+                                    <option value="2">未完成</option>
+                                    <option value="3">已取消</option>
+                                </select>
+                            </li>
+                            <li class="select-time">
+                                <p>时间：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="startTime"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="endTime"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="changeStatus('执行中')">启动</a>
+                <a class="btn btn-primary" onclick="changeStatus('已暂停')">暂停</a>
+                <a class="btn btn-danger" onclick="remove()">停止</a>
+                <div id="divf" style="display: inline-flex;float: right;">
+                    <div id="dydv" th:if="${not #strings.isEmpty(dytoken)}" style="width: 250px;">
+                        <script id="dySdkScript" type="text/javascript" ctype="mini" src='https://cti.duyansoft.com/syui/dysdk/dysdk2.min.js' th:url="'https://cti.duyansoft.com/ctibar.html?noNumberInput=true&noOpBtn=true&account_id='+${accountId}+'&token='+${dytoken}" ></script>
+                    </div>
+                </div>
+                <div style="margin-top: 20px;padding-left: 0px;">
+                    <table style="width:500px;line-height: 30px;">
+                        <tr>
+                            <th style="border:1px solid #d4d4d4; background-color: #eff3f8;">计划编码</th>
+                            <th style="border:1px solid #d4d4d4; background-color: #eff3f8;">计划状态</th>
+                            <th style="border:1px solid #d4d4d4; background-color: #eff3f8;">完成度</th>
+                            <th style="border:1px solid #d4d4d4; background-color: #eff3f8;">创建时间</th>
+                            <th style="border:1px solid #d4d4d4; background-color: #eff3f8;">主叫号码</th>
+                            <th style="border:1px solid #d4d4d4; background-color: #eff3f8;">是否去重</th>
+                        </tr>
+                        <tr id="planList">
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "collect/pretest";
+        var taskPrefix = ctx + "collect/task";
+        var childObj;
+        var caseNo;
+        var phone;
+        var uuid;
+        var callRecordId;
+        var orgId;
+        var importBatchNo;
+        $(function() {
+            var options = {
+                url: prefix + "/getTaskDetailList",
+                removeUrl: prefix + "/remove",
+                modalName: "预测式外呼任务列表",
+                onLoadSuccess: function(data){
+                    var rows = $("#bootstrap-table").bootstrapTable('getData');
+                    $.each(rows,function (i,n) {
+                        if(n.execStatus == '2'){
+                            $("tr[data-index='"+i+"']").attr('style','background:#b6ece1');
+                        }
+                        if(n.callResult == '成功'){
+                            $("tr[data-index='"+i+"']").attr('style','background:#cae5a1');
+                        }
+                    });
+                },
+                columns: [{
+                    checkbox: true
+                },
+                /*{
+                    field : 'id', 
+                    title : '主键ID',
+                    visible: false
+                },*/
+                {
+                    field : '',
+                    title : '序号',
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },
+                {
+                    field : 'caseNo',
+                    title : '案件号'
+                },
+                {
+                    field : 'phone', 
+                    title : '联系方式'
+                },
+                {
+                    field : 'contactName', 
+                    title : '联系人姓名'
+                },
+                {
+                    field : 'contactRelation', 
+                    title : '与本人关系',
+                    formatter: function (value, row, index) {
+                        return getRelaByCode(value);
+                    }
+                },
+                {
+                    field : 'callResult', 
+                    title : '呼叫结果'
+                },
+                {
+                    field : 'lastCallTime', 
+                    title : '最后呼叫时间'
+                },
+                {
+                    field : 'execStatus', 
+                    title : '执行状态',
+                    formatter: function (value, row, index) {
+                        return getStatusByCode(value);
+                    }
+                },
+                {
+                    field : 'arrearsTotal',
+                    title : '委案金额'
+                },
+                {
+                    field : 'closeCaseYhje',
+                    title : '结案应还金额'
+                },
+                {
+                    field : 'dqyhje',
+                    title : '当前已还金额'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        if(row.execStatus == '2'){
+                            actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="remove(\'' + row.phone + '\')" style="background-color: #ffffff;color: #4acece;border-color: #92d8d8">取消</a>');
+                        }
+                        // actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="remove(\'' + row.phone + '\',\''+ row.id + '\')" style="background-color: #ffffff;color: #4acece;border-color: #92d8d8">取消</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+
+            if([[${planId}]] != null && [[${planId}]] != "null"){
+                var isDistinct = [[${isDistinct}]] == "true" ? "是" : "否";
+                $("#planList").append("<td id='planId'style='border:1px solid #d4d4d4;'>"+[[${planId}]]+"</td>" +
+                    "                            <td id='jhzt'style='border:1px solid #d4d4d4;'>"+[[${planStatus}]]+"</td>" +
+                    "                            <td id='wcd'style='border:1px solid #d4d4d4;'>"+[[${finishedCount}]]+"/"+[[${totalCount}]]+"</td>" +
+                    "                            <td style='border:1px solid #d4d4d4;'>"+[[${createdTime}]]+"</td>" +
+                    "                            <td style='border:1px solid #d4d4d4;'>"+[[${caller}]]+"</td>" +
+                    "                            <td style='border:1px solid #d4d4d4;'>"+isDistinct+"</td>");
+            }
+
+
+            if(typeof(DYSDK) == undefined || typeof(DYSDK) == "undefined"){
+                $.modal.alertWarning('度言平台初始失败');
+                return;
+            }
+            DYSDK.init();
+            DYSDK.callBridge(function(data){
+                console.log("预测式智能外呼触发" + JSON.stringify(data))
+                var planId = $("#planId").text();
+                var bridgeType = data.bridgeType;
+                if(bridgeType=="start"){
+                    caseNo = data.userTag;
+                    phone = data.phone;
+                    uuid = data.uuid;
+
+                    //行高亮绿色并先修改页面状态(待定时执行时再真是修改状态)
+                    $('#bootstrap-table').find('tbody').each(function () {
+                        $(this).find('tr').each(function () {
+                            var tds = $(this).find('td');
+                            var list_caseNO = $(tds[2]).text();
+                            var list_phone = $(tds[3]).text();
+                            if(caseNo == list_caseNO && phone == list_phone){
+                                $(this).attr('style','background:#cae5a1');
+                                // $(tds[6]).text("成功");
+                                // $(tds[7]).text(curentTime());
+                                // $(tds[8]).text("已完成");
+                            }
+                        });
+                    });
+
+                    //页面跳转
+                    var url = prefix + "/toPreCollJob"+"?planId="+planId+"&caseNo="+caseNo+"&phone="+phone+"&uuid="+uuid;
+                    var width = $(window).width();
+                    var height = $(window).height();
+                    layer.open({
+                        type: 2,
+                        maxmin: true,
+                        shade: 0,
+                        title: "催收记录 | " + caseNo,
+                        fix: false,
+                        area: [width + 'px', height + 'px'],
+                        content: url,
+                        shadeClose: true,
+                        btn: ['关闭'],
+                        yes: function (index, layero) {//关闭按钮监听事件,测试显示，无论是点击X 还是点击 关闭， yes 和 end 方法都会触发
+                            layer.close(index);
+                            $("#divf",parent.doucment).attr("style","position:'';z-index:'';top:'';left:'';display: inline-flex;float: right;");
+                        },
+                        cancel: function (index, layero) {//点击右上角 X 关闭
+                            layer.close(index);
+                            $("#divf",parent.doucment).attr("style","position:'';z-index:'';top:'';left:'';display: inline-flex;float: right;");
+                        },
+                        success: function(layero, index){
+                            var iframeWin = window[layero.find('iframe')[0]['name']];
+                            childObj = iframeWin;
+                            callRecordId = childObj.$("#callRecordId").val();
+                            orgId = childObj.$("#orgId").val();
+                            importBatchNo = childObj.$("#firstImportBatchNo").val();
+                        }
+                    });
+                }else{
+                    $.ajax({
+                        url: prefix + "/saveCallRecord",
+                        dataType: "json",
+                        type: "post",
+                        async: false,
+                        data:{
+                            orgId:orgId,
+                            importBatchNo:importBatchNo,
+                            caseNo:caseNo,
+                            phone:phone,
+                            callRecordId:callRecordId,
+                            uuid:uuid
+                        },
+                        success:function(result){
+                            if(result.msg == 'error'){
+                                $.modal.alertWarning(result.data);
+                            }
+                        }
+                    });
+                }
+            });
+
+
+            var timer;
+            if(timer){
+                clearInterval(timer);
+            }
+            timer = setInterval("updateTable()", 1000*60*2);
+
+        });
+
+        function getRelaByCode(relaCode) {
+            var rela;
+            if(relaCode == 1){
+                rela = '本人';
+            } else if(relaCode == 2){
+                rela = '直系';
+            } else if(relaCode == 3){
+                rela = '亲戚';
+            }else if(relaCode == 4){
+                rela = '朋友';
+            } else if(relaCode == 5){
+                rela = '父母 ';
+            } else if(relaCode == 6){
+                rela = '配偶';
+            }else if(relaCode == 7){
+                rela = '兄弟';
+            } else if(relaCode == 8){
+                rela = '姐妹';
+            } else if(relaCode == 9){
+                rela = '哥哥';
+            }else if(relaCode == 10){
+                rela = '兄长';
+            } else if(relaCode == 11){
+                rela = '弟弟 ';
+            } else if(relaCode == 12){
+                rela = '姐姐';
+            }else if(relaCode == 13){
+                rela = '妹妹';
+            }else if(relaCode == 14){
+                rela = '家人';
+            } else if(relaCode == 15){
+                rela = '老公';
+            } else if(relaCode == 16){
+                rela = '老婆';
+            } else if(relaCode == 17){
+                rela = '同事';
+            }else if(relaCode == 18){
+                rela = '单位';
+            } else if(relaCode == -1){
+                rela = '其它';
+            }else {
+                rela = '-';
+            }
+            return rela;
+        }
+        function getStatusByCode(StatusCode) {
+            var status = "";
+            if(StatusCode == 0){
+                status = '已暂停';
+            } else if(StatusCode == 1){
+                status = '已完成';
+            } else if(StatusCode == 2){
+                status = '未执行';
+            }else if(StatusCode == 3){
+                status = '已取消';
+            }else{
+                status = '-';
+            }
+            return status;
+        }
+
+        function remove(phone) {
+            var planId = $("#planId").text();
+            $.ajax({
+                url: prefix + "/removeTask",
+                dataType: "json",
+                type: "post",
+                async: false,
+                data:{
+                    phone:phone,
+                    planId:planId,
+                    accountId:[[${accountId}]]
+                },
+                success:function(result){
+                   if(result.msg == 'success'){
+                       var id = $(".bootstrap-table").find(".table").attr("id");
+                       $.table.refresh(id);
+                   }else{
+                       $.modal.alertWarning(result.data);
+                   }
+                }
+            });
+        }
+        function changeStatus(status){
+            var planId = $("#planId").text();
+            $.ajax({
+                url: prefix + "/changeStatus",
+                dataType: "json",
+                type: "post",
+                async: false,
+                data:{
+                    planId:planId,
+                    status:status
+                },
+                success:function(result){
+                    if(result.msg == 'success'){
+                        $.modal.alertWarning(result.data);
+                        var id = $(".bootstrap-table").find(".table").attr("id");
+                        $.table.refresh(id);
+                    }else{
+                        $.modal.alertWarning(result.data);
+                    }
+                }
+            });
+        }
+
+
+        function updateTable(){
+            var planId = $("#planId").text();
+            $.ajax({
+                url: prefix + "/getBaseInfo",
+                dataType: "json",
+                type: "post",
+                async: false,
+                data:{
+                    planId:planId
+                },
+                success:function(result){
+                    if(result.msg == 'success'){
+                        // console.log(result.data);
+                        var finishedCount = result.data.planBaseInfo.finishedCount;
+                        var planStatus = result.data.planBaseInfo.planStatus;
+                        $("#jhzt").text(planStatus);
+
+                        var wcd = $("#wcd").text();
+                        var split = wcd.split("/");
+                        var new_wcd = finishedCount+"/"+split[1];
+                        $("#wcd").text(new_wcd);
+
+                        var id = $(".bootstrap-table").find(".table").attr("id");
+                        $.table.refresh(id);
+                    }else{
+                        $.modal.alertWarning(result.data);
+                    }
+                }
+            });
+        }
+
+        function curentTime(){
+            var now = new Date();
+            var year = now.getFullYear();       //年
+            var month = now.getMonth() + 1;     //月
+            var day = now.getDate();            //日
+            var hh = now.getHours();            //时
+            var mm = now.getMinutes();          //分
+            var ss = now.getSeconds();          //分
+
+            var clock = year + "-";
+            if(month < 10){
+                clock += "0";
+            }
+            clock += month + "-";
+            if(day < 10){
+                clock += "0";
+            }
+            clock += day + " ";
+            if(hh < 10){
+                clock += "0";
+            }
+            clock += hh + ":";
+            if (mm < 10){
+                clock += '0';
+            }
+            clock += mm + ":";
+            if (ss < 10){
+                clock += '0';
+            }
+            clock += ss;
+            return clock;
+        }
+
+
+    </script>
+</body>
+</html>
