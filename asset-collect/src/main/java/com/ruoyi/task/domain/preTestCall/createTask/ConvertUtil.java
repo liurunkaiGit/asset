@@ -59,28 +59,7 @@ public class ConvertUtil {
         return status;
     }
 
-    public static void main(String[] args) {
-       String aaa = "{\n" +
-               "    \"status\": 1,\n" +
-               "    \"data\": {\n" +
-               "        \"created_time\": 1515152386909,\n" +
-               "        \"start_time\": 1506512340000,\n" +
-               "        \"caller\": \"57176666665\",\n" +
-               "        \"total_count\": 1,\n" +
-               "        \"name\": \"010537\",\n" +
-               "        \"end_time\": 1511437140000,\n" +
-               "        \"id\": 10000436,\n" +
-               "        \"status\": \"FINISHED\"\n" +
-               "    }\n" +
-               "}";
-        System.out.println(aaa);
-        JSONObject jsonObject = JSONObject.parseObject(aaa);
-        Object data = jsonObject.get("data");
-        JSONObject data2 = (JSONObject)jsonObject.get("data");
-        String status = (String)data2.get("status");
-        String total_count = (String)data2.get("total_count");
-        System.out.println(status);
-    }
+
 
 
 }

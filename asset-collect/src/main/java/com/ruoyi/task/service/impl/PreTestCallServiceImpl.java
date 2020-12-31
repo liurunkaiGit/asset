@@ -566,7 +566,7 @@ public class PreTestCallServiceImpl implements IPreTestCallService {
         callRecord.setId(Long.valueOf(callRecordId));
         callRecord.setCallSign("R01");
         callRecord.setCallResult("已接听");
-        callRecord.setCallLen(String.valueOf(callLen));
+        callRecord.setCallLen(String.valueOf(callLen*1000));
         callRecord.setCallRadioLocation(callRadioLocation);
         callRecord.setCaseNo(caseNo);
         callRecord.setRemark("已接听");
@@ -666,14 +666,7 @@ public class PreTestCallServiceImpl implements IPreTestCallService {
 
     }*/
 
-    public static void main(String[] args) {
-        Long aaa = 1609222559000L;
-        Long bbb = 32L;
-        String s1 = ConvertUtil.convertDate(aaa);
-        System.out.println(s1);
-        String s = ConvertUtil.convertDate(aaa + bbb*1000);
-        System.out.println(s);
-    }
+
 
 
 }
