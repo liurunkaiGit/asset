@@ -11,6 +11,7 @@ import com.ruoyi.assetspackage.mapper.AssetPackageMapper;
 import com.ruoyi.assetspackage.service.IAssetPackageService;
 import com.ruoyi.assetspackage.service.IAssetsConnectPackageService;
 import com.ruoyi.assetspackage.service.ICurAssetsPackageService;
+import com.ruoyi.assetspackage.util.DataImportUtil;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
@@ -161,6 +162,8 @@ public class AssetPackageServiceImpl implements IAssetPackageService {
                     curAssetsPackage.setPackNo(packageId);
                     curAssetsPackage.setSendOptId(ShiroUtils.getUserId());
                 }
+                //联系人去重
+                curAssetsList = DataImportUtil.contactsDistinct(curAssetsList);
                 curAssetsPackageService.callRemote(curAssetsList);
                 return AjaxResult.success("分发成功，本次分发"+curAssetsList.size()+"条");
             } else {

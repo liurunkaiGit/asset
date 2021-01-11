@@ -2,6 +2,7 @@ package com.ruoyi.task.taskTimer;
 
 import com.ruoyi.task.domain.TlcPreCallTask;
 import com.ruoyi.task.domain.preTestCall.createTask.ConvertUtil;
+import com.ruoyi.task.domain.preTestCall.taskResult.PreTestCallResultEnum;
 import com.ruoyi.task.domain.preTestCall.taskResult.ResultEntity;
 import com.ruoyi.task.domain.preTestCall.taskResult.TaskResultResponseEntity;
 import com.ruoyi.task.mapper.TlcPreCallTaskMapper;
@@ -47,7 +48,7 @@ public class PreTestTaskTimer {
                             TlcPreCallTask updateParam = new TlcPreCallTask();
                             updateParam.setPlanId(planId);
                             updateParam.setPhone(phone);
-                            updateParam.setCallResult(callResult);
+                            updateParam.setCallResult(PreTestCallResultEnum.getName(callResult));
                             updateParam.setLastCallTime(call_time);
                             updateParam.setExecStatus(1);
                             //根据手机号与计划id更新状态

@@ -55,7 +55,6 @@ public class PreTestCallController extends BaseController {
     public AjaxResult createPreTask(PreCallConfig preCallConfig) {
         Map map = new LinkedHashMap();
         try {
-//            this.preTestCallService.updateNotConnect();//创建前先更新
             //创建前先查询当前用户是不是有未完成的计划
             List<TlcPreCallTask> preCallTasks = this.preTestCallService.selectNotExecPlanByLoginName(ShiroUtils.getLoginName());
             if(!preCallTasks.isEmpty()){
@@ -256,8 +255,10 @@ public class PreTestCallController extends BaseController {
                             String caseNo = campaign.getVariables().getU_TAG();
                             String outcome = campaign.getOutcome();
                             Long call_time = campaign.getCall_time();
+                            Boolean is_calling = campaign.getIs_calling();
                             map.put("phone",phone);
                             map.put("caseNo",caseNo);
+                            map.put("isCalling",String.valueOf(is_calling));
                             if(StringUtils.isNotEmpty(outcome)){
                                 map.put("callResult", PreTestCallResultEnum.getName(outcome));
                             }
@@ -349,5 +350,6 @@ public class PreTestCallController extends BaseController {
         List<TlcPreCallTask> list = this.preTestCallService.selectTlcPreCallTaskList(tlcPreCallTask);
         return getDataTable(list);
     }
+
 
 }

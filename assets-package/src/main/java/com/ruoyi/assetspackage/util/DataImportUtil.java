@@ -1,12 +1,14 @@
 package com.ruoyi.assetspackage.util;
 
 import com.alibaba.fastjson.JSON;
+import com.ruoyi.assetspackage.domain.CurAssetsPackage;
 import com.ruoyi.assetspackage.domain.ImportDataMapping;
 import com.ruoyi.assetspackage.domain.TempCurAssetsPackage;
 import com.ruoyi.assetspackage.enums.IsCloseCaseEnum;
 import com.ruoyi.assetspackage.enums.IsNoEnum;
 import com.ruoyi.assetspackage.enums.PackageFlagEnum;
 import com.ruoyi.assetspackage.service.ITemplateRelationPackageService;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -4283,6 +4285,72 @@ public class DataImportUtil {
     }
 
 
+    public static List<CurAssetsPackage> contactsDistinct(List<CurAssetsPackage> paramList){
+        for (CurAssetsPackage curAsset : paramList) {
+            String firstLiaisonMobile = curAsset.getFirstLiaisonMobile();
+            String firstLiaisonTel = curAsset.getFirstLiaisonTel();
+            String secondLiaisonMobile = curAsset.getSecondLiaisonMobile();
+            String secondLiaisonTel = curAsset.getSecondLiaisonTel();
+            String threeLiaisonMobile = curAsset.getThreeLiaisonMobile();
+            String threeLiaisonTel = curAsset.getThreeLiaisonTel();
+
+            //第1轮
+            if(StringUtils.isNotEmpty(firstLiaisonMobile) && firstLiaisonMobile.equals(firstLiaisonTel)){
+               curAsset.setFirstLiaisonTel(null);
+            }
+            if(StringUtils.isNotEmpty(firstLiaisonMobile) && firstLiaisonMobile.equals(secondLiaisonMobile)){
+                curAsset.setSecondLiaisonMobile(null);
+            }
+            if(StringUtils.isNotEmpty(firstLiaisonMobile) && firstLiaisonMobile.equals(secondLiaisonTel)){
+                curAsset.setSecondLiaisonTel(null);
+            }
+            if(StringUtils.isNotEmpty(firstLiaisonMobile) && firstLiaisonMobile.equals(threeLiaisonMobile)){
+                curAsset.setThreeLiaisonMobile(null);
+            }
+            if(StringUtils.isNotEmpty(firstLiaisonMobile) && firstLiaisonMobile.equals(threeLiaisonTel)){
+                curAsset.setThreeLiaisonTel(null);
+            }
+
+            //第2轮
+            if(StringUtils.isNotEmpty(firstLiaisonTel) && firstLiaisonTel.equals(secondLiaisonMobile)){
+                curAsset.setSecondLiaisonMobile(null);
+            }
+            if(StringUtils.isNotEmpty(firstLiaisonTel) && firstLiaisonTel.equals(secondLiaisonTel)){
+                curAsset.setSecondLiaisonTel(null);
+            }
+            if(StringUtils.isNotEmpty(firstLiaisonTel) && firstLiaisonTel.equals(threeLiaisonMobile)){
+                curAsset.setThreeLiaisonMobile(null);
+            }
+            if(StringUtils.isNotEmpty(firstLiaisonTel) && firstLiaisonTel.equals(threeLiaisonTel)){
+                curAsset.setThreeLiaisonTel(threeLiaisonTel);
+            }
+
+            //第3轮
+            if(StringUtils.isNotEmpty(secondLiaisonMobile) && secondLiaisonMobile.equals(secondLiaisonTel)){
+                curAsset.setSecondLiaisonTel(null);
+            }
+            if(StringUtils.isNotEmpty(secondLiaisonMobile) && secondLiaisonMobile.equals(threeLiaisonMobile)){
+                curAsset.setThreeLiaisonMobile(null);
+            }
+            if(StringUtils.isNotEmpty(secondLiaisonMobile) && secondLiaisonMobile.equals(threeLiaisonTel)){
+                curAsset.setThreeLiaisonTel(null);
+            }
+
+            //第4轮
+            if(StringUtils.isNotEmpty(secondLiaisonTel) && secondLiaisonTel.equals(threeLiaisonMobile)){
+                curAsset.setThreeLiaisonMobile(null);
+            }
+            if(StringUtils.isNotEmpty(secondLiaisonTel) && secondLiaisonTel.equals(threeLiaisonTel)){
+                curAsset.setThreeLiaisonTel(null);
+            }
+
+            //第5轮
+            if(StringUtils.isNotEmpty(threeLiaisonMobile) && threeLiaisonMobile.equals(threeLiaisonTel)){
+                curAsset.setThreeLiaisonTel(null);
+            }
+        }
+        return paramList;
+    }
 
 
 }

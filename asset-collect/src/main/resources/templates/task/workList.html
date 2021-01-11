@@ -102,9 +102,9 @@
                         if(n.execStatus == '2'){
                             $("tr[data-index='"+i+"']").attr('style','background:#b6ece1');
                         }
-                        if(n.callResult == '成功'){
-                            $("tr[data-index='"+i+"']").attr('style','background:#cae5a1');
-                        }
+                        // if(n.callResult == '成功'){
+                        //     $("tr[data-index='"+i+"']").attr('style','background:#cae5a1');
+                        // }
                     });
                 },
                 columns: [{
@@ -216,9 +216,9 @@
                             var list_phone = $(tds[3]).text();
                             if(caseNo == list_caseNO && phone == list_phone){
                                 $(this).attr('style','background:#cae5a1');
-                                // $(tds[6]).text("成功");
-                                // $(tds[7]).text(curentTime());
-                                // $(tds[8]).text("已完成");
+                                $(tds[6]).text("成功");
+                                $(tds[7]).text(curentTime());
+                                $(tds[8]).text("已完成");
                             }
                         });
                     });

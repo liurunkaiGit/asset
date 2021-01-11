@@ -341,13 +341,13 @@ public class PreTestCallServiceImpl implements IPreTestCallService {
         return this.tlcPreCallTaskMapper.selectAllNotExecPlan();
     }
 
-    /**
-     * 更新未完成的为 已完成 未接通状态
-     */
-    @Override
-    public void updateNotConnect() {
-        this.tlcPreCallTaskMapper.updateNotConnect();
-    }
+//    /**
+//     * 更新未完成的为 已完成 未接通状态
+//     */
+//    @Override
+//    public void updateNotConnect() {
+//        this.tlcPreCallTaskMapper.updateNotConnect();
+//    }
 
     /**
      * 删除任务

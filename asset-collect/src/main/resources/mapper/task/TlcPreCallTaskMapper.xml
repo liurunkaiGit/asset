@@ -150,10 +150,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-    <update id="updateNotConnect">
+   <!-- <update id="updateNotConnect">
         update t_lc_pre_call_task set call_result = '未接通',exec_status = 1
         where exec_status = 2
-    </update>
+    </update>-->
 
     <update id="updateExecStatus" parameterType="TlcPreCallTask">
         update t_lc_pre_call_task set exec_status = #{execStatus}

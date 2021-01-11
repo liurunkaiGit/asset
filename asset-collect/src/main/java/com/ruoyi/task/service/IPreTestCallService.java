@@ -32,10 +32,10 @@ public interface IPreTestCallService {
 
     public List<TlcPreCallTask> selectAllNotExecPlan();
 
-    /**
-     * 更新未完成的为 已完成 未接通状态
-     */
-    public void updateNotConnect();
+//    /**
+//     * 更新未完成的为 已完成 未接通状态
+//     */
+//    public void updateNotConnect();
 
     public void removeTask(String planId, String phone, String accountId);
 
