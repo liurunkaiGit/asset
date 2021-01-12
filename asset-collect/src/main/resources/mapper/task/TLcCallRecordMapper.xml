@@ -233,8 +233,11 @@
             <if test="endCallLen != null">
                 AND re.call_len <![CDATA[<=]]> #{endCallLen}
             </if>
-            <if test="caseNo != null and caseNo != '' ">
-                AND re.case_no = #{caseNo}
+            <if test="caseNoList != null and caseNoList.size() > 0">
+                and re.case_no in
+                <foreach collection="caseNoList" item="caseNo" open="(" close=")" separator="," >
+                    #{caseNo}
+                </foreach>
             </if>
             <if test="customName != null and customName != '' ">
                 AND cap.cur_name = #{customName}
@@ -293,8 +296,11 @@
         <if test="endCallLen != null">
             AND re.call_len <![CDATA[<=]]> #{endCallLen}
         </if>
-        <if test="caseNo != null and caseNo != '' ">
-            AND re.case_no = #{caseNo}
+        <if test="caseNoList != null and caseNoList.size() > 0">
+            and re.case_no in
+            <foreach collection="caseNoList" item="caseNo" open="(" close=")" separator="," >
+                #{caseNo}
+            </foreach>
         </if>
         <if test="customName != null and customName != '' ">
             AND cap.cur_name = #{customName}

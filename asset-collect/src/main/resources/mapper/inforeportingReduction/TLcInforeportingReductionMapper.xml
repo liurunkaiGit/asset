@@ -218,6 +218,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
                 and date_format(create_time,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{params.endTime},'%Y-%m-%d %H:%i:%s')
             </if>
+            <if test="userNames != null and userNames.size() > 0">
+                and update_by in
+                <foreach collection="userNames" open="(" item="userName" separator="," close=")">
+                    #{userName}
+                </foreach>
+            </if>
             ORDER BY create_by desc
         </where>
     </sql>

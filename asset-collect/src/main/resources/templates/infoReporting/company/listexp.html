@@ -49,7 +49,7 @@
     var prefix = ctx + "inforeporting/company";
     $(document).ready(function(){
         var options = {
-            url: prefix + "/listexpData",
+            url: prefix + "/listexpData?isGroup="+[[${isGroup}]],
             exportUrl: prefix + "/export",
             clickToSelect:true,
             sortName: "createTime",

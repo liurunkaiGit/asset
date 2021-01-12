@@ -27,7 +27,7 @@
                         <input id="currentPageUrl" name="currentPageUrl" class="form-control" type="hidden">
                         <li>
                             <p>机构案件号：</p>
-                            <input type="text" name="caseNo" id="caseNo"/>
+                            <input type="text" name="caseNo" placeholder="多案件用英文“,”分隔" id="caseNo" ondblclick="showCaseNo()"/>
                         </li>
                         <li>
                             <p>姓名：</p>
@@ -285,6 +285,7 @@
                 },
                 {
                     field: 'transferType',
+                    sortable: true,
                     title: '手别'
                 },
 
@@ -295,6 +296,7 @@
                 },
                 {
                     field: 'appointCaseBalance',
+                    sortable: true,
                     title: '委案金额',
                     footerFormatter:function (value) {
                         var sumBalance = 0;
@@ -347,10 +349,12 @@
                 },
                 {
                     field : 'recentlyAllotDate',
+                    sortable: true,
                     title : '最近分配日期'
                 },
                 {
                     field : 'recentlyFollowUpDate',
+                    sortable: true,
                     title : '最近跟进日期'
                 },
                 {
@@ -768,6 +772,15 @@
         $("#freeSQL").val(freeSQL);
     }
     function selectSearch(){
+        var caseNos = $("#caseNo").val();
+        if (caseNos != null && caseNos != '') {
+            if (caseNos.split(",").length > 100) {
+                $.modal.alertError("机构案件号单次最大查询个数不能超过100");
+                return;
+            }
+        }
+        caseNos = caseNos.replace(new RegExp(" ","gm"),",");
+        $("#caseNo").val(caseNos);
         initFreeSearch();
         $.table.search();
         searchTotalMoney();
@@ -926,6 +939,31 @@
         );
     }
 
+    function showCaseNo() {
+        layer.open({
+            type: 0,
+            title: false,
+            content: '<div class="col-sm-12">\n' +
+                '           <div class="form-group">\n' +
+                '               <textarea name="caseNos" id="caseNos" placeholder="手动输入案件号需要加英文“，”分隔；或从EXCEL中直接粘多行过来，无需手动添加分隔符" class="form-control" rows="30" style="width:280px"></textarea>\n' +
+                '           </div>\n' +
+                '</div>',
+            btn: ['确定', '关闭'],
+            yes: function (index, layero) {
+                var caseNos = $("#caseNos").val();
+                caseNos = caseNos.replace(new RegExp("\n","gm"),",");
+                $("#caseNo").val(caseNos);
+                layer.close(index);
+            },
+            cancel: function() {
+            },
+            success: function(layero, index){
+            }
+        });
+        var caseNo = $("#caseNo").val();
+        caseNo = caseNo.replace(new RegExp(" ","gm"),",");
+        $("#caseNos").val(caseNo);
+    }
 </script>
 </body>
 </html>

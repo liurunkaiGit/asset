@@ -22,6 +22,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.domain.CloseCase;
 import com.ruoyi.common.enums.*;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.RestTemplateUtil;
 import com.ruoyi.common.utils.StringUtils;
@@ -30,6 +31,7 @@ import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysUserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -1280,6 +1282,11 @@ public class CurAssetsPackageServiceImpl extends BaseController implements ICurA
             paramList2 = DataImportUtil.dataConvert(datas, orgId, importBatchNo, orgName);
             //插入临时表
             this.batchAddTemp(paramList2);
+            //临时表案件号去重
+            List<String> caseNos = curAssetsPackageMapper.selectDistinctCaseNo(importBatchNo);
+            if(CollectionUtils.isNotEmpty(caseNos)){
+                throw new BusinessException("上传失败，表格中有重复数据：" + String.join(",", caseNos));
+            }
             datas = null;
         }
         return importBatchNo;

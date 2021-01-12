@@ -143,5 +143,7 @@ public interface SysUserMapper
 
     List<String> selectHavaStopCollApprovePermUser();
 
-    List<Long> selectUserIdList(SysUser sysUser);
+    List<String> selectUserIdList(SysUser sysUser);
+
+    List<String> selectUserIdsSameGroup(Long userId);
 }

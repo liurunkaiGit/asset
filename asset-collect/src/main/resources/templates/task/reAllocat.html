@@ -29,6 +29,9 @@
 							<li>
 								手机号码：<input type="text" name="phonenumber"/>
 							</li>
+							<li>
+								组别：<select th:required="required" name="userGroup" id="userGroup" th:with="type=${@dict.getType('sys_user_group')}"  style="width: 80px" required><option value="">请选择</option><option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option></select>
+							</li>
 							<!--<li>
 								委托机构：
 								<select name="orgId2" id="orgId2">
@@ -122,6 +125,10 @@
 				{
 					field : 'email',
 					title : '用户邮箱'
+				},
+				{
+					field : 'userGroup',
+					title : '组别'
 				},
 				{
                     field: 'status',

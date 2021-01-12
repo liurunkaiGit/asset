@@ -1704,4 +1704,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </if>
     </select>
 
+    <select id="selectDistinctCaseNo" parameterType="String" resultType="String">
+        SELECT org_casNo from cur_assets_package_temp where import_batch_no = #{importBatchNo} group by org_casNo having count(org_casNo) > 1
+    </select>
+
 </mapper>

@@ -453,7 +453,13 @@ public class SysUserServiceImpl implements ISysUserService {
     }
 
     @Override
-    public List<Long> selectUserIdList(SysUser sysUser) {
+    public List<String> selectUserIdList(SysUser sysUser) {
         return this.userMapper.selectUserIdList(sysUser);
     }
+
+    @Override
+    public List<String> selectUserIdsSameGroup(Long userId) {
+        return userMapper.selectUserIdsSameGroup(userId);
+    }
+
 }

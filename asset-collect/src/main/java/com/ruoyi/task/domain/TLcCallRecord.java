@@ -277,4 +277,5 @@ public class TLcCallRecord extends BaseEntity {
     private Integer isHangUp;
     private String ucid;
 
+    private List<String> caseNoList;
 }

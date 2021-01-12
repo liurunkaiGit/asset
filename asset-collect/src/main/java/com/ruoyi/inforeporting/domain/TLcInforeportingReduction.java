@@ -5,6 +5,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Description: 上报信息-减免
@@ -54,4 +55,10 @@ public class TLcInforeportingReduction extends TLcInforeportingTemplate {
      * 减免失效日
      */
     private String expirationDate;
+    /**
+     * 是否组内
+     */
+    private Integer isGroup;
+
+    private List<String> userNames;
 }

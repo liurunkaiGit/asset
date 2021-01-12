@@ -12,11 +12,13 @@ import com.ruoyi.common.config.Global;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.domain.CloseCase;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,6 +110,11 @@ public class AssetsImportFromXYServiceImpl extends BaseController implements IAs
             paramList2 = DataImportUtil.dataConvert(datas, orgId,importBatchNo,orgName);
             //插入临时表
             this.batchAddTemp(paramList2);
+            //临时表案件号去重
+            List<String> caseNos = curAssetsPackageMapper.selectDistinctCaseNo(importBatchNo);
+            if(CollectionUtils.isNotEmpty(caseNos)){
+                throw new BusinessException("上传失败，表格中有重复数据：" + String.join(",", caseNos));
+            }
             datas = null;
             //插入文件统计表
             long size = file.getSize();

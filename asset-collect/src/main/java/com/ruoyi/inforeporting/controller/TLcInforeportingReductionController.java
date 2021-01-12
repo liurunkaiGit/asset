@@ -6,11 +6,13 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.enums.IsNoEnum;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.inforeporting.domain.TLcInforeportingBuckle;
 import com.ruoyi.inforeporting.domain.TLcInforeportingReduction;
 import com.ruoyi.inforeporting.domain.TLcInforeportingTemplate;
 import com.ruoyi.inforeporting.service.TLcInforeportingReductionService;
+import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.task.domain.TLcTask;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -38,6 +40,8 @@ public class TLcInforeportingReductionController extends BaseController {
 
     @Autowired
     private TLcInforeportingReductionService inforeportingReductionService;
+    @Autowired
+    private ISysUserService userService;
 
     /**
      * 信息上报减免查询
@@ -77,7 +81,8 @@ public class TLcInforeportingReductionController extends BaseController {
      * 信息上报减免报表查询
      */
     @GetMapping("/listexp")
-    public String listexp() {
+    public String listexp(ModelMap modelMap) {
+        modelMap.put("isGroup", IsNoEnum.NO.getCode());
         return prefix + "/listexp";
     }
 
@@ -118,6 +123,11 @@ public class TLcInforeportingReductionController extends BaseController {
     @ResponseBody
     public TableDataInfo listexpData(TLcInforeportingReduction inforeportingReduction)
     {
+        //组内案件
+        if(inforeportingReduction.getIsGroup() != null && IsNoEnum.IS.getCode().equals(inforeportingReduction.getIsGroup())){
+            List<String> userNames = userService.selectUserIdsSameGroup(ShiroUtils.getUserId());
+            inforeportingReduction.setUserNames(userNames);
+        }
         startPage();
         inforeportingReduction.setOrgId(ShiroUtils.getSysUser().getOrgId());
         List<TLcInforeportingReduction> list = inforeportingReductionService.selectTLcInforeportingReductionList(inforeportingReduction);
@@ -145,5 +155,16 @@ public class TLcInforeportingReductionController extends BaseController {
         return toAjax(inforeportingReductionService.rejectTLcInforeportingReductionByIds(ids));
     }
 
-
+    /**
+     * 跳转到组内减免导出
+     * @param modelMap
+     * @return
+     */
+    @RequiresPermissions("inforeporting:reduction:group:listexp")
+    @GetMapping(value = "/group/listexp")
+    public String groupListxp(ModelMap modelMap) {
+        // 是否组内查询：是
+        modelMap.put("isGroup", IsNoEnum.IS.getCode());
+        return prefix + "/listexp";
+    }
 }

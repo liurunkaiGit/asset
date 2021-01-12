@@ -6,11 +6,13 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.enums.IsNoEnum;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.inforeporting.domain.TLcInforeportingCompany;
 import com.ruoyi.inforeporting.domain.TLcInforeportingCompanyExp;
 import com.ruoyi.inforeporting.service.TLcInforeportingCompanyService;
 import com.ruoyi.inforeporting.service.TLcInforeportingReductionService;
+import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.task.domain.TLcTask;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -46,6 +48,9 @@ public class TLcInforeportingCompanyController extends BaseController {
     @Autowired
     private TLcInforeportingCompanyService inforeportingCompanyService;
 
+    @Autowired
+    private ISysUserService userService;
+
     /**
      * 信息上报逾期划扣查询
      */
@@ -73,7 +78,8 @@ public class TLcInforeportingCompanyController extends BaseController {
      * 信息上报划扣报表查询
      */
     @GetMapping("/listexp")
-    public String listexp() {
+    public String listexp(ModelMap modelMap) {
+        modelMap.put("isGroup", IsNoEnum.NO.getCode());
         return prefix + "/listexp";
     }
 
@@ -85,6 +91,11 @@ public class TLcInforeportingCompanyController extends BaseController {
     @ResponseBody
     public TableDataInfo listexpData(TLcInforeportingCompany tLcInforeportingCompany)
     {
+        //组内案件
+        if(tLcInforeportingCompany.getIsGroup() != null && IsNoEnum.IS.getCode().equals(tLcInforeportingCompany.getIsGroup())){
+            List<String> userNames = userService.selectUserIdsSameGroup(ShiroUtils.getUserId());
+            tLcInforeportingCompany.setUserNames(userNames);
+        }
         startPage();
         tLcInforeportingCompany.setOrgId(ShiroUtils.getSysUser().getOrgId());
         List<TLcInforeportingCompany> list = inforeportingCompanyService.selectTLcInforeportingCompanyList(tLcInforeportingCompany);
@@ -137,5 +148,16 @@ public class TLcInforeportingCompanyController extends BaseController {
         return toAjax(inforeportingCompanyService.rejectTLcInforeportingCompanyByIds(ids));
     }
 
-
+    /**
+     * 跳转到组内对公入账导出
+     * @param modelMap
+     * @return
+     */
+    @RequiresPermissions("inforeporting:company:group:listexp")
+    @GetMapping(value = "/group/listexp")
+    public String groupListxp(ModelMap modelMap) {
+        // 是否组内查询：是
+        modelMap.put("isGroup", IsNoEnum.IS.getCode());
+        return prefix + "/listexp";
+    }
 }

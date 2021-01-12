@@ -99,6 +99,10 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
         if (tLcCallRecord.getEndCallLen() != null) {
             tLcCallRecord.setEndCallLen(tLcCallRecord.getEndCallLen() * 1000);
         }
+        String caseNo = tLcCallRecord.getCaseNo();
+        if(StringUtils.isNotBlank(caseNo)){
+            tLcCallRecord.setCaseNoList(Arrays.asList(caseNo.split(",")));
+        }
         return tLcCallRecordMapper.selectTLcCallRecordList(tLcCallRecord);
     }
 
@@ -115,6 +119,10 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
         }
         if (tLcCallRecord.getEndCallLen() != null) {
             tLcCallRecord.setEndCallLen(tLcCallRecord.getEndCallLen() * 1000);
+        }
+        String caseNo = tLcCallRecord.getCaseNo();
+        if(StringUtils.isNotBlank(caseNo)){
+            tLcCallRecord.setCaseNoList(Arrays.asList(caseNo.split(",")));
         }
         return tLcCallRecordMapper.selectTLcCallRecordXYList(tLcCallRecord);
     }

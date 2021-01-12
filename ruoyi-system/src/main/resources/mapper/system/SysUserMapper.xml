@@ -123,6 +123,9 @@
         <if test="phonenumber != null and phonenumber != ''">
             AND u.phonenumber like concat('%', #{phonenumber}, '%')
         </if>
+        <if test="userGroup != null and userGroup != ''">
+            AND user_group = #{userGroup}
+        </if>
         union all
         SELECT
         u.user_id,
@@ -164,6 +167,9 @@
         </if>
         <if test="phonenumber != null and phonenumber != ''">
             AND u.phonenumber like concat('%', #{phonenumber}, '%')
+        </if>
+        <if test="userGroup != null and userGroup != ''">
+            AND user_group = #{userGroup}
         </if>
     </select>
 
@@ -387,9 +393,12 @@
         AND sur.user_id = su.user_id
     </select>
 
-    <select id="selectUserIdList" resultType="java.lang.Long" parameterType="com.ruoyi.system.domain.SysUser">
-        SELECT su.user_id as userId FROM sys_user su
+    <select id="selectUserIdList" resultType="java.lang.String" parameterType="com.ruoyi.system.domain.SysUser">
+        SELECT su.user_name as userId FROM sys_user su
         WHERE su.user_group = #{userGroup}
     </select>
 
+    <select id="selectUserIdsSameGroup" parameterType="Long" resultType="String">
+        select user_name from sys_user where user_group = (select user_group from sys_user where user_id = #{userId})  and user_group != ''
+    </select>
 </mapper> 

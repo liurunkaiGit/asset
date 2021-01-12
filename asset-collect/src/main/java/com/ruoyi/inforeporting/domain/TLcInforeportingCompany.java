@@ -7,6 +7,7 @@ import com.ruoyi.common.utils.StringUtils;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Description: 上报信息-对公入账
@@ -104,8 +105,12 @@ public class TLcInforeportingCompany extends TLcInforeportingTemplate implements
      * 减免失效日
      */
     private Date expirationDate;
+    /**
+     * 是否组内
+     */
+    private Integer isGroup;
 
-
+    private List<String> userNames;
     @Override
     public TLcInforeportingCompanyExp clone() {
         TLcInforeportingCompanyExp cep = new TLcInforeportingCompanyExp();

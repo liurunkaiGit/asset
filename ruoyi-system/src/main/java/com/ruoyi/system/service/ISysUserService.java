@@ -197,5 +197,12 @@ public interface ISysUserService {
      */
     List<String> selectHavaStopCollApprovePermUser();
 
-    List<Long> selectUserIdList(SysUser sysUser);
+    List<String> selectUserIdList(SysUser sysUser);
+
+    /**
+     * 查询相同组别的用户id
+     * @param userId
+     * @return
+     */
+    List<String> selectUserIdsSameGroup(Long userId);
 }

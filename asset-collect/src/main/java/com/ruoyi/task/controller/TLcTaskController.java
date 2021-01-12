@@ -879,12 +879,13 @@ public class TLcTaskController extends BaseController {
 
     @ResponseBody
     @PostMapping("/findReAllocatUser")
-    public TableDataInfo list(String orgId, String loginName, String phonenumber) {
+    public TableDataInfo list(String orgId, String loginName, String phonenumber, String userGroup) {
         TableDataInfo rspData = new TableDataInfo();
         SysUser sysUser = new SysUser();
         sysUser.setDeptId(ShiroUtils.getSysUser().getOrgId());
         sysUser.setLoginName(loginName);
         sysUser.setPhonenumber(phonenumber);
+        sysUser.setUserGroup(userGroup);
         List<SysUser> userList = this.tLcTaskService.searchUserByDeptAndHaveDept(sysUser);
         /*PageDomain pageDomain = TableSupport.buildPageRequest();
         if (null == pageDomain.getPageNum() || null == pageDomain.getPageSize()) {

@@ -12,6 +12,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
@@ -207,6 +208,9 @@ public class AssetsImportFromXYController extends BaseController {
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("数据导入失败:{}",e);
+            if(e instanceof BusinessException){
+                return AjaxResult.success(e.getMessage());
+            }
             return AjaxResult.success("数据导入失败",e.getMessage());
         }
         return AjaxResult.success("导入临时表成功",importBatchNo);

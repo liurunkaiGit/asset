@@ -133,6 +133,10 @@ public class TLcDuncaseController extends BaseController {
         if (tLcDuncase.getIsGroup() != null && tLcDuncase.getIsGroup().equals(IsNoEnum.IS.getCode())) {
             tLcDuncase.setUserGroup(ShiroUtils.getSysUser().getUserGroup());
         }
+        String caseNo = request.getParameter("caseNo");
+        if(StringUtils.isNotBlank(caseNo)){
+            tLcDuncase.setCaseNoList(Arrays.asList(caseNo.split(",")));
+        }
         List<TLcDuncase> list = tLcDuncaseService.selectTLcDuncaseByPage(tLcDuncase);
         return getDataTable(list);
     }

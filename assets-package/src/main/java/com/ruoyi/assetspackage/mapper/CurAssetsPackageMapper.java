@@ -160,4 +160,5 @@ public interface CurAssetsPackageMapper
 
     public List<CurAssetsPackage> findNowNeedClose(CurAssetsPackage curAssetsPackage);
 
+    List<String> selectDistinctCaseNo(String importBatchNo);
 }

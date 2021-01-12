@@ -776,4 +776,5 @@ public class TLcDuncase extends BaseEntity {
 //    private String compareMethod;
 //    private String sql;
 
+    private List<String> caseNoList;
 }
