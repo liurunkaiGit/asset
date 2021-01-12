@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -123,6 +124,27 @@ public class TLcReportDayProcessServiceImpl extends BaseController implements IT
     @Override
     public List<TLcReportDayProcess> selectDayProcess(Map<String, Object> param) {
         return this.tLcReportDayProcessMapper.selectDayProcess(param);
+    }
+
+    @Override
+    public List<TLcReportDayProcess> selectTLcReportMonthProcessList(TLcReportDayProcess tLcReportDayProcess) {
+        List<TLcReportDayProcess> list = new ArrayList<>();
+        if (StringUtils.isBlank(tLcReportDayProcess.getOrgId())) {
+            return list;
+        }
+        list = this.tLcReportDayProcessMapper.selectTLcReportMonthProcessList(tLcReportDayProcess);
+        if (list != null && list.size() > 0) {
+            list.stream().forEach(process -> {
+                if (process.getCallNum() == null || process.getConnectedCallNum() == null) {
+                    process.setCallConnectedRecovery("0.00");
+                } else {
+                    BigDecimal connectedCallNum = new BigDecimal(process.getConnectedCallNum());
+                    BigDecimal callNum = new BigDecimal(process.getCallNum());
+                    process.setCallConnectedRecovery(connectedCallNum.divide(callNum, 1, BigDecimal.ROUND_HALF_UP).toString());
+                }
+            });
+        }
+        return list;
     }
 
 }

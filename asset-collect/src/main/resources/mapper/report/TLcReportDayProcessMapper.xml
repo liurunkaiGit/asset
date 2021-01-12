@@ -192,8 +192,8 @@
             t.user_group AS seat_group,
             t.login_name AS seat_num,
             t.user_name AS seat_name,
-            (SELECT count(1) from t_lc_task ta where ta.owner_id = t.user_id and ta.org_id = #{orgId} and ta.task_status = 2 AND ta.allot_type = 1 GROUP BY ta.owner_id) as deal_with_consumer_count,
-            (SELECT SUM(ta.arrears_total) from t_lc_task ta where ta.owner_id = t.user_id and ta.org_id = #{orgId} and ta.task_status = 2 AND ta.allot_type = 1 GROUP BY ta.owner_id) as colling_case_money ,
+            (SELECT count(1) from t_lc_task ta where ta.owner_id = t.user_id and ta.org_id = #{orgId} and ta.task_status = 2 AND ta.allot_type = 1 AND ta.task_type NOT IN (10, 11, 12, 18, 19) GROUP BY ta.owner_id) as deal_with_consumer_count,
+            (SELECT SUM(ta.arrears_total) from t_lc_task ta where ta.owner_id = t.user_id and ta.org_id = #{orgId} and ta.task_status = 2 AND ta.allot_type = 1 AND ta.task_type NOT IN (10, 11, 12, 18, 19) GROUP BY ta.owner_id) as colling_case_money ,
             (select count(1) from t_lc_task ta where ta.owner_id = t.user_id and ta.org_id = #{orgId} and ta.recently_follow_up_date BETWEEN #{startDate} and #{endDate} group by ta.owner_id) as user_cover_num,
             (select count(1) from t_lc_call_record re where re.create_by = t.user_id and re.org_id = #{orgId} and re.create_time BETWEEN #{startDate} and #{endDate} and re.type = 1 group by re.create_by) as call_num,
             (select count(1) from t_lc_call_record re where re.create_by = t.user_id and re.org_id = #{orgId} and re.create_time BETWEEN #{startDate} and #{endDate} group by re.create_by) as call_code_num,
@@ -235,6 +235,16 @@
        a.owner_name=b.user_name and b.user_id=${userId}
        and a.hkrq <![CDATA[>=]]> date_format(#{startDate},'%Y-%m-%d %H:%i:%s')
        and a.hkrq <![CDATA[<=]]> date_format(#{endDate},'%Y-%m-%d %H:%i:%s')
+    </select>
+
+    <select id="selectTLcReportMonthProcessList" parameterType="com.ruoyi.report.domain.TLcReportDayProcess" resultMap="TLcReportDayProcessResult">
+        select t.seat_group,t.seat_num,t.seat_name,sum(t.call_num) as call_num,sum(t.connected_call_num) as connected_call_num,sum(t.call_len) as call_len
+        from t_lc_report_day_process t
+        where t.report_date between #{startReportDate} and #{endReportDate} and t.org_id = #{orgId}
+        <if test="seatName != null and seatName != ''">
+            and t.seat_name = #{seatName}
+        </if>
+        GROUP BY t.seat_num
     </select>
 
 

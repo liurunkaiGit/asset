@@ -65,4 +65,6 @@ public interface ITLcStationLetterService {
     List<TLcStationLetter> selectWaitSendLetter(TLcStationLetter tLcStationLetter);
 
     void updateLetterSendStatus();
+
+    void sendReplyStationLetter(TLcStationLetter tLcStationLetter);
 }

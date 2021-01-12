@@ -1,6 +1,7 @@
 package com.ruoyi.report.service;
 
 import com.ruoyi.report.domain.TLcReportRecovery;
+import com.ruoyi.report.domain.TLcReportZyRecovery;
 
 import java.util.List;
 import java.util.Map;
@@ -62,4 +63,5 @@ public interface ITLcReportRecoveryService {
 
     List<TLcReportRecovery> selectRecoveryByPayment(Map<String, Object> param);
 
+    List<TLcReportZyRecovery> selectTLcReportZyRecoveryList(TLcReportZyRecovery zyRecovery);
 }

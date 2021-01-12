@@ -226,6 +226,7 @@
                     <p style="font-size: 18px;color:black; text-align: center; display: inline-block; vertical-align: middle; margin: 0px"
                        id="title"></p>
                     <div style="float: right; width: 200px">
+                        <input type="hidden" id="letterId"/>
                         <span style="font-size: 15px;color:black; float: right " id="sendBy"></span>
                         <span style="font-size: 15px;color:black; float: right; white-space: pre-wrap"
                               id="sendTime"></span>
@@ -242,6 +243,41 @@
                 </div>
                 <div class="modal-footer" style="text-align: center">
                     <button type="button" class="btn btn-primary" onclick="ok();" style="text-align: center">确定</button>
+                    <button type="button" class="btn btn-primary" onclick="reply();" style="text-align: center; border-color: red; background-color: red">回复</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="replyLetter" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content animated bounceInRight" style="height: 370px">
+                <div class="modal-header">
+                    <!--<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
+                    </button>-->
+                    <!--<p style="font-size: 18px;color:black; text-align: center; display: inline-block; vertical-align: middle; margin: 0px"
+                       id="replyTitle"></p>-->
+                    <div >
+                        <span style="font-size: 15px;color:black;" id="replyTitle"></span><br>
+                        <span style="font-size: 15px;color:black;" id="replySendBy"></span><br>
+                        <input type="hidden" id="replySendById">
+                        <span style="font-size: 15px;color:black;" id="replyReceive"></span><br>
+                        <input type="hidden" id="replyReceiveId">
+                        <textarea name="replyContent" id="replyContent" maxlength="100" class="form-control" rows="3" style="width:500px;"></textarea>
+                    </div>
+                </div>
+                <div class="modal-body" style="height: 150px;">
+                    <div class="form-group">
+
+                        <!--<span style="font-size: 15px;color:black;" id="split"></span><br>-->
+                        <span style="font-size: 15px;color:black;" id="curTitle"></span><br>
+                        <span style="font-size: 15px;color:black;" id="curSendBy"></span><br>
+                        <span style="font-size: 15px;color:black;" id="curReceive"></span><br>
+                        <span style="font-size: 15px;color:black;" id="curContent"></span><br>
+                    </div>
+                </div>
+                <div class="modal-footer" style="text-align: center">
+                    <button type="button" class="btn btn-primary" onclick="sendReply();" style="text-align: center">发送</button>
                 </div>
             </div>
         </div>
@@ -411,6 +447,7 @@ function showDetail(id) {
         $("#title").text(data.result.title);
         $("#content").text(data.result.content);
         $("#sendTime").text(data.result.sendTime);
+        $("#letterId").val(id);
     })
     $("#letterDetail").modal('show');
 }
@@ -419,6 +456,47 @@ function ok() {
     $("#letterDetail").modal('hide');
     showLetter();
     getStationLetter();
+}
+
+function reply() {
+    var id = $("#letterId").val();
+    $.get(ctx + "station/letter/agent/letterDetail/"+id,function (data) {
+        $("#replyTitle").text("主题：RE:" + data.result.title);
+        $("#replySendBy").text("发件人：" + data.result.receiveUserName);
+        $("#replySendById").val(data.result.agentId);
+        $("#replyReceive").text("收件人：" + data.result.sendUserName);
+        $("#replyReceiveId").val(data.result.sendBy);
+        /*$("#split").text("==================================");*/
+        $("#curTitle").text("主题：" + data.result.title);
+        $("#curSendBy").text("发件人：" + data.result.sendUserName);
+        $("#curReceive").text("收件人：" + data.result.receiveUserName);
+        $("#curContent").text(data.result.content);
+    })
+    $("#replyLetter").modal('show');
+}
+
+function sendReply() {
+    var content = $("#replyContent").val();
+    content += $("#curTitle").text();
+    content += $("#curSendBy").text();
+    content += $("#curReceive").text();
+    content += $("#curContent").text();
+    alert($("#replyReceiveId").val())
+    $.post(
+        ctx + "station/letter/sendReply",
+        {
+            title:$("#replyTitle").text(),
+            content:content,
+            sendRange:2,
+            userIds: $("#replyReceiveId").val(),
+            sendType:1,
+            sendStatus : 1,
+            letterAgentId: $("#letterId").val()
+        },
+        function() {
+            $("#replyLetter").modal('hide');
+        }
+    );
 }
 </script>
 </body>

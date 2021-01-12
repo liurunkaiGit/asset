@@ -1,6 +1,7 @@
 package com.ruoyi.report.mapper;
 
 import com.ruoyi.report.domain.TLcReportRecovery;
+import com.ruoyi.report.domain.TLcReportZyRecovery;
 
 import java.util.List;
 import java.util.Map;
@@ -61,4 +62,6 @@ public interface TLcReportRecoveryMapper {
     public int deleteTLcReportRecoveryByIds(String[] ids);
 
     List<TLcReportRecovery> selectRecovery(Map<String, Object> param);
+
+    List<TLcReportZyRecovery> selectTLcReportZyRecoveryList(TLcReportZyRecovery zyRecovery);
 }

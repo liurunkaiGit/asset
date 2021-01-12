@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import sun.audio.AudioPlayer;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -748,4 +749,23 @@ public class Test {
             log.error(e.getMessage(),e);
         }
     }
+
+    @org.junit.Test
+    public void testHashMap() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("1", 1);
+        map.put("2", 2);
+        Iterator<String> iterator = map.keySet().iterator();
+        while (iterator.hasNext()) {
+            String key = iterator.next();
+            if (key.equals("1")) {
+                iterator.remove();
+            }
+        }
+        ConcurrentHashMap<String, Object> concurrentHashMap = new ConcurrentHashMap<>();
+        Object oldValue = concurrentHashMap.put("123", "1");
+        final Object o = concurrentHashMap.get("123");
+        concurrentHashMap.remove("123");
+    }
+
 }

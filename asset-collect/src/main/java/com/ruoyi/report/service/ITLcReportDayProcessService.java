@@ -61,4 +61,6 @@ public interface ITLcReportDayProcessService {
     public int deleteTLcReportDayProcessById(Long id);
 
     List<TLcReportDayProcess> selectDayProcess(Map<String, Object> param);
+
+    List<TLcReportDayProcess> selectTLcReportMonthProcessList(TLcReportDayProcess tLcReportDayProcess);
 }

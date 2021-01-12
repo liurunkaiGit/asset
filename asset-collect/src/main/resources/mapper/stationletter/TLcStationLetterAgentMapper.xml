@@ -62,10 +62,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="selectTLcStationLetterAgentById" parameterType="Long" resultMap="TLcStationLetterAgentResult">
-        select su.user_name as sendUserName,
+        select
+        (select su.user_name from sys_user su where su.user_id = t.send_by) as sendUserName,
+        (select su.user_name from sys_user su where su.user_id = t.agent_id) as receiveUserName,
         <include refid="selectTLcStationLetterAgentColumn"/>
-        from t_lc_station_letter_agent t,sys_user su
-        where t.send_by = su.user_id and t.id = #{id}
+        from t_lc_station_letter_agent t
+        where t.id = #{id}
     </select>
 
     <select id="selectWaitSendLetterAgentList" parameterType="com.ruoyi.stationletter.domain.TLcStationLetterAgent" resultMap="TLcStationLetterAgentResult">
@@ -169,8 +171,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-    <update id="updateReadStatus" parameterType="java.lang.Long">
-        update t_lc_station_letter_agent set read_status = 1 where id = #{id}
+    <update id="updateReadStatus" >
+        update t_lc_station_letter_agent set read_status = #{status} where id = #{id}
     </update>
 
     <delete id="deleteTLcStationLetterAgentById" parameterType="Long">

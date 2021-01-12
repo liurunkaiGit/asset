@@ -94,4 +94,6 @@ public class TLcStationLetter extends BaseEntity {
 
     private Date startCreateTime;
     private Date endCreateTime;
+
+    private Long letterAgentId;
 }

@@ -250,4 +250,19 @@
 		WHERE 1 = 1
 	</select>
 
+    <select id="selectTLcReportZyRecoveryList" parameterType="com.ruoyi.report.domain.TLcReportZyRecovery" resultType="com.ruoyi.report.domain.TLcReportZyRecovery">
+        select
+            cap.rcr as enterCollDate,
+            cap.transferType as transferType,
+            sum(cap.rmb_yhbjzje) as mEaOdClBa,
+            sum(cap.ljyhje) as returnedMoney
+        from cur_assets_package cap
+        where org_id = #{orgId}
+        <if test="transferType != null and transferType != ''">
+            and cap.transferType = #{transferType}
+        </if>
+        and cap.rcr BETWEEN #{startEnterCollDate} and #{endEnterCollDate}
+        group by cap.rcr,cap.transferType
+    </select>
+
 </mapper>

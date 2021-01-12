@@ -129,8 +129,8 @@ public class TLcStationLetterAgentServiceImpl implements ITLcStationLetterAgentS
     }
 
     @Override
-    public void updateReadStatus(Long id) {
-        this.tLcStationLetterAgentMapper.updateReadStatus(id);
+    public void updateReadStatus(Integer status, Long id) {
+        this.tLcStationLetterAgentMapper.updateReadStatus(status, id);
     }
 
     @Override

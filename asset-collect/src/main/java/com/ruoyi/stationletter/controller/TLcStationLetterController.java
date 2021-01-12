@@ -9,10 +9,12 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.enums.IsNoEnum;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.stationletter.domain.TLcStationLetter;
+import com.ruoyi.stationletter.domain.TLcStationLetterAgent;
 import com.ruoyi.stationletter.service.ITLcStationLetterService;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.task.domain.TLcTask;
+import com.ruoyi.utils.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -168,5 +170,17 @@ public class TLcStationLetterController extends BaseController {
         List<SysUser> userList = this.tLcStationLetterService.selectSendLetterUser(sysUser);
         rspData.setRows(userList);
         return  rspData;
+    }
+
+    /**
+     * 站内信回复
+     *
+     * @return
+     */
+    @PostMapping("/sendReply")
+    @ResponseBody
+    public Response sendReply(TLcStationLetter tLcStationLetter) {
+        this.tLcStationLetterService.sendReplyStationLetter(tLcStationLetter);
+        return Response.success(null);
     }
 }

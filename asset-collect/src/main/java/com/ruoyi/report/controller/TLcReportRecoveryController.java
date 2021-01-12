@@ -8,6 +8,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.report.domain.TLcReportRecovery;
+import com.ruoyi.report.domain.TLcReportZyRecovery;
 import com.ruoyi.report.service.ITLcReportRecoveryService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -51,6 +52,12 @@ public class TLcReportRecoveryController extends BaseController {
         return prefix + "/recovery";
     }
 
+    @RequiresPermissions("report:recovery:zy:view")
+    @GetMapping("/zy/view")
+    public String zyRecovery() {
+        return prefix + "/zyRecovery";
+    }
+
     /**
      * 查询回收率报列表
      */
@@ -59,6 +66,17 @@ public class TLcReportRecoveryController extends BaseController {
     @ResponseBody
     public TableDataInfo list(TLcReportRecovery tLcReportRecovery) {
         List<TLcReportRecovery> list = this.tLcReportRecoveryService.selectTLcReportRecoveryList(tLcReportRecovery);
+        return getDataTable(list);
+    }
+
+    /**
+     * 查询回收率报列表
+     */
+    @RequiresPermissions("report:recovery:zy:list")
+    @PostMapping("/zy/list")
+    @ResponseBody
+    public TableDataInfo zyList(TLcReportZyRecovery zyRecovery) {
+        List<TLcReportZyRecovery> list = this.tLcReportRecoveryService.selectTLcReportZyRecoveryList(zyRecovery);
         return getDataTable(list);
     }
 
@@ -80,6 +98,19 @@ public class TLcReportRecoveryController extends BaseController {
             }
         });
         ExcelUtil<TLcReportRecovery> util = new ExcelUtil<>(TLcReportRecovery.class);
+        return util.exportExcel(list, "回收率报表");
+    }
+
+    /**
+     * 导出回收率报列表
+     */
+    @RequiresPermissions("report:recovery:zy:export")
+    @Log(title = "回收率报", businessType = BusinessType.EXPORT)
+    @PostMapping(value = "/zy/export",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public AjaxResult zyExport(TLcReportZyRecovery zyRecovery) {
+        List<TLcReportZyRecovery> list = this.tLcReportRecoveryService.selectTLcReportZyRecoveryList(zyRecovery);
+        ExcelUtil<TLcReportZyRecovery> util = new ExcelUtil<>(TLcReportZyRecovery.class);
         return util.exportExcel(list, "回收率报表");
     }
 

@@ -88,4 +88,5 @@ public interface TLcReportDayProcessMapper {
      */
     List<TLcReportDayProcess> selectTaskYiHuankuanZong(Map<String, Object> param);
 
+    List<TLcReportDayProcess> selectTLcReportMonthProcessList(TLcReportDayProcess tLcReportDayProcess);
 }

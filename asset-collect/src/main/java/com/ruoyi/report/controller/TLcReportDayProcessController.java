@@ -10,11 +10,13 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.enums.IsNoEnum;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.report.domain.TLcReportDayProcess;
+import com.ruoyi.report.domain.TLcReportMonthProcess;
 import com.ruoyi.report.service.ITLcReportDayProcessService;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -28,6 +30,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 每日过程指标报Controller
@@ -71,6 +74,18 @@ public class TLcReportDayProcessController extends BaseController {
         return prefix + "/process";
     }
 
+    @RequiresPermissions("report:process:month:view")
+    @GetMapping(value = "/month/view")
+    public String monthProcess(ModelMap modelMap) {
+        String curDate = DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD, new Date());
+        modelMap.put("reportDate", DateUtils.parseDate(curDate));
+        modelMap.put("updateTime", DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS, new Date()));
+        modelMap.put("reportName", "组内每日过程指标");
+        // 是否组内查询：是
+        modelMap.put("isGroup", IsNoEnum.IS.getCode());
+        return prefix + "/monthProcess";
+    }
+
     /**
      * 查询每日过程指标报列表
      */
@@ -80,6 +95,18 @@ public class TLcReportDayProcessController extends BaseController {
     public TableDataInfo list(TLcReportDayProcess tLcReportDayProcess) {
         startPage();
         List<TLcReportDayProcess> list = this.tLcReportDayProcessService.selectTLcReportDayProcessList(tLcReportDayProcess);
+        return getDataTable(list);
+    }
+
+    /**
+     * 查询月度过程指标列表
+     */
+    @RequiresPermissions("report:process:month:list")
+    @PostMapping("/monthList")
+    @ResponseBody
+    public TableDataInfo monthList(TLcReportDayProcess tLcReportDayProcess) {
+        startPage();
+        List<TLcReportDayProcess> list = this.tLcReportDayProcessService.selectTLcReportMonthProcessList(tLcReportDayProcess);
         return getDataTable(list);
     }
 
@@ -102,32 +129,25 @@ public class TLcReportDayProcessController extends BaseController {
     @ResponseBody
     public AjaxResult export(TLcReportDayProcess tLcReportDayProcess) {
         List<TLcReportDayProcess> list = this.tLcReportDayProcessService.selectTLcReportDayProcessList(tLcReportDayProcess);
-        list.stream().forEach(process -> {
-            if (StringUtils.isNoneBlank(process.getCallConnectedRecovery())) {
-                process.setCallConnectedRecovery(df.format(new BigDecimal(process.getCallConnectedRecovery())));
-            }
-            if (StringUtils.isNoneBlank(process.getCallActionCodeRecovery())) {
-                BigDecimal bigDecimal = new BigDecimal(process.getCallActionCodeRecovery());
-                process.setCallActionCodeRecovery(String.valueOf(bigDecimal.setScale(2, RoundingMode.HALF_UP)));
-            }
-            if (StringUtils.isNoneBlank(process.getAverageCallCode())) {
-                BigDecimal bigDecimal = new BigDecimal(process.getAverageCallCode());
-                process.setAverageCallCode(String.valueOf(bigDecimal.setScale(2, RoundingMode.HALF_UP)));
-            }
-            if (StringUtils.isNoneBlank(process.getAverageActionCode())) {
-                BigDecimal bigDecimal = new BigDecimal(process.getAverageActionCode());
-                process.setAverageActionCode(String.valueOf(bigDecimal.setScale(2, RoundingMode.HALF_UP)));
-            }
-            if (StringUtils.isNoneBlank(process.getAverageEffectiveCallCodeNum())) {
-                BigDecimal bigDecimal = new BigDecimal(process.getAverageEffectiveCallCodeNum());
-                process.setAverageEffectiveCallCodeNum(String.valueOf(bigDecimal.setScale(2, RoundingMode.HALF_UP)));
-            }
-            if (StringUtils.isNoneBlank(process.getCallLen())) {
-                double callLen = Math.round(Double.valueOf(process.getCallLen()) * 100 ) * 0.01d;
-                process.setCallLen(String.valueOf(callLen));
-            }
-        });
         ExcelUtil<TLcReportDayProcess> util = new ExcelUtil<TLcReportDayProcess>(TLcReportDayProcess.class);
         return util.exportExcel(list, "每日过程指标");
+    }
+
+    /**
+     * 导出月度过程指标列表
+     */
+    @RequiresPermissions("report:process:month:export")
+    @Log(title = "月度过程指标", businessType = BusinessType.EXPORT)
+    @PostMapping("/monthExport")
+    @ResponseBody
+    public AjaxResult monthExport(TLcReportDayProcess tLcReportDayProcess) {
+        List<TLcReportDayProcess> list = this.tLcReportDayProcessService.selectTLcReportMonthProcessList(tLcReportDayProcess);
+        final List<TLcReportMonthProcess> collect = list.stream().map(dayProcess -> {
+            TLcReportMonthProcess tLcReportMonthProcess = new TLcReportMonthProcess();
+            BeanUtils.copyProperties(dayProcess, tLcReportMonthProcess);
+            return tLcReportMonthProcess;
+        }).collect(Collectors.toList());
+        ExcelUtil<TLcReportMonthProcess> util = new ExcelUtil<>(TLcReportMonthProcess.class);
+        return util.exportExcel(collect, "月度过程指标");
     }
 }

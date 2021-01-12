@@ -203,4 +203,35 @@ public class TLcStationLetterServiceImpl implements ITLcStationLetterService {
     public void updateLetterSendStatus() {
         this.tLcStationLetterMapper.updateLetterSendStatus();
     }
+
+    @Override
+    @Transactional
+    public void sendReplyStationLetter(TLcStationLetter tLcStationLetter) {
+        // 生成站内信
+        Date date = new Date();
+        tLcStationLetter.setSendTime(date);
+        tLcStationLetter.setCreateBy(ShiroUtils.getSysUser().getUserId().toString());
+        tLcStationLetter.setCreateTime(date);
+        tLcStationLetter.setUpdateBy(ShiroUtils.getSysUser().getUserId().toString());
+        tLcStationLetter.setUpdateTime(date);
+        tLcStationLetter.setOrgId(ShiroUtils.getSysUser().getOrgId());
+        tLcStationLetter.setOrgName(ShiroUtils.getSysUser().getOrgName());
+        this.tLcStationLetterMapper.insertTLcStationLetter(tLcStationLetter);
+        // 生成用户接收记录
+        TLcStationLetterAgent tLcStationLetterAgent = new TLcStationLetterAgent();
+        tLcStationLetterAgent.setLetterId(tLcStationLetter.getId());
+        tLcStationLetterAgent.setTitle(tLcStationLetter.getTitle());
+        tLcStationLetterAgent.setContent(tLcStationLetter.getContent());
+        tLcStationLetterAgent.setAgentId(tLcStationLetter.getUserIds());
+        tLcStationLetterAgent.setSendBy(Integer.valueOf(tLcStationLetter.getCreateBy()));
+        tLcStationLetterAgent.setSendTime(tLcStationLetter.getSendTime());
+        tLcStationLetterAgent.setReadStatus(IsNoEnum.NO.getCode());
+        tLcStationLetterAgent.setCreateBy(tLcStationLetter.getCreateBy());
+        tLcStationLetterAgent.setCreateTime(tLcStationLetter.getCreateTime());
+        tLcStationLetterAgent.setOrgId(ShiroUtils.getSysUser().getOrgId());
+        tLcStationLetterAgent.setOrgName(ShiroUtils.getSysUser().getOrgName());
+        this.stationLetterAgentService.insertTLcStationLetterAgent(tLcStationLetterAgent);
+        // 修改状态为已回复
+        this.stationLetterAgentService.updateReadStatus(3, tLcStationLetter.getLetterAgentId());
+    }
 }

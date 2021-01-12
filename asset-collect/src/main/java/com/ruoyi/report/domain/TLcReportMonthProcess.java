@@ -5,8 +5,6 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -22,7 +20,7 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-public class TLcReportDayProcess extends BaseEntity {
+public class TLcReportMonthProcess extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -34,7 +32,6 @@ public class TLcReportDayProcess extends BaseEntity {
      * 报表日期
      */
     @NotNull(message = "日期不能为空")
-    @Excel(name = "报表日期", width = 30, dateFormat = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date reportDate;
 
@@ -59,19 +56,16 @@ public class TLcReportDayProcess extends BaseEntity {
     /**
      * 处理客户数
      */
-    @Excel(name = "处理账户数")
     private Integer dealWithConsumerCount;
 
     /**
      * 在催案件金额
      */
-    @Excel(name = "在催案件金额")
     private BigDecimal collingCaseMoney;
 
     /**
      * 覆盖账户数
      */
-    @Excel(name = "覆盖账户数")
     private Integer userCoverNum;
 
     /**
@@ -101,13 +95,11 @@ public class TLcReportDayProcess extends BaseEntity {
     /**
      * 行动码数量
      */
-//    @Excel(name = "行动码量")
     private Integer actionCodeNum;
 
     /**
      * 电话码量
      */
-    @Excel(name = "电话码量")
     private Integer callCodeNum;
 
     /**
@@ -128,13 +120,11 @@ public class TLcReportDayProcess extends BaseEntity {
     /**
      * 本人有效电话码量
      */
-    @Excel(name = "本人有效电话码量")
     private Integer selfEffectiveCallCodeNum;
 
     /**
      * 三方有效电话码量
      */
-    @Excel(name = "三方有效电话码量")
     private Integer thirdEffectiveCallCodeNum;
 
     /**
@@ -145,13 +135,11 @@ public class TLcReportDayProcess extends BaseEntity {
     /**
      * 投诉代码量
      */
-    @Excel(name = "投诉代码量")
     private Integer complaintNum;
 
     /**
      * 所属机构
      */
-    @NotBlank(message = "机构id不能为空")
     private String orgId;
 
     /**

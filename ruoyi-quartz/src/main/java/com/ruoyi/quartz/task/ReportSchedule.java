@@ -72,7 +72,11 @@ public class ReportSchedule {
                 orgPackageList.stream().forEach(orgPackage -> {
                     processParam.put("orgId", orgPackage.getDeptId());
                     List<TLcReportDayProcess> reportDayProcessList = this.reportDayProcessService.selectDayProcess(processParam);
-                    reportDayProcessList.stream().forEach(reportRecovery -> this.reportDayProcessService.insertTLcReportDayProcess(reportRecovery));
+                    reportDayProcessList.stream().forEach(reportRecovery -> {
+                        reportRecovery.setOrgId(orgPackage.getDeptId().toString());
+                        reportRecovery.setOrgName(orgPackage.getOrgName());
+                        this.reportDayProcessService.insertTLcReportDayProcess(reportRecovery);
+                    });
                     log.info("{}生成每日过程指标报表成功,{}", orgPackage.getOrgName(), DateUtils.getNowDate());
                 });
             }

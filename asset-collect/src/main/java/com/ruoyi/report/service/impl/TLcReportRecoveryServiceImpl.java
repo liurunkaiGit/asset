@@ -4,8 +4,11 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.report.domain.TLcReportRecovery;
+import com.ruoyi.report.domain.TLcReportZyRecovery;
 import com.ruoyi.report.mapper.TLcReportRecoveryMapper;
 import com.ruoyi.report.service.ITLcReportRecoveryService;
+import com.ruoyi.system.domain.SysConfig;
+import com.ruoyi.system.service.ISysConfigService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,8 @@ import java.util.*;
 public class TLcReportRecoveryServiceImpl extends BaseController implements ITLcReportRecoveryService {
     @Autowired
     private TLcReportRecoveryMapper tLcReportRecoveryMapper;
+    @Autowired
+    private ISysConfigService sysConfigService;
 
     /**
      * 查询回收率报
@@ -109,5 +114,28 @@ public class TLcReportRecoveryServiceImpl extends BaseController implements ITLc
     @Override
     public List<TLcReportRecovery> selectRecoveryByPayment(Map<String, Object> param) {
         return this.tLcReportRecoveryMapper.selectRecovery(param);
+    }
+
+    @Override
+    public List<TLcReportZyRecovery> selectTLcReportZyRecoveryList(TLcReportZyRecovery zyRecovery) {
+        String zyOrgId = this.sysConfigService.selectConfigByKey("zyOrgId");
+        zyRecovery.setOrgId(Long.valueOf(zyOrgId));
+        String[] transferTypeStr = new String[]{"M2","M3","M4","M5","M6","M7","M8","M9",};
+        List<String> transferTypes = Arrays.asList(transferTypeStr);
+        List<TLcReportZyRecovery> list = new ArrayList<>();
+        if (zyRecovery.getStartEnterCollDate() != null && zyRecovery.getEndEnterCollDate() != null) {
+            list = this.tLcReportRecoveryMapper.selectTLcReportZyRecoveryList(zyRecovery);
+        }
+        if (list != null && list.size() > 0) {
+            list.stream().forEach(res -> {
+                if (!transferTypes.contains(res.getTransferType())) {
+                    res.setMEaWoNrPr(res.getMEaOdClBa());
+                    res.setMEnWoNrPr(res.getmEnOdClBa());
+                    res.setMEaOdClBa(null);
+                    res.setMEnOdClBa(null);
+                }
+            });
+        }
+        return list;
     }
 }

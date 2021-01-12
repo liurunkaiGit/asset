@@ -80,5 +80,6 @@ public class TLcStationLetterAgent extends BaseEntity {
     private String orgName;
 
     private String sendUserName;
+    private String receiveUserName;
 
 }

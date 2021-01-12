@@ -114,7 +114,9 @@ public class TLcStationLetterAgentController extends BaseController {
     @ResponseBody
     public Response letterDetail(@PathVariable("id") Long id, ModelMap modelMap) {
         TLcStationLetterAgent letterAgent = this.tLcStationLetterAgentService.selectTLcStationLetterAgentById(id);
-        this.tLcStationLetterAgentService.updateReadStatus(id);
+        // 修改站内信状态为已读
+        this.tLcStationLetterAgentService.updateReadStatus(1, id);
         return Response.success(letterAgent);
     }
+
 }
