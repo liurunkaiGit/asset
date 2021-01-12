@@ -84,8 +84,10 @@
                     formatter: function (value, row, index) {
                         if (value == 1) {
                             return '<img src="/img/havaRead.png" />已读';
-                        } else {
+                        } else if (value == 2) {
                             return '<img src="/img/waitRead.png" />未读';
+                        } else if (value == 3) {
+                            return '<img src="/img/havaRead.png" />已回复';
                         }
                     }
                 },
