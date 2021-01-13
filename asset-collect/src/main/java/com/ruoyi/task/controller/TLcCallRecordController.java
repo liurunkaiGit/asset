@@ -20,6 +20,7 @@ import com.ruoyi.task.service.ITLcCallRecordService;
 import com.ruoyi.utils.CSVUtils;
 import com.ruoyi.utils.DesensitizationUtil;
 import com.ruoyi.utils.Response;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,10 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 通话结果记录Controller
@@ -130,6 +128,10 @@ public class TLcCallRecordController extends BaseController {
         String jxOrgId = sysConfigService.selectConfigByKey("jxOrgId");
         String dqOrgId = sysConfigService.selectConfigByKey("dqConfigOrgId");
         String orgId = tLcCallRecord.getOrgId();
+        String caseNo = tLcCallRecord.getCaseNo();
+        if(StringUtils.isNotBlank(caseNo)){
+            tLcCallRecord.setCaseNoList(Arrays.asList(caseNo.split(",")));
+        }
         if(configValue.equals(orgId)){//兴业导出
             List<TLcCallRecordForXY> list = tLcCallRecordService.selectTLcCallRecordListForXY(tLcCallRecord);
             ExcelUtil<TLcCallRecordForXY> util = new ExcelUtil<TLcCallRecordForXY>(TLcCallRecordForXY.class);

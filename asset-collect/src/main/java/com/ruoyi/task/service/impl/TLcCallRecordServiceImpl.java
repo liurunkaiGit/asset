@@ -161,8 +161,10 @@ public class TLcCallRecordServiceImpl implements ITLcCallRecordService {
         if (tLcCallRecord.getEndCallLen() != null) {
             tLcCallRecord.setEndCallLen(tLcCallRecord.getEndCallLen() * 1000);
         }
-
-
+        String caseNo = tLcCallRecord.getCaseNo();
+        if(StringUtils.isNotBlank(caseNo)){
+            tLcCallRecord.setCaseNoList(Arrays.asList(caseNo.split(",")));
+        }
         int pageSize = 10000;//每页的数据条数
         int pageCount = 0;//总页数
         int count = tLcCallRecordMapper.selectTLcCallRecordCount(tLcCallRecord);
