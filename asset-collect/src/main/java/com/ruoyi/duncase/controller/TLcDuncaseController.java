@@ -195,10 +195,6 @@ public class TLcDuncaseController extends BaseController {
         if(cityId != null && !"".equals(cityId)){
             tLcDuncase.setProvinceId(null);
         }
-        String caseNo = request.getParameter("caseNo");
-        if(StringUtils.isNotBlank(caseNo)){
-            tLcDuncase.setCaseNoList(Arrays.asList(caseNo.split(",")));
-        }
         tLcDuncase.setOrgId(String.valueOf(ShiroUtils.getSysUser().getOrgId()));
         String caseNo = request.getParameter("caseNo");
         if(StringUtils.isNotBlank(caseNo)){
