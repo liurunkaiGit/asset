@@ -481,7 +481,7 @@ function sendReply() {
     content += $("#curSendBy").text();
     content += $("#curReceive").text();
     content += $("#curContent").text();
-    alert($("#replyReceiveId").val())
+    // alert($("#replyReceiveId").val())
     $.post(
         ctx + "station/letter/sendReply",
         {

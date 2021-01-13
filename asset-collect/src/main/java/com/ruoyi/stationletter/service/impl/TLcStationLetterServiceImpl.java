@@ -3,6 +3,7 @@ package com.ruoyi.stationletter.service.impl;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.enums.IsNoEnum;
+import com.ruoyi.enums.StationLetterEnum;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.stationletter.domain.TLcStationLetter;
 import com.ruoyi.stationletter.domain.TLcStationLetterAgent;
@@ -225,13 +226,13 @@ public class TLcStationLetterServiceImpl implements ITLcStationLetterService {
         tLcStationLetterAgent.setAgentId(tLcStationLetter.getUserIds());
         tLcStationLetterAgent.setSendBy(Integer.valueOf(tLcStationLetter.getCreateBy()));
         tLcStationLetterAgent.setSendTime(tLcStationLetter.getSendTime());
-        tLcStationLetterAgent.setReadStatus(IsNoEnum.NO.getCode());
+        tLcStationLetterAgent.setReadStatus(StationLetterEnum.WAIT_READ.getStatus());
         tLcStationLetterAgent.setCreateBy(tLcStationLetter.getCreateBy());
         tLcStationLetterAgent.setCreateTime(tLcStationLetter.getCreateTime());
         tLcStationLetterAgent.setOrgId(ShiroUtils.getSysUser().getOrgId());
         tLcStationLetterAgent.setOrgName(ShiroUtils.getSysUser().getOrgName());
         this.stationLetterAgentService.insertTLcStationLetterAgent(tLcStationLetterAgent);
         // 修改状态为已回复
-        this.stationLetterAgentService.updateReadStatus(3, tLcStationLetter.getLetterAgentId());
+        this.stationLetterAgentService.updateReadStatus(StationLetterEnum.HAVE_REPLY.getStatus(), tLcStationLetter.getLetterAgentId());
     }
 }
