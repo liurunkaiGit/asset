@@ -9,6 +9,7 @@
 <body class="gray-bg">
      <div class="container-div">
         <div class="row">
+            <input type="hidden" id="call_uuid" name="call_uuid"/>
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
                     <div class="select-list">
@@ -200,13 +201,14 @@
             }
             DYSDK.init();
             DYSDK.callBridge(function(data){
-                console.log("预测式智能外呼触发" + JSON.stringify(data))
+                console.log("预测式智能外呼触发" + JSON.stringify(data));
                 var planId = $("#planId").text();
                 var bridgeType = data.bridgeType;
                 if(bridgeType=="start"){
                     caseNo = data.userTag;
                     phone = data.phone;
                     uuid = data.uuid;
+                    $("#call_uuid").val(uuid);
 
                     //行高亮绿色并先修改页面状态(待定时执行时再真是修改状态)
                     $('#bootstrap-table').find('tbody').each(function () {
@@ -239,10 +241,14 @@
                         btn: ['关闭'],
                         yes: function (index, layero) {//关闭按钮监听事件,测试显示，无论是点击X 还是点击 关闭， yes 和 end 方法都会触发
                             layer.close(index);
+                            var id = $(".bootstrap-table").find(".table").attr("id");
+                            $.table.refresh(id);
                             $("#divf",parent.doucment).attr("style","position:'';z-index:'';top:'';left:'';display: inline-flex;float: right;");
                         },
                         cancel: function (index, layero) {//点击右上角 X 关闭
                             layer.close(index);
+                            var id = $(".bootstrap-table").find(".table").attr("id");
+                            $.table.refresh(id);
                             $("#divf",parent.doucment).attr("style","position:'';z-index:'';top:'';left:'';display: inline-flex;float: right;");
                         },
                         success: function(layero, index){
@@ -265,7 +271,7 @@
                             caseNo:caseNo,
                             phone:phone,
                             callRecordId:callRecordId,
-                            uuid:uuid
+                            uuid:$("#call_uuid").val()
                         },
                         success:function(result){
                             if(result.msg == 'error'){
