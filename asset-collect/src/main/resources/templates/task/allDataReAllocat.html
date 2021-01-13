@@ -25,15 +25,16 @@
 							<input name="city" id="city" th:field="*{city}" class="form-control" type="hidden">
 
 							<li>
-								登录名称：<input type="text" name="loginName"/>
+								登录名称：<input type="text" name="loginName" style="width: 100px;"/>
 							</li>
 							<li>
-								手机号码：<input type="text" name="phonenumber"/>
+								&nbsp;&nbsp;手机号码：<input type="text" name="phonenumber" style="width: 150px;"/>
 							</li>
 							<li>
-								组别：<select th:required="required" name="userGroup" id="userGroup" th:with="type=${@dict.getType('sys_user_group')}"  style="width: 80px" required><option value="">请选择</option><option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option></select>
+								&nbsp;&nbsp;组别：<select th:required="required" name="userGroup" id="userGroup" th:with="type=${@dict.getType('sys_user_group')}"  style="width: 80px" required><option value="">请选择</option><option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option></select>
 							</li>
 							<li>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
 							</li>
@@ -99,14 +100,14 @@
 					field : 'userName', 
 					title : '用户姓名'
 				},
-				{
+				/*{
 					field : 'phonenumber',
 					title : '用户手机'
 				},
 				{
 					field : 'email',
 					title : '用户邮箱'
-				},
+				},*/
 				{
 					field : 'userGroup',
 					title : '组别'
