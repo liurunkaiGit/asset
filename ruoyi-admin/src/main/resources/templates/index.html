@@ -477,6 +477,10 @@ function reply() {
 
 function sendReply() {
     var content = $("#replyContent").val();
+    if (content == null || content == '') {
+        $.modal.alertError("内容不能为空");
+        return;
+    }
     content += $("#curTitle").text();
     content += $("#curSendBy").text();
     content += $("#curReceive").text();
@@ -493,8 +497,11 @@ function sendReply() {
             sendStatus : 1,
             letterAgentId: $("#letterId").val()
         },
-        function() {
-            $("#replyLetter").modal('hide');
+        function(res) {
+            if (res.status == 200) {
+                $.modal.msg("发送成功");
+                $("#replyLetter").modal('hide');
+            }
         }
     );
 }
