@@ -78,11 +78,11 @@
                 },
                 {
                     field : 'callNum',
-                    title : '拨打次数'
+                    title : '拨打次数(次)'
                 },
                 {
                     field : 'connectedCallNum',
-                    title : '接通次数'
+                    title : '接通次数(次)'
                 },{
                     field : 'callLen',
                     title : '通话时长(分)',
@@ -91,7 +91,7 @@
                     }
                 },{
                     field : 'callConnectedRecovery',
-                    title : '电话接通率',
+                    title : '电话接通率(%)',
                     formatter: function(value,index,row){
                         return toPercent(value);
                     }
@@ -135,9 +135,8 @@
 
         function searchProcess() {
             var startReportDate = $("#startReportDate").val();
-            var endReportDate = $("#endReportDate").val();
-            if (startReportDate == null || startReportDate == '' || endReportDate == null || endReportDate == '') {
-                $.modal.alertWarning("请选择报表日期");
+            if (startReportDate == null || startReportDate == '') {
+                $.modal.alertWarning("请选择报表开始日期");
                 return;
             }
             var orgId = $("#orgId").val();

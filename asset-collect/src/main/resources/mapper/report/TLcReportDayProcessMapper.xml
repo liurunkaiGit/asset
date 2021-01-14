@@ -240,7 +240,13 @@
     <select id="selectTLcReportMonthProcessList" parameterType="com.ruoyi.report.domain.TLcReportDayProcess" resultMap="TLcReportDayProcessResult">
         select t.seat_group,t.seat_num,t.seat_name,sum(t.call_num) as call_num,sum(t.connected_call_num) as connected_call_num,sum(t.call_len) as call_len
         from t_lc_report_day_process t
-        where t.report_date between #{startReportDate} and #{endReportDate} and t.org_id = #{orgId}
+        where t.org_id = #{orgId}
+        <if test="startReportDate != null">
+            and t.report_date <![CDATA[>=]]> #{startReportDate}
+        </if>
+        <if test="endReportDate != null">
+            and t.report_date <![CDATA[<=]]> #{endReportDate}
+        </if>
         <if test="seatName != null and seatName != ''">
             and t.seat_name = #{seatName}
         </if>

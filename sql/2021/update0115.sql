@@ -19,3 +19,5 @@ VALUES ('导出', (select t.menu_id from sys_menu t where t.menu_name = '中银�
 
 INSERT INTO `sys_config` (`config_name`, `config_key`, `config_value`, `config_type`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`)
 VALUES ('中银orgId', 'zyOrgId', '208', 'Y', 'zhang', '2021-01-11 15:10:10', '', NULL, '中银机构id');
+
+ALTER TABLE t_lc_report_day_process MODIFY COLUMN colling_case_money  decimal(16,2) DEFAULT NULL COMMENT '在催案件金额';

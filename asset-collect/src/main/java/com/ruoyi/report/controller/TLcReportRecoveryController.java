@@ -110,8 +110,43 @@ public class TLcReportRecoveryController extends BaseController {
     @ResponseBody
     public AjaxResult zyExport(TLcReportZyRecovery zyRecovery) {
         List<TLcReportZyRecovery> list = this.tLcReportRecoveryService.selectTLcReportZyRecoveryList(zyRecovery);
+        if (list != null && list.size() > 0) {
+            list.stream().forEach(recovery -> {
+                recovery.setMEa(getMea(recovery.getMEaOdClBa(), recovery.getmEaWoNrPr()));
+                recovery.setMEn(getMen(recovery.getmEnOdClBa(),recovery.getmEnWoNrPr()));
+                BigDecimal divide = new BigDecimal("0.00");
+                if (!new BigDecimal("0.00").equals(recovery.getmEa())) {
+                    divide = recovery.getmEn().divide(recovery.getmEa(), 2, BigDecimal.ROUND_HALF_UP);
+                }
+                BigDecimal subtract = new BigDecimal(1).subtract(divide);
+                BigDecimal multiply = subtract.multiply(new BigDecimal(100));
+                recovery.setRecovery(multiply.toString() + "%");
+            });
+        }
         ExcelUtil<TLcReportZyRecovery> util = new ExcelUtil<>(TLcReportZyRecovery.class);
         return util.exportExcel(list, "回收率报表");
+    }
+
+    private BigDecimal getMen(BigDecimal getmEnOdClBa, BigDecimal getmEnWoNrPr) {
+        if (getmEnOdClBa == null && getmEnWoNrPr == null) {
+            return null;
+        } else if (getmEnOdClBa == null) {
+            return getmEnWoNrPr;
+        } else if (getmEnWoNrPr == null) {
+            return getmEnOdClBa;
+        }
+        return getmEnOdClBa.add(getmEnWoNrPr);
+    }
+
+    private BigDecimal getMea(BigDecimal mEaOdClBa, BigDecimal getmEaWoNrPr) {
+        if (mEaOdClBa == null && getmEaWoNrPr == null) {
+            return null;
+        } else if (mEaOdClBa == null) {
+            return getmEaWoNrPr;
+        } else if (getmEaWoNrPr == null) {
+            return mEaOdClBa;
+        }
+        return mEaOdClBa.add(getmEaWoNrPr);
     }
 
 }

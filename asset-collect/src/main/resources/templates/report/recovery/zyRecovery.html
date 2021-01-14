@@ -151,7 +151,7 @@
             var startEnterCollDate = $("#startEnterCollDate").val();
             var endEnterCollDate = $("#endEnterCollDate").val();
             if (startEnterCollDate == null || startEnterCollDate == '' || endEnterCollDate == null || endEnterCollDate == '') {
-                $.modal.alertWarning("请选择委案日期");
+                $.modal.alertWarning("请选择委案开始日期和委案结束日期");
                 return;
             }
             $.table.search();

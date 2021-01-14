@@ -129,7 +129,10 @@ public class TLcReportZyRecovery extends BaseEntity {
     private String recovery;
 
     public String getRecovery() {
-        BigDecimal divide = getmEn().divide(getmEa(), 2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal divide = new BigDecimal("0.00");
+        if (!new BigDecimal("0.00").equals(getmEa())) {
+            divide = getmEn().divide(getmEa(), 2, BigDecimal.ROUND_HALF_UP);
+        }
         BigDecimal subtract = new BigDecimal(1).subtract(divide);
         BigDecimal multiply = subtract.multiply(new BigDecimal(100));
         return multiply.toString() + "%";
