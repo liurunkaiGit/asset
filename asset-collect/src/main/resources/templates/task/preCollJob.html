@@ -1222,11 +1222,11 @@
                         if(n.isClose != null  && n.isClose == '1'){
                             if (n.phone != null && n.phone != 'null' && n.phone.length > 4 ) {
                                 if(n.phone == $("#phone").val() && n.contactName == $("#contactName").val()){
-                                    tp.append("<tr onclick='changeColor(this);' style='background:rgb(169,169,169)'>" +
+                                    tp.append("<tr style='background:rgb(169,169,169)'>" +
                                         "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose' checked='true'/></td><td name='contactName'>"+n.contactName+"</td><td name='phone' style='border-right: none;width: 85px;'>"+phone+"</td><td style='border-left: none'>"+replacePicture(n.phoneStatus)+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
                                         "<td  style='width: 30px;'></td><td style='width: 30px;'></td><td name='phoneShow' style='display: none;'>"+n.phone+"</td></tr>");
                                 }else{
-                                    tp.append("<tr onclick='changeColor(this);'>" +
+                                    tp.append("<tr>" +
                                         "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose'/></td><td name='contactName'>"+n.contactName+"</td><td name='phone' style='border-right: none;width: 85px;'>"+phone+"</td><td style='border-left: none'>"+replacePicture(n.phoneStatus)+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
                                         "<td  style='width: 30px;'></td><td style='width: 30px;'></td><td name='phoneShow' style='display: none;'>"+n.phone+"</td></tr>");
                                 }
@@ -1234,13 +1234,13 @@
                         }else if(n.isClose != null  && n.isClose == '0'){
                             if (n.phone != null && n.phone.length >4) {
                                 if(n.phone == $("#phone").val() && n.contactName == $("#contactName").val()){
-                                    tp.append("<tr onclick='changeColor(this);' style='background:rgb(169,169,169)'>" +
+                                    tp.append("<tr style='background:rgb(169,169,169)'>" +
                                         "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose' checked='true'/></td><td name='contactName'>"+n.contactName+"</td><td name='phone' style='border-right: none;width: 85px;'>"+phone+"</td><td style='border-left: none'>"+replacePicture(n.phoneStatus)+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
                                         // "<td class='disclass'  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='call("+JSON.stringify(n.contactName)+","+n.id+","+n.relation+",\""+n.phone+"\",this)'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>"+"</td>" +
                                         "<td class='disclass'  style='width: 30px;'>"+"</td>" +
                                         "<td  style='width: 30px;' name='gd'></td><td name='phoneShow' style='display: none;'>"+n.phone+"</td></tr>");
                                 }else{
-                                    tp.append("<tr onclick='changeColor(this);'>" +
+                                    tp.append("<tr>" +
                                         "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose'/></td><td name='contactName'>"+n.contactName+"</td><td name='phone' style='border-right: none;width: 85px;'>"+phone+"</td><td style='border-left: none'>"+replacePicture(n.phoneStatus)+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
                                         // "<td class='disclass'  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='call("+JSON.stringify(n.contactName)+","+n.id+","+n.relation+",\""+n.phone+"\",this)'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>"+"</td>" +
                                         "<td class='disclass'  style='width: 30px;'>"+"</td>" +
