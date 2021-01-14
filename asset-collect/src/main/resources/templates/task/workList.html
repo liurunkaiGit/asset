@@ -123,6 +123,10 @@
                         return $.table.serialNumber(index);
                     }
                 },
+                    {
+                        field : 'planId',
+                        title : '计划编号'
+                    },
                 {
                     field : 'caseNo',
                     title : '案件号'
@@ -170,6 +174,10 @@
                     title : '当前已还金额'
                 },
                 {
+                    field : 'createTime',
+                    title : '创建时间'
+                },
+                {
                     title: '操作',
                     align: 'center',
                     formatter: function(value, row, index) {
@@ -214,9 +222,10 @@
                     $('#bootstrap-table').find('tbody').each(function () {
                         $(this).find('tr').each(function () {
                             var tds = $(this).find('td');
-                            var list_caseNO = $(tds[2]).text();
-                            var list_phone = $(tds[3]).text();
-                            if(caseNo == list_caseNO && phone == list_phone){
+                            var list_planId = $(tds[2]).text();
+                            var list_caseNO = $(tds[3]).text();
+                            var list_phone = $(tds[4]).text();
+                            if(caseNo == list_caseNO && phone == list_phone && planId == list_planId){
                                 $(this).attr('style','background:#cae5a1');
                                 $(tds[6]).text("成功");
                                 $(tds[7]).text(curentTime());

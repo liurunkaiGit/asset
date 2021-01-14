@@ -179,6 +179,11 @@ public class PreTestCallController extends BaseController {
             }else{
                 List<TlcPreCallTask> taskList = this.preTestCallService.selectNotExecPlanByLoginName(ShiroUtils.getLoginName());
                 for (TlcPreCallTask tlcPreCallTask : taskList) {
+                    Map<String, String> planBaseInfo = preTestCallService.getPlanBaseInfo(tlcPreCallTask.getPlanId());
+                    String planStatus = ConvertUtil.convertStatus(planBaseInfo.get("planStatus"));
+                    if("已完成".equals(planStatus)){
+                        return AjaxResult.success("error","计划已完成，不允许停止！");
+                    }
                     this.preTestCallService.removeTask(tlcPreCallTask.getPlanId(),tlcPreCallTask.getPhone(),accountId);
                 }
             }
