@@ -63,6 +63,7 @@ public class ReportSchedule {
             log.info("开始定时生成每日过程指标报表任务任务");
             // 查找所有的委托方
             List<OrgPackage> orgPackageList = this.orgPackageService.selectOrgPackageList(new OrgPackage());
+            log.error("总共有{}个机构", orgPackageList);
             // 查询每日过程指标数据
             Map<String, Object> processParam = new HashMap<>();
             processParam.put("startDate", DateUtils.getStartOfDay(new Date()));
@@ -71,13 +72,14 @@ public class ReportSchedule {
             if (orgPackageList != null && orgPackageList.size() > 0) {
                 for (OrgPackage orgPackage : orgPackageList) {
                     processParam.put("orgId", orgPackage.getDeptId());
+                    log.error("{}：开始查询每日过程指标报表,{}", orgPackage.getOrgName(), DateUtils.getNowDate());
                     List<TLcReportDayProcess> reportDayProcessList = this.reportDayProcessService.selectDayProcess(processParam);
-                    log.info("{}查询每日过程指标报表,{}，数据量：{}", orgPackage.getOrgName(), DateUtils.getNowDate(), reportDayProcessList);
+                    log.error("{}：查询每日过程指标报表完成,{}，数据量：{}", orgPackage.getOrgName(), DateUtils.getNowDate(), reportDayProcessList.size());
                     if (reportDayProcessList != null && reportDayProcessList.size() > 0) {
                         for (TLcReportDayProcess dayProcess : reportDayProcessList) {
                             this.reportDayProcessService.insertTLcReportDayProcess(dayProcess);
                         }
-                        log.info("{}生成每日过程指标报表成功,{}", orgPackage.getOrgName(), DateUtils.getNowDate());
+                        log.error("{}生成每日过程指标报表成功,{}", orgPackage.getOrgName(), DateUtils.getNowDate());
                     }
                 }
 //                orgPackageList.stream().forEach(orgPackage -> {
