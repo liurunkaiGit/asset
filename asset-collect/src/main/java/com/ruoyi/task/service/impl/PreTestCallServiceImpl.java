@@ -20,6 +20,7 @@ import com.ruoyi.task.domain.preTestCall.taskResult.TaskResultResponseEntity;
 import com.ruoyi.task.mapper.TlcPreCallTaskMapper;
 import com.ruoyi.task.service.IPreTestCallService;
 import com.ruoyi.task.service.ITLcTaskService;
+import com.ruoyi.utils.CustContactRuleUtil;
 import com.ruoyi.utils.DesensitizationUtil;
 import com.ruoyi.utils.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -62,7 +63,8 @@ public class PreTestCallServiceImpl implements IPreTestCallService {
     private DuYanConfig duYanConfig;
     @Autowired
     private DesensitizationUtil desensitizationUtil;
-
+    @Autowired
+    private CustContactRuleUtil custContactRuleUtil;
 
     /**
      * 获取联系人
@@ -88,8 +90,11 @@ public class PreTestCallServiceImpl implements IPreTestCallService {
             }
             list = this.tLcCustContactService.selectTLcCustContactList(tcc);
         }
-//        List<TLcCustContact> tLcCustContacts = custContactRuleUtil.custContactRule(list);
-        return list;
+        //去除不规则的号码
+        List<TLcCustContact> tLcCustContacts = custContactRuleUtil.custContactRule(list);
+        //去除重复的手机号
+        tLcCustContacts = this.distinctContact(tLcCustContacts);
+        return tLcCustContacts;
     }
 
 
@@ -116,8 +121,6 @@ public class PreTestCallServiceImpl implements IPreTestCallService {
         if(extPhones.size() > 0){
             //查询联系人
             List<TLcCustContact> custContactList = this.getCustContactList(preCallConfig.getCaseNoStr(), preCallConfig.getImportBatchNoStr(), preCallConfig.getRelation());
-            //去除重复的手机号
-            custContactList = this.distinctContact(custContactList);
             //构建参数对象
             List<TlcPreCallTask> taskList = new ArrayList<TlcPreCallTask>();
             List<CreateTaskRequestEntity.Content> contentList = new ArrayList<CreateTaskRequestEntity.Content>();
@@ -637,6 +640,8 @@ public class PreTestCallServiceImpl implements IPreTestCallService {
     }
 
     public List<TLcCustContact> distinctContact(List<TLcCustContact> custContactList) {
+//        List<TLcCustContact> newList = custContactList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(o -> o.getCaseNo() + ";" + o.getPhone()))), ArrayList::new));
+//        return newList;
         List<TLcCustContact> newList = custContactList.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(comparing(TLcCustContact::getPhone))), ArrayList::new));
         return newList;
     }
