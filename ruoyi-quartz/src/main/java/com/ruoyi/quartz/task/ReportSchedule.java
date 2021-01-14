@@ -69,16 +69,25 @@ public class ReportSchedule {
             processParam.put("endDate", DateUtils.getEndOfDay(new Date()));
             processParam.put("day", 0);
             if (orgPackageList != null && orgPackageList.size() > 0) {
-                orgPackageList.stream().forEach(orgPackage -> {
+                for (OrgPackage orgPackage : orgPackageList) {
                     processParam.put("orgId", orgPackage.getDeptId());
                     List<TLcReportDayProcess> reportDayProcessList = this.reportDayProcessService.selectDayProcess(processParam);
-                    reportDayProcessList.stream().forEach(reportRecovery -> {
-//                        reportRecovery.setOrgId(orgPackage.getDeptId().toString());
-//                        reportRecovery.setOrgName(orgPackage.getOrgName());
-                        this.reportDayProcessService.insertTLcReportDayProcess(reportRecovery);
-                    });
-                    log.info("{}生成每日过程指标报表成功,{}", orgPackage.getOrgName(), DateUtils.getNowDate());
-                });
+                    log.info("{}查询每日过程指标报表,{}，数据量：{}", orgPackage.getOrgName(), DateUtils.getNowDate(), reportDayProcessList);
+                    if (reportDayProcessList != null && reportDayProcessList.size() > 0) {
+                        for (TLcReportDayProcess dayProcess : reportDayProcessList) {
+                            this.reportDayProcessService.insertTLcReportDayProcess(dayProcess);
+                        }
+                        log.info("{}生成每日过程指标报表成功,{}", orgPackage.getOrgName(), DateUtils.getNowDate());
+                    }
+                }
+//                orgPackageList.stream().forEach(orgPackage -> {
+//                    processParam.put("orgId", orgPackage.getDeptId());
+//                    List<TLcReportDayProcess> reportDayProcessList = this.reportDayProcessService.selectDayProcess(processParam);
+//                    reportDayProcessList.stream().forEach(dayProcess -> {
+//                        this.reportDayProcessService.insertTLcReportDayProcess(dayProcess);
+//                    });
+//                    log.info("{}生成每日过程指标报表成功,{}", orgPackage.getOrgName(), DateUtils.getNowDate());
+//                });
             }
             log.info("完成定时生成每日过程指标报表任务任务...");
         }
