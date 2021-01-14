@@ -97,8 +97,8 @@ public class TLcCallRecord extends BaseEntity {
     /**
      * 拨打时间
      */
-    @Excel(name = "拨打时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//    @Excel(name = "拨打时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
 
@@ -172,6 +172,8 @@ public class TLcCallRecord extends BaseEntity {
     /**
      * 拨打电话
      */
+    @Excel(name = "拨打时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date makeCallTime;
 
     /**

@@ -212,7 +212,8 @@
             '电催' AS csdz,
             re.call_result,
             re.cnje,
-            re.action_code
+            re.action_code,
+            re.make_call_time
             FROM
             t_lc_call_record re,
             cur_assets_package cap
