@@ -15,7 +15,6 @@ import com.ruoyi.task.domain.TLcTask;
 import com.ruoyi.task.domain.TlcPreCallTask;
 import com.ruoyi.task.domain.preTestCall.createTask.*;
 import com.ruoyi.task.domain.preTestCall.singleCallRecord.SingleCallRecordResponse;
-import com.ruoyi.task.domain.preTestCall.taskResult.PreTestCallResultEnum;
 import com.ruoyi.task.domain.preTestCall.taskResult.ResultEntity;
 import com.ruoyi.task.domain.preTestCall.taskResult.TaskResultResponseEntity;
 import com.ruoyi.task.mapper.TlcPreCallTaskMapper;
@@ -36,6 +35,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
 
 /**
  * @author guozeqi
@@ -112,6 +116,8 @@ public class PreTestCallServiceImpl implements IPreTestCallService {
         if(extPhones.size() > 0){
             //查询联系人
             List<TLcCustContact> custContactList = this.getCustContactList(preCallConfig.getCaseNoStr(), preCallConfig.getImportBatchNoStr(), preCallConfig.getRelation());
+            //去除重复的手机号
+            custContactList = this.distinctContact(custContactList);
             //构建参数对象
             List<TlcPreCallTask> taskList = new ArrayList<TlcPreCallTask>();
             List<CreateTaskRequestEntity.Content> contentList = new ArrayList<CreateTaskRequestEntity.Content>();
@@ -629,7 +635,13 @@ public class PreTestCallServiceImpl implements IPreTestCallService {
 
         return result;
     }
-/*
+
+    public List<TLcCustContact> distinctContact(List<TLcCustContact> custContactList) {
+        List<TLcCustContact> newList = custContactList.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(comparing(TLcCustContact::getPhone))), ArrayList::new));
+        return newList;
+    }
+
+    /*
     public static void main(String[] args) {
 //        String aaa = "{\"status\":1,\"data\":{\"campaigns\":[{\"phone\":\"12345678901\",\"variables\":\"{\\\"U_TAG\\\":\\\"91112018a0284203_078\\\"}\",\"call_count\":0,\"is_calling\":false},{\"phone\":\"12345678901\",\"variables\":\"{\\\"U_TAG\\\":\\\"91112018a0284203_078\\\"}\",\"call_count\":0,\"is_calling\":false},{\"phone\":\"12345678901\",\"variables\":\"{\\\"U_TAG\\\":\\\"91112018a0284203_078\\\"}\",\"call_count\":0,\"is_calling\":false}],\"total_elements\":3,\"total_pages\":1}}";
 //        String aaa = "{\"status\":1,\"data\":{\"campaigns\":[{\"phone\":\"12345678901\",\"variables\":\"{\\\"U_TAG\\\":\\\"91112018a0284203_078\\\"}\",\"call_count\":1,\"outcome\":\"SUCCESS\",\"call_time\":1608889006000,\"duration\":4,\"agent_org_id\":10174143,\"caller\":\"1051371996\",\"call_uuid\":\"d0436e44-5d56-4a6e-a7ad-d16c423eeb69\",\"is_calling\":false},{\"phone\":\"12345678901\",\"variables\":\"{\\\"U_TAG\\\":\\\"91112018a0284203_078\\\"}\",\"call_count\":1,\"outcome\":\"FAIL\",\"call_time\":1608889006000,\"duration\":0,\"agent_org_id\":10174143,\"caller\":\"1051371996\",\"call_uuid\":\"1c1b7827-c275-4765-bc95-ee137aa8a0dd\",\"is_calling\":false},{\"phone\":\"12345678901\",\"variables\":\"{\\\"U_TAG\\\":\\\"91112018a0284203_078\\\"}\",\"call_count\":1,\"outcome\":\"FAIL\",\"call_time\":1608889006000,\"duration\":0,\"agent_org_id\":10174143,\"caller\":\"1051371996\",\"call_uuid\":\"6b9a1bbc-6125-4b8c-84f2-c347353def45\",\"is_calling\":false}],\"total_elements\":3,\"total_pages\":1}}";
@@ -666,6 +678,34 @@ public class PreTestCallServiceImpl implements IPreTestCallService {
 
     }*/
 
+    public static void main(String[] args) {
+        List<TLcCustContact> list = new ArrayList<>();
+        TLcCustContact contact1 = new TLcCustContact();
+        contact1.setCaseNo("123");
+        contact1.setPhone("13353501233");
+        TLcCustContact contact2 = new TLcCustContact();
+        contact2.setCaseNo("234");
+        contact2.setPhone("13353501234");
+        TLcCustContact contact3 = new TLcCustContact();
+        contact3.setCaseNo("123");
+        contact3.setPhone("13353501235");
+        TLcCustContact contact4 = new TLcCustContact();
+        contact4.setCaseNo("345");
+        contact4.setPhone("13353501233");
+        TLcCustContact contact5 = new TLcCustContact();
+        contact5.setCaseNo("123");
+        contact5.setPhone("13353501233");
+        list.add(contact1);
+        list.add(contact2);
+        list.add(contact3);
+        list.add(contact4);
+        list.add(contact5);
+
+        List<TLcCustContact> list1 = new PreTestCallServiceImpl().distinctContact(list);
+        System.out.println(JSON.toJSONString(list1));
+
+
+    }
 
 
 
