@@ -683,34 +683,34 @@ public class PreTestCallServiceImpl implements IPreTestCallService {
 
     }*/
 
-    public static void main(String[] args) {
-        List<TLcCustContact> list = new ArrayList<>();
-        TLcCustContact contact1 = new TLcCustContact();
-        contact1.setCaseNo("123");
-        contact1.setPhone("13353501233");
-        TLcCustContact contact2 = new TLcCustContact();
-        contact2.setCaseNo("234");
-        contact2.setPhone("13353501234");
-        TLcCustContact contact3 = new TLcCustContact();
-        contact3.setCaseNo("123");
-        contact3.setPhone("13353501235");
-        TLcCustContact contact4 = new TLcCustContact();
-        contact4.setCaseNo("345");
-        contact4.setPhone("13353501233");
-        TLcCustContact contact5 = new TLcCustContact();
-        contact5.setCaseNo("123");
-        contact5.setPhone("13353501233");
-        list.add(contact1);
-        list.add(contact2);
-        list.add(contact3);
-        list.add(contact4);
-        list.add(contact5);
+//    public static void main(String[] args) {
+//        List<TLcCustContact> list = new ArrayList<>();
+//        TLcCustContact contact1 = new TLcCustContact();
+//        contact1.setCaseNo("123");
+//        contact1.setPhone("13353501233");
+//        TLcCustContact contact2 = new TLcCustContact();
+//        contact2.setCaseNo("234");
+//        contact2.setPhone("13353501234");
+//        TLcCustContact contact3 = new TLcCustContact();
+//        contact3.setCaseNo("123");
+//        contact3.setPhone("13353501235");
+//        TLcCustContact contact4 = new TLcCustContact();
+//        contact4.setCaseNo("345");
+//        contact4.setPhone("13353501233");
+//        TLcCustContact contact5 = new TLcCustContact();
+//        contact5.setCaseNo("123");
+//        contact5.setPhone("13353501233");
+//        list.add(contact1);
+//        list.add(contact2);
+//        list.add(contact3);
+//        list.add(contact4);
+//        list.add(contact5);
+//
+//        List<TLcCustContact> list1 = new PreTestCallServiceImpl().distinctContact(list);
+//        System.out.println(JSON.toJSONString(list1));
 
-        List<TLcCustContact> list1 = new PreTestCallServiceImpl().distinctContact(list);
-        System.out.println(JSON.toJSONString(list1));
 
-
-    }
+//    }
 
 
 
