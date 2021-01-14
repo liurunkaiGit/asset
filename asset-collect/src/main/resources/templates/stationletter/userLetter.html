@@ -32,7 +32,7 @@
                             <span style="font-size: 15px;color:black; float: right; white-space: pre-wrap" id="sendTime"></span>
                         </div>
                     </div>
-                    <div class="modal-body" style="height: 200px;" >
+                    <div class="modal-body" style="height: 200px;overflow-y: scroll" >
                         <div class="form-group">
                             <span style="font-size: 15px;color:black;" id="content"></span>
                         </div>
@@ -62,7 +62,7 @@
                             <textarea name="replyContent" id="replyContent" maxlength="100" class="form-control" rows="3" style="width:500px;"></textarea>
                         </div>
                     </div>
-                    <div class="modal-body" style="height: 150px;">
+                    <div class="modal-body" style="height: 150px;overflow-y: scroll">
                         <div class="form-group">
 
                             <!--<span style="font-size: 15px;color:black;" id="split"></span><br>-->
@@ -143,7 +143,7 @@
         $.get(ctx + "station/letter/agent/letterDetail/"+id,function (data) {
             $("#sendBy").text("发送人：" + data.result.sendUserName);
             $("#title").text(data.result.title);
-            $("#content").text(data.result.content);
+            $("#content").html(data.result.content);
             $("#sendTime").text(data.result.sendTime);
             $("#letterId").val(id);
         })
@@ -178,16 +178,24 @@
         var id = $("#letterId").val();
         // alert(id);
         $.get(ctx + "station/letter/agent/letterDetail/"+id,function (data) {
-            $("#replyTitle").text("主题：RE:" + data.result.title);
+            if (data.result.title.indexOf("主题：RE:") != -1) {
+                $("#replyTitle").text(data.result.title);
+            } else {
+                $("#replyTitle").text("主题：RE:" + data.result.title);
+            }
             $("#replySendBy").text("发件人：" + data.result.receiveUserName);
             $("#replySendById").val(data.result.agentId);
             $("#replyReceive").text("收件人：" + data.result.sendUserName);
             $("#replyReceiveId").val(data.result.sendBy);
             /*$("#split").text("==================================");*/
-            $("#curTitle").text("主题：" + data.result.title);
+            if (data.result.title.indexOf("主题：") != -1) {
+                $("#curTitle").text(data.result.title);
+            } else {
+                $("#curTitle").text("主题：" + data.result.title);
+            }
             $("#curSendBy").text("发件人：" + data.result.sendUserName);
             $("#curReceive").text("收件人：" + data.result.receiveUserName);
-            $("#curContent").text(data.result.content);
+            $("#curContent").html(data.result.content);
         })
         $("#replyLetter").modal('show');
     }

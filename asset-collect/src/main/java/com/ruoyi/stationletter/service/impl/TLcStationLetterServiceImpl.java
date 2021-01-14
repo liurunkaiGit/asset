@@ -208,6 +208,11 @@ public class TLcStationLetterServiceImpl implements ITLcStationLetterService {
     @Override
     @Transactional
     public void sendReplyStationLetter(TLcStationLetter tLcStationLetter) {
+        TLcStationLetterAgent tLcStationLetterAgent1 = this.stationLetterAgentService.selectTLcStationLetterAgentById(tLcStationLetter.getLetterAgentId());
+        tLcStationLetter.setContent(tLcStationLetter.getContent()+tLcStationLetterAgent1.getContent());
+        if (tLcStationLetterAgent1.getTitle().contains("主题：RE:")) {
+            tLcStationLetter.setTitle(tLcStationLetterAgent1.getTitle());
+        }
         // 生成站内信
         Date date = new Date();
         tLcStationLetter.setSendTime(date);
