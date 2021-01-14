@@ -192,6 +192,7 @@
             t.user_group AS seat_group,
             t.login_name AS seat_num,
             t.user_name AS seat_name,
+            t.org_id,
             (SELECT count(1) from t_lc_task ta where ta.owner_id = t.user_id and ta.org_id = #{orgId} and ta.task_status = 2 AND ta.allot_type = 1 AND ta.task_type NOT IN (10, 11, 12, 18, 19) GROUP BY ta.owner_id) as deal_with_consumer_count,
             (SELECT SUM(ta.arrears_total) from t_lc_task ta where ta.owner_id = t.user_id and ta.org_id = #{orgId} and ta.task_status = 2 AND ta.allot_type = 1 AND ta.task_type NOT IN (10, 11, 12, 18, 19) GROUP BY ta.owner_id) as colling_case_money ,
             (select count(1) from t_lc_task ta where ta.owner_id = t.user_id and ta.org_id = #{orgId} and ta.recently_follow_up_date BETWEEN #{startDate} and #{endDate} group by ta.owner_id) as user_cover_num,
@@ -203,7 +204,7 @@
             (SELECT count(1) from t_lc_call_record re where re.create_by = t.user_id and re.org_id = #{orgId} and re.create_time BETWEEN #{startDate} and #{endDate} and re.call_radio_location IS NOT NULL and re.call_radio_location != '' and re.call_len is not null and re.call_len != '' GROUP BY re.create_by) as connected_call_num,
             (SELECT SUM(re.call_len)/ 1000 / 60 from t_lc_call_record re where re.create_by = t.user_id and re.org_id = #{orgId} and re.create_time BETWEEN #{startDate} and #{endDate} and re.call_radio_location IS NOT NULL and re.call_radio_location != '' and re.call_len is not null and re.call_len != '' GROUP BY re.create_by) as call_len
         from
-            (select su.user_id,su.user_group,su.login_name,su.user_name from t_lc_call_record re, sys_user su where re.create_by = su.user_id and re.org_id = #{orgId} and re.create_time BETWEEN #{startDate} and #{endDate} <if test="userGroup != null and userGroup != ''"> and su.user_group = #{userGroup} </if> GROUP BY re.create_by) t
+            (select su.user_id,su.user_group,su.login_name,su.user_name,re.org_id from t_lc_call_record re, sys_user su where re.create_by = su.user_id and re.org_id = #{orgId} and re.create_time BETWEEN #{startDate} and #{endDate} <if test="userGroup != null and userGroup != ''"> and su.user_group = #{userGroup} </if> GROUP BY re.create_by) t
     </select>
 
 

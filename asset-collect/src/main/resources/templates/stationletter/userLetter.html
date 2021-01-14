@@ -206,10 +206,11 @@
             $.modal.alertError("内容不能为空");
             return;
         }
-        content += $("#curTitle").text();
-        content += $("#curSendBy").text();
-        content += $("#curReceive").text();
-        content += $("#curContent").text();
+        content += "<br><br>================================================<br>";
+        content += $("#curTitle").text() + "<br>";
+        content += $("#curSendBy").text() + "<br>";
+        content += $("#curReceive").text() + "<br>";
+        /*content += $("#curContent").text() + "<br>";*/
         // alert($("#replyReceiveId").val())
         $.post(
             ctx + "station/letter/sendReply",
