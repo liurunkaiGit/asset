@@ -797,6 +797,7 @@
 
         function selectSearch(){
             var caseNos = $("#caseNo").val();
+            caseNos = caseNos.replace(new RegExp(" ","gm"),",");
             if (caseNos != null && caseNos != '') {
                 if (caseNos.split(",").length > 100) {
                     $.modal.alertError("机构案件号单次最大查询个数不能超过100");
@@ -804,7 +805,6 @@
                 }
             }
             // caseNos = caseNos.replaceAll(" ",",");
-            caseNos = caseNos.replace(new RegExp(" ","gm"),",");
             $("#caseNo").val(caseNos);
             $("#selectAll").prop("checked",false);
             initFreeSearch();
