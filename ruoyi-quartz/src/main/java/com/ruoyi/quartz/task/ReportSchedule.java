@@ -16,6 +16,7 @@ import com.ruoyi.task.service.impl.TLcCallRecordServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
  * @Date: 2020/7/21 9:23
  */
 @Slf4j
-@Service("reportSchedule")
+@Component("reportSchedule")
 public class ReportSchedule {
 
     @Value("${isEnableTimer}")
