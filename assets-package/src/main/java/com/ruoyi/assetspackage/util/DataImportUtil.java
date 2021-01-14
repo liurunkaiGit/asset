@@ -4287,66 +4287,38 @@ public class DataImportUtil {
 
     public static List<CurAssetsPackage> contactsDistinct(List<CurAssetsPackage> paramList){
         for (CurAssetsPackage curAsset : paramList) {
+            String customerMobile = curAsset.getCustomerMobile();
             String firstLiaisonMobile = curAsset.getFirstLiaisonMobile();
-            String firstLiaisonTel = curAsset.getFirstLiaisonTel();
             String secondLiaisonMobile = curAsset.getSecondLiaisonMobile();
-            String secondLiaisonTel = curAsset.getSecondLiaisonTel();
             String threeLiaisonMobile = curAsset.getThreeLiaisonMobile();
-            String threeLiaisonTel = curAsset.getThreeLiaisonTel();
-
-            //第1轮
-            if(StringUtils.isNotEmpty(firstLiaisonMobile) && firstLiaisonMobile.equals(firstLiaisonTel)){
-               curAsset.setFirstLiaisonTel(null);
+            String fourthLiaisonMobile = curAsset.getFourthLiaisonMobile();
+            String fifthLiaisonMobile = curAsset.getFifthLiaisonMobile();
+            HashMap<Object, Object> map = new HashMap<>();
+            map.put(customerMobile,1);
+            if (!map.containsKey(firstLiaisonMobile)) {
+                map.put(firstLiaisonMobile,1);
+            } else {
+                curAsset.setFirstLiaisonMobile(null);
             }
-            if(StringUtils.isNotEmpty(firstLiaisonMobile) && firstLiaisonMobile.equals(secondLiaisonMobile)){
+            if (!map.containsKey(secondLiaisonMobile)) {
+                map.put(secondLiaisonMobile,1);
+            } else {
                 curAsset.setSecondLiaisonMobile(null);
             }
-            if(StringUtils.isNotEmpty(firstLiaisonMobile) && firstLiaisonMobile.equals(secondLiaisonTel)){
-                curAsset.setSecondLiaisonTel(null);
-            }
-            if(StringUtils.isNotEmpty(firstLiaisonMobile) && firstLiaisonMobile.equals(threeLiaisonMobile)){
+            if (!map.containsKey(threeLiaisonMobile)) {
+                map.put(threeLiaisonMobile,1);
+            } else {
                 curAsset.setThreeLiaisonMobile(null);
             }
-            if(StringUtils.isNotEmpty(firstLiaisonMobile) && firstLiaisonMobile.equals(threeLiaisonTel)){
-                curAsset.setThreeLiaisonTel(null);
+            if (!map.containsKey(fourthLiaisonMobile)) {
+                map.put(fourthLiaisonMobile,1);
+            } else {
+                curAsset.setFourthLiaisonMobile(null);
             }
-
-            //第2轮
-            if(StringUtils.isNotEmpty(firstLiaisonTel) && firstLiaisonTel.equals(secondLiaisonMobile)){
-                curAsset.setSecondLiaisonMobile(null);
-            }
-            if(StringUtils.isNotEmpty(firstLiaisonTel) && firstLiaisonTel.equals(secondLiaisonTel)){
-                curAsset.setSecondLiaisonTel(null);
-            }
-            if(StringUtils.isNotEmpty(firstLiaisonTel) && firstLiaisonTel.equals(threeLiaisonMobile)){
-                curAsset.setThreeLiaisonMobile(null);
-            }
-            if(StringUtils.isNotEmpty(firstLiaisonTel) && firstLiaisonTel.equals(threeLiaisonTel)){
-                curAsset.setThreeLiaisonTel(threeLiaisonTel);
-            }
-
-            //第3轮
-            if(StringUtils.isNotEmpty(secondLiaisonMobile) && secondLiaisonMobile.equals(secondLiaisonTel)){
-                curAsset.setSecondLiaisonTel(null);
-            }
-            if(StringUtils.isNotEmpty(secondLiaisonMobile) && secondLiaisonMobile.equals(threeLiaisonMobile)){
-                curAsset.setThreeLiaisonMobile(null);
-            }
-            if(StringUtils.isNotEmpty(secondLiaisonMobile) && secondLiaisonMobile.equals(threeLiaisonTel)){
-                curAsset.setThreeLiaisonTel(null);
-            }
-
-            //第4轮
-            if(StringUtils.isNotEmpty(secondLiaisonTel) && secondLiaisonTel.equals(threeLiaisonMobile)){
-                curAsset.setThreeLiaisonMobile(null);
-            }
-            if(StringUtils.isNotEmpty(secondLiaisonTel) && secondLiaisonTel.equals(threeLiaisonTel)){
-                curAsset.setThreeLiaisonTel(null);
-            }
-
-            //第5轮
-            if(StringUtils.isNotEmpty(threeLiaisonMobile) && threeLiaisonMobile.equals(threeLiaisonTel)){
-                curAsset.setThreeLiaisonTel(null);
+            if (!map.containsKey(fifthLiaisonMobile)) {
+                map.put(fifthLiaisonMobile,1);
+            } else {
+                curAsset.setFifthLiaisonMobile(null);
             }
         }
         return paramList;
