@@ -175,14 +175,19 @@ public class PreTestCallController extends BaseController {
     public AjaxResult removeTask(String planId,String phone,String accountId){
         try {
             if(StringUtils.isNotEmpty(phone)){
+                Map<String, String> planBaseInfo = preTestCallService.getPlanBaseInfo(planId);
+                String planStatus = ConvertUtil.convertStatus(planBaseInfo.get("planStatus"));
+                if("已完成".equals(planStatus) || "执行中".equals(planStatus)){
+                    return AjaxResult.success("error","计划已完成或执行中，不允许停止！");
+                }
                 this.preTestCallService.removeTask(planId,phone,accountId);
             }else{
                 List<TlcPreCallTask> taskList = this.preTestCallService.selectNotExecPlanByLoginName(ShiroUtils.getLoginName());
                 for (TlcPreCallTask tlcPreCallTask : taskList) {
                     Map<String, String> planBaseInfo = preTestCallService.getPlanBaseInfo(tlcPreCallTask.getPlanId());
                     String planStatus = ConvertUtil.convertStatus(planBaseInfo.get("planStatus"));
-                    if("已完成".equals(planStatus)){
-                        return AjaxResult.success("error","计划已完成，不允许停止！");
+                    if("已完成".equals(planStatus) || "执行中".equals(planStatus)){
+                        return AjaxResult.success("error","计划已完成或执行中，不允许停止！");
                     }
                     this.preTestCallService.removeTask(tlcPreCallTask.getPlanId(),tlcPreCallTask.getPhone(),accountId);
                 }
