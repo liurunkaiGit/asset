@@ -62,7 +62,6 @@
     <input type="hidden" id="certificateNo" name="certificateNo" th:value="${certificateNo}">
     <input type="hidden" id="firstEnterCaseNo" name="firstEnterCaseNo" th:value="${currentCaseNo}">
     <input type="hidden" id="firstImportBatchNo" name="firstImportBatchNo" th:value="${currentImportBatchNo}">
-    <!--<input type="hidden" id="callPlatform" name="callPlatform" th:value="${callPlatform}">-->
     <!--查询条件-->
     <input type="hidden" id="caseNoSearch" name="caseNoSearch" th:value="${tLcTask.caseNo}">
     <input type="hidden" id="customNameSearch" name="customNameSearch" th:value="${tLcTask.customName}">
@@ -97,7 +96,6 @@
     <input type="hidden" id="desensitization" name="desensitization" th:value="${desensitization}">
     <input type="hidden" id="curActionCode" name="curActionCode" th:value="${curActionCode}">
     <input type="hidden" id="allActionCode" name="allActionCode" value="Fresh-新任务,Search1-联系方式有效,Search2-联系方式无效,Found1-找到本人,Found2-找到联系人,Talking-谈判中,PTP-承诺还款,Check-检查付款,TS-投诉,Transfer-建议转移,QT-其它">
-   <!-- <input type="hidden" id="extNum" name="extNum" th:value="${extNumList}">-->
     <input type="hidden" id="startNum" name="startNum" value="1">
 
     <div class="box box-main">
@@ -179,7 +177,6 @@
                         <div id="tab-5" class="tab-pane active">
                             <div class="collLeftInfo">
                                 <div class="collInfoOne">
-                                    <!--<label>机构案件号：</label><label id="orgCasno"></label><br/>-->
                                     <label style="color: red;font-weight:bold">入催日：</label><label id="rcr"  style="color: red;font-weight:bold"></label><br/>
                                     <label>借款日期：</label><label id="jkrq"></label><br/>
                                     <label style="color: red;font-weight:bold">欠款总金额：</label><label id="rmbQkzje" style="color: red;font-weight:bold"></label><br/>
@@ -306,17 +303,6 @@
                                 <tbody id="callContactTrNew"></tbody>
                             </table>
                         </div>
-                        <!--<div id="tab-3" class="tab-pane">
-                            <table id="actionTable">
-                                <tr>
-                                    <th>行动码</th>
-                                    <th>备注</th>
-                                    <th>坐席</th>
-                                    <th>操作时间</th>
-                                </tr>
-                                <tbody id = "actionTrNew"></tbody>
-                            </table>
-                        </div>-->
                         <div id="tab-4" class="tab-pane">
                             <table id="repayHisTable">
                                 <tr>
@@ -381,18 +367,6 @@
             <div class="btn-group-sm" role="group" align="center">
             </div>
             <div class="btn-group-sm" role="group" align="center">
-                <!--<div style="margin-bottom: 2px;">
-                    <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)">分机号码：</span>
-                    &lt;!&ndash;<select id="agentId" onchange="initial1();" style="width: 120px;height: 22px;"></select>&ndash;&gt;
-                    <input id="agentId" th:value="${extPhone.agentid}" style="width: 120px;height: 22px;"></input>
-                    <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)" id="timing">00:00:00</span>
-                </div>
-                <div style="margin-bottom: 2px;">
-                    <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)">外显号码：</span>
-                    <select id="exonNum" onchange="initial1();" style="width: 120px;height: 22px;" ></select>
-                    <span style="font-size: 16px;font-weight: bold;color: rgb(53, 147, 224)" id="platformName"></span>
-                </div>-->
                 <div class="row" style="width: 98%">
                     <div class="col-sm-12" style="height: 100px;">
                         <div class="ibox float-e-margins">
@@ -419,14 +393,10 @@
                     </lable>
                     <lable style="width:70%;margin: 5px 0px 5px 10px;">
                         <div class="btn-group-sm" align="left">
-                       <!-- <a data-toggle="modal" data-target="#myModal"><img src="/img/addContact.png" class="imgso" width="30px" title="新增联系人"/></a>&nbsp;&nbsp;-->
-                        <!--<a onclick="helpCollApply()"><img src="/img/xiecui.png" class="imgso" width="25px" height="25px" title="协催申请"/></a>&nbsp;&nbsp;
-                        <a onclick="stopCollApply()"><img src="/img/tingcui.png" class="imgso" width="25px" height="25px" title="停催申请"/></a>&nbsp;&nbsp;-->
                             <a onclick="helpCollApply();" title="协催申请" class="btn btn-danger" style="height: 19px;color: #02A7F0;border-color: #02A7F0;background-color: #ffffff;padding: 0px 10px;">协催</a>
                             <a onclick="disableCall(0)" title="取消停拨" class="btn btn-primary" style="height: 19px;color: #02A7F0;border-color: #02A7F0;background-color: #ffffff;padding: 0px 10px;">复拨</a>
                             <a onclick="infoReportingSub()" title="信息上报" class="btn btn-primary" style="height: 19px;color: #02A7F0;border-color: #02A7F0;background-color: #ffffff;padding: 0px 10px;">信息上报</a>
                             <input id="callRecordId" name="callRecordId" class="form-control" type="hidden">
-                            <!--<button class="btn btn-danger" style="height: 25px;" id="letterApply" onclick="letterApply()">信函申请</button>-->
                         </div>
                         <div class="btn-group-sm" align="left" style="margin-top: 5px;">
                             <a onclick="stopCollApply();" title="停催申请" class="btn btn-primary" style="height: 19px;color: #EC808D;border-color: #EC808D;background-color: #ffffff;padding: 0px 10px;">停催</a>
@@ -486,12 +456,6 @@
                             <div class="row">
                                 <div class="select-list">
                                     <ul>
-                                       <!-- <li class="select-time">
-                                            <label class="labelInfo">电话码：</label>
-                                            <select class="form-control" name="callCode" id="callCode" style="width: 180px; height: 30px" >
-                                                <option value="" selected>请选择</option>
-                                            </select>
-                                        </li>-->
                                          <li class="select-time">
                                             <label class="labelInfo">电话码：</label>
                                              <select class="form-control" name="callCode" id="callCode" style="width: 180px; height: 30px" onchange ="callCodeChange()">
@@ -514,14 +478,6 @@
                                                  <option value="SL">SL(失联)</option>
                                                  <option value="BPHZG">BPHZG(不配合转告)</option>
                                                  <option value="FBRJT">FBRJT(非本人接听)</option>
-                                               <!--  <option value="R01">R01(已接听)</option>
-                                                 <option value="R02">R02(无法接通)</option>
-                                                 <option value="R03">R03(主叫号码不可用)</option>
-                                                 <option value="R04">R04(停机)</option>
-                                                 <option value="R05">R05(主叫欠费)</option>
-                                                 <option value="R06">R06(呼损)</option>
-                                                 <option value="R07">R07(黑名单)</option>
-                                                 <option value="R08">R08(线路盲区)</option>-->
                                              </select>
                                         </li>
                                     </ul>
@@ -533,17 +489,7 @@
                                         <li class="select-time">
                                             <label class="labelInfo">行动码：</label>
                                             <select class="form-control" name="actionCode" id="actionCode" style="width: 180px; height: 30px">
-                                                <!--<option value="" selected>请选择</option>
-                                                <option value="Fresh-新任务">Fresh-新任务</option>
-                                                <option value="Search1-联系方式有效">Search1-联系方式有效</option>
-                                                <option value="Search2-联系方式无效">Search2-联系方式无效</option>
-                                                <option value="Found1-找到本人">Found1-找到本人</option>
-                                                <option value="Found2-找到联系人">Found2-找到联系人</option>
-                                                <option value="PTP-承诺还款">PTP-承诺还款</option>
-                                                <option value="Check-检查付款">Check-检查付款</option>
-                                                <option value="TS-投诉">TS-投诉</option>
-                                                <option value="Transfer-建议转移">Transfer-建议转移</option>
-                                                <option value="QT-其它">QT-其它</option>-->
+
                                             </select>
                                         </li>
                                     </ul>
@@ -584,50 +530,6 @@
                             <div class="row" style="text-align: center">
                                 <button type="button" class="btn btn-sm btn-primary" onclick="addCallRecordByButton()"><i class="fa fa-check"></i>保 存</button>
                             </div>
-
-                        <!--
-                            <div class="row">
-                                <div class="select-list">
-                                    <ul>
-                                        &lt;!&ndash;<li class="select-time">
-                                            <label class="labelInfo">行动码：</label>
-                                            <select class="form-control" name="actionCode" id="actionCode" style="width: 180px; height: 30px" onchange="actionCodeTabChange()">
-                                                <option value="" selected>请选择</option>
-                                            </select>
-                                        </li>&ndash;&gt;
-                                        <li class="select-time">
-                                            <label class="labelInfo">行动码：</label>
-                                            <select class="form-control" name="actionCode" id="actionCode" style="width: 180px; height: 30px" onchange="actionCodeTabChange()">
-                                                <option value="" selected>请选择</option>
-                                                <option value="ALPA">ALPA(已还款)</option>
-                                                <option value="CNHK">CNHK(承诺还款)</option>
-                                                <option value="ZTGJ">ZTGJ(暂停跟进)</option>
-                                                <option value="TS">TS(投诉)</option>
-                                                <option value="NXT">NXT(未达成还款)</option>
-                                                <option value="DYZG">DYZG(答应转告)</option>
-                                                <option value="ZCLX">ZCLX(再次联系)</option>
-                                            </select>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="form-group select-list">
-                                    <ul>
-                                        <li class="select-time">
-                                            <label  class="labelInfo">备注：</label>
-                                            <input th:type="text" class="form-control" name="remark" id="actionRemark" style="width: 180px; height: 30px" />
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="row" style="text-align: center">
-                                <button type="button" class="btn btn-sm btn-primary" onclick="submitActionCode()"><i class="fa fa-check"></i>保 存</button>
-                            </div>
-                            -->
-
-
                         </div>
                     </div>
                 </div>
@@ -638,13 +540,6 @@
                             <div class="row">
                                 <div class="select-list">
                                     <ul>
-                                       <!-- <li class="select-time">
-                                            <label class="labelInfo">查找方式：</label>
-                                            <select name="searchType" id="searchType" class="form-control" th:with="type=${@dict.getType('search_type')}" onchange="isHasOtherRemark(this)" style="width:120px;height: 30px;">
-                                                <option value="" selected>请选择</option>
-                                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                            </select>
-                                        </li>-->
                                         <li class="select-time">
                                             <label class="labelInfo">查找方式：</label>
                                             <select name="searchType" id="searchType" class="form-control" onchange="isHasOtherRemark(this)" style="width:120px;height: 30px;">
@@ -673,11 +568,6 @@
                                 <div class="select-list">
                                     <ul>
                                         <li class="select-time">
-                                            <!--<label class="labelInfo">关系：</label>
-                                            <select name="selRelation" id="selRelation" class="form-control" th:with="type=${@dict.getType('sys_custom_contact_rela')}" onchange="isHasOtherContactRelation(this)" style="width:120px;height: 30px;">
-                                                <option value="" selected>请选择</option>
-                                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                            </select>-->
                                             <label class="labelInfo">关系：</label>
                                             <select name="selRelation" id="selRelation" class="form-control" onchange="isHasOtherContactRelation(this)" style="width:120px;height: 30px;">
                                                 <option value="" selected="">请选择</option>
@@ -756,12 +646,6 @@
                             <input name="phone" id="addPhone" class="form-control" type="text" maxlength="20"  required>
                         </div>
                     </div>
-<!--                    <div class="form-group">-->
-<!--                        <label class="col-sm-3 control-label">固定电话：</label>-->
-<!--                        <div class="col-sm-8">-->
-<!--                            <input name="tel" id="addTel" class="form-control" type="text">-->
-<!--                        </div>-->
-<!--                    </div>-->
                     <div class="form-group">
                         <label class="col-sm-3 control-label">联系人家庭地址：</label>
                         <div class="col-sm-8">
@@ -831,10 +715,6 @@
                     <button type="button" class="btn btn-primary" align="center" onclick="addLetterApply()">提交申请</button>
                 </div>
             </div>
-            <!--<div class="modal-footer">
-                &lt;!&ndash;<button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>&ndash;&gt;
-                <button type="button" class="btn btn-primary" onclick="addLetterApply()">提交申请</button>
-            </div>-->
         </div>
     </div>
 </div>
@@ -848,9 +728,7 @@
             <div class="wrapper wrapper-content animated fadeInRight ibox-content">
                 <form class="form-horizontal m" id="form-notebook-add">
                     <div class="form-group">
-                        <!--<label class="col-sm-3 control-label">记事本：</label>-->
                         <div class="col-sm-8">
-                            <!--<input name="notebook" id="editNotebook" class="form-control" type="text" readonly>-->
                             <textarea name="notebook" style="margin: 0px; width: 542px; height: 101px;" id="editNotebook" rows="3" ></textarea>
                         </div>
                     </div>
@@ -859,10 +737,6 @@
                     <button type="button" class="btn btn-primary" align="center" onclick="saveNotebook()">保存</button>
                 </div>
             </div>
-            <!--<div class="modal-footer">
-                &lt;!&ndash;<button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>&ndash;&gt;
-                <button type="button" class="btn btn-primary" onclick="addLetterApply()">提交申请</button>
-            </div>-->
         </div>
     </div>
 </div>
@@ -920,7 +794,6 @@
                 <h4 class="modal-title">初始化窗口</h4>
             </div>
             <div class="modal-body" style="height: 250px;">
-                <!--<input id="callRecordId" name="callRecordId" class="form-control" type="text">-->
                 <div class="form-group">
                     <label class="col-sm-3 control-label">分机号码：</label>
                     <div class="col-sm-8">
@@ -979,7 +852,6 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-                <!--<button type="button" class="btn btn-primary" onclick="initial();">保存</button>-->
             </div>
         </div>
     </div>
@@ -989,10 +861,6 @@
     <div class="modal" id="colorWin" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top: 9%;">
         <div class="modal-dialog" style="width: 335px;margin-left: 10%;">
             <div class="modal-content animated fadeIn">
-                <!--<div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
-                    </button>
-                </div>-->
                 <div class="modal-body" style="height: 100px;">
                     <div class="form-group">
                         <input type="hidden" id="dataId">
@@ -1012,47 +880,19 @@
 </div>
 
 
-<!--<div class="modal" id="colorWin" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content animated bounceInRight">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
-                </button>
-            </div>
-            <div class="modal-body" style="height: 100px;">
-                <div class="form-group">
-                    <input type="hidden" id="dataId">
-                    <div>
-                        <div style="line-height: 60px;width: 30px;background: #FCBF51;color: #FFFFFF;display: inline-block;margin-left: 25%;text-align: center;border-radius: 3px;" onclick="saveColor('1')">金</div>
-                        <div style="line-height: 60px;width: 30px;background: #64C790;color: #FFFFFF;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor('2')">木</div>
-                        <div style="line-height: 60px;width: 30px;background: #81D3F8;color: #FFFFFF;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor('3')">水</div>
-                        <div style="line-height: 60px;width: 30px;background: #FE6249;color: #FFFFFF;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor('4')">火</div>
-                        <div style="line-height: 60px;width: 30px;background: #7D409F;color: #FFFFFF;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor('5')">土</div>
-                        <div style="line-height: 60px;width: 52px;border: 1px solid #9E9E9E;background: #FFFFFF;color: #3c3a3a;display: inline-block;margin-left: 10px;text-align: center;border-radius: 3px;" onclick="saveColor('0')">清空</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>-->
-
-
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: layout-latest-js"/>
 <th:block th:include="include :: ztree-js"/>
 <th:block th:include="include :: datetimepicker-js" />
 <script th:inline="javascript">
-    // var currentCertificateNo; // 点击上一条和下一条按钮时使用，记录当前的客户的证件编号
     var currentCaseNo; // 点击上一条和下一条按钮时使用，记录当前的案件编号
     var currentImportBatchNo; // 点击上一条和下一条按钮时使用，记录当前的案件编号
     var currentOrgId; // 点击上一条和下一条按钮时使用，记录当前的案件编号
     var currentCertificateNo; //新增联系人时使用
-    // var allCertificateNo = new Array(); // 点击上一条和下一条按钮时使用，存放所有客户的证件编号
     var allCaseNo = new Array(); // 点击上一条和下一条按钮时使用，存放所有案件编号
     var allOrgId = new Array(); // 点击上一条和下一条按钮时使用，存放所有机构号
     var allImportBatchNo = new Array(); // 点击上一条和下一条按钮时使用，存放所有案件导入批次号
     var currentTaskId;
-    //var currentDuncaseNo;
     var editFlag = [[${@permission.hasPermi('system:user:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:user:remove')}]];
     var resetPwdFlag = [[${@permission.hasPermi('system:user:resetPwd')}]];
@@ -1074,10 +914,6 @@
         $('body').layout({initClosed: panehHidden, west__size: 185});
         // 查询左边客户列表并显示第一个客户的数据
         findTaskByOwner(startNum,pageSize);
-        // 初始化行动码下拉框
-        // initActionCode();
-        // initCallRecordCode();
-        // $(".ui-layout-pane").css({"overflow":"hidden"});
         // 设置左边div的宽度
         $(".ui-layout-west").css({"width":"10%"});
         $(".ui-layout-west").css({"overflow":"visible"});
@@ -1090,7 +926,6 @@
         $(".ui-layout-center").css({"left": "10%","width":"64%"});
         $(".ui-layout-center").css({"height":"100%"});
         // 设置左右缩回栏的位置
-        //ui-layout-resizer ui-layout-resizer-east ui-layout-resizer-open ui-layout-resizer-east-open
         $(".ui-layout-resizer-east").hide();
         $(".ui-layout-resizer-west").hide();
 
@@ -1098,13 +933,6 @@
             format: "yyyy-mm-dd hh:ii:ss",
             autoclose: true
         });
-        /*var platform = $("#callPlatform").val();
-        if (platform == 'ZJ') {
-            $("#platformName").text("自建话务平台");
-        } else if (platform == 'PA') {
-            $("#platformName").text("平安话务平台");
-        }*/
-
         initial1();
         echoActionCode($("#curActionCode").val());
     });
@@ -1134,8 +962,6 @@
 
     function findTaskByOwner(startNum,pageSize) {//获取案件用户列表
         var taskStatus= $("#taskStatusSearch").val();
-       /* var startEnterCollDate = $("#startEnterCollDateSearch").val();*/
-        /*  var endEnterCollDate = $("#endEnterCollDateSearch").val();*/
         var startEnterCollDate = new Date(Date.parse($("#startEnterCollDateSearch").val())).toLocaleDateString();
         var endEnterCollDate = new Date(Date.parse($("#endEnterCollDateSearch").val())).toLocaleDateString();
         var startRecentlyAllotDate = new Date(Date.parse($("#startRecentlyAllotDateSearch").val())).toLocaleDateString();
@@ -1238,7 +1064,6 @@
                     }
                     $("#customCount").text($("#totalCaseNum").val() + "件");
                     $("#allCustomTotalDebtAmount").text(parseFloat($("#totalArrears").val()).toFixed(2) + "元");
-                    // $("#allCustomTotalDebtAmount").text(allCustomTotalDebtAmount.toFixed(2) + "元");
                     collJobDetail($("#firstEnterCaseNo").val(),$("#orgId").val(),$("#firstImportBatchNo").val());
 
                 }
@@ -1366,11 +1191,6 @@
                                     "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose'/></td><td name='contactName'>"+n.contactName+"</td><td name='phone' style='border-right: none;width: 85px;'>"+phone+"</td><td style='border-left: none'>"+replacePicture(n.phoneStatus)+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
                                     "<td  style='width: 30px;'></td><td style='width: 30px;'></td><td name='phoneShow' style='display: none;'>"+n.phone+"</td></tr>");
                             }
-                            // if (n.tel != null && n.phone != 'null' && n.tel.length > 4) {
-                            //     tp.append("<tr onclick='changeColor(this);'>" +
-                            //         "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose'/></td><td name='contactName'>"+n.contactName+"</td><td name='phone' style='border-right: none;width: 85px;'>"+tel+"</td><td style='border-left: none'>"+replacePicture(n.phoneStatus)+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
-                            //         "<td style='width: 30px;'></td><td style='width: 30px;'></td></tr>");
-                            // }
                         }else if(n.isClose != null  && n.isClose == '0'){
                             if (n.phone != null && n.phone.length >4) {
                                 tp.append("<tr onclick='changeColor(this);'>" +
@@ -1378,12 +1198,6 @@
                                     "<td class='disclass'  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='call("+JSON.stringify(n.contactName)+","+n.id+","+n.relation+",\""+n.phone+"\",this)'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>"+"</td>" +
                                     "<td  style='width: 30px;' name='gd'></td><td name='phoneShow' style='display: none;'>"+n.phone+"</td></tr>");
                             }
-                            // if (n.tel != null && n.tel.length > 4) {
-                            //     tp.append("<tr onclick='changeColor(this);'>" +
-                            //         "<td style='display: none'><input id='"+n.id+"' type='radio' name='radioChoose'/></td><td name='contactName'>"+n.contactName+"</td><td name='phone' style='border-right: none;width: 85px;'>"+tel+"</td><td style='border-left: none'>"+replacePicture(n.phoneStatus)+"</td><td name='hideCerNo' style='display: none'>"+n.certificateNo+"</td><td name='relation'>"+getRelaByCode(n.relation)+"</td><td name='hidRelation' style='display: none'>"+n.relation+"</td>" +
-                            //         "<td class='disclass'  style='width: 30px;'>"+"<a href='javascript:void(0)' onclick='call("+JSON.stringify(n.contactName)+","+n.id+","+n.relation+",\""+n.tel+"\",this)'><img src='/img/call.png'  class='imgso' width='18px' height='20px' alt='拨号' title='拨号'/></a>"+"</td>" +
-                            //         "<td  style='width: 30px;' name='gd'></td></tr>");
-                            // }
                         }
                     });
                }
@@ -1490,9 +1304,7 @@
                             "                                    <label >应还罚息：</label><label  >"+rmbYhfxzje+"</label>\n" +
                             "                                </div></div>");
                     }
-                    // $("#sameCaseArrearsTotal").text(sameCaseArrearsTotal);
                     $("#sameCaseArrearsTotal").text(parseFloat(sameCaseArrearsTotal).toFixed(2));
-                    // $("#sameCaseCloseCaseYhjeTotal").text(sameCaseCloseCaseYhjeTotal);
                     $("#sameCaseCloseCaseYhjeTotal").text(parseFloat(sameCaseCloseCaseYhjeTotal).toFixed(2));
                 }
             }
@@ -1509,13 +1321,6 @@
             },
             function(data) {
                 if(data.status == 200){
-                    // for (var i = 0; i < data.result.length; i++) {
-                    //     if (data.result[i].applyStatus == 1) {
-                    //         document.getElementById("letterApply").disabled=true;
-                    //         $("#letterStatus").text("待审批");
-                    //         break;
-                    //     }
-                    // }
                     if (data.result.length != 0) {
                         if (data.result[0].applyStatus == 1) {
                             document.getElementById("letterApply").disabled=true;
@@ -1550,24 +1355,11 @@
                 if(data.status == 200){
                     if (data.result.length > 1) {
                         $("#isSameCase").text("是");
-                        // document.getElementById("tab-9").style.display = "block";
-                        // document.getElementById("sameCaseLi").style.display = "block";
-                        // $("#sameCaseLi").removeClass('active');
-                        // $("#tab-9").removeClass("active");
-                        // $("#infoLi").addClass("active");
-                        // $("#tab-9").removeClass("active");
-                        // $("#tab-5").addClass("active");
                     } else {
                         $("#isSameCase").text("否");
                         document.getElementById("tab-9").style.display = "none";
-                        // document.getElementById("sameCaseLi").style.display = "none";
-                        // document.getElementById("tab-9").style.display = "none";
-                        // $("#infoLi").addClass("active");
-                        // // $("#tab-9").removeClass("active");
-                        // $("#tab-5").addClass("active");
                     }
                 }
-                // $("a[aria-expanded='true']").click();
             }
         );
     }
@@ -1893,11 +1685,6 @@
                     disabledLetterApply(currentCaseNo,currentOrgId,currentImportBatchNo);
                     isSameCase(currentCertificateNo,currentOrgId);
                     $("a[aria-expanded='true']").click();
-                    // $("#sameCaseLi").removeClass('active');
-                    // $("#infoLi").addClass("active");
-                    // $("#tab-9").removeClass("active");
-                    // $("#tab-5").addClass("active");
-                    // viewTabDetail("sameCaseInfo");
                 }
             }
         );
@@ -1912,7 +1699,6 @@
         $("#cnhkDate").val("");
         $("#zclxDate").val("");
         $("#actionRemark").val("");
-        // $("#actionCode").val("");
     }
 
     function viewTabDetail(tab){
@@ -1961,14 +1747,7 @@
             $.modal.alert("请选择话务平台");
             return;
         }
-        // var isRadio = $('input[name="radioChoose"]:checked').val();
         var isRadio = $('input:radio:checked').val();
-        /*var isRadio = document.getElementsByName("radioChoose");
-        for(i in isRadio){
-            if(isRadio[i].attributes.checked != 'undefined'){
-                isRadio=true;
-            }
-        }*/
 
         if (isRadio == null || isRadio == 'undefined' || isRadio == '') {
             $.modal.alert("请选择联系人");
@@ -1988,7 +1767,6 @@
             return;
         }
         if (sign == null || sign == '' || sign == 'undefined') {
-            // alert($("#callRecordSelect").val())
             sign = $("#callCode").val();
             if (sign == null || sign == '' || sign == 'undefined') {
                 $.modal.alert("请选择电话码");
@@ -2025,14 +1803,6 @@
         var callRadioLocation = $("#callRadioLocation").val();
         var callRemark = $("#callRemarkAdd").val();
         var callRecordId = $("#callRecordId").val();
-        // if(callRadioLocation=="" || callRadioLocation==null){
-        //     $.modal.alertSuccess("请拨打电话后再新增");
-        //     return;
-        // }
-        // if(addPhone!=temp_phone){
-        //     $.modal.alertSuccess("请选择拨打电话的联系人新增");
-        //     return;
-        // }
         var contactRelation;
         if (val.find("[name='hidRelation']").html() != null && val.find("[name='hidRelation']").html() != '' && val.find("[name='hidRelation']").html() != "null") {
             contactRelation = val.find("[name='hidRelation']").html();
@@ -2041,12 +1811,10 @@
             prefix + "/addCallRecord",
             {
                 id:callRecordId,
-                // certificateNo:val.find("[name='hideCerNo']").html(),
                 contactName:val.find("[name='contactName']").html(),
                 phone:addPhone,
                 contactRelation:contactRelation,
                 findDate:findDate,
-                //ownerId:$("#ownerId").val(),
                 callSign:sign,
                 callResult:$('#callResult').val(),
                 callStartTime:callStartTime,
@@ -2064,10 +1832,8 @@
                 cnje:cnje
             },
             function(data) {
-                // alert(JSON.stringify(data));
                 if (data.status == 200) {//请求成功
                     $.modal.alertSuccess("保存成功");
-                    //collJobDetail(data.result);
                     $("#callStartTime").val("");
                     $("#callEndTime").val("");
                     $("#callLen").val("");
@@ -2107,7 +1873,6 @@
                         collJobDetail(allCaseNo[i-1],allOrgId[i-1],allImportBatchNo[i-1]);
                         return;
                     }else {
-                        //$.modal.alert("当前已经是第一条");
                         // 如果是第一条的话点击上一条为最后一条
                         collJobDetail(allCaseNo[allCaseNo.length-1],allOrgId[allCaseNo.length-1],allImportBatchNo[allCaseNo.length-1]);
                         return;
@@ -2116,11 +1881,9 @@
             } else if(sign == 2) { //下一条
                 if(allCaseNo[i] == currentCaseNo && allOrgId[i] == currentOrgId){
                     if(i != allCaseNo.length-1) {
-                        // alert("下一条是" + allCertificateNo[i+1]);
                         collJobDetail(allCaseNo[i+1],allOrgId[i+1],allImportBatchNo[i+1]);
                         return;
                     } else {
-                        //$.modal.alert("当前已经是最后一条");
                         // 如果是最后一条的话点击下一条为第一条
                         collJobDetail(allCaseNo[0],allOrgId[0],allImportBatchNo[0]);
                         return;
@@ -2137,7 +1900,6 @@
 
             },
             function(data) {
-                // alert(JSON.stringify(data));
                 if (data.code == 0) {//请求成功
                     for (var i = 0; i < data.rows.length; i++) {
                         var opt = "<option value='"+data.rows[i].code+"'>"+ data.rows[i].code + "(" +data.rows[i].message+")</option>";
@@ -2153,7 +1915,6 @@
         clearData();
         var selectId = document.getElementById("actionCode");
         var value = selectId.options[selectId.selectedIndex].value;
-        // alert(value);
         if(value == 'cnhk') { //如果是承诺还款，就显示承诺还款相应的页面，隐藏其他页面
             $("#cnhk").show();
             $("#zclx").hide();
@@ -2183,8 +1944,6 @@
     }
 
     function submitActionCode() {
-        //var selectId = document.getElementById("actionCode");
-        //var actionCode = selectId.options[selectId.selectedIndex].value;
         var actionCode = $("#actionCode").val();
         if (actionCode == null || actionCode == '' || actionCode == 'undefined') {
             $.modal.alert("请选择行动码");
@@ -2195,14 +1954,6 @@
                 $.modal.alert("请选择还款日期");
                 return;
             }
-            /*if ($("#hkje").val() == null || $("#hkje").val() == '') {
-                $.modal.alert("请填写还款金额");
-                return;
-            }
-            if ($("#cnhkFhDate").val() == null || $("#cnhkFhDate").val() == '') {
-                $.modal.alert("请选择复核日期");
-                return;
-            }*/
         }
         if (actionCode == 'zclx') {
             if ($("#zclxDate").val() == null || $("#zclxDate").val() == '') {
@@ -2218,8 +1969,6 @@
                 taskId:currentTaskId,
                 actionCode:actionCode,
                 repayDate:$("#cnhkDate").val(),
-                /*repayAmount:$("#hkje").val(),
-                recheckDate:$("#cnhkFhDate").val(),*/
                 recontactDate:$("#zclxDate").val(),
                 remark:$("#actionRemark").val(),
                 orgId:currentOrgId,
@@ -2227,7 +1976,6 @@
             },
             function(data) {
                 if (data.status == 200) {//请求成功
-                    // $.modal.alertWarning("新增成功");
                     $.modal.alertSuccess("新增成功");
                     $("#cnhkDate").val("");
                     $("#zclxDate").val("");
@@ -2378,51 +2126,6 @@
 
     }
 
-   /* $(function () {
-       /!* $("#agentId").text(111);
-        $.ajax({
-            url: prefix + "/selectExtPhoneList",
-            dataType: "json",
-            type: "post",
-            success:function(data){
-                var result = eval(data.msg);
-                $("#agentId").append("<option value=''>请选择</option>");
-                $.each(result,function(index,obj){
-                    var agentId = obj.agentid;
-                    $("#agentId").append("<option value='"+agentId+"'>"+agentId+"</option>");
-                });
-            }
-
-        });*!/
-        // $.post(
-        //     prefix + "/selectExtNumBySeat",
-        //     {
-        //         seatId:$("#ownerId").val(),
-        //         agentId:$("#agentId").val(),
-        //         callPlatform:$("#callPlatform").val(),
-        //     },
-        //     function(data){
-        //         var result = eval(data.msg);
-        //         $("#exonNum").append("<option value=''>请选择</option>");
-        //         $.each(result,function(index,obj){
-        //             var agentId = obj;
-        //             $("#exonNum").append("<option value='"+agentId+"'>"+agentId+"</option>");
-        //         });
-        //     }
-        //
-        // );
-        var extNumList = $("#extNum").val();
-        extNumList = extNumList.split(",");
-        $("#exonNum").append("<option value=''>请选择</option>");
-        if (extNumList != null && extNumList != "") {
-            $.each(extNumList,function(index,obj){
-                var agentId = obj;
-                $("#exonNum").append("<option value='"+agentId+"'>"+agentId+"</option>");
-            });
-        }
-    });*/
-
-
    var reset = new Reset(window);
    reset.resetByClass("ui-layout-resizer ui-layout-resizer-east ui-layout-resizer-open ui-layout-resizer-east-open","ui-layout-resizer ui-layout-resizer-west ui-layout-resizer-open ui-layout-resizer-west-open");
 
@@ -2441,7 +2144,6 @@
             if(type == "EVENT_CALLOUT_FAIL"){
                 console.log('callout' + type,JSON.stringify(data))
             }
-            // if(type == "EVENT_HUNGUP_SUCCESS" || type == "EVENT_HUNGUP" || type == "EVENT_OUTBOUND_AGNET_HANGUP" || type == "EVENT_OUTBOUND_CUSTOMER_HANGUP" || type == "EVENT_OUTBOUND_FORECAST_AGNET_HANGUP" || type == "EVENT_OUTBOUND_FORECAST_CUSTOMER_HANGUP"){
             if(type == "EVENT_HUNGUP"){
                 window.parent.parent.$("#callstatus").html("<img style='width:30px;height: 30px;' src='/weijietong.png'/>");
                 agentIsCalling = false;
@@ -2482,7 +2184,6 @@
                             prefix + "/addCallRecord",
                             {
                                 id:$("#callRecordId").val(),
-                                // certificateNo:val.find("[name='hideCerNo']").html(),
                                 contactName:val.find("[name='contactName']").html(),
                                 phone:val.find("[name='phone']").html(),
                                 contactRelation:val.find("[name='hidRelation']").html(),
@@ -2503,10 +2204,7 @@
                                 actionCode: actionCode
                             },
                             function(data) {
-                                // alert(JSON.stringify(data));
                                 if (data.status == 200) {//请求成功
-                                    // $.modal.alertSuccess("保存成功");
-                                    //collJobDetail(data.result);
                                     $("#callStartTime").val("");
                                     $("#callEndTime").val("");
                                     $("#callLen").val("");
@@ -2537,85 +2235,23 @@
         var extPhone = window.parent.parent.extPhone;
         var platform = window.parent.parent.$("#callPlatform").val();
         if (platform == 'PA') {
-            /*$.ajax({
-                url: prefix + "/selectExtPhone",
-                dataType: "json",
-                async:false,
-                type: "post",
-                data:{
-                    agentId: agentId
-                },
-                success:function(data){
-                    var result = eval(data.msg);
-                    var obj = result[0];
-                    $("#skillDesc").val(obj.skilldesc);
-                    $("#dialPrefix").val(obj.dialprefix);
-                    $("#dialCaller").val(obj.dialcaller);
-                    $("#proxyUrl").val(obj.proxyUrl);
-                }
-            });*/
-
-            // var skillDesc = $("#skillDesc").val();
-            // var dialPrefix = $("#dialPrefix").val();
-            // // var dialCaller = $("#dialCaller").val();
-            // var dialCaller = $("#exonNum").val();
-            // var proxyUrl = $("#proxyUrl").val();
             var skillDesc = extPhone.skilldesc;
             var dialPrefix = extPhone.dialprefix;
             var dialCaller = window.parent.parent.$("#exonNum").val();
             var proxyUrl = extPhone.proxyUrl;
             initial2(agentId,skillDesc,dialPrefix,dialCaller,proxyUrl);
         } else if (platform == 'ZJ') {
-            // $.ajax({
-            //     url: prefix + "/selectExtPhone",
-            //     dataType: "json",
-            //     async:false,
-            //     type: "post",
-            //     data:{
-            //         agentId: agentId
-            //     },
-            //     success:function(data){
-            //         var result = eval(data.msg);
-            //         var obj = result[0];
-            //         // 登录及初始化
-            //         var agent = $("#agentId").val(); //坐席工号
-            //         // var pwd = "1234"; //登录密码
-            //         var pwd = obj.password;
-            //         var extno = $("#agentId").val(); //登录分机号
-            //         // var domain = 'huadao'; //企业编号或域名
-            //         var domain = obj.domain; //企业编号或域名
-            //         var host = obj.proxyUrl.split(":")[0];
-            //         var port = obj.proxyUrl.split(":")[1];
-            //         // uKeFuSoftPhone.Initial("172.18.100.1","8088","0","0","0",Event);
-            //         console.log("pwd="+pwd+",domain="+domain+",host="+host+",port="+port);
-            //         uKeFuSoftPhone.Initial(host,port,"0","0","0",Event,domain);
-            //         console.log("初始化成功");
-            //         // 每次登陆之前先退出，然后再进行登录
-            //         uKeFuSoftPhone.AgentLogout(agent,domain, extno, pwd);
-            //         // console.log("---html退出成功---");
-            //         // uKeFuSoftPhone.AgentLogin(agent, extno, pwd, domain);
-            //         // console.log("---html登录成功---");
-            //     }
-            // });
-
-
                 var agent = window.parent.parent.$("#agentId").val(); //坐席工号
-                // var pwd = "1234"; //登录密码
                 var pwd = extPhone.password;
                 var extno = window.parent.parent.$("#agentId").val(); //登录分机号
-                // var domain = 'huadao'; //企业编号或域名
                 var domain = extPhone.domain; //企业编号或域名
                 var host = extPhone.proxyUrl.split(":")[0];
                 var port = extPhone.proxyUrl.split(":")[1];
-                // uKeFuSoftPhone.Initial("172.18.100.1","8088","0","0","0",Event);
                 console.log("pwd="+pwd+",domain="+domain+",host="+host+",port="+port);
                 uKeFuSoftPhone.Initial(host,port,"0","0","0",Event,domain);
                 console.log("初始化成功");
                 // 每次登陆之前先退出，然后再进行登录
                 uKeFuSoftPhone.AgentLogout(agent,domain, extno, pwd);
-                // console.log("---html退出成功---");
-                // uKeFuSoftPhone.AgentLogin(agent, extno, pwd, domain);
-                // console.log("---html登录成功---");
 
         }else if (platform == 'DY'){
             var soundRecordingUrl = [[${soundRecordingUrl}]];
@@ -2637,25 +2273,6 @@
                 }
             });
             DYSDK.init();
-            //暂时屏蔽度言 页面 拨打电话按钮记录日志
-            // DYSDK.callConnecting(function(data){
-            //     if(lxdata){
-            //         $.each(lxdata, function (i, n) {
-            //             //电话匹配 则增加电催记录
-            //             if(n.phone == data.phone){
-            //                 var obj = {};
-            //                 obj.contactName = JSON.stringify(n.contactName);
-            //                 obj.phone = n.phone;
-            //                 obj.contactRelation = n.relation;
-            //                 obj.callSign = 'R02';
-            //                 obj.callResult = '无法接通';
-            //                 obj.remark = '无法接通';
-            //                 obj.platform = 'DY';
-            //                 pubAddCallRecord(obj);
-            //             }
-            //         });
-            //     }
-            // });
             DYSDK.callConnecting(function(data){
                 console.log("当电话在拨打中的时候被触发：" + JSON.stringify(data));
             });
@@ -2822,11 +2439,6 @@
             printEvent('onOffering', event);
         };
 
-        /*agentClient.onConnected = function(event) {
-            printEvent('onConnected', event);
-            window.parent.parent.$("#callstatus").html("<img style='width:30px;height: 30px;' src='/yijietong.png'/>");
-        };*/
-
         agentClient.onReleased = function(event) {
             window.parent.parent.$("#callstatus").html("<img style='width:30px;height: 30px;' src='/weijietong.png'/>");
             agentIsCalling = false;
@@ -2851,7 +2463,6 @@
             console.log("平安录音返回信息recordFile="+event.recordFile+",recordTime="+event.recordTime+",startTime="+event.startTime+",recordDuration="+event.recordDuration+",currentCaseNo="+currentCaseNo);
             // 直接保存点催记录
             var val = $('input[name="radioChoose"]:checked').parents("tr");
-            // if(freeCallFlag==null || freeCallFlag==""){
 
             $.ajax({
                 url: prefix + "/getCurActionCode",
@@ -2873,7 +2484,6 @@
                         prefix + "/addCallRecord",
                         {
                             id:$("#callRecordId").val(),
-                            // certificateNo:val.find("[name='hideCerNo']").html(),
                             contactName:val.find("[name='contactName']").html(),
                             phone:val.find("[name='phone']").html(),
                             contactRelation:val.find("[name='hidRelation']").html(),
@@ -2896,10 +2506,7 @@
                             ucid: event.ucid
                         },
                         function(data) {
-                            // alert(JSON.stringify(data));
                             if (data.status == 200) {//请求成功
-                                // $.modal.alertSuccess("保存成功");
-                                //collJobDetail(data.result);
                                 $("#callStartTime").val("");
                                 $("#callEndTime").val("");
                                 $("#callLen").val("");
@@ -2919,43 +2526,6 @@
 
                 }
             });
-            // }
-
-           /* $.ajax({
-                url: prefix + "/downRemoteRecord",
-                dataType: "json",
-                async:false,
-                type: "post",
-                data:{
-                    recordFile: recordFile,
-                    startTime: startTime,
-                    endTime: endTime,
-                    recordDuration: recordDuration
-                },
-                success:function(data){
-                    if(data.msg=='失败'){
-                        $.modal.alertWarning("录音文件保存失败！！！");
-                    }else{
-                        var result = JSON.parse(data.msg);
-                        var callStartTime = result.callStartTime;
-                        var callEndTime = result.callEndTime;
-                        var callLen = result.callLen;
-                        var callRadioLocation = result.callRadioLocation;
-                        $("#callStartTime").val(callStartTime);
-                        $("#callEndTime").val(callEndTime);
-                        $("#callLen").val(callLen);
-                        $("#callRadioLocation").val(callRadioLocation);
-                    }
-
-
-                }
-            });*/
-
-            // $("#callStartTime").val(startTime);
-            // $("#callEndTime").val(endTime);
-            // $("#callLen").val(recordDuration);
-            // $("#callRadioLocation").val(recordFile);
-
         };
 
         agentClient.onError = function(event) {
@@ -3013,11 +2583,6 @@
         var callEndTime = $("#callEndTime").val();
         var callLen = $("#callLen").val();
         var callRadioLocation = $("#callRadioLocation").val();
-        /*var isRadio = $('input[name="radioChoose"]:checked').val();
-        if (isRadio == null || isRadio == 'undefined' || isRadio == '') {
-            $.modal.alert("请选择通话的联系人");
-            return;
-        }*/
         if(callRadioLocation!=""&&callRadioLocation!=null){
             $.modal.alert("请保存通话记录再拨打电话");
             return;
@@ -3038,7 +2603,6 @@
             return;
         }
         var tr1 = obj.parentNode.parentNode;
-        // alert(tr1.cells[7].innerHTML="<span class='text-success'>已授权</span>")
         if(callPlatform != 'DY') {
             tr1.cells[8].innerHTML="<a href='javascript:void(0)' onclick='hangUp()'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
         }
@@ -3056,7 +2620,6 @@
         var callLen = $("#callLen").val();
         var callRadioLocation = $("#callRadioLocation").val();
         var callRemark = $("#callRemarkAdd").val();
-        // var callRecordId = $("#callRecordId").val();
         var destDesc = "0"+phone;
         temp_phone=phone;
         start();
@@ -3090,7 +2653,6 @@
         }else if(callPlatform == 'DY') {
             // 度言拨打电话
             duyanSdk.callme(phone);
-            // agentIsCalling = false;
             DYSDK.callConnecting(function(data){
                 console.log("当电话在拨打中的时候被触发：" + JSON.stringify(data));
                 ucid = data.uuid;
@@ -3145,16 +2707,12 @@
                             $("#actionCode").val("");
                             $("#curActionCode").val("");
                             echoActionCode(actionCode);//回显
-                            // alert(JSON.stringify(data));
-                            // $.modal.alertSuccess("保存成功");
-                            //collJobDetail(data.result);
                             $("#callRecordId").val(data.result);
                             if($('#call').val() == '1') {
                                 callRecordList(currentCaseNo);
                             }
                             var val = $('input[name="radioChoose"]:checked').parents("tr");
                             val.css('background','#dddada');
-                            // var phone = val.find("[name='phone']").html();
                         }else if (data.code == 1) {
                             window.location.href="/login";
                             return;
@@ -3286,14 +2844,6 @@
     }
 
     function getCallSign(id, callSign, dictLabel) {
-        /*if (callSign == null || callSign == '') {
-            // return "<a href='javascript:void(0)' onclick='updateCallSign(\""+id+"\")'>待更新</a>";
-            return "<a onclick='showModal(\""+id+"\")'>待更新</a>";
-        }
-        if (callSign == 'R01' || callSign == 'R02') {
-            // return "<a href='javascript:void(0)' onclick='updateCallSign(\""+id+"\")'>待更新</a>";
-            return "<a onclick='showModal(\""+id+"\")'>"+callSign+"("+dictLabel+")</a>";
-        }*/
         if (dictLabel != null && dictLabel != '') {
             return callSign + "(" + dictLabel + ")";
         }
@@ -3315,7 +2865,6 @@
                 orgId:currentOrgId
             },
             function(data) {
-                // alert(JSON.stringify(data));
                 if (data.status == 200) {//请求成功
                     $.modal.alertSuccess("修改成功");
                     $("#updateCallSignModal").modal('hide');
@@ -3456,11 +3005,7 @@
         $.post(
             taskPrefix + "/initCallRecordCode",
             function (data) {
-                // alert(JSON.stringify(data));
                 if (data.code == 0) {//请求成功
-                    // var optDefault = "<option value='' selected>请选择</option>";
-                    // $("#callRecordSelect").append(optDefault);
-
                     for (var i = 0; i < data.rows.length; i++) {
                         var opt = "<option value='" + data.rows[i].code + "'>" + data.rows[i].code +"("+ data.rows[i].message + ")</option>";
                         $("#callCode").append(opt);
@@ -3494,25 +3039,6 @@
         $.modal.open("通话内容", viewCallContentUrl);
     }
 
-    // //电话号码脱敏
-    // function tellToMd5(tell){
-    //     if(tell != null && tell != ""){
-    //         tell = tell.substring(0,3) + "****" + tell.substring(7);
-    //     }else{
-    //         tell = "";
-    //     }
-    //     return tell;
-    // }
-    // //银行卡、身份证脱敏
-    // function cardToMd5(cardno){
-    //     if(cardno != null && cardno != ""){
-    //         cardno = cardno.substring(0,2) + "************" + cardno.substring(14);
-    //     }else {
-    //         cardno ="";
-    //     }
-    //     return cardno;
-    // }
-
     function showModal(id) {
         if (agentIsCalling) {
             $.modal.alertError("正在通话中，请先挂断当前通话再保存电话码");
@@ -3528,7 +3054,6 @@
             $.modal.alertError("正在通话中，请先挂断当前通话再拨打");
             return;
         }
-        // $("#freeCallFlag").val("freeCall");
         var callRadioLocation = $("#callRadioLocation").val();
         if(callRadioLocation!=""&&callRadioLocation!=null){
             $.modal.alert("请保存通话记录再拨打电话");
@@ -3554,14 +3079,7 @@
             $.modal.alert("请输入号码");
             return;
         }
-       /* var trs = $("#custContactTbody")[0].childNodes;
-        $.each(trs,function (i,n) {
-            if(n.firstChild.lastChild.checked){
-                changeColor(n);
-            }
-        });*/
         var tr1 = obj.parentNode.parentNode;
-        // alert(tr1.cells[7].innerHTML="<span class='text-success'>已授权</span>")
         if(callPlatform != 'DY'){
             tr1.cells[3].innerHTML="<a href='javascript:void(0)' onclick='hangUp()'><img src='/img/hangup.png'  class='imgso' width='18px' height='20px' alt='挂断' title='挂断'/></a>";
         }
@@ -3578,7 +3096,6 @@
         var callLen = $("#callLen").val();
         var callRadioLocation = $("#callRadioLocation").val();
         var callRemark = $("#callRemarkAdd").val();
-        // var callRecordId = $("#callRecordId").val();
         var destDesc = "0"+phone;
         temp_phone=phone;
         start();
@@ -3605,7 +3122,6 @@
         }else if(callPlatform == 'DY') {
             // 度言拨打电话
             duyanSdk.callme(phone);
-            // agentIsCalling = false;
             DYSDK.callConnecting(function(data){
                 console.log("当电话在拨打中的时候被触发：" + JSON.stringify(data));
                 ucid = data.uuid;
@@ -3646,8 +3162,6 @@
         } else {
             hisPhone = freePhone;
         }
-        // alert(hisPhone);
-        // document.getElementsByName("radioChoose").checked=false;
         var tp = $("#custContactTbody");
         var trs = $("#custContactTbody")[0].childNodes;
         var strs = $("#finalContactTbody")[0].childNodes;
@@ -3665,7 +3179,6 @@
                 curPhone = $(n).children().eq(2).text();
             }
         });
-        // alert(curPhone);
         if (hisPhone != undefined && hisPhone != curPhone) {
             $("#callRecordId").val("");
         }
@@ -3758,7 +3271,6 @@
                 phone:$(tr.parentElement.parentElement.lastElementChild).text()
             },
             success: function(data){
-                //console.log(data.msg);
                 custContactList(currentCaseNo,currentOrgId,currentImportBatchNo);//获取联系人信息
             }
         });
@@ -3880,7 +3392,6 @@
         if (value == null || value == '') {
             value = $("#notebook").text();
         }
-        // $("#editNotebook").val($("#notebook").text());
         $("#editNotebook").val(value);
         $("#notebookModal").modal('show');
     }
@@ -3904,8 +3415,6 @@
                 if (data.status == 200) {//请求成功
                     $.modal.alertSuccess("保存成功");
                     $("#notebookModal").modal('hide');
-                    // $("#notebook").text($("#editNotebook").val());
-                    // $("#notebook").attr("title",$("#editNotebook").val());
                     subNotebook($("#editNotebook").val());
                 }else if (data.code == 1) {
                     window.location.href="/login";
@@ -3916,21 +3425,12 @@
     }
 
     function subNotebook(value, length) {
-        // value = $.table.tooltip(value);
-        // return value;
         var _length = $.common.isEmpty(length) ? 35 : length;
         var _text = "";
         var _value = $.common.nullToStr(value);
-        // var _target = $.common.isEmpty(target) ? 'copy' : target;
         if (_value.length > _length) {
             $("#notebook").attr("title",value);
             _text = _value.substr(0, _length) + "...";
-            // _value = _value.replace(/\'/g,"&apos;");
-            // _value = _value.replace(/\"/g,"&quot;");
-            // var actions = [];
-            // actions.push($.common.sprintf('<input id="tooltip-show" style="opacity: 0;position: absolute;z-index:-1" type="text" value="%s"/>', _value));
-            // actions.push($.common.sprintf('<a href="###" class="tooltip-show" data-toggle="tooltip" data-target="%s" title="%s">%s</a>', _target, _value, _text));
-            // return actions.join('');
             $("#notebook").text(_text);
             return _text;
         } else {
@@ -3996,9 +3496,6 @@
                         op.attr("style","padding: 0px;margin-top: 3px;margin-right: 20px;height: 13px;width: 13px;border-radius: 10px;float: right;background: #FFFFFF;border-color: #9E9E9E");
                         opName.attr("style","color:#515050");
                     }
-                    // location.reload();
-                    //$("#customNameList").empty();
-                    //findTaskByOwner(startNum,pageSize);
                 }
             }
         });
