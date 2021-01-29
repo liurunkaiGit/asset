@@ -195,11 +195,12 @@
                  contentType: false,
                  dataType: "json",
                  success: function(result) {
-                     if(result.msg =="数据导入失败"){
+                     if(result.msg =="error"){
                          var data = result.data;
-                         for(var i=0;i<data.length;i++){
-                             $("#message").append("<div>"+data[i]+"；</div>");
-                         }
+                         // for(var i=0;i<data.length;i++){
+                         //     $("#message").append("<div>"+data[i]+"；</div>");
+                         // }
+                         console.log(result.data);
                          window.parent.$.modal.closeLoading();
                      }else{
                          var importBatchNo = result.data;

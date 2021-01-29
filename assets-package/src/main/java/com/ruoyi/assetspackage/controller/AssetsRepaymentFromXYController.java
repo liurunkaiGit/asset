@@ -266,7 +266,8 @@ public class AssetsRepaymentFromXYController extends BaseController {
             importBatchNo = this.curAssetsRepaymentPackageService.handler(request, file, templateId, orgId);
         } catch (Exception e) {
             e.printStackTrace();
-            return error("数据导入失败：" + e.getMessage());
+            log.error("还款导入失败{}",e);
+            return AjaxResult.error("error","数据导入失败：" + e.getMessage());
         }
         return AjaxResult.success("导入临时表成功",importBatchNo);
     }
