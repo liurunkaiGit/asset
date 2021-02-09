@@ -89,11 +89,13 @@ public class AssetsRepaymentFromXYServiceImpl implements IAssetsRepaymenFromXYSe
         List<Map<String, String>> ownerNameByAssign = this.assetsRepaymentFromXYMapper.findOwnerNameByAssign(param);
         if(ownerNameByAssign.size() > 0){
             for (Map<String, String> map : ownerNameByAssign) {
-                String name = map.get("ownerName");
-                String no = map.get("jobNo");
-                if(name != null && !"".equals(name)){
-                    ownerName = ownerName + ","+name;
-                    jobNo = jobNo + ","+no;
+                if(map != null){
+                    String name = map.get("ownerName");
+                    String no = map.get("jobNo");
+                    if(name != null && !"".equals(name)){
+                        ownerName = ownerName + ","+name;
+                        jobNo = jobNo + ","+no;
+                    }
                 }
             }
         }
