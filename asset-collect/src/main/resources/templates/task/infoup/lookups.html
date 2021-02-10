@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('任务信息')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+<div class="main-content" style="border:solid #ACC0D8 1px;margin: auto;width: 99%;height: 99%">
+        <form class="form-horizontal m" id="form-infoup-edit" th:object="${tLcTaskInfoup}">
+            <input name="id" id="id" th:value="*{id}" type="hidden">
+            <div style="text-align: center;font-weight:bold;font-size: 13px;" >任务ID：[[${tLcTaskInfoup.id}]]</div>
+            <div style="height: 1px;border-top: solid #ACC0D8 1px;margin-top: 30px"></div>
+            <div style="margin-top: 10px;">
+                <span >任务信息</span>
+            </div>
+            <div class="row" >
+                <div class="col-sm-6 " style="width: 33%">
+                        <label class="col-sm-3 control-label">机构案件号：</label>
+                        <label class="control-label" th:text="*{caseNo}">机构案件号：</label>
+                </div>
+                <div class="col-sm-6" style="width: 34%">
+                        <label class="col-sm-3 control-label">委案金额：</label>
+                        <label class="control-label" th:text="*{arrearsTotal}"></label>
+                </div>
+                <div class="col-sm-6" style="width: 33%">
+                        <label class="col-sm-3 control-label">所属机构：</label>
+                        <label class="control-label" th:text="*{orgName}"></label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 " style="width: 33%">
+                    <label class="col-sm-3 control-label">客户姓名：</label>
+                    <label class="control-label" th:text="*{customName}"></label>
+                </div>
+                <div class="col-sm-6 " style="width: 34%">
+                    <label class="col-sm-3 control-label">身份证号码：</label>
+                    <label class="control-label" th:text="*{certificateNo}"></label>
+                </div>
+                <div class="col-sm-6 " style="width: 33%">
+                    <label class="col-sm-3 control-label">电话号码：</label>
+                    <label class="control-label" th:text="*{phone}"></label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 " style="width: 33%">
+                    <label class="col-sm-3 control-label">户籍地址：</label>
+                    <label class="control-label" th:text="*{certificateAddress}"></label>
+                </div>
+            </div>
+            <div style="height: 1px;border-top: solid #ACC0D8 1px;margin-top: 3px"></div>
+            <div style="height: 1px;border-top: solid #ACC0D8 1px;margin-top: 3px"></div>
+        </form>
+
+            <div class="btn-group-sm" style="margin-top: 20px;" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="addInfoUplog()" style="background-color: #23C0FA" >
+                    <i class="fa fa-plus"></i> 新增
+                </a>
+                <a class="btn btn-primary single " onclick="editInfoUplog()" style="background-color: #4CD2D2"  >
+                    <i class="fa fa-edit"></i> 编辑
+                </a>
+            </div>
+       <div style="margin-top: 10px;">
+           <span style="font-weight:bold;font-size: 13px;" >信息更新</span>
+       </div>
+      <div>
+          <table id="infoup-table" class="table-bordered"></table>
+      </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "task/infouplog";
+        $("#form-infoup-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-infoup-edit').serialize());
+            }
+        }
+        function shuaxin(){
+            $("#infoup-table").bootstrapTable('refresh');
+        }
+        $(document).ready(function(){
+            function xinUp(){
+                $('#infoup-table').bootstrapTable({
+                    method: 'post',
+                    url: prefix + "/listPid", // 请求路径
+                    createUrl: prefix + "/add/"+$("#id").val(),
+                    striped: true, // 是否显示行间隔色
+                    bordered:true,
+                    // pagination: false, // 是否分页
+                    queryParams: function(params) { // 上传服务器的参数
+                        var temp = {
+                            taskInfoId:$("#id").val()
+                        };
+                        return temp;
+                    },
+                    columns: [{
+                        checkbox: true
+                        },
+                        {
+                            field : 'types',
+                            title : '更新类型',
+                            formatter:function (value, row, index) {
+                                if(value === 0)return'电话号码';
+                                else return '联系人地址';
+                            }
+                        },
+                        {
+                            field : 'names',
+                            title : '姓名'
+                        },
+                        {
+                            field : 'relations',
+                            title : '与本人关系',
+                            formatter:function (value, row, index) {
+                                if(value === 1)return'本人';
+                                else if(value === 2)return '直系';
+                                else if(value === 3)return '亲戚';
+                                else if(value === 4)return '朋友';
+                                else if(value === 5)return '父母';
+                                else if(value === 6)return '配偶';
+                                else if(value === 14)return '家人';
+                                else if(value === 17)return '同事';
+                                else return '其它';
+                            }
+                        },
+                        {
+                            field : 'phone',
+                            title : '电话'
+                        },
+                        {
+                            field : 'contents',
+                            title : '联系人地址'
+                        },
+                        {
+                            field : 'remark',
+                            title : '备注'
+                        }
+                    ]
+                })
+            }
+            xinUp();
+        });
+
+        function editInfoUplog(){
+            var taskIdRows = $("#infoup-table").bootstrapTable('getSelections');
+            if (taskIdRows.length == 0 ) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            layer.open({
+                type: 2,
+                area: [800 + 'px', 500 + 'px'],
+                fix: false,
+                //不固定
+                maxmin: true,
+                shade: 0.3,
+                title: '新增',
+                content: prefix+"/edit/"+taskIdRows[0].id,
+                btn: ['增加下一条', '取消','保存并关闭'],
+                // 弹层外区域关闭
+                shadeClose: true,
+                yes: function (index, layero) {
+                    var iframeWin = layero.find('iframe')[0];
+                    iframeWin.contentWindow.submitHandlerAndNext(index, layero);
+                    return false;
+                },
+                btn2: function (index, layero) {
+                    return true;
+                },
+                btn3: function(index,layero) {
+                    var iframeWin = layero.find('iframe')[0];
+                    iframeWin.contentWindow.submitHandler(index, layero);
+                    return false;
+                },
+                cancel: function(index) {
+                    return true;
+                }
+            });
+        }
+
+        function addInfoUplog(objId) {
+            layer.open({
+                type: 2,
+                area: [800 + 'px', 500 + 'px'],
+                fix: false,
+                //不固定
+                maxmin: true,
+                shade: 0.3,
+                title: '新增',
+                content: prefix+"/add/"+$("#id").val(),
+                btn: ['增加下一条', '取消','保存并关闭'],
+                // 弹层外区域关闭
+                shadeClose: true,
+                yes: function (index, layero) {
+                    var iframeWin = layero.find('iframe')[0];
+                    iframeWin.contentWindow.submitHandlerAndNext(index, layero);
+                    return false;
+                },
+                btn2: function (index, layero) {
+                    return true;
+                },
+                btn3: function(index,layero) {
+                    var iframeWin = layero.find('iframe')[0];
+                    iframeWin.contentWindow.submitHandler(index, layero);
+                    return false;
+                },
+                cancel: function(index) {
+                    return true;
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -54,7 +54,9 @@ import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.task.domain.CollJob;
 import com.ruoyi.task.domain.TLcCallRecord;
 import com.ruoyi.task.domain.TLcTask;
+import com.ruoyi.task.domain.TLcTaskUplog;
 import com.ruoyi.task.mapper.TLcTaskMapper;
+import com.ruoyi.task.mapper.TLcTaskUplogMapper;
 import com.ruoyi.task.service.AsyncTaskService;
 import com.ruoyi.task.service.IAsyncSelectPhoneStatus;
 import com.ruoyi.task.service.ITLcCallRecordService;
@@ -72,6 +74,7 @@ import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -150,6 +153,8 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     private ITLcStationLetterAgentService stationLetterAgentService;
     @Autowired
     private IAsyncSelectPhoneStatus asyncSelectPhoneStatus;
+    @Autowired
+    private TLcTaskUplogMapper tLcTaskUplogMapper;
 
 
     /**
@@ -863,6 +868,13 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
             tLcTask.setEndRecentlyFollowUpDate(DateUtils.getEndOfDay(tLcTask.getEndRecentlyFollowUpDate()));
         }
         return this.tLcTaskMapper.selectMyTaskList2(tLcTask);
+    }
+
+    @Override
+    public List<TLcTask> selectMyTaskInfoUpList(TLcTask tLcTask) {
+        tLcTask.setOrgId(ShiroUtils.getSysUser().getOrgId().toString());
+        tLcTask.setInfoUp(1);
+        return tLcTaskMapper.selectMyTaskList(tLcTask);
     }
 
     /**
@@ -1835,6 +1847,21 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     @Override
     public int updateColor(TLcTask tLcTask) {
         return this.tLcTaskMapper.updateColor(tLcTask);
+    }
+
+    @Override
+    public Integer findInfoUpCnt(BigInteger[] ids, int infoUp) {
+        return tLcTaskMapper.findInfoUpCnt(ids, infoUp);
+    }
+
+    @Override
+    public Integer updateInfoUp(BigInteger[] ids, int status) {
+        TLcTaskUplog tLcTaskUplog = new  TLcTaskUplog();
+        tLcTaskUplog.setUserId(ShiroUtils.getSysUser().getUserId());
+        tLcTaskUplog.setDateLog(DateUtils.stringConvertDate(DateUtils.getDate(),DateUtils.YYYY_MM_DD));
+        tLcTaskUplog.setCishu(ids.length);
+        tLcTaskUplogMapper.updateTLcTaskUplogCishu(tLcTaskUplog);
+        return tLcTaskMapper.updateInfoUp(ids,status);
     }
 
     @Override

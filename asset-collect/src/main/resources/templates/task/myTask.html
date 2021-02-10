@@ -265,7 +265,16 @@
 
                                     </span>
                             </li>-->
-
+                            <li>
+                                <p>信息状态：</p>
+                                <select name="infoUp" >
+                                    <option value="">请选择</option>
+                                    <option value="4">未更新</option>
+                                    <option value="1">待提交</option>
+                                    <option value="2">已更新</option>
+                                    <option value="3">更新失败</option>
+                                </select>
+                            </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="searchMyTask()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -281,6 +290,7 @@
                 <button type="button" class="btn btn-success" onclick="toAutoCall()">自动拨打</button>
                 <button type="button" class="btn btn-success" onclick="sendRobotApply()">机器人外呼</button>
                 <button type="button" class="btn btn-success" onclick="infoReporting()">信息上报</button>
+                <button type="button" class="btn btn-success" onclick="infoUpFn()">信息更新</button>
                 <button type="button" class="btn btn-success" onclick="toPreCallConfig()" th:if="${callPlatform}=='DY'">预测式外呼</button>
                 <input id="currentPageUrl" name="currentPageUrl" class="form-control" type="hidden">
             </div>
@@ -937,6 +947,53 @@
             var orgId = $.table.selectColumns("orgId")[0];
             var importBatchNo = $.table.selectColumns("importBatchNo")[0];
             $.modal.open("添加", ctx+"inforeporting/reduction/add?caseNo="+caseNo+"&orgId="+orgId+"&importBatchNo="+importBatchNo);
+        }
+        /**
+         * 信息更新
+         */
+        function infoUpFn(){
+            var taskIdRows = $.table.selectFirstColumns();
+            if (taskIdRows.length == 0 ) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.ajax({
+                url: ctx+'infoup/uplog/findCishu',    //请求的url地址
+                dataType: "json",   //返回格式为json
+                async: false, //请求是否异步，默认为异步，这也是ajax重要特性
+                type: "POST",   //请求方式
+                success: function(data) {
+                 if(data>=10){
+                     $.modal.alert('每天只能提交10个信息更新申请');
+                 }else
+                     {
+                     $.post(
+                         prefix + "/findInfoUpCnt",
+                         {
+                             ids:taskIdRows.join(",")
+                         },
+                         function (data) {
+                             if (data === 0 ) {
+                                 $.modal.confirm("您确认要提交这个案件的信息更新吗?", function() {
+                                     var data = { "ids": taskIdRows.join(",") };
+                                     var url = ctx+"task/infoup/infoupStatusSub";
+                                     $.operate.submit(url, "post", "json", data);
+                                 });
+                             }else{
+                                 if(taskIdRows.length==1){
+                                     $.modal.alert('您当前案件已提交信息更新，请勿重复提交');
+                                 }else{
+                                     $.modal.alert('您当前案件中包含已提交信息更新申请，请勿重复提交');
+                                 }
+                             }
+                         }
+                     );
+                 }
+                },
+                error: function(e) {
+                    //请求出错处理
+                }
+            });
         }
         /**
          * 批量呼叫保存

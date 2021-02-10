@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增【请填写功能名称】')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-infoup-add">
+            <input name="taskInfoId" th:value="${id}" type="hidden" required>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red">*</span>更新类型：</label>
+                <div class="col-sm-8">
+                    <select name="types" class="form-control" id="types">
+                        <option value="0">电话号码</option>
+                        <option value="1">联系人地址</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">    
+                <label class="col-sm-3 control-label"><span style="color: red">*</span>联系人姓名：</label>
+                <div class="col-sm-8">
+                    <input name="names" class="form-control" type="text" maxlength="50" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red">*</span>和本人关系：</label>
+                <div class="col-sm-8">
+                    <select name="relations" class="form-control">
+                        <option value="1">本人</option>
+                        <option value="2">直系</option>
+                        <option value="3">亲戚</option>
+                        <option value="4">朋友</option>
+                        <option value="5">父母</option>
+                        <option value="6">配偶</option>
+                        <option value="14">家人</option>
+                        <option value="17">同事</option>
+                        <option value="-1">其他</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group" id="contt">
+                <label class="col-sm-3 control-label"><span style="color: red">*</span>联系电话：</label>
+                <div class="col-sm-8">
+                    <input name="phone" class="form-control" type="text" maxlength="30" required>
+                </div>
+            </div>
+
+            <div class="form-group" >
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <textarea name="remarks" style="width:450px;" class="form-control" maxlength="200"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+        <div class="form-group" id="cnt0" style="display: none">
+            <label class="col-sm-3 control-label"><span style="color: red">*</span>联系电话：</label>
+            <div class="col-sm-8">
+                <input name="phone" class="form-control" type="text" maxlength="30" required>
+            </div>
+        </div>
+        <div class="form-group" id="cnt1" style="display: none">
+            <label class="col-sm-3 control-label"><span style="color: red">*</span>联系人地址：</label>
+            <div class="col-sm-8">
+                <input name="contents" class="form-control" type="text" required>
+            </div>
+        </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "task/infouplog"
+        $("#form-infoup-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-infoup-add').serialize());
+            }
+        }
+
+        $(document).ready(function(){
+            $("#types").on("change",function(){
+                var tyval = $(this).children('option:selected').val();
+                $("#contt").empty();
+                $("#contt").html($("#cnt"+tyval).html());
+            });
+        });
+
+        function submitHandlerAndNext() {
+            if ($.validate.form()) {
+                var config = {
+                    url: prefix + "/add",
+                    type: "post",
+                    dataType: "json",
+                    data: $('#form-infoup-add').serialize(),
+                    beforeSend: function () {
+                        $.modal.loading("正在处理中，请稍后...");
+                        $.modal.disable();
+                    },
+                    success: function(result) {
+                        $.modal.closeLoading();
+                        $.modal.enable();
+                        var parent = window.parent;
+                        parent.shuaxin();
+                        if (result.code == web_status.SUCCESS) {
+                            parent.$.modal.msgSuccess(result.msg);
+                        }  else {
+                            $.modal.alertError(result.msg);
+                        }
+                    }
+                };
+                $.ajax(config);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.task.mapper.TLcTaskInfoupMapper">
+    
+    <resultMap type="TLcTaskInfoup" id="TLcTaskInfoupResult">
+        <result property="id"    column="id"    />
+        <result property="taskId"    column="task_id"    />
+        <result property="caseNo"    column="case_no"    />
+        <result property="certificateNo"    column="certificate_no"    />
+        <result property="certificateType"    column="certificate_type"    />
+        <result property="customCode"    column="custom_code"    />
+        <result property="customName"    column="custom_name"    />
+        <result property="arrearsTotal"    column="arrears_total"    />
+        <result property="overdueDays"    column="overdue_days"    />
+        <result property="ownerName"    column="owner_name"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="modifyBy"    column="modify_by"    />
+        <result property="modifyTime"    column="modify_time"    />
+        <result property="infoupAproStatus"    column="infoup_apro_status"    />
+        <result property="infoupBy"    column="infoup_by"    />
+        <result property="infoupTime"    column="infoup_time"    />
+        <result property="infoupStatus"    column="infoup_status"    />
+        <result property="phone"    column="phone"    />
+        <result property="certificateAddress"    column="certificate_address"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+    </resultMap>
+
+    <sql id="selectTLcTaskInfoupVo">
+        select id,task_id, case_no, certificate_no, certificate_type, custom_code, custom_name, arrears_total, overdue_days, owner_name, org_id, org_name, create_by, create_time, modify_by, modify_time, infoup_apro_status, infoup_by, infoup_time, infoup_status,phone,certificate_address,import_batch_no from t_lc_task_infoup
+    </sql>
+
+    <select id="selectTLcTaskInfoupList" parameterType="TLcTaskInfoup" resultMap="TLcTaskInfoupResult">
+        <include refid="selectTLcTaskInfoupVo"/>
+        <where>  
+            <if test="caseNo != null  and caseNo != ''"> and case_no = #{caseNo}</if>
+            <if test="certificateNo != null  and certificateNo != ''"> and certificate_no = #{certificateNo}</if>
+            <if test="certificateType != null "> and certificate_type = #{certificateType}</if>
+            <if test="customCode != null  and customCode != ''"> and custom_code = #{customCode}</if>
+            <if test="customName != null  and customName != ''"> and custom_name like concat('%', #{customName}, '%')</if>
+            <if test="arrearsTotal != null "> and arrears_total = #{arrearsTotal}</if>
+            <if test="overdueDays != null "> and overdue_days = #{overdueDays}</if>
+            <if test="ownerName != null  and ownerName != ''"> and owner_name like concat('%', #{ownerName}, '%')</if>
+            <if test="orgId != null  and orgId != ''"> and org_id = #{orgId}</if>
+            <if test="orgName != null  and orgName != ''"> and org_name like concat('%', #{orgName}, '%')</if>
+            <if test="modifyBy != null  and modifyBy != ''"> and modify_by = #{modifyBy}</if>
+            <if test="modifyTime != null "> and modify_time = #{modifyTime}</if>
+            <if test="infoupAproStatus != null "> and infoup_apro_status = #{infoupAproStatus}</if>
+            <if test="infoupBy != null  and infoupBy != ''"> and infoup_by = #{infoupBy}</if>
+            <if test="infoupTime != null "> and infoup_time = #{infoupTime}</if>
+            <if test="infoupStatus != null "> and infoup_status = #{infoupStatus}</if>
+            <if test="params.arrearsTotalBg != null and params.arrearsTotalBg != ''">
+                and arrears_total &gt;= #{params.arrearsTotalBg}
+            </if>
+            <if test="params.arrearsTotalEd != null and params.arrearsTotalEd != ''">
+                and arrears_total &gt;= #{params.arrearsTotalEd}
+            </if>
+            <if test="params.beginModifyTime != null and params.beginModifyTime != ''"><!-- 开始时间检索 -->
+                and date_format(modify_time,'%Y-%m-%d') &gt;= date_format(#{params.beginModifyTime},'%Y-%m-%d')
+            </if>
+            <if test="params.endModifyTime != null and params.endModifyTime != ''"><!-- 结束时间检索 -->
+                and date_format(modify_time,'%Y-%m-%d') &lt;= date_format(#{params.endModifyTime},'%Y-%m-%d')
+            </if>
+            <if test="params.beginGxTime != null and params.beginGxTime != ''"><!-- 开始时间检索 -->
+                and date_format(infoup_time,'%Y-%m-%d') &gt;= date_format(#{params.beginGxTime},'%Y-%m-%d')
+            </if>
+            <if test="params.endGxTime != null and params.endGxTime != ''"><!-- 结束时间检索 -->
+                and date_format(infoup_time,'%Y-%m-%d') &lt;= date_format(#{params.endGxTime},'%Y-%m-%d')
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectTLcTaskInfoupById" parameterType="Long" resultMap="TLcTaskInfoupResult">
+        <include refid="selectTLcTaskInfoupVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBatchTLcTaskInfoup">
+        insert into t_lc_task_infoup(task_id, case_no, certificate_no, certificate_type, custom_code, custom_name,
+        arrears_total, overdue_days, owner_name, org_id, org_name, create_by, create_time,phone,certificate_address,import_batch_no)
+        select a.id as taks_id, a.case_no, a.certificate_no, a.certificate_type, a.custom_code, a.custom_name, a.arrears_total, a.overdue_days,
+        a.owner_name, a.org_id, a.org_name, a.create_by, a.create_time,a.phone,b.certificate_address,a.import_batch_no from
+        (select id, case_no, certificate_no, certificate_type, custom_code, custom_name, arrears_total, overdue_days,
+        owner_name, org_id, org_name, create_by, now()as create_time,phone,import_batch_no from t_lc_task
+        WHERE id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+        )a left join t_lc_custinfo b on a.case_no=b.case_no and a.org_id=b.org_id and a.import_batch_no=b.import_batch_no
+    </insert>
+    <insert id="insertBatchLianxiren">
+       insert into t_lc_cust_contact(infoup_id,infoup_status,phone,contact_name,case_no,org_id,org_name,import_batch_no,relation,create_by,create_time,modify_by,modify_time,origin)
+       select id as infoup_id,1 as infoup_status,phone,names,case_no,org_id,org_name,import_batch_no,relations as relation,create_by_id,now()as create_time,update_by_id as modify_by,now() as modify_time,1 as origin  from t_lc_infoup
+       where  types=0 and task_infoup_id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </insert>
+
+
+    <insert id="insertTLcTaskInfoup" parameterType="TLcTaskInfoup" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_task_infoup
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="caseNo != null  and caseNo != ''">case_no,</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no,</if>
+            <if test="certificateType != null ">certificate_type,</if>
+            <if test="customCode != null  and customCode != ''">custom_code,</if>
+            <if test="customName != null  and customName != ''">custom_name,</if>
+            <if test="arrearsTotal != null ">arrears_total,</if>
+            <if test="overdueDays != null ">overdue_days,</if>
+            <if test="ownerName != null  and ownerName != ''">owner_name,</if>
+            <if test="orgId != null  and orgId != ''">org_id,</if>
+            <if test="orgName != null  and orgName != ''">org_name,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="modifyBy != null  and modifyBy != ''">modify_by,</if>
+            <if test="modifyTime != null ">modify_time,</if>
+            <if test="infoupAproStatus != null ">infoup_apro_status,</if>
+            <if test="infoupBy != null  and infoupBy != ''">infoup_by,</if>
+            <if test="infoupTime != null ">infoup_time,</if>
+            <if test="infoupStatus != null ">infoup_status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="caseNo != null  and caseNo != ''">#{caseNo},</if>
+            <if test="certificateNo != null  and certificateNo != ''">#{certificateNo},</if>
+            <if test="certificateType != null ">#{certificateType},</if>
+            <if test="customCode != null  and customCode != ''">#{customCode},</if>
+            <if test="customName != null  and customName != ''">#{customName},</if>
+            <if test="arrearsTotal != null ">#{arrearsTotal},</if>
+            <if test="overdueDays != null ">#{overdueDays},</if>
+            <if test="ownerName != null  and ownerName != ''">#{ownerName},</if>
+            <if test="orgId != null  and orgId != ''">#{orgId},</if>
+            <if test="orgName != null  and orgName != ''">#{orgName},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="modifyBy != null  and modifyBy != ''">#{modifyBy},</if>
+            <if test="modifyTime != null ">#{modifyTime},</if>
+            <if test="infoupAproStatus != null ">#{infoupAproStatus},</if>
+            <if test="infoupBy != null  and infoupBy != ''">#{infoupBy},</if>
+            <if test="infoupTime != null ">#{infoupTime},</if>
+            <if test="infoupStatus != null ">#{infoupStatus},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLcTaskInfoup" parameterType="TLcTaskInfoup">
+        update t_lc_task_infoup
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="caseNo != null  and caseNo != ''">case_no = #{caseNo},</if>
+            <if test="certificateNo != null  and certificateNo != ''">certificate_no = #{certificateNo},</if>
+            <if test="certificateType != null ">certificate_type = #{certificateType},</if>
+            <if test="customCode != null  and customCode != ''">custom_code = #{customCode},</if>
+            <if test="customName != null  and customName != ''">custom_name = #{customName},</if>
+            <if test="arrearsTotal != null ">arrears_total = #{arrearsTotal},</if>
+            <if test="overdueDays != null ">overdue_days = #{overdueDays},</if>
+            <if test="ownerName != null  and ownerName != ''">owner_name = #{ownerName},</if>
+            <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
+            <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="modifyBy != null  and modifyBy != ''">modify_by = #{modifyBy},</if>
+            <if test="modifyTime != null ">modify_time = #{modifyTime},</if>
+            <if test="infoupAproStatus != null ">infoup_apro_status = #{infoupAproStatus},</if>
+            <if test="infoupBy != null  and infoupBy != ''">infoup_by = #{infoupBy},</if>
+            <if test="infoupTime != null ">infoup_time = #{infoupTime},</if>
+            <if test="infoupStatus != null ">infoup_status = #{infoupStatus},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+     <update id="updateStatus"  parameterType="TLcTaskInfoup">
+         update t_lc_task_infoup
+         <trim prefix="SET" suffixOverrides=",">
+             <if test="infoupAproStatus != null  and infoupAproStatus != ''">infoup_apro_status=#{infoupAproStatus},</if>
+             <if test="modifyTime != null ">modify_time=#{modifyTime},</if>
+             <if test="modifyBy != null  and modifyBy != ''">modify_by=#{modifyBy},</if>
+             <if test="infoupStatus != null  and infoupStatus != ''">infoup_status=#{infoupStatus},</if>
+             <if test="infoupBy != null  and infoupBy != ''">infoup_by=#{infoupBy},</if>
+             <if test="infoupTime != null ">infoup_time=#{infoupTime},</if>
+         </trim>
+         where id in
+         <foreach item="id" collection="ids" open="(" separator="," close=")">
+             #{id}
+         </foreach>
+     </update>
+    <delete id="deleteTLcTaskInfoupById" parameterType="Long">
+        delete from t_lc_task_infoup where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcTaskInfoupByIds" parameterType="String">
+        delete from t_lc_task_infoup where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

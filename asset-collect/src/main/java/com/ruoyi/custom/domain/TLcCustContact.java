@@ -12,6 +12,7 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -142,7 +143,13 @@ public class TLcCustContact extends BaseEntity {
      *结案应还金额
      */
     private BigDecimal closeCaseYhje;
-
-
+    /**
+     *信息更新id
+     */
+    private Long infoupId;
+    /**
+     *信息更新状态
+     */
+    private Integer infoupStatus;
 
 }

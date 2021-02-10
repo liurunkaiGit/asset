@@ -454,7 +454,10 @@ public class TLcTask extends BaseEntity {
     private Integer score;
     private String startScore;
     private String endScore;
-
+    /**
+     * 信息更新 申请状态
+     */
+    private Integer infoUp;
     /**
      * 自由查询sql
      */

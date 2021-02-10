@@ -9,9 +9,11 @@ import com.ruoyi.task.domain.TLcCallRecord;
 import com.ruoyi.task.domain.TLcTask;
 import com.ruoyi.utils.CloseCaseUser;
 import com.ruoyi.utils.Response;
+import org.apache.ibatis.annotations.Param;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -199,6 +201,12 @@ public interface ITLcTaskService {
     List<TLcTask> selectMyTaskList2(TLcTask tLcTask);
 
     /**
+     * 信息审批列表
+     * @param tLcTask
+     * @return
+     */
+    List<TLcTask> selectMyTaskInfoUpList(TLcTask tLcTask);
+    /**
      * 查询用户信息
      *
      * @return
@@ -336,6 +344,20 @@ public interface ITLcTaskService {
     AjaxResult allCaseRecyle(TLcTask tLcTask, Integer caseRecycleNum);
 
     int updateColor(TLcTask tLcTask);
+    /**
+     * 查询ids 当前状态是否有值
+     * @param ids
+     * @param infoUp
+     * @return
+     */
+    Integer findInfoUpCnt(@Param("ids") BigInteger[] ids, @Param("infoUp") int infoUp);
+    /**
+     * 信息更新状态
+     * @param ids
+     * @param status
+     * @return
+     */
+    Integer updateInfoUp(BigInteger[] ids, int status);
 
     List<TLcTask> selectTaskList(TLcTask tLcTask);
 

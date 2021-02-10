@@ -63,6 +63,14 @@ public interface TLcCustContactMapper {
     public int deleteTLcCustContactByIds(String[] ids);
 
     /**
+     * 批量删除客户联系人信息
+     *
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+    public int deleteTLcCustContactByInfoupId(Long ids);
+
+    /**
      * 批量修改客户联系人信息
      *
      * @param contactUpdateList

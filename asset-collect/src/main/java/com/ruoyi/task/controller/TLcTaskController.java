@@ -72,6 +72,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -527,6 +528,18 @@ public class TLcTaskController extends BaseController {
         List<TLcTask> list = tLcTaskService.selectMyTaskList(tLcTask);
         logger.info("我的任务页面查询list结束");
         return getDataTable(list);
+    }
+
+
+    /**
+     * 查找id 状态1 是否已经更新
+     * @param ids
+     * @return
+     */
+    @PostMapping("/findInfoUpCnt")
+    @ResponseBody
+    public Integer findInfoUpCnt(BigInteger[] ids) {
+        return tLcTaskService.findInfoUpCnt(ids,1);
     }
 
     @PostMapping("/findTaskByOwner")

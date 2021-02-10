@@ -162,6 +162,9 @@
     </sql>
 
     <sql id="SELECT_TASK_WHERE">
+        <if test="infoUp != null  and infoUp != ''">
+            and t.info_up = #{infoUp}
+        </if>
         <if test="id != null">
             and t.id = #{id}
         </if>
@@ -1642,6 +1645,7 @@
         </foreach>
     </select>
 
+
     <select id="selectAllocatedCount" resultType="java.lang.Long">
         SELECT count(1)
         FROM t_lc_task t,t_lc_duncase d
@@ -1814,6 +1818,23 @@
             #{id}
         </foreach>
     </select>
+    <select id="findInfoUpCnt" resultType="java.lang.Integer">
+      select count(1) from t_lc_task
+        WHERE info_up = #{infoUp} and id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+        limit 1
+    </select>
+
+
+    <update id="updateInfoUp" >
+        UPDATE t_lc_task set info_up = #{infoUp}
+        WHERE id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
 
     <update id="updateNotebook" parameterType="com.ruoyi.task.domain.TLcTask">
         UPDATE t_lc_task set notebook = #{notebook} WHERE id = #{id}

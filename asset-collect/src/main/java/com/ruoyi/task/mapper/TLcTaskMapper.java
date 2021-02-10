@@ -8,6 +8,7 @@ import com.ruoyi.task.domain.TLcTask;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -230,6 +231,22 @@ public interface TLcTaskMapper {
     void updateCaseRecycle(@Param("taskIdList") List<Long> taskIdList);
 
     int updateColor(TLcTask tLcTask);
+
+    /**
+     * 信息更新状态
+     * @param ids
+     * @param infoUp
+     * @return
+     */
+    int updateInfoUp(@Param("ids") BigInteger[] ids, @Param("infoUp") int infoUp);
+
+    /**
+     * 查询ids 当前状态是否有值
+     * @param ids
+     * @param infoUp
+     * @return
+     */
+    int findInfoUpCnt(@Param("ids") BigInteger[] ids, @Param("infoUp") int infoUp);
 
     int updatePhoneStatus(TLcTask tLcTask);
 

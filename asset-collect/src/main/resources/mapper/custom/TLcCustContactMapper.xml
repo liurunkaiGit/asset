@@ -26,6 +26,8 @@
         <result property="phoneStatus"    column="phone_status"    />
         <result property="arrearsTotal"    column="arrears_total"    />
         <result property="closeCaseYhje"    column="close_case_yhje"    />
+        <result property="infoupId"    column="infoup_id"    />
+        <result property="infoupStatus"    column="infoup_status"    />
     </resultMap>
 
     <sql id="selectTLcCustContactVo">
@@ -115,6 +117,8 @@
             <if test="orgId != null  and orgId != ''">org_id,</if>
             <if test="orgName != null  and orgName != ''">org_name,</if>
             <if test="importBatchNo != null  and importBatchNo != ''">import_batch_no,</if>
+            <if test="infoupId != null  and infoupId != ''">infoup_id,</if>
+            <if test="infoupStatus != null  and infoupStatus != ''">infoup_status,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="certificateNo != null  and certificateNo != ''">#{certificateNo},</if>
@@ -133,6 +137,8 @@
             <if test="orgId != null  and orgId != ''">#{orgId},</if>
             <if test="orgName != null  and orgName != ''">#{orgName},</if>
             <if test="importBatchNo != null  and importBatchNo != ''">#{importBatchNo},</if>
+            <if test="infoupId != null  and infoupId != ''">#{infoupId},</if>
+            <if test="infoupStatus != null  and infoupStatus != ''">#{infoupStatus},</if>
         </trim>
     </insert>
 
@@ -165,6 +171,9 @@
 
     <delete id="deleteTLcCustContactById" parameterType="Long">
         delete from t_lc_cust_contact where id = #{id}
+    </delete>
+    <delete id="deleteTLcCustContactByInfoupId" parameterType="Long">
+        delete from t_lc_cust_contact where infoup_id = #{id}
     </delete>
 
     <delete id="deleteTLcCustContactByIds" parameterType="String">
@@ -264,7 +273,9 @@
         t.org_name,
         t.import_batch_no,
         t.is_close,
-        t.phone_status
+        t.phone_status,
+        t.infoup_id,
+        t.infoup_status
         FROM t_lc_cust_contact t
         WHERE
         t.case_no = #{caseNo}

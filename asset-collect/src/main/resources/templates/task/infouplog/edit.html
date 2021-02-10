@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改【请填写功能名称】')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-infoup-edit" th:object="${tLcInfoup}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <input name="sign" th:value="*{types}" type="hidden">
+            <input name="taskInfoId" th:value="*{taskInfoId}" type="hidden" >
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red">*</span>更新类型：</label>
+                <div class="col-sm-8">
+                    <select name="types" class="form-control" th:field="*{types}" id="types">
+                        <option value="0">电话号码</option>
+                        <option value="1">联系人地址</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red">*</span>联系人姓名：</label>
+                <div class="col-sm-8">
+                    <input name="names" class="form-control" type="text" th:field="*{names}" maxlength="50" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red">*</span>和本人关系：</label>
+                <div class="col-sm-8">
+                    <select name="relations" class="form-control" th:field="*{relations}">
+                        <option value="1">本人</option>
+                        <option value="2">直系</option>
+                        <option value="3">亲戚</option>
+                        <option value="4">朋友</option>
+                        <option value="5">父母</option>
+                        <option value="6">配偶</option>
+                        <option value="14">家人</option>
+                        <option value="17">同事</option>
+                        <option value="-1">其他</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" id="contt">
+                <label class="col-sm-3 control-label"><span style="color: red">*</span>联系电话：</label>
+                <div class="col-sm-8">
+                    <input name="phone" class="form-control" type="text" maxlength="30" th:field="*{phone}" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <textarea name="remarks" style="width:450px;" class="form-control" maxlength="200" ></textarea>
+                </div>
+            </div>
+        </form>
+        <div class="form-group" id="cnt0" style="display: none">
+            <label class="col-sm-3 control-label"><span style="color: red">*</span>联系电话：</label>
+            <div class="col-sm-8">
+                <input name="phone" class="form-control" type="text" maxlength="30" th:field="${tLcInfoup.phone}" required>
+            </div>
+        </div>
+        <div class="form-group" id="cnt1" style="display: none">
+            <label class="col-sm-3 control-label"><span style="color: red">*</span>联系人地址：</label>
+            <div class="col-sm-8">
+                <input name="contents" class="form-control" type="text" th:field="${tLcInfoup.contents}" required>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "task/infouplog";
+        $("#form-infoup-edit").validate({
+            focusCleanup: true
+        });
+        $(document).ready(function(){
+            var tyvals = $('#types option:selected').val();
+            chtm(tyvals);
+            $("#types").on("change",function(){
+                var tyval = $(this).children('option:selected').val();
+                chtm(tyval);
+            });
+
+            function chtm(sign) {
+                $("#contt").empty();
+                $("#contt").html($("#cnt"+sign).html());
+            }
+        });
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-infoup-edit').serialize());
+            }
+        }
+
+        function submitHandlerAndNext() {
+            if ($.validate.form()) {
+                var config = {
+                    url: prefix + "/edit",
+                    type: "post",
+                    dataType: "json",
+                    data: $('#form-infoup-edit').serialize(),
+                    beforeSend: function () {
+                        $.modal.loading("正在处理中，请稍后...");
+                        $.modal.disable();
+                    },
+                    success: function(result) {
+                        $.modal.closeLoading();
+                        $.modal.enable();
+                        var parent = window.parent;
+                        parent.shuaxin();
+                        if (result.code == web_status.SUCCESS) {
+                            parent.$.modal.msgSuccess(result.msg);
+                        }  else {
+                            $.modal.alertError(result.msg)
+                        }
+                    }
+                };
+                $.ajax(config);
+            }
+        }
+    </script>
+</body>
+</html>

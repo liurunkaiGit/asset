@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.task.mapper.TLcTaskUplogMapper">
+    
+    <resultMap type="TLcTaskUplog" id="TLcTaskUplogResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="dateLog"    column="date_log"    />
+        <result property="cishu"    column="cishu"    />
+    </resultMap>
+
+    <sql id="selectTLcTaskUplogVo">
+        select id, user_id, date_log, cishu from t_lc_task_uplog
+    </sql>
+
+    <select id="selectTLcTaskUplogList" parameterType="TLcTaskUplog" resultMap="TLcTaskUplogResult">
+        <include refid="selectTLcTaskUplogVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="dateLog != null "> and date_log = #{dateLog}</if>
+            <if test="cishu != null "> and cishu = #{cishu}</if>
+        </where>
+    </select>
+    
+    <select id="selectTLcTaskUplogById" parameterType="Long" resultMap="TLcTaskUplogResult">
+        <include refid="selectTLcTaskUplogVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLcTaskUplog" parameterType="TLcTaskUplog">
+        insert into t_lc_task_uplog
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="userId != null ">user_id,</if>
+            <if test="dateLog != null ">date_log,</if>
+            <if test="cishu != null ">cishu,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="userId != null ">#{userId},</if>
+            <if test="dateLog != null ">#{dateLog},</if>
+            <if test="cishu != null ">#{cishu},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLcTaskUplog" parameterType="TLcTaskUplog">
+        update t_lc_task_uplog
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null ">user_id = #{userId},</if>
+            <if test="dateLog != null ">date_log = #{dateLog},</if>
+            <if test="cishu != null ">cishu = #{cishu},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <update id="updateTLcTaskUplogCishu" parameterType="TLcTaskUplog">
+        update t_lc_task_uplog set
+        cishu = (cishu+${cishu})
+        where user_id = #{userId} and date_log = #{dateLog}
+    </update>
+
+    <delete id="deleteTLcTaskUplogById" parameterType="Long">
+        delete from t_lc_task_uplog where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcTaskUplogByIds" parameterType="String">
+        delete from t_lc_task_uplog where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

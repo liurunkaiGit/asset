@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('信息更新任务列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>委托机构：</p>
+                                <input type="text" name="caseNo"/>
+                            </li>
+
+                            <li>
+                                <p>委案金额：</p>
+                                <input type="text" name="params[arrearsTotalBg]" style="width: 180px"/>-
+                                <input type="text" name="params[arrearsTotalEd]" style="width: 180px"/>
+                            </li>
+                            <li>
+                                <p>案件号：</p>
+                                <input type="text" name="caseNo"/>
+                            </li>
+                            <li>
+                                <p>更新状态：</p>
+                                <select name="infoupStatus">
+                                    <option value="">所有</option>
+                                    <option value="0">未更新</option>
+                                    <option value="1">待提交</option>
+                                    <option value="2">已更新</option>
+                                    <option value="3">更新失败</option>
+                                </select>
+                            </li>
+
+                            <li class="select-time">
+                                <p>日期：</p>
+                                <input type="text" class="time-input" id="startTime"   placeholder="开始时间" name="params[beginGxTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime"  placeholder="结束时间" name="params[endGxTime]"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="updateStatus(2)" style="background-color: #4996C7" >
+                    <i class="fa"></i> 提交
+                </a>
+                <a class="btn btn-primary single disabled" onclick="updateStatus(3)" style="background-color: #FACA8B"  >
+                    <i class="fa"></i> 退回
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('ruoyi:infoup:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('ruoyi:infoup:remove')}]];
+        var prefix = ctx + "task/infoup";
+
+        $(function() {
+            var options = {
+                url: prefix + "/listGx",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "信息更新",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '任务ID',
+                    visible: true
+                },
+                {
+                    field : 'caseNo', 
+                    title : '机构案件编号'
+                },
+                {
+                    field : 'customName',
+                    title : '客户姓名'
+                },
+                {
+                    field : 'arrearsTotal',
+                    title : '委案金额'
+                },
+                {
+                    field : 'infoupStatus',
+                    title : '信息状态',
+                    formatter: function (value, row, index) {
+                       if(1==value)return'待提交';
+                       else if(2 == value)return'已更新';
+                       else if(3 == value)return'更新失败';
+                       else return '未更新';
+                    }
+                },
+                {
+                    field : 'infoupBy',
+                    title : '操作人'
+                },
+                {
+                    field : 'infoupTime',
+                    title : '操作时间'
+                },
+                    {
+                        title: '操作',
+                        align: 'center',
+                        formatter: function(value, row, index) {
+                            var actions = [];
+                            actions.push('<a class="btn btn-success btn-xs" style="background-color: #23C0FA" href="javascript:void(0)" onclick="lookups(\'' + row.id + '\')"><i class="fa"></i>查看详情</a> ');
+                            return actions.join('');
+                        }
+                    }
+                ]
+            };
+            $.table.init(options);
+        });
+        /**更新状态*/
+        function updateStatus(sign) {
+            var rows = $("#bootstrap-table").bootstrapTable('getSelections');
+            if (rows.length == 0 ) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            var taskIds = [];
+            for(var i=0;i<rows.length;i++){
+              var obj = rows[i];
+              if(1 != obj.infoupStatus*1){
+                  $.modal.alertWarning("状态是待提交的任务才可操作");
+                  return;
+              }
+                taskIds.push(obj.taskId);
+            }
+            var taskIdRows = $.table.selectFirstColumns();
+            var data = { "ids": taskIdRows.join(","),"taskIds":taskIds.join(","),infoupStatus:sign};
+            var url = prefix+"/updateStatusGx";
+            $.operate.submit(url, "post", "json", data);
+        }
+        function lookups(objId) {
+            layer.open({
+                type: 2,
+                area: [$(window).width() + 'px', $(window).height() + 'px'],
+                fix: false,
+                //不固定
+                maxmin: true,
+                shade: 0.3,
+                title: "查看",
+                content: prefix+"/lookups/"+objId,
+                // 弹层外区域关闭
+                shadeClose: true
+            });
+        }
+    </script>
+</body>
+</html>

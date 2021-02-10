@@ -171,6 +171,7 @@
                         <li class=""><a data-toggle="tab" href="#tab-6" aria-expanded="false" onclick="viewTabDetail('find')">查找记录</a><input type="hidden" id="find" value="0"></li>
                         <li class=""><a data-toggle="tab" href="#tab-8" aria-expanded="false" onclick="viewTabDetail('inforeporting')">信息上报</a><input type="hidden" id="inforeporting" value="0"></li>
                         <li class="" id="sameCaseLi" ><a data-toggle="tab" href="#tab-9" aria-expanded="false" onclick="viewTabDetail('sameCaseInfo')">共案信息</a><input type="hidden" id="sameCaseInfo" value="0"></li>
+                        <li class=""><a data-toggle="tab" href="#tab-10" aria-expanded="false" onclick="viewTabDetail('infouplog')">信息更新</a><input type="hidden" id="infouplog" value="0"></li>
 
                     </ul>
                     <div id="tabDiv" class="tab-content tabDiv">
@@ -353,6 +354,19 @@
                             </div>
                             <hr style="margin-top: 0;margin-bottom: 0;"/>
                             <div id="sameCaseInfoDetail"></div>
+                        </div>
+                        <div id="tab-10" class="tab-pane">
+                            <table >
+                                <tr>
+                                    <th style="text-align: left">信息更新类型</th>
+                                    <th style="text-align: left">姓名</th>
+                                    <th style="text-align: left">和本人关系</th>
+                                    <th style="text-align: left">电话号码</th>
+                                    <th style="text-align: left">联系人地址</th>
+                                    <th style="text-align: left">备注</th>
+                                </tr>
+                                <tbody id="inforuplogTbody"></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -1185,6 +1199,9 @@
                             phone = tellToMd5(phone);
                             tel = tellToMd5(tel);
                         }
+                        if(1 == n.infoupStatus*1){
+                            phone = "<span style='color:green'>"+phone+"</span>";
+                        }
                         if(n.isClose != null  && n.isClose == '1'){
                             if (n.phone != null && n.phone != 'null' && n.phone.length > 4 ) {
                                 tp.append("<tr onclick='changeColor(this);'>" +
@@ -1407,6 +1424,76 @@
                     htm+="</tr>";
                 });
                 $("#inforeportingTbody").html(htm);
+            },
+            error: function(e) {
+                //请求出错处理
+            }
+        });
+    }
+
+    function  selectInfouplogList() {//获取查找记录
+        $.ajax({
+            url: ctx+'task/infouplog/listPid',    //请求的url地址
+            dataType: "json",   //返回格式为json
+            async: false, //请求是否异步，默认为异步，这也是ajax重要特性
+            data:
+                {
+                    "caseNo": currentCaseNo,
+                    "orgId": currentOrgId,
+                    "importBatchNo": currentImportBatchNo
+                },    //参数值
+            type: "POST",   //请求方式
+            success: function(data) {
+                debugger;
+                //请求成功时处理
+                $("#inforuplogTbody").html("");
+                var htm = "";
+                $.each(data, function (i, n) {
+                    htm+="<tr>";
+                    htm+="<td>";
+                    if(n.types==0){
+                        htm+="电话号码";
+                    }else{
+                        htm+="联系地址";
+                    }
+                    htm+="</td>";
+                    htm+="<td>";
+                    htm+=n.names;
+                    htm+="</td>";
+                    htm+="<td>";
+                    if(n.relations==0){
+                        htm+="本人";
+                    }else if(n.relations==1){
+                        htm+="直系";
+                    }else if(n.relations==2){
+                        htm+="亲戚";
+                    }else if(n.relations==3){
+                        htm+="朋友";
+                    }else if(n.relations==4){
+                        htm+="父母";
+                    }else if(n.relations==5){
+                        htm+="配偶";
+                    }else if(n.relations==6){
+                        htm+="家人";
+                    }else if(n.relations==7){
+                        htm+="同事";
+                    }else{
+                        htm+="其他";
+                    }
+                    htm+="</td>";
+                    htm+="<td>";
+                    htm+=n.phone==null ? '' : n.phone;
+                    htm+="</td>"
+                    htm+="<td>";
+                    htm+=n.contents==null ? '' : n.contents;
+                    htm+="</td>";
+                    htm+="<td>";
+                    htm+=n.remark==null ? '' : n.remark;
+                    htm+="</td>";
+                    htm+="</tr>"
+                });
+                $("#inforuplogTbody").html(htm);
+
             },
             error: function(e) {
                 //请求出错处理
@@ -1681,6 +1768,7 @@
                     $('#find').val('0');
                     $('#inforeporting').val('0');
                     $('#sameCaseInfo').val('0');
+                    $('#infouplog').val('0');
                     document.getElementById("letterApply").disabled=false;
                     disabledLetterApply(currentCaseNo,currentOrgId,currentImportBatchNo);
                     isSameCase(currentCertificateNo,currentOrgId);
@@ -1736,6 +1824,9 @@
         }else if(tab == 'sameCaseInfo' && $('#sameCaseInfo').val()=='0'){//查找记录
             $('#sameCaseInfo').val('1');
             selectSameCaseInfo(currentCertificateNo,currentOrgId);//获取查找记录
+        }else if(tab == 'infouplog' && $('#infouplog').val()=='0'){//信息更新
+            $('#infouplog').val('1');
+            selectInfouplogList();//获取查找记录
         }
 
     }

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.task.mapper.TLcInfoupMapper">
+    
+    <resultMap type="TLcInfoup" id="TLcInfoupResult">
+        <result property="id"    column="id"    />
+        <result property="taskInfoId"    column="task_infoup_id"    />
+        <result property="taskId"    column="task_id"    />
+        <result property="types"    column="types"    />
+        <result property="names"    column="names"    />
+        <result property="relations"    column="relations"    />
+        <result property="contents"    column="contents"    />
+        <result property="phone"    column="phone"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createById"    column="create_by_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateById"    column="update_by_id"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="caseNo" column="case_no" jdbcType="VARCHAR"/>
+        <result property="orgId" column="org_id" jdbcType="VARCHAR"/>
+        <result property="orgName" column="org_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="selectTLcInfoupVo">
+        select id, task_infoup_id,task_id, types, names, relations, contents,phone, remark, create_by, create_time, update_by, update_time,import_batch_no,org_id,case_no,org_name from t_lc_infoup
+    </sql>
+
+    <select id="selectTLcInfoupList" parameterType="TLcInfoup" resultMap="TLcInfoupResult">
+        <include refid="selectTLcInfoupVo"/>
+        <where>
+            <if test="taskInfoId != null "> and task_infoup_id = #{taskInfoId}</if>
+            <if test="taskId != null "> and task_id = #{taskId}</if>
+            <if test="types != null "> and types = #{types}</if>
+            <if test="names != null  and names != ''"> and names = #{names}</if>
+            <if test="relations != null "> and relations = #{relations}</if>
+            <if test="contents != null  and contents != ''"> and contents = #{contents}</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and import_batch_no = #{importBatchNo}</if>
+            <if test="caseNo != null  and caseNo != ''"> and case_no = #{caseNo}</if>
+            <if test="orgId != null  and orgId != ''"> and org_id = #{orgId}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="id != null  and id != ''"> and id != #{id}</if>
+        </where>
+    </select>
+    
+    <select id="selectTLcInfoupById" parameterType="Long" resultMap="TLcInfoupResult">
+        <include refid="selectTLcInfoupVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTLcInfoup" parameterType="TLcInfoup" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lc_infoup
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskInfoId != null ">task_infoup_id,</if>
+            <if test="taskId != null ">task_id,</if>
+            <if test="types != null ">types,</if>
+            <if test="names != null  and names != ''">names,</if>
+            <if test="relations != null ">relations,</if>
+            <if test="contents != null  and contents != ''">contents,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createById != null  and createById != ''">create_by_id,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateById != null  and updateById != ''">update_by_id,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="importBatchNo != null ">import_batch_no,</if>
+            <if test="caseNo != null ">case_no,</if>
+            <if test="orgId != null ">org_id,</if>
+            <if test="orgName != null ">org_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskInfoId != null ">#{taskInfoId},</if>
+            <if test="taskId != null ">#{taskId},</if>
+            <if test="types != null ">#{types},</if>
+            <if test="names != null  and names != ''">#{names},</if>
+            <if test="relations != null ">#{relations},</if>
+            <if test="contents != null  and contents != ''">#{contents},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createById != null  and createById != ''">#{createById},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateById != null  and updateById != ''">#{updateById},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="importBatchNo != null ">#{importBatchNo},</if>
+            <if test="caseNo != null ">#{caseNo},</if>
+            <if test="orgId != null ">#{orgId},</if>
+            <if test="orgName != null ">#{orgName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLcInfoup" parameterType="TLcInfoup">
+        update t_lc_infoup
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskInfoId != null ">task_infoup_id = #{taskInfoId},</if>
+            <if test="taskId != null ">task_id = #{taskId},</if>
+            <if test="types != null ">types = #{types},</if>
+            <if test="names != null  and names != ''">names = #{names},</if>
+            <if test="relations != null ">relations = #{relations},</if>
+            contents = #{contents},
+            phone = #{phone},
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createById != null  and createById != ''">create_by_id = #{createById},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateById != null  and updateById != ''">update_by_id = #{updateById},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="importBatchNo != null ">import_batch_no = #{importBatchNo},</if>
+            <if test="caseNo != null ">case_no = #{caseNo},</if>
+            <if test="orgId != null ">org_id = #{orgId},</if>
+            <if test="orgName != null ">org_name = #{orgName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLcInfoupById" parameterType="Long">
+        delete from t_lc_infoup where id = #{id}
+    </delete>
+
+    <delete id="deleteTLcInfoupByIds" parameterType="String">
+        delete from t_lc_infoup where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
