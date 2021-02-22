@@ -15,11 +15,21 @@
                                 <p>机构案件号：</p>
                                 <input type="text" name="orgCasno"/>
                             </li>
+                            <li>
+                                <p>委案日期：</p>
+                                <input type="text" name="warq"  class="time-input"/>
+                            </li>
                             <li class="select-time">
                                 <p>还款日期：</p>
                                 <input type="text" class="time-input" id="startDate" placeholder="开始时间" name="startDate"/>
                                 <span>-</span>
                                 <input type="text" class="time-input" id="endDate" placeholder="结束时间" name="endDate"/>
+                            </li>
+                            <li class="select-time">
+                                <p>创建时间：</p>
+                                <input type="text" class="time-input" id="crStartDate" placeholder="开始时间" name="startDate"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="crEndDate" placeholder="结束时间" name="endDate"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -132,6 +142,14 @@
                     {
                         field : 'hkrq',
                         title : '还款日期'
+                    },
+                    {
+                        field : 'warq',
+                        title : '委案日期'
+                    },
+                    {
+                        field : 'productType',
+                        title : '产品类型'
                     },
                     {
                         field : 'createTime',

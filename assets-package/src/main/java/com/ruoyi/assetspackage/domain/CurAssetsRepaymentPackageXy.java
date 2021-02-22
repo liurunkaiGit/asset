@@ -1,11 +1,9 @@
 package com.ruoyi.assetspackage.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -18,8 +16,8 @@ import java.util.Set;
  * @date 2020-01-13
  */
 @Data
-public class CurAssetsRepaymentPackage extends BaseEntity {
-    private static final long serialVersionUID = 1L;
+public class CurAssetsRepaymentPackageXy extends BaseEntity {
+    private static final long serialVersionUID = 155556552L;
 
     /**
      * id
@@ -28,32 +26,17 @@ public class CurAssetsRepaymentPackage extends BaseEntity {
 
     @Excel(name = "序号")
     private Integer sque;
-
+    /**
+     * 还款日期
+     */
+    @Excel(name = "还款日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date hkrq;
     /**
      * 机构案件号
      */
-    @Excel(name = "机构案件号")
+    @Excel(name = "帐户号")
     private String orgCasno;
-
-    @Excel(name = "委托方名称")
-    private String orgName;
-
-    @Excel(name = "手别")
-    private String transferType;
-
-    /**
-     * 还款时逾期期数
-     */
-    @Excel(name = "还款时逾期期数")
-    private String hksyqqs;
-    /**
-     * 客户名称
-     */
-    @Excel(name = "姓名")
-    private String curName;
-
-    @Excel(name = "委案金额")
-    private BigDecimal rmbYe;
 
     /**
      * 还款金额
@@ -62,22 +45,82 @@ public class CurAssetsRepaymentPackage extends BaseEntity {
     private BigDecimal hkje;
 
     /**
-     * 还款日期
+     * 地区事业部(一级)
      */
-    @Excel(name = "还款日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "一级事业部")
+    private String dqsybYj;
+
+    /**
+     * 地区事业部(二级)
+     */
+    @Excel(name = "二级事业部")
+    private String dqsybEj;
+    /**
+     * 催收节点
+     */
+    @Excel(name = "催收节点")
+    private String csjd;
+    /**
+     * 外包经办
+     */
+    @Excel(name = "外包公司")
+    private String wbjb;
+    /**
+     * 产品类型
+     */
+    @Excel(name = "产品种类")
+    private String productType;
+    /**
+     * 客户名称
+     */
+    @Excel(name = "客户姓名")
+    private String curName;
+
+    /**
+     * 是否结清
+     */
+    @Excel(name = "是否结清")
+    private String sfjq;
+    /**
+     * 还款时逾期期数
+     */
+    @Excel(name = "委案期数")
+    private String hksyqqs;
+    /**
+     * 委案日期
+     */
+    @Excel(name = "委外开始日期", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date warq;
+    /**
+     * 案件回收日期
+     */
+    @Excel(name = "计划收回日期", width = 30, dateFormat = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date hkrq;
+    private Date ajhsrq;
+    @Excel(name = "业务归属人")
+    private String ownerName;
+    @Excel(name = "归属人工号")
+    private String jobNo;
 
 
+
+
+//    @Excel(name = "委案金额")
+    private BigDecimal rmbYe;
+
+
+//    @Excel(name = "委托方名称")
+    private String orgName;
+
+//    @Excel(name = "手别")
+    private String transferType;
     /**
      * 创建时间
      */
-    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
-    @Excel(name = "业务归属人")
-    private String ownerName;
 
 
     /**
@@ -116,11 +159,7 @@ public class CurAssetsRepaymentPackage extends BaseEntity {
 //    @Excel(name = "交易金额")
     private BigDecimal jyje;
 
-    /**
-     * 产品类型
-     */
-//    @Excel(name = "产品类型")
-    private String productType;
+
 
     /**
      * 借据号
@@ -134,11 +173,7 @@ public class CurAssetsRepaymentPackage extends BaseEntity {
 //    @Excel(name = "催收人")
     private String csr;
 
-    /**
-     * 催收节点
-     */
-//    @Excel(name = "催收节点")
-    private String csjd;
+
 
     /**
      * 分配日期
@@ -164,17 +199,17 @@ public class CurAssetsRepaymentPackage extends BaseEntity {
 //    @Excel(name = "合同号")
     private String hth;
 
-    /**
-     * 地区事业部(一级)
-     */
-//    @Excel(name = "地区事业部(一级)")
-    private String dqsybYj;
-
-    /**
-     * 地区事业部(二级)
-     */
-//    @Excel(name = "地区事业部(二级)")
-    private String dqsybEj;
+//    /**
+//     * 地区事业部(一级)
+//     */
+////    @Excel(name = "地区事业部(一级)")
+//    private String dqsybYj;
+//
+//    /**
+//     * 地区事业部(二级)
+//     */
+////    @Excel(name = "地区事业部(二级)")
+//    private String dqsybEj;
 
     /**
      * 外包期数
@@ -182,18 +217,9 @@ public class CurAssetsRepaymentPackage extends BaseEntity {
 //    @Excel(name = "外包期数")
     private String wbqs;
 
-    /**
-     * 外包经办
-     */
-//    @Excel(name = "外包经办")
-    private String wbjb;
 
-    /**
-     * 委案日期
-     */
-//    @Excel(name = "委案日期", width = 30, dateFormat = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date warq;
+
+
 
 
 
@@ -215,11 +241,7 @@ public class CurAssetsRepaymentPackage extends BaseEntity {
 //    @Excel(name = "是否外包催收")
     private String sfwbcs;
 
-    /**
-     * 是否结清
-     */
-//    @Excel(name = "是否结清")
-    private String sfjq;
+
 
     /**
      * 本月委案
@@ -227,12 +249,7 @@ public class CurAssetsRepaymentPackage extends BaseEntity {
 //    @Excel(name = "本月委案")
     private String bywa;
 
-    /**
-     * 案件回收日期
-     */
-//    @Excel(name = "案件回收日期", width = 30, dateFormat = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date ajhsrq;
+
 
     /**
      * 消费金融账号
@@ -332,6 +349,4 @@ public class CurAssetsRepaymentPackage extends BaseEntity {
      */
     private String assetBatchNO;
 
-    @Excel(name = "归属人工号")
-    private String jobNo;
 }

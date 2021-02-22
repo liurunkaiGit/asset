@@ -371,6 +371,11 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
 
     @Override
     public Map<String, String> checkData(HttpServletRequest request, String importBatchNo) throws Exception {
+        //查询案件不存在的数量并更新
+        int notExistsNumResult = this.selectNotExistsNum(importBatchNo);
+        if(notExistsNumResult>0){
+            this.updateNotExists(importBatchNo);
+        }
         Map<String, String> map = new HashMap<String, String>();
         List<Map<String, String>> exectionList = null;
         //查询临时表信息
@@ -386,11 +391,6 @@ public class CurAssetsRepaymentPackageServiceImpl implements ICurAssetsRepayment
                 //更新状态
                 this.updateExceptionStatus(exceptionid);
             }
-        }
-        //查询案件不存在的数量并更新
-        int notExistsNumResult = this.selectNotExistsNum(importBatchNo);
-        if(notExistsNumResult>0){
-            this.updateNotExists(importBatchNo);
         }
         //查询已经结案的案件数量并更新
 //        int closeCaseNum = this.selectCloseCaseNum(importBatchNo);

@@ -106,9 +106,17 @@ public class AssetsRepaymentFromXYController extends BaseController {
         curAssetsRepaymentPackage.setDeptIds(deptIds);*/
         Long orgId = ShiroUtils.getSysUser().getOrgId();
         curAssetsRepaymentPackage.setOrgId(String.valueOf(orgId));
-        List<CurAssetsRepaymentPackage> list = assetsRepaymenFromXYService.findCurAssetsRepaymentList(curAssetsRepaymentPackage);
-        ExcelUtil<CurAssetsRepaymentPackage> util = new ExcelUtil<CurAssetsRepaymentPackage>(CurAssetsRepaymentPackage.class);
-        return util.exportExcel(list, "repayment");
+        String xyOrgId = this.sysConfigService.selectConfigByKey("xyOrgId");
+        if(xyOrgId.equals(orgId.toString())){
+            //兴业
+            List<CurAssetsRepaymentPackageXy> list = assetsRepaymenFromXYService.findCurAssetsRepaymentXyList(curAssetsRepaymentPackage);
+            ExcelUtil<CurAssetsRepaymentPackageXy> util = new ExcelUtil<CurAssetsRepaymentPackageXy>(CurAssetsRepaymentPackageXy.class);
+            return util.exportExcel(list, "repayment");
+        }else{
+            List<CurAssetsRepaymentPackage> list = assetsRepaymenFromXYService.findCurAssetsRepaymentList(curAssetsRepaymentPackage);
+            ExcelUtil<CurAssetsRepaymentPackage> util = new ExcelUtil<CurAssetsRepaymentPackage>(CurAssetsRepaymentPackage.class);
+            return util.exportExcel(list, "repayment");
+        }
     }
 
 

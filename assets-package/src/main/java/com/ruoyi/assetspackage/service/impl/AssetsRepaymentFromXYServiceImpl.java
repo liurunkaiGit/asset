@@ -66,6 +66,11 @@ public class AssetsRepaymentFromXYServiceImpl implements IAssetsRepaymenFromXYSe
         return this.assetsRepaymentFromXYMapper.findCurAssetsRepaymentList(curAssetsRepaymentPackage);
     }
 
+    @Override
+    public List<CurAssetsRepaymentPackageXy> findCurAssetsRepaymentXyList(CurAssetsRepaymentPackage curAssetsRepaymentPackage) {
+        return assetsRepaymentFromXYMapper.findCurAssetsRepaymentXyList(curAssetsRepaymentPackage);
+    }
+
     /**
      * 查询委案金额、手别、资产批次号
      *

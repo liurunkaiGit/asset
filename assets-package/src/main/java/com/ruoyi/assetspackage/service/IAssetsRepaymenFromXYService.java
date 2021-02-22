@@ -2,6 +2,7 @@ package com.ruoyi.assetspackage.service;
 
 import com.ruoyi.assetspackage.domain.CurAssetsPackage;
 import com.ruoyi.assetspackage.domain.CurAssetsRepaymentPackage;
+import com.ruoyi.assetspackage.domain.CurAssetsRepaymentPackageXy;
 import com.ruoyi.assetspackage.domain.TempCurAssetsRepaymentPackage;
 import com.ruoyi.common.core.domain.AjaxResult;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +27,7 @@ public interface IAssetsRepaymenFromXYService
      * @return
      */
     public List<CurAssetsRepaymentPackage> findCurAssetsRepaymentList(CurAssetsRepaymentPackage curAssetsRepaymentPackage);
+    public List<CurAssetsRepaymentPackageXy> findCurAssetsRepaymentXyList(CurAssetsRepaymentPackage curAssetsRepaymentPackage);
 
     /**
      * 查询委案金额、手别、资产批次号

@@ -58,6 +58,60 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="sque"    column="sque"    />
     </resultMap>
 
+    <resultMap type="com.ruoyi.assetspackage.domain.CurAssetsRepaymentPackageXy" id="CurAssetsRepaymentPackageXy">
+        <result property="id"    column="id"    />
+        <result property="orgCasno"    column="org_casNo"    />
+        <result property="jyqtfy"    column="jyqtfy"    />
+        <result property="jylx"    column="jylx"    />
+        <result property="jybj"    column="jybj"    />
+        <result property="jyznf"    column="jyznf"    />
+        <result property="jyType"    column="jy_type"    />
+        <result property="jyje"    column="jyje"    />
+        <result property="productType"    column="product_type"    />
+        <result property="jjh"    column="jjh"    />
+        <result property="csr"    column="csr"    />
+        <result property="csjd"    column="csjd"    />
+        <result property="fprq"    column="fprq"    />
+        <result property="areaCenter"    column="area_center"    />
+        <result property="acceptCity"    column="accept_city"    />
+        <result property="hth"    column="hth"    />
+        <result property="dqsybYj"    column="dqsyb_yj"    />
+        <result property="dqsybEj"    column="dqsyb_ej"    />
+        <result property="wbqs"    column="wbqs"    />
+        <result property="wbjb"    column="wbjb"    />
+        <result property="warq"    column="warq"    />
+        <result property="curName"    column="cur_name"    />
+        <result property="khjlxm"    column="khjlxm"    />
+        <result property="sjrq"    column="sjrq"    />
+        <result property="sfwbcs"    column="sfwbcs"    />
+        <result property="sfjq"    column="sfjq"    />
+        <result property="bywa"    column="bywa"    />
+        <result property="ajhsrq"    column="ajhsrq"    />
+        <result property="xfjrzh"    column="xfjrzh"    />
+        <result property="tzsx"    column="tzsx"    />
+        <result property="tzje"    column="tzje"    />
+        <result property="zhzt"    column="zhzt"    />
+        <result property="hkrq"    column="hkrq"    />
+        <result property="hksyqqs"    column="hksyqqs"    />
+        <result property="hkje"    column="hkje"    />
+        <result property="yqcplx"    column="yqcplx"    />
+        <result property="yqjd"    column="yqjd"    />
+        <result property="quotaProduct"    column="quota_product"    />
+        <result property="orgId"    column="org_id"    />
+        <result property="jazt"    column="jazt"    />
+        <result property="isExitCollect"    column="is_exit_collect"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="importBatchNo"    column="import_batch_no"    />
+        <result property="orgName"    column="org_name"    />
+        <result property="transferType"    column="transferType"    />
+        <result property="ownerName"    column="owner_name"    />
+        <result property="jobNo"    column="job_no"    />
+        <result property="rmbYe"    column="rmb_ye"    />
+        <result property="assetBatchNO"    column="asset_batch_no"    />
+        <result property="sque"    column="sque"    />
+    </resultMap>
+
     <resultMap type="com.ruoyi.assetspackage.domain.CurAssetsPackage" id="CurAssetsPackageResult">
         <result property="id"    column="id"    />
         <result property="orgCasno"    column="org_casNo"    />
@@ -179,13 +233,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <select id="findCurAssetsRepaymentList" parameterType="CurAssetsRepaymentPackage" resultMap="CurAssetsRepaymentPackageResult">
-        SELECT (@a :=@a + 1) as sque,t.id,t.org_casNo,t.org_name,t.transferType,t.hksyqqs,t.cur_name,t.rmb_ye,t.hkje,t.hkrq,t.create_time,t.owner_name,t.job_no
+        SELECT (@a :=@a + 1) as sque,t.id,t.org_casNo,t.org_name,t.transferType,t.hksyqqs,t.cur_name,t.rmb_ye,t.hkje,t.hkrq,t.create_time,t.owner_name,t.job_no,t.warq
         from cur_assets_repayment_package t,(SELECT @a := 0) t1
         <where>
             <if test="orgCasno != null  and orgCasno != ''"> and t.org_casNo = #{orgCasno}</if>
             <if test="importBatchNo != null  and importBatchNo != ''"> and t.import_batch_no = #{importBatchNo}</if>
             <if test="startDate != null"> and t.hkrq <![CDATA[>=]]> #{startDate}</if>
             <if test="endDate != null"> and t.hkrq <![CDATA[<=]]> #{endDate}</if>
+            <if test="crStartDate != null"> and t.create_time <![CDATA[>=]]> #{crStartDate}</if>
+            <if test="warq != null"> date_format(t.warq,'%Y-%m-%d') <![CDATA[=]]> date_format(#{warq},'%Y-%m-%d')</if>
             <choose>
                 <when test="orgId != null and orgId != ''">
                     and t.org_id = #{orgId}
@@ -204,7 +260,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         ORDER BY t.create_time DESC
     </select>
-    
+
+    <select id="findCurAssetsRepaymentXyList" parameterType="CurAssetsRepaymentPackage" resultMap="CurAssetsRepaymentPackageXy">
+        SELECT (@a :=@a + 1) as sque,t.id,t.org_casNo,t.org_name,t.transferType,t.hksyqqs,t.cur_name,t.rmb_ye,t.hkje,t.hkrq,t.create_time,t.owner_name,t.job_no,t.warq
+        from cur_assets_repayment_package t,(SELECT @a := 0) t1
+        <where>
+            <if test="orgCasno != null  and orgCasno != ''"> and t.org_casNo = #{orgCasno}</if>
+            <if test="importBatchNo != null  and importBatchNo != ''"> and t.import_batch_no = #{importBatchNo}</if>
+            <if test="startDate != null"> and t.hkrq <![CDATA[>=]]> #{startDate}</if>
+            <if test="endDate != null"> and t.hkrq <![CDATA[<=]]> #{endDate}</if>
+            <if test="crStartDate != null"> and t.create_time <![CDATA[>=]]> #{crStartDate}</if>
+            <if test="warq != null"> date_format(t.warq,'%Y-%m-%d') <![CDATA[=]]> date_format(#{warq},'%Y-%m-%d')</if>
+            <choose>
+                <when test="orgId != null and orgId != ''">
+                    and t.org_id = #{orgId}
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="deptIds != null">
+                            and t.org_id in
+                            <foreach collection="deptIds" item="deptId" open="(" close=")" separator=",">
+                                #{deptId}
+                            </foreach>
+                        </when>
+                    </choose>
+                </otherwise>
+            </choose>
+        </where>
+        ORDER BY t.create_time DESC
+    </select>
+
+
 
     <select id="findAssetsInfo" parameterType="java.util.Map" resultMap="CurAssetsPackageResult">
         SELECT org_casNo,transferType,rmb_ye,import_batch_no,cur_name

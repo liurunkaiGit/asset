@@ -1,9 +1,6 @@
 package com.ruoyi.assetspackage.mapper;
 
-import com.ruoyi.assetspackage.domain.CurAssetsPackage;
-import com.ruoyi.assetspackage.domain.CurAssetsRepaymentPackage;
-import com.ruoyi.assetspackage.domain.DuncaseAssign;
-import com.ruoyi.assetspackage.domain.TempCurAssetsRepaymentPackage;
+import com.ruoyi.assetspackage.domain.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
@@ -39,5 +36,7 @@ public interface AssetsRepaymentFromXYMapper
      * @return
      */
     public List<CurAssetsRepaymentPackage> findCurAssetsRepaymentList(CurAssetsRepaymentPackage curAssetsRepaymentPackage);
+
+    public List<CurAssetsRepaymentPackageXy> findCurAssetsRepaymentXyList(CurAssetsRepaymentPackage curAssetsRepaymentPackage);
 
 }
