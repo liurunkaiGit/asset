@@ -28,6 +28,13 @@ public interface ITLcTaskInfoupService
      * @return 信息更新集合
      */
     public List<TLcTaskInfoup> selectTLcTaskInfoupList(TLcTaskInfoup tLcTaskInfoup);
+    /**
+     * 导出查询信息更新列表
+     *
+     * @param tLcTaskInfoup 信息更新
+     * @return 信息更新集合
+     */
+    public List<TLcTaskInfoup> selectTLcTaskInfoupListExp(TLcTaskInfoup tLcTaskInfoup);
 
     /**
      * 新增信息更新

@@ -47,6 +47,8 @@ public class TLcTaskInfoup extends BaseEntity
     /** 信息更新时间 */
     @Excel(name = "操作时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date infoupTime;
+    @Excel(name = "信息更新")
+    private String content;
 
     /** 证件类型 */
     private Long certificateType;

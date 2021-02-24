@@ -120,25 +120,9 @@ public class TLcTaskInfoupController extends BaseController
     {
         tLcTaskInfoup.setInfoupAproStatus(1);
         tLcTaskInfoup.setOrgId(ShiroUtils.getSysUser().getOrgId().toString());
-        List<TLcTaskInfoup> list = tLcTaskInfoupService.selectTLcTaskInfoupList(tLcTaskInfoup);
-        conver(list);
+        List<TLcTaskInfoup> list = tLcTaskInfoupService.selectTLcTaskInfoupListExp(tLcTaskInfoup);
         ExcelUtil<TLcTaskInfoup> util = new ExcelUtil<TLcTaskInfoup>(TLcTaskInfoup.class);
         return util.exportExcel(list, "infoup");
-    }
-
-    private void conver(List<TLcTaskInfoup> list ){
-        if(null == list || list.isEmpty())return;
-        for(TLcTaskInfoup tp:list){
-            if(1 == tp.getInfoupStatus()){
-                tp.setXinxiStatus("待提交");
-            }else if(2 == tp.getInfoupStatus()){
-                tp.setXinxiStatus("已更新");
-            }else if(3 == tp.getInfoupStatus()){
-                tp.setXinxiStatus("更新失败");
-            }else{
-                tp.setXinxiStatus("未更新");
-            }
-        }
     }
 
     /**
