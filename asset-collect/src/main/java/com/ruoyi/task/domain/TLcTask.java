@@ -130,6 +130,31 @@ public class TLcTask extends BaseEntity {
     private String ownerName;
 
     /**
+     * 协助人id
+     */
+    private Long assistId;
+
+    /**
+     * 准协助人id
+     */
+    private Long assistIdBf;
+    /**
+     *协助审批状态
+     */
+    private Integer assistType;
+
+    private List<Integer>assistTypeList;
+
+
+    /**
+     * 协助人名称
+     */
+    private String assistName;
+    /**
+     * 准协助人名称
+     */
+    private String assistNameBf;
+    /**
      * 业务归属机构
      */
     @Excel(name = "业务归属机构")

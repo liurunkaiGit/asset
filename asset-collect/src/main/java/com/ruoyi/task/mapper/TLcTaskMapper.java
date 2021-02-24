@@ -115,6 +115,8 @@ public interface TLcTaskMapper {
      */
     void batchUpdateTask(@Param("taskList") List<TLcTask> taskList);
 
+    void batchUpdateTaskXz(@Param("taskList") List<TLcTask> taskList);
+
     /**
      * 通过组织机构id查询对应的部门id
      *

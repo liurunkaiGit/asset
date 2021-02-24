@@ -17,6 +17,11 @@
         <result property="overdueAging" column="overdue_aging" jdbcType="VARCHAR"/>
         <result property="ownerId" column="owner_id" jdbcType="INTEGER"/>
         <result property="ownerName" column="owner_name" jdbcType="VARCHAR"/>
+        <result property="assistId" column="assist_id" jdbcType="INTEGER"/>
+        <result property="assistIdBf" column="assist_id_bf" jdbcType="INTEGER"/>
+        <result property="assistName" column="assist_name" jdbcType="VARCHAR"/>
+        <result property="assistNameBf" column="assist_name_bf" jdbcType="VARCHAR"/>
+        <result property="assistType" column="assist_type" jdbcType="INTEGER"/>
         <result property="orgId" column="org_id" jdbcType="VARCHAR"/>
         <result property="closeDate" column="close_date" jdbcType="TIMESTAMP"/>
         <result property="oldOwnerId" column="old_owner_id" jdbcType="BIGINT"/>
@@ -67,6 +72,11 @@
         t.overdue_aging,
         t.owner_id,
         t.owner_name,
+        t.assist_id,
+        t.assist_name,
+        t.assist_name_bf,
+        t.assist_id_bf,
+        t.assist_type,
         t.org_id,
         t.org_name,
         t.close_date,
@@ -186,11 +196,20 @@
         <if test="taskStatus != null">
             and t.task_status = #{taskStatus}
         </if>
-        <if test="ownerId != null ">
+        <if test="ownerId != null and assistId != null">
+            and (t.owner_id = #{ownerId} or t.assist_id = #{assistId})
+        </if>
+        <if test="ownerId != null and assistId == null">
             and t.owner_id = #{ownerId}
         </if>
-        <if test="ownerName != null and ownerName != ''">
+        <if test="ownerName != null">
             and t.owner_name = #{ownerName}
+        </if>
+        <if test="assistName != ''">
+            and t.assist_name like concat('%', #{assistName}, '%')
+        </if>
+        <if test="assistType != null">
+            and t.assist_type = #{assistType}
         </if>
         <if test="transferType != null and transferType != ''">
             and t.transfer_type = #{transferType}
@@ -216,7 +235,7 @@
                 </choose>
             </otherwise>
         </choose>
-        <if test="taskType != null">
+        <if test="taskType != null ">
             and t.task_type = #{taskType}
         </if>
         <if test="allotType != null ">
@@ -330,6 +349,11 @@
         t.owner_id,
         t.old_owner_id,
         t.owner_name,
+        t.assist_id,
+        t.assist_name,
+        t.assist_name_bf,
+        t.assist_id_bf,
+        t.assist_type,
         t.call_sign,
         t.call_sign_value,
         t.action_code,
@@ -375,6 +399,15 @@
         </if>
         <if test="taskType != null ">
             and t.task_type = #{taskType}
+        </if>
+        <if test="assistType != null ">
+            and t.assist_type = #{assistType}
+        </if>
+        <if test="assistTypeList != null and assistTypeList.size()>0">
+            and t.assist_type IN
+            <foreach collection="assistTypeList" item="atp" open="(" close=")" separator=",">
+                #{atp}
+            </foreach>
         </if>
         <if test="province != null and province != ''">
             and left(t.certificate_no, 2) = #{province}
@@ -721,6 +754,11 @@
             <if test="overdueAging != null  and overdueAging != ''">overdue_aging = #{overdueAging},</if>
             <if test="ownerId != null ">owner_id = #{ownerId},</if>
             <if test="ownerName != null  and ownerName != ''">owner_name = #{ownerName},</if>
+            <if test="assistId != null ">assist_id = #{assistId},</if>
+            <if test="assistIdBf != null ">assist_id_bf = #{assistIdBf},</if>
+            <if test="assistName != null  and assistName != ''">assist_name = #{assistName},</if>
+            <if test="assistNameBf != null  and assistNameBf != ''">assist_name_bf = #{assistNameBf},</if>
+            <if test="assistType != null  and assistType != ''">assist_type = #{assistType},</if>
             <if test="orgId != null  and orgId != ''">org_id = #{orgId},</if>
             <if test="orgName != null  and orgName != ''">org_name = #{orgName},</if>
             <if test="closeDate != null ">close_date = #{closeDate},</if>
@@ -873,6 +911,17 @@
         from t_lc_task WHERE robot_task_id = #{robotTaskId}
     </insert>
 
+    <update id="batchUpdateTaskXz" parameterType="java.util.List">
+        <foreach collection="taskList" item="task" separator=";">
+            UPDATE t_lc_task set
+               assist_id = #{task.assistId},
+               assist_id_bf = #{task.assistIdBf},
+               assist_name = #{task.assistName},
+               assist_name_bf = #{task.assistNameBf},
+               assist_type = #{task.assistType}
+            WHERE id = #{task.id}
+        </foreach>
+    </update>
     <update id="batchUpdateTask" parameterType="java.util.List">
         <foreach collection="taskList" item="task" separator=";">
             UPDATE t_lc_task
@@ -892,6 +941,11 @@
                 </if>
                 <if test="task.ownerId != null ">owner_id = #{task.ownerId},</if>
                 <if test="task.ownerName != null  and task.ownerName != ''">owner_name = #{task.ownerName},</if>
+                <if test="task.assistId != null ">assist_id = #{task.assistId},</if>
+                <if test="task.assistIdBf != null ">assist_id_bf = #{task.assistIdBf},</if>
+                <if test="task.assistName != null  and task.assistName != ''">assist_name = #{task.assistName},</if>
+                <if test="task.assistNameBf != null  and task.assistNameBf != ''">assist_name_bf = #{task.assistNameBf},</if>
+                <if test="task.assistType != null ">assist_type = #{task.assistType},</if>
                 <if test="task.orgId != null  and task.orgId != ''">org_id = #{task.orgId},</if>
                 <if test="task.orgName != null  and task.orgName != ''">org_name = #{task.orgName},</if>
                 <if test="task.closeDate != null ">close_date = #{task.closeDate},</if>
@@ -1355,6 +1409,11 @@
         t.overdue_aging,
         t.owner_id,
         t.owner_name,
+        t.assist_id,
+        t.assist_name,
+        t.assist_name_bf,
+        t.assist_id_bf,
+        t.assist_type,
         t.org_id,
         t.org_name,
         t.close_date,

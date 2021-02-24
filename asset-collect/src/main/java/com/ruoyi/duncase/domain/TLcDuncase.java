@@ -138,7 +138,10 @@ public class TLcDuncase extends BaseEntity {
      */
     @Excel(name = "业务归属人")
     private String ownerName;
-
+    /**
+     * 协催人
+     */
+    private String assistName;
     /**
      * 组别
      */

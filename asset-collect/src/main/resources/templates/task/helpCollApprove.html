@@ -74,6 +74,17 @@
                                 </select>
                             </li>
                             <li>
+                                <p>协催任务状态：</p>
+                                <select name="assistTypeList">
+                                    <option value="1,2,3,4">所有</option>
+                                    <option th:value="1">协催申请</option>
+                                    <option th:value="2">审批拒绝</option>
+                                    <option th:value="3">审批通过</option>
+                                    <option th:value="4">停止协催</option>
+                                </select>
+                            </li>
+
+                            <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
@@ -83,8 +94,9 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <button type="button" class="btn btn-success" onclick="approveHelpColl(1)">同意</button>
+                <button type="button" class="btn btn-success" onclick="approveHelpColl(3)">同意</button>
                 <button type="button" class="btn btn-success" onclick="approveHelpColl(2)">拒绝</button>
+                <button type="button" class="btn btn-success" onclick="approveHelpCollStop(4)">停止</button>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -104,7 +116,7 @@
 
         $(function() {
             var options = {
-                url: prefix + "/list?taskType=10",
+                url: prefix + "/list",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
@@ -170,7 +182,29 @@
                 },
                 {
                     field : 'ownerName',
+                    title : '业务归属人'
+                },
+                {
+                    field : 'assistNameBf',
                     title : '协催人员'
+                },
+                {
+                    field : 'assistType',
+                    title : '协催任务状态',
+                    formatter: function (value, row, index) {
+                        debugger;
+                       if(value*1==1){
+                           return "协催申请";
+                       }else if(value*1==2){
+                           return "审批拒绝";
+                       }else if(value*1==3){
+                           return "审批通过";
+                       }else if(value*1==4){
+                           return "停止协催";
+                       }else{
+                           return "协催待申请";
+                       }
+                    }
                 },
                 {
                     field : 'oldOwnerName',
@@ -194,8 +228,31 @@
             };
             $.table.init(options);
         });
-
-
+        /**
+         * 协助催收任务终止
+         * @param status
+         */
+        function approveHelpCollStop(status) {
+            var rows = $("#bootstrap-table").bootstrapTable('getSelections');
+            if (rows.length == 0 ) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            var taskIds = [];
+            for(var i=0;i<rows.length;i++){
+                var obj = rows[i];
+                if(3 != obj.assistType*1){
+                    $.modal.alertWarning("状态是审批通过的才可停止");
+                    return;
+                }
+                taskIds.push(obj.id);
+            }
+            $.modal.confirm("确认要要执行此操作吗?", function() {
+                // 查询当前机构下所有用户
+                var approveHelpCollUrl = prefix + '/approveHelpColl?taskIds='+taskIds.join(",")+"&status="+status;
+                $.operate.submit(approveHelpCollUrl);
+            });
+        }
 
         /**
          * 协助催收任务审批

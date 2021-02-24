@@ -637,11 +637,18 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         List<TLcTask> taskList = Arrays.stream(taskIds.split(","))
                 .map(taskId -> {
                     TLcTask tLcTask = this.tLcTaskMapper.selectTLcTaskById(Long.valueOf(taskId));
-                    tLcTask.setTaskType(TaskTypeEnum.HELP_COLLECT_APPLY.getCode())
-                            .setOldOwnerId(tLcTask.getOwnerId())
-                            .setOwnerId(Long.valueOf(userId))
-                            .setOwnerName(userName)
-                            .setOldOwnerName(this.sysUserService.selectUserById(Long.valueOf(tLcTask.getOldOwnerId())).getUserName());
+                    //如果正在申请提示不可再次申请
+                    if(1==tLcTask.getAssistType() || 3== tLcTask.getAssistType() ){
+                        throw new RuntimeException("已经申请协催案件不能重复申请");
+                    }
+                    tLcTask//.setTaskType(TaskTypeEnum.HELP_COLLECT_APPLY.getCode())
+                    .setAssistIdBf(Long.valueOf(userId))
+                    .setAssistType(1)
+                    .setAssistNameBf(userName);
+//                            .setOldOwnerId(tLcTask.getOwnerId())
+//                            .setOwnerId(Long.valueOf(userId))
+//                            .setOwnerName(userName)
+//                            .setOldOwnerName(this.sysUserService.selectUserById(Long.valueOf(tLcTask.getOldOwnerId())).getUserName());
 //                    TLcDuncase tLcDuncase = this.tLcDuncaseMapper.findDuncaseByCaseNoAndImportBatchNo(tLcTask.getCaseNo(), tLcTask.getOrgId(), tLcTask.getImportBatchNo());
 //                    tLcDuncase.setTaskType(TaskTypeEnum.HELP_COLLECT_APPLY.getCode());
 //                    this.tLcDuncaseMapper.updateTLcDuncase(tLcDuncase);
@@ -856,6 +863,8 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         if (tLcTask.getEndRecentlyFollowUpDate() != null) {
             tLcTask.setEndRecentlyFollowUpDate(DateUtils.getEndOfDay(tLcTask.getEndRecentlyFollowUpDate()));
         }
+        //增加显示写催人也是当前人的数据
+        tLcTask.setAssistId(tLcTask.getOwnerId());
         return this.tLcTaskMapper.selectMyTaskList(tLcTask);
     }
 
@@ -1028,21 +1037,29 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
                     TLcTask tLcTask = this.tLcTaskMapper.selectTLcTaskById(Long.valueOf(taskId));
                     // 修改案件信息
 //                    TLcDuncase duncase = this.tLcDuncaseService.findDuncaseByCaseNoAndImportBatchNo(tLcTask.getCaseNo(), tLcTask.getOrgId(), tLcTask.getImportBatchNo());
-                    if (status == 1) {//同意
-                        tLcTask.setTaskType(TaskTypeEnum.HELP_COLLECT.getCode());
+                    if (status == 3) {//同意
+//                        tLcTask.setTaskType(TaskTypeEnum.HELP_COLLECT.getCode());
+                        tLcTask.setAssistType(3);
+                        tLcTask.setAssistId(tLcTask.getAssistIdBf());
+                        tLcTask.setAssistName(tLcTask.getAssistNameBf());
 //                        duncase.setTaskType(TaskTypeEnum.HELP_COLLECT.getCode());
                     } else if (status == 2) {//拒绝
-                        tLcTask.setOwnerId(tLcTask.getOldOwnerId())
-                                .setOwnerName(this.sysUserService.selectUserById(Long.valueOf(tLcTask.getOldOwnerId())).getUserName())
-                                .setOldOwnerId(null)
-                                .setOldOwnerName(null)
-                                .setTaskType(TaskTypeEnum.HELP_COLLECT_REFUSE.getCode());
+//                        tLcTask.setOwnerId(tLcTask.getOldOwnerId())
+//                                .setOwnerName(this.sysUserService.selectUserById(Long.valueOf(tLcTask.getOldOwnerId())).getUserName())
+//                                .setOldOwnerId(null)
+//                                .setOldOwnerName(null)
+//                        tLcTask.setTaskType(TaskTypeEnum.HELP_COLLECT_REFUSE.getCode());
+                        tLcTask.setAssistType(2);
 //                        duncase.setTaskType(TaskTypeEnum.HELP_COLLECT_REFUSE.getCode());
+                    }else if (status == 4) {//停止
+                        tLcTask.setAssistType(4);
+                        tLcTask.setAssistId(null);
+                        tLcTask.setAssistName(null);
                     }
 //                    this.tLcDuncaseService.updateTLcDuncase(duncase);
                     return tLcTask;
                 }).collect(Collectors.toList());
-        this.tLcTaskMapper.batchUpdateTask(taskList);
+        this.tLcTaskMapper.batchUpdateTaskXz(taskList);
         if (status == 1) {
             updateDuncaseOwner(taskList);
         }

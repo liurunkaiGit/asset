@@ -60,6 +60,7 @@
         <result property="recentlyAllotDate" column="recently_allot_date" jdbcType="TIMESTAMP"/>
         <result property="recentlyFollowUpDate" column="recently_follow_up_date" jdbcType="TIMESTAMP"/>
         <result property="ownerName" column="owner_name" jdbcType="VARCHAR"/>
+        <result property="assistName" column="assist_name" jdbcType="VARCHAR"/>
         <result property="taskType" column="task_type" jdbcType="INTEGER"/>
         <result property="backCaseDate" column="back_case_date" jdbcType="DATE"/>
         <result property="loanType" column="loan_type" jdbcType="VARCHAR"/>
@@ -109,6 +110,7 @@
             t.recently_allot_date,
             t.recently_follow_up_date,
             t.owner_name,
+            t.assist_name,
             t.task_type,
             t.import_batch_no,
             t.org_id,
@@ -138,6 +140,9 @@
             </if>
             <if test="taskStatus != null ">
                 and t.task_status = #{taskStatus}
+            </if>
+            <if test="assistName != null and assistName != ''">
+                and t.assist_name like  concat('%', #{assistName}, '%')
             </if>
             <if test="provinceId != null and provinceId != ''">
                 and left(t.certificate_no, 2) = #{provinceId}

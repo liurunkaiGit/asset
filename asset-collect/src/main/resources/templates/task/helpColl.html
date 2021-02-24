@@ -118,8 +118,17 @@
 			alert($("#taskIds").val());
 			alert($("#orgId").val());*/
 			var data = {"userId":rows.join(),"taskIds": $("#taskIds").val(),"ownerIds":$("#ownerIds").val()};
-			$.operate.submit(prefix + "/helpColl", "post", "json", data);
-			$.modal.close();
+			$.operate.submit(prefix + "/helpColl", "post", "json", data,function (result) {
+				if (result.code == 0 ) {
+					$.modal.msgSuccess(result.msg);
+				}else{
+					$.modal.alertWarning(result.msg);
+				}
+				setTimeout(function () {
+					$.modal.close();
+				},2000);
+			});
+
 		}
     </script>
 </body>
