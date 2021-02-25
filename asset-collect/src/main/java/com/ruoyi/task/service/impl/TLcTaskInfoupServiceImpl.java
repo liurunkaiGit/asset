@@ -86,7 +86,7 @@ public class TLcTaskInfoupServiceImpl implements ITLcTaskInfoupService
             StringBuilder sr = new StringBuilder("更新类型|姓名|与本人关系|电话|联系人地址|备注\n");
             List<TLcInfoup> dhList = tLcInfoupMapper.selectTLcInfoupList(tLcInfoup);
             for(TLcInfoup tf : dhList){
-              sr.append(tf.getTypes()==0?"电话号码":"联系人地址"+"|");
+              sr.append((tf.getTypes()==0?"电话号码":"联系人地址")+"|");
               sr.append(tf.getNames()+"|");
               sr.append(guanxi(tf.getRelations())+"|");
               sr.append((tf.getPhone()==null?"":tf.getPhone())+"|");
