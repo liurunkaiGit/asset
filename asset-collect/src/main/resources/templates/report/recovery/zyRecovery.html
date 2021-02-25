@@ -86,11 +86,23 @@
                 },
                 {
                     field : 'mEaWoNrPr',
-                    title : '月初核销未收回本金'
+                    title : '月初核销未收回本金',
+                    formatter: function (value, index, row) {
+                        if (value == 0) {
+                            return "-";
+                        }
+                        return value;
+                    }
                 },
                 {
                     field : 'mEnWoNrPr',
-                    title : '月底核销未收回本金'
+                    title : '月底核销未收回本金',
+                    formatter: function (value, index, row) {
+                        if (value == 0) {
+                            return "-";
+                        }
+                        return value;
+                    }
                 },
                 {
                     field : 'mEa',

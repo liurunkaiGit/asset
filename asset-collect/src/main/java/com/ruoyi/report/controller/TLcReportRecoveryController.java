@@ -77,8 +77,7 @@ public class TLcReportRecoveryController extends BaseController {
     @ResponseBody
     public TableDataInfo zyList(TLcReportZyRecovery zyRecovery) {
         List<TLcReportZyRecovery> list = this.tLcReportRecoveryService.selectTLcReportZyRecoveryList(zyRecovery);
-        final TableDataInfo dataTable = getDataTable(list);
-        return dataTable;
+        return getDataTable(list);
     }
 
     /**
