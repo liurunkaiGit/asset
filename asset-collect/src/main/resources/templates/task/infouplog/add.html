@@ -108,30 +108,7 @@
 
             }
         }
-        function findLx(){
-            $("#cunzai").val(0);
-            var tyval = $("#types").children('option:selected').val();
-            if(1==tyval*1)return;
-            if("" == $("#contt input[name='phone']").val() )return;
-            var config = {
-                url: prefix + "/findLx",
-                type: "post",
-                dataType: "json",
-                async: false,
-                data: {
-                    taskInfoId:$("#taskInfoId").val(),
-                    phone:$("#contt input[name='phone']").val(),
-                    types:0
-                },
-                success: function(result) {
-                    if (result*1>0) {
-                        $("#cunzai").val(1);
-                        $.modal.alertWarning('电话号码已经存在联系人列表中');
-                    }
-                }
-            };
-            $.ajax(config);
-        }
+
         $(document).ready(function(){
             $("#types").on("change",function(){
                 var tyval = $(this).children('option:selected').val();

@@ -121,7 +121,7 @@ public class TLcInfoupServiceImpl implements ITLcInfoupService
 
     private void lianxphone(TLcTaskInfoup tup,TLcInfoup tLcInfoup){
 //        //判断电话是否已经存在联系人表中 如果是地址类型则返回
-//        if(1 == tLcInfoup.getTypes())return;
+        if(1 == tLcInfoup.getTypes())return;
 //        TLcCustContact tLcCustContact = new TLcCustContact();
 //        tLcCustContact.setPhone(tLcInfoup.getPhone());
 //        tLcCustContact.setCaseNo(tup.getCaseNo());
