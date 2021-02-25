@@ -392,8 +392,7 @@ public class RepaymentDataImportUtil {
                     boolean flag = false;
                     if(checkRQ3(ajhsrq,"yyyy-MM-dd")){
                         flag=true;
-                    }
-                    if(checkRQ3(ajhsrq,"yyyy/MM/dd")){
+                    }else if(checkRQ3(ajhsrq,"yyyy/MM/dd")){
                         flag=true;
                     }
                     if(flag==false) {
@@ -436,8 +435,7 @@ public class RepaymentDataImportUtil {
                     boolean flag = false;
                     if(checkRQ3(hkrq,"yyyy-MM-dd")){
                         flag=true;
-                    }
-                    if(checkRQ3(hkrq,"yyyy/MM/dd")){
+                    }else  if(checkRQ3(hkrq,"yyyy/MM/dd")){
                         flag=true;
                     }
                     if(flag==false) {
@@ -546,8 +544,7 @@ public class RepaymentDataImportUtil {
                 boolean flag = false;
                 if(checkRQ3(warq,"yyyy-MM-dd")){
                     flag=true;
-                }
-                if(checkRQ3(warq,"yyyy/MM/dd")){
+                }else  if(checkRQ3(warq,"yyyy/MM/dd")){
                     flag=true;
                 }
                 if(flag==false) {
@@ -565,8 +562,7 @@ public class RepaymentDataImportUtil {
                 boolean flag = false;
                 if(checkRQ3(sjrq,"yyyy-MM-dd")){
                     flag=true;
-                }
-                if(checkRQ3(sjrq,"yyyy/MM/dd")){
+                } else  if(checkRQ3(sjrq,"yyyy/MM/dd")){
                     flag=true;
                 }
                 if(flag==false) {
@@ -1098,6 +1094,7 @@ public class RepaymentDataImportUtil {
             format.setLenient(false);
             format.parse(str);
         } catch (ParseException e) {
+            e.printStackTrace();
             return false;
         }
         return true;
