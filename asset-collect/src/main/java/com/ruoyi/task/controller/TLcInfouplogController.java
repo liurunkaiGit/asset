@@ -57,6 +57,13 @@ public class TLcInfouplogController extends BaseController
         return list;
     }
 
+    @PostMapping("/listPidtab")
+    @ResponseBody
+    public List<TLcInfoup> listPidtab(TLcInfoup tLcInfoup)
+    {
+        List<TLcInfoup> list = tLcInfoupService.selectTLcInfoupList(tLcInfoup);
+        return list;
+    }
     /**
      * 新增【联系人增加】
      */
