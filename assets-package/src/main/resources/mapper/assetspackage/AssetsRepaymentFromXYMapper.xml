@@ -263,7 +263,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="findCurAssetsRepaymentXyList" parameterType="CurAssetsRepaymentPackage" resultMap="CurAssetsRepaymentPackageXy">
-        SELECT (@a :=@a + 1) as sque,t.id,t.org_casNo,t.org_name,t.transferType,t.hksyqqs,t.cur_name,t.rmb_ye,t.hkje,t.hkrq,t.create_time,t.owner_name,t.job_no,t.warq
+        SELECT (@a :=@a + 1) as sque,t.id,t.org_casNo,t.org_name,t.transferType,t.hksyqqs,t.cur_name,t.rmb_ye,t.hkje,t.hkrq,t.create_time,t.owner_name,t.job_no,t.warq,t.product_type,t.csjd,t.wbjb,t.cur_name,t.sfjq,t.ajhsrq,t.owner_name,t.job_no,t.dqsyb_yj,t.dqsyb_ej
         from cur_assets_repayment_package t,(SELECT @a := 0) t1
         <where>
             <if test="orgCasno != null  and orgCasno != ''"> and t.org_casNo = #{orgCasno}</if>
