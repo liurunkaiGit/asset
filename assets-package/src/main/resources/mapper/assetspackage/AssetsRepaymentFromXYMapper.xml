@@ -240,7 +240,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="importBatchNo != null  and importBatchNo != ''"> and t.import_batch_no = #{importBatchNo}</if>
             <if test="startDate != null"> and t.hkrq <![CDATA[>=]]> #{startDate}</if>
             <if test="endDate != null"> and t.hkrq <![CDATA[<=]]> #{endDate}</if>
-            <if test="crStartDate != null"> and t.create_time <![CDATA[>=]]> #{crStartDate}</if>
+            <if test="crStartDate != null"> and date_format(t.create_time,'%Y-%m-%d') <![CDATA[>=]]> date_format(#{crStartDate},'%Y-%m-%d')</if>
+            <if test="crEndDate != null"> and date_format(t.create_time,'%Y-%m-%d') <![CDATA[<=]]> date_format(#{crEndDate},'%Y-%m-%d')</if>
             <if test="warq != null"> date_format(t.warq,'%Y-%m-%d') <![CDATA[=]]> date_format(#{warq},'%Y-%m-%d')</if>
             <choose>
                 <when test="orgId != null and orgId != ''">
@@ -269,7 +270,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="importBatchNo != null  and importBatchNo != ''"> and t.import_batch_no = #{importBatchNo}</if>
             <if test="startDate != null"> and t.hkrq <![CDATA[>=]]> #{startDate}</if>
             <if test="endDate != null"> and t.hkrq <![CDATA[<=]]> #{endDate}</if>
-            <if test="crStartDate != null"> and t.create_time <![CDATA[>=]]> #{crStartDate}</if>
+            <if test="crStartDate != null"> and date_format(t.create_time,'%Y-%m-%d') <![CDATA[>=]]> date_format(#{crStartDate},'%Y-%m-%d') </if>
+            <if test="crEndDate != null"> and date_format(t.create_time,'%Y-%m-%d') <![CDATA[<=]]> date_format(#{crEndDate},'%Y-%m-%d')</if>
             <if test="warq != null"> date_format(t.warq,'%Y-%m-%d') <![CDATA[=]]> date_format(#{warq},'%Y-%m-%d')</if>
             <choose>
                 <when test="orgId != null and orgId != ''">
