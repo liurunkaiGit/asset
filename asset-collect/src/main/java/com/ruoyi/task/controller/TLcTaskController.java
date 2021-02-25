@@ -539,7 +539,7 @@ public class TLcTaskController extends BaseController {
     @PostMapping("/findInfoUpCnt")
     @ResponseBody
     public Integer findInfoUpCnt(BigInteger[] ids) {
-        return tLcTaskService.findInfoUpCnt(ids,1);
+        return tLcTaskService.findInfoUpCnt(ids,4);
     }
 
     @PostMapping("/findTaskByOwner")
