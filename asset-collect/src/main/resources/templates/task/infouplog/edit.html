@@ -8,7 +8,8 @@
         <form class="form-horizontal m" id="form-infoup-edit" th:object="${tLcInfoup}">
             <input name="id" th:field="*{id}" type="hidden">
             <input name="sign" th:value="*{types}" type="hidden">
-            <input name="taskInfoId" th:value="*{taskInfoId}" type="hidden" >
+            <input name="cunzai" id="cunzai" th:value="*{cunzai}"  type="hidden" >
+            <input name="taskInfoId" id="taskInfoId" th:value="*{taskInfoId}" type="hidden" >
             <div class="form-group">
                 <label class="col-sm-3 control-label"><span style="color: red">*</span>更新类型：</label>
                 <div class="col-sm-8">
@@ -43,7 +44,7 @@
             <div class="form-group" id="contt">
                 <label class="col-sm-3 control-label"><span style="color: red">*</span>联系电话：</label>
                 <div class="col-sm-8">
-                    <input name="phone" class="form-control" type="text" maxlength="30" th:field="*{phone}" required>
+                    <input name="phone" class="form-control"  type="text" maxlength="30" th:field="*{phone}" required>
                 </div>
             </div>
             <div class="form-group">
@@ -56,7 +57,7 @@
         <div class="form-group" id="cnt0" style="display: none">
             <label class="col-sm-3 control-label"><span style="color: red">*</span>联系电话：</label>
             <div class="col-sm-8">
-                <input name="phone" class="form-control" type="text" maxlength="30" th:field="${tLcInfoup.phone}" required>
+                <input name="phone" class="form-control" type="text"  maxlength="30" th:field="${tLcInfoup.phone}" required>
             </div>
         </div>
         <div class="form-group" id="cnt1" style="display: none">
@@ -87,11 +88,70 @@
         });
         function submitHandler() {
             if ($.validate.form()) {
-                $.operate.save(prefix + "/edit", $('#form-infoup-edit').serialize());
+                $("#cunzai").val(0);
+                var tyval = $("#types").children('option:selected').val();
+                if(0 == tyval*1){
+                    var config = {
+                        url: prefix + "/findLx",
+                        type: "post",
+                        dataType: "json",
+                        async: false,
+                        data: {
+                            taskInfoId:$("#taskInfoId").val(),
+                            phone:$("#contt input[name='phone']").val(),
+                            types:0
+                        },
+                        success: function(result) {
+                            if (result*1>0) {
+                                $("#cunzai").val(1);
+                                $.modal.confirm("电话号码已经存在联系人列表中,确定增加吗？", function() {
+                                    $.operate.save(prefix + "/edit", $('#form-infoup-edit').serialize());
+                                });
+                            }else{
+                                $.operate.save(prefix + "/edit", $('#form-infoup-edit').serialize());
+                            }
+                        }
+                    };
+                    $.ajax(config);
+                }else{
+                    $.operate.save(prefix + "/edit", $('#form-infoup-edit').serialize());
+                }
+
             }
         }
 
         function submitHandlerAndNext() {
+            $("#cunzai").val(0);
+            var tyval = $("#types").children('option:selected').val();
+            if(0 == tyval*1){
+                var config = {
+                    url: prefix + "/findLx",
+                    type: "post",
+                    dataType: "json",
+                    async: false,
+                    data: {
+                        taskInfoId:$("#taskInfoId").val(),
+                        phone:$("#contt input[name='phone']").val(),
+                        types:0
+                    },
+                    success: function(result) {
+                        if (result*1>0) {
+                            $("#cunzai").val(1);
+                            $.modal.confirm("电话号码已经存在联系人列表中,确定增加吗？", function() {
+                                biaodan();
+                            });
+                        }else{
+                            biaodan();
+                        }
+                    }
+                };
+                $.ajax(config);
+            }else{
+                biaodan();
+            }
+        }
+
+        function biaodan() {
             if ($.validate.form()) {
                 var config = {
                     url: prefix + "/edit",
@@ -102,14 +162,14 @@
                         $.modal.loading("正在处理中，请稍后...");
                         $.modal.disable();
                     },
-                    success: function(result) {
+                    success: function (result) {
                         $.modal.closeLoading();
                         $.modal.enable();
                         var parent = window.parent;
                         parent.shuaxin();
                         if (result.code == web_status.SUCCESS) {
                             parent.$.modal.msgSuccess(result.msg);
-                        }  else {
+                        } else {
                             $.modal.alertError(result.msg)
                         }
                     }

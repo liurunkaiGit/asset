@@ -37,6 +37,11 @@ public interface ITLcInfoupService
     public int insertTLcInfoup(TLcInfoup tLcInfoup);
 
     /**
+     * 查找联系
+     * @return
+     */
+    public int findLx(TLcInfoup tLcInfoup);
+    /**
      * 修改【联系人增加】
      * 
      * @param tLcInfoup 【联系人增加】

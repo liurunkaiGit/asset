@@ -6,7 +6,8 @@
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-infoup-add">
-            <input name="taskInfoId" th:value="${id}" type="hidden" required>
+            <input name="taskInfoId" id="taskInfoId" th:value="${id}" type="hidden" required>
+            <input name="cunzai" id="cunzai" value="0" type="hidden" >
             <div class="form-group">    
                 <label class="col-sm-3 control-label"><span style="color: red">*</span>更新类型：</label>
                 <div class="col-sm-8">
@@ -43,7 +44,7 @@
             <div class="form-group" id="contt">
                 <label class="col-sm-3 control-label"><span style="color: red">*</span>联系电话：</label>
                 <div class="col-sm-8">
-                    <input name="phone" class="form-control" type="text" maxlength="30" required>
+                    <input name="phone" class="form-control"  type="text" maxlength="30" required>
                 </div>
             </div>
 
@@ -58,7 +59,7 @@
         <div class="form-group" id="cnt0" style="display: none">
             <label class="col-sm-3 control-label"><span style="color: red">*</span>联系电话：</label>
             <div class="col-sm-8">
-                <input name="phone" class="form-control" type="text" maxlength="30" required>
+                <input name="phone"  class="form-control"  type="text"  maxlength="30" required>
             </div>
         </div>
         <div class="form-group" id="cnt1" style="display: none">
@@ -76,44 +77,128 @@
 
         function submitHandler() {
             if ($.validate.form()) {
-                $.operate.save(prefix + "/add", $('#form-infoup-add').serialize());
+                $("#cunzai").val(0);
+                var tyval = $("#types").children('option:selected').val();
+                if(0 == tyval*1){
+                    var config = {
+                        url: prefix + "/findLx",
+                        type: "post",
+                        dataType: "json",
+                        async: false,
+                        data: {
+                            taskInfoId:$("#taskInfoId").val(),
+                            phone:$("#contt input[name='phone']").val(),
+                            types:0
+                        },
+                        success: function(result) {
+                            if (result*1>0) {
+                                $("#cunzai").val(1);
+                                $.modal.confirm("电话号码已经存在联系人列表中,确定增加吗？", function() {
+                                    $.operate.save(prefix + "/add", $('#form-infoup-add').serialize());
+                                });
+                            }else{
+                                $.operate.save(prefix + "/add", $('#form-infoup-add').serialize());
+                            }
+                        }
+                    };
+                    $.ajax(config);
+                }else{
+                    $.operate.save(prefix + "/add", $('#form-infoup-add').serialize());
+                }
+
             }
         }
-
+        function findLx(){
+            $("#cunzai").val(0);
+            var tyval = $("#types").children('option:selected').val();
+            if(1==tyval*1)return;
+            if("" == $("#contt input[name='phone']").val() )return;
+            var config = {
+                url: prefix + "/findLx",
+                type: "post",
+                dataType: "json",
+                async: false,
+                data: {
+                    taskInfoId:$("#taskInfoId").val(),
+                    phone:$("#contt input[name='phone']").val(),
+                    types:0
+                },
+                success: function(result) {
+                    if (result*1>0) {
+                        $("#cunzai").val(1);
+                        $.modal.alertWarning('电话号码已经存在联系人列表中');
+                    }
+                }
+            };
+            $.ajax(config);
+        }
         $(document).ready(function(){
             $("#types").on("change",function(){
                 var tyval = $(this).children('option:selected').val();
                 $("#contt").empty();
                 $("#contt").html($("#cnt"+tyval).html());
             });
+
         });
 
         function submitHandlerAndNext() {
             if ($.validate.form()) {
-                var config = {
-                    url: prefix + "/add",
-                    type: "post",
-                    dataType: "json",
-                    data: $('#form-infoup-add').serialize(),
-                    beforeSend: function () {
-                        $.modal.loading("正在处理中，请稍后...");
-                        $.modal.disable();
-                    },
-                    success: function(result) {
-                        $.modal.closeLoading();
-                        $.modal.enable();
-                        var parent = window.parent;
-                        parent.shuaxin();
-                        if (result.code == web_status.SUCCESS) {
-                            parent.$.modal.msgSuccess(result.msg);
-                        }  else {
-                            $.modal.alertError(result.msg);
+                $("#cunzai").val(0);
+                var tyval = $("#types").children('option:selected').val();
+                if(0 == tyval*1){
+                    var config = {
+                        url: prefix + "/findLx",
+                        type: "post",
+                        dataType: "json",
+                        async: false,
+                        data: {
+                            taskInfoId:$("#taskInfoId").val(),
+                            phone:$("#contt input[name='phone']").val(),
+                            types:0
+                        },
+                        success: function(result) {
+                            if (result*1>0) {
+                                $("#cunzai").val(1);
+                                $.modal.confirm("电话号码已经存在联系人列表中,确定增加吗？", function() {
+                                    biaodan();
+                                });
+                            }else{
+                                biaodan();
+                            }
                         }
-                    }
-                };
-                $.ajax(config);
+                    };
+                    $.ajax(config);
+                }else{
+                    biaodan();
+                }
             }
         }
+
+        function biaodan() {
+            var config = {
+                url: prefix + "/add",
+                type: "post",
+                dataType: "json",
+                data: $('#form-infoup-add').serialize(),
+                beforeSend: function () {
+                    $.modal.loading("正在处理中，请稍后...");
+                    $.modal.disable();
+                },
+                success: function(result) {
+                    $.modal.closeLoading();
+                    $.modal.enable();
+                    var parent = window.parent;
+                    parent.shuaxin();
+                    if (result.code == web_status.SUCCESS) {
+                        parent.$.modal.msgSuccess(result.msg);
+                    }  else {
+                        $.modal.alertError(result.msg);
+                    }
+                }
+            };
+            $.ajax(config);
+        }
+
     </script>
 </body>
 </html>

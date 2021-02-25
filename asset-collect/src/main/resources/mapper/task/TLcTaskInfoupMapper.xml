@@ -95,7 +95,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertBatchLianxiren">
        insert into t_lc_cust_contact(infoup_id,infoup_status,phone,contact_name,case_no,org_id,org_name,import_batch_no,relation,create_by,create_time,modify_by,modify_time,origin)
        select id as infoup_id,1 as infoup_status,phone,names,case_no,org_id,org_name,import_batch_no,relations as relation,create_by_id,now()as create_time,update_by_id as modify_by,now() as modify_time,1 as origin  from t_lc_infoup
-       where  types=0 and task_infoup_id in
+       where  types=0 and cunzai=0 and task_infoup_id in
         <foreach collection="ids" item="id" separator="," open="(" close=")">
             #{id}
         </foreach>

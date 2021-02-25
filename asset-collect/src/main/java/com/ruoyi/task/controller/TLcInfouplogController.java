@@ -80,6 +80,18 @@ public class TLcInfouplogController extends BaseController
     }
 
     /**
+     * 查找联系人 是否存在
+     * @param tLcInfoup
+     * @return
+     */
+    @PostMapping("/findLx")
+    @ResponseBody
+    public int findLx(TLcInfoup tLcInfoup)
+    {
+        return tLcInfoupService.findLx(tLcInfoup);
+    }
+
+    /**
      * 修改【联系人增加】
      */
     @GetMapping("/edit/{id}")

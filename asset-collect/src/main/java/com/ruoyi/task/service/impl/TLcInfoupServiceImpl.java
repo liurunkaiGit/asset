@@ -101,9 +101,11 @@ public class TLcInfoupServiceImpl implements ITLcInfoupService
         return rl;
     }
 
-    private void lianxphone(TLcTaskInfoup tup,TLcInfoup tLcInfoup){
+    @Override
+    public int findLx(TLcInfoup tLcInfoup) {
+        TLcTaskInfoup tup = tLcTaskInfoupMapper.selectTLcTaskInfoupById(tLcInfoup.getTaskInfoId());
         //判断电话是否已经存在联系人表中 如果是地址类型则返回
-        if(1 == tLcInfoup.getTypes())return;
+        if(1 == tLcInfoup.getTypes())return 0;
         TLcCustContact tLcCustContact = new TLcCustContact();
         tLcCustContact.setPhone(tLcInfoup.getPhone());
         tLcCustContact.setCaseNo(tup.getCaseNo());
@@ -112,8 +114,24 @@ public class TLcInfoupServiceImpl implements ITLcInfoupService
         //根据电话、编号、机构id、批次 查询是否存在
         List<TLcCustContact> list = tLcCustContactMapper.selectTLcCustContactList(tLcCustContact);
         if(null != list && !list.isEmpty()){
-            throw new RuntimeException("电话号码已经存在联系人中");
+            return 1;
         }
+        return 0;
+    }
+
+    private void lianxphone(TLcTaskInfoup tup,TLcInfoup tLcInfoup){
+//        //判断电话是否已经存在联系人表中 如果是地址类型则返回
+//        if(1 == tLcInfoup.getTypes())return;
+//        TLcCustContact tLcCustContact = new TLcCustContact();
+//        tLcCustContact.setPhone(tLcInfoup.getPhone());
+//        tLcCustContact.setCaseNo(tup.getCaseNo());
+//        tLcCustContact.setOrgId(tup.getOrgId());
+//        tLcCustContact.setImportBatchNo(tup.getImportBatchNo());
+//        //根据电话、编号、机构id、批次 查询是否存在
+//        List<TLcCustContact> list = tLcCustContactMapper.selectTLcCustContactList(tLcCustContact);
+//        if(null != list && !list.isEmpty()){
+//            throw new RuntimeException("电话号码已经存在联系人中");
+//        }
         TLcInfoup tLcInfoupN = new TLcInfoup();
         tLcInfoupN.setOrgId(tup.getOrgId());
         tLcInfoupN.setId(tLcInfoup.getId());

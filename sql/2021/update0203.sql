@@ -55,6 +55,7 @@ CREATE TABLE `t_lc_infoup` (
   `org_id` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '业务归属机构',
   `org_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '所属机构',
   `case_no` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '案件编号',
+  `cunzai` tinyint(3) DEFAULT '0' COMMENT '存在联系表中',
   PRIMARY KEY (`id`),
   KEY `pri` (`task_id`),
   KEY `sc` (`org_id`,`case_no`,`import_batch_no`) USING BTREE

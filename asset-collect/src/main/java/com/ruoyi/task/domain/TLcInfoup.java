@@ -49,6 +49,7 @@ public class TLcInfoup extends BaseEntity
     private int sign =0;
     private Long createById;
     private Long updateById;
+    private Integer cunzai;
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
