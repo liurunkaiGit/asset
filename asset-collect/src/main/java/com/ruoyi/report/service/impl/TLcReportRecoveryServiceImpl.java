@@ -120,7 +120,7 @@ public class TLcReportRecoveryServiceImpl extends BaseController implements ITLc
     public List<TLcReportZyRecovery> selectTLcReportZyRecoveryList(TLcReportZyRecovery zyRecovery) {
         String zyOrgId = this.sysConfigService.selectConfigByKey("zyOrgId");
         zyRecovery.setOrgId(Long.valueOf(zyOrgId));
-        String[] transferTypeStr = new String[]{"M2","M3","M4","M5","M6","M7","M8","M9",};
+        String[] transferTypeStr = new String[]{"M2","M3","M4","M5","M6","M7","M8","M9","未核销"};
         List<String> transferTypes = Arrays.asList(transferTypeStr);
         List<TLcReportZyRecovery> list = new ArrayList<>();
         if (zyRecovery.getStartEnterCollDate() != null && zyRecovery.getEndEnterCollDate() != null) {
@@ -129,9 +129,9 @@ public class TLcReportRecoveryServiceImpl extends BaseController implements ITLc
         if (list != null && list.size() > 0) {
             list.stream().forEach(res -> {
                 if (!transferTypes.contains(res.getTransferType())) {
-                    res.setMEaWoNrPr(res.getMEaOdClBa());
+                    res.setMEaWoNrPr(res.getmEaOdClBa());
                     res.setMEnWoNrPr(res.getmEnOdClBa());
-                    res.setMEaOdClBa(null);
+                    res.setmEaOdClBa(null);
                     res.setMEnOdClBa(null);
                 }
             });

@@ -33,6 +33,14 @@ public class TLcReportZyRecovery extends BaseEntity {
     @Excel(name = "委案公司")
     private String company = "华道";
 
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
     /**
      * 委案日期
      */
@@ -40,17 +48,41 @@ public class TLcReportZyRecovery extends BaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date enterCollDate;
 
+    public Date getEnterCollDate() {
+        return enterCollDate;
+    }
+
+    public void setEnterCollDate(Date enterCollDate) {
+        this.enterCollDate = enterCollDate;
+    }
+
     /**
      * 逾期阶段
      */
     @Excel(name = "逾期阶段")
     private String transferType;
 
+    public String getTransferType() {
+        return transferType;
+    }
+
+    public void setTransferType(String transferType) {
+        this.transferType = transferType;
+    }
+
     /**
      * 月初逾期现贷余额
      */
     @Excel(name = "月初逾期现贷余额")
     private BigDecimal mEaOdClBa;
+
+    public BigDecimal getmEaOdClBa() {
+        return mEaOdClBa;
+    }
+
+    public void setmEaOdClBa(BigDecimal mEaOdClBa) {
+        this.mEaOdClBa = mEaOdClBa;
+    }
 
     /**
      * 月底逾期现贷余额
@@ -95,14 +127,14 @@ public class TLcReportZyRecovery extends BaseEntity {
     private BigDecimal mEa;
 
     public BigDecimal getmEa() {
-        if (getMEaOdClBa() == null && getmEaWoNrPr() == null) {
+        if (getmEaOdClBa() == null && getmEaWoNrPr() == null) {
             return null;
-        } else if (getMEaOdClBa() == null) {
+        } else if (getmEaOdClBa() == null) {
             return getmEaWoNrPr();
         } else if (getmEaWoNrPr() == null) {
-            return getMEaOdClBa();
+            return getmEaOdClBa();
         }
-        return getMEaOdClBa().add(getmEaWoNrPr());
+        return getmEaOdClBa().add(getmEaWoNrPr());
     }
 
     /**
@@ -131,11 +163,12 @@ public class TLcReportZyRecovery extends BaseEntity {
     public String getRecovery() {
         BigDecimal divide = new BigDecimal("0.00");
         if (!new BigDecimal("0.00").equals(getmEa())) {
-            divide = getmEn().divide(getmEa(), 2, BigDecimal.ROUND_HALF_UP);
+            BigDecimal mEn = getmEn().multiply(new BigDecimal(100));
+            divide = mEn.divide(getmEa(), 2, BigDecimal.ROUND_HALF_UP);
         }
-        BigDecimal subtract = new BigDecimal(1).subtract(divide);
-        BigDecimal multiply = subtract.multiply(new BigDecimal(100));
-        return multiply.toString() + "%";
+        BigDecimal subtract = new BigDecimal(100).subtract(divide);
+//        BigDecimal multiply = subtract.multiply(new BigDecimal(100));
+        return subtract.toString() + "%";
     }
 
     /**
