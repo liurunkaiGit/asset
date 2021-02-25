@@ -971,7 +971,7 @@
                 async: false, //请求是否异步，默认为异步，这也是ajax重要特性
                 type: "POST",   //请求方式
                 success: function(data) {
-                 if(data>=10){
+                 if(data>10){
                      $.modal.alert('每天只能提交10个信息更新申请');
                  }else
                      {
