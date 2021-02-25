@@ -77,7 +77,8 @@ public class TLcReportRecoveryController extends BaseController {
     @ResponseBody
     public TableDataInfo zyList(TLcReportZyRecovery zyRecovery) {
         List<TLcReportZyRecovery> list = this.tLcReportRecoveryService.selectTLcReportZyRecoveryList(zyRecovery);
-        return getDataTable(list);
+        final TableDataInfo dataTable = getDataTable(list);
+        return dataTable;
     }
 
     /**
@@ -112,7 +113,7 @@ public class TLcReportRecoveryController extends BaseController {
         List<TLcReportZyRecovery> list = this.tLcReportRecoveryService.selectTLcReportZyRecoveryList(zyRecovery);
         if (list != null && list.size() > 0) {
             list.stream().forEach(recovery -> {
-                recovery.setMEa(getMea(recovery.getMEaOdClBa(), recovery.getmEaWoNrPr()));
+                recovery.setMEa(getMea(recovery.getmEaOdClBa(), recovery.getmEaWoNrPr()));
                 recovery.setMEn(getMen(recovery.getmEnOdClBa(),recovery.getmEnWoNrPr()));
                 BigDecimal divide = new BigDecimal("0.00");
                 if (!new BigDecimal("0.00").equals(recovery.getmEa())) {
