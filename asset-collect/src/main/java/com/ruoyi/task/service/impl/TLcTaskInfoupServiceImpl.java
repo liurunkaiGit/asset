@@ -139,6 +139,11 @@ public class TLcTaskInfoupServiceImpl implements ITLcTaskInfoupService
 
     @Override
     public int updateStatus(TLcTaskInfoup tLcTaskInfoup) {
+        //更新主任务状态 驳回的时候
+        if(2 == tLcTaskInfoup.getInfoupAproStatus()){
+            tLcTaskMapper.updateInfoUp(tLcTaskInfoup.getTaskIds(),tLcTaskInfoup.getInfoupStatus());
+        }
+
         return tLcTaskInfoupMapper.updateStatus(tLcTaskInfoup);
     }
 

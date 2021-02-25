@@ -113,12 +113,22 @@
         });
         /**更新状态*/
         function updateStatus(sign) {
-            var taskIdRows = $.table.selectFirstColumns();
-            if (taskIdRows.length == 0 ) {
+            var rows = $("#bootstrap-table").bootstrapTable('getSelections');
+            if (rows.length == 0 ) {
                 $.modal.alertWarning("请至少选择一条记录");
                 return;
             }
-            var data = { "ids": taskIdRows.join(","),infoupAproStatus:sign};
+            var taskIds = [];
+            for(var i=0;i<rows.length;i++){
+                var obj = rows[i];
+                if(0 != obj.infoupAproStatus*1 ){
+                    $.modal.alertWarning("状态是未审批的任务才可操作");
+                    return;
+                }
+                taskIds.push(obj.taskId);
+            }
+            var taskIdRows = $.table.selectFirstColumns();
+            var data = { "ids": taskIdRows.join(","),"taskIds":taskIds.join(","),infoupAproStatus:sign,infoupStatus:0};
             var url = prefix+"/updateStatus";
             $.operate.submit(url, "post", "json", data);
         }
