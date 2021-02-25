@@ -95,7 +95,7 @@
 
             <div class="btn-group-sm" id="toolbar" role="group">
                 <button type="button" class="btn btn-success" onclick="approveHelpColl(3)">同意</button>
-                <button type="button" class="btn btn-success" onclick="approveHelpColl(2)">拒绝</button>
+                <button type="button" class="btn btn-success" onclick="jujue(2)">拒绝</button>
                 <button type="button" class="btn btn-success" onclick="approveHelpCollStop(4)">停止</button>
             </div>
             <div class="col-sm-12 select-table table-striped">
@@ -192,7 +192,6 @@
                     field : 'assistType',
                     title : '协催任务状态',
                     formatter: function (value, row, index) {
-                        debugger;
                        if(value*1==1){
                            return "协催申请";
                        }else if(value*1==2){
@@ -254,6 +253,28 @@
             });
         }
 
+        function jujue(){
+            var rows = $("#bootstrap-table").bootstrapTable('getSelections');
+            if (rows.length == 0 ) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            var taskIds = [];
+            for(var i=0;i<rows.length;i++){
+                var obj = rows[i];
+                if(1 != obj.assistType*1){
+                    $.modal.alertWarning("协催申请状态下的任务才可拒绝");
+                    return;
+                }
+                taskIds.push(obj.id);
+            }
+            $.modal.confirm("确认要要执行此操作吗?", function() {
+                // 查询当前机构下所有用户
+                var approveHelpCollUrl = prefix + '/approveHelpColl?taskIds='+taskIds.join(",")+"&status="+status;
+                $.operate.submit(approveHelpCollUrl);
+            });
+        }
+
         /**
          * 协助催收任务审批
          * @param status
@@ -264,6 +285,22 @@
                 $.modal.alertWarning("请至少选择一条记录");
                 return;
             }
+
+            var rows = $("#bootstrap-table").bootstrapTable('getSelections');
+            if (rows.length == 0 ) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            var taskIds = [];
+            for(var i=0;i<rows.length;i++){
+                var obj = rows[i];
+                if(1 != obj.assistType*1){
+                    $.modal.alertWarning("协催申请状态下的任务才可通过");
+                    return;
+                }
+                taskIds.push(obj.id);
+            }
+
             $.modal.confirm("确认要要执行此操作吗?", function() {
                 // 查询当前机构下所有用户
                 var approveHelpCollUrl = prefix + '/approveHelpColl?taskIds='+taskIdrows.join()+"&status="+status;
