@@ -202,10 +202,10 @@
         <if test="ownerId != null and assistId == null">
             and t.owner_id = #{ownerId}
         </if>
-        <if test="ownerName != null">
+        <if test="ownerName != null and ownerName != ''">
             and t.owner_name = #{ownerName}
         </if>
-        <if test="assistName != ''">
+        <if test="assistName != null and assistName != ''">
             and t.assist_name like concat('%', #{assistName}, '%')
         </if>
         <if test="assistType != null">
