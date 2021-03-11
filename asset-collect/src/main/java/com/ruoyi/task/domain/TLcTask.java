@@ -494,6 +494,10 @@ public class TLcTask extends BaseEntity {
     private String sendRobotBatchNo;
 
     private Integer closeType;
+    /**
+     * 锁定状态
+     */
+    private Integer suoding;
 
     // 共案信息
     private String accountDate;

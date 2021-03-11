@@ -380,6 +380,23 @@ public class TLcTaskController extends BaseController {
     /**
      * 查询任务列表
      */
+    @PostMapping("/listSuoding")
+    @ResponseBody
+    public int listSuoding(TLcTask tLcTask, HttpServletRequest request, ModelMap modelMap) {
+        startPage();
+        String callCodeHistoryListStr = request.getParameter("callCodeHistoryListStr");//历史电话码
+        if(StringUtils.isNotEmpty(callCodeHistoryListStr) && !"null".equals(callCodeHistoryListStr)){
+            tLcTask.setCallCodeHistoryList(Arrays.asList(callCodeHistoryListStr.split(",")));
+        }
+        List<TLcTask> list = tLcTaskService.selectTLcTaskByPage(tLcTask);
+        if(null == list || list.isEmpty())return 0;
+        return list.size();
+    }
+
+
+    /**
+     * 查询任务列表
+     */
     @PostMapping(value = "/performance/test/list", consumes = "application/json")
     @ResponseBody
     public TableDataInfo performanceTestList(@RequestBody TLcTask tLcTask, HttpServletRequest request, ModelMap modelMap) {
@@ -541,6 +558,20 @@ public class TLcTaskController extends BaseController {
     public Integer findInfoUpCnt(BigInteger[] ids) {
         return tLcTaskService.findInfoUpCnt(ids,4);
     }
+
+    @PostMapping("/findSuodingCnt")
+    @ResponseBody
+    public Integer findSuodingCnt(BigInteger[] ids,int suoding) {
+        return tLcTaskService.findSuodingCnt(ids,suoding);
+    }
+
+    @PostMapping("/suoding")
+    @ResponseBody
+    public AjaxResult suoding(BigInteger[] ids,int suoding) {
+        return toAjax(tLcTaskService.updateSuoding(ids,suoding));
+    }
+
+
 
     @PostMapping("/findTaskByOwner")
     @ResponseBody

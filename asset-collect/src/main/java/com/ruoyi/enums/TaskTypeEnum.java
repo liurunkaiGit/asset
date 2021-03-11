@@ -35,8 +35,9 @@ public enum TaskTypeEnum {
     SEND_ROBOT_APPLY(18, "申请推送机器人"),
     SEND_ROBOT_APPLY_ALLOW(19, "同意推送机器人"),
     SEND_ROBOT_APPLY_REJECT(20, "拒绝推送机器人"),
-    CASE_RECYCLE(21, "案件回收");
-
+    CASE_RECYCLE(21, "案件回收"),
+    CASE_SUODING(22, "锁定"),
+    CASE_JIESUO(23, "锁定");
     private Integer code;
     private String message;
 

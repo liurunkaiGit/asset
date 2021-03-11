@@ -193,6 +193,8 @@ public interface TLcTaskMapper {
 
     List<TLcTask> selectTLcTaskByIdsNotExistRobotBlack(@Param("taskIds") String[] taskIds);
 
+    List<TLcTask> selectTLcTaskByIdsNotExistRobotBlackSuoding(@Param("taskIds") String[] taskIds,@Param("suoding") Integer suoding);
+
     Long selectCountByIdsNotExistRobotBlack(@Param("taskIds") String[] taskIds);
     /**
      * 根据时间只查询 任务表--定时任务同步数据中心 用
@@ -249,6 +251,8 @@ public interface TLcTaskMapper {
      * @return
      */
     int findInfoUpCnt(@Param("ids") BigInteger[] ids, @Param("infoUp") int infoUp);
+    int findSuodingCnt(@Param("ids") BigInteger[] ids, @Param("suoding") int suoding);
+    int updateSuoding(@Param("ids") BigInteger[] ids, @Param("suoding") int infoUp);
 
     int updatePhoneStatus(TLcTask tLcTask);
 

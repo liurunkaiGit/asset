@@ -1176,7 +1176,7 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
     @Transactional
     public AjaxResult sendRobot(String taskIds, String orgId, String speechcraftIdAndSceneDefId, Integer callLineId, String sendRobotBatchNos, Integer callType) {
         if (StringUtils.isNotBlank(taskIds)) {
-            List<TLcTask> taskList = this.tLcTaskMapper.selectTLcTaskByIdsNotExistRobotBlack(taskIds.split(","));
+            List<TLcTask> taskList = this.tLcTaskMapper.selectTLcTaskByIdsNotExistRobotBlackSuoding(taskIds.split(","),0);
             // 查询机器人在黑名单数量
             Long blackCount = this.tLcTaskMapper.selectCountByIdsNotExistRobotBlack(taskIds.split(","));
             sendRobotByList(orgId, speechcraftIdAndSceneDefId, callLineId, taskList, DateUtils.parseDateToStr(DateUtils.YYYYMMDDHHMMSS, new Date()), callType);
@@ -1879,6 +1879,41 @@ public class TLcTaskServiceImpl implements ITLcTaskService {
         tLcTaskUplog.setCishu(ids.length);
         tLcTaskUplogMapper.updateTLcTaskUplogCishu(tLcTaskUplog);
         return tLcTaskMapper.updateInfoUp(ids,status);
+    }
+
+    @Override
+    public Integer findSuodingCnt(BigInteger[] ids, int suoding) {
+        return tLcTaskMapper.findSuodingCnt(ids,suoding);
+    }
+
+    @Override
+    public Integer updateSuoding(BigInteger[] ids, int suoding) {
+        int type = 22;
+        if(0==suoding)type=23;
+        List<TLcDuncaseAssign> duncaseAssignList = new ArrayList<>(ids.length);
+        for(BigInteger id:ids){
+            TLcTask tLcTask = this.tLcTaskMapper.selectTLcTaskById(id.longValue());
+            TLcDuncaseAssign tLcDuncaseAssign = TLcDuncaseAssign.builder()
+                    .ownerId(Long.valueOf(tLcTask.getOwnerId()))
+                    .taskId(tLcTask.getId().toString())
+                    .operationId(ShiroUtils.getUserId())
+                    .customName(tLcTask.getCustomName())
+                    .collectTeamName(tLcTask.getCollectTeamName())
+                    .collectTeamId(tLcTask.getCollectTeamId())
+                    .certificateNo(tLcTask.getCertificateNo())
+                    .caseNo(tLcTask.getCaseNo())
+                    .operationName(ShiroUtils.getSysUser().getUserName())
+                    .transferType(type)
+                    .orgId(tLcTask.getOrgId())
+                    .taskStatus(tLcTask.getTaskStatus())
+                    .validateStatus(IsNoEnum.IS.getCode())
+                    .createBy(ShiroUtils.getUserId().toString())
+                    .build();
+            duncaseAssignList.add(tLcDuncaseAssign);
+        }
+        // 将该任务添加到案件历史轨迹表
+        this.tLcDuncaseAssignMapper.batchInsertDuncaseAssign(duncaseAssignList);
+        return tLcTaskMapper.updateSuoding(ids,suoding);
     }
 
     @Override

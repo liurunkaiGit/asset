@@ -280,6 +280,14 @@
                                 <input type="text" name="assistName" id="assistName"/>
                             </li>
                             <li>
+                                <p>锁定状态：</p>
+                                <select name="suoding" >
+                                    <option value="">请选择</option>
+                                    <option value="1">锁定</option>
+                                    <option value="0">解锁</option>
+                                </select>
+                            </li>
+                            <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="searchMyTask()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
@@ -292,10 +300,12 @@
                 <button type="button" class="btn btn-success" onclick="toCollJob('','')">催收作业</button>
                <!-- <button type="button" class="btn btn-success" onclick="signRepay('ALPA')">标记还款</button>-->
                 <button type="button" class="btn btn-success" onclick="toAutoCall()">自动拨打</button>
-                <button type="button" class="btn btn-success" onclick="sendRobotApply()">机器人外呼</button>
+<!--                <button type="button" class="btn btn-success" onclick="sendRobotApply()">机器人外呼</button>-->
                 <button type="button" class="btn btn-success" onclick="infoReporting()">信息上报</button>
                 <button type="button" class="btn btn-success" onclick="infoUpFn()">信息更新</button>
                 <button type="button" class="btn btn-success" onclick="toPreCallConfig()" th:if="${callPlatform}=='DY'">预测式外呼</button>
+                <button type="button" class="btn btn-success" onclick="suoding()" >锁定</button>
+                <button type="button" class="btn btn-success" onclick="jiesuo()" >解锁</button>
                 <input id="currentPageUrl" name="currentPageUrl" class="form-control" type="hidden">
             </div>
             <div class="col-sm-12 select-table table-bordered">
@@ -923,27 +933,27 @@
         }
 
         // 推送机器人申请
-        function sendRobotApply() {
-            var taskIdRows = $.table.selectFirstColumns();
-            if (taskIdRows.length == 0) {
-                $.modal.alertWarning("请至少选择一条记录");
-                return;
-            }
-            $.modal.confirm("确认要对选中的" + taskIdRows.length + "条数据进行操作吗?", function() {
-                $.post(
-                    prefix + "/sendRobotApply",
-                    {
-                        taskIds: taskIdRows.join()
-                    },
-                    function (data) {
-                        if (data.status == 200) {//请求成功
-                            $.modal.alertSuccess(data.result.split(",")[0] + "条数据推送成功," + data.result.split(",")[1] + "条数据未推送");
-                        }
-                        $.table.search();
-                    }
-                );
-            })
-        }
+        // function sendRobotApply() {
+        //     var taskIdRows = $.table.selectFirstColumns();
+        //     if (taskIdRows.length == 0) {
+        //         $.modal.alertWarning("请至少选择一条记录");
+        //         return;
+        //     }
+        //     $.modal.confirm("确认要对选中的" + taskIdRows.length + "条数据进行操作吗?", function() {
+        //         $.post(
+        //             prefix + "/sendRobotApply",
+        //             {
+        //                 taskIds: taskIdRows.join()
+        //             },
+        //             function (data) {
+        //                 if (data.status == 200) {//请求成功
+        //                     $.modal.alertSuccess(data.result.split(",")[0] + "条数据推送成功," + data.result.split(",")[1] + "条数据未推送");
+        //                 }
+        //                 $.table.search();
+        //             }
+        //         );
+        //     })
+        // }
         //信息上报
         function infoReporting(){
             var taskIdRows = $.table.selectFirstColumns();
@@ -1002,6 +1012,71 @@
                     //请求出错处理
                 }
             });
+        }
+        /**
+         * 锁定
+         */
+        function suoding(){
+            var taskIdRows = $.table.selectFirstColumns();
+            if (taskIdRows.length == 0 ) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.post(
+                prefix + "/findSuodingCnt",
+                {
+                    ids:taskIdRows.join(","),
+                    suoding:1
+                },
+                function (data) {
+                    if (data === 0 ) {
+                        $.modal.confirm("您确定要锁定案件吗？", function() {
+                            var data = {"ids": taskIdRows.join(","), "suoding": 1};
+                            var url = prefix + "/suoding";
+                            $.operate.submit(url, "post", "json", data);
+                        })
+                    }else{
+                        if(taskIdRows.length==1){
+                            $.modal.alert('您当前案件已锁定，请勿重复提交');
+                        }else{
+                            $.modal.alert('您当前案件中包含已锁定，请勿重复提交');
+                        }
+                    }
+                }
+            );
+        }
+
+        /**
+         * 解锁
+         */
+        function jiesuo(){
+            var taskIdRows = $.table.selectFirstColumns();
+            if (taskIdRows.length == 0 ) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.post(
+                prefix + "/findSuodingCnt",
+                {
+                    ids:taskIdRows.join(","),
+                    suoding:0
+                },
+                function (data) {
+                    if (data === 0 ) {
+                        $.modal.confirm("您确定要解锁案件吗？", function() {
+                            var data = {"ids": taskIdRows.join(","), "suoding": 0};
+                            var url = prefix + "/suoding";
+                            $.operate.submit(url, "post", "json", data);
+                        })
+                    }else{
+                        if(taskIdRows.length==1){
+                            $.modal.alert('您当前案件已解锁，请勿重复提交');
+                        }else{
+                            $.modal.alert('您当前案件中包含已解锁，请勿重复提交');
+                        }
+                    }
+                }
+            );
         }
         /**
          * 批量呼叫保存

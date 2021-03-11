@@ -350,7 +350,7 @@ public interface ITLcTaskService {
      * @param infoUp
      * @return
      */
-    Integer findInfoUpCnt(@Param("ids") BigInteger[] ids, @Param("infoUp") int infoUp);
+    Integer findInfoUpCnt( BigInteger[] ids,int infoUp);
     /**
      * 信息更新状态
      * @param ids
@@ -358,6 +358,8 @@ public interface ITLcTaskService {
      * @return
      */
     Integer updateInfoUp(BigInteger[] ids, int status);
+    Integer findSuodingCnt( BigInteger[] ids, int suoding);
+    Integer updateSuoding(BigInteger[] ids, int suoding);
 
     List<TLcTask> selectTaskList(TLcTask tLcTask);
 

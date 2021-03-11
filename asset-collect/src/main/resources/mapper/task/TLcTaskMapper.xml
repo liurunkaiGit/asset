@@ -217,6 +217,9 @@
         <if test="color != null and color != ''">
             and t.color = #{color}
         </if>
+        <if test="suoding != null and suoding != ''">
+            and t.suoding = #{suoding}
+        </if>
         <if test="collJob != null and collJob != ''">
             and t.task_status = 2
         </if>
@@ -399,6 +402,9 @@
         </if>
         <if test="taskType != null ">
             and t.task_type = #{taskType}
+        </if>
+        <if test="suoding != null ">
+            and t.suoding = #{suoding}
         </if>
         <if test="assistType != null ">
             and t.assist_type = #{assistType}
@@ -1322,6 +1328,9 @@
         <if test="taskStatus != null ">
             and t.task_status = #{taskStatus}
         </if>
+        <if test="suoding != null ">
+            and t.suoding = #{suoding}
+        </if>
         <if test="taskType != null ">
             and t.task_type = #{taskType}
         </if>
@@ -1445,6 +1454,72 @@
         FROM t_lc_task t,t_lc_duncase d,t_lc_custinfo cust
         WHERE t.case_no = d.case_no and t.import_batch_no = d.import_batch_no and t.case_no = cust.case_no and
         t.import_batch_no = cust.import_batch_no
+        AND t.id in
+        <foreach item="id" collection="taskIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND NOT EXISTS (select 1 from t_lc_robot_black rb where rb.case_no = t.case_no)
+        AND t.allot_type = 1 AND t.task_status != 3
+    </select>
+
+    <select id="selectTLcTaskByIdsNotExistRobotBlackSuoding" resultMap="TLcTaskResult">
+        select
+        d.product_name as productName,
+        d.first_overdue_time as firstOverdueTime,
+        d.lowest_payment_rmb as lowestPaymentRmb,
+        cust.custom_sex as customSex,
+        d.ljyhje,
+        t.id,
+        t.case_no,
+        t.certificate_no,
+        t.certificate_type,
+        t.custom_code,
+        t.custom_name,
+        t.arrears_total,
+        t.task_status,
+        t.overdue_days,
+        t.overdue_aging,
+        t.owner_id,
+        t.owner_name,
+        t.assist_id,
+        t.assist_name,
+        t.assist_name_bf,
+        t.assist_id_bf,
+        t.assist_type,
+        t.org_id,
+        t.org_name,
+        t.close_date,
+        t.old_owner_id,
+        t.old_owner_name,
+        t.task_type,
+        t.allot_type,
+        t.create_time,
+        t.modify_time,
+        t.create_by,
+        t.modify_by,
+        t.robot_task_id,
+        t.robot_call_strategy_id,
+        t.transfer_type,
+        t.enter_coll_date,
+        t.close_case_yhje,
+        t.recently_allot_date,
+        t.recently_follow_up_date,
+        t.hit_rule,
+        t.hit_rule_desc,
+        t.distribution_strategy,
+        t.import_batch_no,
+        t.action_code,
+        t.action_code_value,
+        t.call_sign,
+        t.call_sign_value,
+        t.phone,
+        t.dqyhje
+        FROM t_lc_task t,t_lc_duncase d,t_lc_custinfo cust
+        WHERE t.case_no = d.case_no and t.import_batch_no = d.import_batch_no and t.case_no = cust.case_no and
+        t.import_batch_no = cust.import_batch_no
+        <if test="suoding != null">
+            and d.suoding=#{suoding}
+        </if>
         AND t.id in
         <foreach item="id" collection="taskIds" open="(" separator="," close=")">
             #{id}
@@ -1908,6 +1983,22 @@
 
     <update id="updateColor" parameterType="com.ruoyi.task.domain.TLcTask">
            UPDATE t_lc_task set color = #{color} where id = #{id}
+    </update>
+
+    <select id="findSuodingCnt" resultType="java.lang.Integer">
+        select count(1) from t_lc_task
+        WHERE suoding = #{suoding} and id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+        limit 1
+    </select>
+
+    <update id="updateSuoding" parameterType="com.ruoyi.task.domain.TLcTask">
+        UPDATE t_lc_task set suoding = #{suoding} where  id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
     </update>
 
     <update id="updatePhoneStatus" parameterType="com.ruoyi.task.domain.TLcTask">
