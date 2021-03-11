@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.task.mapper.TLcCallRecordHisMapper">
+
+    <resultMap id="TLcCallRecordHisResult" type="com.ruoyi.task.domain.TLcCallRecordHis">
+        <result property="id" column="id"/>
+        <result property="certificateNo" column="certificate_no"/>
+        <result property="caseNo" column="case_no"/>
+        <result property="contactName" column="contact_name"/>
+        <result property="phone" column="phone"/>
+        <result property="contactRelation" column="contact_relation"/>
+        <result property="callStartTime" column="call_start_time"/>
+        <result property="callEndTime" column="call_end_time"/>
+        <result property="callLen" column="call_len"/>
+        <result property="callSign" column="call_sign"/>
+        <result property="callResult" column="call_result"/>
+        <result property="callRadioLocation" column="call_radio_location"/>
+        <result property="callRadio" column="call_radio"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="findDate" column="find_date"/>
+        <result property="remark" column="remark"/>
+        <result property="platform" column="platform"/>
+        <result property="agentName" column="agent_name"/>
+        <result property="type" column="type"/>
+        <result property="star" column="star"/>
+        <result property="makeCallTime" column="make_call_time"/>
+        <result property="orgId" column="org_id"/>
+        <result property="orgName" column="org_name"/>
+        <result property="createName" column="user_name"/>
+        <result property="loginName" column="login_name"/>
+        <!-- <result property="ywdetp" column="ywdetp"/>-->
+        <result property="sque" column="sque"/>
+        <result property="productName" column="product_name"/>
+        <result property="tar" column="back_case_date"/>
+        <result property="wbjb" column="wbjb"/>
+        <result property="csdz" column="csdz"/>
+        <result property="recommendVendor" column="recommend_vendor"/>
+        <result property="actionCode" column="action_code"/>
+        <result property="ucid" column="ucid"/>
+    </resultMap>
+
+    <resultMap id="JxphCallRecordResult" type="com.ruoyi.task.domain.JxphCallRecord">
+        <result property="caseId" column="case_no"/>
+        <result property="name" column="contact_name"/>
+        <result property="mobile" column="phone"/>
+        <result property="relType" column="contact_relation"/>
+        <result property="customerConnectTime" column="call_start_time"/>
+        <result property="duration" column="call_len"/>
+        <result property="teletphoneCode" column="call_result"/>
+        <result property="recordUrl" column="call_radio_location"/>
+        <result property="tsrConnectTime" column="create_time"/>
+        <result property="userId" column="create_by"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+
+    <sql id="selectTLcCallRecordHisVo">
+        select id, case_no,  contact_name, phone, contact_relation, call_start_time, call_end_time, call_len, call_sign, call_result, call_radio_location, call_radio, create_time, create_by, remark, platform, star, type, org_id, ucid from t_lc_call_record_his
+    </sql>
+
+    <sql id="selectTLcHisCallRecordVo">
+        select id, case_no,  contact_name, phone, contact_relation, call_start_time, call_end_time, call_len, call_sign, call_result, call_radio_location, call_radio, create_time, create_by, remark, platform, star, type, ucid from t_lc_call_record_his
+    </sql>
+
+    <sql id="SELECT_CALL_RECORD">
+        t.id,
+        t.case_no,
+        t.contact_name,
+        t.phone,
+        t.contact_relation,
+        t.call_start_time,
+        t.call_end_time,
+        t.call_len/1000 as call_len,
+        t.call_sign,
+        t.call_result,
+        t.call_radio_location,
+        t.call_radio,
+        t.remark,
+        t.create_time,
+        t.create_by,
+        t.find_date,
+        t.platform,
+        t.type,
+        t.platform,
+        t.star,
+        t.make_call_time,
+        t.action_code,
+        t.ucid
+    </sql>
+
+
+    <select id="selectTLcCallRecordHisList" parameterType="com.ruoyi.task.domain.TLcCallRecordHis" resultMap="TLcCallRecordHisResult">
+        select (@a :=@a + 1) as sque,tab.* from (
+        SELECT
+        distinct
+        re.case_no,
+        cap.cur_name as customName,
+        cap.certificate_no,
+        cap.rcr AS enterCollDate,
+        cap.rmb_ye AS arrearsTotal,
+        cap.wa_ye AS closeCaseYhje,
+        cap.overdue_days AS overdueDays,
+        cap.tj_wd AS tjWd,
+        cap.area_center AS areaCenter,
+        re.contact_name,
+        re.contact_relation,
+        re.phone,
+        CASE re.agent_name
+        WHEN '-1' THEN '机器人'
+        ELSE re.agent_name
+        END AS agent_name,
+        re.call_sign as callSignEn,
+        CONCAT(re.call_sign,'(',re.call_result,')') AS call_sign,
+        re.find_date,
+        re.remark,
+        re.create_time,
+        re.call_start_time,
+        re.call_end_time,
+        re.call_len / 1000 AS call_len,
+        re.call_radio_location,
+        cap.cpmc as product_name,
+        cap.tar as back_case_date,
+        cap.tj_firm as recommend_vendor,
+        '华道数据' AS wbjb,
+        '电催' AS csdz,
+        re.call_result,
+        re.cnje,
+        re.action_code,
+        re.make_call_time
+        FROM
+        t_lc_call_record_his re,
+        cur_assets_package_his cap
+        WHERE
+        re.case_no = cap.org_casNo AND cap.org_id = #{orgId}
+        <if test="startCreateTime != null">
+            AND re.create_time <![CDATA[>=]]> #{startCreateTime}
+        </if>
+        <if test="endCreateTime != null">
+            AND re.create_time <![CDATA[<=]]> #{endCreateTime}
+        </if>
+        <if test="startCallStartTime != null">
+            AND re.call_start_time <![CDATA[>=]]> #{startCallStartTime}
+        </if>
+        <if test="endCallStartTime != null">
+            AND re.call_start_time <![CDATA[<=]]> #{endCallStartTime}
+        </if>
+        <if test="startCallLen != null">
+            AND re.call_len <![CDATA[>=]]> #{startCallLen}
+        </if>
+        <if test="endCallLen != null">
+            AND re.call_len <![CDATA[<=]]> #{endCallLen}
+        </if>
+        <if test="caseNoList != null and caseNoList.size() > 0">
+            and re.case_no in
+            <foreach collection="caseNoList" item="caseNo" open="(" close=")" separator="," >
+                #{caseNo}
+            </foreach>
+        </if>
+        <if test="customName != null and customName != '' ">
+            AND cap.cur_name = #{customName}
+        </if>
+        order by re.create_time desc
+        <if test="pNum != null and pSize != null" >
+            limit #{pNum},#{pSize}
+        </if>
+        ) tab,(SELECT @a := 0) t1
+    </select>
+
+    <select id="selectTLcCallRecordCount" parameterType="com.ruoyi.task.domain.TLcCallRecordHis" resultType="java.lang.Integer">
+        SELECT
+          count(*)
+        FROM
+        t_lc_call_record_his re
+        WHERE
+        re.org_id = #{orgId}
+        <if test="startCreateTime != null">
+            AND re.create_time <![CDATA[>=]]> #{startCreateTime}
+        </if>
+        <if test="endCreateTime != null">
+            AND re.create_time <![CDATA[<=]]> #{endCreateTime}
+        </if>
+        <if test="startCallStartTime != null">
+            AND re.call_start_time <![CDATA[>=]]> #{startCallStartTime}
+        </if>
+        <if test="endCallStartTime != null">
+            AND re.call_start_time <![CDATA[<=]]> #{endCallStartTime}
+        </if>
+        <if test="startCallLen != null">
+            AND re.call_len <![CDATA[>=]]> #{startCallLen}
+        </if>
+        <if test="endCallLen != null">
+            AND re.call_len <![CDATA[<=]]> #{endCallLen}
+        </if>
+        <if test="caseNoList != null and caseNoList.size() > 0">
+            and re.case_no in
+            <foreach collection="caseNoList" item="caseNo" open="(" close=")" separator="," >
+                #{caseNo}
+            </foreach>
+        </if>
+        order by re.create_time desc
+    </select>
+
+    <select id="selectTLcCallRecordList" parameterType="com.ruoyi.task.domain.TLcCallRecordHis" resultMap="TLcCallRecordHisResult">
+        select (@a :=@a + 1) as sque,tab.* from (
+            SELECT
+            distinct
+            re.case_no,
+            cap.cur_name as customName,
+            cap.certificate_no,
+            cap.rcr AS enterCollDate,
+            cap.rmb_ye AS arrearsTotal,
+            cap.wa_ye AS closeCaseYhje,
+            cap.overdue_days AS overdueDays,
+            cap.tj_wd AS tjWd,
+            cap.area_center AS areaCenter,
+            re.contact_name,
+            re.contact_relation,
+            re.phone,
+            CASE re.agent_name
+            WHEN '-1' THEN '机器人'
+            ELSE re.agent_name
+            END AS agent_name,
+            re.call_sign as callSignEn,
+            CONCAT(re.call_sign,'(',re.call_result,')') AS call_sign,
+            re.find_date,
+            re.remark,
+            re.create_time,
+            re.call_start_time,
+            re.call_end_time,
+            re.call_len / 1000 AS call_len,
+            re.call_radio_location,
+            cap.cpmc as product_name,
+            cap.tar as back_case_date,
+            cap.tj_firm as recommend_vendor,
+            '华道数据' AS wbjb,
+            '电催' AS csdz,
+            re.call_result,
+            re.cnje,
+            re.action_code,
+            re.make_call_time
+            FROM
+            t_lc_call_record_his re,
+            cur_assets_package_his cap
+            WHERE
+            re.case_no = cap.org_casNo AND cap.org_id = #{orgId}
+            <if test="startCreateTime != null">
+                AND re.create_time <![CDATA[>=]]> #{startCreateTime}
+            </if>
+            <if test="endCreateTime != null">
+                AND re.create_time <![CDATA[<=]]> #{endCreateTime}
+            </if>
+            <if test="startCallStartTime != null">
+                AND re.call_start_time <![CDATA[>=]]> #{startCallStartTime}
+            </if>
+            <if test="endCallStartTime != null">
+                AND re.call_start_time <![CDATA[<=]]> #{endCallStartTime}
+            </if>
+            <if test="startCallLen != null">
+                AND re.call_len <![CDATA[>=]]> #{startCallLen}
+            </if>
+            <if test="endCallLen != null">
+                AND re.call_len <![CDATA[<=]]> #{endCallLen}
+            </if>
+            <if test="caseNoList != null and caseNoList.size() > 0">
+                and re.case_no in
+                <foreach collection="caseNoList" item="caseNo" open="(" close=")" separator="," >
+                    #{caseNo}
+                </foreach>
+            </if>
+            <if test="customName != null and customName != '' ">
+                AND cap.cur_name = #{customName}
+            </if>
+            order by re.create_time desc
+            <if test="pNum != null and pSize != null" >
+                limit #{pNum},#{pSize}
+            </if>
+        ) tab,(SELECT @a := 0) t1
+    </select>
+
+    <select id="selectTLcCallRecordXYList" parameterType="com.ruoyi.task.domain.TLcCallRecordHis" resultMap="TLcCallRecordHisResult">
+        SELECT
+        (@a :=@a + 1) as sque,
+        re.case_no,
+        (select cap.cur_name from cur_assets_package_his cap where re.case_no = cap.org_casNo limit 1) as customName,
+        (select cap.rcr from cur_assets_package_his cap where re.case_no = cap.org_casNo limit 1) AS enterCollDate,
+        re.contact_name,
+        re.contact_relation,
+        re.phone,
+        re.call_sign as callSignEn,
+        CONCAT(re.call_sign,'(',re.call_result,')') AS call_sign,
+        re.find_date,
+        re.remark,
+        re.create_time,
+        re.call_start_time,
+        re.call_end_time,
+        re.call_len / 1000 AS call_len,
+        re.call_radio_location,
+        (select cap.cpmc from cur_assets_package_his cap where re.case_no = cap.org_casNo limit 1) as product_name,
+        (select cap.tar from cur_assets_package_his cap where re.case_no = cap.org_casNo limit 1) as back_case_date,
+        (select cap.tj_firm from cur_assets_package_his cap where re.case_no = cap.org_casNo limit 1) as recommend_vendor,
+        '华道数据' AS wbjb,
+        '电催' AS csdz,
+        re.call_result,
+        re.cnje
+        FROM
+        t_lc_call_record_his re,(SELECT @a := 0) t1
+        WHERE
+        re.org_id = #{orgId}
+        <if test="startCreateTime != null">
+            AND re.create_time <![CDATA[>=]]> #{startCreateTime}
+        </if>
+        <if test="endCreateTime != null">
+            AND re.create_time <![CDATA[<=]]> #{endCreateTime}
+        </if>
+        <if test="startCallStartTime != null">
+            AND re.call_start_time <![CDATA[>=]]> #{startCallStartTime}
+        </if>
+        <if test="endCallStartTime != null">
+            AND re.call_start_time <![CDATA[<=]]> #{endCallStartTime}
+        </if>
+        <if test="startCallLen != null">
+            AND re.call_len <![CDATA[>=]]> #{startCallLen}
+        </if>
+        <if test="endCallLen != null">
+            AND re.call_len <![CDATA[<=]]> #{endCallLen}
+        </if>
+        <if test="caseNoList != null and caseNoList.size() > 0">
+            and re.case_no in
+            <foreach collection="caseNoList" item="caseNo" open="(" close=")" separator="," >
+                #{caseNo}
+            </foreach>
+        </if>
+        <if test="customName != null and customName != '' ">
+            AND cap.cur_name = #{customName}
+        </if>
+        order by re.create_time desc
+        <if test="pNum != null and pSize != null" >
+            limit #{pNum},#{pSize}
+        </if>
+    </select>
+
+
+
+    <select id="selectUserTotal" parameterType="TLcCallRecordHis" resultType="TlcCallRecordTotal">
+        select count(1) as frequencys ,sum(call_len) as durations,
+        (select COUNT(1) from  t_lc_call_record_his_view a where
+        a.create_time <![CDATA[>=]]> date_format(#{startCallStartTime}, '%Y-%m-%d %H:%i:%s')
+        AND a.create_time  <![CDATA[<=]]> date_format(#{endCallStartTime}, '%Y-%m-%d %H:%i:%s')
+        AND a.create_by = ${createBy} and call_len!='')as connections
+        from t_lc_call_record_his_view b
+        where  b.create_time <![CDATA[>=]]> date_format(#{startCallStartTime},'%Y-%m-%d %H:%i:%s')
+        and b.create_time <![CDATA[<=]]> date_format(#{endCallStartTime},'%Y-%m-%d %H:%i:%s')   and b.create_by=${createBy}
+    </select>
+
+    <select id="findListenCallRecord" parameterType="com.ruoyi.task.domain.TLcCallRecordHis" resultMap="TLcCallRecordHisResult">
+        SELECT distinct t.case_no,tt.org_name,tt.org_id,
+        t.agent_name as user_name,
+        (select u.login_name from sys_user u where u.user_id = t.create_by) as login_name,
+        t.id,
+        t.contact_name,
+        t.phone,
+        t.contact_relation,
+        t.call_start_time,
+        t.call_end_time,
+        t.call_len/1000 as call_len,
+        t.call_sign,
+        t.call_result,
+        t.call_radio_location,
+        t.call_radio,
+        t.remark,
+        t.create_time,
+        t.create_by,
+        t.find_date,
+        t.type,
+        t.platform,
+        t.star
+        from t_lc_call_record_his t,t_lc_task_his tt
+        <where>
+            t.case_no=tt.case_no and t.call_radio_location is not null
+            <if test="caseNo != null  and caseNo != ''">and t.case_no = #{caseNo}</if>
+            <if test="orgId != null  and orgId != ''">and tt.org_id = #{orgId}</if>
+            <if test="contactName != null  and contactName != ''">and t.contact_name like concat('%', #{contactName},'%')</if>
+            <if test="phone != null  and phone != ''">and t.phone = #{phone}</if>
+            <if test="contactRelation != null ">and t.contact_relation = #{contactRelation}</if>
+            <if test="callSign != null ">and t.call_sign = #{callSign}</if>
+            <if test="callResult != null  and callResult != ''">and t.call_result = #{callResult}</if>
+            <if test="platform != null  and platform != ''">and t.platform = #{platform}</if>
+            <if test="callStartTime != null">and t.call_start_time <![CDATA[>=]]> #{callStartTime}</if>
+            <if test="callEndTime != null">and t.call_start_time <![CDATA[<=]]> #{callEndTime}</if>
+            <if test="startCallLen != null  and startCallLen != ''">and t.call_len <![CDATA[>=]]> #{startCallLen}</if>
+            <if test="createName != null  and createName != ''">and t.agent_name like concat('%', #{createName},'%')</if>
+            <if test="endCallLen != null  and endCallLen != ''">and t.call_len <![CDATA[<=]]> #{endCallLen}</if>
+        </where>
+        order by t.call_start_time desc
+    </select>
+
+    <select id="findTLcCallRecordListByDate" parameterType="com.ruoyi.task.domain.TLcCallRecordHis" resultMap="TLcCallRecordHisResult">
+        SELECT r.id,r.case_no,r.platform,r.call_radio_location,t.org_id,t.org_name FROM t_lc_call_record_his r,t_lc_task_his t WHERE r.case_no = t.case_no
+        AND r.call_radio_location is NOT NULL AND r.call_radio_location != '' AND r.platform IS NOT NULL
+        AND t.task_status = 2
+        <if test="startCreateTime != null">
+            AND r.create_time <![CDATA[>=]]> #{startCreateTime}
+        </if>
+        <if test="endCreateTime != null">
+            AND r.create_time <![CDATA[<=]]> #{endCreateTime}
+        </if>
+        ORDER BY r.create_time ASC
+    </select>
+
+    <resultMap id="mapResult" type="java.util.LinkedHashMap">
+        <result property="id" column="id"/>
+        <result property="contactName" column="contact_name"/>
+        <result property="phone" column="phone"/>
+        <result property="contactRelation" column="contact_relation"/>
+        <result property="callStartTime" column="call_start_time"/>
+        <result property="callEndTime" column="call_end_time"/>
+        <result property="callLen" column="call_len"/>
+        <result property="callSign" column="call_sign"/>
+        <result property="callResult" column="call_result"/>
+        <result property="callRadioLocation" column="call_radio_location"/>
+        <result property="callRadio" column="call_radio"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="caseNo" column="case_no"/>
+        <result property="platform" column="platform"/>
+        <result property="findDate" column="find_date"/>
+        <result property="agentName" column="agent_name"/>
+        <result property="star" column="star"/>
+        <result property="type" column="type"/>
+    </resultMap>
+
+    <select id="selectCallRecordByTime" resultMap="mapResult">
+        select id, contact_name, phone, contact_relation,  call_start_time, call_end_time,call_len, call_sign, call_result,call_radio_location,call_radio,create_time,
+        create_by,case_no,platform,find_date,agent_name,star,type from t_lc_call_record_his
+        where 1 = 1
+        <if test="createTime != null">
+            AND create_time <![CDATA[>=]]> #{createTime}
+        </if>
+        order by id desc
+        limit #{pnum},#{psize}
+    </select>
+
+    <select id="selectCallRecordCount" resultType="java.lang.Integer">
+        select count(1) from t_lc_call_record_his
+        where 1 = 1
+        <if test="createTime != null">
+            AND create_time <![CDATA[>=]]> #{createTime}
+        </if>
+    </select>
+
+    <select id="selectTLcHisCallRecordById" parameterType="Long" resultMap="TLcCallRecordHisResult">
+        <include refid="selectTLcHisCallRecordVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectJxphCallRecord" parameterType="java.util.Map" resultMap="JxphCallRecordResult">
+        select
+        t.case_no,
+        t.contact_name,
+        t.phone,
+        case t.contact_relation WHEN - 1 THEN "其它"
+            WHEN 1 THEN "本人"
+            WHEN 2 THEN "直系"
+            WHEN 3 THEN "亲戚"
+            WHEN 4 THEN "朋友"
+            WHEN 5 THEN "父母"
+            WHEN 6 THEN "配偶"
+            WHEN 7 THEN "兄弟"
+            WHEN 8 THEN "姐妹"
+            WHEN 9 THEN "哥哥"
+            WHEN 10 THEN "兄长"
+            WHEN 11 THEN "弟弟"
+            WHEN 12 THEN "姐姐"
+            WHEN 13 THEN "妹妹"
+            WHEN 14 THEN "家人"
+            WHEN 15 THEN "老公"
+            WHEN 16 THEN "老婆"
+            WHEN 17 THEN "同事"
+            WHEN 18 THEN "单位"
+        END AS contact_relation,
+        t.contact_relation,
+        t.call_start_time,
+        t.call_len/1000 as call_len,
+        t.call_result,
+        t.call_radio_location,
+        t.remark,
+        t.create_time,
+        t.create_by
+        from t_lc_call_record_his t,t_lc_task_his ta
+        where t.case_no = ta.case_no
+        and ta.org_id = #{orgId}
+        and t.create_time <![CDATA[>=]]> #{startDate}
+        and t.create_time <![CDATA[<=]]> #{endDate}
+    </select>
+
+    <select id="findZjCallRecordListByDate" parameterType="com.ruoyi.task.domain.TLcCallRecordHis" resultMap="TLcCallRecordHisResult">
+        SELECT r.id,r.case_no,r.platform,r.call_radio_location,t.org_id,t.org_name FROM t_lc_call_record_his r,t_lc_task_his t WHERE r.case_no = t.case_no
+        AND r.call_radio_location is NOT NULL AND r.call_radio_location != '' AND r.platform = 'ZJ'
+    </select>
+
+    <select id="selectCountByTimePeriod" resultType="java.lang.Long">
+        select count(1) from t_lc_call_record_his where create_time between #{startTimePeriod} and #{endTimePeriod}
+    </select>
+
+    <select id="selectCallRecordListByOrgIdAndTime" parameterType="com.ruoyi.task.domain.TLcCallRecordHis" resultMap="TLcCallRecordHisResult">
+        select distinct cap.cur_name as customName,cap.area_center AS areaCenter,
+        <include refid="SELECT_CALL_RECORD"/>
+        from t_lc_call_record_his t,cur_assets_package_his cap
+        where t.case_no = cap.org_casNo and t.org_id = #{orgId} and t.call_radio_location is not null and t.create_time between #{startCreateTime} and #{endCreateTime}
+    </select>
+
+</mapper>

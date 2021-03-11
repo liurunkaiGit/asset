@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('历史通话结果记录列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>委托方：</p>
+                                <select name="orgId" id="orgId">
+                                    <option value="">所有</option>
+                                </select>
+                            <li>
+                            <li>
+                                <p>客户姓名：</p>
+                                <input type="text" name="customName" id="customName"/>
+                            </li>
+                            <li>
+                                <p>案件编号：</p>
+                                <input type="text" name="caseNo" placeholder="多案件用英文“,”分隔" id="caseNo" ondblclick="showCaseNo()"/>
+                            </li>
+                            <li class="select-time">
+                                <p>拨打时间：</p>
+                                <input type="text" name="startCreateTime" id="startCreateTime" placeholder="开始时间" class="time-input"/>
+                                <span>-</span>
+                                <input type="text" name="endCreateTime" id="endCreateTime" placeholder="结束时间" class="time-input"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="searchCallRecord()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-warning" onclick="daochu()" shiro:hasPermission="call:recordhis:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "call/recordhis";
+        var taskPrefix = ctx + "collect/task";
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "通话结果记录",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '主键id',
+                    visible: false
+                },
+                {
+                    field : 'customName',
+                    title : '客户姓名'
+                },
+                {
+                    field : 'certificateNo',
+                    title : '证件号'
+                },
+                {
+                    field : 'caseNo',
+                    title : '机构案件号'
+                },
+                {
+                    field : 'contactName', 
+                    title : '联系人姓名'
+                },
+                {
+                    field : 'contactRelation',
+                    title : '关系',
+                    formatter: function (value) {
+                        return getRelaByCode(value);
+                    }
+                },
+                {
+                    field : 'phone', 
+                    title : '电话号码'
+                },
+                {
+                    field : 'agentName',
+                    title : '坐席'
+                },
+                {
+                    field : 'callSign',
+                    title : '电话码'
+                },
+                {
+                    field : 'findDate',
+                    title : '查账日期'
+                },
+                {
+                    field : 'remark',
+                    title : '备注'
+                },
+                {
+                    field : 'makeCallTime',
+                    title : '拨打时间'
+                },
+                {
+                    field : 'callStartTime',
+                    title : '通话开始时间'
+                },
+                {
+                    field : 'callEndTime',
+                    title : '通话结束时间'
+                },
+                {
+                    field : 'callLen', 
+                    title : '通话时长',
+                    formatter: function (value) {
+                        return revert(value);
+                    }
+                },
+                {
+                    field : 'callRadioLocation', 
+                    title : '录音地址'
+                }]
+            };
+            $.table.init(options);
+            initOrg();
+        });
+
+        function initOrg() {
+            $.post(
+                taskPrefix + "/initOrg",
+                function(data) {
+                    // alert(JSON.stringify(data));
+                    if (data.code == 0) {//请求成功
+                        for (var i = 0; i < data.rows.length; i++) {
+                            var opt = "<option value='"+data.rows[i].deptId+"'>"+data.rows[i].deptName+"</option>";
+                            $("#orgId").append(opt);
+                        }
+                    }
+                }
+            );
+        }
+
+        function daochu(){
+            var orgId = $("#orgId").val();
+            if (orgId == null || orgId == '') {
+                $.modal.alertWarning("请选择委托方");
+                return;
+            }
+            $.modal.confirm("确定导出所有通话结果记录吗？", function() {
+                $.modal.loading("正在导出数据，请稍后...");
+                $.post(prefix + "/export", $("#formId").serializeArray(), function(result) {
+                    if (result.code == web_status.SUCCESS) {
+                        window.location.href = ctx + "common/downloadByName?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.closeLoading();
+                });
+            });
+        }
+
+        function searchCallRecord() {
+            var orgId = $("#orgId").val();
+            if (orgId == null || orgId == '') {
+                $.modal.alertWarning("请选择委托方");
+                return;
+            }
+            var caseNos = $("#caseNo").val();
+            caseNos = caseNos.replace(new RegExp(" ","gm"),",");
+            if (caseNos != null && caseNos != '') {
+                if (caseNos.split(",").length > 100) {
+                    $.modal.alertError("机构案件号单次最大查询个数不能超过100");
+                    return;
+                }
+            }
+            $("#caseNo").val(caseNos);
+            $.table.search();
+        }
+
+        function getRelaByCode(relaCode) {
+            var rela;
+            if(relaCode == 1){
+                rela = '本人';
+            } else if(relaCode == 2){
+                rela = '直系';
+            } else if(relaCode == 3){
+                rela = '亲戚';
+            }else if(relaCode == 4){
+                rela = '朋友';
+            } else if(relaCode == 5){
+                rela = '父母 ';
+            } else if(relaCode == 6){
+                rela = '配偶';
+            }else if(relaCode == 7){
+                rela = '兄弟';
+            } else if(relaCode == 8){
+                rela = '姐妹';
+            } else if(relaCode == 9){
+                rela = '哥哥';
+            }else if(relaCode == 10){
+                rela = '兄长';
+            } else if(relaCode == 11){
+                rela = '弟弟 ';
+            } else if(relaCode == 12){
+                rela = '姐姐';
+            }else if(relaCode == 13){
+                rela = '妹妹';
+            }else if(relaCode == 14){
+                rela = '家人';
+            } else if(relaCode == 15){
+                rela = '老公';
+            } else if(relaCode == 16){
+                rela = '老婆';
+            } else if(relaCode == 17){
+                rela = '同事';
+            }else if(relaCode == 18){
+                rela = '单位';
+            } else if(relaCode == -1){
+                rela = '其它';
+            }else {
+                rela = '-';
+            }
+            return rela;
+        }
+
+        function revert(value) {
+            if (value == null || value == '' || value==0) {
+                return '-';
+            }
+            value = Math.round(value);
+            return value;
+        }
+
+        function checkSZ(obj) {
+            var r = /^\+?[0-9][0-9]*$/;　　//正整数
+            var value = $(obj).val();
+            if(!r.test(value)){
+                $.modal.alertWarning("请输入整数！")
+            }
+        }
+
+        function showCaseNo() {
+            layer.open({
+                type: 0,
+                title: false,
+                content: '<div class="col-sm-12">\n' +
+                    '           <div class="form-group">\n' +
+                    '               <textarea name="caseNos" id="caseNos" placeholder="手动输入案件号需要加英文“，”分隔；或从EXCEL中直接粘多行过来，无需手动添加分隔符" class="form-control" rows="30" style="width:280px"></textarea>\n' +
+                    '           </div>\n' +
+                    '</div>',
+                btn: ['确定', '关闭'],
+                yes: function (index, layero) {
+                    var caseNos = $("#caseNos").val();
+                    caseNos = caseNos.replace(new RegExp("\n","gm"),",");
+                    $("#caseNo").val(caseNos);
+                    layer.close(index);
+                },
+                cancel: function() {
+                },
+                success: function(layero, index){
+                }
+            });
+            var caseNo = $("#caseNo").val();
+            caseNo = caseNo.replace(new RegExp(" ","gm"),",");
+            $("#caseNos").val(caseNo);
+        }
+    </script>
+</body>
+</html>
